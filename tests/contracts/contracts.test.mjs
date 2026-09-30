@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {generateKeyPairSync} from 'node:crypto';
+import {baseUnits,hash,validateCampaign,validateOpportunity,validateDecision,computeBid,ownCampaign,signReceipt,verifyReceipt} from '../../packages/contracts/index.mjs';
+import {campaignFixtures,opportunityFixture,decisionFixture} from '../../packages/contracts/fixtures.mjs';
+test('canonical hashing and strict integer units',()=>{assert.equal(hash({b:1,a:2}),hash({a:2,b:1}));for(const v of [1,'1.0','01','-1','18446744073709551616'])assert.throws(()=>baseUnits(v));});
+test('strict campaign and opportunity inputs',()=>{const c=campaignFixtures()[0];validateCampaign(c);assert.throws(()=>validateCampaign({...c,override:true}));validateOpportunity(opportunityFixture());assert.throws(()=>validateOpportunity({...opportunityFixture(),rawChat:'private'}));});
+test('agent input has no financial authority and output forbids money',()=>{const c=campaignFixtures()[0],o={...opportunityFixture(),id:'o1'},d=decisionFixture(c,o);assert.equal(ownCampaign(c).maxBidBaseUnits,undefined);validateDecision(d,c,o);assert.throws(()=>validateDecision({...d,amount:'999'},c,o));assert.throws(()=>validateDecision({...d,creativeVersionId:'competitor'},c,o));});
+test('integer score table never rounds up to floor',()=>{const c=campaignFixtures()[0],o={...opportunityFixture(),id:'o1'},d=decisionFixture(c,o,{relevanceLevel:2,commercialIntentLevel:2});assert.equal(computeBid(d,c,'20000','20000','1000').amountBaseUnits,'2000');assert.equal(computeBid(d,c,'20000','20000','2001').reason,'below_floor');});
+test('signed receipts bind every public field',()=>{const {privateKey,publicKey}=generateKeyPairSync('ed25519');const r={schemaVersion:'delivery.v1',runId:'r',mode:'synthetic',publisherId:'p',publisherKeyId:'key',awardId:'a',opportunityId:'o',creativeHash:'h',nonce:'n',renderAcknowledgementHash:'ack'};const sig=signReceipt(r,privateKey);assert.equal(verifyReceipt(r,sig,publicKey),true);assert.equal(verifyReceipt({...r,awardId:'other'},sig,publicKey),false);});

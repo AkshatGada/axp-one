@@ -1,0 +1,12 @@
+{
+  "name": "axp-agentic-exchange",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13.0" },
+  "scripts": {
+    "test": "node --test",
+    "demo": "node scripts/demo/run.mjs",
+    "start": "node apps/backend/server.mjs"
+  }
+}
