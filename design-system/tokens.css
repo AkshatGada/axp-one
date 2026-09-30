@@ -1,0 +1,34 @@
+/* AXP shared foundation: neutral tokens from motion redesign, not old page code. */
+:root {
+  color-scheme: light;
+  --paper: #f5f4f0;
+  --white: #fffefa;
+  --ink: #171b1f;
+  --muted: #444d53;
+  --steel: #626c73;
+  --steel-dark: #37444b;
+  --silver: #c8ccce;
+  --line: #b9bec0;
+  --mist: #e7e9e9;
+  --dark: #1b2226;
+  --dark-line: #677177;
+  --gutter: clamp(20px, 5.5vw, 88px);
+  --section-y: clamp(88px, 11vw, 160px);
+  --wide: 1520px;
+  --content: 1320px;
+  --ease: cubic-bezier(.2, .75, .25, 1);
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-30: 120px;
+  --font-body: "PolySans", system-ui, sans-serif;
+  --font-display: "PolySans Wide", "PolySans", system-ui, sans-serif;
+  --font-mono: "PolySans Mono", ui-monospace, monospace;
+}

@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+coverage/
+local-state/
+artifacts/private/
+*.sqlite
+*.sqlite-*
+*.db
+.DS_Store
