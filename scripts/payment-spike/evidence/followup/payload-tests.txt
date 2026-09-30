@@ -1,0 +1,14 @@
+(node:66068) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ pinned source: exact versioned 50-byte payload for totals100 and350 (48.460792ms)
+✔ pinned source: malformed address/u64 overflow/unsafe expiry reject (0.907083ms)
+✔ pinned source: repeated encoding retains exact payload bytes without signing (5.3935ms)
+✔ pinned source: dependency root required, no implicit existing-assets fallback (0.231709ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 119.168833

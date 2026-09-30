@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "axp.codec-closure.v1",
+  "purpose": "pinned-voucher-source-check-only",
+  "packages": [
+    {
+      "name": "@solana/codecs-numbers",
+      "version": "6.10.0",
+      "registryURL": "https://registry.npmjs.org/@solana%2fcodecs-numbers/6.10.0",
+      "tarballURL": "https://registry.npmjs.org/@solana/codecs-numbers/-/codecs-numbers-6.10.0.tgz",
+      "integrity": "sha512-CcM+wX4zOiA9zkh8A7t1787A0Ehgmu5+6Z2tKoHew6cNw/dkaUTPa8JnNHbvfsLC8dfHC1BhAEJl86sKmRsfkQ==",
+      "archiveBytes": 62805,
+      "unpackedBytes": 512153,
+      "dependencies": {
+        "@solana/errors": "6.10.0",
+        "@solana/codecs-core": "6.10.0"
+      }
+    },
+    {
+      "name": "@solana/codecs-strings",
+      "version": "6.10.0",
+      "registryURL": "https://registry.npmjs.org/@solana%2fcodecs-strings/6.10.0",
+      "tarballURL": "https://registry.npmjs.org/@solana/codecs-strings/-/codecs-strings-6.10.0.tgz",
+      "integrity": "sha512-zlaqkg7K6F6IN4V/Ec8TWkTn054gxv7ZLagvGkuEyAdPQ6BzzsehOm2TqCuyXgJJTCGPLY1bEk6yH9NxANe0kA==",
+      "archiveBytes": 58468,
+      "unpackedBytes": 369870,
+      "dependencies": {
+        "@solana/errors": "6.10.0",
+        "@solana/codecs-core": "6.10.0",
+        "@solana/codecs-numbers": "6.10.0"
+      }
+    },
+    {
+      "name": "@solana/codecs-core",
+      "version": "6.10.0",
+      "registryURL": "https://registry.npmjs.org/@solana%2fcodecs-core/6.10.0",
+      "tarballURL": "https://registry.npmjs.org/@solana/codecs-core/-/codecs-core-6.10.0.tgz",
+      "integrity": "sha512-nfAl9OMGo4HanIMxGsQoVB7BxMoqBCYEUxl8oEAZZ09pDxnaXQZkTRXEwPPccag37XfW1ciPd1vWPKwB2b0HHQ==",
+      "archiveBytes": 172047,
+      "unpackedBytes": 1098299,
+      "dependencies": {
+        "@solana/errors": "6.10.0"
+      }
+    },
+    {
+      "name": "@solana/errors",
+      "version": "6.10.0",
+      "registryURL": "https://registry.npmjs.org/@solana%2ferrors/6.10.0",
+      "tarballURL": "https://registry.npmjs.org/@solana/errors/-/errors-6.10.0.tgz",
+      "integrity": "sha512-KBLAxCtAXr357JNhCyIDQXWbuSj5vN6w+28FSfcYY6OOSiphmXLAV3V58jgV0C6iNbIzFJFi6yatFyDTdeJsNg==",
+      "archiveBytes": 376766,
+      "unpackedBytes": 2137994,
+      "dependencies": {
+        "chalk": "5.6.2",
+        "commander": "15.0.0"
+      }
+    },
+    {
+      "name": "chalk",
+      "version": "5.6.2",
+      "registryURL": "https://registry.npmjs.org/chalk/5.6.2",
+      "tarballURL": "https://registry.npmjs.org/chalk/-/chalk-5.6.2.tgz",
+      "integrity": "sha512-7NzBL0rN6fMUW+f7A6Io4h40qQlG+xGmtMxfbnH/K7TAtt8JQWVQK+6g0UXKMeVJoyV5EkkNsErQ8pVD3bLHbA==",
+      "archiveBytes": 13831,
+      "unpackedBytes": 44342,
+      "dependencies": {}
+    },
+    {
+      "name": "commander",
+      "version": "15.0.0",
+      "registryURL": "https://registry.npmjs.org/commander/15.0.0",
+      "tarballURL": "https://registry.npmjs.org/commander/-/commander-15.0.0.tgz",
+      "integrity": "sha512-z67u4ZhzCL/Tydu1lJARtEZYWbWaN7oYLHbsuzocr6y4N6WZAagG3RQ4FW61V1/0+jImpj293XfrcYnd1qxtPg==",
+      "archiveBytes": 52736,
+      "unpackedBytes": 207368,
+      "dependencies": {}
+    }
+  ],
+  "newLogicalDiskBytes": 4410779,
+  "maxNewDiskBytes": 104857600,
+  "freeBytesAfter": 57282129920,
+  "installs": 0,
+  "globalConfigChanges": 0
+}

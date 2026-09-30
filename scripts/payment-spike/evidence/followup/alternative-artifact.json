@@ -1,0 +1,25 @@
+{
+  "package": "@solana/mpp",
+  "version": "0.7.0",
+  "tarballURL": "https://registry.npmjs.org/@solana/mpp/-/mpp-0.7.0.tgz",
+  "archiveBytes": 358748,
+  "archiveSHA256": "ed16f23857f4d327b806c6e3f48550e3a28583a32d3531e74a194ccf2a8ea84b",
+  "integrity": "sha512-vJfqf4bZkgaSztq4giEinZfU/94T5QwO2m+Ck3QMHU1PgPnFffgJaawHmK3umW71XUxW5sxA3Tm8SCg2XzCm+w==",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "default": "./dist/client/index.js"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "default": "./dist/server/index.js"
+    }
+  },
+  "installed": false,
+  "imported": false,
+  "proposalOnly": true
+}

@@ -1,0 +1,33 @@
+(node:66978) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ C06-F01: candidate/award/failed/expired/invalid receipt produce no authorization (2.575708ms)
+✔ C06-F02: first accepted charge authorizes exactly 100 (1.042375ms)
+✔ C06-F03: same channel accumulates 100 then 350, never 450 (0.798834ms)
+✔ C06-F04: concurrent and restart replay preserve exact result and payload (3.348916ms)
+✔ C06-F05: lost signed/commit acknowledgement survives SQLite restart without signing more (9.869ms)
+✔ C06-F06: valid synthetic signature undercommitting 249 against 250 is rejected (0.641459ms)
+✔ C06-F07: overcommit 251 against 250 rejected with prior state retained (0.425875ms)
+✔ C06-F08: wrong channel/signer/tamper/expiry/decrease/cap never advance (0.897042ms)
+✔ C06-F09: closure reuses saved 350 voucher, payout350/refund650, zero extra signing (1.131334ms)
+✔ C06-F10: outstanding awards, accepted unpaid, unknown commit each block close (1.448459ms)
+✔ C06-F11: both admission/freeze orderings conserve all charges (1.376584ms)
+✔ C06-F12: lost close acknowledgement recovers same attempt after restart (1.090042ms)
+✔ C06-F13: synthetic idle-close requests drain, cannot bypass obligations (0.556334ms)
+✔ C06-F14: near-expiry saved final voucher cannot be refreshed by another charge (0.846458ms)
+✔ C06-F15: config/network/mint/payee/treasury rejects before any signing or broadcast (19.453542ms)
+✔ C06-F16: reclaim strict slot gate and approval; token refund separate from unmeasured rent (1.077791ms)
+✔ strict money, sequence, terms, caps, schema restore and detached projections (0.619875ms)
+(node:66979) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ pinned source: exact versioned 50-byte payload for totals100 and350 (51.777417ms)
+✔ pinned source: malformed address/u64 overflow/unsafe expiry reject (1.007167ms)
+✔ pinned source: repeated encoding retains exact payload bytes without signing (5.590166ms)
+✔ pinned source: dependency root required, no implicit existing-assets fallback (0.246459ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 125.895084

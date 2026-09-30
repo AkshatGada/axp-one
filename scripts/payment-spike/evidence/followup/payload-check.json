@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "axp.pinned-payload-check.v1",
+  "mode": "synthetic",
+  "status": "passed_source_payload_check",
+  "runtime": "v25.5.0",
+  "sourceCommit": "c294f8903f18efc746584e3cc2961d6033b8365c",
+  "sourceSHA256": "d27f5322cc9b5e6bd16073bdc7ce6880e8f73d6e3196e53b62d30f33d8ba062e",
+  "sourcePath": "typescript/packages/mpp/src/shared/voucher.ts",
+  "dependencyVersions": {
+    "@solana/codecs-strings": "6.10.0",
+    "@solana/codecs-numbers": "6.10.0",
+    "@solana/codecs-core": "6.10.0",
+    "@solana/errors": "6.10.0",
+    "chalk": "5.6.2",
+    "commander": "15.0.0"
+  },
+  "adaptation": "replace @solana/kit barrel import with its exact 6.10.0 codec dependencies; native Node type stripping",
+  "transformedModuleSHA256": "9f711bea9ca00fa373c50b1ea41b8a0122467c89d33495f9a652e2eb21f8c7e8",
+  "fullSDKImported": false,
+  "kitBarrelImported": false,
+  "fixtureChannelId": "11111111111111111111111111111111",
+  "fixtureExpiresAt": 2000007200,
+  "encodings": [
+    {
+      "cumulativeAmountBaseUnits": "100",
+      "byteLength": 50,
+      "payloadHex": "56010000000000000000000000000000000000000000000000000000000000000000640000000000000020b0357700000000",
+      "payloadSHA256": "c3aaa10554af188e682f3e82951862029ce5e7cc2f68bfc9497505d74927b518"
+    },
+    {
+      "cumulativeAmountBaseUnits": "350",
+      "byteLength": 50,
+      "payloadHex": "560100000000000000000000000000000000000000000000000000000000000000005e0100000000000020b0357700000000",
+      "payloadSHA256": "d610e0299785aae72435b453fd8442635d5565763c91b74254bb7ee5d9650f84"
+    }
+  ],
+  "zeroSignatureRejected": true,
+  "signaturesCreated": 0,
+  "walletKeyReads": 0,
+  "broadcasts": 0,
+  "limitations": [
+    "not a complete MPP package import",
+    "no client/server protocol or SessionStore execution",
+    "no positive voucher signature fixture",
+    "no Devnet ABI/treasury compatibility or payment evidence"
+  ]
+}

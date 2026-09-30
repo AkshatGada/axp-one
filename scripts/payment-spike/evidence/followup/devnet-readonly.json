@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "axp.devnet-readonly.v1",
+  "mode": "devnet",
+  "status": "blocked",
+  "observedAt": "2026-09-30T14:52:01.343Z",
+  "sourceCommit": "c294f8903f18efc746584e3cc2961d6033b8365c",
+  "rpc": "https://api.devnet.solana.com",
+  "config": {
+    "mode": "devnet",
+    "network": "devnet",
+    "rpc": "https://api.devnet.solana.com",
+    "genesisHash": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+    "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+    "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+    "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "decimals": 6,
+    "sdkTreasury": "Cs2zdfUNonRdRGsiZUQQLdTxzxVvJZmgiX2mpLYKuEqP"
+  },
+  "rpcMethodsExecuted": [
+    "getGenesisHash",
+    "getSlot",
+    "getAccountInfo",
+    "getAccountInfo",
+    "getAccountInfo"
+  ],
+  "observations": {
+    "genesisHash": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+    "finalizedSlot": 505940424,
+    "program": {
+      "address": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+      "observedSlot": 505940424,
+      "exists": true,
+      "executable": true,
+      "loader": "BPFLoaderUpgradeab1e11111111111111111111111"
+    },
+    "programData": {
+      "address": "CghQXkmw2F6p1exMETiZdNeUx9QGraWsNZ4eom1Cuiw1",
+      "observedSlot": 505940424,
+      "deploymentSlot": "480232051",
+      "dataSha256": "b7722bc01b79849ec324dfbe075c1dc017c266b1eedbafc2e54cd6b5cb7084d6",
+      "deploymentByteSha256": "acdb3abfc818a7350e876db42253d465fe31f5d52da0259c7ef3806191b3cf8b",
+      "deploymentByteLength": 66240
+    },
+    "mint": {
+      "address": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+      "observedSlot": 505940426,
+      "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+      "decimals": 6
+    }
+  },
+  "blockers": [
+    "payer_public_identity_unavailable",
+    "payee_public_identity_unavailable",
+    "deployed_abi_and_voucher_verifier_relationship_unverified",
+    "deployed_treasury_and_canonical_ata_unverified",
+    "canonical_payer_payee_ata_derivation_not_executed",
+    "open_settle_distribute_reclaim_simulations_not_run",
+    "sdk_artifact_unavailable"
+  ],
+  "walletKeyReads": 0,
+  "signaturesCreated": 0,
+  "simulations": 0,
+  "broadcasts": 0
+}
