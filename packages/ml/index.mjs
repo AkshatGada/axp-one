@@ -1,0 +1,12 @@
+export { ContractError, hash, textHash, normalizePrompt, cosine } from './core.mjs';
+export { curateSnapshot, SNAPSHOT_CAPS } from './data_adapter/snapshot.mjs';
+export { groupedSplits } from './evidence/splits.mjs';
+export { buildCampaignProfile } from './profiles/builder.mjs';
+export { validateRequest, validateCampaign, validateDecision, validateProfile, RUBRIC, RUBRIC_HASH } from './engines/contract.mjs';
+export { RuleDecisionEngine, ruleRelevance } from './engines/rules.mjs';
+export { EmbeddingDecisionEngine, EMBEDDING_POLICY, textEmbeddingLevel, historyEmbeddingLevel } from './engines/embeddings.mjs';
+export { createExactIndex, createCachedEmbeddingProvider, embeddingText, opportunityText } from './embeddings/exact.mjs';
+export { JevDecisionEngine, buildJevRequest, validateJevResponse, JEV_MAPPING_VERSION, JEV_ENDPOINT } from './engines/jev.mjs';
+export { scoreWithFallback, intentLevel } from './engines/base.mjs';
+export { freezeBenchmarkCases, runBenchmark } from './evaluation/harness.mjs';
+export { quantile, ndcgAt3, summarizeAttempts, pairedFamilyBootstrap } from './evaluation/metrics.mjs';
