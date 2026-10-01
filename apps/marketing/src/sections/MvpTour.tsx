@@ -18,7 +18,7 @@ function Frame({ i, eager }: { i: number; eager?: boolean }) {
         <span className="mt-bar-o">Open this page</span>
       </span>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={`/mvp/${t.key}.webp`} alt={t.alt} width={1440} height={900} loading={eager ? "eager" : "lazy"} decoding="async" />
+      <img src={`/tour/${t.key}.webp`} alt={t.alt} width={1440} height={900} loading={eager ? "eager" : "lazy"} decoding="async" />
     </a>
   );
 }

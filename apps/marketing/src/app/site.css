@@ -211,3 +211,6 @@ html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: n
   .ss:not([data-pinned]) .pg-beats b { font-size: 20px; }
   .ss:not([data-pinned]) .pg-beats p { font-size: 15.5px; }
 }
+.pg-close { overflow: clip; }
+/* Very wide screens: top-align the chat with the headline instead of floating it mid-column. */
+@media (min-width: 1600px) { html[data-px-motion="on"] .hs .hs-grid, .pg-hero-grid { align-items: start; align-content: center; } .pg-hero-chat { margin-top: 14px; } }
