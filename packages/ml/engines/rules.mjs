@@ -4,6 +4,14 @@ import { BaseDecisionEngine, intentLevel, participation } from './base.mjs';
 // Tags are operator supplied, not inferred user demographics. Contradictions take precedence.
 export function ruleRelevance(opportunity, campaign, creative) {
   if (!campaign.allowedIntents.includes(opportunity.coarseIntent)) return 0;
+  if(opportunity.coarseIntent === 'travel_tools') {
+    const required=opportunity.taskConstraints.requiredCapabilities??[];
+    const tags=new Set(creative.softFitTags);
+    if(required.some(t=>!tags.has(t))) return 1;
+    const preferences=opportunity.softPreferences;
+    if(preferences.some(t=>tags.has('not:'+t))) return 1;
+    return required.length && preferences.every(t=>tags.has(t)) ? 3 : 2;
+  }
   const text = creative.approvedText.toLowerCase();
   if (!/\b(hotels?|rooms?|stays?|accommodations?|lodging)\b/u.test(text)) return 0;
   const tags = new Set(creative.softFitTags);

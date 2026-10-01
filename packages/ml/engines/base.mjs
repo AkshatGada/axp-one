@@ -5,6 +5,7 @@ import { validateRequest, validateDecision, RUBRIC_HASH } from './contract.mjs';
 export function participation(relevance, intent) { return relevance >= 2 && intent >= 2 ? 'bid' : 'skip'; }
 export function intentLevel(o) {
   if (o.coarseIntent === 'informational' || o.coarseIntent === 'blocked') return 0;
+  if (o.coarseIntent === 'travel_tools') return o.taskConstraints.requiredCapabilities?.length ? 3 : 2;
   if (o.coarseIntent === 'hotel_comparison') return o.destination === null ? 1 : 2;
   return o.destination !== null && Object.values(o.taskConstraints).some(v => v !== false && v !== null && (!Array.isArray(v) || v.length > 0)) ? 3 : o.destination === null ? 1 : 2;
 }

@@ -1,9 +1,10 @@
 import { assert, object, array, ids, id, safeText, timestamp, hash, freeze, space, vector } from '../core.mjs';
+import { validateCachedCampaignProfile } from '../profiles/cached.mjs';
 
 export const RUBRIC = freeze({ version: 'fit-intent-v1', relevance: ['Unrelated service', 'Broad category but different need or soft conflict', 'Relevant general service; specific soft fit incomplete', 'Direct supported task fit and stated soft preferences supported'], intent: ['Educational; no offer seeking', 'Broad exploration', 'Bounded offer comparison or shortlist', 'Find or book offer with destination and concrete feature, dates or event'] });
 export const RUBRIC_HASH = hash(RUBRIC);
-const INTENTS = ['hotel_booking', 'hotel_comparison', 'informational', 'blocked'];
-const CONSTRAINTS = ['destination', 'freeCancellation', 'wheelchairAccessible', 'event', 'dates', 'travellers'];
+const INTENTS = ['hotel_booking', 'hotel_comparison', 'travel_tools', 'informational', 'blocked'];
+const CONSTRAINTS = ['destination', 'freeCancellation', 'wheelchairAccessible', 'event', 'dates', 'travellers', 'requiredCapabilities'];
 function constraints(value) {
   object(value, CONSTRAINTS, []);
   for (const [key, v] of Object.entries(value)) {
@@ -28,7 +29,8 @@ export function validateRequest(r) {
   object(r, ['schemaVersion', 'runId', 'mode', 'opportunity', 'campaign', 'profile', 'options']);
   assert(r.schemaVersion === 'decision-request.v1'); id(r.runId); assert(['synthetic', 'sandbox', 'devnet'].includes(r.mode));
   validateCampaign(r.campaign);
-  object(r.opportunity, ['id', 'coarseIntent', 'destination', 'taskConstraints', 'softPreferences']);
+  object(r.opportunity, ['id', 'coarseIntent', 'destination', 'taskConstraints', 'softPreferences', 'taskText'], ['id', 'coarseIntent', 'destination', 'taskConstraints', 'softPreferences']);
+  if(r.opportunity.taskText !== undefined) safeText(r.opportunity.taskText,1200);
   id(r.opportunity.id); assert(INTENTS.includes(r.opportunity.coarseIntent));
   if (r.opportunity.destination !== null) safeText(r.opportunity.destination, 120);
   constraints(r.opportunity.taskConstraints); ids(r.opportunity.softPreferences, 20);
@@ -38,6 +40,7 @@ export function validateRequest(r) {
   return r;
 }
 export function validateProfile(p, campaign) {
+  if(p?.schemaVersion === 'cached-campaign-profile.v1') return validateCachedCampaignProfile(p,campaign);
   object(p, ['schemaVersion', 'profileId', 'profileHash', 'campaignId', 'campaignVersionId', 'campaignContentHash', 'snapshotId', 'snapshotContentHash', 'splitManifestHash', 'profileBuilderVersion', 'approvedTargetingText', 'approvedCreativeVersionIds', 'embeddingSpace', 'observedExamples', 'contrastExamples', 'inferredHints', 'independentPromptFamilyCount', 'historicalAdvertiserCount', 'qualityFlags', 'historyStatus']);
   assert(p.schemaVersion === 'campaign-evidence-profile.v1');
   ['profileId', 'campaignId', 'campaignVersionId', 'snapshotId', 'profileBuilderVersion'].forEach(k => id(p[k]));
@@ -69,7 +72,7 @@ export function validateDecision(d, r) {
   assert(d.creativeVersionId === null || creative, 'creative_id_invalid');
   for (const [level, score] of [[d.relevanceLevel, d.relevance], [d.commercialIntentLevel, d.commercialIntent]]) assert(level === null ? score === null && d.decision === 'abstain' : Number.isInteger(level) && level >= 0 && level <= 3 && score === level/3, 'score_invalid');
   ids(d.evidenceFieldIds, 60); ids(d.reasonCodes, 20);
-  const supplied = new Set([...r.campaign.creatives.flatMap(c => c.evidenceFieldIds), ...(r.profile === null ? [] : [...r.profile.observedExamples, ...r.profile.contrastExamples, ...r.profile.inferredHints].map(e => e.id))]);
+  const supplied = new Set([...r.campaign.creatives.flatMap(c => c.evidenceFieldIds), ...(r.profile === null ? [] : [...r.profile.observedExamples, ...(r.profile.contrastExamples??[]), ...r.profile.inferredHints].map(e => e.id))]);
   assert(d.evidenceFieldIds.every(k => supplied.has(k)), 'evidence_id_invalid');
   if (d.decision === 'bid') assert(creative && creative.evidenceFieldIds.length > 0 && creative.evidenceFieldIds.some(k => d.evidenceFieldIds.includes(k)) && d.relevanceLevel >= 2 && d.commercialIntentLevel >= 2, 'bid_invalid');
   if (d.decision === 'skip') assert(d.relevanceLevel !== null && d.commercialIntentLevel !== null && (d.relevanceLevel < 2 || d.commercialIntentLevel < 2), 'skip_invalid');

@@ -10,7 +10,7 @@ export function buildJevRequest(request, model) {
   validateRequest(request); id(model); assert(/^jev-\d+\.\d+\.\d+$/u.test(model), 'model_unconfigured');
   const evidence = request.profile === null ? null : {
     observed: request.profile.observedExamples.map(({ id, text }) => ({ id, text, semantics: 'observed_association_not_fit_label' })),
-    contrasts: request.profile.contrastExamples.map(({ id, text }) => ({ id, text, semantics: 'alternative_need_not_hard_exclusion' })),
+    contrasts: (request.profile.contrastExamples??[]).map(({ id, text }) => ({ id, text, semantics: 'alternative_need_not_hard_exclusion' })),
     hints: request.profile.inferredHints,
   };
   const payload = { model, state: { opportunity: request.opportunity, campaign: request.campaign, evidence }, questions: {
