@@ -295,7 +295,7 @@ html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: n
 /* Hero pinned layout: the same condition as usePinned (>= 900px, motion armed before paint),
    so the layout never changes at hydration. */
 @media (min-width: 900px) {
-  html[data-px-motion="on"] .hs { height: 156vh; padding: 0; }
+  html[data-px-motion="on"] .hs { height: 190vh; padding: 0; }
   html[data-px-motion="on"] .hs .hs-stage { position: sticky; top: 0; height: 100vh; overflow: clip; }
   html[data-px-motion="on"] .hs .hs-grid { height: 100vh; min-height: 0; padding-top: calc(var(--px-header-h) + 8px); padding-bottom: 32px; align-items: center; }
   html[data-px-motion="on"] .hs .hs-copy-wrap { will-change: transform, opacity; }

@@ -27,8 +27,6 @@ import { usePinned } from "@/motion/useReduced";
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 const PW = 520;
 const PH = 270;
-/** The collapsed stack starts this much larger than its exploded size, so the lie-down fills the frame. */
-const BIG = 1.4;
 
 type Geo = { vw: number; vh: number; k: number; cx: number; cy: number; chat: { x: number; y: number; w: number; h: number } };
 
@@ -43,7 +41,7 @@ export default function HeroScene() {
   const capRef = useRef<HTMLParagraphElement>(null);
   const pinned = usePinned();
   const geo = useRef<Geo | null>(null);
-  const [s, setS] = useState({ explode: 0, callouts: 0, marker: -1, zoom: BIG });
+  const [s, setS] = useState({ explode: 0, callouts: 0, marker: -1 });
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   // Measure where the chat sits (untransformed) and how big the stack is drawn.
@@ -77,39 +75,38 @@ export default function HeroScene() {
     const g = geo.current;
     if (!g) return;
     // Headline lifts away.
-    const up = out(seg(v, 0, 0.09));
+    const up = out(seg(v, 0, 0.14));
     if (copyRef.current) {
       copyRef.current.style.transform = `translate3d(0, ${-140 * up}px, 0)`;
-      copyRef.current.style.opacity = String(1 - seg(v, 0, 0.07));
+      copyRef.current.style.opacity = String(1 - seg(v, 0.02, 0.1));
     }
-    if (asideRef.current) asideRef.current.style.opacity = String(1 - seg(v, 0, 0.06));
+    if (asideRef.current) asideRef.current.style.opacity = String(1 - seg(v, 0.02, 0.1));
     // The chat travels, shrinks and lies down as a plate.
     const chat = chatRef.current?.querySelector<HTMLElement>(".sp-chat");
     if (chat) {
-      const m = io(seg(v, 0.02, 0.24));
-      const tilt = io(seg(v, 0.06, 0.24));
+      const m = io(seg(v, 0.03, 0.3));
+      const tilt = io(seg(v, 0.1, 0.32));
       const tx = (g.cx - (g.chat.x + g.chat.w / 2)) * m;
       const ty = (g.cy - (g.chat.y + g.chat.h / 2)) * m;
-      const sx = lerp(1, (PW * g.k * BIG) / g.chat.w, m);
-      const sy = lerp(1, (PH * g.k * BIG) / g.chat.h, m);
+      const sx = lerp(1, (PW * g.k) / g.chat.w, m);
+      const sy = lerp(1, (PH * g.k) / g.chat.h, m);
       chat.style.transform = css(mul(translate(tx, ty), mul(mixM(IDENTITY, PLATE_M, tilt), scale(sx, sy))));
-      chat.style.opacity = String(1 - seg(v, 0.24, 0.27));
+      chat.style.opacity = String(1 - seg(v, 0.32, 0.36));
     }
     // The stack takes over in the same place, then explodes.
-    if (stackRef.current) stackRef.current.style.opacity = String(seg(v, 0.23, 0.26));
+    if (stackRef.current) stackRef.current.style.opacity = String(seg(v, 0.3, 0.34));
     if (lineRef.current) {
-      const t = seg(v, 0.09, 0.17);
+      const t = seg(v, 0.1, 0.17);
       lineRef.current.style.opacity = String(t);
       lineRef.current.style.transform = `translate3d(0, ${18 * (1 - out(t))}px, 0)`;
     }
-    if (capRef.current) capRef.current.style.opacity = String(seg(v, 0.45, 0.55));
+    if (capRef.current) capRef.current.style.opacity = String(seg(v, 0.5, 0.6));
     const next = {
-      explode: io(seg(v, 0.25, 0.46)),
-      callouts: seg(v, 0.42, 0.62),
-      marker: v > 0.62 ? io(seg(v, 0.62, 0.8)) : -1,
-      zoom: lerp(BIG, 1, io(seg(v, 0.25, 0.46))),
+      explode: io(seg(v, 0.33, 0.56)),
+      callouts: seg(v, 0.5, 0.72),
+      marker: v > 0.72 ? io(seg(v, 0.72, 0.88)) : -1,
     };
-    setS((c) => (Math.abs(c.explode - next.explode) < 0.002 && Math.abs(c.callouts - next.callouts) < 0.002 && Math.abs(c.marker - next.marker) < 0.002 && Math.abs(c.zoom - next.zoom) < 0.002 ? c : next));
+    setS((c) => (Math.abs(c.explode - next.explode) < 0.002 && Math.abs(c.callouts - next.callouts) < 0.002 && Math.abs(c.marker - next.marker) < 0.002 ? c : next));
   }
 
   useMotionValueEvent(p, "change", (v) => {
@@ -179,7 +176,7 @@ export default function HeroScene() {
           </div>
           <div ref={stackRef} className="hs-stack" aria-label="Six plates behind the Sponsored card: answer, card, auction, agents, evidence, payment">
             {pinned ? (
-              <div className="hs-canvas" style={{ width: STACK_W, height: STACK_H, transform: `translate(-50%, -50%) scale(${k * s.zoom})` }}>
+              <div className="hs-canvas" style={{ width: STACK_W, height: STACK_H, transform: `translate(-50%, -50%) scale(${k})` }}>
                 <PlateStack tilt={1} explode={s.explode} callouts={s.callouts} marker={s.marker} />
               </div>
             ) : (
