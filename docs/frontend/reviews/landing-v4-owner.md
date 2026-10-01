@@ -86,3 +86,24 @@ Use exactly that claim (ContextHint's traction, owner-supplied, not axp.one's). 
 Show it prominently: in the hero ContextHint badge line and as a big figure in the ContextHint chapter
 ("1,000+ marketers every day"), next to the library numbers. Keep it in library.ts with the source "owner-supplied".
 No invented counts beyond this, no revenue, no customer names.
+
+## Owner: no internal details on the landing page (2026-10-02, standing rule)
+"Landing pages don't need internal details. Small tags with IDs don't look good on a landing page."
+- Remove from the landing page entirely: record IDs (ads:mapping:..., ads:hint:...), hashes, policy names
+  (fit_intent_bid_v1), model version strings (jev-1.13.0, gpt-6.1-sol), level shorthands (R3 I3), run IDs,
+  "legacy ID" notes, base units, lamports, campaign-ID wording for the tie rule (say "a fixed tie rule").
+- Provenance: keep it human and sparse. At most one quiet source line per figure/scene (e.g. "Values from our recorded
+  run. Motion is illustrative."), not a chip on every element. The 10-glyph legend goes (it lives in the MVP).
+- All of that detail belongs in the MVP (the Ledger explorer, inspector, Verify). The landing links there.
+
+## Owner: highlight Jev more (2026-10-02)
+"Jev needs to be highlighted more: it's the decision API we're using, it's good for marketing."
+Jev (by TypeSafe) is the decision API behind every advertiser agent's judgment. Give it a clear, proud moment:
+- In the stage beat "Agents judge the fit" and the exploded-card "Agents" plate: "Judged by Jev" as the named engine.
+- A dedicated short feature block (paper, ultramarine): "Every bid starts as a Jev decision." Jev returns typed
+  judgments for each opportunity: how relevant it is, how strong the buying intent is, and which approved creative fits,
+  with its own confidence. axp.one turns those judgments into a bounded bid in code; Jev never sees money.
+  Real numbers from the run only: 15 Jev decisions, each returned in under a second (recorded 315 to 846 ms; say
+  "under a second", no speed-advantage claims), bid or skip on every one, LeatherGuard's skip included.
+- Name it "Jev by TypeSafe" and link https://docs.typesafe.ai (new tab). No partnership/endorsement claim beyond
+  "built with Jev". Keep it replaceable framing implicit (don't call it the only or optimal model).
