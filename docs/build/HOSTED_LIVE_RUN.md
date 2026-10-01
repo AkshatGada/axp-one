@@ -1,0 +1,201 @@
+# Hosted live run (axp.one): architecture
+
+Status 2026-10-02: designed; the API runs locally (`node scripts/hosted/dev-server.mjs`).
+Vercel packaging (section 9) is designed but deliberately not built yet (owner: hosting last).
+
+A judge presses "Run it live" in the hosted MVP and gets a real, bounded V3 run on
+Solana Devnet: four DeepSeek `deepseek-flash` organic answers, 15 real Jev decisions,
+deterministic first-price auctions, publisher delivery acknowledged from the judge's
+own browser, publisher-signed receipts, accepted charges, cumulative vouchers and
+real Devnet channel opens/closes in test USDC. The result is a bundle in the
+`artifacts/v3/replay` schema, persisted and viewable later with the same MVP components.
+
+## 1. Shape
+
+```
+axp.one/            landing   (apps/marketing static export)
+axp.one/mvp/        MVP       (apps/product-ui static export, NEXT_PUBLIC_BASE_PATH=/mvp)
+axp.one/api/*       one Node function (packages/hosted/api.mjs), Node 22+/24 runtime
+                    state: Upstash Redis (KV) in production, a local directory in dev
+```
+
+One function, not many: the handler routes `/api/*` itself (keeps under Hobby's
+function count and shares warm module caches). Node 22.13+ has `node:sqlite`
+unflagged; the run engine keeps using it, but only inside a per-invocation `/tmp`
+directory (see 3). Nothing in a function relies on a previous invocation's disk.
+
+## 2. What a run is
+
+Exactly the four fixed V3 scenarios (cached, offline, repeat, mobile) against the
+three fictional campaigns, because the replay schema validator (`validateV3Run`)
+requires that matrix (12 paired + 3 repeat Jev slots, 4 organic answers, 2 channels).
+Judges do not type a question: no prompt-injection surface and no length cap needed
+(a custom-question run would need a new bundle schema: owner decision, not done).
+Story gates (competition, three placements, multiple increments) are reported, never
+forced: a live run may legitimately differ from the recording.
+
+## 3. Persistence
+
+**Upstash Redis (Vercel Marketplace, free tier)**, REST API via `fetch` (no SDK).
+Chosen over Blob (no atomic lock/counter) and Neon (SQL schema + driver for what is
+a key/value need). Free tier: 256 MB, 500K commands/month, 10 MB/request: a run's
+encrypted state is about 0.3 MB compressed, its public bundle about 3 MB.
+
+| Key | Value |
+|---|---|
+| `axp:run:<id>` | run record: phase, timestamps, public status (fast GETs) |
+| `axp:run:<id>:state` | AES-256-GCM encrypted, gzipped snapshot of the run's private state dir (SQLite files, publisher receipt key, vouchers) |
+| `axp:run:<id>:file:<path>` | public outputs (organic answers, chain-check, restart, replay bundle) |
+| `axp:run:<id>:lease` | step lock (SET NX PX) |
+| `axp:runs` | recent run ids |
+| `axp:day:<date>[:ip:<hmac>]` | daily counters |
+| `axp:idem:<key>` | idempotency key → run id |
+
+Env: `KV_REST_API_URL`, `KV_REST_API_TOKEN` (injected by the integration; the
+`UPSTASH_REDIS_REST_*` names are also accepted), `AXP_STATE_KEY` (32 random bytes,
+base64). Without KV variables the same code uses `local-state/hosted/` (dev).
+
+Each step: take the lease, restore the snapshot into `/tmp/<run>`, run one step of
+the existing engine (`packages/v3/service.mjs` + the payment adapter, unchanged),
+save the snapshot and public files, release the lease.
+
+## 4. Run flow and time limits
+
+Measured: organic 10–60 s each, Jev about 1 s per call, a Devnet open or close 5–20 s
+to finality. The browser drives the run by calling `POST /api/runs/:id/advance`
+(every 2–3 s); each call does at most one step, each step stays well under the
+300 s function limit (Hobby with Fluid compute; 60 s would not fit the opening step).
+
+| Phase | Work | Typical |
+|---|---|---|
+| `queued` | balances check, approve + freeze campaigns, frozen Devnet terms, request 4 organic answers | 2–4 s |
+| `opening` | open ClearVault then KeyForge (sequential: the adapter refuses to sign while another channel is unreconciled), concurrently 4 DeepSeek answers | 30–70 s |
+| `auctions` | cached, offline, repeat (15 Jev calls), mobile (0 calls, policy no-fill) | 15–40 s |
+| `delivery` | waits for the judge's browser to render + acknowledge each award; authorizes the voucher after each receipt | judge-paced, 10 min window |
+| `closing` | drain + cooperative close of both channels | 20–40 s |
+| `finalizing` | chain verification, restart check, bundle export + validation | 5–10 s |
+| `completed` | bundle downloadable, viewable in the MVP | |
+
+**Channels: open + close per run (chosen)** rather than long-lived pre-opened
+channels with periodic closes. Per-run channels reuse the proven adapter, terms and
+bundle validator unchanged (voucher expiry 2 h, two charges, 8000 cap per channel),
+give each run its own open/close explorer links, and leave nothing open between runs.
+Long-lived channels would change the shared payment terms and the evidence schema
+(an owner decision) to save about 40 s per run.
+
+**Wallets: stable advertiser wallets (chosen)** instead of the rehearsal's fresh
+payers funded per run: two payers (ClearVault, KeyForge) and one publisher payee,
+generated once (`scripts/hosted/wallets.mjs init`), funded once from the existing
+disposable Devnet wallet (`fund`). Saves a funding transaction per run and keeps
+refunds in the system. Hosted, they arrive as `AXP_DEVNET_WALLETS` (base64 JSON);
+locally from `local-state/secrets/hosted-devnet-wallets.json` (0600, ignored).
+
+## 5. Abuse controls
+
+- `AXP_LIVE_ENABLED=1` required to start runs (and to sign or call models).
+- Optional judge passcode `AXP_LIVE_PASSCODE` (timing-safe compare).
+- Caps: `AXP_LIVE_DAILY_CAP` (default 20 runs/day), `AXP_LIVE_IP_DAILY_CAP`
+  (default 3 per IP/day; the IP is stored only as an HMAC), `AXP_LIVE_MAX_ACTIVE`
+  (default 1 concurrent run: one public RPC, one payer pair).
+- Model budgets per run are the frozen V3 policy: at most 24 Jev admissions
+  (15 used) and at most 10 DeepSeek attempts (4 per scenario). Day maximum =
+  cap × those numbers. DeepSeek model pinned to `deepseek-flash` (pro rejected).
+- Timeouts: DeepSeek 90 s, Jev 12 s per call, RPC 15–20 s, step lease 290 s,
+  delivery window `AXP_LIVE_DELIVERY_WINDOW_SECONDS` (600), awards expire after 30 min.
+- Idempotency: `Idempotency-Key` on start; the lease serializes steps; receipts,
+  opens, closes and vouchers are idempotent in the existing engine.
+- Request bodies at most 16 KB, strict field allowlists, same-origin POSTs only,
+  the run token (returned once at start, stored as a hash) is required to acknowledge
+  delivery. Anyone may advance a run (it only performs its fixed script).
+
+## 6. Devnet funding math
+
+Per run (2 opens, 2 closes): network fees about 0.00004 SOL; each channel leaves its
+channel-account rent (0.00195 SOL) behind; the escrow token account rent is
+reclaimed at close. So about 0.004 SOL and at most 0.012 test USDC (payouts, which
+move payer → publisher) per run; 0.04 USDC is locked as deposits during a run and
+refunded at close. Initial funding: 0.25 SOL + 1 USDC per payer covers about 60
+runs of rent and about 100 runs of payouts; at 20 runs/day that is a top-up every
+3 days (the funder holds about 4.9 SOL and 18.9 Devnet USDC). Publisher payouts can
+be swept back to the payers. `GET /api/live` reports payer balances so the
+MVP can say "live runs paused: wallet top-up needed" instead of failing.
+
+## 7. Failure handling
+
+- RPC 429: the transport retries with identical bytes (same signed wire, no new
+  identity); operator RPC helper backs off; `sendTransaction` is never re-signed.
+- Every step is resumable: a crashed step leaves the lease to expire; the next
+  advance restores the last snapshot and the adapter reconciles by lookup
+  (`submitted` → finalized/failed) before any new signing. No double-sends: signed
+  wires are persisted before broadcast and only rebroadcast unchanged.
+- Bounded retries per phase (4 attempts). Before delivery, exhaustion aborts the
+  run: reserved awards fail (no charge) and open channels close with a refund
+  (`zeroChargeClose`). If closing itself keeps failing the run becomes
+  `needs_operator` (run `node scripts/hosted/runs.mjs reconcile <id>`).
+- A judge who leaves: the delivery window expires, the next advance (any viewer,
+  the local sweeper, or the cron in 9) fails the remaining awards and closes.
+  Never acknowledged by the server: no receipt without a browser render.
+
+## 8. Browser delivery acknowledgement
+
+During `delivery` the status lists each reserved award (advertiser, approved
+creative text, `creativeHash`, price, expiry). The MVP inserts a card into its own
+DOM with a visible `Sponsored` label and the creative text, checks both from the
+DOM, then posts `{domInserted:true, sponsoredLabelPresent:true, creativeHash}` with
+the run token. The server signs the publisher receipt with the run's own key
+(`session.acknowledge`), the exchange accepts the charge, and the voucher for that
+channel is authorized immediately. `acknowledgeCard()` in the client contract does
+the DOM checks. It proves an owned-app DOM insertion, not human attention.
+
+## 9. Vercel packaging (designed, deferred)
+
+- `scripts/build-site.mjs`: build marketing → `/`, MVP with `NEXT_PUBLIC_BASE_PATH=/mvp`
+  → `/mvp/`, rebuild the payment SDK (`tooling/payment-sdk` + `phase4-sdk.mjs`) and
+  write `.vercel/output` (Build Output API): `static/`, `functions/api/index.func`
+  (handler + `packages/`, `apps/backend/`, `artifacts/v2/evidence`, the SDK),
+  `config.json` routes `/api/(.*)` → the function.
+- Function: Node 22.x or 24.x, `maxDuration` 300, memory 1024 MB.
+- `vercel.json`: `buildCommand`, headers (no-store on `/api`), cron
+  `/api/cron/sweep` (daily on Hobby, every 2 min on Pro) with `CRON_SECRET`.
+- Env names: `JEV_API_KEY`, `DEEPSEEK_API_KEY`, `AXP_LIVE_ENABLED`,
+  `AXP_LIVE_PASSCODE`, `AXP_LIVE_DAILY_CAP`, `AXP_LIVE_IP_DAILY_CAP`,
+  `AXP_LIVE_MAX_ACTIVE`, `AXP_LIVE_DELIVERY_WINDOW_SECONDS`, `AXP_DEVNET_WALLETS`,
+  `AXP_STATE_KEY`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `CRON_SECRET`.
+
+## 10. Client contract (for the MVP "Run it live" UI)
+
+`packages/hosted/client.mjs` + `client.d.mts` (dependency-free; import or copy).
+
+| Call | HTTP | Notes |
+|---|---|---|
+| `config()` | `GET /api/live` | enabled, passcodeRequired, caps, used today, active run, payer health |
+| `start({passcode?, idempotencyKey?})` | `POST /api/runs` | → `{runId, runToken, status}`; keep `runToken` in memory/sessionStorage |
+| `list()` | `GET /api/runs` | recent runs, newest first |
+| `status(id)` | `GET /api/runs/:id` | `RunStatus` (phase, steps, turns, awards, payments with explorer links) |
+| `advance(id)` | `POST /api/runs/:id/advance` | performs one step; returns `RunStatus` (`busy:true` if a step is in flight) |
+| `render(id, awardId, body, token)` | `POST /api/runs/:id/awards/:awardId/render` | the browser delivery acknowledgement |
+| `file(id, path)` | `GET /api/runs/:id/files/<path>` | `replay/run.json`, `replay/manifest.json`, `chain-check.json`, `restart.json`, `devnet-feasibility.json`, `organic/<scenario>.json` |
+| `bundle(id)` | the three files above | `{run, manifest, chainCheck}`: exactly what `apps/product-ui/scripts/project-run.mjs` reads |
+| `driveRun(client, id, opts)` | loop | advances until `delivery` with pending awards or a terminal phase |
+| `acknowledgeCard(client, id, token, award, element)` | | DOM checks, then `render` |
+
+The file layout mirrors `artifacts/<run>/` (`replay/` plus sibling `chain-check.json`),
+so a completed hosted run can be projected with the same code as a committed one.
+
+## 11. Honest risks
+
+- Public Devnet RPC (`api.devnet.solana.com`, frozen into the terms) rate-limits; a
+  busy hour can stall opens/closes. Mitigated by retries and one active run; a
+  private RPC would need a terms/environment change (owner decision).
+- Jev and DeepSeek outages make runs abstain or abort (no charges, refunds at close).
+- Stochastic decisions: a live run may have fewer placements or no competition; the
+  MVP must render story-gate failures honestly (the schema reports them).
+- An abandoned run keeps 0.04 test USDC locked until the window passes and something
+  advances it (on Hobby the cron is daily; the dev sweeper is local only).
+- `/tmp` snapshots: a crash between broadcast and snapshot save loses the
+  "submitted" mark locally; recovery relies on the persisted pre-broadcast state
+  (signed wire stored before submission) plus RPC lookup. Not exercised hosted yet.
+- Secrets live in Vercel env: Jev/DeepSeek keys and the Devnet wallets. All are
+  throwaway hackathon credentials; Devnet tokens have no value; rotate after judging.
+- The run's receipt key and vouchers are in KV, encrypted with `AXP_STATE_KEY`.
+- Delivery acknowledgement proves DOM insertion in the judge's browser, not attention.
