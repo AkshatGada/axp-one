@@ -1,4 +1,16 @@
-# AXP design systems
+# axp.one design systems
+
+> **Owner decision, 2026-10-02 (supersedes the colour rules below):** the identity is **ULTRAMARINE**.
+> Warm paper `#f4f2ec`, blue-biased ink `#0e1220`, and ONE electric ultramarine `--brand #2b3bff`
+> (deep `#1a26cf`, wash `#e7e9ff`, on-stage `#6573ff`). The dark stage is a deep ultramarine night
+> `#0a0e2a`, not grey. Ultramarine is used the way ContextHint uses its vermillion: bold, big, only where
+> the story peaks (winning bid, route, Sponsored frame, key numbers, primary action, wordmark dot, emphasis).
+> ContextHint keeps its own vermillion `--contexthint #f65a20`, only in its section and where its evidence
+> enters an AXP decision (orange turns into ultramarine). Money states: reserved dashed brand, accepted brand
+> hatch, authorized brand solid, settled ink. **Wordmark is lowercase `axp.one`** (and the brand name is
+> written `axp` in UI chrome). Textured metal was explored and rejected; no metal, no chrome, no gradients
+> except the functional orange-to-ultramarine evidence handoff. Steel token names remain as cool neutrals.
+
 
 Two design systems on one shared foundation, the same pattern ContextHint uses
 (editorial landing system + product system sharing tokens). Owner direction:

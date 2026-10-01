@@ -1,4 +1,4 @@
-/* STEEL: the shared AXP foundation. Tokens, fonts, base, provenance marks and money states.
+/* STEEL: the shared axp.one foundation (ultramarine identity). Tokens, fonts, base, provenance marks and money states.
    Both Prospectus (landing) and Ledger (product) import this first. Spec: docs/frontend/DESIGN_SYSTEMS.md */
 
 @font-face { font-family: "PolySans"; src: url("../fonts/PolySans-Neutral.woff2") format("woff2"); font-weight: 400; font-display: swap; }
@@ -13,29 +13,45 @@
 :root {
   color-scheme: light;
 
-  /* Colour: neutral paper and ink, steel as the only accent */
-  --paper: #f5f4f0;
-  --paper-2: #eeede8;
-  --white: #fffefa;
-  --ink: #171b1f;
-  --muted: #444d53;
-  --steel: #626c73;
-  --steel-dark: #37444b;
-  --silver: #c8ccce;
-  --line: #b9bec0;
-  --line-soft: #d6d9d9;
-  --mist: #e7e9e9;
-  --focus: #475962;
+  /* ULTRAMARINE identity (owner, 2026-10-02). Warm paper, blue-black ink, ONE electric ultramarine.
+     Ultramarine is used like ContextHint uses its vermillion: big, bold, only where the story peaks
+     (the winning bid, the route, the Sponsored frame, key numbers, the primary action, the wordmark dot). */
+  --brand: #2b3bff;            /* electric ultramarine: fills, rules, large type */
+  --brand-deep: #1a26cf;       /* hover / pressed, text-on-paper at small sizes */
+  --brand-ink: #0b1470;        /* ultramarine darkened for long text emphasis */
+  --brand-wash: #e7e9ff;       /* tint fills, selected rows */
+  --brand-line: #b9c0ff;       /* hairlines in brand */
+  --on-brand: #ffffff;
+  --brand-hatch: repeating-linear-gradient(135deg, var(--brand) 0 1.5px, transparent 1.5px 6px);
 
-  /* The one matte dark stage */
-  --stage: #1b2226;
-  --stage-2: #232c31;
-  --stage-3: #2c373d;
-  --stage-line: #677177;
-  --stage-line-soft: #3a464c;
-  --stage-ink: #eef0ee;
-  --stage-muted: #9aa5ab;
-  --stage-steel: #8f9da3;
+  /* Neutrals: warm paper, ink biased toward the brand's blue */
+  --paper: #f4f2ec;
+  --paper-2: #ecebe4;
+  --white: #fbfaf6;
+  --ink: #0e1220;
+  --muted: #4c5266;
+  --steel: #5a6178;            /* legacy name: cool secondary neutral (labels, quiet marks) */
+  --steel-dark: #2f3550;       /* legacy name: strong secondary neutral */
+  --silver: #c3c6d2;
+  --line: #c9cad3;
+  --line-soft: #e0e0e7;
+  --mist: #e9e9ef;
+  --focus: #2b3bff;
+
+  /* The one dark stage: deep ultramarine night, not grey */
+  --stage: #0a0e2a;
+  --stage-2: #111743;
+  --stage-3: #19205a;
+  --stage-line: #3a4385;
+  --stage-line-soft: #232a62;
+  --stage-ink: #eef0ff;
+  --stage-muted: #9aa2d9;
+  --stage-steel: #aeb5e6;      /* legacy name: secondary marks on stage */
+  --stage-brand: #6573ff;      /* ultramarine lifted for contrast on the stage */
+
+  /* ContextHint's own colour: only in the ContextHint section and where its evidence enters AXP */
+  --contexthint: #f65a20;
+  --contexthint-wash: #ffe4d6;
 
   /* Type families: PolySans only */
   --font-body: "PolySans", system-ui, sans-serif;
@@ -82,6 +98,7 @@
   --hatch-steel: repeating-linear-gradient(135deg, var(--steel) 0 1.5px, transparent 1.5px 6px);
   --hatch-silver: repeating-linear-gradient(135deg, var(--silver) 0 1.5px, transparent 1.5px 6px);
   --dash-line: repeating-linear-gradient(90deg, var(--steel) 0 6px, transparent 6px 11px);
+  --route-line: repeating-linear-gradient(90deg, var(--brand) 0 10px, transparent 10px 18px);
 
   /* Legacy aliases kept for apps/v3-ui (design-system/tokens.css users) */
   --dark: var(--stage);
@@ -95,8 +112,8 @@ body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(
 img, svg, video { display: block; max-width: 100%; }
 a { color: inherit; }
 button { font: inherit; color: inherit; }
-em { font-style: normal; color: var(--steel); }
-::selection { background: var(--ink); color: var(--paper); }
+em { font-style: normal; color: var(--brand-deep); }
+::selection { background: var(--brand); color: var(--on-brand); }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 .steel-data, code, kbd, samp { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .steel-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -128,9 +145,9 @@ em { font-style: normal; color: var(--steel); }
 .ms { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; line-height: 1; color: var(--ink); }
 .ms-swatch { width: 18px; height: 10px; flex: none; }
 .ms[data-state="deposit"] .ms-swatch { border: 1.5px solid var(--ink); }
-.ms[data-state="reserved"] .ms-swatch { border: 1.5px dashed var(--steel); }
-.ms[data-state="accepted"] .ms-swatch { background: var(--hatch-steel); border: 1px solid var(--steel); }
-.ms[data-state="authorized"] .ms-swatch { background: var(--steel); }
+.ms[data-state="reserved"] .ms-swatch { border: 1.5px dashed var(--brand); }
+.ms[data-state="accepted"] .ms-swatch { background: var(--brand-hatch); border: 1px solid var(--brand); }
+.ms[data-state="authorized"] .ms-swatch { background: var(--brand); }
 .ms[data-state="settled"] .ms-swatch { background: var(--ink); }
 .ms[data-state="refunded"] .ms-swatch { border: 1.5px solid var(--ink); background: var(--white); }
 .ms[data-state="pending"] .ms-swatch,

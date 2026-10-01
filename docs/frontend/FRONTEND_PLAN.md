@@ -22,6 +22,8 @@
 
 ---
 
+**Owner decisions (2026-10-02 update):** identity = ULTRAMARINE on warm paper with a deep ultramarine-night stage; ContextHint keeps vermillion in its own section; lowercase wordmark `axp.one`; textured metal rejected. See DESIGN_SYSTEMS.md top note.
+
 **Owner decisions (2026-10-01):**
 - Show real brands in observed evidence, always labelled "Observed historical reference, not an AXP advertiser".
 - Include the 3 receipt signatures + publisher public key, so Verify checks Ed25519 live.
