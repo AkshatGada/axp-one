@@ -7,7 +7,9 @@
     "dev": "next dev -p 3420",
     "build": "node scripts/project-run.mjs && next build",
     "project": "node scripts/project-run.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --test scripts/test/*.test.mjs",
+    "predev": "node scripts/project-run.mjs"
   },
   "dependencies": {
     "@axp/design-system": "workspace:*",

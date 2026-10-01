@@ -1,0 +1,315 @@
+{
+  "projectionVersion": "axp.product-run.v1",
+  "generatedFrom": {
+    "artifacts/v3/replay/run.json": "938a0ee84b1936a02a56c8eb30b0fea0dca47f07195013f69847ee404dd6dd48",
+    "artifacts/v3/replay/manifest.json": "e34448fafa059d88c0120373fe039940ee1aca29369e3a245293a8b0f5a2152a"
+  },
+  "output": {
+    "path": "public/run.public.json",
+    "bytes": 176387,
+    "sha256": "6c2560ded6275c98bdef6470d617fe495eafa5860ca4d0f92692fa6c9dfe81ee"
+  },
+  "counts": {
+    "opportunities": 4,
+    "decisions": 15,
+    "auctions": 3,
+    "noFill": 1,
+    "receipts": 3,
+    "events": 33,
+    "channels": 2,
+    "txs": 4,
+    "inputTokens": 21336,
+    "outputTokens": 1655,
+    "evidenceRecords": 13,
+    "evidenceHints": 5
+  },
+  "sanitization": {
+    "removed": [
+      {
+        "field": "events: organic agentId",
+        "count": 4
+      },
+      {
+        "field": "events: buyer_decision agentRunId, engine provenance, conversion field",
+        "count": 5
+      },
+      {
+        "field": "decisions: packetBytes",
+        "count": 15
+      },
+      {
+        "field": "decisions: request (kept requestHash)",
+        "count": 15
+      },
+      {
+        "field": "decisions: agentRunId",
+        "count": 15
+      },
+      {
+        "field": "decisions: conversion-probability field",
+        "count": 15
+      },
+      {
+        "field": "decisions: rawOutput (kept scores, probabilities, rawOutputHash)",
+        "count": 15
+      },
+      {
+        "field": "decisions: query vector ids",
+        "count": 2
+      },
+      {
+        "field": "organic: agentId",
+        "count": 4
+      },
+      {
+        "field": "evidence: full catalogue records",
+        "count": 1165
+      },
+      {
+        "field": "evidence: full catalogue hints",
+        "count": 326
+      },
+      {
+        "field": "top-level retrieval duplicate",
+        "count": 6
+      },
+      {
+        "field": "top-level callEvidence",
+        "count": 15
+      },
+      {
+        "field": "channels: rpc url, settlementLink, openSalt",
+        "count": 2
+      },
+      {
+        "field": "chain: absolute balances (pre/post lamports, token balances, postSnapshot)",
+        "count": 4
+      },
+      {
+        "field": "laboratory (synthetic, never acceptance)",
+        "count": 1
+      },
+      {
+        "field": "freeze.drafts and freeze.manifest duplicates",
+        "count": 2
+      }
+    ],
+    "forbiddenStringsScanned": [
+      "surfnet",
+      "customUrl",
+      "openSalt",
+      "\"agentId\"",
+      "agentRunId",
+      "packetBytes",
+      "PRIVATE KEY",
+      "\"rpc\"",
+      ":8899",
+      "conversionProbability",
+      "sandbox-topup"
+    ],
+    "vectorGuard": "no numeric array longer than 64"
+  },
+  "selfChecks": [
+    {
+      "name": "manifest records the run.json hash",
+      "ok": true,
+      "detail": "938a0ee84b1936a02a56c8eb30b0fea0dca47f07195013f69847ee404dd6dd48 vs 938a0ee84b1936a02a56c8eb30b0fea0dca47f07195013f69847ee404dd6dd48"
+    },
+    {
+      "name": "bid v3-cached/v3-clearvault = computeBid(3:3)",
+      "ok": true,
+      "detail": "4000 vs 4000"
+    },
+    {
+      "name": "bid v3-cached/v3-clearvault policy version",
+      "ok": true
+    },
+    {
+      "name": "bid v3-cached/v3-keyforge = computeBid(3:3)",
+      "ok": true,
+      "detail": "4000 vs 4000"
+    },
+    {
+      "name": "bid v3-cached/v3-keyforge policy version",
+      "ok": true
+    },
+    {
+      "name": "auction v3-cached winner by rank",
+      "ok": true
+    },
+    {
+      "name": "bid v3-offline/v3-clearvault = computeBid(3:2)",
+      "ok": true,
+      "detail": "3000 vs 3000"
+    },
+    {
+      "name": "bid v3-offline/v3-clearvault policy version",
+      "ok": true
+    },
+    {
+      "name": "bid v3-offline/v3-keyforge = computeBid(3:2)",
+      "ok": true,
+      "detail": "3000 vs 3000"
+    },
+    {
+      "name": "bid v3-offline/v3-keyforge policy version",
+      "ok": true
+    },
+    {
+      "name": "auction v3-offline winner by rank",
+      "ok": true
+    },
+    {
+      "name": "bid v3-repeat/v3-keyforge = computeBid(3:2)",
+      "ok": true,
+      "detail": "3000 vs 3000"
+    },
+    {
+      "name": "bid v3-repeat/v3-keyforge policy version",
+      "ok": true
+    },
+    {
+      "name": "auction v3-repeat winner by rank",
+      "ok": true
+    },
+    {
+      "name": "count: 4 opportunities",
+      "ok": true,
+      "detail": "4"
+    },
+    {
+      "name": "count: 15 agent decisions",
+      "ok": true,
+      "detail": "15"
+    },
+    {
+      "name": "count: 3 auctions + 1 no-fill",
+      "ok": true
+    },
+    {
+      "name": "count: 3 receipts",
+      "ok": true,
+      "detail": "3"
+    },
+    {
+      "name": "count: 33 events",
+      "ok": true,
+      "detail": "33"
+    },
+    {
+      "name": "count: 2 funded channels",
+      "ok": true,
+      "detail": "2"
+    },
+    {
+      "name": "count: 4 chain transactions",
+      "ok": true,
+      "detail": "4"
+    },
+    {
+      "name": "evidence: 13 records, 5 hints",
+      "ok": true,
+      "detail": "13/5"
+    },
+    {
+      "name": "story order: questionIndex 0..3",
+      "ok": true
+    },
+    {
+      "name": "story order: mobile no-fill is last",
+      "ok": true
+    },
+    {
+      "name": "events sorted by seq",
+      "ok": true
+    },
+    {
+      "name": "chain txs sorted by slot",
+      "ok": true
+    },
+    {
+      "name": "charges 4000 + 3000 + 3000 = 10000",
+      "ok": true
+    },
+    {
+      "name": "running totals 0.004 / 0.007 / 0.010 / 0.010",
+      "ok": true
+    },
+    {
+      "name": "conservation v3-clearvault: settled + refund = deposit",
+      "ok": true
+    },
+    {
+      "name": "conservation v3-clearvault: close deltas = settled, refund",
+      "ok": true
+    },
+    {
+      "name": "conservation v3-clearvault: open delta = -deposit",
+      "ok": true
+    },
+    {
+      "name": "settled = last voucher v3-clearvault",
+      "ok": true
+    },
+    {
+      "name": "conservation v3-keyforge: settled + refund = deposit",
+      "ok": true
+    },
+    {
+      "name": "conservation v3-keyforge: close deltas = settled, refund",
+      "ok": true
+    },
+    {
+      "name": "conservation v3-keyforge: open delta = -deposit",
+      "ok": true
+    },
+    {
+      "name": "settled = last voucher v3-keyforge",
+      "ok": true
+    },
+    {
+      "name": "payout + refund = deposits (0.010 + 0.030 = 0.040)",
+      "ok": true
+    },
+    {
+      "name": "fee + new rent within cap",
+      "ok": true,
+      "detail": "9463840 <= 20000000"
+    },
+    {
+      "name": "receipts joined by awardId",
+      "ok": true
+    },
+    {
+      "name": "no decision exposes a conversion field",
+      "ok": true
+    },
+    {
+      "name": "ClearVault repeat: agent bid, not admitted",
+      "ok": true
+    },
+    {
+      "name": "sanitization: no forbidden strings",
+      "ok": true
+    },
+    {
+      "name": "vector guard: no numeric array longer than 64",
+      "ok": true
+    },
+    {
+      "name": "size budget <= 300KB",
+      "ok": true,
+      "detail": "176387 bytes"
+    },
+    {
+      "name": "verify checks pass (48)",
+      "ok": true
+    }
+  ],
+  "verify": {
+    "total": 48,
+    "passed": 48,
+    "failed": 0,
+    "skipped": 0
+  }
+}

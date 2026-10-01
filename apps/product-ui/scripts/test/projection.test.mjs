@@ -1,0 +1,64 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { resolve, dirname } from 'node:path';
+import { project, scanForbidden, longNumericArrays, structuralChecks } from '../project-run.mjs';
+
+const app = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const repo = resolve(app, '../..');
+const runBytes = readFileSync(resolve(repo, 'artifacts/v3/replay/run.json'));
+const manifestBytes = readFileSync(resolve(repo, 'artifacts/v3/replay/manifest.json'));
+const shipped = readFileSync(resolve(app, 'public/run.public.json'), 'utf8');
+const { projection } = project({ runBytes, manifestBytes });
+
+test('projection is deterministic and matches the shipped file', () => {
+  assert.equal(JSON.stringify(projection), shipped);
+  assert.equal(readFileSync(resolve(app, 'src/data/run.public.json'), 'utf8'), shipped);
+});
+
+test('counts, story order and joins', () => {
+  const p = projection;
+  assert.deepEqual([p.counts.opportunities, p.counts.decisions, p.counts.auctions, p.counts.noFill, p.counts.receipts, p.counts.events, p.counts.channels, p.counts.txs], [4, 15, 3, 1, 3, 33, 2, 4]);
+  assert.deepEqual(p.opportunities.map((o) => o.scenarioId), ['cached', 'offline', 'repeat', 'mobile']);
+  assert.deepEqual(p.opportunities.map((o) => o.runningTotalBaseUnits), ['4000', '7000', '10000', '10000']);
+  for (const o of p.opportunities.filter((x) => x.award)) {
+    assert.equal(o.receipt.fields.awardId, o.award.id);
+    assert.equal(o.charge.awardId, o.award.id);
+    assert.equal(o.voucher.chargeId, o.charge.id);
+  }
+  assert.deepEqual(p.chainTxs.map((t) => t.slot), [452225151, 452225252, 452225945, 452226063]);
+  const o3 = p.opportunities[2];
+  const cv = o3.decisions.find((d) => d.campaignId === 'v3-clearvault');
+  assert.equal(cv.decision, 'bid');
+  assert.equal(cv.auctionRole, 'not_admitted');
+  assert.equal(o3.auction.notAdmitted[0].sessionAwards, 2);
+  assert.equal(p.opportunities[3].decisions.length, 0);
+  assert.deepEqual(p.opportunities[3].eligibility.excluded.map((x) => x.missing.join()), ['mobile_software_wallet', 'mobile_software_wallet', 'crypto_storage,mobile_software_wallet']);
+  const cached = p.opportunities[0].decisions.filter((d) => d.campaignId === 'v3-clearvault').map((d) => d.scores.intent);
+  assert.deepEqual(cached, [2.38, 2.52]);
+});
+
+test('sanitization, vector guard and size budget', () => {
+  const text = JSON.stringify(projection);
+  assert.deepEqual(scanForbidden(text), []);
+  assert.deepEqual(longNumericArrays(projection), []);
+  assert.ok(Buffer.byteLength(text) <= 300 * 1024);
+  assert.ok(!/postSnapshot|preBalances|postTokenBalances|settlementLink|callEvidence/.test(text));
+  // the guards catch what they claim to catch
+  assert.deepEqual(scanForbidden('{"rpc":"x","agentRunId":1}'), ['agentRunId', '"rpc"']);
+  assert.equal(longNumericArrays({ a: { v: Array.from({ length: 768 }, () => 0.1) } }).length, 1);
+});
+
+test('structural checks fail on broken conservation and count drift', () => {
+  const broken = structuredClone(projection);
+  broken.channels[0].refundBaseUnits = '12999';
+  broken.counts.events = 32;
+  const failed = [];
+  structuralChecks(broken, (name, ok) => { if (!ok) failed.push(name); });
+  assert.ok(failed.some((n) => n.startsWith('conservation v3-clearvault')), failed.join());
+  assert.ok(failed.includes('count: 33 events'));
+  const clean = [];
+  structuralChecks(projection, (name, ok) => { if (!ok) clean.push(name); });
+  assert.deepEqual(clean, []);
+});

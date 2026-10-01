@@ -1,4 +1,4 @@
 .next/
 out/
-next-env.d.ts
 *.tsbuildinfo
+public/run.public.json
