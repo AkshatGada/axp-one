@@ -18,6 +18,7 @@ import {
   DecisionGrid,
   EligibilityMatrix,
   EvidencePacket,
+  Handoff,
   HostChat,
   InferredHint,
   InspectButton,
@@ -266,6 +267,8 @@ export function EvidencePanel({ o, d }: { o: Opportunity; d: Decision }) {
       title={`${nameOf(d.campaignId)}'s agent, with history`}
       method={<MethodBadge method={rt.method} detail={vector ? `cosine, BGE-768, cached` : "word overlap, not semantic"} />}
       footer={
+        <>
+        <Handoff to={`Handed to ${nameOf(d.campaignId)}'s agent`} />
         <div className="lg-row" style={{ justifyContent: "space-between" }}>
           <span className="lg-row" style={{ gap: 10 }}>
             <span className="lg-label">Packet hash</span>
@@ -276,6 +279,7 @@ export function EvidencePanel({ o, d }: { o: Opportunity; d: Decision }) {
             <InspectButton payload={inspect.packet(o, d)}>View exact packet sent</InspectButton>
           </span>
         </div>
+        </>
       }
     >
       {rt.examples.map((e) => {

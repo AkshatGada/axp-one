@@ -16,7 +16,7 @@ export function ScopeChip({ kind, label, title }: { kind?: ProvenanceKind; label
 }
 
 export function Key({ children }: { children: ReactNode }) {
-  return <kbd className="lg-key m-plate">{children}</kbd>;
+  return <kbd className="lg-key">{children}</kbd>;
 }
 export function KeyHint({ keys, children }: { keys: string[]; children: ReactNode }) {
   return (
@@ -171,7 +171,7 @@ export function NumberStrip({ items }: { items: Array<{ value: ReactNode; label:
     <div className="lg-numbers">
       {items.map((it, i) => (
         <div className="lg-number" key={it.key ?? i}>
-          <span className="lg-number-v t-steel">{it.value}</span>
+          <span className="lg-number-v">{it.value}</span>
           <span className="lg-number-l">{it.label}</span>
         </div>
       ))}
@@ -194,7 +194,7 @@ export function Term({ children, title, def }: { children: ReactNode; title?: Re
 
 export function Button({ children, variant, size, onClick, type = "button", disabled, ariaLabel }: { children: ReactNode; variant?: "outline" | "text"; size?: "lg"; onClick?: () => void; type?: "button" | "submit"; disabled?: boolean; ariaLabel?: string }) {
   return (
-    <button type={type} className={`lg-btn ${variant === "text" ? "" : variant === "outline" ? "m-chrome-rim" : "m-gun m-chrome-rim"}`} data-variant={variant} data-size={size} onClick={onClick} disabled={disabled} aria-label={ariaLabel}>
+    <button type={type} className="lg-btn" data-variant={variant} data-size={size} onClick={onClick} disabled={disabled} aria-label={ariaLabel}>
       {children}
     </button>
   );

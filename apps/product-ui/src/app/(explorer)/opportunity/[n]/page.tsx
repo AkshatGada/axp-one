@@ -139,7 +139,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ n:
             </StepShell>
             {noFill ? (
               <li id="nofill" className="lg-step" data-collapsed>
-                <span className="lg-step-node m-chrome-rim" aria-hidden>
+                <span className="lg-step-node" aria-hidden>
                   3
                 </span>
                 <div className="lg-step-body">
@@ -181,18 +181,18 @@ export default async function OpportunityPage({ params }: { params: Promise<{ n:
           </ol>
           <nav className="op-nav" aria-label="Opportunities">
             {prev ? (
-              <Link className="lg-btn m-chrome-rim" data-variant="outline" href={`/opportunity/${prev}/`}>
+              <Link className="lg-btn" data-variant="outline" href={`/opportunity/${prev}/`}>
                 <span className="lg-arrow">←</span> Opportunity {prev}
               </Link>
             ) : (
               <span />
             )}
             {next ? (
-              <Link className="lg-btn m-gun m-chrome-rim" href={`/opportunity/${next}/`}>
+              <Link className="lg-btn" href={`/opportunity/${next}/`}>
                 Opportunity {next} <span className="lg-arrow">→</span>
               </Link>
             ) : (
-              <Link className="lg-btn m-gun m-chrome-rim" href="/settlement/">
+              <Link className="lg-btn" href="/settlement/">
                 Settlement <span className="lg-arrow">→</span>
               </Link>
             )}

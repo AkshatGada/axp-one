@@ -203,6 +203,19 @@ export function NeighborList({ items }: { items: Array<{ similarity: number; tex
   );
 }
 
+/** ContextHint evidence (vermillion) handed into an agent's decision (ultramarine). */
+export function Handoff({ from = "ContextHint evidence", to }: { from?: ReactNode; to: ReactNode }) {
+  return (
+    <div className="lg-handoff" aria-label={`${typeof from === "string" ? from : "Evidence"} handed to ${typeof to === "string" ? to : "the agent"}`}>
+      <div className="lg-handoff-rule" />
+      <div className="lg-handoff-l">
+        <b>{from}</b>
+        <b>{to}</b>
+      </div>
+    </div>
+  );
+}
+
 /** One agent's packet: the method, what it was shown, and the exact packet hash. */
 export function EvidencePacket({ title, method, children, footer, id }: { title: ReactNode; method: ReactNode; children: ReactNode; footer?: ReactNode; id?: string }) {
   return (
@@ -237,7 +250,7 @@ export function ScoreRuler({ min = 0, max = 3, roundLines, keyLine, marks, capti
         ))}
         {roundLines.map((r) => (
           <span key={`r${r}`} className="lg-ruler-round" data-key={r === keyLine || undefined} style={{ left: pos(r), top: r === keyLine ? -14 : 4 }}>
-            {r === keyLine ? <span className="lg-ruler-roundl">{r.toFixed(1)} rounding line</span> : null}
+            {r === keyLine ? <span className="lg-ruler-roundl" data-flip={(r - min) / (max - min) > 0.7 || undefined}>{r.toFixed(1)} rounding line</span> : null}
           </span>
         ))}
         {marks.map((m) => (
@@ -476,7 +489,7 @@ export function StepRail({ children }: { children: ReactNode }) {
 export function Step({ n, id, title, explain, aside, children, active, dim, collapsed }: { n: ReactNode; id: string; title: ReactNode; explain?: ReactNode; aside?: ReactNode; children?: ReactNode; active?: boolean; dim?: boolean; collapsed?: boolean }) {
   return (
     <li className="lg-step" id={id} data-active={active || undefined} data-dim={dim || undefined} data-collapsed={collapsed || undefined} data-step-anchor={id}>
-      <span className="lg-step-node m-chrome-rim" data-step-node aria-hidden>
+      <span className="lg-step-node" data-step-node aria-hidden>
         {n}
       </span>
       <div className="lg-step-body">
@@ -497,7 +510,7 @@ export function Step({ n, id, title, explain, aside, children, active, dim, coll
 export function ChannelMeter({ scale, segments, labels, legend }: { scale: number; segments: Array<{ state: MoneyState; value: number; label?: string; key: string }>; labels?: [ReactNode, ReactNode]; legend?: ReactNode }) {
   return (
     <div className="lg-meter">
-      <div className="lg-meter-bar m-plate" role="img" aria-label={segments.map((s) => `${s.state} ${s.label ?? s.value}`).join(", ")}>
+      <div className="lg-meter-bar" role="img" aria-label={segments.map((s) => `${s.state} ${s.label ?? s.value}`).join(", ")}>
         {segments.map((s) => (
           <span key={s.key} className="lg-meter-seg" data-state={s.state} style={{ width: `${(s.value / scale) * 100}%` }}>
             {s.label && s.value / scale > 0.12 ? <span>{s.label}</span> : null}

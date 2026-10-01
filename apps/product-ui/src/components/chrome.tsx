@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { AppFrame, InspectorProvider, RunSpine, ScopeBar, ScopeChip, Provenance, type LinkComponent, type SpineItem } from "@axp/design-system/ledger";
+import { AppFrame, InspectorProvider, RunSpine, ScopeBar, ScopeChip, Provenance, Wordmark, type LinkComponent, type SpineItem } from "@axp/design-system/ledger";
 import { LANDING_URL } from "@/lib/paths";
 
 export type SpineOpp = { n: number; question: string; outcome: string; glyph: "filled" | "capped" | "nofill"; total: string };
@@ -29,7 +29,7 @@ export function Chrome({ runId, opps, children }: { runId: string; opps: SpineOp
         scopeBar={
           <ScopeBar
             Link={L}
-            brand="AXP.one"
+            brand={<Wordmark />}
             brandHref={LANDING_URL}
             runId={runId}
             chips={

@@ -1,5 +1,14 @@
 import type { ComponentType, ReactNode } from "react";
 
+/** The lowercase wordmark with the ultramarine dot. */
+export function Wordmark() {
+  return (
+    <>
+      axp<span className="lg-brand-dot">.</span>one
+    </>
+  );
+}
+
 /** A link component (next/link in the app, a plain anchor by default). */
 export type LinkComponent = ComponentType<{ href: string; className?: string; children?: ReactNode; "aria-current"?: "page" | undefined; title?: string; prefetch?: boolean }>;
 const A: LinkComponent = ({ href, className, children, title, ...rest }) => (
@@ -27,7 +36,7 @@ export function AppFrame({ scopeBar, spine, children }: { scopeBar: ReactNode; s
 /** Persistent scope: what this is (a recorded run), where money moved (sandbox), what is fictional. */
 export function ScopeBar({ brand, brandHref, runId, chips, actions, Link = A }: { brand: ReactNode; brandHref: string; runId: string; chips: ReactNode; actions?: ReactNode; Link?: LinkComponent }) {
   return (
-    <header className="lg-scope m-brushed">
+    <header className="lg-scope">
       <Link href={brandHref} className="lg-brand" title="AXP.one">
         <span className="lg-brand-mark">{brand}</span>
       </Link>

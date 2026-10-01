@@ -71,7 +71,7 @@ export function StartButton({ label = "Step through" }: { label?: string }) {
   const { mode, start, exit } = useSteps();
   return (
     <span className="lg-row" style={{ gap: 10 }}>
-      <button type="button" className="lg-btn m-gun m-chrome-rim" onClick={() => (mode ? exit() : start(0))}>
+      <button type="button" className="lg-btn" onClick={() => (mode ? exit() : start(0))}>
         {mode ? "Leave step-through" : label}
       </button>
       <span className="lg-keyhint">
