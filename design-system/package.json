@@ -13,5 +13,10 @@
     "./ledger.css": "./ledger/ledger.css",
     "./fonts/*": "./fonts/*"
   },
-  "peerDependencies": { "react": ">=19" }
+  "peerDependencies": {
+    "react": ">=19"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0"
+  }
 }
