@@ -88,8 +88,8 @@ html[data-px-motion="on"] .sp-chat[data-intro] .sp-card-foot { animation: spFade
 .sp-chain-step[data-tone="brand"] { --c: var(--brand); }
 /* The handoff: ContextHint's evidence enters an AXP decision, vermillion turning into ultramarine. */
 .sp-chain-step[data-tone="hand"]::before { background: linear-gradient(180deg, var(--contexthint), var(--brand)); -webkit-mask: repeating-linear-gradient(180deg, #000 0 6px, transparent 6px 10px); mask: repeating-linear-gradient(180deg, #000 0 6px, transparent 6px 10px); }
-.sp-chain-step[data-tone="ch"] .pv, .sp-chain-step[data-tone="ch"] .sp-chain-kicker { color: var(--contexthint); }
-.sp-chain-step[data-tone="hand"] .pv, .sp-chain-step[data-tone="brand"] .pv, .sp-chain-step[data-tone="brand"] .sp-chain-kicker { color: var(--brand); }
+.sp-chain-step[data-tone="ch"] .pv, .sp-chain-step[data-tone="ch"] .sp-chain-kicker, .sp-chain-step[data-tone="hand"] .pv, .sp-chain-step[data-tone="hand"] .sp-chain-kicker { color: var(--contexthint); }
+.sp-chain-step[data-tone="brand"] .pv, .sp-chain-step[data-tone="brand"] .sp-chain-kicker { color: var(--brand); }
 .sp-chain-step[data-tone="brand"] .sp-chain-result { color: var(--brand); }
 .sp-chain-step:last-child::before { display: none; }
 .sp-chain-node { position: relative; z-index: 1; width: 28px; height: 28px; display: grid; place-items: center; background: var(--paper); }
@@ -113,7 +113,8 @@ html[data-px-motion="on"] .sp-chat[data-intro] .sp-card-foot { animation: spFade
 .sp-ruler-line span { position: absolute; top: -2px; left: 8px; font-size: 12px; font-weight: 500; color: var(--steel-dark); white-space: nowrap; }
 .sp-ruler-mark { position: absolute; top: 47px; width: 11px; height: 11px; transform: translateX(-50%); border: 1.5px solid var(--ink); background: var(--paper); }
 .sp-ruler-mark[data-filled] { background: var(--brand); border-color: var(--brand); }
-.sp-ruler-mark span { position: absolute; bottom: 16px; font-family: var(--font-mono); font-size: 12px; color: var(--ink); white-space: nowrap; }
+.sp-ruler-mark span { position: absolute; bottom: 16px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.sp-ruler-mark span b { font-weight: 400; font-size: 13px; color: var(--ink); margin-right: 4px; }
 .sp-ruler-mark span[data-side="left"] { right: 2px; }
 .sp-ruler-mark span[data-side="right"] { left: 2px; }
 

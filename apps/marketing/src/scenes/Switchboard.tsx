@@ -187,7 +187,11 @@ export function Switchboard({ beat }: { beat: number }) {
           </div>
         </div>
         <p style={{ marginTop: "auto" }}>
-          <span className="px-num">{excl.reason}</span>: {REASON[excl.reason]}
+          {excl.name}: {REASON[excl.reason]}
+          <br />
+          <span className="px-num" style={{ fontSize: 11 }}>
+            {excl.reason}
+          </span>
         </p>
         <Provenance kind="policy" />
       </Node>

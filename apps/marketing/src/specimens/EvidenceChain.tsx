@@ -37,10 +37,10 @@ export function ScoreRuler({ from, to, line = 2.5, fromLabel, toLabel }: { from:
         <span>from {line}, intent rounds to 3</span>
       </i>
       <i className="sp-ruler-mark" style={{ left: x(from) }} title={fromLabel}>
-        <span data-side="left">{from} text only</span>
+        <span data-side="left"><b className="px-num">{from}</b> question only</span>
       </i>
       <i className="sp-ruler-mark" data-filled="" style={{ left: x(to) }} title={toLabel}>
-        <span data-side="right">{to} with history</span>
+        <span data-side="right"><b className="px-num">{to}</b> with history</span>
       </i>
     </div>
   );

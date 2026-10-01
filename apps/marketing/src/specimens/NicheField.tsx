@@ -57,7 +57,7 @@ export function NicheField({ highlight = true, reveal = true, className, style }
         </span>
         {highlight ? (
           <span>
-            <i style={{ background: "var(--ink)" }} />
+            <i style={{ background: "var(--contexthint)" }} />
             The niche in our run
           </span>
         ) : null}

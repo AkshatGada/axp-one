@@ -129,3 +129,43 @@ html[data-px-motion="on"] .pg-in { animation: pgIn 1s var(--ease-out) both; anim
 .hs[data-pinned] .hs-line { position: absolute; z-index: 5; left: var(--gutter); top: calc(var(--px-header-h) + 24px); margin: 0; opacity: 0; }
 .hs[data-pinned] .hs-line-h { max-width: 9.5ch; font-size: clamp(28px, 2.6vw, 44px); line-height: 1.02; }
 .hs[data-pinned] .hs-cap { position: absolute; z-index: 5; right: var(--gutter); bottom: 28px; max-width: 30ch; margin: 0; text-align: right; opacity: 0; }
+
+/* Stage scene: pinned seven beats on the ultramarine night. */
+.ss-board { margin-top: clamp(48px, 6vw, 80px); }
+.ss-ticks { display: none; }
+.ss[data-pinned] { height: var(--scene-h); }
+.ss[data-pinned] .ss-stage { position: sticky; top: 0; height: 100vh; display: grid; grid-template-columns: minmax(0, .36fr) minmax(0, .64fr); gap: clamp(32px, 4vw, 72px); align-items: center; }
+.ss[data-pinned] .ss-board { margin: 0; }
+.ss[data-pinned] .ss-ticks { display: flex; margin-bottom: 32px; }
+.ss[data-pinned] .pg-beats { display: grid; border-top: 0; }
+.ss[data-pinned] .pg-beats li { grid-area: 1 / 1; display: grid; grid-template-columns: 1fr; gap: 18px; padding: 0; border: 0; opacity: 0; transform: translate3d(0, 16px, 0); transition: opacity .3s linear, transform .5s var(--ease); }
+.ss[data-pinned] .pg-beats li[data-on] { opacity: 1; transform: none; transition: opacity .45s var(--ease-out) .12s, transform .7s var(--ease-out) .12s; }
+.ss[data-pinned] .pg-beats b { font-weight: 300; font-size: clamp(30px, 2.8vw, 46px); line-height: 1.04; letter-spacing: -.025em; }
+.ss[data-pinned] .pg-beats p { font-size: 18px; max-width: 40ch; }
+
+/* Library Dive */
+.ld-stage { position: relative; }
+.ld-head { margin-bottom: clamp(24px, 3vw, 40px); max-width: 14ch; }
+.ld-field .sp-field rect.f, .ld-field .sp-field rect.o { opacity: var(--ld-dim, 1); transition: opacity .2s linear; }
+.ld-fly { position: absolute; z-index: 6; background: var(--contexthint); pointer-events: none; transform-origin: 50% 50%; will-change: transform, opacity; }
+.ld[data-pinned] { height: 250vh; }
+.ld[data-pinned] .ld-stage { position: sticky; top: 0; height: 100vh; display: grid; align-content: center; }
+.ld[data-pinned] .ld-grid { align-items: center; }
+.ld[data-pinned] .ld-chain .sp-chain-step { transition: none; }
+.ld[data-pinned] .ld-chain .sp-chain-step:nth-child(1) { opacity: var(--s0); transform: translate3d(0, calc((1 - var(--s0)) * 16px), 0); }
+.ld[data-pinned] .ld-chain .sp-chain-step:nth-child(2) { opacity: var(--s1); transform: translate3d(0, calc((1 - var(--s1)) * 16px), 0); }
+.ld[data-pinned] .ld-chain .sp-chain-step:nth-child(3) { opacity: var(--s2); transform: translate3d(0, calc((1 - var(--s2)) * 16px), 0); }
+.ld[data-pinned] .ld-chain .sp-chain-step:nth-child(4) { opacity: var(--s3); transform: translate3d(0, calc((1 - var(--s3)) * 16px), 0); }
+.ld[data-pinned] .ld-chain .sp-chain-step:nth-child(5) { opacity: var(--s4); transform: translate3d(0, calc((1 - var(--s4)) * 16px), 0); }
+
+/* Closing collapse */
+.cs { position: relative; width: 100%; max-width: 560px; justify-self: end; min-height: 360px; display: grid; align-items: center; }
+.cs-viz { position: absolute; inset: -40% -77%; pointer-events: none; }
+.pg-close { overflow: clip; }
+.cs-canvas { position: absolute; inset: 0; display: grid; align-items: center; }
+.cs-viz .sc-plate-sheet { box-shadow: 0 16px 0 -1.5px var(--brand-wash), 0 16px 0 0 var(--ink); }
+.cs-card { position: relative; z-index: 2; }
+
+/* Film mode: no cursor, no hover states, for a repeatable recording. */
+html[data-px-film] *, html[data-px-film] *::before { cursor: none !important; }
+html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: none !important; }

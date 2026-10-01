@@ -27,6 +27,7 @@ import {
   Wrap,
 } from "@axp/design-system/prospectus";
 import MotionRoot from "@/motion/MotionRoot";
+import FilmMode from "@/motion/FilmMode";
 import { LIBRARY } from "@/data/library";
 import { CACHED, CV, CV_CHANNEL, RUN, receiptFor, usdc } from "@/data/run";
 import { CLOSING, CONTEXTHINT, FOOTER, HEADER, HERO, MVP_URL, NAV, NEXT, PAYMENTS, PRINCIPLES, PROOF, ROLES, SHIFT, STAGE, VIDEO, VIDEO_ANCHOR } from "@/data/copy";
@@ -39,6 +40,10 @@ import { ReceiptSheet } from "@/specimens/Receipt";
 import { SponsoredCard } from "@/specimens/SponsoredCard";
 import { Fit } from "@/scenes/Fit";
 import HeroScene from "@/scenes/HeroScene";
+import StageScene from "@/scenes/StageScene";
+import ScrubMeter from "@/scenes/ScrubMeter";
+import LibraryDive from "@/scenes/LibraryDive";
+import ClosingStack from "@/scenes/ClosingStack";
 import { BOARD_H, BOARD_W, Switchboard } from "@/scenes/Switchboard";
 
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
@@ -63,33 +68,6 @@ function Shift() {
           </Display>
           <RoleRail roles={ROLES.roles} />
           <p className="px-small">{ROLES.legend}</p>
-        </div>
-      </Wrap>
-    </Section>
-  );
-}
-
-function Stage() {
-  return (
-    <Section id="how" tone="stage" labelledBy="how-q">
-      <Wrap>
-        <div className="pg-stage-head">
-          <Opener id="how-q" label={STAGE.label} question={STAGE.h2} lead={STAGE.lede} aside={<a className="pg-skip" href="#payments">{STAGE.skip}</a>} />
-        </div>
-        <ol className="pg-beats">
-          {STAGE.beats.map((b, i) => (
-            <li key={b.title} data-reveal="fade" style={d(i * 40)}>
-              <b>{b.title}</b>
-              <p>{b.body}</p>
-            </li>
-          ))}
-        </ol>
-        <div className="pg-stage-board only-wide">
-          <Figure title="The exchange for one opportunity" kinds={["actual", "policy", "settled"]} caption="Values are actual, from the cached question. The wiring is illustrative." onStage>
-            <Fit w={BOARD_W} h={BOARD_H}>
-              <Switchboard beat={-1} />
-            </Fit>
-          </Figure>
         </div>
       </Wrap>
     </Section>
@@ -121,7 +99,7 @@ function Payments() {
         <Opener id="pay-q" label={PAYMENTS.label} question={PAYMENTS.h2} layout="split" lead={<p className="px-body">{PAYMENTS.body}</p>} />
         <div className="pg-lanes">
           <Figure title={`${CV.name}, one channel`} kinds={["settled"]} caption={PAYMENTS.caption}>
-            <ChannelMeter ch={CV_CHANNEL} t={1} />
+            <ScrubMeter />
           </Figure>
           <div className="pg-lane-alt">
             <div className="px-marks">
@@ -173,13 +151,7 @@ function ContextHint() {
         <SourceNote>{CONTEXTHINT.source}</SourceNote>
 
         <div className="pg-dive">
-          <Display size="h2">{CONTEXTHINT.dive}</Display>
-          <div className="pg-dive-grid">
-            <Figure title="The library, one square per niche" kinds={["observed", "illustrative"]} caption={CONTEXTHINT.fieldNote}>
-              <NicheField />
-            </Figure>
-            <EvidenceChain />
-          </div>
+          <LibraryDive />
           <div className="px-stack">
             <p className="px-h3">{CONTEXTHINT.funnelTitle}</p>
             <div className="pg-funnel">
@@ -380,13 +352,7 @@ function Closing() {
               </ActionText>
             </Actions>
           </div>
-          <div style={{ maxWidth: 520, justifySelf: "end", width: "100%" }}>
-            <SponsoredCard name={CV.name} text={CV.approvedText!} destination={CV.destination} />
-            <div className="px-marks" style={{ marginTop: 16 }}>
-              <Provenance kind="actual" label="The card from the cached question" onStage />
-              <Provenance kind="fictional" onStage />
-            </div>
-          </div>
+          <ClosingStack />
         </div>
       </Wrap>
     </section>
@@ -397,11 +363,12 @@ export default function Home() {
   return (
     <>
       <MotionRoot />
+      <FilmMode />
       <SiteHeader links={NAV} cta={{ href: MVP_URL, label: HEADER.cta }} chip={HEADER.chip} />
       <main id="main" className="pg-main">
         <HeroScene />
         <Shift />
-        <Stage />
+        <StageScene />
         <Rule />
         <Payments />
         <ContextHint />

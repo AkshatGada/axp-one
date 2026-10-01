@@ -28,10 +28,22 @@ Owner of this file: the landing builder agent. Update at every milestone.
   decides the money." at display size, and an ultramarine closing. Builds as static export, 115 KB first load,
   lint clean incl. rendered HTML, no overflow at 375.
 
+- `axp-landing-v2` (ca4d142): hero Exploded Card scroll scene (pinned 330vh at >= 900px): headline lifts, chat travels
+  to centre and lies down as a plate (mixed 2D matrices), hands over to the collapsed stack, explode along the route,
+  line, callouts, Illustrative marker. Same markup is the still sequence below 900px / reduced motion / no JS.
+- `axp-landing-v3`: Shutter (square clip aperture) + pinned seven-beat dark Stage on the switchboard (`StageScene`);
+  payments meter scrubbed by scroll (`ScrubMeter`); pinned Library Dive (the run's niche square flies from the
+  983-square field into the evidence chain, steps build; `LibraryDive`); closing collapse on ultramarine
+  (`ClosingStack`); film mode `?film=1[&from=hero|stage|data|proof|close]` (`motion/FilmMode.tsx`, linear scroll in
+  scenes). Build now uses `.next-build` (NEXT_DIST_DIR) so it never collides with dev's `.next`.
+  Verified headless (Chrome via playwright-core) at 1440x900, 1280x800, 1920x1080, 390: no console errors, no
+  failed requests, no horizontal overflow, all PolySans faces loaded; reduced-motion still render complete.
+
 ## Next
-- Step 4: hero Exploded Card motion, pinned ~320vh (tag `axp-landing-v2`).
-- Step 5: Shutter + Stage, payments meter, Library Dive, RunSheet, closing, film mode.
+- Lighthouse pass, OG image via ?still=1 (public/og.png not generated yet; meta points to /og.png), Present-mode cut of
+  the video when the MVP agent has it, review fixes from the critics.
 
 ## Notes
-- Dev: `pnpm --dir apps/marketing dev` (:3410). Verify in own tab, not tab-1.
+- Dev: `pnpm --dir apps/marketing dev` (:3410). Verify in own tab, not tab-1 (the owner views :3410 there).
+- If dev 500s with MODULE_NOT_FOUND, a production build polluted `.next`: stop dev, `rm -rf .next`, restart.
 - Run order: mobile no-fill ran first (by exchange completion); page uses story order.
