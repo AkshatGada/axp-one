@@ -71,6 +71,7 @@ export function Chrome({ runId, runLabel, scope, runNote, navFoot, otherRuns = [
                   { key: "settlement", href: "/settlement/", label: "Settlement", current: starts("/settlement") },
                   { key: "evidence", href: "/evidence/", label: "Evidence", current: starts("/evidence") },
                   { key: "verify", href: "/verify/", label: "Verify", meta: verifyMeta, current: starts("/verify") },
+                  { key: "live", href: "/live/", label: "Run it live", meta: "Devnet", current: starts("/live") },
                 ],
               },
             ]}

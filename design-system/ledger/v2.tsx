@@ -1,6 +1,6 @@
 // LEDGER v2 components (dashboard grade). Use inside an element with class "ld" (or <Shell>), import as `Ld.*`.
 // Server-safe unless noted; interactive pieces live in v2-client.tsx and are re-exported here.
-import type { ComponentType, ReactNode } from "react";
+import { forwardRef, type ComponentType, type ReactNode } from "react";
 import { Provenance } from "../foundation/marks";
 import type { ProvenanceKind, MoneyState } from "../foundation/provenance";
 import { MONEY_STATE } from "../foundation/provenance";
@@ -635,23 +635,25 @@ export function ChatSpecimen({ app, question, answer, meta, slot }: { app: React
   );
 }
 
-export function SponsoredCard({ text, advertiser, url, enter }: { text: string; advertiser: string; url: string; enter?: boolean }) {
+/** The disclosed card. `data-sponsored-label` and `data-creative-copy` let a publisher check, from its own DOM, that the
+ *  label is shown and the approved text is exact (the live run's delivery acknowledgement reads them). */
+export const SponsoredCard = forwardRef<HTMLDivElement, { text: string; advertiser: string; url: string; enter?: boolean }>(function SponsoredCard({ text, advertiser, url, enter }, ref) {
   return (
-    <div className={`ld-ad${enter ? " ld-ad-enter" : ""}`}>
+    <div ref={ref} className={`ld-ad${enter ? " ld-ad-enter" : ""}`} data-sponsored-card="">
       <div className="ld-ad-top">
-        <span>Sponsored</span>
+        <span data-sponsored-label="">Sponsored</span>
         <span className="ld-caption">Fictional advertiser</span>
       </div>
-      <p className="ld-ad-text">{text}</p>
+      <p className="ld-ad-text" data-creative-copy="">{text}</p>
       <div className="ld-ad-foot">
         <span className="ld-strong" style={{ color: "var(--ld-text)" }}>
           {advertiser}
         </span>
-        <span>{url.replace(/^https:\/\//, "").replace(/\/$/, "")}</span>
+        {url ? <span>{url.replace(/^https:\/\//, "").replace(/\/$/, "")}</span> : null}
       </div>
     </div>
   );
-}
+});
 
 export function EvidenceCard({ prompt, advertiser, creative, sim, method, hint }: { prompt: string; advertiser: string; creative: string; sim: number; method: string; hint?: ReactNode }) {
   const body = creative.startsWith(advertiser) ? creative.slice(advertiser.length).trim() : creative;
