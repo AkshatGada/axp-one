@@ -78,3 +78,11 @@ Suggested choreography (builder may improve, must stay honest):
    at the packet as it enters the agent.
 6. Close the chapter with the moat line at display size and the vermillion **Visit ContextHint** action.
 Reduced motion and <900px: the same content as static charts. Keep "Planned" and truth labels intact.
+
+## Owner traction line (2026-10-02, supersedes the earlier "thousands of people" wording)
+ContextHint has **more than a thousand users and marketers using it every day**, including paying customers.
+Use exactly that claim (ContextHint's traction, owner-supplied, not axp.one's). Suggested copy:
+"More than a thousand marketers use ContextHint every day, including paying customers."
+Show it prominently: in the hero ContextHint badge line and as a big figure in the ContextHint chapter
+("1,000+ marketers every day"), next to the library numbers. Keep it in library.ts with the source "owner-supplied".
+No invented counts beyond this, no revenue, no customer names.
