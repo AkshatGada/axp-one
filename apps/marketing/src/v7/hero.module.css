@@ -182,9 +182,10 @@
 .copy { position: absolute; inset: 0; z-index: 3; display: flex; align-items: flex-end; padding: 0 var(--gutter) clamp(44px, 8.5vh, 96px); pointer-events: none; }
 .copyIn { display: grid; gap: clamp(18px, 2.4vh, 28px); max-width: 780px; pointer-events: auto; }
 .trio { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; }
-.trio a { display: inline-flex; align-items: baseline; gap: 6px; height: 34px; padding: 7px 14px 0; border: 1px solid var(--line); border-radius: var(--px-r-full); background: color-mix(in oklab, var(--white) 70%, transparent); font-size: 14px; color: var(--muted); text-decoration: none; transition: border-color var(--d-ui) var(--ease), background var(--d-ui) var(--ease); }
+.trio a { display: inline-flex; align-items: baseline; gap: 0; height: 34px; padding: 7px 14px 0; border: 1px solid var(--line); border-radius: var(--px-r-full); background: color-mix(in oklab, var(--white) 70%, transparent); font-size: 14px; color: var(--muted); text-decoration: none; transition: border-color var(--d-ui) var(--ease), background var(--d-ui) var(--ease); }
 .trio a:hover { background: var(--white); border-color: var(--silver); }
 .trio b { font-weight: 500; }
+.trio a > span { margin-right: 6px; }
 .trio a[data-tone="ch"] b { color: var(--contexthint-ink); }
 .trio a[data-tone="jev"] b { color: var(--brand); }
 .trio a[data-tone="sol"] b { color: var(--sol-deep); }

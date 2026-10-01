@@ -52,6 +52,9 @@ export default function ContextHint() {
           <h2 id="ch-title" className={s.moat} data-reveal="fade">
             {CONTEXTHINT.moat} <span className={s.accent}>{CONTEXTHINT.moatAccent}</span>
           </h2>
+          <a className={s.what} href={CH_URL} {...ext}>
+            {CONTEXTHINT.what}
+          </a>
           <ul className={s.scale}>
             {CONTEXTHINT.scale.map((x, i) => (
               <li key={x.small} data-reveal="fade" style={{ "--d": `${120 + i * 90}ms` } as CSSProperties}>

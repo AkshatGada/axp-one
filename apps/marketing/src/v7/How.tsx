@@ -167,7 +167,7 @@ export default function How() {
                   <span className={s.node} aria-hidden />
                   <span className={s.n}>{String(i + 1).padStart(2, "0")}</span>
                   <b className={s.t}>{st.t}</b>
-                  <span className={s.s}>{st.s}</span>
+                  {st.s ? <span className={s.s}>{st.s}</span> : null}
                 </li>
               ))}
             </ol>

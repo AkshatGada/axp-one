@@ -36,12 +36,12 @@ export const HERO = {
   accent: "agentic internet.",
   lede: "Advertiser agents bid for a disclosed slot beside AI answers. Code sets the price; Solana pays the app.",
   primary: "See the working MVP",
-  status: "Run live on public Solana Devnet, test USDC.",
+  status: "Live on public Solana Devnet, test USDC.",
   devnet: "See the settlement on Explorer",
   trio: [
-    { k: "Data", name: "ContextHint", href: LIBRARY.url, tone: "ch" },
-    { k: "Decisions", name: "Jev", href: JEV.url, tone: "jev" },
-    { k: "Settlement", name: "Solana", href: SOLANA_URL, tone: "sol" },
+    { k: "", name: "ContextHint", rest: ", the intelligence platform for ChatGPT ads", href: LIBRARY.url, tone: "ch" },
+    { k: "Decisions", name: "Jev", rest: "", href: JEV.url, tone: "jev" },
+    { k: "Settlement", name: "Solana", rest: "", href: SOLANA_URL, tone: "sol" },
   ],
   wallNote: "Questions observed by ContextHint. Bidding illustrative.",
   focalNote: "From our live Devnet run. ClearVault is fictional.",
@@ -73,13 +73,13 @@ export const HOW = {
   label: "How it works",
   h2: "Agents advise. Code decides the money.",
   stations: [
-    { t: "A question", s: "with its must-haves" },
+    { t: "A question", s: "" },
     { t: "Eligibility", s: "in code; no bid buys past it" },
     { t: "Judgment", s: "each agent, its own evidence" },
     { t: "Price", s: "in code; ties by fixed rule" },
     { t: "The card", s: "beside the answer, never in it" },
     { t: "Receipt", s: "signed; only then a charge" },
-    { t: "Settlement", s: "on Solana, once" },
+    { t: "Settlement", s: "" },
   ],
   mustStore: "must store crypto",
   bidWord: "bid",
@@ -93,6 +93,7 @@ export const HOW = {
 /** ContextHint: the data chapter. Scale words only. */
 export const CONTEXTHINT = {
   label: "Data from ContextHint",
+  what: "ContextHint is the intelligence platform for ChatGPT ads.",
   moat: "An auction is code. The evidence has to be collected.",
   moatAccent: "ContextHint already collects it.",
   scale: [
@@ -154,7 +155,7 @@ export const SOLANA = {
   program: "Program",
   programUrl: DEVNET?.programUrl ?? null,
   live: "Live on Solana Devnet",
-  note: "Our live run on public Solana Devnet. Test USDC, no real value.", // claim-ok: limit
+  note: "Public Solana Devnet, test USDC, no real value.", // claim-ok: limit
   kfPaid: usdc(KF_CHANNEL.settled),
 };
 
@@ -171,7 +172,7 @@ export const MVP_TOUR = {
   h2: "Open the whole run.",
   action: "Open the MVP",
   tiles: [
-    { key: "overview", title: "The run, on one screen", href: mvp("/"), alt: "The MVP overview: the demo AI app with its Sponsored card, the run's totals and the auctions." },
+    { key: "overview", title: "The whole run", href: mvp("/"), alt: "The MVP overview: the demo AI app with its Sponsored card, the run's totals and the auctions." },
     { key: "opportunity", title: "One auction, step by step", href: mvp("/opportunity/1/"), alt: "The MVP opportunity page: every stage from the moment to the charge." },
     { key: "settlement", title: "Both Solana channels", href: mvp("/settlement/"), alt: "The MVP settlement page: deposits, payouts, refunds and each channel's vouchers." },
     { key: "verify", title: "Verify it, then tamper", href: mvp("/verify/"), alt: "The MVP verify page after a one byte tamper: checks fail on the copy." },
@@ -206,7 +207,7 @@ export const NEXT = {
 
 export const VIDEO = {
   title: "axp.one recorded run, four minute walkthrough",
-  caption: "Four minutes, from our earlier sandbox run.",
+  caption: "From our earlier sandbox run.",
   chapters: ["What axp.one is", "Fictional advertisers", "Evidence from ContextHint", "A question with no exact match", "Independent answers", "Agent decisions", "Auction and price", "Delivery and receipts", "Settlement", "Restart and limits"],
 };
 
@@ -220,9 +221,9 @@ export const CLOSING = {
 export const FOOTER = {
   scope: ["Hackathon MVP.", "Live on Solana Devnet, test USDC. Not mainnet.", `${CV.name}, ${KF.name} and ${LG.name} are fictional.`], // claim-ok: limit
   contexthint: "contexthint.com",
-  jev: { text: "Decisions built with", name: JEV.name, url: JEV.url },
-  solana: "Settlement on Solana",
-  base: "October 2026.",
+  jev: { text: "Built with", name: JEV.name, url: JEV.url },
+  solana: "Settled on Solana",
+  base: "axp.one",
 };
 
 /** Shown on plates (short, from the run). */

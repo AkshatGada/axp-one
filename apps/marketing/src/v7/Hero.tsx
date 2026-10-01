@@ -135,7 +135,9 @@ function Copy() {
       <p className={s.trio}>
         {HERO.trio.map((t) => (
           <a key={t.name} href={t.href} {...ext} data-tone={t.tone}>
-            {t.k} <b>{t.name}</b>
+            {t.k ? <span>{t.k}</span> : null}
+            <b>{t.name}</b>
+            {t.rest}
           </a>
         ))}
       </p>
