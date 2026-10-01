@@ -68,3 +68,28 @@ Resume notes for the MVP builder. Spec: docs/frontend/MVP_SPEC.md + FRONTEND_PLA
   cap line. Units everywhere (USDC, lamports), glossary terms for Jev, ContextHint, tie rule, hosted Solana sandbox.
 - CLS: PolySans via next/font/local (src/app/fonts.ts) removes the font-swap shift. Measured load CLS: /verify 0.012 to
   0.014, every other route 0 to 0.004 (19 routes x 1280/1440/1920/390, zero console errors, no overflow).
+
+## MVP v4 notes (docs/frontend/reviews/mvp-v3-fixes.md A, B, C + Devnet), tag axp-mvp-v4
+- Truth: opportunity 3 says "a rule kept a bidder out" (ClearVault had 0.001 left; no amount implied). Eligibility
+  research-comparison copy only where agents were asked (opps 1 to 3). Settlement fees callout states the real rent
+  share (43% reclaimed) and never compares SOL with USDC. Arm comparisons carry "One observation per arm; not a
+  measured lift". Tie rule is "fixed in the exchange code before the run".
+- Passing needs exactly 48: `summarize()` in src/lib/verify.ts compares results with the build-time check IDs
+  (build-meta.json `verify.ids`); deletions read "n not checked". Tests cover a deleted receipt, a cleared tie flag
+  and a dropped opportunity. Verify shows values read from the fetched file, "Not run yet" before the run, and the
+  tamper flow re-runs all 48 on a copy: panel tag and a floating page banner read "Tampered copy: 46 of 48".
+- Solana Devnet re-settlement: scripts/project-devnet.mjs projects artifacts/v3-devnet/settlement.json into
+  src/data/devnet.public.json (committed) + public/devnet.public.json, with asserts (5 finalized txs, payouts and
+  refunds, receipt hashes equal the recorded receipts, devnet-only explorer links). Absent file = every devnet
+  section hidden; the build passes (checked). Settlement has a separate "Recorded receipts, settled on Solana Devnet"
+  section (numbers never merged); Verify adds a 7-check "Devnet re-settlement" group plus explorer links; Overview
+  "Why Solana" links the channels; Present beat 9 mentions it; the scope chip says so.
+- Overview: product sentence title, chat-plus-Sponsored-card picture in the first screen, "Why Solana" panel beside
+  Auctions, plain run label ("Recorded run, Oct 1"), plain activity lanes, HTML activity chart with fixed-size labels
+  and a list under 900 px.
+- Opportunity: two columns down to 1100 px (1280 works), sticky stepper, "Upcoming" for later stages, stage follows
+  the hash (Back and deep links), last stage offers "Next: Opportunity n", Evidence and Decisions have a primary
+  Inspect. Inspector now renders inside the `.ld` scope (v2 look, JSON not wrapping to column 0).
+- Present: 11 beats, 4:00. Problem opener, ends on "Disclosed. Decided in code. Paid on delivery." with limits one
+  beat earlier; "Why Solana" in beat 9; live tamper result in beat 10; zoom band 1.65 to 1.9 at every viewport.
+- Dev runs from .next-dev; `pnpm build` writes .next + out/.
