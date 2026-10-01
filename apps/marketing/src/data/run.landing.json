@@ -1,0 +1,418 @@
+{
+  "schema": "axp.landing-public.v1",
+  "counts": {
+    "questions": 4,
+    "decisions": 15,
+    "auctions": 3,
+    "ties": 2,
+    "noFill": 1,
+    "receipts": 3,
+    "events": 33,
+    "channels": 2,
+    "organicAnswers": 4
+  },
+  "policy": {
+    "maxBid": "4000",
+    "budgetCap": "8000",
+    "deposit": "20000",
+    "frequencyCap": 2,
+    "floor": "1000"
+  },
+  "campaigns": {
+    "v3-clearvault": {
+      "name": "ClearVault",
+      "fictional": true,
+      "maxBid": "4000",
+      "budgetCap": "8000",
+      "approvedText": "ClearVault is a fictional hardware wallet with offline key storage and declared Ethereum/Solana support. Straightforward self-custody guidance for people comparing hardware wallets.",
+      "destination": "https://clearvault.example/",
+      "deposit": "20000"
+    },
+    "v3-keyforge": {
+      "name": "KeyForge",
+      "fictional": true,
+      "maxBid": "4000",
+      "budgetCap": "8000",
+      "approvedText": "KeyForge is a fictional hardware wallet with offline key storage and declared Ethereum/Solana support. Hardware self-custody for experienced users comparing key-storage and recovery tradeoffs.",
+      "destination": "https://keyforge.example/",
+      "deposit": "20000"
+    },
+    "v3-leatherguard": {
+      "name": "LeatherGuard",
+      "fictional": true,
+      "maxBid": "4000",
+      "budgetCap": "8000",
+      "approvedText": "LeatherGuard is a fictional physical RFID-blocking wallet for payment cards. It cannot store cryptocurrency or manage blockchain private keys.",
+      "destination": "https://leatherguard.example/",
+      "deposit": "0"
+    }
+  },
+  "turns": [
+    {
+      "id": "v3-cached",
+      "question": "cheapest hardware wallet that still supports ethereum and solana",
+      "status": "awarded",
+      "winner": "v3-clearvault",
+      "winnerName": "ClearVault",
+      "price": "4000",
+      "organic": {
+        "excerpt": "I can’t reliably name the cheapest hardware wallet without checking current prices and Ethereum/Solana support. For a budget choice, compare entry-level hardware wallets by total delivered cost, then confirm that the exact model supports both networks through wallet software you’re comfortable using."
+      },
+      "eligible": [
+        "v3-clearvault",
+        "v3-keyforge"
+      ],
+      "excluded": [
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "reason": "missing_constraint"
+        }
+      ],
+      "bids": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "amount": "4000"
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "amount": "4000"
+        }
+      ],
+      "decisions": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "arm": "text_only",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2
+        },
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "arm": "history",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 3
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "arm": "text_only",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "arm": "history",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 3
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "arm": "text_only",
+          "decision": "skip",
+          "relevanceLevel": 1,
+          "intentLevel": 2
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "arm": "history",
+          "decision": "skip",
+          "relevanceLevel": 1,
+          "intentLevel": 2
+        }
+      ]
+    },
+    {
+      "id": "v3-offline",
+      "question": "Compare self-custody options for Ethereum and Solana, prioritizing offline key storage over a mobile-only wallet.",
+      "status": "awarded",
+      "winner": "v3-clearvault",
+      "winnerName": "ClearVault",
+      "price": "3000",
+      "organic": {
+        "excerpt": "For Ethereum and Solana, prioritize a hardware wallet if keeping private keys off your phone or computer is your main goal. Confirm that the exact device and its companion software support both networks and the transactions you need; support can differ by model, app and account type."
+      },
+      "eligible": [
+        "v3-clearvault",
+        "v3-keyforge"
+      ],
+      "excluded": [
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "reason": "missing_constraint"
+        }
+      ],
+      "bids": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "amount": "3000"
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "amount": "3000"
+        }
+      ],
+      "decisions": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "arm": "text_only",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2
+        },
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "arm": "history",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "arm": "text_only",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "arm": "history",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "arm": "text_only",
+          "decision": "skip",
+          "relevanceLevel": 0,
+          "intentLevel": 2
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "arm": "history",
+          "decision": "skip",
+          "relevanceLevel": 0,
+          "intentLevel": 2
+        }
+      ]
+    },
+    {
+      "id": "v3-repeat",
+      "question": "cheapest hardware wallet that still supports ethereum and solana",
+      "status": "awarded",
+      "winner": "v3-keyforge",
+      "winnerName": "KeyForge",
+      "price": "3000",
+      "organic": {
+        "excerpt": "For the lowest-cost hardware wallet that supports both Ethereum and Solana, compare entry-level models—but verify support for both networks on the exact model before buying. I can’t reliably name today’s cheapest option without current prices and compatibility information."
+      },
+      "eligible": [
+        "v3-keyforge"
+      ],
+      "excluded": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "reason": "frequency_cap"
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "reason": "missing_constraint"
+        }
+      ],
+      "bids": [
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "amount": "3000"
+        }
+      ],
+      "decisions": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "arm": "history",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 3
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "arm": "history",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "arm": "history",
+          "decision": "skip",
+          "relevanceLevel": 1,
+          "intentLevel": 2
+        }
+      ]
+    },
+    {
+      "id": "v3-mobile",
+      "question": "Compare mobile-only software wallets for Ethereum and Solana. A hardware device does not satisfy my requirement.",
+      "status": "no_fill",
+      "winner": null,
+      "winnerName": null,
+      "price": null,
+      "organic": {
+        "excerpt": "For a mobile-only Ethereum and Solana wallet, compare software wallets on chain coverage, security, usability, and recovery—not hardware devices. First decide whether you prefer one app for both chains or separate chain-focused wallets."
+      },
+      "eligible": [],
+      "excluded": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "reason": "missing_constraint"
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "reason": "missing_constraint"
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "reason": "missing_constraint"
+        }
+      ],
+      "bids": [],
+      "decisions": []
+    }
+  ],
+  "receipts": [
+    {
+      "turn": "v3-cached",
+      "campaign": "v3-clearvault",
+      "name": "ClearVault",
+      "amount": "4000"
+    },
+    {
+      "turn": "v3-offline",
+      "campaign": "v3-clearvault",
+      "name": "ClearVault",
+      "amount": "3000"
+    },
+    {
+      "turn": "v3-repeat",
+      "campaign": "v3-keyforge",
+      "name": "KeyForge",
+      "amount": "3000"
+    }
+  ],
+  "channels": [
+    {
+      "campaign": "v3-clearvault",
+      "name": "ClearVault",
+      "deposit": "20000",
+      "settled": "7000",
+      "refund": "13000",
+      "status": "finalized",
+      "vouchers": [
+        {
+          "sequence": 1,
+          "increment": "4000",
+          "cumulative": "4000"
+        },
+        {
+          "sequence": 2,
+          "increment": "3000",
+          "cumulative": "7000"
+        }
+      ]
+    },
+    {
+      "campaign": "v3-keyforge",
+      "name": "KeyForge",
+      "deposit": "20000",
+      "settled": "3000",
+      "refund": "17000",
+      "status": "finalized",
+      "vouchers": [
+        {
+          "sequence": 1,
+          "increment": "3000",
+          "cumulative": "3000"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "deposits": "40000",
+    "paid": "10000",
+    "refunded": "30000"
+  },
+  "restart": {
+    "replayedTurns": 4,
+    "replayedReceipts": 3,
+    "newCalls": 0,
+    "newCharges": 0,
+    "newSignatures": 0,
+    "newBroadcasts": 0,
+    "sameStateHash": true
+  },
+  "evidence": {
+    "nicheLabel": "crypto hardware wallets self custody",
+    "examples": 1,
+    "hints": 1,
+    "observedPrompt": "cheapest hardware wallet that still supports ethereum and solana",
+    "observedCreative": "Mercari Nano Trezor Hardware Wallet NEW - New Electronics | Color: White New in wrapping Open to offers Paid $55",
+    "hintText": "Crypto holders and stakers looking to buy or resell hardware wallets like Trezor and Ledger on Mercari, where listings for new and used self-custody devices surface.",
+    "slice": {
+      "associations": 1178,
+      "prompts": 241,
+      "creatives": 537,
+      "hints": 331,
+      "niches": 5
+    }
+  },
+  "video": {
+    "file": "media/axp-v3-four-minute-demo.mp4",
+    "poster": "media/axp-v3-poster.jpg",
+    "captions": "media/walkthrough.vtt",
+    "width": 1400,
+    "height": 1352,
+    "chapters": [
+      0,
+      20,
+      45,
+      65,
+      85,
+      105,
+      135,
+      155,
+      180,
+      210
+    ]
+  },
+  "mvp": {
+    "verifyChecks": 48
+  }
+}

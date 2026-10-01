@@ -113,7 +113,7 @@ export default function BrandBook() {
                   <p className="px-lead" style={{ maxWidth: "36ch" }}>
                     Prospectus: the landing system for {HERO.h1.toLowerCase().replace(/\.$/, "")}. Paper, ink, one ultramarine, one ultramarine night. Every mark says where a fact came from.
                   </p>
-                  <p className="px-small">Brand book, version 2. Built with the recorded run {RUN.runId} and the ContextHint snapshot of {LIBRARY.snapshotDate}.</p>
+                  <p className="px-small">Brand book, version 2. Built with our recorded run and ContextHint data as of {LIBRARY.snapshotDate}.</p>
                 </div>
                 <ul className="bk-index">
                   {INDEX.map(([id, name]) => (
@@ -140,7 +140,7 @@ export default function BrandBook() {
             <SplitGrid ratio="74">
               <p className="px-lead">{HERO.lede}</p>
               <div className="px-stack">
-                <p className="px-body">Body text is eighteen pixels. Emphasis is a shift to <em>steel</em>, never italics. A price reads <Amount baseUnits={CACHED.price!} />; a receipt hash reads <span className="px-num">{cached.receiptHash}</span>.</p>
+                <p className="px-body">Body text is eighteen pixels. Emphasis is a shift to <em>ultramarine</em>, never italics. A price reads <Amount baseUnits={CACHED.price!} />.</p>
                 <p className="px-small">Small text for notes, sources and scope lines.</p>
                 <p className="px-caption">Caption, PolySans 500, open tracking.</p>
               </div>
@@ -243,7 +243,7 @@ export default function BrandBook() {
               <p className="px-body">{HERO.frameCaption}</p>
               <p className="px-small">The intro plays once from first paint: the question, the answer word by word, then the card lands on its hard shadow, label first.</p>
             </div>
-            <HostChat question={CACHED.question} answer={CACHED.organic.excerpt} model={CACHED.organic.model} appName={HERO.appName} card={{ name: CV.name, text: CV.approvedText!, destination: CV.destination }} intro />
+            <HostChat question={CACHED.question} answer={CACHED.organic.excerpt} appName={HERO.appName} card={{ name: CV.name, text: CV.approvedText!, destination: CV.destination }} intro />
           </SplitGrid>
         </Chapter>
 

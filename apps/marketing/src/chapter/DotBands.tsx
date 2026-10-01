@@ -18,6 +18,9 @@ const GAP = 2;
 const BAND_GAP = 26;
 const BANDS = LIBRARY_BY_COUNTRY.rows.map((r) => ({ ...r, dots: Math.round(r.placements / PER) }));
 const TOTAL = Math.round(LIBRARY.placements / PER);
+/** Bands settle in order: the United States first, then no country, Australia, South Korea. */
+const BAND_DELAY = [0, 0.14, 0.24, 0.3];
+const SETTLE = 0.5;
 
 // Deterministic pseudo-random so the "before" field is the same every load.
 function rand(i: number) {
@@ -52,7 +55,7 @@ function layout() {
     const r = Math.floor(k / fieldCols);
     dots[di]!.x0 = c * (CELL + GAP);
     dots[di]!.y0 = r * (CELL + GAP) * sy;
-    dots[di]!.d = rand(di + 7) * 0.35;
+    dots[di]!.d = BAND_DELAY[dots[di]!.band]! + rand(di + 7) * 0.2;
   });
   return { dots, W, H, bandTop };
 }
@@ -69,11 +72,11 @@ export default function DotBands() {
 
   useMotionValueEvent(p, "change", (v) => {
     if (!pinned) return;
-    const x = seg(v, 0.12, 0.72);
+    const x = seg(v, 0.1, 0.7);
     setT((c) => (Math.abs(c - x) < 0.002 ? c : x));
   });
   useEffect(() => {
-    if (pinned) setT(seg(p.get(), 0.12, 0.72));
+    if (pinned) setT(seg(p.get(), 0.1, 0.7));
     else setT(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pinned]);
@@ -89,7 +92,7 @@ export default function DotBands() {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, L.W, L.H);
     for (const d of L.dots) {
-      const k = io(seg(t, d.d, d.d + 0.65));
+      const k = io(seg(t, d.d, d.d + SETTLE));
       ctx.fillStyle = k > 0.5 ? COLORS[d.band]! : "#d9a58e";
       ctx.fillRect(d.x0 + (d.x1 - d.x0) * k, d.y0 + (d.y1 - d.y0) * k, CELL, CELL);
     }
@@ -104,13 +107,13 @@ export default function DotBands() {
           <p className="px-body">{CONTEXTHINT.dotsBody}</p>
           <ul className="db-legend">
             {BANDS.map((b, i) => (
-              <li key={b.country} style={{ opacity: 0.25 + 0.75 * seg(shown, 0.4 + i * 0.1, 0.6 + i * 0.1) }}>
+              <li key={b.country} style={{ opacity: 0.3 + 0.7 * seg(shown, BAND_DELAY[i]! + SETTLE, BAND_DELAY[i]! + SETTLE + 0.12) }}>
                 <i style={{ background: COLORS[i] }} />
                 <span>{b.country}</span>
                 <b className="px-num">{fmt(b.placements)}</b>
               </li>
             ))}
-            <li style={{ opacity: 0.25 + 0.75 * seg(shown, 0.85, 1) }}>
+            <li style={{ opacity: 0.3 + 0.7 * seg(shown, 0.9, 1) }}>
               <i style={{ border: "1px solid var(--line)" }} />
               <span>{LIBRARY_BY_COUNTRY.othersNote}</span>
             </li>
@@ -121,7 +124,7 @@ export default function DotBands() {
         </div>
         <div className="db-viz">
           {BANDS.map((b, i) => (
-            <span key={b.country} className="db-band" style={{ top: `${(L.bandTop[i]! / L.H) * 100}%`, opacity: seg(shown, 0.75, 0.95) }}>
+            <span key={b.country} className="db-band" style={{ top: `${(L.bandTop[i]! / L.H) * 100}%`, opacity: seg(shown, BAND_DELAY[i]! + SETTLE, BAND_DELAY[i]! + SETTLE + 0.12) }}>
               {b.country} <b className="px-num">{fmt(b.placements)}</b>
             </span>
           ))}

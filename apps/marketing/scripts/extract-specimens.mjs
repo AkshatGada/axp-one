@@ -107,6 +107,49 @@ function verify(d) {
   assert(text.length < 60000, `slice under 60KB (got ${text.length})`);
 }
 
+/* ---------------- The landing's own slice: only what the page renders ----------------
+   The full slice (with model versions, policy names, hashes, IDs) stays in run.generated.json for
+   the asserts and /design; the landing bundle imports run.landing.json, so none of that ships. */
+const LANDING_OUT = join(app, "src/data/run.landing.json");
+const MVP_META = join(repo, "apps/product-ui/src/data/build-meta.json");
+function landing(d) {
+  let verifyChecks = null;
+  if (existsSync(MVP_META)) {
+    const m = readFileSync(MVP_META, "utf8").match(/verify checks pass \((\d+)\)/);
+    if (m) verifyChecks = Number(m[1]);
+  }
+  const pick = (o, keys) => Object.fromEntries(keys.filter((k) => k in o).map((k) => [k, o[k]]));
+  return {
+    schema: "axp.landing-public.v1",
+    counts: d.counts,
+    policy: pick(d.policy, ["maxBid", "budgetCap", "deposit", "frequencyCap", "floor"]),
+    campaigns: Object.fromEntries(Object.entries(d.campaigns).map(([k, c]) => [k, pick(c, ["name", "fictional", "maxBid", "budgetCap", "approvedText", "destination", "deposit"])])),
+    turns: d.turns.map((t) => ({
+      ...pick(t, ["id", "question", "status", "winner", "winnerName", "price"]),
+      organic: { excerpt: t.organic.excerpt },
+      eligible: t.eligible,
+      excluded: t.excluded.map((e) => pick(e, ["campaign", "name", "reason"])),
+      bids: t.bids.map((b) => pick(b, ["campaign", "name", "amount"])),
+      decisions: t.decisions.map((x) => pick(x, ["campaign", "name", "arm", "decision", "relevanceLevel", "intentLevel"])),
+    })),
+    receipts: d.receipts.map((r) => pick(r, ["turn", "campaign", "name", "amount"])),
+    channels: d.channels.map((c) => ({ ...pick(c, ["campaign", "name", "deposit", "settled", "refund", "status"]), vouchers: c.vouchers })),
+    totals: pick(d.totals, ["deposits", "paid", "refunded"]),
+    restart: d.restart,
+    evidence: { ...pick(d.evidence, ["nicheLabel", "examples", "hints", "observedPrompt", "observedCreative", "hintText", "slice"]) },
+    video: d.video,
+    mvp: { verifyChecks: verifyChecks ?? d.mvp?.verifyChecks ?? null },
+  };
+}
+function writeLanding(d) {
+  const l = landing(d);
+  const text = JSON.stringify(l);
+  for (const bad of [/jev-\d/i, /gpt-\d/i, /fit_intent/, /[0-9a-f]{40,}/, /v3-wallet-acceptance/, /\.\.\./]) assert(!bad.test(text), `landing slice leaks ${bad}`);
+  finish("landing slice");
+  writeFileSync(LANDING_OUT, `${JSON.stringify(l, null, 2)}\n`);
+  console.log(`extract-specimens: wrote ${LANDING_OUT.replace(`${app}/`, "")} (${text.length} bytes).`);
+}
+
 /* ---------------- Fresh-clone path: verify the committed slice ---------------- */
 if (!existsSync(RUN) || !existsSync(MANIFEST)) {
   if (!existsSync(OUT)) {
@@ -115,6 +158,7 @@ if (!existsSync(RUN) || !existsSync(MANIFEST)) {
   }
   verify(JSON.parse(readFileSync(OUT, "utf8")));
   finish("committed slice");
+  writeLanding(JSON.parse(readFileSync(OUT, "utf8")));
   console.log("extract-specimens: artifacts absent; committed run.generated.json re-verified.");
   process.exit(0);
 }
@@ -366,6 +410,7 @@ finish("fresh extraction");
 mkdirSync(dirname(OUT), { recursive: true });
 writeFileSync(OUT, `${JSON.stringify(out, null, 2)}\n`);
 console.log(`extract-specimens: wrote ${OUT.replace(`${app}/`, "")} (${statSync(OUT).size} bytes), all asserts passed.`);
+writeLanding(out);
 
 /* ---------------- Video, captions and poster (gitignored public/media) ---------------- */
 if (existsSync(VIDEO) && existsSync(SRT)) {

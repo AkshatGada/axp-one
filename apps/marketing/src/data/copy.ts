@@ -5,7 +5,7 @@
 // negation or a limit carries a claim-ok comment. Run numbers come from run.ts, library numbers
 // from library.ts.
 import { FRESH_ADS, JEV, LIBRARY, TRACTION, fmt } from "./library";
-import { CACHED, CV, CV_CHANNEL, LG, MOBILE, RUN, decision, lower, usdc, word } from "./run";
+import { CACHED, CV, CV_CHANNEL, LG, MOBILE, REPEAT, RUN, decision, lower, policyBid, usdc, word } from "./run";
 
 const cvText = decision(CACHED, "v3-clearvault", "text_only");
 const cvHist = decision(CACHED, "v3-clearvault", "history");
@@ -37,8 +37,8 @@ export const HERO = {
   skip: "Skip to the proof",
   badge: "Built on ContextHint's ad intelligence",
   badgeLine: TRACTION.line,
-  status: "Working MVP on a hosted Solana sandbox with test USDC.",
-  frameCaption: "A real question from our recorded run, with an excerpt of the answer. The answer was written without any ad in view, and the card was sold at auction. Motion is illustrative.",
+  status: "Settled through Solana payment channels on a hosted Solana sandbox with test USDC.",
+  frameCaption: "A real question from our recorded run, with an excerpt of the answer. The answer was written without any ad in view, and the card was sold at auction.",
   appName: "Our demo AI app",
   answerLabel: "Answer, excerpt",
   pullBack: "Behind one Sponsored card, a whole exchange.",
@@ -50,7 +50,7 @@ export const HERO = {
     evidence: { title: "The evidence.", body: "A real recorded prompt, the ad shown beside it and the audience it implies. From ContextHint." },
     payment: { title: "The payment.", body: "Charged only on a signed receipt. Settled in one close on Solana." },
   },
-  stackCaption: "Values from one recorded run. Motion is illustrative.",
+  stackCaption: "Values from one recorded run.",
   brandNote: "Observed historical reference, not an axp.one advertiser.",
 };
 
@@ -81,7 +81,7 @@ export const STAGE = {
   label: "How it works",
   h2: "What happens between the question and the card?",
   lede: "One real moment from our run, step by step.",
-  source: "Values from our recorded run. Motion is illustrative.",
+  source: "Values from our recorded run.",
   skip: "Skip the walkthrough",
   dataLink: "See the ContextHint data",
   beats: [
@@ -102,12 +102,12 @@ export const STAGE = {
     },
     {
       title: "Agents judge the fit, with Jev.",
-      body: `Each agent's judgment is made with Jev: bid or skip, how relevant, how strong the intent. With history, both wallet agents rated intent ${cvHist.intentLevel} instead of ${cvText.intentLevel} on this question. On the second question, history changed nothing. Asked anyway, for comparison, ${LG.name}'s agent said skip.`,
+      body: `Each agent's judgment is made with Jev: bid or skip, how relevant, how strong the intent. With ContextHint's history, both wallet agents were a little more sure of the buying intent on this question. On the second question, history changed nothing. Asked anyway, for comparison, ${LG.name}'s agent said skip.`,
       facts: [`${CV.name}: bid`, `${KF.name}: bid`, `${LG.name}: skip, and not in the auction`],
     },
     {
       title: "Code sets the price.",
-      body: `Policy turns those judgments into a bid, capped at the advertiser's maximum. ${word(CACHED.bids.length)} bids of ${bid} tied. A fixed tie rule chose ${CV.name} and reserved its budget.`,
+      body: `Both wallet campaigns declared the same capabilities and got the same ratings, so policy gave both the same bid: ${bid}, the advertiser's maximum. A fixed, published tie rule chose ${CV.name} and reserved its budget.`,
       facts: [`${CV.name}: ${bid} USDC, won`, `${KF.name}: ${bid} USDC`, "Reserved, not yet charged"],
     },
     {
@@ -128,11 +128,11 @@ export const RULE = {
   h2: "Agents advise. Code decides the money.",
   body: `In the run, agents returned judgments. Policy set all ${lower(RUN.counts.auctions)} prices, a fixed tie rule settled both ties, and only signed receipts became charges.`,
   rules: [
+    { rule: "Money cannot buy past eligibility.", run: `A mobile only question: all ${lower(MOBILE.excluded.length)} campaigns ruled out, ${lower(MOBILE.decisions.length)} model calls, no ad.` },
+    { rule: "A cap holds, even when the agent wants in.", run: `On the repeat question ${CV.name}'s agent said bid. The exchange did not admit it: the card had already been shown ${lower(RUN.policy.frequencyCap)} times.` },
     { rule: "An award is not a charge.", run: `${word(RUN.counts.receipts)} awards became charges only after ${lower(RUN.counts.receipts)} signed receipts.` },
     { rule: "Losing bids cost nothing.", run: `${KF.name} lost ${lower(RUN.counts.ties)} ties and paid nothing for them.` },
     { rule: "Disclosure, always.", run: "Every delivered card carried the Sponsored label." },
-    { rule: "Ads never rewrite the answer.", run: `${word(RUN.counts.organicAnswers)} answers came from assistants given no advertiser material.` },
-    { rule: "Money cannot buy past eligibility.", run: `A mobile only question: all ${lower(MOBILE.excluded.length)} campaigns ruled out, ${lower(MOBILE.decisions.length)} model calls, no ad.` },
     { rule: "A restart cannot double charge.", run: `The run replayed: ${lower(RUN.restart.newCalls)} new calls, charges or signatures.` },
   ],
 };
@@ -145,7 +145,7 @@ export const CONTEXTHINT = {
   lede: "ContextHint is our conversational ad intelligence product. It records the ads shown inside ChatGPT, the prompts they appeared beside and an inferred view of who each ad is after.",
   traction: TRACTION,
   tractionLabel: "marketers use ContextHint every day, including paying customers",
-  wallLabel: "Ads observed by ContextHint inside ChatGPT. Not axp.one advertisers.",
+  wallLabel: "Ads observed by ContextHint inside ChatGPT, shown as data. These brands are not axp.one advertisers, and no relationship with them is implied.",
   wallStats: [
     { value: fmt(LIBRARY.advertisers), label: "advertisers observed" },
     { value: fmt(LIBRARY.creatives), label: "unique ads" },
@@ -154,13 +154,13 @@ export const CONTEXTHINT = {
   dotsBody: "One dot is a hundred placements. Sorted by the country each was recorded in, the library leans hard to the United States, and many placements carry no country at all.",
   dotsCaption: "One dot per 100 placements. Layout illustrative, counts actual.",
   nichesTitle: `${fmt(LIBRARY.niches)} niches. ${fmt(LIBRARY.subNiches)} sub niches.`,
-  nichesBody: `${fmt(LIBRARY.nichesWithAds)} niches and ${fmt(LIBRARY.subNichesWithAds)} sub niches have ads. One of them is the niche our run drew on: crypto hardware wallets and self custody.`,
+  nichesBody: `${fmt(LIBRARY.nichesWithAds)} niches and ${fmt(LIBRARY.subNichesWithAds)} sub niches have ads. Our run drew on ${lower(RUN.evidence.slice.niches)} niches; the record in our story comes from crypto hardware wallets and self custody.`,
   fieldNote: "Illustrative layout, counts actual.",
   dive: "One niche. One record. One agent.",
   countriesTitle: `Collecting in ${LIBRARY.freshAdsCountries} countries.`,
-  countriesBody: `Fresh Ads collects new ads live. A call is one collection request; it counts when the answer carried at least one ad. In the United States, ${fa[0]!.withAds} of ${fa[0]!.calls} calls returned ads.`,
+  countriesBody: `Fresh Ads collects new ads live. A call is one collection request. A call counts as returning ads when its answer carried at least one ad. In the United States, ${fa[0]!.withAds} of ${fa[0]!.calls} calls returned ads.`,
   countriesNote: `${FRESH_ADS.source} Not part of the ${fmt(LIBRARY.placements)} placements.`,
-  source: `${LIBRARY.source}, ${LIBRARY.snapshotDate}. Placements observed ${LIBRARY.placementsWindow.from} to ${LIBRARY.placementsWindow.to}.`,
+  source: `${LIBRARY.source}, as of ${LIBRARY.snapshotDate}. Placements observed ${LIBRARY.placementsWindow.from} to ${LIBRARY.placementsWindow.to}.`,
   chain: {
     prompt: "A recorded prompt",
     promptNote: "This exact question is in ContextHint's recorded prompts, so the lookup found a perfect match.",
@@ -172,13 +172,16 @@ export const CONTEXTHINT = {
     handedNote: "One example and one audience, beside its own campaign. No rival bids, budgets or wallets.",
   },
   payoff: {
-    title: "Evidence an agent can show. Evidence that cannot buy a capability.",
-    changed: { q: "On the cached question", a: `With history, intent ${cvText.intentLevel} became ${cvHist.intentLevel}.` },
-    unchanged: { q: "On the second question", a: "With history, nothing changed." },
+    title: "What the evidence did, and what it could not do.",
+    changed: { q: "On the first question", a: `With ContextHint's history, the agent was a little more sure the person wanted to buy, enough to bid the full ${usdc(policyBid(cvHist.relevanceLevel!, cvHist.intentLevel!, CV.maxBid))} instead of ${usdc(policyBid(cvText.relevanceLevel!, cvText.intentLevel!, CV.maxBid))}.` },
+    unchanged: { q: "On the second question", a: "History changed nothing." },
     leather: `${LG.name}'s evidence matched leather wallets. It was ruled out anyway, in code.`,
     note: "Each setting ran once: a demonstration, not a benchmark.",
   },
   funnelTitle: "Three numbers, kept apart.",
+  funnelNote: "Not to scale.",
+  handoff: "This is what each buying agent sees before it judges a moment.",
+  handoffLink: "See how the exchange uses it",
   funnel: [
     { title: "The library", value: fmt(LIBRARY.placements), unit: "placements", body: "What ContextHint has observed." },
     { title: "The screened slice", value: fmt(RUN.evidence.slice.associations), unit: "records", body: `${fmt(RUN.evidence.slice.associations)} ad and prompt records, ${fmt(RUN.evidence.slice.prompts)} prompts, ${fmt(RUN.evidence.slice.creatives)} ads, ${fmt(RUN.evidence.slice.hints)} inferred audiences. What this MVP could draw on.` },
@@ -194,15 +197,15 @@ export const PROOF = {
   label: "Proof",
   h2: "Does it actually run?",
   h3: "One recorded run, end to end.",
-  lede: `Four real questions through the whole exchange on a hosted Solana sandbox with test USDC. Fictional advertisers, real decisions, real settlement. The agents drew on a screened ContextHint slice of ${fmt(RUN.evidence.slice.associations)} ad and prompt records.`,
-  stats: [
-    { value: String(RUN.counts.questions), label: "real questions" },
+  lede: `Four questions through the whole exchange on a hosted Solana sandbox with test USDC. Fictional advertisers, real decisions, real settlement. The agents drew on a screened ContextHint slice of ${fmt(RUN.evidence.slice.associations)} ad and prompt records.`,
+  counts: [
+    { value: String(RUN.counts.questions), label: "questions" },
     { value: String(RUN.counts.decisions), label: "agent decisions" },
-    { value: String(RUN.counts.auctions), label: `auctions and ${lower(RUN.counts.noFill)} no fill` },
-    { value: String(RUN.counts.receipts), label: "Sponsored cards with signed receipts" },
-    { value: usdc(RUN.totals.paid), unit: "USDC", label: "paid to the AI app", mono: true },
-    { value: usdc(RUN.totals.refunded), unit: "USDC", label: "refunded", mono: true },
+    { value: String(RUN.counts.receipts), label: "deliveries with signed receipts" },
+    { value: String(RUN.counts.channels), label: "Solana channels settled" },
   ],
+  money: `In total, ${usdc(RUN.totals.paid)} USDC paid to the AI app and ${usdc(RUN.totals.refunded)} USDC refunded, across both channels.`,
+  verifyLine: `Verify the receipts yourself: ${RUN.mvp.verifyChecks ?? "all"} checks run in your browser.`,
   sheetTitle: "The run, question by question",
   exhibitCard: `${KF.name}'s actual Sponsored card`,
   exhibitReceipt: "Its delivery receipt",
@@ -275,7 +278,7 @@ export const CLOSING = {
   primary: "See the working MVP",
   video: "Watch the video",
   contexthint: "Explore ContextHint",
-  source: "The card from our recorded run. Motion is illustrative.",
+  source: "The card from our recorded run.",
 };
 
 export const FOOTER = {
@@ -283,7 +286,7 @@ export const FOOTER = {
     "Hackathon MVP, October 2026.",
     "Hosted Solana sandbox, test USDC.",
     `${CV.name}, ${KF.name} and ${LG.name} are fictional.`,
-    `ContextHint figures are from an owner supplied snapshot dated ${LIBRARY.snapshotDate}.`,
+    `ContextHint figures: library data as of ${LIBRARY.snapshotDate}; traction and Fresh Ads, October 2026.`,
   ],
   contexthint: { title: "ContextHint", body: "Conversational ad intelligence: the data our agents draw on.", link: "contexthint.com" },
   jev: { text: "Agent decisions built with", name: JEV.name, url: JEV.url },
@@ -295,7 +298,7 @@ export const BUILT_ON = {
   label: "Built on",
   items: [
     { lead: "Data from ContextHint.", line: "Real ads and prompts recorded inside ChatGPT.", href: LIBRARY.url, link: "contexthint.com" },
-    { lead: "Decisions with Jev.", line: "Each buying agent judges the moment with Jev by TypeSafe.", href: JEV.url, link: "docs.typesafe.ai" },
+    { lead: "Decisions with Jev.", line: "Jev is the decision model each advertiser's agent uses to judge an opportunity.", href: JEV.url, link: "docs.typesafe.ai" },
     { lead: "Settlement on Solana.", line: "Stablecoin payment channels: one close pays the AI app.", href: "https://solana.com", link: "solana.com" },
   ],
 };
@@ -307,12 +310,37 @@ export const PAYMENTS = {
   facts: [
     { value: String(RUN.counts.channels), label: "channels opened and closed, both finalized" },
     { value: usdc(RUN.totals.paid), unit: "USDC", label: "paid to the AI app", mono: true },
-    { value: usdc(RUN.totals.refunded), unit: "USDC", label: "refunded to the advertiser", mono: true },
+    { value: usdc(RUN.totals.refunded), unit: "USDC", label: "refunded to the payer that funded both channels", mono: true },
   ],
   meterTitle: `${CV.name}'s Solana payment channel`,
-  source: "Hosted Solana sandbox, test USDC. Values from our recorded run; the fill motion is illustrative.",
-  perAd: "A transaction for each ad",
-  perAdNote: "A network fee and a wait on every card.",
+  source: "Hosted Solana sandbox, test USDC. Channel values from our recorded run; the per-ad lane is illustrative.",
+  perAd: "A transaction per ad",
+  perAdNote: "A Solana transaction fee and a wait on every card.",
   channel: "One channel",
   channelNote: "Authorizations off chain, one close on Solana.",
+};
+
+/** One compact panel near Proof replaces the scattered caveats. */
+export const REAL = {
+  title: "What's real, what's illustrative.",
+  real: {
+    title: "Real, from the recorded run",
+    items: [
+      `The ${lower(RUN.counts.questions)} questions and their answers, written with no advertiser material.`,
+      `All ${RUN.counts.decisions} agent judgments, made with Jev.`,
+      "Eligibility, prices and the auction, decided in code.",
+      `${word(RUN.counts.receipts)} Sponsored cards, each with a receipt signed by the app.`,
+      `${word(RUN.counts.channels)} Solana payment channels on a hosted sandbox, opened and closed, test USDC.`,
+      "ContextHint's ads, prompts and inferred audiences.",
+    ],
+  },
+  illustrative: {
+    title: "Illustrative",
+    items: [
+      "All motion and animation on this page.",
+      "The per-ad transaction lane in the payments band.",
+      "The layout of the dot field and the niche field (the counts are actual).",
+    ],
+  },
+  notShown: { title: "What this run does not show", items: PROOF.limits },
 };

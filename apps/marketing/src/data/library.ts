@@ -4,7 +4,7 @@
 // these axp.one advertisers, traffic or reach.
 
 export const LIBRARY = {
-  source: "ContextHint library snapshot",
+  source: "ContextHint data",
   snapshotDate: "September 26, 2026",
   placementsWindow: { from: "June 19", to: "August 24" },
   advertisers: 11730,
@@ -31,7 +31,7 @@ export const TRACTION = {
 /** Library placements by recorded country (owner-supplied). One dot on the page = 100 placements.
  *  Ads by country overlap and are not additive: never sum them. */
 export const LIBRARY_BY_COUNTRY = {
-  source: "ContextHint library by country, serving database, owner-supplied.",
+  source: "ContextHint data, as of September 26, 2026.",
   rows: [
     { country: "United States", placements: 330777, ads: 23600 },
     { country: "No country recorded", placements: 67430, ads: 26893 },
@@ -45,7 +45,7 @@ export const LIBRARY_BY_COUNTRY = {
  *  the answers provider; "with ads" counts calls whose answer carried at least one ad.
  *  Not part of the 420,540 library placements. */
 export const FRESH_ADS = {
-  source: "Fresh Ads collection by country, ContextHint serving database, owner-supplied.",
+  source: "Fresh Ads collection by country, ContextHint data, October 2026.",
   rows: [
     { country: "United States", calls: 311, withAds: 207 },
     { country: "India", calls: 230, withAds: 112 },

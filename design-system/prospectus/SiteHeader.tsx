@@ -9,7 +9,7 @@ import { Wordmark } from "./Type";
 
 export type NavLink = { href: string; label: string };
 
-export function SiteHeader({ links, cta, chip = "Hackathon MVP" }: { links: NavLink[]; cta: { href: string; label: string }; chip?: string }) {
+export function SiteHeader({ links, cta, chip = "Hackathon MVP" }: { links: NavLink[]; cta: { href: string; label: string; external?: boolean }; chip?: string }) {
   const [hidden, setHidden] = useState(false);
   const [tone, setTone] = useState<"paper" | "stage" | "brand">("paper");
   const last = useRef(0);
@@ -61,7 +61,7 @@ export function SiteHeader({ links, cta, chip = "Hackathon MVP" }: { links: NavL
           ))}
         </nav>
         <div className="px-header-cta">
-          <ActionPrimary href={cta.href} size="s">
+          <ActionPrimary href={cta.href} size="s" external={cta.external}>
             {cta.label}
           </ActionPrimary>
         </div>

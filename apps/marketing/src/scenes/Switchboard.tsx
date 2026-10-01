@@ -171,7 +171,7 @@ export function Switchboard({ beat }: { beat: number }) {
         <span className="sc-node-name">Reserved</span>
         <span className="sc-node-sub">not a charge yet</span>
         <p style={{ color: "var(--stage-ink)" }}>{CACHED.winnerName}</p>
-        <b className="px-num sc-big">{usdc(CACHED.price!)}</b>
+        <b className="sc-big">{usdc(CACHED.price!)}</b>
       </Node>
 
       <Node id="chan" beat={beat} label="Solana payment channel">

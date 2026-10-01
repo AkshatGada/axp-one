@@ -16,7 +16,7 @@ import { io, sceneHeight, seg } from "@/motion/motion";
 import { usePinned } from "@/motion/useReduced";
 
 const ENTER = 0.15;
-const HOLD = 0.28;
+const HOLD = 0.2;
 const EXIT = 0.22;
 const N = STAGE.beats.length;
 const T = ENTER + N * HOLD + EXIT;
@@ -92,7 +92,7 @@ export default function StageScene() {
               </ol>
             </div>
             <div className={`ss-board${pinned ? "" : " only-wide"}`}>
-              <Fit w={BOARD_W} h={BOARD_H} maxH={pinned ? "76vh" : undefined}>
+              <Fit w={BOARD_W} h={BOARD_H} maxH={pinned ? "84vh" : undefined}>
                 <Switchboard beat={pinned ? beat : -1} />
               </Fit>
               <p className="ss-source">{STAGE.source}</p>

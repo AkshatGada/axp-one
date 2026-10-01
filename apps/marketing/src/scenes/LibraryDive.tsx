@@ -10,7 +10,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { CONTEXTHINT } from "@/data/copy";
 import { NicheField } from "@/specimens/NicheField";
-import { EvidenceChain } from "@/specimens/EvidenceChain";
+import { EvidenceChain, EvidencePayoff } from "@/specimens/EvidenceChain";
 import { io, seg } from "@/motion/motion";
 import { usePinned } from "@/motion/useReduced";
 
@@ -18,7 +18,8 @@ export default function LibraryDive() {
   const ref = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const flyRef = useRef<HTMLDivElement>(null);
-  const pinned = usePinned();
+  // v5: a still composition (no pin): the field, then the chain and what the evidence did.
+  const pinned = usePinned() && false;
   const [v, setV] = useState(1);
   const geo = useRef<{ from: DOMRect; to: DOMRect; base: DOMRect } | null>(null);
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
@@ -54,7 +55,7 @@ export default function LibraryDive() {
 
   const dim = pinned ? seg(v, 0.08, 0.2) : 0;
   const fly = pinned ? io(seg(v, 0.18, 0.42)) : 1;
-  const steps = [0, 1, 2, 3].map((i) => (pinned ? 0.16 + 0.84 * seg(v, 0.42 + i * 0.12, 0.5 + i * 0.12) : 1));
+  const steps = [0, 1, 2, 3].map((i) => (pinned ? 0.4 + 0.6 * seg(v, 0.42 + i * 0.12, 0.5 + i * 0.12) : 1));
 
   let flyStyle: CSSProperties = { opacity: 0 };
   const g = geo.current;
@@ -91,6 +92,9 @@ export default function LibraryDive() {
             <p className="px-h3 ld-chain-h">{CONTEXTHINT.dive}</p>
             <EvidenceChain />
           </div>
+        </div>
+        <div className="ld-payoff">
+          <EvidencePayoff />
         </div>
         <div ref={flyRef} className="ld-fly" aria-hidden style={flyStyle} />
       </div>

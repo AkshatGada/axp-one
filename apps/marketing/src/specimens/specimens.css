@@ -170,3 +170,8 @@ html[data-px-motion="on"] .sp-field[data-reveal][data-in] g.row { opacity: 1; }
 @media (min-width: 900px) { .sp-payoff-grid > div + div { padding-left: 20px; border-left: 1px solid var(--line); } }
 .sp-payoff-grid p { margin: 0; font-family: var(--font-display); font-size: 20px; line-height: 1.2; letter-spacing: -.01em; }
 .sp-payoff-grid [data-guard] p { color: var(--brand); }
+
+.sp-meter-paid { position: absolute; top: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--on-brand); white-space: nowrap; transition: opacity var(--d-move) var(--ease); }
+.sp-meter-amt { font-variant-numeric: tabular-nums; }
+.on-stage .sp-meter-seg[data-state="settled"], [data-tone="stage"] .sp-meter-seg[data-state="settled"] { background: var(--brand); }
+.sc-node .sp-meter-paid { font-size: 16px; }

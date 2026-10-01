@@ -25,8 +25,9 @@ export default function ClosingStack() {
   const t = reduce ? 1 : v;
   const explode = 1 - io(seg(t, 0.05, 0.55));
   const tilt = 1 - io(seg(t, 0.5, 0.78));
-  const stackO = 1 - seg(t, 0.8, 0.83);
-  const chatO = seg(t, 0.83, 0.88);
+  // A cut, never a crossfade: the chat is either fully there or not there at all.
+  const swapped = t >= 0.82;
+  const stackO = swapped ? 0 : 1;
   return (
     <div ref={ref} className="cs">
       {stackO > 0 ? (
@@ -38,7 +39,7 @@ export default function ClosingStack() {
           </div>
         </div>
       ) : null}
-      <div className="cs-chat" style={{ opacity: chatO }}>
+      <div className="cs-chat" style={{ visibility: swapped ? "visible" : "hidden" }}>
         <HostChat question={CACHED.question} answer={HELPFUL_EXCERPT} answerLabel={HERO.answerLabel} appName={HERO.appName} card={{ name: CV.name, text: CV.approvedText!, destination: CV.destination }} />
         <p className="cs-source">{CLOSING.source}</p>
       </div>

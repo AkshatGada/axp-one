@@ -121,7 +121,7 @@ html[data-px-motion="on"] .pg-in { animation: pgIn 1s var(--ease-out) both; anim
 .hs-canvas { position: absolute; left: 50%; top: calc(50% + 28px); transform-origin: 50% 50%; }
 
 /* Stage scene: shutter, then seven pinned beats on the ultramarine night. */
-.ss-shutter { position: relative; height: 104vh; margin-bottom: -1px; }
+.ss-shutter { position: relative; height: 100vh; margin-bottom: -1px; }
 .ss-shutter-plate { position: sticky; top: 0; height: 100vh; display: grid; place-items: center; background: var(--stage); will-change: clip-path; }
 .ss-shutter-q { max-width: 16ch; padding: 0 var(--gutter); color: var(--stage-ink); font-family: var(--font-display); font-weight: 300; font-size: clamp(40px, 5vw, 84px); line-height: 1; letter-spacing: -.035em; text-align: center; }
 .ss-section[data-pinned] .pg-stage-head { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
@@ -140,8 +140,8 @@ html[data-px-motion="on"] .pg-in { animation: pgIn 1s var(--ease-out) both; anim
 .ss[data-pinned] .ss-stage { position: sticky; top: 0; height: 100vh; display: grid; grid-template-columns: minmax(0, .32fr) minmax(0, .68fr); gap: clamp(28px, 3vw, 56px); align-items: center; }
 .ss[data-pinned] .ss-board { margin: 0; }
 .ss[data-pinned] .ss-ticks { display: flex; margin-bottom: 32px; }
-.ss[data-pinned] .pg-beats { display: grid; border-top: 0; }
-.ss[data-pinned] .pg-beats > li { grid-area: 1 / 1; display: grid; grid-template-columns: 1fr; gap: 18px; padding: 0; border: 0; opacity: 0; transform: translate3d(0, 16px, 0); transition: opacity .3s linear, transform .5s var(--ease); pointer-events: none; }
+.ss[data-pinned] .pg-beats { display: grid; align-items: start; border-top: 0; }
+.ss[data-pinned] .pg-beats > li { grid-area: 1 / 1; display: grid; grid-template-columns: 1fr; align-content: start; gap: 18px; padding: 0; border: 0; opacity: 0; transform: translate3d(0, 16px, 0); transition: opacity .3s linear, transform .5s var(--ease); pointer-events: none; }
 .ss[data-pinned] .pg-beats > li[data-on] { opacity: 1; transform: none; pointer-events: auto; transition: opacity .45s var(--ease-out) .12s, transform .7s var(--ease-out) .12s; }
 .ss[data-pinned] .pg-beats b { font-weight: 300; font-size: clamp(28px, 2.5vw, 42px); line-height: 1.04; letter-spacing: -.025em; }
 .ss[data-pinned] .pg-beats p { font-size: 18px; max-width: 38ch; }
@@ -155,7 +155,7 @@ html[data-px-motion="on"] .pg-in { animation: pgIn 1s var(--ease-out) both; anim
 .ld-head { margin-bottom: clamp(24px, 3vw, 40px); max-width: 14ch; }
 .ld-field .sp-field rect.f, .ld-field .sp-field rect.o { opacity: var(--ld-dim, 1); transition: opacity .2s linear; }
 .ld-fly { position: absolute; z-index: 6; background: var(--contexthint); pointer-events: none; transform-origin: 50% 50%; will-change: transform, opacity; }
-.ld[data-pinned] { height: 140vh; }
+.ld[data-pinned] { height: 125vh; }
 .ld[data-pinned] .ld-stage { position: sticky; top: 0; height: 100vh; display: grid; align-content: center; }
 .ld[data-pinned] .ld-grid { align-items: center; }
 .ld[data-pinned] .ld-chain .sp-chain-step { transition: none; }
@@ -178,10 +178,10 @@ html[data-px-motion="on"] .pg-in { animation: pgIn 1s var(--ease-out) both; anim
 html[data-px-film] *, html[data-px-film] *::before { cursor: none !important; }
 html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: none !important; }
 
-/* Hero ContextHint badge (vermillion: ContextHint's own colour) */
-.pg-badge { display: grid; gap: 4px; justify-self: start; max-width: 46ch; padding: 12px 16px 13px; border: 1.5px solid var(--contexthint); background: var(--white); text-decoration: none; color: var(--ink); transition: transform var(--d-ui) var(--ease), box-shadow var(--d-ui) var(--ease); }
-.pg-badge:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--contexthint-wash); }
-.pg-badge-k { font-size: 15px; font-weight: 500; color: var(--contexthint); }
+/* Hero ContextHint line: unboxed, vermillion ink (AA), directly under the lede */
+.pg-badge { display: grid; gap: 2px; justify-self: start; max-width: 50ch; padding-left: 14px; border-left: 3px solid var(--contexthint); text-decoration: none; color: var(--ink); }
+.pg-badge:hover .pg-badge-k { text-decoration: underline; text-underline-offset: 4px; }
+.pg-badge-k { font-size: 16px; font-weight: 500; color: var(--contexthint-ink); }
 .pg-badge-k::after { content: "  \2192"; }
 .pg-badge-line { font-size: 15px; line-height: 1.4; color: var(--muted); }
 .pg-status { padding-top: 0; border-top: 0; font-size: 14px; }
@@ -217,8 +217,7 @@ html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: n
 @media (min-width: 1000px) { .pay-grid { grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); } }
 .pay-facts { display: grid; gap: 0; border-top: 1px solid var(--ink); }
 .pay-fact { display: grid; gap: 4px; padding: 18px 0; border-bottom: 1px solid var(--line-soft); }
-.pay-n { font-family: var(--font-display); font-weight: 300; font-size: clamp(40px, 4vw, 64px); line-height: 1; letter-spacing: -.03em; color: var(--brand); }
-.pay-n.px-num { font-family: var(--font-mono); letter-spacing: -.02em; }
+.pay-n { font-family: var(--font-display); font-weight: 300; font-size: clamp(40px, 4vw, 64px); line-height: 1; letter-spacing: -.03em; color: var(--brand); font-variant-numeric: tabular-nums; }
 .pay-n small { margin-left: 8px; font-family: var(--font-body); font-size: 15px; font-weight: 500; color: var(--muted); }
 .pay-l { font-size: 16px; color: var(--ink); }
 .pay-meter { display: grid; gap: 24px; padding: clamp(20px, 2.4vw, 32px); border: 1px solid var(--ink); background: var(--white); }
@@ -226,7 +225,10 @@ html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: n
 .pay-lane { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 4px 16px; align-items: center; }
 .pay-lane-k { font-size: 15px; font-weight: 500; }
 .pay-ticks { display: flex; gap: 6px; }
-.pay-ticks i { flex: 1; height: 14px; border: 1.5px dashed var(--muted); }
+.pay-ticks i { position: relative; flex: 1; height: 16px; border: 1.5px dashed var(--muted); }
+.pay-ticks i::before { content: ""; position: absolute; left: 0; top: -1.5px; bottom: -1.5px; width: 14px; background: var(--ink); }
+.pay-ticks i::after { content: ""; position: absolute; left: 20px; right: 8px; top: 6px; height: 2px; background: repeating-linear-gradient(90deg, var(--muted) 0 3px, transparent 3px 7px); }
+.pay-lane[data-one] .pay-ticks i::before, .pay-lane[data-one] .pay-ticks i::after { display: none; }
 .pay-lane[data-one] .pay-ticks i { border: 0; background: var(--brand); }
 .pay-lane-n { grid-column: 2; font-size: 14px; color: var(--muted); }
 
@@ -297,7 +299,7 @@ html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: n
 /* Hero pinned layout: the same condition as usePinned (>= 900px, motion armed before paint),
    so the layout never changes at hydration. */
 @media (min-width: 900px) {
-  html[data-px-motion="on"] .hs { height: 190vh; padding: 0; }
+  html[data-px-motion="on"] .hs { height: 162vh; padding: 0; }
   html[data-px-motion="on"] .hs .hs-stage { position: sticky; top: 0; height: 100vh; overflow: clip; }
   html[data-px-motion="on"] .hs .hs-grid { height: 100vh; min-height: 0; padding-top: calc(var(--px-header-h) + 8px); padding-bottom: 32px; align-items: center; }
   html[data-px-motion="on"] .hs .hs-copy-wrap { will-change: transform, opacity; }
@@ -308,3 +310,61 @@ html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: n
   html[data-px-motion="on"] .hs .hs-line-h { max-width: 9.5ch; font-size: clamp(28px, 2.6vw, 44px); line-height: 1.02; }
   html[data-px-motion="on"] .hs .hs-cap { position: absolute; z-index: 5; right: max(var(--gutter), calc((100% - var(--wide)) / 2)); bottom: 28px; max-width: 30ch; margin: 0; text-align: right; opacity: 0; }
 }
+
+/* Proof v5: counts lead, amounts small, verify line, the one "what's real" panel */
+.pr-counts-row { display: grid; gap: 24px; margin: clamp(32px, 4vw, 48px) 0 18px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 900px) { .pr-counts-row { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.pr-count { display: grid; gap: 6px; padding-top: 14px; border-top: 2px solid var(--brand); }
+.pr-count-n { font-family: var(--font-display); font-weight: 300; font-size: clamp(56px, 6vw, 96px); line-height: .92; letter-spacing: -.04em; color: var(--brand); font-variant-numeric: tabular-nums; }
+.pr-count-l { font-size: 17px; }
+.pr-lines { display: grid; gap: 8px; margin-bottom: clamp(36px, 4vw, 56px); }
+.pr-money { margin: 0; font-size: 17px; color: var(--muted); }
+.pr-verify { justify-self: start; font-size: 17px; font-weight: 500; color: var(--brand-deep); text-decoration: underline; text-underline-offset: 5px; }
+.real { margin-top: clamp(40px, 5vw, 64px); padding: clamp(24px, 3vw, 36px); border: 1px solid var(--ink); background: var(--white); }
+.real-h { margin-bottom: 18px; }
+.real-grid { display: grid; gap: 24px; }
+@media (min-width: 900px) { .real-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; } }
+.real-k { margin: 0 0 10px; padding-top: 10px; border-top: 2px solid var(--ink); font-size: 15px; font-weight: 500; }
+.real-col[data-kind="real"] .real-k { border-top-color: var(--brand); color: var(--brand-deep); }
+.real-col[data-kind="ill"] .real-k { border-top-style: dashed; }
+.real-col ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.real-col li { font-size: 15px; line-height: 1.45; color: var(--ink); }
+
+/* v5 length */
+.ld-payoff { margin-top: clamp(28px, 3vw, 40px); }
+.ld-payoff .sp-payoff { gap: 10px; padding: 18px 22px; }
+.ld-payoff .sp-payoff-title { font-size: 20px; }
+.ld-payoff .sp-payoff-grid p { font-size: 17px; }
+.ch-dive { padding-bottom: clamp(40px, 5vw, 72px); }
+.ch-pair { padding: clamp(40px, 5vw, 72px) 0; }
+.pg-wall { padding-block: clamp(56px, 7vw, 104px); }
+.pg-wall-h { font-size: clamp(56px, 8vw, 132px); }
+.pg-rules { margin-top: clamp(36px, 4vw, 56px); }
+.pg-rules li { padding: 16px 24px 16px 0; }
+#next .px-nn-list li { padding: 8px 0; font-size: 15px; }
+#next .px-nn-head { padding-bottom: 10px; }
+.pg-close { padding-block: clamp(56px, 7vw, 104px); }
+#payments .pay-fact { padding: 12px 0; }
+
+#next { padding-block: clamp(48px, 6vw, 88px); }
+#next .px-opener { margin-bottom: 28px; }
+#payments { padding-block: clamp(48px, 6vw, 88px); }
+#why { padding-block: clamp(48px, 6vw, 88px); }
+.pg-wall-h { font-size: clamp(52px, 7vw, 116px); }
+
+/* Now and next, as two compact paragraphs */
+.nx { display: grid; gap: 24px clamp(32px, 4vw, 64px); align-items: start; }
+@media (min-width: 1000px) { .nx { grid-template-columns: minmax(0, .8fr) minmax(0, 1fr) minmax(0, 1fr); } }
+.nx-h { max-width: 10ch; }
+.nx-col { display: grid; gap: 10px; padding-top: 12px; border-top: 1px solid var(--ink); }
+.nx-col[data-next] { border-top-style: dotted; }
+.nx-k { margin: 0; }
+.nx-t { margin: 0; font-size: 16px; line-height: 1.6; color: var(--ink); }
+.nx-col[data-next] .nx-t { color: var(--muted); }
+#proof .px-opener { margin-bottom: 20px; }
+.pg-close { padding-block: clamp(48px, 6vw, 88px); }
+.pr-video .px-video-frame video { max-height: 48vh; }
+.real { padding: clamp(20px, 2.4vw, 28px); }
+.real-col li { font-size: 14.5px; }
+.pr-lines { margin-bottom: clamp(28px, 3vw, 40px); }
+.pr-counts-row { margin-top: 24px; }

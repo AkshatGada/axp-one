@@ -1,15 +1,15 @@
 // axp.one: the landing page. One argument: what, why, how, money, moat, proof, next.
 // Every word is server-rendered and visible without JS; motion layers on top (scenes/).
-// Run values come from src/data/run.generated.json (extracted with asserts); ContextHint values
+// Run values come from src/data/run.landing.json (the slim, render-only slice of the extraction); ContextHint values
 // from src/data/library.ts; all copy from src/data/copy.ts. No internal identifiers on this page:
 // those live in the MVP.
 import type { CSSProperties } from "react";
 import { Provenance } from "@axp/design-system/foundation";
-import { ActionPrimary, ActionText, Actions, NowNext, Opener, Section, SiteFooter, SiteHeader, VideoFigure, Words, Wrap } from "@axp/design-system/prospectus";
+import { ActionPrimary, ActionText, Actions, Opener, Section, SiteFooter, SiteHeader, VideoFigure, Words, Wrap } from "@axp/design-system/prospectus";
 import MotionRoot from "@/motion/MotionRoot";
 import FilmMode from "@/motion/FilmMode";
 import { RUN, receiptFor, usdc } from "@/data/run";
-import { BUILT_ON, CH_URL, CLOSING, FOOTER, HEADER, MVP_URL, MVP_VERIFY_URL, NAV, NEXT, PAYMENTS, PROOF, RULE, VIDEO, VIDEO_ANCHOR, WHY } from "@/data/copy";
+import { BUILT_ON, CH_URL, CLOSING, FOOTER, HEADER, MVP_URL, MVP_VERIFY_URL, NAV, NEXT, PAYMENTS, PROOF, REAL, RULE, VIDEO, VIDEO_ANCHOR, WHY } from "@/data/copy";
 import { RunSheet } from "@/specimens/RunSheet";
 import { ReceiptSheet } from "@/specimens/Receipt";
 import { SponsoredCard } from "@/specimens/SponsoredCard";
@@ -101,7 +101,7 @@ function Payments() {
           <div className="pay-facts">
             {PAYMENTS.facts.map((f) => (
               <div key={f.label} className="pay-fact">
-                <span className={`pay-n${f.mono ? " px-num" : ""}`}>
+                <span className="pay-n">
                   {f.value}
                   {f.unit ? <small>{f.unit}</small> : null}
                 </span>
@@ -139,32 +139,25 @@ function Payments() {
 
 function Proof() {
   const kfReceipt = receiptFor("v3-repeat");
-  const counts = PROOF.stats.filter((s) => !s.mono);
-  const money = PROOF.stats.filter((s) => s.mono);
   return (
     <Section id="proof" labelledBy="proof-q">
       <Wrap>
         <Opener id="proof-q" label={PROOF.label} question={PROOF.h2} layout="split" lead={<div className="px-stack"><p className="px-h3">{PROOF.h3}</p><p className="px-body">{PROOF.lede}</p></div>} />
-        <div className="pr-money">
-          {money.map((s) => (
-            <div key={s.label} className="pr-money-item" data-reveal="mask">
+        <div className="pr-counts-row">
+          {PROOF.counts.map((c, i) => (
+            <div key={c.label} className="pr-count" data-reveal="mask" style={d(i * 70)}>
               <span className="px-mask">
-                <span className="px-mask-in pr-money-n px-num">
-                  {s.value}
-                  <small>{s.unit}</small>
-                </span>
+                <span className="px-mask-in pr-count-n">{c.value}</span>
               </span>
-              <span className="pr-money-l">{s.label}</span>
+              <span className="pr-count-l">{c.label}</span>
             </div>
           ))}
-          <p className="pr-counts">
-            {counts.map((s, i) => (
-              <span key={s.label}>
-                <b className="px-num">{s.value}</b> {s.label}
-                {i < counts.length - 1 ? ", " : "."}
-              </span>
-            ))}
-          </p>
+        </div>
+        <div className="pr-lines">
+          <p className="pr-money">{PROOF.money}</p>
+          <a className="pr-verify" href={MVP_VERIFY_URL} {...ext}>
+            {PROOF.verifyLine}
+          </a>
         </div>
         <div className="pr-pair">
           <div className="pr-sheet">
@@ -173,35 +166,29 @@ function Proof() {
           </div>
           <Video />
         </div>
-        <div className="pr-row">
-          <figure className="pr-exhibit" data-tilt="right">
-            <figcaption className="px-label">{PROOF.exhibitCard}</figcaption>
-            <div className="pr-exhibit-sheet">
-              <p className="px-small" style={{ marginBottom: 14 }}>
-                Shown beside the answer to: {RUN.turns.find((t) => t.id === "v3-repeat")!.question}
-              </p>
-              <SponsoredCard name={KF.name} text={KF.approvedText!} destination={KF.destination} />
-            </div>
-          </figure>
-          <figure className="pr-exhibit" data-tilt="left">
-            <figcaption className="px-label">{PROOF.exhibitReceipt}</figcaption>
-            <div className="pr-exhibit-sheet" style={{ padding: 0 }}>
-              <ReceiptSheet r={kfReceipt} note={PROOF.receiptNote} />
-            </div>
-          </figure>
-          <div className="px-stack">
-            <p className="px-label">{PROOF.limitsTitle}</p>
-            <ul className="pg-limits">
-              {PROOF.limits.map((l) => (
-                <li key={l}>{l}</li>
-              ))}
-            </ul>
+        <div className="real" id="whats-real">
+          <p className="px-h3 real-h">{REAL.title}</p>
+          <div className="real-grid">
+            {[REAL.real, REAL.illustrative, REAL.notShown].map((col, i) => (
+              <div key={col.title} className="real-col" data-kind={["real", "ill", "not"][i]}>
+                <p className="real-k">{col.title}</p>
+                <ul>
+                  {col.items.map((it) => (
+                    <li key={it}>{it}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
-        <div style={{ marginTop: "clamp(40px, 5vw, 72px)" }}>
+        <div style={{ marginTop: "clamp(40px, 5vw, 64px)" }}>
           <Actions>
-            <ActionPrimary href={MVP_URL}>{PROOF.action}</ActionPrimary>
-            <ActionText href={MVP_VERIFY_URL}>{PROOF.verify}</ActionText>
+            <ActionPrimary href={MVP_URL} external>
+              {PROOF.action}
+            </ActionPrimary>
+            <ActionText href={MVP_VERIFY_URL} external>
+              {PROOF.verify}
+            </ActionText>
           </Actions>
         </div>
       </Wrap>
@@ -224,8 +211,23 @@ function Next() {
   return (
     <Section id="next" labelledBy="next-q">
       <Wrap>
-        <Opener id="next-q" label={NEXT.label} question={NEXT.h2} size="h2" />
-        <NowNext now={NEXT.now} next={NEXT.next} />
+        <div className="nx">
+          <h2 id="next-q" className="px-h2 nx-h">
+            {NEXT.h2}
+          </h2>
+          <div className="nx-col">
+            <p className="nx-k">
+              <Provenance kind="actual" label="Working now" />
+            </p>
+            <p className="nx-t">{NEXT.now.join(" ")}</p>
+          </div>
+          <div className="nx-col" data-next="">
+            <p className="nx-k">
+              <Provenance kind="vision" label="Building next" />
+            </p>
+            <p className="nx-t">{NEXT.next.join(" ")}</p>
+          </div>
+        </div>
       </Wrap>
     </Section>
   );
@@ -242,7 +244,9 @@ function Closing() {
             </h2>
             <p className="px-lead">{CLOSING.body}</p>
             <Actions>
-              <ActionPrimary href={MVP_URL}>{CLOSING.primary}</ActionPrimary>
+              <ActionPrimary href={MVP_URL} external>
+                {CLOSING.primary}
+              </ActionPrimary>
               <ActionText href={VIDEO_ANCHOR}>{CLOSING.video}</ActionText>
               <ActionText href={CH_URL} external>
                 {CLOSING.contexthint}
@@ -289,7 +293,7 @@ export default function Home() {
     <>
       <MotionRoot />
       <FilmMode />
-      <SiteHeader links={NAV} cta={{ href: MVP_URL, label: HEADER.cta }} chip={HEADER.chip} />
+      <SiteHeader links={NAV} cta={{ href: MVP_URL, label: HEADER.cta, external: true }} chip={HEADER.chip} />
       <main id="main" className="pg-main">
         <HeroScene />
         <BuiltOn />

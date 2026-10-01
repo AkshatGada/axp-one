@@ -33,6 +33,9 @@ export function ChannelMeter({ ch, t = 1, onStage, compact, title }: { ch: Chann
       <div className="sp-meter-track" role="img" aria-label={`${ch.name}: deposit ${usdc(ch.deposit)}, paid ${usdc(ch.settled)}, refunded ${usdc(ch.refund)} USDC`}>
         <i className="sp-meter-seg" data-state="accepted" style={{ width: "100%", transform: `scaleX(${share})`, opacity: 1 - closed }} />
         <i className="sp-meter-seg" data-state="settled" style={{ width: "100%", transform: `scaleX(${share})`, opacity: closed }} />
+        <span className="sp-meter-paid" style={{ width: `${(Number(ch.settled) / dep) * 100}%`, opacity: closed }}>
+          Paid <span className="sp-meter-amt">{usdc(ch.settled)}</span>
+        </span>
         <span className="sp-meter-refund" style={{ width: `${(1 - Number(ch.settled) / dep) * 100}%`, opacity: closed }}>
           <svg width="30" height="10" viewBox="0 0 30 10" fill="none" aria-hidden>
             <path d="M29 5H2M6 1L2 5l4 4" stroke="currentColor" strokeWidth="1.4" />

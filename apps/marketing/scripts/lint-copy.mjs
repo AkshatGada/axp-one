@@ -79,6 +79,15 @@ for (const page of builtPages) {
     }
   }
 }
+// The shipped JS must not carry the run's internals either (the landing imports a slim slice).
+if (!sourceOnly && existsSync(join(app, "out/_next"))) {
+  const chunks = walk(join(app, "out/_next")).filter((f) => f.endsWith(".js"));
+  const SHIPPED = [/jev-\d\.\d/, /gpt-6\./, /fit_intent_bid/, /v3-wallet-acceptance/, /e34448fa/, /ads:(mapping|hint):\d/];
+  for (const f of chunks) {
+    const js = readFileSync(f, "utf8");
+    for (const re of SHIPPED) if (re.test(js)) hits.push(`${relative(app, f)}  internal detail in shipped JS: ${re}`);
+  }
+}
 const built = builtPages[0] ?? join(app, "out/index.html");
 
 if (hits.length) {

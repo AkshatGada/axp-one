@@ -1,8 +1,8 @@
-// Typed access to the recorded-run slice (src/data/run.generated.json, written by
+// Typed access to the landing slice (src/data/run.landing.json: only what the page renders, written by
 // scripts/extract-specimens.mjs with arithmetic asserts). Every run value on the page comes
 // from here; nothing is hand-typed.
 import { formatBaseUnits, shortHash } from "@axp/design-system/foundation";
-import slice from "./run.generated.json";
+import slice from "./run.landing.json";
 
 export const RUN = slice;
 export type Turn = (typeof slice.turns)[number];
@@ -38,3 +38,8 @@ export const lower = (n: number) => word(n).toLowerCase();
 /** The cached answer from its helpful part on: the recorded second sentence, verbatim,
  *  marked as an excerpt with a leading ellipsis (the opening sentence is a caveat). */
 export const HELPFUL_EXCERPT = `…${CACHED.organic.excerpt.split(/(?<=[.!?])\s+/)[1] ?? CACHED.organic.excerpt}`;
+
+/** The recorded bid policy in plain arithmetic (max bid x level weight), for copy that says what a
+ *  judgment would have bid. Mirrors packages/contracts computeBid; the extractor asserts parity. */
+const BPS: Record<string, number> = { "2:2": 5000, "2:3": 7500, "3:2": 7500, "3:3": 10000 };
+export const policyBid = (rel: number, intent: number, maxBid: string) => String((Number(maxBid) * (BPS[`${rel}:${intent}`] ?? 0)) / 10000);
