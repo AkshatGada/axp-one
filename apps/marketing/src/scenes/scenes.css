@@ -37,7 +37,8 @@
 .sc-leader[data-side="right"]::after { left: -3px; }
 .sc-leader[data-side="left"]::after { right: -3px; }
 .sc-marker { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; background: var(--brand); box-shadow: 0 0 0 5px var(--paper), 0 0 0 7px var(--brand); }
-.sc-marker-tag { position: absolute; left: 22px; top: -4px; white-space: nowrap; }
+.sc-marker-tag { position: absolute; right: 28px; top: -1px; padding: 3px 8px; border: 1px solid var(--brand); background: var(--paper); white-space: nowrap; }
+.sc-marker-tag .pv { color: var(--brand-deep); }
 
 /* Flat (static) fallback of the stack: the same plates and words, stacked vertically. */
 .sc-stack-static { display: grid; gap: 18px; }

@@ -112,3 +112,20 @@ html[data-px-motion="on"] .pg-in { animation: pgIn 1s var(--ease-out) both; anim
 .pg-close h2 .px-wi { color: var(--on-brand); }
 .pg-scroll { overflow-x: auto; max-width: 100%; }
 @media (max-width: 600px) { .pg-settle { font-size: 13px; } .pg-settle th:last-child, .pg-settle td:last-child { display: none; } }
+
+/* Hero scene: the same markup reads as a still sequence; [data-pinned] (>= 900px, motion on) pins it. */
+.hs-after { padding-top: clamp(64px, 9vw, 120px); }
+.hs-line { margin-bottom: clamp(32px, 4vw, 56px); }
+.hs-line-h { max-width: 16ch; }
+.hs-cap { margin-top: 20px; }
+.hs[data-pinned] { height: 330vh; padding: 0; }
+.hs[data-pinned] .hs-stage { position: sticky; top: 0; height: 100vh; overflow: clip; }
+.hs[data-pinned] .hs-grid { height: 100vh; min-height: 0; padding-top: calc(var(--px-header-h) + 8px); padding-bottom: 32px; align-items: center; }
+.hs[data-pinned] .hs-copy-wrap { will-change: transform, opacity; }
+.hs[data-pinned] .sp-chat { position: relative; z-index: 3; transform-origin: 50% 50%; will-change: transform, opacity; }
+.hs[data-pinned] .hs-after { position: absolute; inset: 0; width: auto; max-width: none; margin: 0; padding: 0; pointer-events: none; }
+.hs[data-pinned] .hs-stack { position: absolute; inset: 0; z-index: 4; opacity: 0; }
+.hs-canvas { position: absolute; left: 50%; top: calc(50% + 28px); transform-origin: 50% 50%; }
+.hs[data-pinned] .hs-line { position: absolute; z-index: 5; left: var(--gutter); top: calc(var(--px-header-h) + 24px); margin: 0; opacity: 0; }
+.hs[data-pinned] .hs-line-h { max-width: 9.5ch; font-size: clamp(28px, 2.6vw, 44px); line-height: 1.02; }
+.hs[data-pinned] .hs-cap { position: absolute; z-index: 5; right: var(--gutter); bottom: 28px; max-width: 30ch; margin: 0; text-align: right; opacity: 0; }

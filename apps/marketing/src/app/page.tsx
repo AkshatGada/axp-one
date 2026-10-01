@@ -38,61 +38,11 @@ import { RunSheet } from "@/specimens/RunSheet";
 import { ReceiptSheet } from "@/specimens/Receipt";
 import { SponsoredCard } from "@/specimens/SponsoredCard";
 import { Fit } from "@/scenes/Fit";
-import { PlateStack, PlateStackStatic, STACK_H, STACK_W } from "@/scenes/PlateStack";
+import HeroScene from "@/scenes/HeroScene";
 import { BOARD_H, BOARD_W, Switchboard } from "@/scenes/Switchboard";
 
 const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 const KF = RUN.campaigns["v3-keyforge"];
-
-function Hero() {
-  return (
-    <Section id="top" borderless className="pg-hero">
-      <Wrap>
-        <div className="pg-hero-grid">
-          <div className="pg-hero-copy">
-            <h1 className="px-dxl">
-              <Words text={HERO.h1} accent={HERO.accent} />
-            </h1>
-            <p className="px-lead pg-hero-lede pg-in" style={d(420)}>
-              {HERO.lede}
-            </p>
-            <div className="pg-in" style={d(560)}>
-              <Actions>
-                <ActionPrimary href={MVP_URL}>{HERO.primary}</ActionPrimary>
-                <ActionText href={VIDEO_ANCHOR}>{HERO.video}</ActionText>
-                <ActionText href="#proof">{HERO.skip}</ActionText>
-              </Actions>
-            </div>
-            <p className="pg-status pg-in" style={d(680)}>
-              <span>{HERO.status}</span>
-              <Provenance kind="replay" />
-            </p>
-          </div>
-          <div className="pg-hero-chat">
-            <HostChat question={CACHED.question} answer={CACHED.organic.excerpt} model={CACHED.organic.model} appName={HERO.appName} card={{ name: CV.name, text: CV.approvedText!, destination: CV.destination }} intro />
-            <p className="pg-hero-cap">{HERO.frameCaption}</p>
-          </div>
-        </div>
-      </Wrap>
-      <Wrap className="pg-explode">
-        <div className="pg-explode-head">
-          <Display size="h1">{HERO.pullBack}</Display>
-        </div>
-        <div className="only-wide">
-          <Fit w={STACK_W} h={STACK_H} maxH="92vh">
-            <PlateStack tilt={1} explode={1} callouts={1} marker={1} />
-          </Fit>
-        </div>
-        <div className="only-narrow">
-          <PlateStackStatic />
-        </div>
-        <p className="px-small" style={{ marginTop: 20 }}>
-          {HERO.stackCaption}
-        </p>
-      </Wrap>
-    </Section>
-  );
-}
 
 function Shift() {
   return (
@@ -449,7 +399,7 @@ export default function Home() {
       <MotionRoot />
       <SiteHeader links={NAV} cta={{ href: MVP_URL, label: HEADER.cta }} chip={HEADER.chip} />
       <main id="main" className="pg-main">
-        <Hero />
+        <HeroScene />
         <Shift />
         <Stage />
         <Rule />
