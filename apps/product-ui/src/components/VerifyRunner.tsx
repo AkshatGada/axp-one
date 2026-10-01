@@ -7,6 +7,8 @@ import { Ld } from "@axp/design-system/ledger";
 import { verifyChecks, summarize, summaryWords, GROUP_LABEL, EXPECTED_CHECK_COUNT, type Check, type CheckGroup, type CheckSummary } from "@/lib/verify.ts";
 import type { ProductRun } from "@/data/types";
 import { asset } from "@/lib/paths";
+import { verifyDevnet } from "@/lib/verify-devnet.ts";
+import type { DevnetProjection } from "@/data/devnet-types";
 
 export type CheckRow = Pick<Check, "id" | "group" | "label" | "method">;
 
@@ -44,11 +46,23 @@ const Val = ({ v, danger }: { v: string; danger?: boolean }) => <span className=
 
 type Tamper = { tampered: boolean; checks: Check[]; summary: CheckSummary } | null;
 
-export function VerifyRunner({ rows, expectedIds }: { rows: CheckRow[]; expectedIds: string[] }) {
+export function VerifyRunner({ rows, expectedIds, devnetRows = [] }: { rows: CheckRow[]; expectedIds: string[]; devnetRows?: CheckRow[] }) {
   const { run, bytes, error } = useRun();
   const [results, setResults] = useState<Record<string, Check> | null>(null);
   const [summary, setSummary] = useState<CheckSummary | null>(null);
   const [tamper, setTamper] = useState<Tamper>(null);
+  const [devnetResults, setDevnetResults] = useState<Record<string, Check> | null>(null);
+  useEffect(() => {
+    if (!run || !devnetRows.length) return;
+    let live = true;
+    fetch(asset("/devnet.public.json"), { cache: "no-store" })
+      .then((r) => r.json() as Promise<DevnetProjection>)
+      .then((d) => live && setDevnetResults(Object.fromEntries(verifyDevnet(run, d).map((c) => [c.id, c]))))
+      .catch((e) => live && setDevnetResults(Object.fromEntries(devnetRows.map((r) => [r.id, { ...r, status: "fail", expected: "devnet.public.json", actual: e instanceof Error ? e.message : String(e), path: "" } as Check]))));
+    return () => {
+      live = false;
+    };
+  }, [run, devnetRows]);
   useEffect(() => {
     if (!run) return;
     let live = true;
@@ -148,7 +162,27 @@ export function VerifyRunner({ rows, expectedIds }: { rows: CheckRow[]; expected
           </Ld.Panel>
         );
       })}
+      {devnetRows.length ? <CheckGroupPanel title={GROUP_LABEL.devnet} sub="Compares the Devnet evidence file with the recorded run, in your browser. It does not query the chain; the explorer links below do." rows={devnetRows} results={devnetResults} /> : null}
     </div>
+  );
+}
+
+function CheckGroupPanel({ title, sub, rows, results }: { title: string; sub: string; rows: CheckRow[]; results: Record<string, Check> | null }) {
+  const done = !!results;
+  const nPass = rows.filter((r) => results?.[r.id]?.status === "pass").length;
+  const ok = done && nPass === rows.length;
+  return (
+    <Ld.Panel title={title} sub={sub} actions={<Ld.Tag tone={!done ? undefined : ok ? "success" : "danger"} dot>{done ? `${nPass} of ${rows.length}` : "Not run yet"}</Ld.Tag>} flush>
+      <Ld.Table
+        columns={[
+          { key: "s", head: "", width: "40px", cell: (r: CheckRow) => { const c = results?.[r.id]; return <Ld.Verified state={!c ? "idle" : c.status === "pass" ? "pass" : "fail"}>{""}</Ld.Verified>; } },
+          { key: "l", head: "Check", cell: (r) => r.label },
+          { key: "e", head: "Recorded run", cell: (r) => (results?.[r.id] ? <Val v={results[r.id].expected} /> : <span className="ld-faint">not run yet</span>) },
+          { key: "a", head: "Devnet evidence", cell: (r) => (results?.[r.id] ? <Val v={results[r.id].actual} danger={results[r.id].status === "fail"} /> : <span className="ld-faint">not run yet</span>) },
+        ]}
+        rows={rows}
+      />
+    </Ld.Panel>
   );
 }
 

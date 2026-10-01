@@ -4,7 +4,9 @@ import { VerifyRunner, type CheckRow } from "@/components/VerifyRunner";
 import { buildMeta, run } from "@/data/select";
 import { verifyChecks } from "@/lib/verify.ts";
 import { asset } from "@/lib/paths";
-import { DevnetPanel, hasDevnet } from "@/components/v2/devnet";
+import { DevnetVerifyLinks, hasDevnet } from "@/components/v2/devnet";
+import { devnet } from "@/data/devnet";
+import { verifyDevnet } from "@/lib/verify-devnet.ts";
 
 export const metadata: Metadata = { title: "Verify" };
 
@@ -13,6 +15,7 @@ export default async function VerifyPage() {
   // The list of checks (labels and recorded values) is laid out at build time; the browser computes the results.
   const rows: CheckRow[] = (await verifyChecks(run)).map(({ id, group, label, method }) => ({ id, group, label, method }));
   const expectedIds = buildMeta.verify.ids;
+  const devnetRows: CheckRow[] = devnet ? verifyDevnet(run, devnet).map(({ id, group, label, method }) => ({ id, group, label, method })) : [];
   const removed = ["agent and agent-run IDs", "raw model requests and outputs (their hashes are kept)", "model output fields the demo does not use", "packet byte copies", "the sandbox network address and settlement links", "absolute wallet balances", "the full evidence catalogue", "laboratory data"];
   return (
     <>
@@ -25,7 +28,7 @@ export default async function VerifyPage() {
           </a>
         }
       />
-      <VerifyRunner rows={rows} expectedIds={expectedIds} />
+      <VerifyRunner rows={rows} expectedIds={expectedIds} devnetRows={devnetRows} />
       <div className="ld-cols-2">
         <Ld.Panel title="Restart without models or payments" sub="Recorded when the run was restarted; reported here, not recomputed">
           <div className="ld-cols-2">
@@ -68,7 +71,7 @@ export default async function VerifyPage() {
           </ul>
         </Ld.Panel>
       </div>
-      <DevnetPanel context="verify" />
+      <DevnetVerifyLinks />
     </>
   );
 }

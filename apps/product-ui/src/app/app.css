@@ -319,3 +319,15 @@ html[data-op-stage="charge"] [data-slot="await"] { display: none !important; }
 .ov2-chan li[data-chain] { border-left-color: var(--brand); }
 .ov2-grid > .ld-panel { display: flex; flex-direction: column; }
 .ov2-grid > .ld-panel > .ld-panel-body { flex: 1 1 auto; }
+
+/* Devnet re-settlement (Settlement, Verify, Overview) */
+.ld .ld-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.dv-ext { white-space: nowrap; }
+.dv-section { display: grid; gap: var(--ld-gap); scroll-margin-top: calc(var(--ld-top-h) + 16px); padding-top: 8px; }
+.dv-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 24px; padding-top: 16px; border-top: 1px solid var(--ld-border); }
+.dv-chain { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.dv-chain li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 8px 0; border-top: 1px solid var(--ld-border); font-size: 13px; color: var(--ld-text); }
+.dv-chain li:first-child { border-top: 0; }
+.dv-chain li > .ld-tag { margin-left: auto; }
+.dv-arrow { color: var(--ld-text-3); }
+.st2-part { display: grid; gap: 4px; padding-top: 4px; }

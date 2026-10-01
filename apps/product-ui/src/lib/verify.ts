@@ -19,7 +19,8 @@ export type CheckGroup =
   | "bid"
   | "tiebreak"
   | "feecap"
-  | "totals";
+  | "totals"
+  | "devnet";
 
 export type CheckStatus = "pass" | "fail" | "skip";
 
@@ -50,6 +51,7 @@ export const GROUP_LABEL: Record<CheckGroup, string> = {
   tiebreak: "Tie-break order",
   feecap: "Fee and rent cap",
   totals: "Run totals",
+  devnet: "Devnet re-settlement",
 };
 
 /** The run publishes exactly this many checks. "Passing" needs all of them, present and passing. */

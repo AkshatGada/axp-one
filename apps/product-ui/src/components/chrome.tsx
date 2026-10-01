@@ -11,7 +11,7 @@ export type NavCampaign = { slug: string; name: string; meta: string };
 
 const L = Link as unknown as Ld.LinkC;
 
-export function Chrome({ runId, runLabel, opps, campaigns, verifyMeta, children }: { runId: string; runLabel: string; opps: NavOpp[]; campaigns: NavCampaign[]; verifyMeta: string; children: ReactNode }) {
+export function Chrome({ runId, runLabel, devnet, opps, campaigns, verifyMeta, children }: { runId: string; runLabel: string; devnet?: boolean; opps: NavOpp[]; campaigns: NavCampaign[]; verifyMeta: string; children: ReactNode }) {
   const path = usePathname() ?? "/";
   const is = (p: string) => path === p || path === p.replace(/\/$/, "");
   const starts = (p: string) => path.startsWith(p);
@@ -25,7 +25,7 @@ export function Chrome({ runId, runLabel, opps, campaigns, verifyMeta, children 
             chips={
               <>
                 <Ld.Pv kind="replay" />
-                <Ld.Pv kind="settled" label="Hosted Solana sandbox" />
+                <Ld.Pv kind="settled" label={devnet ? "Hosted Solana sandbox + Solana Devnet re-settlement" : "Hosted Solana sandbox"} />
                 <Ld.Tag>Test USDC</Ld.Tag>
                 <Ld.Pv kind="fictional" label="Fictional advertisers" />
               </>

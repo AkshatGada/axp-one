@@ -5,9 +5,9 @@ import { GLOSSARY } from "@/data/glossary";
 import { campaign, nameOf, run, usdc } from "@/data/select";
 import { txPayload } from "@/components/money";
 import type { Channel, ChainTx } from "@/data/types";
-import { DevnetPanel } from "@/components/v2/devnet";
+import { DevnetSettlementSection, hasDevnet } from "@/components/v2/devnet";
 
-export const metadata: Metadata = { title: "Hosted Solana sandbox settlement" };
+export const metadata: Metadata = { title: hasDevnet ? "Settlement: hosted Solana sandbox and Solana Devnet" : "Hosted Solana sandbox settlement" };
 const L = Link as unknown as Ld.LinkC;
 const lam = (v: string | number) => Number(v).toLocaleString("en-US");
 
@@ -46,10 +46,17 @@ export default function SettlementPage() {
   return (
     <>
       <Ld.PageBar
-        title="Payment channels on a hosted Solana sandbox"
-        meta={<Ld.Tag tone="success" dot>Both finalized</Ld.Tag>}
-        sub={<>Each funded advertiser locked a 0.020 USDC (test) deposit in its own <Term title={GLOSSARY.channel.term} def={GLOSSARY.channel.def}>payment channel</Term> on a <Term title={GLOSSARY.solanaSandbox.term} def={GLOSSARY.solanaSandbox.def}>hosted Solana sandbox</Term>. Every accepted delivery advanced an off-chain <Term title={GLOSSARY.voucher.term} def={GLOSSARY.voucher.def}>voucher</Term>. One close per channel paid the publisher the last authorized total and refunded the rest. No transfer per ad.</>}
+        title={hasDevnet ? "Payment channels on Solana" : "Payment channels on a hosted Solana sandbox"}
+        meta={<Ld.Tag tone="success" dot>All finalized</Ld.Tag>}
+        sub={<>Each funded advertiser locked a 0.020 USDC (test) deposit in its own <Term title={GLOSSARY.channel.term} def={GLOSSARY.channel.def}>payment channel</Term> on a <Term title={GLOSSARY.solanaSandbox.term} def={GLOSSARY.solanaSandbox.def}>hosted Solana sandbox</Term>. Every accepted delivery advanced an off-chain <Term title={GLOSSARY.voucher.term} def={GLOSSARY.voucher.def}>voucher</Term>. One close per channel paid the publisher the last authorized total and refunded the rest. No transfer per ad.{hasDevnet ? " The same 3 receipts were then settled again on Solana Devnet, shown separately below." : ""}</>}
+        actions={hasDevnet ? <a className="ld-btn ld-btn--primary" href="#devnet">Solana Devnet re-settlement ↓</a> : undefined}
       />
+      {hasDevnet ? (
+        <div className="st2-part">
+          <h2 className="ld-section-title">The recorded run&apos;s own settlement, on a hosted Solana sandbox</h2>
+          <p className="ld-secondary">What the run did when it was recorded. The Devnet re-settlement is a separate section with its own numbers.</p>
+        </div>
+      ) : null}
       <div className="ld-kpis">
         <Ld.Kpi label="Deposited" value={usdc(run.totals.depositsBaseUnits)} unit="USDC" context="Test USDC across 2 channels" />
         <Ld.Kpi label="Paid to the publisher" value={usdc(run.totals.paidBaseUnits)} unit="USDC" context="Equals the 3 accepted charges" />
@@ -107,14 +114,14 @@ export default function SettlementPage() {
                       </li>
                       {ch.vouchers.map((v) => (
                         <li key={v.sequence} id={`voucher-${c.slug}-${v.sequence}`}>
-                          <b>Voucher {v.sequence}</b> {usdc(v.cumulativeAmountBaseUnits)} in total
+                          <b>Voucher {v.sequence}</b> {usdc(v.cumulativeAmountBaseUnits)}
                         </li>
                       ))}
                       <li data-chain>
                         <b>Close</b> {usdc(ch.settledBaseUnits)} paid
                       </li>
                     </ol>
-                    <span className="ld-caption">Open and close are sandbox transactions; vouchers are off-chain. {usdc(ch.refundBaseUnits)} USDC went back to the payer at close.</span>
+                    <span className="ld-caption">Open and close are sandbox transactions; vouchers are off-chain totals so far. {usdc(ch.refundBaseUnits)} USDC went back to the payer at close.</span>
                   </div>
                 </div>
                 <div className="ld-stack" style={{ gap: 6 }}>
@@ -199,11 +206,10 @@ export default function SettlementPage() {
         Fees and <Term title={GLOSSARY.rent.term} def={GLOSSARY.rent.def}>rent</Term> are paid in test SOL, measured in <Term title={GLOSSARY.lamports.term} def={GLOSSARY.lamports.def}>lamports</Term>, and kept apart from the USDC ad spend. Each channel paid {lam(perOpenRent)} lamports of new rent at open; {lam(perReclaim)} of it ({reclaimPct}%) was reclaimed at close, so {lam(run.fees.reclaimedRentLamports)} of {lam(run.fees.newRentLamports)} in total. Network fees were {lam(run.fees.networkFeeLamports)} lamports for the 4 transactions. These costs are paid per channel, not per ad: one open and one close are shared by every delivery the channel carries, and each delivery is a signed voucher, not a transaction. Here the channels carried {run.channels.map((c) => c.vouchers.length).join(" and ")} deliveries.
       </Ld.Callout>
 
-      <DevnetPanel context="settlement" />
-
       <Ld.Callout title="Funding is not settlement">
         An approved one-time sandbox faucet top-up funded the payer. Absolute wallet balances include funds from before this run, so only each transaction's own changes are shown. Hosted Solana sandbox, not devnet or mainnet.
       </Ld.Callout>
+      <DevnetSettlementSection />
     </>
   );
 }

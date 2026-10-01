@@ -20,5 +20,6 @@ export const GLOSSARY = {
   jev: { term: "Jev", def: "The judgment model each advertiser's agent used. Jev returns scores with probabilities; the exchange rounds them to levels 0 to 3 for relevance and buying intent. It never names a price; code does." },
   contexthint: { term: "ContextHint", def: "A recorded library of prompts and the ads that appeared beside them in AI answers, with inferred targeting hints. Agents receive its history as evidence." },
   tieRule: { term: "Tie rule", def: "Fixed in the exchange code before the run: when bids are equal, the campaign with the lower campaign ID wins. Here v3-clearvault sorts before v3-keyforge." },
+  devnet: { term: "Solana Devnet", def: "Solana's public test network. Anyone can open its transactions in the Solana explorer. Test tokens only, no real value; not mainnet." },
   solanaSandbox: { term: "Hosted Solana sandbox", def: "A hosted test network that runs Solana programs. Test USDC and test SOL only; not devnet or mainnet." },
 } as const;

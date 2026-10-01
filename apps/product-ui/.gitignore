@@ -7,3 +7,4 @@ public/run.public.json
 public/present.srt
 .next-dev/
 .next-build/
+public/devnet.public.json
