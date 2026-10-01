@@ -43,7 +43,7 @@ function inspectEvent(line) {
   return event;
 }
 
-export async function runCodexJSON(prompt,schema,{executable=process.env.AXP_CODEX_BIN??'/Applications/Codex.app/Contents/Resources/codex',timeoutMs=120000,spawnImpl=spawn}={}) {
+export async function runCodexJSON(prompt,schema,{executable=process.env.AXP_CODEX_BIN??'codex',timeoutMs=120000,spawnImpl=spawn}={}) {
   if(typeof prompt!=='string'||!prompt.trim()||Buffer.byteLength(prompt)>32768)throw new Error('invalid_prompt');
   if(!Number.isSafeInteger(timeoutMs)||timeoutMs<=0||timeoutMs>120000)throw new Error('invalid_agent_timeout');
   const dir=await mkdtemp(join(tmpdir(),'axp-agent-'));
@@ -85,7 +85,7 @@ export async function runCodexJSON(prompt,schema,{executable=process.env.AXP_COD
     if(!completed||!msg)throw new Error('agent_result_missing');
     let value;try{value=JSON.parse(msg);}catch{throw new Error('agent_invalid_json');}
     validateOutput(value,schema);
-    return {value,provenance:{engine:'codex',model:CODEX_MODEL,effort:'low',runtime:'bundled-cli',elapsedMs:Date.now()-started,inputHash:hash({prompt,schema}),usage:completed.usage??null,status:'completed',toolUse:'none',invocationScoped:true}};
+    return {value,provenance:{engine:'codex',model:CODEX_MODEL,effort:'low',runtime:'codex-cli',elapsedMs:Date.now()-started,inputHash:hash({prompt,schema}),usage:completed.usage??null,status:'completed',toolUse:'none',invocationScoped:true}};
   } finally {await rm(dir,{recursive:true,force:true});}
 }
 

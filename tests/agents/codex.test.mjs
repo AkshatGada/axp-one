@@ -56,7 +56,7 @@ test('organic answer preserves schema, provenance and invocation-only CLI settin
   assert.ok(!call.args.includes(call.prompt));
   assert.deepEqual(call.schema,answerSchema);assert.equal(call.schemaMode,0o600);
   assert.equal(result.value.answer,'Compare booking workflows, expense capture and integration needs.');
-  assert.deepEqual({...result.provenance,elapsedMs:0},{engine:'codex',model:CODEX_MODEL,effort:'low',runtime:'bundled-cli',elapsedMs:0,inputHash:hash({prompt:call.prompt,schema:call.schema}),usage,status:'completed',toolUse:'none',invocationScoped:true});
+  assert.deepEqual({...result.provenance,elapsedMs:0},{engine:'codex',model:CODEX_MODEL,effort:'low',runtime:'codex-cli',elapsedMs:0,inputHash:hash({prompt:call.prompt,schema:call.schema}),usage,status:'completed',toolUse:'none',invocationScoped:true});
   assert.ok(result.provenance.elapsedMs>=0);
   await assert.rejects(access(dir),{code:'ENOENT'});
 });
@@ -95,11 +95,11 @@ test('child environment excludes credentials, payment authority and alternate au
   assert.ok(!JSON.stringify(env).includes('fixture-secret-'));
 });
 
-test('existing bundled executable remains the default',async t=>{
+test('portable PATH executable is the default; explicit executable overrides remain supported',async t=>{
   const saved=process.env.AXP_CODEX_BIN;delete process.env.AXP_CODEX_BIN;
   t.after(()=>{if(saved===undefined)delete process.env.AXP_CODEX_BIN;else process.env.AXP_CODEX_BIN=saved;});
   const f=fixture();await organicAnswer('Plan a journey.',{spawnImpl:f.spawnImpl});
-  assert.equal(f.calls[0].executable,'/Applications/Codex.app/Contents/Resources/codex');
+  assert.equal(f.calls[0].executable,'codex');
 });
 
 test('each invocation has independent arguments, workdir and input hash',async()=>{

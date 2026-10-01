@@ -4,8 +4,8 @@ import {resolve,join} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {loadV3Bundle} from '../../packages/v3/bundle.mjs';
-const root=resolve(import.meta.dirname,'../..'),out=join(root,'artifacts/v3/recording'),source=process.argv[2];
-if(!/^\/private\/tmp\/axp-v3-capture\.[A-Za-z0-9]+$/.test(source??''))throw Error('explicit_v3_capture_directory_required');
+import {captureDirectory} from './capture-path.mjs';
+const root=resolve(import.meta.dirname,'../..'),out=join(root,'artifacts/v3/recording'),source=captureDirectory(process.argv[2],'v3');
 const disk=statfsSync(root);if(disk.bavail*disk.bsize<40*1024**3)throw Error('storage_floor_40GiB');
 const bundle=loadV3Bundle(join(root,'artifacts/v3/replay')),capture=JSON.parse(readFileSync(join(source,'capture.json')));
 const stages=[
@@ -23,7 +23,7 @@ const stages=[
 if(capture.runId!==bundle.run.runId||capture.bundleHash!==bundle.bundleHash||capture.frames.length!==stages.length)throw Error('capture_run_binding');
 mkdirSync(out,{recursive:true});const digest=x=>createHash('sha256').update(x).digest('hex');
 const exec=(command,args)=>{const r=spawnSync(command,args,{encoding:'utf8',maxBuffer:2*1024**2});if(r.status!==0)throw Error(r.stderr?.slice(-2000));return r.stdout;};
-const ffmpeg='/opt/homebrew/bin/ffmpeg',ffprobe='/opt/homebrew/bin/ffprobe',time=s=>`${String(Math.floor(s/3600)).padStart(2,'0')}:${String(Math.floor(s/60)%60).padStart(2,'0')}:${String(s%60).padStart(2,'0')},000`;
+const ffmpeg=process.env.AXP_FFMPEG_BIN??'ffmpeg',ffprobe=process.env.AXP_FFPROBE_BIN??'ffprobe',time=s=>`${String(Math.floor(s/3600)).padStart(2,'0')}:${String(Math.floor(s/60)%60).padStart(2,'0')}:${String(s%60).padStart(2,'0')},000`;
 let elapsed=0;const frames=stages.map(([step,seconds,caption,narration],i)=>{const f=capture.frames[i];if(f.step!==step||f.file!==`${String(i+1).padStart(2,'0')}-${step}.jpg`||!f.replayObserved)throw Error('capture_order');copyFileSync(join(source,f.file),join(out,f.file));const info=JSON.parse(exec(ffprobe,['-v','error','-show_entries','stream=codec_name,width,height','-of','json',join(out,f.file)])).streams[0];if(info.codec_name!=='mjpeg')throw Error('capture_format');const row={...f,...info,sha256:digest(readFileSync(join(out,f.file))),startSeconds:elapsed,durationSeconds:seconds,caption,narration};elapsed+=seconds;return row;});if(elapsed!==240)throw Error('walkthrough_duration');
 writeFileSync(join(out,'captures.json'),JSON.stringify({...capture,presentation:'recorded_evidence_replay',financialMode:'sandbox',captureMethod:'Actual read-only Chrome navigation; cropped central app context; edited frame holds, not continuous paid execution',frames},null,2));
 writeFileSync(join(out,'walkthrough.srt'),frames.map((f,i)=>`${i+1}\n${time(f.startSeconds)} --> ${time(f.startSeconds+f.durationSeconds)}\n${f.caption}\n`).join('\n'));

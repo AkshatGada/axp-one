@@ -2,15 +2,15 @@ import {readFileSync,writeFileSync,mkdirSync,copyFileSync,statfsSync,statSync} f
 import {resolve,join} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {STEPS,loadReplayBundle,digest} from '../../packages/replay/bundle.mjs';
+import {captureDirectory} from './capture-path.mjs';
 
 const root=resolve(import.meta.dirname,'../..'),out=join(root,'artifacts/phase5'),recording=join(out,'recording');
-const source=process.argv[2];
-if(!source||!/^\/private\/tmp\/axp-phase5-capture\.[A-Za-z0-9]+$/.test(source))throw Error('explicit_capture_directory_required');
+const source=captureDirectory(process.argv[2],'phase5');
 const disk=statfsSync(root);if(disk.bavail*disk.bsize<40*1024**3)throw Error('storage_floor_40GiB');
 const b=loadReplayBundle(join(out,'replay')),capture=JSON.parse(readFileSync(join(source,'capture.json')));
 if(capture.runId!==b.run.runId||capture.frames.length!==STEPS.length)throw Error('capture_binding');
 mkdirSync(recording,{recursive:true});
-const ffmpeg='/opt/homebrew/bin/ffmpeg',ffprobe='/opt/homebrew/bin/ffprobe';
+const ffmpeg=process.env.AXP_FFMPEG_BIN??'ffmpeg',ffprobe=process.env.AXP_FFPROBE_BIN??'ffprobe';
 const exec=(cmd,args)=>{const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:2*1024**2});if(r.status!==0)throw Error(`${cmd}: ${r.stderr?.slice(-2500)}`);return r.stdout;};
 const time=seconds=>`${String(Math.floor(seconds/3600)).padStart(2,'0')}:${String(Math.floor(seconds/60)%60).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')},000`;
 const narration=[

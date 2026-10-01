@@ -23,7 +23,8 @@ function walk(path) {
   if (!/\.(?:mjs|cjs|js|jsx|ts|tsx|py)$/.test(path)) return;
   checked++;
   const text = readFileSync(path, 'utf8');
-  if (text.includes('/Users/' + 'akshat/')) findings.push(relative(root, path) + ':machine_specific_path');
+  if (text.includes('/Users/' + 'akshat/') || text.includes('/Applications/' + 'Codex.app/')
+    || text.includes('/opt/' + 'homebrew/')) findings.push(relative(root, path) + ':machine_specific_path');
 }
 for (const directory of ['apps', 'packages', 'scripts', 'tooling']) walk(join(root, directory));
 const vendor = join(root, 'vendor/pay-kit');

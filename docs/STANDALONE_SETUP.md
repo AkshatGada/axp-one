@@ -47,6 +47,18 @@ when `.env.local` does not exist. Never put a provider key in a client-side
 Live calls stay operator-enabled and subject to frozen admission limits. Setup
 is not permission for another experiment, payment or reset of completed runs.
 
+The optional organic-agent CLI uses `codex` from `PATH`, not a Mac application
+bundle. Install and authenticate your own compatible CLI separately; use
+`AXP_CODEX_BIN` for an explicit executable override. See the
+[official CLI setup example](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex).
+Recorded organic answers need neither CLI installation nor a signed-in account.
+
+Existing videos are included. Optional re-encoding needs installed `ffmpeg`
+and `ffprobe` on `PATH` (or `AXP_FFMPEG_BIN` / `AXP_FFPROBE_BIN` overrides),
+not Homebrew specifically. Capture inputs are explicit absolute directories
+named `axp-v3-capture.<suffix>` (or the corresponding V2/Phase5 prefix),
+wherever the operator places them. Do not re-encode over preserved evidence.
+
 ## 4. Rebuild the exact payment SDK without another checkout
 
 Only needed for native payment operations and native SDK tests, not replay:
@@ -99,8 +111,13 @@ does not require it.
 ```sh
 node scripts/setup/check-repository.mjs
 npm test
-node scripts/demo/v3-preservation.mjs --check
+node scripts/demo/v3-replay-check.mjs artifacts/v3/replay
 ```
+
+The explicit replay-check path is read-only: it neither regenerates the bundle
+nor overwrites its saved report. `v3-preservation.mjs --check` is additionally
+used on the original working checkout, whose private-state preservation manifest
+cannot be fully verified in a public clone without those ignored private files.
 
 The check rejects machine-specific runtime paths, external source symlinks,
 changed vendored source, private files in the index and recognizable provider
