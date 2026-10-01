@@ -1,0 +1,20 @@
+// Inline glossary (Term). Plain words; no claims beyond the recorded run.
+export const GLOSSARY = {
+  opportunity: { term: "Opportunity", def: "One chance to show one Sponsored card beside one answer in the app. The app sends only a coarse intent, required capabilities and a floor price." },
+  eligibility: { term: "Eligibility", def: "A rule in code: a campaign may compete only if it declares every capability the moment requires. Checked before any agent is asked." },
+  frequencyCap: { term: "Frequency cap", def: "A campaign may be placed at most twice in one session. A third decision is not admitted to the auction." },
+  firstPrice: { term: "First price", def: "The winner pays its own bid. There is no second-price discount." },
+  floor: { term: "Floor", def: "The lowest bid the app will accept for this slot: 0.001 test USDC here." },
+  baseUnits: { term: "Base units", def: "USDC has six decimals. 4000 base units are 0.004 USDC. Amounts are kept as whole base units, never floats." },
+  channel: { term: "Payment channel", def: "A deposit locked once on the sandbox chain. Deliveries are paid by off-chain vouchers; one close transaction settles the final total." },
+  voucher: { term: "Voucher", def: "A signed off-chain authorization for the channel. Each one states the cumulative total owed so far." },
+  cumulative: { term: "Cumulative authorization", def: "Each voucher states the total, not an increment. Voucher 2 at 0.007 replaces voucher 1 at 0.004; it does not add to it." },
+  lamports: { term: "Lamports", def: "The smallest unit of SOL. Network fees and account rent are paid in test SOL and are never mixed with USDC." },
+  rent: { term: "Rent", def: "SOL locked to keep a sandbox account open. New rent is paid when accounts are created; some is reclaimed when they close." },
+  finalized: { term: "Finalized", def: "The sandbox chain's strongest confirmation level, read back from the chain for each transaction." },
+  receipt: { term: "Signed receipt", def: "The app's Ed25519-signed statement that it inserted the awarded card with its Sponsored label. It is not proof that a person read it." },
+  arm: { term: "Arm", def: "Each agent was asked twice for the first two questions: once with the question and campaign only (baseline), once with ContextHint history added. Only the history arm competed." },
+  cosine: { term: "Cosine similarity", def: "How close two prompt embeddings are, from 0 to 1. Used only when the exact question already had a stored vector." },
+  lexical: { term: "Lexical fallback", def: "When no stored vector exists, retrieval ranks prompts by shared words. It is an overlap score, not semantic similarity." },
+  inferred: { term: "Inferred hint", def: "A ContextHint hypothesis about who an observed ad targeted. A hypothesis, never an advertiser setting." },
+} as const;
