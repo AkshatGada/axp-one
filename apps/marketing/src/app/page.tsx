@@ -16,11 +16,13 @@ import Tour from "@/v7/Tour";
 import Proof from "@/v7/Proof";
 import Closing from "@/v7/Closing";
 import Footer from "@/v7/Footer";
+import Tone from "@/v7/Tone";
 
 export default function Home() {
   return (
     <>
       <MotionRoot />
+      <Tone />
       <FilmMode />
       <SiteHeader links={NAV} cta={{ href: MVP_URL, label: HEADER.cta, external: true }} chip={HEADER.chip} />
       <main id="main" className="pg-main">

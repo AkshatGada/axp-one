@@ -1,6 +1,6 @@
 /* v7 closing: ultramarine, the wall returns in white at low contrast behind the promises. */
 .close { position: relative; overflow: clip; min-height: 92svh; display: grid; align-content: center; background: var(--brand); color: #fff; }
-.fog { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: radial-gradient(70% 70% at 30% 55%, color-mix(in oklab, var(--brand) 94%, transparent) 0%, color-mix(in oklab, var(--brand) 80%, transparent) 45%, color-mix(in oklab, var(--brand) 35%, transparent) 75%, transparent 100%), linear-gradient(180deg, var(--brand) 0%, transparent 18%, transparent 80%, var(--brand) 100%); }
+.fog { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: radial-gradient(70% 70% at 30% 55%, color-mix(in oklab, var(--brand) 94%, transparent) 0%, color-mix(in oklab, var(--brand) 80%, transparent) 45%, color-mix(in oklab, var(--brand) 35%, transparent) 75%, transparent 100%); }
 .in { position: relative; z-index: 3; display: grid; gap: 40px; padding: clamp(96px, 14vh, 160px) 0; }
 .h2 { margin: 0; max-width: 13ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(52px, 7vw, 124px); line-height: 0.92; letter-spacing: -0.04em; }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 34px; }

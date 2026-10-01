@@ -2,7 +2,7 @@
    (#14f195) as the accent for money that moved. Radius: blocks and cards 12, lanes 16, buttons 6,
    pills full. Explorer buttons are white with purple ink (7:1). */
 .sol { --g: var(--sol-green); position: relative; background: var(--sol); color: #fff; overflow: clip; }
-.sol::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(70% 50% at 85% 10%, rgba(20, 241, 149, 0.16), transparent 70%), radial-gradient(70% 60% at 0% 100%, rgba(42, 11, 92, 0.45), transparent 70%); }
+.sol::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(50% 30% at 85% 30%, rgba(20, 241, 149, 0.14), transparent 70%), radial-gradient(60% 30% at 10% 60%, rgba(42, 11, 92, 0.35), transparent 70%); }
 .pin { position: relative; }
 .stage { position: relative; min-height: 100svh; display: grid; align-content: center; padding: calc(var(--px-header-h, 72px) + 28px) 0 48px; }
 @media (min-width: 900px) {
@@ -13,9 +13,10 @@
 .head { display: grid; gap: 18px; max-width: 900px; }
 .pills { display: flex; flex-wrap: wrap; gap: 8px; }
 .label, .live { height: 30px; padding: 0 12px; border-radius: var(--px-r-full); font-size: 13.5px; font-weight: 500; line-height: 30px; }
-.label { background: rgba(255, 255, 255, 0.18); }
-.live { background: var(--sol-ink); color: var(--g); }
-.h2 { margin: 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(46px, 5.6vw, 96px); line-height: 0.94; letter-spacing: -0.04em; }
+.label { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 14px 0 5px; background: rgba(10, 14, 42, 0.86); }
+.label i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: var(--px-r-full); background: var(--sol-green); color: var(--sol-ink); font-size: 12px; font-style: normal; }
+.live { height: 32px; line-height: 32px; background: var(--sol-ink); color: var(--g); }
+.h2 { margin: 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(38px, 4vw, 68px); line-height: 0.98; letter-spacing: -0.035em; }
 .lede { margin: 0; max-width: 46ch; font-size: clamp(17px, 1.35vw, 21px); line-height: 1.45; color: rgba(255, 255, 255, 0.92); }
 
 /* Two lanes: on Solana, off chain. */

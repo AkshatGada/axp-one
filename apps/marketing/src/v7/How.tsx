@@ -143,7 +143,7 @@ export default function How() {
   });
 
   return (
-    <section ref={ref} id="how" className={s.how} data-tone="stage" data-header-tone="stage" aria-labelledby="how-title" data-pinned={pinned ? "" : undefined}>
+    <section ref={ref} id="how" data-world="stage" className={s.how} data-tone="stage" data-header-tone="stage" aria-labelledby="how-title" data-pinned={pinned ? "" : undefined}>
       <div className={s.stage}>
         <Tape />
         <div className={s.fog} aria-hidden />

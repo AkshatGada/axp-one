@@ -9,7 +9,7 @@ import s from "./proof.module.css";
 export default function Proof() {
   const v = RUN.video;
   return (
-    <section id="proof" className={s.proof} aria-labelledby="proof-title">
+    <section id="proof" data-world="paper2" className={s.proof} aria-labelledby="proof-title">
       <div className={`px-wrap ${s.grid}`}>
         <div className={s.left}>
           <p className={s.label}>{PROOF.label}</p>

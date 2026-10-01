@@ -1,5 +1,5 @@
 /* v7 proof + now/next: paper 2, big numbers in ultramarine, video frame radius 16, pills full. */
-.proof { position: relative; padding: clamp(72px, 10vh, 120px) 0 clamp(56px, 8vh, 88px); background: var(--paper-2); border-top: 1px solid var(--line); }
+.proof { position: relative; padding: clamp(72px, 10vh, 120px) 0 clamp(56px, 8vh, 88px); background: var(--paper-2); }
 .grid { display: grid; gap: 48px; align-items: center; }
 @media (min-width: 1000px) { .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr); gap: clamp(40px, 5vw, 96px); } }
 .left { display: grid; gap: 28px; align-content: start; }

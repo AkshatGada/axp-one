@@ -388,7 +388,7 @@ export default function Hero() {
   const still = (v: MotionValue<number>, rest: number) => (pinned ? v : rest);
 
   return (
-    <section ref={ref} id="top" className={s.hero} aria-labelledby="hero-title" data-pinned={pinned ? "" : undefined}>
+    <section ref={ref} id="top" data-world="paper" className={s.hero} aria-labelledby="hero-title" data-pinned={pinned ? "" : undefined}>
       <div ref={stageRef} className={s.stage} onPointerMove={onMove}>
         <Wall wallRef={wallRef} plane={{ x: reduce ? 26 : rotX, y: reduce ? 7 : rotY, z: still(rotZ, -11) }} cam={{ z: still(camZ, 0), y: still(camY, 0) }} opacity={still(wallO, 1)} />
         <motion.div className={s.fog} style={{ opacity: still(fogO, 1) }} aria-hidden />

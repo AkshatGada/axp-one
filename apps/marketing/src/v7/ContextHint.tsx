@@ -42,10 +42,13 @@ export default function ContextHint() {
   const rotateX = useTransform(p, (v) => 30 - 16 * v);
   const y = useTransform(p, (v) => 60 - 120 * v);
   return (
-    <section ref={ref} id="data" className={s.ch} data-header-tone="ch" aria-labelledby="ch-title">
+    <section ref={ref} id="data" data-world="ch" data-step="ch" className={s.ch} data-header-tone="ch" aria-labelledby="ch-title">
       <div className={`px-wrap ${s.grid}`}>
         <div className={s.left}>
-          <p className={s.label}>{CONTEXTHINT.label}</p>
+          <p className={s.label}>
+            <i>1</i>
+            {CONTEXTHINT.label}
+          </p>
           <h2 id="ch-title" className={s.moat} data-reveal="fade">
             {CONTEXTHINT.moat} <span className={s.accent}>{CONTEXTHINT.moatAccent}</span>
           </h2>

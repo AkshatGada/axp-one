@@ -318,3 +318,5 @@
 
 /* The closing's wall: white tiles at low contrast on ultramarine, no auctions. */
 .view[data-tone="brand"] .tile { background: #fff; border-color: transparent; box-shadow: none; }
+
+:global(html[data-px-tone="on"]) .stage, :global(html[data-px-tone="on"]) .after { background: transparent; border-top-color: transparent; }

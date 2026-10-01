@@ -16,3 +16,8 @@ html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: n
 .poster-sub { margin: 0; max-width: 32ch; font-size: 30px; line-height: 1.35; color: rgba(255, 255, 255, .86); }
 .poster-chat { align-self: end; max-width: 860px; transform: scale(1.12); transform-origin: 0 100%; }
 .poster-chat .sp-chat { border-radius: var(--px-r-xl); box-shadow: 0 30px 80px -30px rgba(10, 14, 42, .7); }
+
+/* v7 one continuous story: once the tone layer runs (src/v7/Tone.tsx), sections drop their own
+   backgrounds and the single fixed layer carries the colour, blending across every seam. */
+html[data-px-tone="on"] body, html[data-px-tone="on"] [data-world] { background: transparent !important; }
+html[data-px-tone="on"] [data-world] .px-footer { background: transparent; border-top-color: transparent; }

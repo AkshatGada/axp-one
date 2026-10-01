@@ -11,10 +11,13 @@ const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 
 export default function Jev() {
   return (
-    <section id="jev" className={s.jev} data-tone="brand" data-header-tone="brand" aria-labelledby="jev-title">
+    <section id="jev" data-world="brand" data-step="jev" className={s.jev} data-tone="brand" data-header-tone="brand" aria-labelledby="jev-title">
       <div className={`px-wrap ${s.grid}`}>
         <div className={s.left}>
-          <p className={s.label}>{J.label}</p>
+          <p className={s.label}>
+            <i>2</i>
+            {J.label}
+          </p>
           <h2 id="jev-title" className={s.h2}>
             {J.h2}
           </h2>

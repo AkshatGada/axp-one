@@ -44,13 +44,16 @@ export default function Solana() {
   const fill = shown >= 3 ? vs[1]?.cumulative ?? vs[0]!.cumulative : shown >= 2 ? vs[0]!.cumulative : "0";
 
   return (
-    <section id="solana" className={s.sol} data-header-tone="sol" aria-labelledby="sol-title">
-      <div className={s.pin} ref={ref} data-pinned={pinned ? "" : undefined}>
+    <section id="solana" data-world="sol" className={s.sol} data-header-tone="sol" aria-labelledby="sol-title">
+      <div className={s.pin} ref={ref} data-step="sol" data-pinned={pinned ? "" : undefined}>
         <div className={s.stage} data-step={shown}>
           <div className={`px-wrap ${s.in}`}>
             <div className={s.head}>
               <div className={s.pills}>
-                <span className={s.label}>{SOLANA.label}</span>
+                <span className={s.label}>
+                  <i>3</i>
+                  {SOLANA.label}
+                </span>
                 <span className={s.live}>{SOLANA.live}</span>
               </div>
               <h2 id="sol-title" className={s.h2}>

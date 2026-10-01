@@ -9,7 +9,7 @@ const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 
 export default function Tour() {
   return (
-    <section id="mvp" className={s.tour} aria-labelledby="mvp-title">
+    <section id="mvp" data-world="paper" className={s.tour} aria-labelledby="mvp-title">
       <div className="px-wrap">
         <div className={s.head}>
           <div>

@@ -158,6 +158,13 @@ export const SOLANA = {
   kfPaid: usdc(KF_CHANNEL.settled),
 };
 
+/** The story's spine: the same question, carried through the three pillar chapters. */
+export const SPINE = {
+  ch: { n: "1", state: "Evidence: one example, one audience" },
+  jev: { n: "2", state: "Judged: bid, a direct fit" },
+  sol: { n: "3", state: "Settled on Solana, one close" },
+} as const;
+
 /** Inside the MVP: four framed captures, each linking to its page. */
 export const MVP_TOUR = {
   label: "Inside the MVP",

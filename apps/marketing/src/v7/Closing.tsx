@@ -20,7 +20,7 @@ export default function Closing() {
   const rx = useTransform(p, (v) => 10 + 16 * t(v));
   const rz = useTransform(p, (v) => -3 - 8 * t(v));
   return (
-    <section ref={ref} className={s.close} data-tone="brand" data-header-tone="brand" aria-labelledby="close-title">
+    <section ref={ref} data-world="brand" className={s.close} data-tone="brand" data-header-tone="brand" aria-labelledby="close-title">
       <Wall lite tone="brand" opacity={0.2} plane={{ x: reduce ? 26 : rx, y: 6, z: reduce ? -11 : rz }} cam={{ z: reduce ? 0 : z, y: 0 }} />
       <div className={s.fog} aria-hidden />
       <div className={`px-wrap ${s.in}`}>

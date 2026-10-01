@@ -7,6 +7,7 @@ const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 
 export default function Footer() {
   return (
+    <div data-world="paper">
     <SiteFooter
       scope={FOOTER.scope}
       legend={false}
@@ -30,5 +31,6 @@ export default function Footer() {
       }
       base={<span>{FOOTER.base}</span>}
     />
+    </div>
   );
 }
