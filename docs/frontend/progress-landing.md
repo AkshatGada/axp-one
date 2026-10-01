@@ -39,9 +39,23 @@ Owner of this file: the landing builder agent. Update at every milestone.
   Verified headless (Chrome via playwright-core) at 1440x900, 1280x800, 1920x1080, 390: no console errors, no
   failed requests, no horizontal overflow, all PolySans faces loaded; reduced-motion still render complete.
 
+- `axp-landing-v4`: built from reviews/landing-v3-fixes.md + landing-v4-owner.md + judge/truth/design reviews.
+  No internal details on the landing (lint fails the built page on IDs, hashes, policy names, model versions, R/I
+  shorthands, run IDs, base units, legacy notes). MVP URL env-aware (dev http://localhost:3420/, build /mvp/).
+  New order: hero (ContextHint badge, helpful excerpt) / Built on trio (ContextHint, Jev, Solana) / Why now /
+  shutter + stage / rule wall + rules strip / Solana payments / ContextHint chapter (traction, ad wall with real
+  local images, 4,205 dots into country bands, niche dive + payoff with changed and unchanged results, 12-country
+  Fresh Ads chart + funnel, moat, Visit ContextHint) / proof (money pair, run sheet, video, card, plain receipt,
+  limits) / next / closing / footer (ContextHint column, Jev + Solana credits). Fonts preloaded from /fonts (CLS 0
+  at 1280/1440/1920, was 0.03 to 0.10). Shutter clips a viewport-sized plate. og.png + video-poster.png captured
+  from /?still=1 and /poster/. Build: `rm -rf out .next-build && NEXT_DIST_DIR=.next-build next build && mv
+  .next-build out` (Next exports straight into a custom distDir), so dev's .next is never touched.
+  Heights: 18,854px at 1440x900 (20.9 screens; v3 27,732), 16,952px reduced motion, 25,555px at 390.
+  Final shots: docs/frontend/reviews/shots/landing-v4-builder/ (untracked).
+
 ## Next
-- Lighthouse pass, OG image via ?still=1 (public/og.png not generated yet; meta points to /og.png), Present-mode cut of
-  the video when the MVP agent has it, review fixes from the critics.
+- Lighthouse pass; mobile page length (30 screens at 390) could drop with lighter static plates; the niche field
+  could gain a literal sub-niche zoom.
 
 ## Notes
 - Dev: `pnpm --dir apps/marketing dev` (:3410). Verify in own tab, not tab-1 (the owner views :3410 there).
