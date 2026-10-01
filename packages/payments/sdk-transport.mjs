@@ -6,8 +6,21 @@ import {signPreparedWire} from './unsigned-transaction.mjs';
 import {testWalletPath} from '../config/local.mjs';
 
 const sha=v=>createHash('sha256').update(v).digest('hex');
-const allowed={devnet:{rpc:'https://api.devnet.solana.com',genesis:'EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG',mint:'4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'},sandbox:{rpc:'https://402.surfnet.dev:8899',genesis:'5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d',mint:'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'}};
-const PROGRAM='CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX',TOKEN='TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',TREASURY='Cs2zdfUNonRdRGsiZUQQLdTxzxVvJZmgiX2mpLYKuEqP';
+// Per-network treasury owner compiled into that cluster's program build. The pinned
+// SDK always derives the mainnet owner's ATA; the Devnet build rejects it (Custom
+// 2401). Devnet value observed from successful on-chain distributes, see
+// docs/build/DEVNET_FEASIBILITY.md. Sandbox (mainnet fork) keeps the SDK owner.
+const SDK_TREASURY='Cs2zdfUNonRdRGsiZUQQLdTxzxVvJZmgiX2mpLYKuEqP';
+export const NETWORK_ENVIRONMENTS=Object.freeze({devnet:Object.freeze({rpc:'https://api.devnet.solana.com',genesis:'EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG',mint:'4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU',treasuryOwner:'4zTeC5mVqWLruDexgU2mV66p9t5vCA9JyiZqdGDUspap'}),sandbox:Object.freeze({rpc:'https://402.surfnet.dev:8899',genesis:'5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d',mint:'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',treasuryOwner:SDK_TREASURY})});
+const allowed=NETWORK_ENVIRONMENTS;
+const PROGRAM='CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX',TOKEN='TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
+const DISTRIBUTE_TREASURY_INDEX=6;
+/** Point the SDK-built distribute at the network's treasury ATA. No-op when equal. */
+export function retargetDistributeTreasury({instruction,sdkTreasuryAta,treasuryAta}) {
+  if(sdkTreasuryAta===treasuryAta)return instruction;
+  if(instruction?.accounts?.[DISTRIBUTE_TREASURY_INDEX]?.address!==sdkTreasuryAta)throw new Error('distribute_layout_mismatch');
+  return {...instruction,accounts:instruction.accounts.map((a,i)=>i===DISTRIBUTE_TREASURY_INDEX?{...a,address:treasuryAta}:a)};
+}
 export function assertUnsignedPlanFresh({currentBlockHeight,lastValidBlockHeight,blockhashValid}){if(blockhashValid!==true||!Number.isSafeInteger(currentBlockHeight)||!Number.isSafeInteger(Number(lastValidBlockHeight))||BigInt(currentBlockHeight)+20n>=BigInt(lastValidBlockHeight)){const e=Error('unsigned_plan_expired');e.code='unsigned_plan_expired';throw e;}return true;}
 export async function createNativeTransport({terms,statePath,walletPath=testWalletPath()}) {
   const environment=allowed[terms.mode];
@@ -33,7 +46,8 @@ export async function createNativeTransport({terms,statePath,walletPath=testWall
   const assertPlanFresh=async({plan})=>{const currentBlockHeight=await rpc('getBlockHeight',[{commitment:'confirmed'}]),valid=await rpc('isBlockhashValid',[plan.latest.value.blockhash,{commitment:'confirmed'}]);return assertUnsignedPlanFresh({currentBlockHeight,lastValidBlockHeight:plan.latest.value.lastValidBlockHeight,blockhashValid:valid.value});};
   const routes=sessionServer.session.routes({store,currency:terms.mint,network:terms.mode==='sandbox'?'mainnet':'devnet',settlementWindowSeconds:60n});
   const ata=async owner=>(await token.findAssociatedTokenPda({owner:kit.address(owner),mint:kit.address(terms.mint),tokenProgram:kit.address(TOKEN)}))[0];
-  const accounts={payer:await ata(terms.payer),payee:await ata(terms.payee),treasury:await ata(TREASURY)};
+  const TREASURY=environment.treasuryOwner;
+  const accounts={payer:await ata(terms.payer),payee:await ata(terms.payee),treasury:await ata(TREASURY),sdkTreasury:await ata(SDK_TREASURY)};
   const balance=async address=>{const a=(await rpc('getAccountInfo',[address,{encoding:'base64',commitment:'finalized'}])).value;return a?BigInt(Buffer.from(a.data[0],'base64').readBigUInt64LE(64)).toString():'0';};
   const snapshot=async()=>({payerBaseUnits:await balance(accounts.payer),publisherBaseUnits:await balance(accounts.payee),payerLamports:String((await rpc('getBalance',[terms.payer,{commitment:'finalized'}])).value)});
   const unsignedWire=(instructions,latest)=>{const message=kit.pipe(kit.createTransactionMessage({version:0}),m=>kit.setTransactionMessageFeePayer(terms.payer,m),m=>kit.setTransactionMessageLifetimeUsingBlockhash({...latest.value,lastValidBlockHeight:BigInt(latest.value.lastValidBlockHeight)},m),m=>kit.appendTransactionMessageInstructions(instructions,m));return kit.getBase64EncodedWireTransaction(kit.compileTransaction(message));};
@@ -45,7 +59,7 @@ export async function createNativeTransport({terms,statePath,walletPath=testWall
       setup.push(token.getCreateAssociatedTokenIdempotentInstruction({payer:unsignedPayer,ata:account,owner:kit.address(owner),mint:kit.address(terms.mint),tokenProgram:kit.address(TOKEN)}));rent+=BigInt(await rpc('getMinimumBalanceForRentExemption',[165]));
     }
     const seal=onChain.buildSettleAndSealInstructions({channelId:plan.protocolChannelId,merchantSigner:unsignedPayee,programId:kit.address(PROGRAM),...(plan.finalVoucher?{voucher:{authorizedSigner:terms.payer,signed:plan.finalVoucher}}:{})});
-    const distribute=await onChain.buildDistributeInstruction({channelState:{channelId:plan.protocolChannelId,payer:terms.payer,payee:terms.payee},mint:terms.mint,rentPayer:terms.payer,tokenProgram:TOKEN,splits:[],programId:kit.address(PROGRAM)});
+    const distribute=retargetDistributeTreasury({instruction:await onChain.buildDistributeInstruction({channelState:{channelId:plan.protocolChannelId,payer:terms.payer,payee:terms.payee},mint:terms.mint,rentPayer:terms.payer,tokenProgram:TOKEN,splits:[],programId:kit.address(PROGRAM)}),sdkTreasuryAta:accounts.sdkTreasury,treasuryAta:accounts.treasury});
     const wire=unsignedWire([...setup,...seal.instructions,distribute],plan.latest),estimate=await estimated(wire,rent);
     return {unsignedWireBase64:wire,estimatedFeeAndRentLamports:estimate.cost,simulation:estimate};
   }

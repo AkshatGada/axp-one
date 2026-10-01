@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "axp.v3-devnet-feasibility.v1",
+  "settlementRunId": "v3-devnet-settlement",
+  "observedAt": "2026-10-01T21:00:54.425Z",
+  "signed": false,
+  "broadcast": false,
+  "network": {
+    "mode": "devnet",
+    "network": "solana-devnet",
+    "rpc": "https://api.devnet.solana.com",
+    "genesisHash": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+    "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+    "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+    "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "treasuryOwner": "4zTeC5mVqWLruDexgU2mV66p9t5vCA9JyiZqdGDUspap"
+  },
+  "sdk": {
+    "sourceCommit": "c294f8903f18efc746584e3cc2961d6033b8365c",
+    "packageVersion": "0.11.0"
+  },
+  "deployment": {
+    "programAccountHash": "8d139929fe85d2acfbd67de55f6849ec58b2a158f676f199801e97f46dd7b7e0",
+    "programDataAddress": "CghQXkmw2F6p1exMETiZdNeUx9QGraWsNZ4eom1Cuiw1",
+    "programDataHash": "b7722bc01b79849ec324dfbe075c1dc017c266b1eedbafc2e54cd6b5cb7084d6",
+    "deploymentSlot": "480232051",
+    "upgradeAuthority": "4zTeC5mVqWLruDexgU2mV66p9t5vCA9JyiZqdGDUspap"
+  },
+  "mintDecimals": 6,
+  "treasury": {
+    "owner": "4zTeC5mVqWLruDexgU2mV66p9t5vCA9JyiZqdGDUspap",
+    "tokenAccount": "BSMX9adNvtMHhBSbiuDeaPZZbF82cmPJkSHyptJSHecz",
+    "sdkDefaultOwner": "Cs2zdfUNonRdRGsiZUQQLdTxzxVvJZmgiX2mpLYKuEqP",
+    "note": "Devnet build rejects the SDK default owner with Custom 2401 (TreasuryAccountMismatch)."
+  },
+  "simulation": {
+    "description": "unsigned open + 7000 cumulative voucher settle_and_seal + distribute; ephemeral voucher signer; no broadcast",
+    "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+    "payee": "DB4GyrEU7KPXzC4oYfKPfvct5Ja2pxXa7WZnREk3URsV",
+    "err": null,
+    "unitsConsumed": 53945,
+    "slot": 506403649,
+    "payeeTokenBefore": "4000",
+    "payeeTokenAfterSimulated": "11000"
+  },
+  "compatible": true
+}
