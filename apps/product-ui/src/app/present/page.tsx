@@ -84,6 +84,8 @@ export default function PresentPage() {
             <Ld.Pv kind="fictional" label="The card" />
             <p className="pr2-big">{paid ? "Below it, one disclosed Sponsored card, bought in a sealed auction and paid through Solana." : "No card was placed in this run."}</p>
           </F>
+
+
         </div>
         <Ld.ChatSpecimen
           app={run.publisher.displayName}
@@ -111,25 +113,11 @@ export default function PresentPage() {
       <div className="ld-stack-lg" style={{ gap: 16 }}>
         <div className="ld-kpis">
           <Ld.Kpi label="Questions" value={run.counts.opportunities} context="Asked in the app" />
-          <Ld.Kpi label="Agent decisions" value={run.counts.decisions} context="Decided with Jev" />
+          <Ld.Kpi label="Agent decisions" value={run.counts.decisions} context="By Jev, a judgment model that rates relevance and intent" />
           <Ld.Kpi label="Auctions" value={run.counts.auctions} context={run.counts.noFill ? `Plus ${run.counts.noFill} no fill` : "Every question filled"} />
           <Ld.Kpi label="Signed deliveries" value={run.counts.receipts} context="Publisher receipts" />
           <Ld.Kpi label="Paid to the app" value={usdc(run.totals.paidBaseUnits)} unit="USDC" context="Test USDC" />
         </div>
-        <dl className="ov2-defs pr2-defs">
-          <div>
-            <dt>Jev</dt>
-            <dd>The judgment model each advertiser&apos;s agent uses to rate relevance and intent. It never names a price.</dd>
-          </div>
-          <div>
-            <dt>ContextHint</dt>
-            <dd>A recorded library of real prompts and the ads seen beside them, given to agents as evidence.</dd>
-          </div>
-          <div>
-            <dt>{onDevnet ? "Solana Devnet" : "Hosted Solana sandbox"}</dt>
-            <dd>{onDevnet ? "Solana's public test network; every transaction opens in the Solana explorer." : "A private test network that runs Solana programs; test tokens only."}</dd>
-          </div>
-        </dl>
         <div className="pr2-split" style={{ gridTemplateColumns: "1.15fr 1fr", gap: 16 }}>
           <Ld.Panel title={`The ${run.counts.opportunities} questions`} sub="Story order" flush>
             <Ld.Table
@@ -171,7 +159,7 @@ export default function PresentPage() {
             return (
               <div className="ld-stack">
                 <Ld.Callout tone="ch" title={exact ? "ContextHint had seen this exact question before" : `What ${nameOf(evMain.campaignId)}'s agent was shown`}>
-                  {exact && rec ? `Next to an ad from ${rec.advertiser}. That history goes to the agents as evidence.` : "Past prompts close to this one, and the ads seen beside them, go to the agent as evidence."}
+                  {exact && rec ? `ContextHint is a recorded library of real prompts and the ads seen beside them. This question appeared next to an ad from ${rec.advertiser}; that history goes to the agents as evidence.` : "ContextHint is a recorded library of real prompts and the ads seen beside them. Past prompts close to this one go to the agent as evidence."}
                 </Ld.Callout>
                 {rec ? <Ld.EvidenceCard prompt={rec.promptText} advertiser={rec.advertiser} creative={rec.creativeText} sim={ex!.similarity} method={evMain.retrieval.method} hint={hint ? <span className="ld-stack" style={{ gap: 4 }}><Ld.Pv kind="inferred" label="Inferred hint" /><span className="ld-secondary">{hint.text}</span></span> : undefined} /> : null}
               </div>
@@ -391,7 +379,7 @@ export default function PresentPage() {
     settlement: (
       <div className="ld-stack-lg" style={{ gap: 14 }}>
         <Ld.Callout tone="brand" title="Why Solana">
-          A small ad only makes sense if each delivery is not its own on-chain transaction. A payment channel turns many accepted charges into one open and one close on Solana. This run had {run.counts.receipts} deliveries over {run.channels.length} channels, about as many transactions as deliveries; a channel carrying 100 deliveries would still need only one open and one close (illustration, not from this run).
+          {onDevnet ? "Solana Devnet is Solana's public test network. " : "The hosted Solana sandbox is a private test network that runs Solana programs. "}A small ad only makes sense if each delivery is not its own on-chain transaction. A payment channel turns many accepted charges into one open and one close on Solana. This run had {run.counts.receipts} deliveries over {run.channels.length} channels, about as many transactions as deliveries; a channel carrying 100 deliveries would still need only one open and one close (illustration, not from this run).
         </Ld.Callout>
         <div className="pr2-split" style={{ gridTemplateColumns: dvCard ? "1.35fr 1fr" : "1fr", gap: 14 }}>
           <div className="ld-cols-2">

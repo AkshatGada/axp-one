@@ -396,3 +396,7 @@ html[data-op-stage="charge"] [data-slot="await"] { display: none !important; }
 .vf2-kpis .ld-kpi { min-height: 136px; }
 .vf2-tamper .ld-table td { height: 48px; }
 @media (max-width: 700px) { .vf2-kpis .ld-kpi { min-height: 150px; } .vf2-tamper .ld-table td { height: 64px; } }
+.pr2-defs2 { display: grid; gap: 6px; margin: 4px 0 0; padding: 10px 14px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); max-width: 34em; }
+.pr2-defs2 > div { display: grid; grid-template-columns: 9em minmax(0, 1fr); gap: 8px; }
+.pr2-defs2 dt { font-size: 13px; font-weight: 500; }
+.pr2-defs2 dd { margin: 0; font-size: 13px; color: var(--ld-text-2); }
