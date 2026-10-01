@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AXP metal lab</title>
+<style>
+@font-face { font-family: "PolySans"; src: url("fonts/PolySans-Neutral.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "PolySans"; src: url("fonts/PolySans-Median.woff2") format("woff2"); font-weight: 500; }
+@font-face { font-family: "PolySans Wide"; src: url("fonts/PolySans-SlimWide.woff2") format("woff2"); font-weight: 300; }
+@font-face { font-family: "PolySans Wide"; src: url("fonts/PolySans-NeutralWide.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "PolySans Wide"; src: url("fonts/PolySans-MedianWide.woff2") format("woff2"); font-weight: 500; }
+@font-face { font-family: "PolySans Mono"; src: url("fonts/PolySans-NeutralMono.woff2") format("woff2"); font-weight: 400; }
+
+:root {
+  --paper: #f2f1ec; --ink: #15191c; --muted: #4a5257; --line: #b9bec0;
+  --lx: 50%; --ly: 30%;
+  /* Brushed grain: anisotropic SVG noise stretched along x */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9 0.008' numOctaves='3' seed='7'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1.25 -0.38'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --grain-fine: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6 0.02' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1 -0.3'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --speck: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' seed='11'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0.9 -0.35'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+
+  /* Light brushed stainless */
+  --steel-base: linear-gradient(180deg, #f3f4f4 0%, #d4d8da 22%, #b8bfc2 48%, #dfe2e3 62%, #a3abaf 100%);
+  /* Polished chrome ramp (sky / horizon / ground reflection) */
+  --chrome: linear-gradient(180deg, #ffffff 0%, #e9edef 18%, #9aa4a9 46%, #3b4449 50%, #7d878c 56%, #d7dcde 78%, #fbfcfc 100%);
+  /* Dark gunmetal */
+  --gun-base: linear-gradient(180deg, #2b3338 0%, #1c2226 45%, #232a2e 60%, #15191c 100%);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font: 400 17px/1.5 "PolySans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1440px; margin: 0 auto; padding: 0 64px; }
+.mono { font-family: "PolySans Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+.wide { font-family: "PolySans Wide", system-ui, sans-serif; }
+section { padding: 120px 0; border-top: 1px solid var(--line); }
+.label { font: 500 13px/1 "PolySans"; letter-spacing: .04em; color: var(--muted); display: flex; gap: 14px; align-items: center; }
+.letter { width: 34px; height: 34px; display: grid; place-items: center; font: 500 15px/1 "PolySans Wide"; }
+h2 { font: 300 clamp(44px, 5vw, 76px)/.98 "PolySans Wide"; letter-spacing: -.035em; margin: 22px 0 18px; }
+.lede { font-size: 21px; max-width: 46ch; color: var(--muted); margin: 0 0 56px; }
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 32px; align-items: start; }
+
+/* ---------- METAL MATERIALS ---------- */
+/* Brushed stainless sheet with a moving anisotropic highlight */
+.m-brushed {
+  position: relative; isolation: isolate;
+  background:
+    radial-gradient(ellipse 40% 160% at var(--lx) 50%, rgba(255,255,255,.75), rgba(255,255,255,0) 60%),
+    var(--grain), var(--steel-base);
+  background-size: 100% 100%, 600px 600px, 100% 100%;
+  background-blend-mode: screen, overlay, normal;
+  border: 1px solid #8e979c;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(0,0,0,.28), inset 1px 0 0 rgba(255,255,255,.4), inset -1px 0 0 rgba(0,0,0,.12), 0 1px 0 rgba(255,255,255,.7), 0 14px 30px -18px rgba(20,26,30,.55);
+}
+/* Polished chrome rim (applied as a border ring) */
+.m-chrome-rim { position: relative; isolation: isolate; }
+.spons.m-chrome-rim { margin: 3px; }
+.m-chrome-rim::before {
+  content: ""; position: absolute; inset: -3px; z-index: -1; padding: 3px;
+  background: var(--chrome); background-size: 100% 220%; background-position: 0 var(--rimpos, 40%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  transition: background-position .6s cubic-bezier(.2,.75,.25,1);
+}
+/* Chrome type */
+.t-chrome {
+  background: var(--chrome); background-size: 100% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.9)) drop-shadow(0 -1px 0 rgba(0,0,0,.25));
+}
+/* Brushed steel type (matte, grain visible) */
+.t-steel {
+  background: radial-gradient(ellipse 30% 120% at var(--lx) 40%, rgba(255,255,255,.9), rgba(255,255,255,0) 55%), var(--grain-fine), linear-gradient(180deg, #8c969b, #39434a 60%, #6b757b);
+  background-size: 100% 100%, 300px 300px, 100% 100%; background-blend-mode: screen, overlay, normal;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+/* Engraved into metal */
+.t-engraved { color: #59636a; text-shadow: 0 1px 0 rgba(255,255,255,.75), 0 -1px 0 rgba(0,0,0,.32); }
+.t-engraved-dark { color: #0c1012; text-shadow: 0 1px 0 rgba(255,255,255,.12), 0 -1px 0 rgba(0,0,0,.7); }
+/* Dark anodized gunmetal */
+.m-gun {
+  position: relative; isolation: isolate; color: #e9ecec;
+  background:
+    radial-gradient(ellipse 45% 140% at var(--lx) 0%, rgba(190,205,212,.22), rgba(190,205,212,0) 60%),
+    var(--grain), var(--gun-base);
+  background-size: 100% 100%, 600px 600px, 100% 100%; background-blend-mode: screen, soft-light, normal;
+  border: 1px solid #0b0e10;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 -1px 0 rgba(0,0,0,.6), 0 30px 60px -30px rgba(0,0,0,.7);
+}
+/* Machined plate (chamfered edge) */
+.m-plate { clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px); }
+/* Knurled grip */
+.m-knurl {
+  background:
+    repeating-linear-gradient(45deg, rgba(0,0,0,.28) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,.5) 0 1px, transparent 1px 5px),
+    var(--steel-base);
+  border: 1px solid #7d868b; box-shadow: inset 0 1px 0 rgba(255,255,255,.8), inset 0 -1px 0 rgba(0,0,0,.3);
+}
+/* Screw head */
+.screw { width: 11px; height: 11px; border-radius: 50%; position: absolute; background: radial-gradient(circle at 35% 30%, #fff 0 15%, #b9c0c3 40%, #6b757a 100%); box-shadow: inset 0 0 0 .5px rgba(0,0,0,.4), 0 1px 0 rgba(255,255,255,.7); }
+.screw::after { content: ""; position: absolute; left: 2px; right: 2px; top: 5px; height: 1px; background: rgba(0,0,0,.55); transform: rotate(var(--r, 30deg)); }
+.screw.tl { top: 10px; left: 10px; } .screw.tr { top: 10px; right: 10px; --r: -20deg; } .screw.bl { bottom: 10px; left: 10px; --r: 70deg; } .screw.br { bottom: 10px; right: 10px; --r: 10deg; }
+
+/* ---------- COMPONENTS ---------- */
+.btn-metal { display: inline-flex; align-items: center; gap: 40px; height: 56px; padding: 0 22px 0 24px; font: 500 16px/1 "PolySans"; color: var(--ink); text-decoration: none; cursor: pointer; }
+.btn-metal:active { transform: translateY(1px); }
+.btn-ink { display: inline-flex; align-items: center; gap: 40px; height: 56px; padding: 0 22px 0 24px; font: 500 16px/1 "PolySans"; color: #f3f4f4; background: var(--ink); text-decoration: none; position: relative; }
+.btn-ink::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--chrome); background-size: 100% 600%; }
+.arrow { width: 22px; height: 12px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 12px; font: 500 13px/1 "PolySans"; letter-spacing: .02em; }
+.glyph { width: 10px; height: 10px; display: inline-block; }
+.g-sq { background: var(--chrome); box-shadow: 0 0 0 .5px rgba(0,0,0,.4); }
+.g-ci { background: var(--chrome); border-radius: 50%; box-shadow: 0 0 0 .5px rgba(0,0,0,.4); }
+.g-di { background: var(--chrome); transform: rotate(45deg) scale(.85); box-shadow: 0 0 0 .5px rgba(0,0,0,.4); }
+
+.chat { background: #fff; border-radius: 16px; padding: 22px; box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 18px 40px -26px rgba(0,0,0,.4); }
+.bubble-u { margin-left: auto; width: fit-content; max-width: 80%; background: #f0f0f0; border-radius: 16px; padding: 10px 14px; font-size: 15px; }
+.answer { font-size: 15px; color: #262a2d; margin: 16px 0; }
+.spons { padding: 16px 18px; border-radius: 12px; background: #fff; }
+.spons small { font: 500 12px/1 "PolySans"; letter-spacing: .03em; color: #59636a; }
+.spons p { margin: 8px 0 0; font-size: 15px; }
+
+.stat .num { font: 300 104px/.9 "PolySans Wide"; letter-spacing: -.04em; }
+.stat .cap { margin-top: 12px; font-size: 15px; color: var(--muted); }
+
+.meter { height: 46px; position: relative; display: flex; }
+.seg { height: 100%; }
+.seg-paid { background: var(--chrome); background-size: 100% 100%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.35); }
+.seg-auth { background: repeating-linear-gradient(135deg, rgba(0,0,0,.35) 0 1.5px, transparent 1.5px 6px), var(--steel-base); box-shadow: inset 0 0 0 1px rgba(0,0,0,.3); }
+.seg-ref { border: 1px solid #8e979c; background: transparent; }
+
+.stage { padding: 72px; }
+.core { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 22px; margin-top: 36px; }
+.cell { padding: 22px; min-height: 150px; }
+.cell h4 { margin: 0 0 10px; font: 500 15px/1.2 "PolySans"; letter-spacing: .02em; }
+.cell .v { font: 400 14px/1.5 "PolySans Mono"; color: #c9d0d3; }
+.cell.lit { outline: 1px solid rgba(220,230,235,.45); outline-offset: -1px; }
+
+.hairline-chrome { height: 2px; background: var(--chrome); background-size: 100% 900%; background-position: 0 45%; }
+.footer-note { font-size: 14px; color: var(--muted); margin-top: 18px; }
+.pick { margin-top: 48px; font-size: 15px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<header style="padding: 110px 0 120px">
+  <div class="wrap">
+    <div class="label">AXP metal lab. Four directions, real pieces. Move your cursor: the light follows it.</div>
+    <h1 class="wide t-chrome" style="font-weight:500; font-size: clamp(110px, 17vw, 260px); line-height:.86; letter-spacing:-.05em; margin: 40px 0 0">AXP.one</h1>
+    <div class="m-brushed" style="height: 18px; margin-top: 30px"></div>
+    <p style="font: 300 clamp(28px,3vw,44px)/1.1 'PolySans Wide'; letter-spacing:-.02em; margin: 40px 0 0; max-width: 22ch">The advertising exchange for the agentic internet.</p>
+  </div>
+</header>
+
+<!-- A: BRUSHED STAINLESS -->
+<section>
+  <div class="wrap">
+    <div class="label"><span class="letter m-brushed t-engraved">A</span>Brushed stainless</div>
+    <h2>Brushed steel <span class="t-steel">as the accent</span>.</h2>
+    <p class="lede">Paper stays the page. Metal appears on what you touch and what matters: actions, marks, numbers, meters, plates. Real grain, a soft sheen that follows the light, machined edges.</p>
+    <div class="grid">
+      <div style="grid-column: span 5">
+        <div style="display:flex; flex-wrap:wrap; gap:18px; align-items:center">
+          <a class="btn-metal m-brushed m-plate">See the working MVP <svg class="arrow" viewBox="0 0 22 12"><path d="M0 6h20M15 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
+          <a class="btn-ink">Watch the run <svg class="arrow" viewBox="0 0 22 12"><path d="M0 6h20M15 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top: 28px">
+          <span class="chip m-brushed t-engraved"><i class="glyph g-sq"></i>Actual output</span>
+          <span class="chip m-brushed t-engraved"><i class="glyph g-ci"></i>Observed</span>
+          <span class="chip m-brushed t-engraved"><i class="glyph g-di"></i>Policy</span>
+        </div>
+        <div class="stat" style="margin-top: 56px">
+          <div class="num t-steel">420,540</div>
+          <div class="cap">observed ad placements, ContextHint library, Sep 26, 2026</div>
+        </div>
+      </div>
+      <div style="grid-column: 7 / span 6">
+        <div class="m-brushed m-plate" style="padding: 26px; position: relative">
+          <i class="screw tl"></i><i class="screw tr"></i><i class="screw bl"></i><i class="screw br"></i>
+          <div class="label t-engraved" style="margin: 6px 0 16px 18px">Payment channel. ClearVault. Test USDC</div>
+          <div class="meter" style="margin: 0 18px">
+            <div class="seg seg-paid" style="width: 35%"></div>
+            <div class="seg seg-ref" style="width: 65%"></div>
+          </div>
+          <div class="mono t-engraved" style="display:flex; justify-content:space-between; margin: 12px 18px 4px; font-size: 14px">
+            <span>paid 0.007</span><span>refunded 0.013</span><span>deposit 0.020</span>
+          </div>
+        </div>
+        <div class="chat" style="margin-top: 28px">
+          <div class="bubble-u">cheapest hardware wallet that still supports ethereum and solana</div>
+          <p class="answer">I can't reliably name the cheapest hardware wallet without checking current prices and Ethereum/Solana support. For a budget choice, compare entry-level hardware wallets by total delivered cost...</p>
+          <div class="spons m-chrome-rim"><small>Sponsored</small><p>ClearVault is a fictional hardware wallet with offline key storage and declared Ethereum/Solana support.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- B: GUNMETAL STAGE -->
+<section style="padding: 0; border: 0">
+  <div class="m-gun stage">
+    <div class="wrap" style="padding:0">
+      <div class="label" style="color:#9aa5ab"><span class="letter m-brushed t-engraved">B</span>Anodized gunmetal stage</div>
+      <h2 style="color:#eef0ee">The exchange, <span class="t-chrome">machined</span>.</h2>
+      <p class="lede" style="color:#9aa5ab">The one dark stage becomes a brushed gunmetal console. Plates are chamfered, labels engraved, the active part catches the light.</p>
+      <div class="core">
+        <div class="cell m-gun m-plate"><h4 class="t-engraved-dark" style="color:#c3ccd0">Agents</h4><div class="v">ClearVault bid R3 I3<br>KeyForge bid R3 I3<br>LeatherGuard skip</div></div>
+        <div class="cell m-gun m-plate lit"><h4 style="color:#eef0ee">Exchange core</h4><div class="v">eligibility in code<br>fit_intent_bid_v1, max 0.004<br>two bids 0.004, tie by campaign ID<br>budget reserved</div></div>
+        <div class="cell m-gun m-plate"><h4 style="color:#c3ccd0">Publisher</h4><div class="v">Sponsored card delivered<br>receipt signed<br>charge 0.004</div></div>
+      </div>
+      <div class="hairline-chrome" style="margin-top: 40px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- C: CHROME EDGE -->
+<section>
+  <div class="wrap">
+    <div class="label"><span class="letter m-brushed t-engraved">C</span>Polished chrome edges</div>
+    <h2>Paper objects, <span class="t-chrome">chrome rims</span>.</h2>
+    <p class="lede">Quieter: surfaces stay paper and white, metal lives in thin polished rims, rules and the wordmark. The most "premium hardware" feel with the least noise.</p>
+    <div class="grid">
+      <div style="grid-column: span 4" class="m-chrome-rim"><div style="background:#fbfbf9; padding: 28px; min-height: 220px"><div class="label">The auction</div><p class="wide" style="font-size: 26px; line-height:1.15; margin: 18px 0 0">Two bids of <span class="mono">0.004</span>. A fixed rule broke the tie.</p></div></div>
+      <div style="grid-column: span 4" class="m-chrome-rim"><div style="background:#fbfbf9; padding: 28px; min-height: 220px"><div class="label">The receipt</div><p class="mono" style="font-size: 14px; color: var(--muted); margin: 18px 0 0">receiptHash 3f9a…c21e<br>publisherKeyId local-publisher-v1<br>signature Ed25519, verified</p></div></div>
+      <div style="grid-column: span 4" class="m-chrome-rim"><div style="background:#fbfbf9; padding: 28px; min-height: 220px"><div class="label">The settlement</div><p class="wide" style="font-size: 26px; line-height:1.15; margin: 18px 0 0">Publisher paid <span class="mono">0.010</span>. <span class="mono">0.030</span> refunded.</p></div></div>
+    </div>
+    <div class="hairline-chrome" style="margin-top: 56px"></div>
+  </div>
+</section>
+
+<!-- D: MACHINED DETAIL -->
+<section>
+  <div class="wrap">
+    <div class="label"><span class="letter m-brushed t-engraved">D</span>Machined detail</div>
+    <h2>Knurl, screws, <span class="t-steel">engraving</span>.</h2>
+    <p class="lede">The most physical: instrument-panel details, knurled controls, engraved labels, fastened plates. Strong personality, best used sparingly on controls and the stage.</p>
+    <div class="grid">
+      <div style="grid-column: span 6; position: relative; padding: 40px" class="m-brushed">
+        <i class="screw tl"></i><i class="screw tr"></i><i class="screw bl"></i><i class="screw br"></i>
+        <div class="label t-engraved">Present mode controls</div>
+        <div style="display:flex; gap: 14px; margin-top: 22px">
+          <span class="m-knurl" style="width:120px; height: 52px; display:grid; place-items:center"><span class="t-engraved" style="font-weight:500">Back</span></span>
+          <span class="m-knurl" style="width:120px; height: 52px; display:grid; place-items:center"><span class="t-engraved" style="font-weight:500">Next</span></span>
+          <span class="m-knurl" style="width:52px; height: 52px; border-radius:50%; display:grid; place-items:center"><span class="t-engraved mono">7</span></span>
+        </div>
+      </div>
+      <div style="grid-column: 8 / span 5">
+        <div class="stat"><div class="num t-chrome">0.010</div><div class="cap">USDC paid to the publisher. Hosted Solana sandbox, test USDC.</div></div>
+      </div>
+    </div>
+    <p class="pick">Pick one direction, or a mix (for example A everywhere, B for the stage, C for cards). Then it goes into the Steel foundation for both the landing page and the MVP.</p>
+  </div>
+</section>
+
+<script>
+  const root = document.documentElement;
+  let raf = 0;
+  addEventListener('pointermove', (e) => {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      root.style.setProperty('--lx', (e.clientX / innerWidth * 100).toFixed(1) + '%');
+      root.style.setProperty('--ly', (e.clientY / innerHeight * 100).toFixed(1) + '%');
+      document.querySelectorAll('.m-chrome-rim').forEach((el) => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--rimpos', (20 + 60 * Math.min(1, Math.max(0, (e.clientY - r.top + 200) / (r.height + 400)))).toFixed(0) + '%');
+      });
+    });
+  }, { passive: true });
+  // Scroll also shifts the light, so the sheen moves on touch devices and in recordings
+  addEventListener('scroll', () => { root.style.setProperty('--lx', (30 + (scrollY / (document.body.scrollHeight - innerHeight)) * 40).toFixed(1) + '%'); }, { passive: true });
+</script>
+</body>
+</html>
