@@ -28,7 +28,8 @@ import {
 import MotionRoot from "@/motion/MotionRoot";
 import { LIBRARY, fmt } from "@/data/library";
 import { CACHED, CV, CV_CHANNEL, REPEAT, RUN, receiptFor } from "@/data/run";
-import { CONTEXTHINT, FOOTER, HERO, MVP_URL, NEXT, ROLES, RULE } from "@/data/copy";
+import { FOOTER, HERO, MVP_URL } from "@/data/copy";
+import { CONTEXTHINT, NEXT, ROLES, RULE } from "@/data/copy-book";
 import { EvidencePayoff } from "@/specimens/EvidenceChain";
 import { HostChat } from "@/specimens/HostChat";
 import { ChannelMeter } from "@/specimens/ChannelMeter";
@@ -233,7 +234,7 @@ export default function BrandBook() {
             <ActionPrimary href={MVP_URL}>{HERO.primary}</ActionPrimary>
             <ActionPrimary href="#video" variant="outline">{HERO.video}</ActionPrimary>
             <ActionPrimary href={MVP_URL} size="s">See the MVP</ActionPrimary>
-            <ActionText href="#proof">{HERO.skip}</ActionText>
+            <ActionText href="#proof">Skip to the proof</ActionText>
           </Actions>
         </Chapter>
 

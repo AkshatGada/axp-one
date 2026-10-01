@@ -6,6 +6,7 @@ import "./fonts.css";
 import "@/specimens/specimens.css";
 import "@/scenes/scenes.css";
 import "@/chapter/chapter.css";
+import "@/sections/sections.css";
 import "./site.css";
 import { MOTION_SCRIPT } from "@/motion/MotionRoot";
 

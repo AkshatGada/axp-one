@@ -17,7 +17,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { ActionPrimary, ActionText, Actions, Words } from "@axp/design-system/prospectus";
 import { CACHED, CV, HELPFUL_EXCERPT } from "@/data/run";
-import { CH_URL, HERO, MVP_URL, VIDEO_ANCHOR } from "@/data/copy";
+import { CH_URL, DEVNET_URL, HERO, MVP_URL, VIDEO_ANCHOR } from "@/data/copy";
 import { HostChat } from "@/specimens/HostChat";
 import { Fit } from "./Fit";
 import { PlateStack, PlateStackStatic, STACK_H, STACK_W } from "./PlateStack";
@@ -146,7 +146,12 @@ export default function HeroScene() {
           </Actions>
         </div>
         <p className="pg-status pg-in" style={d(760)}>
-          {HERO.status}
+          <span>{HERO.status}</span>
+          {DEVNET_URL ? (
+            <a className="pg-devnet" href={DEVNET_URL} target="_blank" rel="noopener noreferrer">
+              {HERO.devnet}
+            </a>
+          ) : null}
         </p>
       </>
     ),

@@ -384,14 +384,7 @@
     "hints": 1,
     "observedPrompt": "cheapest hardware wallet that still supports ethereum and solana",
     "observedCreative": "Mercari Nano Trezor Hardware Wallet NEW - New Electronics | Color: White New in wrapping Open to offers Paid $55",
-    "hintText": "Crypto holders and stakers looking to buy or resell hardware wallets like Trezor and Ledger on Mercari, where listings for new and used self-custody devices surface.",
-    "slice": {
-      "associations": 1178,
-      "prompts": 241,
-      "creatives": 537,
-      "hints": 331,
-      "niches": 5
-    }
+    "hintText": "Crypto holders and stakers looking to buy or resell hardware wallets like Trezor and Ledger on Mercari, where listings for new and used self-custody devices surface."
   },
   "jev": {
     "campaign": "v3-clearvault",

@@ -177,7 +177,7 @@ function landing(d) {
     channels: d.channels.map((c) => ({ ...pick(c, ["campaign", "name", "deposit", "settled", "refund", "status"]), vouchers: c.vouchers })),
     totals: pick(d.totals, ["deposits", "paid", "refunded"]),
     restart: d.restart,
-    evidence: { ...pick(d.evidence, ["nicheLabel", "examples", "hints", "observedPrompt", "observedCreative", "hintText", "slice"]) },
+    evidence: { ...pick(d.evidence, ["nicheLabel", "examples", "hints", "observedPrompt", "observedCreative", "hintText"]) },
     jev: d.jev,
     video: d.video,
     mvp: { verifyChecks: verifyChecks ?? d.mvp?.verifyChecks ?? null },

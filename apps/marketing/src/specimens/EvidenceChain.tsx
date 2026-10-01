@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { Provenance } from "@axp/design-system/foundation";
 import type { ProvenanceKind } from "@axp/design-system/foundation";
 import { RUN } from "@/data/run";
-import { CONTEXTHINT } from "@/data/copy";
+import { CONTEXTHINT } from "@/data/copy-book";
 
 function Step({ kind, kicker, children, note, tone }: { kind: ProvenanceKind; kicker: ReactNode; children: ReactNode; note?: ReactNode; tone?: "ch" | "hand" | "brand" }) {
   return (

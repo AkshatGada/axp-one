@@ -43,3 +43,8 @@ export const HELPFUL_EXCERPT = `…${CACHED.organic.excerpt.split(/(?<=[.!?])\s+
  *  judgment would have bid. Mirrors packages/contracts computeBid; the extractor asserts parity. */
 const BPS: Record<string, number> = { "2:2": 5000, "2:3": 7500, "3:2": 7500, "3:3": 10000 };
 export const policyBid = (rel: number, intent: number, maxBid: string) => String((Number(maxBid) * (BPS[`${rel}:${intent}`] ?? 0)) / 10000);
+
+/** The public Devnet re-settlement of the run's three receipts (explorer links read by the extractor). */
+export const DEVNET = (slice as { devnet?: typeof slice.devnet }).devnet ?? null;
+/** One real Jev judgment from the run (ClearVault, history arm, cached question). */
+export const JEV_EXAMPLE = slice.jev;

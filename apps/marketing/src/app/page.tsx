@@ -1,173 +1,68 @@
-// axp.one: the landing page. One argument: what, why, how, money, moat, proof, next.
-// Every word is server-rendered and visible without JS; motion layers on top (scenes/).
-// Run values come from src/data/run.landing.json (the slim, render-only slice of the extraction); ContextHint values
-// from src/data/library.ts; all copy from src/data/copy.ts. No internal identifiers on this page:
-// those live in the MVP.
-import type { CSSProperties } from "react";
-import { Provenance } from "@axp/design-system/foundation";
-import { ActionPrimary, ActionText, Actions, Opener, Section, SiteFooter, SiteHeader, VideoFigure, Words, Wrap } from "@axp/design-system/prospectus";
+// axp.one: the landing page, v6. The story of what happens in the MVP, on three pillars:
+// hero, pillars, how it works (the dark stage), ContextHint, Jev, Solana, inside the MVP, proof,
+// closing. Every word is server-rendered and visible without JS; motion layers on top (scenes/).
+// Run values come from src/data/run.landing.json (the slim, render-only slice of the extraction);
+// all copy from src/data/copy.ts. No internal identifiers and no exact library counts on this page:
+// those live in the MVP and on contexthint.com.
+import { ActionPrimary, ActionText, Actions, SiteFooter, SiteHeader, VideoFigure, Words, Wrap } from "@axp/design-system/prospectus";
 import MotionRoot from "@/motion/MotionRoot";
 import FilmMode from "@/motion/FilmMode";
-import { RUN, receiptFor, usdc } from "@/data/run";
-import { BUILT_ON, CH_URL, CLOSING, FOOTER, HEADER, MVP_URL, MVP_VERIFY_URL, NAV, NEXT, PAYMENTS, PROOF, REAL, RULE, VIDEO, VIDEO_ANCHOR, WHY } from "@/data/copy";
-import { RunSheet } from "@/specimens/RunSheet";
-import { ReceiptSheet } from "@/specimens/Receipt";
-import { SponsoredCard } from "@/specimens/SponsoredCard";
+import { RUN } from "@/data/run";
+import { CH_URL, CLOSING, DEVNET_URL, FOOTER, HEADER, MVP_URL, MVP_VERIFY_URL, NAV, PROOF, REAL, VIDEO, VIDEO_ANCHOR } from "@/data/copy";
 import HeroScene from "@/scenes/HeroScene";
 import StageScene from "@/scenes/StageScene";
-import ScrubMeter from "@/scenes/ScrubMeter";
 import ClosingStack from "@/scenes/ClosingStack";
-import { ContextHintChapter } from "@/chapter/ContextHintChapter";
+import { ContextHintSection, JevSection, Pillars, SolanaSection } from "@/sections/Sections";
+import MvpTour from "@/sections/MvpTour";
 
-const d = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
-const KF = RUN.campaigns["v3-keyforge"];
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 
-function BuiltOn() {
+function Video() {
+  const v = RUN.video;
+  if (!v) return null;
   return (
-    <section className="bo" aria-label={BUILT_ON.label}>
-      <Wrap>
-        <div className="bo-grid">
-          <p className="bo-label">{BUILT_ON.label}</p>
-          {BUILT_ON.items.map((it, i) => (
-            <a key={it.lead} className="bo-item" href={it.href} {...ext} data-reveal="fade" style={d(i * 80)} data-i={i}>
-              <b>{it.lead}</b>
-              <span>{it.line}</span>
-              <u>{it.link}</u>
-            </a>
-          ))}
-        </div>
-      </Wrap>
-    </section>
-  );
-}
-
-function Why() {
-  return (
-    <Section id="why" labelledBy="why-q">
-      <Wrap>
-        <Opener id="why-q" label={WHY.label} question={WHY.h2} size="h2" />
-        <div className="pg-for">
-          {WHY.cols.map((f, i) => (
-            <div key={f.title} data-reveal="fade" style={d(i * 90)}>
-              <b>{f.title}</b>
-              <p>{f.body}</p>
-              {f.planned ? <Provenance kind="vision" label="Planned, not in this demo" /> : null}
-            </div>
-          ))}
-        </div>
-      </Wrap>
-    </Section>
-  );
-}
-
-/** The one full-bleed ultramarine wall, with the rules it holds. */
-function Rule() {
-  return (
-    <Section id="rule" tone="brand" className="pg-wall" labelledBy="wall-q">
-      <Wrap>
-        <p className="px-label pg-wall-label">{RULE.label}</p>
-        <h2 id="wall-q" className="px-dxxl pg-wall-h" data-reveal="">
-          <span className="pg-wall-line">
-            <Words text="Agents advise." />
-          </span>
-          <span className="pg-wall-line">
-            <Words text="Code decides" start={2} />
-          </span>
-          <span className="pg-wall-line">
-            <Words text="the money." start={4} />
-          </span>
-        </h2>
-        <p className="px-lead pg-wall-lead">{RULE.body}</p>
-        <ul className="pg-rules">
-          {RULE.rules.map((r, i) => (
-            <li key={r.rule} data-reveal="fade" style={d(i * 60)}>
-              <b>{r.rule}</b>
-              <span>{r.run}</span>
-            </li>
-          ))}
-        </ul>
-      </Wrap>
-    </Section>
-  );
-}
-
-function Payments() {
-  return (
-    <Section id="payments" labelledBy="pay-q">
-      <Wrap>
-        <Opener id="pay-q" label={PAYMENTS.label} question={PAYMENTS.h2} size="h2" layout="split" lead={<p className="px-body">{PAYMENTS.body}</p>} />
-        <div className="pay-grid">
-          <div className="pay-facts">
-            {PAYMENTS.facts.map((f) => (
-              <div key={f.label} className="pay-fact">
-                <span className="pay-n">
-                  {f.value}
-                  {f.unit ? <small>{f.unit}</small> : null}
-                </span>
-                <span className="pay-l">{f.label}</span>
-              </div>
-            ))}
-          </div>
-          <div className="pay-meter">
-            <ScrubMeter title={PAYMENTS.meterTitle} />
-            <div className="pay-lanes" aria-hidden>
-              <div className="pay-lane">
-                <span className="pay-lane-k">{PAYMENTS.perAd}</span>
-                <span className="pay-ticks">
-                  {[0, 1, 2].map((k) => (
-                    <i key={k} />
-                  ))}
-                </span>
-                <span className="pay-lane-n">{PAYMENTS.perAdNote}</span>
-              </div>
-              <div className="pay-lane" data-one="">
-                <span className="pay-lane-k">{PAYMENTS.channel}</span>
-                <span className="pay-ticks">
-                  <i />
-                </span>
-                <span className="pay-lane-n">{PAYMENTS.channelNote}</span>
-              </div>
-            </div>
-            <p className="px-small">{PAYMENTS.source}</p>
-          </div>
-        </div>
-      </Wrap>
-    </Section>
+    <div id="video" className="pr-video">
+      <VideoFigure src={`/${v.file}`} poster="/video-poster.png" track={`/${v.captions}`} ratio={`${v.width} / ${v.height}`} title={VIDEO.title} caption={VIDEO.caption} chapters={v.chapters.map((at, i) => ({ at, label: VIDEO.chapters[i]! }))} />
+    </div>
   );
 }
 
 function Proof() {
-  const kfReceipt = receiptFor("v3-repeat");
   return (
-    <Section id="proof" labelledBy="proof-q">
+    <section id="proof" className="pr px-section" aria-labelledby="proof-q">
       <Wrap>
-        <Opener id="proof-q" label={PROOF.label} question={PROOF.h2} layout="split" lead={<div className="px-stack"><p className="px-h3">{PROOF.h3}</p><p className="px-body">{PROOF.lede}</p></div>} />
-        <div className="pr-counts-row">
-          {PROOF.counts.map((c, i) => (
-            <div key={c.label} className="pr-count" data-reveal="mask" style={d(i * 70)}>
-              <span className="px-mask">
-                <span className="px-mask-in pr-count-n">{c.value}</span>
-              </span>
-              <span className="pr-count-l">{c.label}</span>
-            </div>
-          ))}
-        </div>
-        <div className="pr-lines">
-          <p className="pr-money">{PROOF.money}</p>
-          <a className="pr-verify" href={MVP_VERIFY_URL} {...ext}>
-            {PROOF.verifyLine}
-          </a>
-        </div>
-        <div className="pr-pair">
-          <div className="pr-sheet">
-            <p className="px-label">{PROOF.sheetTitle}</p>
-            <RunSheet />
+        <div className="pr-top">
+          <div className="pr-copy">
+            <p className="px-label">{PROOF.label}</p>
+            <h2 id="proof-q" className="px-h2" data-reveal="">
+              <Words text={PROOF.h2} />
+            </h2>
+            <p className="pr-counts">{PROOF.counts}</p>
+            <p className="pr-money">{PROOF.money}</p>
+            <ul className="pr-links">
+              <li>
+                <a href={MVP_VERIFY_URL} {...ext}>
+                  {PROOF.verifyLine}
+                </a>
+              </li>
+              {DEVNET_URL ? (
+                <li>
+                  <a href={DEVNET_URL} {...ext}>
+                    {PROOF.devnet}
+                  </a>
+                </li>
+              ) : null}
+            </ul>
+            <Actions>
+              <ActionPrimary href={MVP_URL} external size="s">
+                {PROOF.action}
+              </ActionPrimary>
+            </Actions>
           </div>
           <Video />
         </div>
         <div className="real" id="whats-real">
-          <p className="px-h3 real-h">{REAL.title}</p>
+          <p className="real-h">{REAL.title}</p>
           <div className="real-grid">
             {[REAL.real, REAL.illustrative, REAL.notShown].map((col, i) => (
               <div key={col.title} className="real-col" data-kind={["real", "ill", "not"][i]}>
@@ -181,55 +76,8 @@ function Proof() {
             ))}
           </div>
         </div>
-        <div style={{ marginTop: "clamp(40px, 5vw, 64px)" }}>
-          <Actions>
-            <ActionPrimary href={MVP_URL} external>
-              {PROOF.action}
-            </ActionPrimary>
-            <ActionText href={MVP_VERIFY_URL} external>
-              {PROOF.verify}
-            </ActionText>
-          </Actions>
-        </div>
       </Wrap>
-    </Section>
-  );
-}
-
-function Video() {
-  const v = RUN.video;
-  if (!v) return null;
-  return (
-    <div id="video" className="pr-video">
-      <p className="px-label">{VIDEO.h2}</p>
-      <VideoFigure src={`/${v.file}`} poster="/video-poster.png" track={`/${v.captions}`} ratio={`${v.width} / ${v.height}`} title={VIDEO.title} caption={VIDEO.caption} chapters={v.chapters.map((at, i) => ({ at, label: VIDEO.chapters[i]! }))} />
-    </div>
-  );
-}
-
-function Next() {
-  return (
-    <Section id="next" labelledBy="next-q">
-      <Wrap>
-        <div className="nx">
-          <h2 id="next-q" className="px-h2 nx-h">
-            {NEXT.h2}
-          </h2>
-          <div className="nx-col">
-            <p className="nx-k">
-              <Provenance kind="actual" label="Working now" />
-            </p>
-            <p className="nx-t">{NEXT.now.join(" ")}</p>
-          </div>
-          <div className="nx-col" data-next="">
-            <p className="nx-k">
-              <Provenance kind="vision" label="Building next" />
-            </p>
-            <p className="nx-t">{NEXT.next.join(" ")}</p>
-          </div>
-        </div>
-      </Wrap>
-    </Section>
+    </section>
   );
 }
 
@@ -238,7 +86,8 @@ function Closing() {
     <section className="pg-close px-section" data-tone="brand" data-header-tone="brand" aria-labelledby="close-q">
       <Wrap>
         <div className="pg-close-grid">
-          <div className="px-stack-lg">
+          <div className="pg-close-copy">
+            <p className="pg-slogan">{CLOSING.slogan}</p>
             <h2 id="close-q" className="px-dxl" data-reveal="">
               <Words text={CLOSING.h2} />
             </h2>
@@ -296,14 +145,13 @@ export default function Home() {
       <SiteHeader links={NAV} cta={{ href: MVP_URL, label: HEADER.cta, external: true }} chip={HEADER.chip} />
       <main id="main" className="pg-main">
         <HeroScene />
-        <BuiltOn />
-        <Why />
+        <Pillars />
         <StageScene />
-        <Rule />
-        <Payments />
-        <ContextHintChapter />
+        <ContextHintSection />
+        <JevSection />
+        <SolanaSection />
+        <MvpTour />
         <Proof />
-        <Next />
         <Closing />
       </main>
       <SiteFooter scope={FOOTER.scope} legend={false} aside={<FooterAside />} base={<span>{FOOTER.base}</span>} />

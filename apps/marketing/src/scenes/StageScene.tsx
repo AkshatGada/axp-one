@@ -1,12 +1,13 @@
 "use client";
 
-// The one dark stage. The Shutter: a viewport-sized night plate, pinned for a moment, opens from
-// a square aperture to the full screen as it arrives (clip-path in % of the viewport, never of
-// the long section). Then the switchboard pins and walks through seven beats: each beat swaps
-// the copy on the left and lights one region of the board; the rest dims to a readable half.
+// The one dark stage. As the section arrives, its pinned night plate opens from a square aperture
+// to the full screen (clip-path in % of the viewport-sized plate, never of the long section) with the
+// question on it; once pinned, the question clears and the switchboard walks through seven beats:
+// each beat swaps the copy on the left and lights one region of the board; the rest dims to a
+// readable half. v6: the aperture lives inside the pinned plate, so the shutter costs no extra scroll.
 // Below 900px, under reduced motion and without JS: the beats as stacked cards with their facts
 // (and, on wide screens, the whole board lit). Same words.
-import { useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { Opener } from "@axp/design-system/prospectus";
 import { STAGE } from "@/data/copy";
@@ -15,56 +16,67 @@ import { BOARD_H, BOARD_W, Switchboard } from "./Switchboard";
 import { io, sceneHeight, seg } from "@/motion/motion";
 import { usePinned } from "@/motion/useReduced";
 
-const ENTER = 0.15;
-const HOLD = 0.18;
-const EXIT = 0.22;
+const ENTER = 0.32;
+const HOLD = 0.17;
+const EXIT = 0.2;
 const N = STAGE.beats.length;
 const T = ENTER + N * HOLD + EXIT;
 
 export default function StageScene() {
-  const shutterRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const pinned = usePinned();
   const [beat, setBeat] = useState(0);
-  const [open, setOpen] = useState(0);
+  const [open, setOpen] = useState(1);
+  const [curtain, setCurtain] = useState(1);
 
-  const { scrollYProgress: enter } = useScroll({ target: shutterRef, offset: ["start end", "start start"] });
-  useMotionValueEvent(enter, "change", (v) => {
-    if (!pinned) return;
+  // The aperture: the plate opens while the scene rises into view.
+  const { scrollYProgress: enter } = useScroll({ target: sceneRef, offset: ["start end", "start start"] });
+  const onEnter = (v: number) => {
     const t = io(seg(v, 0.15, 1));
     setOpen((o) => (Math.abs(o - t) < 0.003 ? o : t));
+  };
+  useMotionValueEvent(enter, "change", (v) => {
+    if (pinned) onEnter(v);
   });
 
   const { scrollYProgress: q } = useScroll({ target: sceneRef, offset: ["start start", "end end"] });
-  useMotionValueEvent(q, "change", (v) => {
-    if (!pinned) return;
-    const b = Math.min(N - 1, Math.max(0, Math.floor((v * T - ENTER + HOLD * 0.3) / HOLD)));
+  const onScene = (v: number) => {
+    const at = v * T;
+    const c = 1 - seg(at, 0.1, 0.24);
+    setCurtain((x) => (Math.abs(x - c) < 0.003 ? x : c));
+    const b = Math.min(N - 1, Math.max(0, Math.floor((at - ENTER + HOLD * 0.3) / HOLD)));
     setBeat((x) => (x === b ? x : b));
+  };
+  useMotionValueEvent(q, "change", (v) => {
+    if (pinned) onScene(v);
   });
+  // Arriving mid-page (reload, anchor): set the plate from the current scroll, not only on change.
+  useEffect(() => {
+    if (!pinned) return;
+    onEnter(enter.get());
+    onScene(q.get());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pinned]);
 
-  const inset = (1 - open) * 40;
+  const inset = pinned ? (1 - open) * 40 : 0;
   return (
-    <>
-      {pinned ? (
-        <div ref={shutterRef} className="ss-shutter" aria-hidden data-header-tone={open > 0.9 ? "stage" : undefined}>
-          <div className="ss-shutter-plate" style={{ clipPath: `inset(${inset}% ${inset * 1.1}% ${inset}% ${inset * 1.1}%)` }}>
-            <div className="ss-shutter-in" style={{ opacity: seg(open, 0.55, 1) }}>
-              <span className="ss-shutter-label">{STAGE.label}</span>
-              <span className="ss-shutter-q">{STAGE.h2}</span>
-              <span className="ss-shutter-lede">{STAGE.lede}</span>
+    <section id="how" className="px-section on-stage ss-section" data-tone="stage" data-header-tone={!pinned || open > 0.9 ? "stage" : undefined} aria-labelledby="how-q" data-pinned={pinned ? "" : undefined}>
+      <div className="px-wrap">
+        <div className="pg-stage-head">
+          <Opener id="how-q" label={STAGE.label} question={STAGE.h2} lead={STAGE.lede} aside={<a className="pg-skip" href="#data">{STAGE.skip}</a>} />
+        </div>
+      </div>
+      <div ref={sceneRef} className="ss" data-pinned={pinned ? "" : undefined} style={{ "--scene-h": sceneHeight(N, { hold: HOLD, enter: ENTER, exit: EXIT }) } as CSSProperties}>
+        <div className="ss-pin" style={pinned ? { clipPath: `inset(${inset}% ${inset * 1.1}% ${inset}% ${inset * 1.1}%)` } : undefined}>
+          {pinned ? (
+            <div className="ss-curtain" aria-hidden style={{ opacity: curtain, visibility: curtain > 0.01 ? "visible" : "hidden" }}>
+              <div className="ss-shutter-in" style={{ opacity: seg(open, 0.55, 1) }}>
+                <span className="ss-shutter-label">{STAGE.label}</span>
+                <span className="ss-shutter-q">{STAGE.h2}</span>
+                <span className="ss-shutter-lede">{STAGE.lede}</span>
+              </div>
             </div>
-          </div>
-        </div>
-      ) : (
-        <div ref={shutterRef} hidden />
-      )}
-      <section id="how" className="px-section on-stage ss-section" data-tone="stage" data-header-tone="stage" aria-labelledby="how-q" data-pinned={pinned ? "" : undefined}>
-        <div className="px-wrap">
-          <div className="pg-stage-head">
-            <Opener id="how-q" label={STAGE.label} question={STAGE.h2} lead={STAGE.lede} aside={<a className="pg-skip" href="#rule">{STAGE.skip}</a>} />
-          </div>
-        </div>
-        <div ref={sceneRef} className="ss" data-pinned={pinned ? "" : undefined} style={{ "--scene-h": sceneHeight(N, { hold: HOLD, enter: ENTER, exit: EXIT }) } as CSSProperties}>
+          ) : null}
           <div className="ss-stage px-wrap">
             <div className="ss-copy">
               <div className="sc-ticks ss-ticks" aria-hidden>
@@ -99,7 +111,7 @@ export default function StageScene() {
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

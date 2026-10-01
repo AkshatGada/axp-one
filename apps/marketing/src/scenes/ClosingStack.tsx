@@ -2,7 +2,8 @@
 
 // The closing: the hero reversed. As the closing arrives, the six plates collapse onto each
 // other and stand up flat; then, in one short cut (never a long crossfade), they become the chat
-// again with the Sponsored card under the answer. Reduced motion and no JS: the chat.
+// again with the Sponsored card under the answer. Below 900px, reduced motion and no JS: only the
+// final chat, directly under the actions (no collapse).
 import { useRef, useState } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { CACHED, CV, HELPFUL_EXCERPT } from "@/data/run";
@@ -11,11 +12,12 @@ import { HostChat } from "@/specimens/HostChat";
 import { Fit } from "./Fit";
 import { PlateStack, STACK_H, STACK_W } from "./PlateStack";
 import { io, seg } from "@/motion/motion";
-import useReduced from "@/motion/useReduced";
+import { usePinned } from "@/motion/useReduced";
 
 export default function ClosingStack() {
   const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReduced();
+  const pinned = usePinned();
+  const reduce = !pinned;
   const [v, setV] = useState(1);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 100%", "center 50%"] });
   useMotionValueEvent(scrollYProgress, "change", (x) => {
