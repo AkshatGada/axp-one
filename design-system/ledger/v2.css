@@ -533,3 +533,9 @@ a.ld-kpi:hover { border-color: var(--ld-border-2); box-shadow: var(--ld-shadow-2
 .ld .ld-act-list { display: none; list-style: none; margin: 0; padding: 0; }
 .ld .ld-act-list li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-top: 1px solid var(--ld-border); font-size: 13px; }
 @media (max-width: 899px) { .ld .ld-act-chart { display: none; } .ld .ld-act-list { display: grid; } }
+.ld-pv[data-kind="fictional"] .pv-glyph { display: none; }
+.ld .ld-skip { position: fixed; left: 12px; top: -48px; z-index: 100; padding: 8px 12px; border-radius: var(--ld-r-sm); background: var(--ld-text); color: #fff; font-size: 13px; font-weight: 500; text-decoration: none; transition: top var(--ld-fast) var(--ld-ease); }
+.ld .ld-skip:focus { top: 8px; }
+.ld .ld-main:focus { outline: none; }
+.ld .lg-inspector:focus, .ld .lg-inspector:focus-visible { outline: none; }
+.ld .lg-inspector-body { grid-auto-rows: max-content; }

@@ -13,7 +13,7 @@ import { LiveHashV2, LiveSignatureV2 } from "./live";
 const L = Link as unknown as Ld.LinkC;
 const two = (n: number) => n.toFixed(2);
 const utc = (ms: number) => `${new Date(ms).toISOString().slice(11, 19)} UTC`;
-const plain = (s: string) => s.replace(/_/g, " ");
+const plain = (s: string) => s.replace(/_/g, " ").replace(/\brfid\b/gi, "RFID");
 
 /** "3:2" -> "relevance 3, intent 2" */
 export const levelsWords = (lv?: string | null) => {
@@ -49,7 +49,7 @@ export function pipeStages(o: Opportunity): Ld.PipeStage[] {
     `${o.decisions.length} calls`,
     o.auction.tieBreakApplied ? `Tie at ${usdc(o.auction.bids[0].amountBaseUnits)}` : `${o.auction.bids.length} bid${o.auction.bids.length > 1 ? "s" : ""}`,
     `${usdc(o.award!.priceBaseUnits)} held`,
-    `+${(o.delivery!.msAfterAward / 1000).toFixed(1)} s`,
+    `${(o.delivery!.msAfterAward / 1000).toFixed(1)} s after award`,
     "Signed",
     `${usdc(o.charge!.amountBaseUnits)} charged`,
   ];
@@ -143,7 +143,7 @@ function EvidenceTab({ o, d }: { o: Opportunity; d: Decision }) {
     <div className="ld-stack" style={{ gap: 12 }}>
       <div className="ld-between">
         <span className="ld-row" style={{ gap: 8 }}>
-          <Ld.Tag tone={rt.method === "vector" ? "brand" : "warning"}>{rt.method === "vector" ? "Vector match: the exact question was stored" : "Lexical fallback: word overlap, not semantic"}</Ld.Tag>
+          <Ld.Tag tone={rt.method === "vector" ? "brand" : "warning"}>{rt.method === "vector" ? "Seen before: this exact question was stored" : "Word-overlap match: this wording was not stored"}</Ld.Tag>
           <span className="ld-caption">
             Similarity is <Term title={GLOSSARY.cosine.term} def={GLOSSARY.cosine.def}>cosine</Term> for stored questions, <Term title={GLOSSARY.lexical.term} def={GLOSSARY.lexical.def}>word overlap</Term> otherwise.
           </span>

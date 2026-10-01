@@ -349,3 +349,4 @@ html[data-op-stage="charge"] [data-slot="await"] { display: none !important; }
 .pr2-end-big span:nth-child(2) { color: var(--brand-deep); }
 .pr2-end-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; width: 100%; }
 .pr2-why { display: flex; gap: 14px; align-items: baseline; }
+.ld .ld-nowrap { white-space: nowrap; }

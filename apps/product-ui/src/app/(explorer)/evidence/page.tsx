@@ -33,7 +33,7 @@ export default function EvidencePage() {
             <a className="ld-link" href="https://contexthint.com" target="_blank" rel="noopener noreferrer">
               contexthint.com
             </a>
-            ): prompts from ContextHint&apos;s recorded prompt panel, the ads that appeared beside them, and inferred targeting hints. Brands below are observed historical references, not axp.one advertisers.
+            ): prompts and the ads that appeared beside them, from ContextHint&apos;s stored ad library and ContextHint&apos;s collection, plus inferred targeting hints. Brands below are observed historical references, not axp.one advertisers.
           </>
         }
       />
@@ -68,7 +68,7 @@ export default function EvidencePage() {
           <div className="ld-stack" style={{ gap: 8 }}>
             {Object.entries(d.counts.sources).map(([k, v]) => (
               <span key={k} className="ld-stack" style={{ gap: 4 }}>
-                <span className="ld-label">{k === "aws" ? "Stored ad library" : k === "verseodin" ? "VerseOdin prompt panel" : k}</span>
+                <span className="ld-label">{k === "aws" ? "ContextHint's stored ad library" : k === "verseodin" ? "ContextHint's collection" : k}</span>
                 <Ld.Progress value={v} max={d.counts.associations} tone="ink" label={n(v)} />
               </span>
             ))}

@@ -9,7 +9,7 @@ import { inspect } from "@/components/opportunity/parts";
 import { RowLink } from "@/components/v2/RowLink";
 
 const L = Link as unknown as Ld.LinkC;
-const plain = (s: string) => s.replace(/_/g, " ");
+const plain = (s: string) => s.replace(/_/g, " ").replace(/\brfid\b/gi, "RFID");
 
 export function generateStaticParams() {
   return run.campaigns.map((c) => ({ slug: c.slug }));
@@ -59,19 +59,19 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
       />
       <div className="ld-kpis">
         <Ld.Kpi label="Eligible" value={`${s.eligible} of 4`} context="Opportunities it could enter" />
-        <Ld.Kpi label="Agent calls" value={s.calls} context="Including research-only baseline arms" />
+        <Ld.Kpi label="Agent calls" value={s.calls} context="Including research-only baseline answers" />
         <Ld.Kpi label="Bids" value={s.bids} context="Admitted to an auction" />
         <Ld.Kpi label="Wins" value={s.wins} context="Delivered, signed, charged" />
         <Ld.Kpi label="Spend" value={usdc(s.spend)} unit="USDC" context={`of the ${usdc(s.cap)} USDC cap`} spark={<Ld.Progress value={s.spend} max={s.cap} />} />
       </div>
-      <div className="ov2-grid">
-        <Ld.Panel title="Decision history" sub="Every opportunity, in story order. Levels are relevance and intent." flush>
+      <div className="ld-stack" style={{ gap: 16 }}>
+        <Ld.Panel title="Decision history" sub="Every opportunity, in story order. Levels run from 0 to 3." flush>
           <Ld.Table
             columns={[
               { key: "o", head: "Opportunity", cell: (r: (typeof rows)[number]) => <RowLink href={`/opportunity/${r.o.n}/`}><span className="ld-faint">{r.o.n}</span> <span className="ld-strong">{shortLabel(r.o)}</span></RowLink> },
-              { key: "e", head: "Eligible", cell: (r) => (r.ex ? <span className="ld-secondary">{r.ex.reason === "missing_constraint" ? `No: missing ${r.ex.missing.map(plain).join(", ")}` : "No: frequency cap"}</span> : "Yes") },
-              { key: "b", head: "Baseline", cell: (r) => (r.b ? `${r.b.decision === "bid" ? "Bid" : "Skip"}, ${r.b.relevanceLevel}:${r.b.commercialIntentLevel}` : <span className="ld-faint">not asked</span>) },
-              { key: "h", head: "With history", cell: (r) => (r.h ? `${r.h.decision === "bid" ? "Bid" : "Skip"}, ${r.h.relevanceLevel}:${r.h.commercialIntentLevel}` : <span className="ld-faint">not asked</span>) },
+              { key: "e", head: "Eligible", cell: (r) => (r.ex ? <span className="ld-stack" style={{ gap: 2 }}><Ld.Tag tone="dashed">Excluded</Ld.Tag><span className="ld-caption">{r.ex.reason === "missing_constraint" ? `Missing ${r.ex.missing.map(plain).join(", ")}` : "Frequency cap"}</span></span> : "Yes") },
+              { key: "b", head: "Baseline", cell: (r) => (r.b ? <span className="ld-nowrap">{`${r.b.decision === "bid" ? "Bid" : "Skip"}, relevance ${r.b.relevanceLevel}, intent ${r.b.commercialIntentLevel}`}</span> : <span className="ld-faint">not asked</span>) },
+              { key: "h", head: "With history", cell: (r) => (r.h ? <span className="ld-nowrap">{`${r.h.decision === "bid" ? "Bid" : "Skip"}, relevance ${r.h.relevanceLevel}, intent ${r.h.commercialIntentLevel}`}</span> : <span className="ld-faint">not asked</span>) },
               { key: "bid", head: "Bid, USDC", num: true, cell: (r) => (r.bid ? usdc(r.bid.amountBaseUnits) : <span className="ld-faint">none</span>) },
               { key: "out", head: "Outcome", cell: (r) => (r.outcome.label ? <Ld.Tag tone={r.outcome.tone}>{r.outcome.label}</Ld.Tag> : null) },
               { key: "ch", head: "Charged, USDC", num: true, cell: (r) => (r.won && r.o.charge ? <span className="ld-strong">{usdc(r.o.charge.amountBaseUnits)}</span> : <span className="ld-faint">0</span>) },
@@ -79,7 +79,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
             rows={rows}
           />
         </Ld.Panel>
-        <div className="ld-stack" style={{ gap: 16 }}>
+        <div className="ld-cols-2">
           <Ld.Panel title="Creative" sub={`Version ${c.version}, approved`} actions={<InspectButton payload={{ key: `campaign:${c.slug}`, title: `${c.businessName} campaign`, sourcePath: `state.exchange.campaigns[campaignId=${c.campaignId}]`, json: c, hashes: [{ label: "Creative hash", value: c.creativeHash, recomputable: true }] }}>Inspect</InspectButton>}>
             <Ld.SponsoredCard text={c.creative.approvedText} advertiser={c.businessName} url={c.creative.destinationURL} />
           </Ld.Panel>

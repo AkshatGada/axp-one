@@ -8,7 +8,7 @@ import { RowLink } from "@/components/v2/RowLink";
 
 export const metadata: Metadata = { title: "Campaigns" };
 const L = Link as unknown as Ld.LinkC;
-const plain = (s: string) => s.replace(/_/g, " ");
+const plain = (s: string) => s.replace(/_/g, " ").replace(/\brfid\b/gi, "RFID");
 
 export default function CampaignsPage() {
   const stats = run.campaigns.map((c) => campaignStats(c.campaignId));

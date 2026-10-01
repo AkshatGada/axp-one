@@ -19,9 +19,12 @@ const A: LinkC = ({ href, className, children, title, ...r }) => (
 export function Shell({ top, side, children }: { top: ReactNode; side: ReactNode; children: ReactNode }) {
   return (
     <div className="ld ld-shell">
+      <a className="ld-skip" href="#main">
+        Skip to content
+      </a>
       {top}
       {side}
-      <main className="ld-main" id="main">
+      <main className="ld-main" id="main" tabIndex={-1}>
         <div className="ld-main-inner">{children}</div>
       </main>
     </div>

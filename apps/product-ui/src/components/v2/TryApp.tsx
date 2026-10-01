@@ -17,7 +17,7 @@ export type TryOpp = {
   recordedWinner: string | null;
 };
 type Preset = { name: string; creative: string; hints: string; maxBid: string; cap: string; caps: string[]; funded: boolean };
-const plain = (s: string) => s.replace(/_/g, " ");
+const plain = (s: string) => s.replace(/_/g, " ").replace(/\brfid\b/gi, "RFID");
 
 export function TryApp({ opps, presets }: { opps: TryOpp[]; presets: Preset[] }) {
   const [name, setName] = useState("Northwind Vault");
