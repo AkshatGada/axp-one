@@ -14,6 +14,15 @@ Track: **Solana**. Three pillars to show: ContextHint (data), Jev (agent decisio
 > recorded run, and the copy is being made data-driven to handle that). Section 1 below (re-settling the recorded
 > receipts) remains the fallback if the live run fails.
 
+> **Update 2026-10-02:** the live devnet rehearsal succeeded (run in `artifacts/v3-devnet-live-rehearsal/`, all
+> transactions finalized, real price competition, two payers, DeepSeek flash organic answers). Owner decision: both
+> sites feature it as the MAIN run now. The day before the hackathon, run a fresh live run with
+> `scripts/demo/v3-devnet-live.mjs` (commands: init, fund, freeze, open, organic, run, serve, deliver, authorize,
+> close, reconcile, verify, restart, export; runbook in docs/build/DEVNET_LIVE_PLAN.md, about 60 to 75 minutes,
+> payment steps within 2 hours of freeze), point both apps' data at the new run directory, rebuild, and re-check.
+> Owner to review two shared payment changes in packages/payments/sdk-transport.mjs (per-network treasury; 429
+> retry that resends identical signed bytes).
+
 ---
 
 ## 1. Fresh Solana Devnet settlement (FALLBACK) (run JUST BEFORE the hackathon, on the day if possible)
