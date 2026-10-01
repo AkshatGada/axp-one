@@ -104,7 +104,7 @@
 .chip { justify-self: start; height: 22px; padding: 0 9px; border-radius: var(--px-r-full); box-shadow: inset 0 0 0 1px var(--stage-line); font-size: 12px; line-height: 22px; color: var(--stage-muted); }
 .list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .list li { display: flex; justify-content: space-between; gap: 6px; font-size: 13px; }
-.list b { font-weight: 500; color: var(--stage-brand); }
+.list b { font-weight: 500; color: #8b96ff; }
 .list li[data-out] { color: var(--stage-muted); }
 .list li[data-out] b { color: var(--stage-muted); }
 .list s { text-decoration-thickness: 1px; }

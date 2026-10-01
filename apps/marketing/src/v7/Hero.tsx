@@ -153,10 +153,9 @@ function Copy() {
   );
 }
 
-type Geo = { vw: number; vh: number; w: number; h: number; hx: number; hy: number; k0: number; k1: number; cx: number; cy: number; sx: number; sy: number; ks: number };
+type Geo = { ox: number; oy: number; vw: number; vh: number; w: number; h: number; hx: number; hy: number; k0: number; k1: number; cx: number; cy: number; sx: number; sy: number; ks: number };
 
 const r = (n: number) => Math.round(n);
-const m2 = (m: M2) => `matrix(${m.map((v, i) => (i >= 4 ? r(v) : +v.toFixed(5))).join(",")})`;
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -221,9 +220,17 @@ export default function Hero() {
       const vh = stage.clientHeight;
       const w = focal.offsetWidth;
       const h = focal.offsetHeight;
+      // The tile's exact (possibly fractional) layout origin, so the landed pose sits on whole pixels.
+      const prev = focal.style.transform;
+      focal.style.transform = "none";
+      const fr = focal.getBoundingClientRect();
+      const sr = stage.getBoundingClientRect();
+      focal.style.transform = prev;
       const unit = stackSize(1);
       const ks = Math.min(1, (vh - 110) / unit.h, (vw * 0.56) / unit.w);
       geo.current = {
+        ox: fr.left - sr.left,
+        oy: fr.top - sr.top,
         vw,
         vh,
         w,
@@ -260,7 +267,7 @@ export default function Hero() {
     let t: string;
     if (m < 1) {
       // In flight: a real 3D pose (composited while moving, no will-change, so it re-rasters).
-      t = `translate(${(fx - g.w / 2).toFixed(2)}px, ${(fy - g.h / 2).toFixed(2)}px) perspective(1400px) rotateX(${(rotX.get() * tilt).toFixed(3)}deg) rotateY(${(rotY.get() * tilt).toFixed(3)}deg) rotateZ(${(rotZ.get() * tilt).toFixed(3)}deg) scale(${k.toFixed(4)})`;
+      t = `translate(${(fx - g.w / 2 - g.ox).toFixed(2)}px, ${(fy - g.h / 2 - g.oy).toFixed(2)}px) perspective(1400px) rotateX(${(rotX.get() * tilt).toFixed(3)}deg) rotateY(${(rotY.get() * tilt).toFixed(3)}deg) rotateZ(${(rotZ.get() * tilt).toFixed(3)}deg) scale(${k.toFixed(4)})`;
     } else {
       // Landed, then lying down into the top plate: a 2D matrix on whole pixels.
       const cx = lerp(g.cx, g.sx, lie);
@@ -268,8 +275,8 @@ export default function Hero() {
       const sx = lerp(g.k1, (g.ks * PW) / g.w, lie);
       const sy = lerp(g.k1, (g.ks * PH) / g.h, lie);
       const base = mixM(IDENTITY, PLATE_M7, lie);
-      const mm = mul([1, 0, 0, 1, cx - g.w / 2, cy - g.h / 2], mul(base, [sx, 0, 0, sy, 0, 0]));
-      t = m2(mm);
+      const mm = mul([1, 0, 0, 1, r(cx - g.w / 2) - g.ox, r(cy - g.h / 2) - g.oy], mul(base, [sx, 0, 0, sy, 0, 0]));
+      t = `matrix(${mm.map((v) => +v.toFixed(5)).join(",")})`;
     }
     focal.style.transform = t;
     focal.style.opacity = String(1 - seg(v, 0.455, 0.48));

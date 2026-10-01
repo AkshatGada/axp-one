@@ -42,6 +42,15 @@ export default function Tone() {
         const r = el.getBoundingClientRect();
         return { w: el.dataset.world!, top: r.top + window.scrollY, bottom: r.bottom + window.scrollY };
       });
+      // A seam the reference line can never fully cross (the first and the last) is pulled inwards,
+      // so the page's top and bottom always rest on their own world's colour.
+      const maxMid = document.documentElement.scrollHeight - vh * 0.5;
+      const S0 = vh * 0.26;
+      for (let k = 0; k < secs.length - 1; k++) {
+        const b = Math.min(secs[k]!.bottom, maxMid - S0 - 1);
+        secs[k]!.bottom = b;
+        secs[k + 1]!.top = b;
+      }
       const i = Math.max(0, secs.findIndex((x) => mid >= x.top && mid < x.bottom));
       const stepEl = Array.from(document.querySelectorAll<HTMLElement>("[data-step]")).find((el) => {
         const r = el.getBoundingClientRect();

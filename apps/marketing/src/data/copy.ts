@@ -103,7 +103,7 @@ export const CONTEXTHINT = {
     { big: "A dozen", small: "countries" },
   ],
   traction: TRACTION.line,
-  use: "Agents get one real example and one inferred audience each.",
+  use: "Each agent gets a few real past examples and an inferred audience as evidence.",
   wallLabel: "Real ads observed in ChatGPT. Not axp.one advertisers; no relationship implied.",
   action: "Visit ContextHint",
 };
@@ -161,7 +161,7 @@ export const SOLANA = {
 
 /** The story's spine: the same question, carried through the three pillar chapters. */
 export const SPINE = {
-  ch: { n: "1", state: "Evidence: one example, one audience" },
+  ch: { n: "1", state: "Evidence: past examples, an audience" },
   jev: { n: "2", state: "Judged: bid, a direct fit" },
   sol: { n: "3", state: "Settled on Solana, one close" },
 } as const;
@@ -175,7 +175,7 @@ export const MVP_TOUR = {
     { key: "overview", title: "The whole run", href: mvp("/"), alt: "The MVP overview: the demo AI app with its Sponsored card, the run's totals and the auctions." },
     { key: "opportunity", title: "One auction, step by step", href: mvp("/opportunity/1/"), alt: "The MVP opportunity page: every stage from the moment to the charge." },
     { key: "settlement", title: "Both Solana channels", href: mvp("/settlement/"), alt: "The MVP settlement page: deposits, payouts, refunds and each channel's vouchers." },
-    { key: "verify", title: "Verify it, then tamper", href: mvp("/verify/"), alt: "The MVP verify page after a one byte tamper: checks fail on the copy." },
+    { key: "verify", title: "Verify, then tamper", href: mvp("/verify/"), alt: "The MVP verify page after a one byte tamper: checks fail on the copy." },
   ],
 };
 
@@ -190,7 +190,7 @@ export const PROOF = {
   ],
   verify: "Verify it yourself",
   verifySub: `${RUN.mvp.verifyChecks ?? "All"} checks run in your browser`,
-  video: "Watch the four minute run",
+  video: "Watch the run",
   realSummary: "What's real, what's illustrative",
   real: `Real: the questions, answers, ${RUN.counts.decisions} judgments, auctions, receipts and channels.`,
   illustrative: "Illustrative: the motion, the wall's bidding and the advertisers, who are fictional.",
@@ -219,7 +219,7 @@ export const CLOSING = {
 };
 
 export const FOOTER = {
-  scope: ["Hackathon MVP.", "Live on Solana Devnet, test USDC. Not mainnet.", `${CV.name}, ${KF.name} and ${LG.name} are fictional.`], // claim-ok: limit
+  scope: ["Live on Solana Devnet, test USDC. Not mainnet.", `${CV.name}, ${KF.name} and ${LG.name} are fictional.`], // claim-ok: limit
   contexthint: "contexthint.com",
   jev: { text: "Built with", name: JEV.name, url: JEV.url },
   solana: "Settled on Solana",

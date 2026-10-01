@@ -223,13 +223,13 @@
 .focal {
   position: absolute;
   z-index: 4;
-  right: calc(var(--hr) - (520px - var(--hw)) / 2);
+  left: calc(100% - var(--hr) - var(--hw) / 2 - 260px);
   top: var(--ht);
   width: 520px;
   transform-origin: 50% 0;
   transform: perspective(1400px) rotateX(11.7deg) rotateY(3.2deg) rotateZ(-5deg) scale(var(--hk));
 }
-.hero[data-pinned] .focal { right: auto; left: 0; top: 0; transform-origin: 50% 50%; }
+.hero[data-pinned] .focal { transform-origin: 50% 50%; }
 .frame { display: none; }
 
 .chat { position: relative; border: 1px solid var(--ink); border-radius: 18px; background: var(--white); box-shadow: 9px 9px 0 #d0d5d5, 0 40px 80px -40px rgba(14, 18, 32, 0.35); }

@@ -5,7 +5,7 @@
 .grid { position: relative; display: grid; gap: 48px; align-items: center; min-height: 100svh; padding: clamp(96px, 13vh, 140px) 0 clamp(64px, 9vh, 104px); }
 @media (min-width: 1000px) { .grid { grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.38fr); gap: clamp(32px, 5vw, 88px); } }
 .left { display: grid; gap: 24px; align-content: center; }
-.label { justify-self: start; display: inline-flex; align-items: center; gap: 8px; margin: 0; height: 32px; padding: 0 14px 0 5px; border-radius: var(--px-r-full); background: rgba(10, 14, 42, 0.86); color: #fff; font-size: 13.5px; font-weight: 500; }
+.label { justify-self: start; display: inline-flex; align-items: center; gap: 8px; margin: 0; height: 32px; padding: 0 14px 0 5px; border-radius: var(--px-r-full); background: rgba(10, 14, 42, 0.94); color: #fff; font-size: 13.5px; font-weight: 500; }
 .label i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: var(--px-r-full); background: var(--brand); color: #fff; font-size: 12px; font-style: normal; }
 .h2 { margin: 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(38px, 4vw, 68px); line-height: 0.98; letter-spacing: -0.035em; max-width: 9ch; }
 .credit { justify-self: start; display: inline-flex; align-items: center; gap: 14px; padding: 6px 0; color: #fff; font-size: 17px; font-weight: 500; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.55); text-decoration-thickness: 1.5px; text-underline-offset: 7px; }
