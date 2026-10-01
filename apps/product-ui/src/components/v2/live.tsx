@@ -121,7 +121,7 @@ export function DrawerDemo() {
 }
 
 /** Present: the tamper flow, computed live on a copy of the public file (one changed character in a receipt). */
-export function LiveTamperResult() {
+export function LiveTamperResult({ n }: { n: number }) {
   const [r, setR] = useState<{ s: CheckSummary; receipt: boolean; signature: boolean; n: number } | null>(null);
   useEffect(() => {
     let live = true;
@@ -154,7 +154,7 @@ export function LiveTamperResult() {
           {r ? `${r.s.pass} of ${CHECK_TOTAL}` : "Checking"}
         </Ld.Tag>
       </div>
-      <span className="ld-caption">One character of {r ? `opportunity ${r.n}'s` : "a"} receipt nonce, changed in a copy and re-checked here</span>
+      <span className="ld-caption">One character of opportunity {n}&apos;s receipt nonce, changed in a copy and re-checked here</span>
       {row("Receipt hash", r?.receipt)}
       {row("Publisher signature (Ed25519)", r?.signature)}
     </div>

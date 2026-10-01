@@ -79,7 +79,7 @@ export function makeStory(run: ProductRun) {
     const price = `${usdc(o.award!.priceBaseUnits)} USDC`;
     const bids = o.auction.bids;
     if (k === "single") return `${w} was the only bidder and paid its own bid, ${price}.`;
-    if (k === "tie") return `${list(bids.map((b) => nameOf(b.campaignId)))} all bid ${price}; a tie rule fixed in the exchange code gave the slot to the lower campaign ID, ${w}.`;
+    if (k === "tie") return `${list(bids.map((b) => nameOf(b.campaignId)))} ${bids.length === 2 ? "both" : "all"} bid ${price}; a tie rule fixed in the exchange code gave the slot to the lower campaign ID, ${w}.`;
     return `${list(bids.map((b) => `${nameOf(b.campaignId)} ${usdc(b.amountBaseUnits)}`))} USDC: the highest bid won, so ${w} paid ${price}.`;
   }
 
@@ -209,7 +209,7 @@ export function makeStory(run: ProductRun) {
   /** The opportunities Present and the Overview feature, chosen from what actually happened. */
   const picks = () => {
     const paid = firstPaid();
-    const auction = firstTie() ?? run.opportunities.find((o) => auctionKind(o) === "different") ?? paid;
+    const auction = run.opportunities.find((o) => auctionKind(o) === "different") ?? firstTie() ?? paid;
     const hist = featuredHistory();
     const ev = paid ?? run.opportunities.find((o) => o.decisions.length) ?? null;
     const evMain = ev ? ev.decisions.find((d) => d.arm === "history" && d.retrieval && d.campaignId === ev.award?.campaignId) ?? ev.decisions.find((d) => d.arm === "history" && d.retrieval) ?? null : null;

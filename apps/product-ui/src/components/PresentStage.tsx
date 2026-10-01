@@ -24,6 +24,7 @@ export function PresentStage({ beats, views, scope }: { beats: BeatMeta[]; views
   const [scale, setScale] = useState(0.5);
   const [ready, setReady] = useState(false);
   const [small, setSmall] = useState(false);
+  const [tall, setTall] = useState(false);
   const [fitted, setFitted] = useState(false);
   const viewRef = useRef<HTMLDivElement>(null);
   const fitRef = useRef<HTMLDivElement>(null);
@@ -37,6 +38,8 @@ export function PresentStage({ beats, views, scope }: { beats: BeatMeta[]; views
     const fit = () => {
       setScale(Math.min(window.innerWidth / 1920, window.innerHeight / 1080));
       setSmall(window.innerWidth < 700);
+      // Taller than 16:9: pin the frame to the top so the spare height sits under the dark caption bar, not above the header.
+      setTall(window.innerHeight / window.innerWidth > 1080 / 1920 + 0.001);
     };
     fit();
     window.addEventListener("resize", fit);
@@ -120,13 +123,26 @@ export function PresentStage({ beats, views, scope }: { beats: BeatMeta[]; views
     }
   }, [beat, step, beats]);
 
-  // Autoplay: a beat's duration is split evenly across its steps.
+  // Autoplay: extra steps arrive about 3 s apart, so no slide sits half-built; the last step holds the rest of the beat.
+  const STEP_MS = 3000;
   useEffect(() => {
     if (!auto || !ready) return;
     const b = beats[beat];
-    const t = setTimeout(next, b.durationMs / b.steps);
+    const t = setTimeout(next, step < b.steps ? STEP_MS : b.durationMs - STEP_MS * (b.steps - 1));
     return () => clearTimeout(t);
   }, [auto, ready, beat, step, beats, next]);
+
+  // Elapsed time: the beat's start plus time spent on it (capped at its length), ticking.
+  const [beatStart, setBeatStart] = useState(0);
+  const [now, setNow] = useState(0);
+  useEffect(() => {
+    setBeatStart(Date.now());
+    setNow(Date.now());
+  }, [beat]);
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 500);
+    return () => clearInterval(t);
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -136,6 +152,7 @@ export function PresentStage({ beats, views, scope }: { beats: BeatMeta[]; views
       else if (k === "ArrowRight" || k === " " || k === "PageDown") next();
       else if (k === "ArrowLeft" || k === "PageUp") prev();
       else if (/^[0-9]$/.test(k)) goBeat(k === "0" ? 9 : Number(k) - 1);
+      else if (k === "-") goBeat(beats.length - 1);
       else if (k === "a" || k === "A") setAuto((v) => !v);
       else if (k === "c" || k === "C") setCaptions((v) => !v);
       else if (k === "e" || k === "E") router.push(beats[beat].exploreHref);
@@ -153,7 +170,8 @@ export function PresentStage({ beats, views, scope }: { beats: BeatMeta[]; views
   }, [beat, next, prev, goBeat, router, beats, help]);
 
   const b = beats[beat];
-  const elapsed = useMemo(() => beats.slice(0, beat).reduce((n, x) => n + x.durationMs, 0), [beats, beat]);
+  const startOfBeat = useMemo(() => beats.slice(0, beat).reduce((n, x) => n + x.durationMs, 0), [beats, beat]);
+  const elapsed = startOfBeat + Math.min(Math.max(0, now - beatStart), beats[beat].durationMs);
   const mmss = (ms: number) => `${Math.floor(ms / 60000)}:${String(Math.floor((ms % 60000) / 1000)).padStart(2, "0")}`;
 
   if (small)
@@ -170,7 +188,7 @@ export function PresentStage({ beats, views, scope }: { beats: BeatMeta[]; views
     );
   return (
     <div className="lg-present" data-cursor={auto ? "hidden" : undefined}>
-      <div className="lg-present-frame pr-frame ld" style={{ transform: `translate(-50%, -50%) scale(${scale})`, visibility: ready && fitted ? "visible" : "hidden" }} onClick={() => !auto && next()}>
+      <div className="lg-present-frame pr-frame ld" style={{ top: tall ? 0 : "50%", transformOrigin: tall ? "50% 0" : "50% 50%", transform: `translate(-50%, ${tall ? "0" : "-50%"}) scale(${scale})`, visibility: ready && fitted ? "visible" : "hidden" }} onClick={() => !auto && next()}>
         <header className="pr-top">
           <span className="pr-brand">
             <Wordmark />
@@ -223,7 +241,7 @@ export function PresentStage({ beats, views, scope }: { beats: BeatMeta[]; views
               [["→", "Space"], "Next step"],
               [["←"], "Back"],
               [["Shift", "→"], "Next beat"],
-              [["1", "…", "0"], "Jump to beat"],
+              [["1", "…", "0", "-"], "Jump to beat (- is the last)"],
               [["A"], "Autoplay on or off"],
               [["C"], "Captions on or off"],
               [["E"], "Open this in the explorer"],

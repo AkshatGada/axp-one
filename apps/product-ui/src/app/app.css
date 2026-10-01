@@ -345,8 +345,7 @@ html[data-op-stage="charge"] [data-slot="await"] { display: none !important; }
 .pr2-tamper-row { padding-top: 8px; border-top: 1px solid var(--ld-border); font-size: 14px; }
 .pr2-end { display: grid; gap: 28px; justify-items: start; }
 .pr2-end-big { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 64px; line-height: 1.05; letter-spacing: -.03em; color: var(--ld-text); }
-.pr2-end-big span { display: block; }
-.pr2-end-big span:nth-child(2) { color: var(--brand-deep); }
+.pr2-end-big span:nth-of-type(2) { color: var(--brand-deep); }
 .pr2-end-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; width: 100%; }
 .pr2-why { display: flex; gap: 14px; align-items: baseline; }
 .ld .ld-nowrap { white-space: nowrap; }
@@ -376,3 +375,21 @@ html[data-op-stage="charge"] [data-slot="await"] { display: none !important; }
 .vf2-tamper-alert b { font-weight: 500; color: var(--ld-danger); }
 #devnet-checks > .ld-panel:first-child { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 #devnet-checks > .ld-panel + .ld-panel { margin-top: -1px; border-top-left-radius: 0; border-top-right-radius: 0; }
+
+/* Present v5 */
+.pr2-before-after { display: grid; gap: 14px; padding: 18px 20px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); box-shadow: var(--ld-shadow-1); }
+.pr2-ba-row { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: stretch; gap: 16px; }
+.pr2-ba { display: grid; gap: 4px; padding: 14px 16px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-sunken); }
+.pr2-ba[data-tone="brand"] { background: var(--ld-accent-wash); border-color: var(--ld-accent-line); }
+.pr2-ba-lv { font-size: 15px; color: var(--ld-text); }
+.pr2-ba-bid { font-family: var(--font-display); font-size: 34px; line-height: 1.1; letter-spacing: -.02em; color: var(--ld-text); }
+.pr2-ba[data-tone="brand"] .pr2-ba-bid { color: var(--brand-deep); }
+.pr2-ba-arrow { align-self: center; font-size: 28px; color: var(--ld-text-3); }
+.pr2-claim-n { font-family: var(--font-display); font-size: 40px !important; line-height: 1.05; letter-spacing: -.02em; color: var(--ld-text) !important; }
+.pr2-claim[data-tone="brand"] .pr2-claim-n { color: var(--brand-deep) !important; }
+.pr2-close { margin: 0; font-family: var(--font-display); font-size: 26px; color: var(--ld-text); }
+.pr2-dv { display: grid; gap: 10px; align-content: start; padding: 16px 18px; border-color: var(--ld-accent-line); box-shadow: inset 3px 0 0 var(--brand); }
+.pr2-dv-tx { display: grid; gap: 4px; padding: 10px 12px; border-radius: var(--ld-r-sm); background: var(--ld-sunken); }
+.pr2-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding: 14px 16px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); }
+.pr2-seq li { font-size: 14px; padding: 8px 12px; }
+.pr2-defs { margin: 0; padding: 10px 14px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); }

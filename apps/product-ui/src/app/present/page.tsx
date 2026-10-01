@@ -116,6 +116,20 @@ export default function PresentPage() {
           <Ld.Kpi label="Signed deliveries" value={run.counts.receipts} context="Publisher receipts" />
           <Ld.Kpi label="Paid to the app" value={usdc(run.totals.paidBaseUnits)} unit="USDC" context="Test USDC" />
         </div>
+        <dl className="ov2-defs pr2-defs">
+          <div>
+            <dt>Jev</dt>
+            <dd>The judgment model each advertiser&apos;s agent uses to rate relevance and intent. It never names a price.</dd>
+          </div>
+          <div>
+            <dt>ContextHint</dt>
+            <dd>A recorded library of real prompts and the ads seen beside them, given to agents as evidence.</dd>
+          </div>
+          <div>
+            <dt>{onDevnet ? "Solana Devnet" : "Hosted Solana sandbox"}</dt>
+            <dd>{onDevnet ? "Solana's public test network; every transaction opens in the Solana explorer." : "A private test network that runs Solana programs; test tokens only."}</dd>
+          </div>
+        </dl>
         <div className="pr2-split" style={{ gridTemplateColumns: "1.15fr 1fr", gap: 16 }}>
           <Ld.Panel title={`The ${run.counts.opportunities} questions`} sub="Story order" flush>
             <Ld.Table
@@ -265,6 +279,11 @@ export default function PresentPage() {
                 ) : null}
               </div>
             </div>
+            <div className="pr2-strip">
+              <Ld.Stat label="Winner" value={nameOf(o.award!.campaignId)} caption={story.winnerCaption(o)} />
+              <Ld.Stat label="Price" value={`${usdc(o.award!.priceBaseUnits)} USDC`} caption="First price: the winner pays its own bid" />
+              <Ld.Stat label="Who set it" value="The bid table" caption="The model rated; code priced. Never the other way round" />
+            </div>
           </div>
         );
       })()
@@ -309,6 +328,25 @@ export default function PresentPage() {
               <span className="ld-caption">Key {paid.receipt!.fields.publisherKeyId}, published in the same file</span>
             </div>
           </div>
+        </F>
+        <F from={3}>
+          <ol className="st2-seq pr2-seq" aria-label="In order">
+            <li>
+              <b>Reserved</b> {usdc(paid.award!.priceBaseUnits)}
+            </li>
+            <li>
+              <b>Inserted</b> +{(paid.delivery!.msAfterAward / 1000).toFixed(1)} s
+            </li>
+            <li>
+              <b>Receipt signed</b> Ed25519
+            </li>
+            <li data-chain>
+              <b>Charged</b> {usdc(paid.charge!.amountBaseUnits)}
+            </li>
+            <li data-chain>
+              <b>Voucher {paid.voucher!.sequence}</b> {usdc(paid.voucher!.cumulativeAmountBaseUnits)} in total
+            </li>
+          </ol>
         </F>
       </div>
     ) : (
@@ -404,7 +442,7 @@ export default function PresentPage() {
             <LiveVerifyTile context="Checked in this browser" />
             <Ld.Kpi label="New calls on restart" value={run.restart.newCalls} context={`Models off; ${run.restart.newCharges} new charges, ${run.restart.newSignatures} new signatures`} />
           </div>
-          <LiveTamperResult />
+          <LiveTamperResult n={paid?.n ?? 1} />
           <div className="ld-callout">
             <span className="ld-card-title">What Verify checks, on the public file</span>
             <span className="ld-secondary" style={{ color: "var(--ld-text)" }}>
