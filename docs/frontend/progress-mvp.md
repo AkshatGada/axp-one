@@ -93,3 +93,25 @@ Resume notes for the MVP builder. Spec: docs/frontend/MVP_SPEC.md + FRONTEND_PLA
 - Present: 11 beats, 4:00. Problem opener, ends on "Disclosed. Decided in code. Paid on delivery." with limits one
   beat earlier; "Why Solana" in beat 9; live tamper result in beat 10; zoom band 1.65 to 1.9 at every viewport.
 - Dev runs from .next-dev; `pnpm build` writes .next + out/.
+
+## MVP v5 notes (mvp-v4-fixes.md A, B, C + owner: live Devnet run is the main run), tag axp-mvp-v5
+- Any bundle at build time: `AXP_RUN_DIR` (default `artifacts/v3-devnet-live-rehearsal/replay`, the fully live Devnet
+  run). The projection reads an optional sibling `chain-check.json` for the run's own explorer links (asserted against
+  the run's signatures). Asserts are structural (conservation, joins, hashes, bid = table) and compared with the bundle's
+  own records (manifest run id and mode, model counters, receipts, events, chain-evidence totals); no fixed counts.
+  The verify check count comes from the run's structure (`expectedCheckCount`); "Passing" needs exactly that list.
+- `pnpm build` = `scripts/build-all.mjs`: out/ is the live run; out/first-recording/ is the first recording (hosted
+  sandbox, with its Devnet re-settlement). The run switcher links them; numbers never merge. `pnpm build:one` builds
+  one run. Internal raw links go through `asset()` so base paths work.
+- Story copy: `src/lib/narrative.ts` (pure, shared by pages, Present captions and the SRT script). Ties, single bidders,
+  different bids, level changed or not, caps and no-fills are worded from the data only when they happened.
+- Perturbed fixture: `node scripts/fixtures/perturb-run.mjs` (writes .fixtures/perturbed, never committed): first tie ->
+  different bids, cap event removed (that agent skips), a level changes. Build it with
+  `AXP_RUN_DIR=apps/product-ui/.fixtures/perturbed`; the copy adapts (checked: "Where bids differed", no cap wording,
+  "Unchanged", Present beat 8 "A question with no fill"). Run `pnpm project` afterwards to restore src/data.
+- Design: Present opener is the problem only; the claims close the deck with the run's own numbers; decisions beat is a
+  before/after; a Devnet proof card on beat 9; reveals within 3 s; elapsed timer; `-` jumps to the last beat; frame pinned
+  to the top on 16:10. Chart value labels avoid the cap line. Tamper alert docked inside the panel. Devnet checks in USDC
+  with links inside the group and a "48 + 7" nav count. Settlement detail behind a disclosure; rent in words.
+- Checked: 144 static route/viewport combos (both runs) with 0 errors, 0 overflow, max CLS 0.016; Present 1280 to 2560
+  centred, zoom 1.7 to 1.9; tests 32/32; tamper flow on both runs (45/47 live, 46/48 first recording).
