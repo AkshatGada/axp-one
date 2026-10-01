@@ -6,9 +6,17 @@ explicit ask). Owner decisions and the frontend state live in docs/frontend/FRON
 
 Track: **Solana**. Three pillars to show: ContextHint (data), Jev (agent decisions), Solana payment channels (settlement).
 
+> **Owner decision 2026-10-02: the hackathon run is a FULLY LIVE run on Solana Devnet** (new opportunities for the
+> 4 scenarios, new organic answers, new Jev decisions, auctions, receipts, and devnet payment channels), not only a
+> re-settlement. Plan and runbook: docs/build/DEVNET_LIVE_PLAN.md (being prepared, with one rehearsal run).
+> Timing: do the real live run the DAY BEFORE the hackathon if possible, so there are a few hours to rebuild both
+> apps from it and re-check the story (live Jev outputs are stochastic: ties, levels and skips can differ from the
+> recorded run, and the copy is being made data-driven to handle that). Section 1 below (re-settling the recorded
+> receipts) remains the fallback if the live run fails.
+
 ---
 
-## 1. Fresh Solana Devnet settlement (run JUST BEFORE the hackathon, on the day if possible)
+## 1. Fresh Solana Devnet settlement (FALLBACK) (run JUST BEFORE the hackathon, on the day if possible)
 
 Why: the devnet transactions should carry the hackathon's date, so judges opening Solana Explorer see fresh activity.
 What: re-settle the SAME three recorded, publisher-signed receipts from run `v3-wallet-acceptance` through two NEW
