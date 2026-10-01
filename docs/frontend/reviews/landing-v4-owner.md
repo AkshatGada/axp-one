@@ -107,3 +107,8 @@ Jev (by TypeSafe) is the decision API behind every advertiser agent's judgment. 
   "under a second", no speed-advantage claims), bid or skip on every one, LeatherGuard's skip included.
 - Name it "Jev by TypeSafe" and link https://docs.typesafe.ai (new tab). No partnership/endorsement claim beyond
   "built with Jev". Keep it replaceable framing implicit (don't call it the only or optimal model).
+
+### Jev: owner clarification (2026-10-02, supersedes the block above where they differ)
+Not a sponsor. Keep it modest: "Built with Jev" only where it is relevant, no dedicated feature block, no hero mention.
+Places: the "Agents judge the fit" stage beat and the exploded-card Agents plate ("judged with Jev"), plus one line in
+the footer/credits ("Agent decisions built with Jev by TypeSafe", linking https://docs.typesafe.ai). Nothing more.
