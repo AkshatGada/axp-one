@@ -64,16 +64,17 @@ function Tile({ q, filled, n }: { q: string; filled: boolean; n: number }) {
 
 type MV = MotionValue<number> | number;
 
-export function Wall({ plane, cam, opacity, wallRef, tone }: { plane: { x: MV; y: MV; z: MV }; cam?: { z: MV; y: MV }; opacity?: MV; wallRef?: React.RefObject<HTMLDivElement | null>; tone?: "brand" }) {
+export function Wall({ plane, cam, opacity, wallRef, tone, lite }: { plane: { x: MV; y: MV; z: MV }; cam?: { z: MV; y: MV }; opacity?: MV; wallRef?: React.RefObject<HTMLDivElement | null>; tone?: "brand"; lite?: boolean }) {
+  const shown = lite ? cols.slice(1, 6).map((qs) => qs.slice(0, 4)) : cols;
   return (
     <motion.div ref={wallRef} className={s.view} data-tone={tone} style={{ opacity: opacity ?? 1 }} aria-hidden>
       <motion.div className={s.cam} style={{ z: cam?.z ?? 0, y: cam?.y ?? 0 }}>
         <motion.div className={s.plane} style={{ z: -170, rotateX: plane.x, rotateY: plane.y, rotateZ: plane.z }}>
-          {cols.map((qs, c) => (
+          {shown.map((qs, c) => (
             <div key={c} className={s.col} style={{ transform: `translateZ(${DEPTH[c]}px) translateY(${LIFT[c]}rem)` }}>
               <div className={s.track} style={{ "--dur": `${DURS[c]}s` } as CSSProperties}>
                 {[...qs, ...qs].map((q, n) => (
-                  <Tile key={n} q={q} n={c * 11 + n} filled={PREFILLED.has(`${c}-${n % PER}`)} />
+                  <Tile key={n} q={q} n={c * 11 + n} filled={PREFILLED.has(`${c}-${n % qs.length}`)} />
                 ))}
               </div>
             </div>

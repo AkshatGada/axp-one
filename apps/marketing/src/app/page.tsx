@@ -12,6 +12,10 @@ import How from "@/v7/How";
 import ContextHint from "@/v7/ContextHint";
 import Jev from "@/v7/Jev";
 import Solana from "@/v7/Solana";
+import Tour from "@/v7/Tour";
+import Proof from "@/v7/Proof";
+import Closing from "@/v7/Closing";
+import Footer from "@/v7/Footer";
 
 export default function Home() {
   return (
@@ -25,8 +29,11 @@ export default function Home() {
         <ContextHint />
         <Jev />
         <Solana />
-        <section style={{ height: "100vh" }} />
+        <Tour />
+        <Proof />
+        <Closing />
       </main>
+      <Footer />
     </>
   );
 }

@@ -87,7 +87,7 @@ export default function Solana() {
                 <span className={s.laneK}>{SOLANA.offChain}</span>
                 <div className={s.vouchers}>
                   {vs.map((v, i) => (
-                    <div key={v.sequence} className={s.voucher} data-v={i}>
+                    <div key={v.sequence} className={s.voucher} data-v={i} style={{ "--x": pct(v.cumulative) } as React.CSSProperties}>
                       <span>
                         {SOLANA.voucher} {v.sequence}
                       </span>

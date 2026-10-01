@@ -315,3 +315,7 @@
 /* Once the tile's own intro has played, its children drop their animations, so nothing inside it
    stays on a layer of its own when the camera lands. */
 .focal[data-intro="done"] * { animation: none !important; }
+
+/* The closing's wall: white tiles at low contrast on ultramarine, no auctions. */
+.view[data-tone="brand"] { opacity: 0.22; }
+.view[data-tone="brand"] .tile { background: #fff; border-color: transparent; box-shadow: none; }
