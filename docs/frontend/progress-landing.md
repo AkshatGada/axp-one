@@ -19,16 +19,17 @@ Owner of this file: the landing builder agent. Update at every milestone.
   ChannelMeter at four moments, EvidenceChain + score ruler, the 983-square NicheField, RunSheet, receipt exhibit,
   real rail/ledger/stats/now-next/tiles, and a Motion section with Replay demos.
 
-## Material hooks (for the coordinator's metal pass; no metal CSS written here)
-`mh-action` primary/outline actions, `mh-chip` chips, `mh-num` big numbers, `mh-rule` key rules (opener rule, stat
-rule, ledger), `mh-exhibit` figure frames, exhibit sheets, tiles, run sheet, video frame, `mh-plate` hero plates,
-`mh-meter` channel meter track, `mh-stage` dark stage sections and the switchboard, `mh-cell` switchboard nodes,
-`mh-glyph` large glyphs, rail nodes, route marker, `mh-marks` provenance rows/legend, `mh-route` dashed routes,
-`mh-wordmark` header, footer and cover wordmarks. Provenance marks themselves are foundation `.pv`.
+- `axp-prospectus-v3` (c16ed91): owner pivot to ULTRAMARINE (metal rejected, hooks removed). Solid ultramarine
+  primary action, accent words, winning bid, route + marker, Sponsored frame, key numbers; ContextHint vermillion only
+  in its section, handing over to ultramarine in the evidence chain; lowercase `axp.one` Wordmark; full-bleed
+  ultramarine brand-book cover. (`axp-prospectus-v2` = the earlier steel version, kept for comparison.)
+- `axp-landing-v1` (25eb90b): the full static page, every section with final copy and still figures (this is also the
+  reduced-motion / <900px baseline). Aesthetic risk: a full-bleed ultramarine wall with the rule "Agents advise. Code
+  decides the money." at display size, and an ultramarine closing. Builds as static export, 115 KB first load,
+  lint clean incl. rendered HTML, no overflow at 375.
 
 ## Next
-- Step 3: full static page, all sections in order (tag `axp-landing-v1`).
-- Step 4: hero Exploded Card motion (tag `axp-landing-v2`).
+- Step 4: hero Exploded Card motion, pinned ~320vh (tag `axp-landing-v2`).
 - Step 5: Shutter + Stage, payments meter, Library Dive, RunSheet, closing, film mode.
 
 ## Notes
