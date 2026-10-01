@@ -81,3 +81,22 @@ test('structural checks pass on the selected bundle too', () => {
   structuralChecks(p, (name, ok) => { if (!ok) bad.push(name); }, JSON.parse(b.runBytes.toString('utf8')));
   assert.deepEqual(bad, []);
 });
+
+import { project as coreProject, structuralChecks as coreStructural } from '../../src/lib/project-core.mjs';
+test('the isomorphic core (pure-JS hashing, as in the browser) gives the same projection', () => {
+  const b = bundle(RUN_DIR);
+  const viaCore = coreProject({ runBytes: new Uint8Array(b.runBytes), manifestBytes: new Uint8Array(b.manifestBytes), chainCheck: b.chainCheck, paths: { run: 'x', manifest: 'y' } }).projection;
+  const viaBuild = project(b).projection;
+  viaCore.source.runPath = viaBuild.source.runPath;
+  viaCore.source.manifestPath = viaBuild.source.manifestPath;
+  assert.deepEqual(viaCore, viaBuild);
+});
+
+test('a hosted live run bundle projects and passes the structural checks', { skip: !existsSync(resolve(repo, 'artifacts/hosted-live-e2e/replay/run.json')) }, () => {
+  const b = bundle('artifacts/hosted-live-e2e/replay');
+  const bad = [];
+  const { projection: p } = coreProject(b, { check: (n, ok) => { if (!ok) bad.push(n); } });
+  coreStructural(p, (n, ok) => { if (!ok) bad.push(n); }, JSON.parse(new TextDecoder().decode(b.runBytes)));
+  assert.deepEqual(bad, []);
+  assert.equal(p.network.kind, 'devnet');
+});
