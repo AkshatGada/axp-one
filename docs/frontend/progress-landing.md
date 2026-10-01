@@ -90,6 +90,27 @@ Owner of this file: the landing builder agent. Update at every milestone.
   requests, horizontal overflow or contrast failures (1440 and 390, all text); CLS 0; LCP 60 to 92 ms (H1).
   Shots: docs/frontend/reviews/shots/landing-v6-final/.
 
+- `axp-landing-v7`: complete rethink per reviews/landing-v7-owner.md and the coordinator's must-keep list.
+  Main run is now the LIVE Solana Devnet run (artifacts/v3-devnet-live-rehearsal; extract-specimens.mjs reads
+  it with its own asserts: 11000 paid / 29000 refunded, price competition, one tie, frequency cap, no-fill;
+  Explorer links from its chain evidence; AXP_LANDING_RUN overrides). Sections live in src/v7/: Hero (the
+  Exchange Wall from hero-lab A, then a pinned dive that lands the tile at exactly 1x on whole pixels and lays it
+  into six painted plates: 2D matrices, rounded translation, no will-change, no 3D at rest, checked at 1x and
+  2x), How (four plain numbered steps with specimens over a dim order-book tape; slogan as tagline), the three
+  pillar chapters ContextHint (vermillion, "the intelligence platform for ChatGPT ads", scale words, real ad
+  wall labelled first), Jev (one real judgment sheet, fixed rule, code sets the amount, built with Jev) and
+  Solana (purple world, channel told in four steps, live Devnet Explorer buttons), Tour (2x captures of the live
+  MVP, bento), Proof (four numbers, Verify, video, a "what's real" disclosure, now/next with planned marked),
+  Closing (ultramarine, the wall returns), Footer. One continuous story: Tone.tsx drives a single fixed colour
+  layer that blends every seam in OKLCH (sections go transparent), and the live question travels through the
+  pillar chapters as a token (evidence, judged, settled). Prospectus now uses the Ledger v2 radius scale and
+  shadow levels (--px-r-*, --px-shadow-*), header tones ch and sol; /design is the v7 brand book. v6 scenes,
+  sections, copy and the hero-lab routes are removed (src/hero-lab components kept).
+  Measured (dev, headless Chrome): 1440x900 12.3 screens, 1280x800 12.5, 1920x1080 12.2, 390x844 13.9,
+  reduced motion 10.3; about 450 words of copy (header and footer included, figure labels excluded); zero
+  console errors and failed requests; no horizontal overflow; contrast AA at 1440/1280/390 and reduced motion;
+  CLS 0 (dev and static export). Shots: docs/frontend/reviews/shots/landing-v7/.
+
 ## Next
 - Phones are 16.2 screens; the hero's static plate list and the Jev / Proof blocks are the remaining length.
 - The stale untracked folder docs/frontend/reviews/shots/landing-v5-builder can be deleted by hand.

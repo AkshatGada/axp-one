@@ -15,7 +15,7 @@ export default function Poster() {
         <Wordmark className="poster-mark" />
         <span className="poster-k">{PROOF.video}</span>
       </div>
-      <h1 className="poster-h">{PROOF.h2}</h1>
+      <h1 className="poster-h">{PROOF.video}.</h1>
       <p className="poster-sub">{VIDEO.caption}</p>
       <div className="poster-chat">
         <HostChat question={CACHED.question} answer={HELPFUL_EXCERPT} answerLabel={HERO.answerLabel} appName={HERO.appName} card={{ name: CV.name, text: CV.approvedText!, destination: CV.destination }} />
