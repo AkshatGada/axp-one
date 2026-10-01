@@ -15,10 +15,9 @@
 // headline, chat, the line, the exploded stack (flat list on phones).
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
-import { Provenance } from "@axp/design-system/foundation";
 import { ActionPrimary, ActionText, Actions, Words } from "@axp/design-system/prospectus";
-import { CACHED, CV } from "@/data/run";
-import { HERO, MVP_URL, VIDEO_ANCHOR } from "@/data/copy";
+import { CACHED, CV, HELPFUL_EXCERPT } from "@/data/run";
+import { CH_URL, HERO, MVP_URL, VIDEO_ANCHOR } from "@/data/copy";
 import { HostChat } from "@/specimens/HostChat";
 import { Fit } from "./Fit";
 import { PlateStack, PlateStackStatic, STACK_H, STACK_W } from "./PlateStack";
@@ -76,36 +75,36 @@ export default function HeroScene() {
     const g = geo.current;
     if (!g) return;
     // Headline lifts away.
-    const up = out(seg(v, 0, 0.16));
+    const up = out(seg(v, 0, 0.14));
     if (copyRef.current) {
       copyRef.current.style.transform = `translate3d(0, ${-140 * up}px, 0)`;
-      copyRef.current.style.opacity = String(1 - seg(v, 0.02, 0.14));
+      copyRef.current.style.opacity = String(1 - seg(v, 0.02, 0.12));
     }
     if (asideRef.current) asideRef.current.style.opacity = String(1 - seg(v, 0.02, 0.1));
     // The chat travels, shrinks and lies down as a plate.
     const chat = chatRef.current?.querySelector<HTMLElement>(".sp-chat");
     if (chat) {
-      const m = io(seg(v, 0.04, 0.34));
-      const tilt = io(seg(v, 0.14, 0.37));
+      const m = io(seg(v, 0.03, 0.3));
+      const tilt = io(seg(v, 0.1, 0.32));
       const tx = (g.cx - (g.chat.x + g.chat.w / 2)) * m;
       const ty = (g.cy - (g.chat.y + g.chat.h / 2)) * m;
       const sx = lerp(1, (PW * g.k) / g.chat.w, m);
       const sy = lerp(1, (PH * g.k) / g.chat.h, m);
       chat.style.transform = css(mul(translate(tx, ty), mul(mixM(IDENTITY, PLATE_M, tilt), scale(sx, sy))));
-      chat.style.opacity = String(1 - seg(v, 0.37, 0.42));
+      chat.style.opacity = String(1 - seg(v, 0.32, 0.36));
     }
     // The stack takes over in the same place, then explodes.
-    if (stackRef.current) stackRef.current.style.opacity = String(seg(v, 0.35, 0.39));
+    if (stackRef.current) stackRef.current.style.opacity = String(seg(v, 0.3, 0.34));
     if (lineRef.current) {
-      const t = seg(v, 0.44, 0.54);
+      const t = seg(v, 0.06, 0.16);
       lineRef.current.style.opacity = String(t);
       lineRef.current.style.transform = `translate3d(0, ${18 * (1 - out(t))}px, 0)`;
     }
-    if (capRef.current) capRef.current.style.opacity = String(seg(v, 0.62, 0.72));
+    if (capRef.current) capRef.current.style.opacity = String(seg(v, 0.5, 0.6));
     const next = {
-      explode: io(seg(v, 0.4, 0.62)),
-      callouts: seg(v, 0.56, 0.76),
-      marker: v > 0.76 ? io(seg(v, 0.76, 0.9)) : -1,
+      explode: io(seg(v, 0.33, 0.56)),
+      callouts: seg(v, 0.5, 0.72),
+      marker: v > 0.72 ? io(seg(v, 0.72, 0.88)) : -1,
     };
     setS((c) => (Math.abs(c.explode - next.explode) < 0.002 && Math.abs(c.callouts - next.callouts) < 0.002 && Math.abs(c.marker - next.marker) < 0.002 ? c : next));
   }
@@ -141,15 +140,18 @@ export default function HeroScene() {
             <ActionText href="#proof">{HERO.skip}</ActionText>
           </Actions>
         </div>
-        <p className="pg-status pg-in" style={d(680)}>
-          <span>{HERO.status}</span>
-          <Provenance kind="replay" />
+        <a className="pg-badge pg-in" style={d(680)} href={CH_URL} target="_blank" rel="noopener noreferrer">
+          <span className="pg-badge-k">{HERO.badge}</span>
+          <span className="pg-badge-line">{HERO.badgeLine}</span>
+        </a>
+        <p className="pg-status pg-in" style={d(760)}>
+          {HERO.status}
         </p>
       </>
     ),
     [],
   );
-  const chat = useMemo(() => <HostChat question={CACHED.question} answer={CACHED.organic.excerpt} model={CACHED.organic.model} appName={HERO.appName} card={{ name: CV.name, text: CV.approvedText!, destination: CV.destination }} intro marks={false} />, []);
+  const chat = useMemo(() => <HostChat question={CACHED.question} answer={HELPFUL_EXCERPT} answerLabel={HERO.answerLabel} appName={HERO.appName} card={{ name: CV.name, text: CV.approvedText!, destination: CV.destination }} intro marks={false} />, []);
 
   const k = geo.current?.k ?? 0.7;
   return (
@@ -162,10 +164,6 @@ export default function HeroScene() {
           <div className="pg-hero-chat">
             <div ref={chatRef}>{chat}</div>
             <div ref={asideRef}>
-              <div className="px-marks" style={{ marginTop: 16 }}>
-                <Provenance kind="actual" label="Actual output: question, answer, card" />
-                <Provenance kind="fictional" label="Fictional advertiser" />
-              </div>
               <p className="pg-hero-cap">{HERO.frameCaption}</p>
             </div>
           </div>

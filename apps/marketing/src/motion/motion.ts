@@ -40,5 +40,5 @@ export const mixM = (a: M2, b: M2, t: number): M2 => a.map((v, i) => lerp(v, b[i
 export const css = (m: M2) => `matrix(${m.map((v) => (Math.abs(v) < 1e-6 ? 0 : +v.toFixed(5))).join(",")})`;
 
 /** The plate matrix used by the Exploded Card: a sheet laid on the table, seen from the front right.
- *  Squashed to 58% height, sheared 36 degrees and turned 4 degrees: text stays horizontal and legible. */
-export const PLATE_M: M2 = mul(rotate(-4), mul(skewX(-36), scale(1, 0.58)));
+ *  Squashed to 66% height, sheared 26 degrees and turned 4 degrees: text stays horizontal and legible. */
+export const PLATE_M: M2 = mul(rotate(-4), mul(skewX(-26), scale(1, 0.66)));

@@ -121,7 +121,7 @@ html[data-px-motion="on"] .sp-chat[data-intro] .sp-card-foot { animation: spFade
 /* ---------- Niche field ---------- */
 .sp-field { display: grid; gap: 14px; }
 .sp-field svg { width: 100%; height: auto; overflow: visible; }
-.sp-field rect.f { fill: var(--silver); }
+.sp-field rect.f { fill: color-mix(in oklab, var(--ink) 34%, transparent); }
 .sp-field rect.o { fill: none; stroke: var(--steel); stroke-width: 1; }
 .sp-field rect.hit { fill: var(--contexthint); }
 .sp-field .ring { fill: none; stroke: var(--contexthint); stroke-width: 2; }
@@ -158,3 +158,15 @@ html[data-px-motion="on"] .sp-field[data-reveal][data-in] g.row { opacity: 1; }
 .sp-row .px-num { font-size: 13px; }
 .sp-tag { display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border: 1px solid currentColor; font-size: 11px; font-weight: 500; letter-spacing: .03em; }
 .sp-tag[data-solid] { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+
+/* v4: plain receipt rows and the evidence payoff */
+.sp-kv-plain dd { font-family: var(--font-body); font-size: 15px; }
+.sp-kv-plain dt { font-size: 14px; }
+.sp-payoff { display: grid; gap: 20px; padding: clamp(24px, 3vw, 36px); border: 2px solid var(--brand); background: var(--white); box-shadow: 9px 9px 0 var(--brand-wash); }
+.sp-payoff-title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 2vw, 30px); line-height: 1.1; letter-spacing: -.02em; max-width: 30ch; }
+.sp-payoff-grid { display: grid; gap: 0; border-top: 1px solid var(--ink); }
+@media (min-width: 900px) { .sp-payoff-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.sp-payoff-grid > div { display: grid; gap: 8px; align-content: start; padding: 16px 20px 4px 0; }
+@media (min-width: 900px) { .sp-payoff-grid > div + div { padding-left: 20px; border-left: 1px solid var(--line); } }
+.sp-payoff-grid p { margin: 0; font-family: var(--font-display); font-size: 20px; line-height: 1.2; letter-spacing: -.01em; }
+.sp-payoff-grid [data-guard] p { color: var(--brand); }

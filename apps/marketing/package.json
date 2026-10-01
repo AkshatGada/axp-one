@@ -8,8 +8,8 @@
     "lint:copy": "node scripts/lint-copy.mjs",
     "predev": "node scripts/extract-specimens.mjs",
     "dev": "next dev -p 3410",
-    "prebuild": "node scripts/extract-specimens.mjs && node scripts/lint-copy.mjs",
-    "build": "NEXT_DIST_DIR=.next-build next build",
+    "prebuild": "node scripts/extract-specimens.mjs && node scripts/lint-copy.mjs --source-only",
+    "build": "rm -rf out .next-build && NEXT_DIST_DIR=.next-build next build && mv .next-build out",
     "postbuild": "node scripts/lint-copy.mjs",
     "typecheck": "tsc --noEmit"
   },

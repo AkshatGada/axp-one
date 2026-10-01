@@ -57,20 +57,33 @@ for (const f of files) {
   });
 }
 
-// The built page: visible text must carry no dashes (data quotes are chosen to carry none).
-const built = join(app, "out/index.html");
-if (existsSync(built)) {
-  const html = readFileSync(built, "utf8")
+// The built pages: visible text must carry no dashes; the landing must carry no internal details
+// (record IDs, hashes, policy names, model versions, level shorthands, run IDs): those live in the MVP.
+const textOf = (f) =>
+  readFileSync(f, "utf8")
     .replace(/<script[\s\S]*?<\/script>/g, " ")
     .replace(/<style[\s\S]*?<\/style>/g, " ")
     .replace(/<[^>]+>/g, " ");
-  const m = html.match(/.{0,60}[–—].{0,60}/g);
-  if (m) for (const x of m) hits.push(`out/index.html  dash in rendered text: ${x.trim()}`);
+const INTERNAL = [/ads:(mapping|hint):/, /fit_intent/, /jev-\d/i, /gpt-\d/i, /\bR\d I\d\b/, /\b[0-9a-f]{8}\.\.\.[0-9a-f]{4,}/, /v3-wallet-acceptance/, /missing_constraint/, /frequency_cap/, /crypto_storage/, /campaign ID/i, /base units/i, /lamport/i, /legacy/i];
+const sourceOnly = process.argv.includes("--source-only");
+const builtPages = sourceOnly ? [] : [join(app, "out/index.html"), join(app, "out/design/index.html")].filter(existsSync);
+for (const page of builtPages) {
+  const text = textOf(page);
+  const name = relative(app, page);
+  const m = text.match(/.{0,60}[\u2013\u2014].{0,60}/g);
+  if (m) for (const x of m) hits.push(`${name}  dash in rendered text: ${x.trim()}`);
+  if (name === "out/index.html") {
+    for (const re of INTERNAL) {
+      const k = text.match(new RegExp(`.{0,40}${re.source}.{0,40}`, re.flags));
+      if (k) hits.push(`${name}  internal detail on the landing (${re}): ${k[0].trim()}`);
+    }
+  }
 }
+const built = builtPages[0] ?? join(app, "out/index.html");
 
 if (hits.length) {
   console.error(`lint-copy: ${hits.length} problem(s)`);
   for (const h of hits) console.error(`  x ${h}`);
   process.exit(1);
 }
-console.log(`lint-copy: ${files.length} files clean${existsSync(built) ? " (and out/index.html)" : ""}.`);
+console.log(`lint-copy: ${files.length} files clean${builtPages.length ? ` (and ${builtPages.map((p) => relative(app, p)).join(", ")})` : ""}.`);

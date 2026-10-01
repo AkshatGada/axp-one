@@ -48,7 +48,7 @@ export function NicheField({ highlight = true, reveal = true, className, style }
       </svg>
       <div className="sp-field-legend">
         <span>
-          <i style={{ background: "var(--silver)" }} />
+          <i style={{ background: "color-mix(in oklab, var(--ink) 34%, transparent)" }} />
           Niche with ads
         </span>
         <span>

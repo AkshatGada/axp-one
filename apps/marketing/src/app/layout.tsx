@@ -2,8 +2,10 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import "@axp/design-system/steel.css";
 import "@axp/design-system/prospectus.css";
+import "./fonts.css";
 import "@/specimens/specimens.css";
 import "@/scenes/scenes.css";
+import "@/chapter/chapter.css";
 import "./site.css";
 import { MOTION_SCRIPT } from "@/motion/MotionRoot";
 
@@ -30,6 +32,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: MOTION_SCRIPT }} />
+        {["SlimWide", "Neutral", "Median", "NeutralWide"].map((f) => (
+          <link key={f} rel="preload" href={`/fonts/PolySans-${f}.woff2`} as="font" type="font/woff2" crossOrigin="anonymous" />
+        ))}
       </head>
       <body>{children}</body>
     </html>

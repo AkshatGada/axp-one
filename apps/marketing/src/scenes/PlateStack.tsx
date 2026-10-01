@@ -7,15 +7,14 @@
 //   explode  0 one stack  -> 1 six plates apart on the route
 //   callouts 0 hidden     -> 1 leader lines and labels drawn
 //   marker   0 at Card    -> 1 at Payment (Illustrative)
-import { Provenance } from "@axp/design-system/foundation";
 import { CALLOUTS, PLATES, PlateSheet } from "./plates";
 import { IDENTITY, PLATE_M, css, mixM, mul, translate, type M2 } from "@/motion/motion";
 
 export const STACK_W = 1320;
-export const STACK_H = 1040;
+export const STACK_H = 1120;
 const PW = 520;
 const PH = 270;
-const GAP = 150;
+const GAP = 162;
 const CX = STACK_W / 2;
 const CY = STACK_H / 2 + 10;
 
@@ -56,11 +55,6 @@ export function PlateStack({ tilt = 1, explode = 1, callouts = 1, marker = -1, s
           <div key={c.id} style={{ opacity: local, transition: "opacity .2s linear" }}>
             <i className="sc-leader" data-side={side} style={{ left: side === "right" ? ax : tx + 14, top: ay, width: len, transform: `scaleX(${local})`, transformOrigin: side === "right" ? "0 0" : "100% 0" }} />
             <div className="sc-callout" data-side={side} style={{ left: side === "right" ? tx + 18 : tx - 18 - 270, top: ay - 16 }}>
-              <span className="px-marks">
-                {c.kinds.map((k) => (
-                  <Provenance key={k} kind={k} />
-                ))}
-              </span>
               <span className="sc-callout-title">{c.title}</span>
               <p className="sc-callout-body">{c.body}</p>
             </div>
@@ -68,11 +62,7 @@ export function PlateStack({ tilt = 1, explode = 1, callouts = 1, marker = -1, s
         );
       })}
       {marker >= 0 ? (
-        <i className="sc-marker" style={{ left: CX, top: CY + y1 + (y5 - y1) * marker, zIndex: n + 1 }}>
-          <span className="sc-marker-tag">
-            <Provenance kind="illustrative" />
-          </span>
-        </i>
+        <span className="sc-marker" style={{ left: CX, top: CY + y1 + (y5 - y1) * marker, zIndex: n + 1 }} />
       ) : null}
     </div>
   );

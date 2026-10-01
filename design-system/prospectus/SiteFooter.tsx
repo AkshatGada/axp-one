@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { ProvenanceLegend } from "./Blocks";
 import { Wordmark } from "./Type";
 
-export function SiteFooter({ scope, base, children }: { scope: string[]; base: ReactNode; children?: ReactNode }) {
+export function SiteFooter({ scope, base, children, legend = true, aside }: { scope: string[]; base: ReactNode; children?: ReactNode; legend?: boolean; aside?: ReactNode }) {
   return (
     <footer className="px-footer">
       <div className="px-wrap px-footer-in">
@@ -15,7 +15,7 @@ export function SiteFooter({ scope, base, children }: { scope: string[]; base: R
               <li key={s}>{s}</li>
             ))}
           </ul>
-          <ProvenanceLegend />
+          {legend ? <ProvenanceLegend /> : aside}
         </div>
         <div className="px-footer-base">{base}</div>
       </div>

@@ -6,7 +6,7 @@ import type { Channel } from "@/data/run";
 import { usdc } from "@/data/run";
 import { seg } from "@/motion/motion";
 
-export function ChannelMeter({ ch, t = 1, onStage, compact }: { ch: Channel; t?: number; onStage?: boolean; compact?: boolean }) {
+export function ChannelMeter({ ch, t = 1, onStage, compact, title }: { ch: Channel; t?: number; onStage?: boolean; compact?: boolean; title?: string }) {
   const dep = Number(ch.deposit);
   const vs = ch.vouchers;
   const n = vs.length;
@@ -25,7 +25,7 @@ export function ChannelMeter({ ch, t = 1, onStage, compact }: { ch: Channel; t?:
   return (
     <div className={`sp-meter${onStage ? " on-stage" : ""}`}>
       <div className="sp-meter-top">
-        <span className="sp-meter-name">{ch.name} channel</span>
+        <span className="sp-meter-name">{title ?? `${ch.name} channel`}</span>
         <span className="sp-meter-dep">
           Deposit <span className="px-num">{usdc(ch.deposit)}</span> USDC
         </span>

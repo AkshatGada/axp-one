@@ -8,19 +8,21 @@ import { SponsoredCard } from "./SponsoredCard";
 export function HostChat({
   question,
   answer,
-  model,
   appName,
+  answerLabel = "Answer",
   card,
   intro,
   awaiting,
-  marks = true,
+  marks = false,
   className,
   style,
 }: {
   question: string;
   answer: string;
-  model: string;
+  /** Kept for the MVP; never shown on the landing. */
+  model?: string;
   appName: string;
+  answerLabel?: string;
   card?: { name: string; text: string; destination?: string | null };
   /** Play the load intro (CSS only, starts at first paint). */
   intro?: boolean;
@@ -41,9 +43,7 @@ export function HostChat({
         <div className="sp-chat-body">
           <p className="sp-chat-q">{question}</p>
           <div className="sp-chat-a">
-            <span className="sp-chat-who">
-              Organic answer <span className="px-num">{model}</span>
-            </span>
+            <span className="sp-chat-who">{answerLabel}</span>
             <p className="sp-chat-text">
               {words.map((w, i) => (
                 <span key={i}>
@@ -60,8 +60,7 @@ export function HostChat({
       </div>
       {marks ? (
         <div className="px-marks" style={{ marginTop: 16 }}>
-          <Provenance kind="actual" label="Actual output: question, answer, card" />
-          <Provenance kind="fictional" label="Fictional advertiser" />
+          <Provenance kind="actual" label="From our recorded run" />
         </div>
       ) : null}
     </div>

@@ -8,7 +8,7 @@ import { ChannelMeter } from "@/specimens/ChannelMeter";
 import { CV_CHANNEL } from "@/data/run";
 import useReduced from "@/motion/useReduced";
 
-export default function ScrubMeter() {
+export default function ScrubMeter({ title }: { title?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReduced();
   const [t, setT] = useState(1);
@@ -19,7 +19,7 @@ export default function ScrubMeter() {
   });
   return (
     <div ref={ref}>
-      <ChannelMeter ch={CV_CHANNEL} t={reduce ? 1 : t} />
+      <ChannelMeter ch={CV_CHANNEL} t={reduce ? 1 : t} title={title} />
     </div>
   );
 }

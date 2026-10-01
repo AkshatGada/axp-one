@@ -1,11 +1,11 @@
-// The recorded run as one sheet: four opportunities in story order with their outcome, the scope
-// chips and the manifest hash a judge can check.
+// The recorded run as one sheet: four questions in story order, the bids, the outcome and
+// whether a signed receipt exists. Identifiers and hashes live in the MVP, not here.
 import { Provenance } from "@axp/design-system/foundation";
 import { RUN, usdc } from "@/data/run";
 
 const REASON: Record<string, string> = {
   missing_constraint: "missing a required capability",
-  frequency_cap: "frequency cap",
+  frequency_cap: "had already been shown twice",
 };
 
 export function RunSheet() {
@@ -13,8 +13,7 @@ export function RunSheet() {
     <div className="sp-sheet">
       <div className="sp-sheet-head">
         <div className="sp-sheet-id">
-          <span className="px-caption">Recorded run</span>
-          <span className="px-num">{RUN.runId}</span>
+          <span className="px-caption">Recorded run, October 2026</span>
         </div>
         <div className="sp-sheet-chips">
           <span className="px-chip">Hosted Solana sandbox</span>
@@ -56,7 +55,7 @@ export function RunSheet() {
                       <b>
                         {t.winnerName} at <span className="px-num">{usdc(t.price!)}</span>
                       </b>
-                      {t.excluded.map((e) => `${e.name}: ${REASON[e.reason] ?? e.reason}`).join(". ")}
+                      {t.excluded.map((e) => `${e.name}: ${REASON[e.reason] ?? "ruled out"}`).join(". ")}
                     </>
                   ) : (
                     <>
@@ -64,16 +63,13 @@ export function RunSheet() {
                     </>
                   )}
                 </td>
-                <td>{r ? <span className="px-num">{r.receiptHash}</span> : <span className="o">None</span>}</td>
+                <td>{r ? "Signed" : <span className="o">None</span>}</td>
               </tr>
             );
           })}
         </tbody>
       </table>
       <div className="sp-sheet-foot">
-        <span>
-          Manifest <span className="px-num">{RUN.manifestHashShort}</span>
-        </span>
         <span>Story order. The no fill question ran first in the recorded run.</span>
       </div>
     </div>

@@ -34,3 +34,7 @@ const WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "E
 /** A count as a capitalised word ("Two"); falls back to digits above ten. */
 export const word = (n: number) => WORDS[n] ?? String(n);
 export const lower = (n: number) => word(n).toLowerCase();
+
+/** The cached answer from its helpful part on: the recorded second sentence, verbatim,
+ *  marked as an excerpt with a leading ellipsis (the opening sentence is a caveat). */
+export const HELPFUL_EXCERPT = `…${CACHED.organic.excerpt.split(/(?<=[.!?])\s+/)[1] ?? CACHED.organic.excerpt}`;

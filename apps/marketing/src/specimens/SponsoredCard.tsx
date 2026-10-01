@@ -11,7 +11,6 @@ export function SponsoredCard({ name, text, destination, square }: { name: strin
       <p className="sp-card-text">{text}</p>
       <div className="sp-card-foot">
         {host ? <span>{host}</span> : null}
-        <span>Fictional advertiser</span>
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import { PlateStack, STACK_H, STACK_W } from "@/scenes/PlateStack";
 import { BOARD_H, BOARD_W, Switchboard } from "@/scenes/Switchboard";
 import { STAGE } from "@/data/copy";
 import { CV } from "@/data/run";
+import { LIBRARY, fmt } from "@/data/library";
 import { SponsoredCard } from "@/specimens/SponsoredCard";
 import { seg } from "@/motion/motion";
 
@@ -123,7 +124,7 @@ export function MotionDemos() {
       <Demo name="Number mask rise" token={<>1100ms, <code>--ease-out</code>, never counts</>}>
         <span className="px-mask">
           <span className="px-stat-value mo-num" style={{ display: "block", fontSize: 96 }}>
-            11,730
+            {fmt(LIBRARY.advertisers)}
           </span>
         </span>
       </Demo>

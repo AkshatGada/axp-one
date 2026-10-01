@@ -28,7 +28,8 @@ import {
 import MotionRoot from "@/motion/MotionRoot";
 import { LIBRARY, fmt } from "@/data/library";
 import { CACHED, CV, CV_CHANNEL, REPEAT, RUN, receiptFor } from "@/data/run";
-import { CONTEXTHINT, FOOTER, HERO, MVP_URL, NEXT, PRINCIPLES, ROLES } from "@/data/copy";
+import { CONTEXTHINT, FOOTER, HERO, MVP_URL, NEXT, ROLES, RULE } from "@/data/copy";
+import { EvidencePayoff } from "@/specimens/EvidenceChain";
 import { HostChat } from "@/specimens/HostChat";
 import { ChannelMeter } from "@/specimens/ChannelMeter";
 import { EvidenceChain } from "@/specimens/EvidenceChain";
@@ -267,12 +268,15 @@ export default function BrandBook() {
 
         <Chapter id="evidence" name="Evidence chain" title={CONTEXTHINT.dive} lead="What ClearVault's agent saw for the cached question, and the one thing that changed.">
           <SplitGrid ratio="74">
-            <p className="px-small">{CONTEXTHINT.brandNote} {CONTEXTHINT.context.split(". ").slice(2, 4).join(". ")}.</p>
-            <EvidenceChain />
+            <p className="px-small">{CONTEXTHINT.context}</p>
+            <div className="px-stack-lg">
+              <EvidenceChain />
+              <EvidencePayoff />
+            </div>
           </SplitGrid>
         </Chapter>
 
-        <Chapter id="field" name="Niche field" title={`${fmt(LIBRARY.niches)} niches. One of them is ours.`} lead={CONTEXTHINT.fieldNote} tone="paper2">
+        <Chapter id="field" name="Niche field" title={`${fmt(LIBRARY.niches)} niches. One of them is the run's.`} lead={CONTEXTHINT.fieldNote} tone="paper2">
           <NicheField />
           <div style={{ marginTop: 32 }}>
             <SourceNote>{CONTEXTHINT.source}</SourceNote>
@@ -298,17 +302,24 @@ export default function BrandBook() {
           </div>
         </Chapter>
 
-        <Chapter id="blocks" name="Content blocks" title={ROLES.h2}>
+        <Chapter id="blocks" name="Content blocks" title={ROLES.h3}>
           <div className="px-stack-lg">
             <RoleRail roles={ROLES.roles} />
             <p className="px-small">{ROLES.legend}</p>
-            <PrincipleLedger rows={PRINCIPLES.rows} />
+            <PrincipleLedger rows={RULE.rules.map((r) => ({ rule: r.rule, run: r.run, kind: "actual" as const }))} />
             <StatGrid>
-              {CONTEXTHINT.stats.map((s, i) => (
+              {[
+                { value: fmt(LIBRARY.advertisers), label: "advertisers observed", sub: undefined },
+                { value: fmt(LIBRARY.creatives), label: "unique ads", sub: undefined },
+                { value: fmt(LIBRARY.placements), label: "times an ad was seen", sub: undefined },
+                { value: fmt(LIBRARY.niches), label: "niches", sub: `${fmt(LIBRARY.nichesWithAds)} with ads` },
+                { value: fmt(LIBRARY.subNiches), label: "sub niches", sub: `${fmt(LIBRARY.subNichesWithAds)} with ads` },
+              ].map((s, i) => (
                 <BigStat key={s.label} value={s.value} label={s.label} sub={s.sub} kind="observed" delay={i * 80} />
               ))}
             </StatGrid>
             <SourceNote>{CONTEXTHINT.source}</SourceNote>
+            <p className="px-small">{CONTEXTHINT.context}</p>
             <NowNext now={NEXT.now} next={NEXT.next} />
             <div className="px-tiles">
               {NEXT.tiles.map((t) => (
