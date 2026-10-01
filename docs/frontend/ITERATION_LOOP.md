@@ -25,7 +25,29 @@ as good as it can be. The orchestrator (main session) runs this loop; agents do 
 
 **Exit**: a track is done when all milestones in FRONTEND_PLAN.md are built, the truth audit has zero blockers,
 builds/tests/lint are green, no console errors, and both the design critic and the cold judge score every rubric
-line at least 8.5. Stop a track after v10 regardless and report the remaining gaps. Never push or deploy.
+line at least 8.5, and every hard benchmark below passes. **v7 is the last version (owner, 2026-10-01): never go
+beyond v7**; if a track is not done at v7, stop and report the remaining gaps. Never push or deploy.
+
+## Hard benchmarks (measured, not opinion; checked every version)
+| Benchmark | Landing | MVP |
+|---|---|---|
+| Typecheck + `next build` static export | pass | pass |
+| Node tests (projection, policy parity, verify checks, tamper fixture) | n/a | 100% pass |
+| Copy/claims lint (dashes, forbidden claims) | 0 hits | 0 hits |
+| Truth audit blockers | 0 | 0 |
+| Console errors / failed requests on every route | 0 | 0 |
+| Off-origin requests at runtime | 0 | 0 |
+| Horizontal overflow at 390 wide | none | none |
+| Lighthouse desktop performance / accessibility | >= 90 / 100 | >= 85 / >= 95 |
+| Lighthouse mobile performance | >= 80 | >= 75 |
+| LCP desktop / CLS | < 1.8 s / < 0.02 | < 2.0 s / < 0.02 |
+| First-load JS (gzip) | <= 170 KB | <= 200 KB per route |
+| Public data size | n/a | run.public.json <= 300 KB, no vectors |
+| /verify in Chromium | n/a | every check green incl. Ed25519 |
+| Fonts | PolySans loads, no fallback flash in screenshots | same |
+| Reduced motion | every scene has a complete still with the same words | step-through instant, nothing hidden |
+| Present mode autoplay | n/a | 10 beats, 3:45 to 4:15 total, no stuck beat |
+| Scroll pins (landing) | no stuck or skipped pin at 1280/1440/1920, back-scroll reverses cleanly | n/a |
 
 **Every version stays runnable for comparison**: tags `axp-landing-vN` / `axp-mvp-vN`; `git worktree add` an old tag
 under /Users/akshat/axp-compare-<tag> (never /tmp) only when a side-by-side is needed.
