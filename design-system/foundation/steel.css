@@ -113,6 +113,7 @@ img, svg, video { display: block; max-width: 100%; }
 a { color: inherit; }
 button { font: inherit; color: inherit; }
 em { font-style: normal; color: var(--brand-deep); }
+i { font-style: normal; }
 ::selection { background: var(--brand); color: var(--on-brand); }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 .steel-data, code, kbd, samp { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
