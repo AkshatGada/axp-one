@@ -206,7 +206,7 @@ so a completed hosted run can be projected with the same code as a committed one
 `AXP_E2E_LIVE=1 node scripts/hosted/e2e-live.mjs --keep-artifacts artifacts/hosted-live-e2e`:
 local dev server with the file store, headless Chrome on the dev harness
 (`/__live/#auto=1`) starting, driving and acknowledging the run from its DOM.
-Run `v3-devnet-live-h20261001-8897d4114d`, 74 s wall clock, 13 advance steps:
+Run `v3-devnet-live-h20261001-8897d4114d`, 74 s wall clock, 6 advance steps plus 3 delivery acknowledgements, no step retries:
 queued 0.7 s, opening (2 opens + 4 DeepSeek answers 5–30 s each) 33 s, auctions
 (15 Jev calls) 8 s, delivery (3 browser receipts) 2 s, closing 25 s, finalizing 3 s.
 
