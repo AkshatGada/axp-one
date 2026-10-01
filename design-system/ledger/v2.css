@@ -128,7 +128,8 @@
 .ld-top-actions { display: flex; gap: 8px; flex: none; }
 .ld-side { position: sticky; top: var(--ld-top-h); align-self: start; height: calc(100vh - var(--ld-top-h)); overflow-y: auto; padding: 12px 10px 20px; background: var(--ld-canvas); border-right: 1px solid var(--ld-border); display: flex; flex-direction: column; gap: 18px; }
 .ld-main { min-width: 0; padding: 20px 28px 64px; }
-.ld-main-inner { max-width: var(--ld-content-max); margin: 0 auto; display: grid; gap: var(--ld-gap); }
+.ld-main-inner { max-width: var(--ld-content-max); margin: 0 auto; display: grid; gap: var(--ld-gap); grid-template-columns: minmax(0, 1fr); }
+.ld-main-inner > *, .ld-panel-body > * { min-width: 0; }
 
 /* Run switcher */
 .ld-switch { position: relative; }
@@ -157,7 +158,7 @@
 
 /* Page bar and breadcrumbs */
 .ld-pagebar { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 4px 0 4px; }
-.ld-pagebar-l { display: grid; gap: 6px; min-width: 0; }
+.ld-pagebar-l { display: grid; gap: 6px; min-width: 0; flex: 1 1 320px; }
 .ld-crumbs { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ld-text-3); }
 .ld-crumbs a { color: var(--ld-text-2); text-decoration: none; }
 .ld-crumbs a:hover { color: var(--ld-text); }

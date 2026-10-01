@@ -244,8 +244,10 @@
 .pr-frame.ld .pr-brand { font-size: 24px; }
 .pr-frame.ld .pr-title { font-family: var(--font-body); font-weight: 500; font-size: 24px; letter-spacing: -.01em; }
 .pr-frame.ld .pr-beatn { color: var(--brand-deep); font-size: 15px; }
-.pr-frame.ld .pr-view { padding: 32px 56px 20px; }
+.pr-frame.ld .pr-view { display: grid; align-content: center; padding: 24px 48px 16px; zoom: 1.4; }
 .pr2-split { display: grid; gap: 40px; align-items: start; }
 .pr2-lede { display: grid; gap: 14px; align-content: center; min-height: 520px; }
 .pr2-big { margin: 0 0 14px; font-family: var(--font-display); font-weight: 400; font-size: 38px; line-height: 1.15; letter-spacing: -.025em; color: var(--ld-text); max-width: 18ch; }
 .pr-frame.ld .ld-chat-a { -webkit-line-clamp: 6; }
+.pr2-lede .ld-pv { justify-self: start; width: max-content; }
+.ld .ld-callout { align-content: start; }

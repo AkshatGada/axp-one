@@ -91,7 +91,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ n:
               )}
             </div>
           </div>
-          <span className="ld-caption">Owned reference publisher app, specimen. The slot fills when the replay reaches delivery.</span>
+          <span className="ld-caption">{noFill ? "Owned reference publisher app, specimen. No card for this turn; the answer still serves the user." : "Owned reference publisher app, specimen. In one-stage view the slot fills when the replay reaches delivery."}</span>
         </aside>
         <div className="ld-stack" style={{ gap: 16, minWidth: 0 }}>
           <StageView panels={stagePanels(o)} />

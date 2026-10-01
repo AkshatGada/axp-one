@@ -459,7 +459,7 @@ export function BalanceBar({ total, segments, legend }: { total: number; segment
 export type Lane = { key: string; label: string; marks: Array<{ t: number; title: string; tone?: "brand" | "ink" }> };
 /** Activity on the exchange clock as swimlanes, with an explicit axis break between busy windows. Exchange clock only. */
 export function ActivityChart({ lanes, segments, fmt, gapLabel }: { lanes: Lane[]; segments: Array<{ from: number; to: number }>; fmt: (t: number) => string; gapLabel?: string }) {
-  const W = 900, labelW = 140, gap = 56, laneH = 30, top = 6;
+  const W = 1100, labelW = 150, gap = 64, laneH = 32, top = 6;
   const H = top + lanes.length * laneH + 30;
   const plotW = W - labelW - 8;
   const segW = (plotW - gap * (segments.length - 1)) / segments.length;

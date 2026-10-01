@@ -9,8 +9,11 @@ Resume notes for the MVP builder. Spec: docs/frontend/MVP_SPEC.md + FRONTEND_PLA
 - [x] Present mode (10 beats, keys, autoplay, captions, SRT) tag axp-present-v1 (commit a8502d1)
 - [x] Settlement, Overview (v1 look), Verify pages (v1 look)
 - [x] Ledger v2 design system on /design/ (v1 archived at /design/v1/), docs/frontend/LEDGER_SYSTEM.md, tag axp-ledger-v2
-- [ ] WAITING for owner approval of Ledger v2, then: dashboard redesign of all routes on Ld.* (Overview dashboard, opportunity pipeline, campaign pages, settlement), tag axp-mvp-v2
-- [ ] Then: Advertisers/campaign pages, Evidence, Publisher, Timeline, Try (all on v2)
+- [x] Ledger v2 approved by the owner (as is)
+- [x] MVP v2 on Ledger v2, tag axp-mvp-v2: product shell (top bar + run switcher + sidebar), Overview exchange dashboard,
+      opportunity pipeline (one stage at a time via J/K/click/hash, "Show all stages" with ?all=1), Campaigns + campaign
+      detail, Publisher, Settlement (Solana payment channels, step charts, tx table, chain lane by slot), Evidence
+      (ContextHint), Verify, Try (synthetic), Present (rebuilt on v2, 4:00 total). Timeline dropped as a route (owner).
 
 ## Checkpoint A (data layer)
 - `scripts/project-run.mjs` -> `src/data/run.public.json` (committed), `public/run.public.json` (generated, gitignored; `predev`/`build` regenerate), `src/data/build-meta.json`.
@@ -40,3 +43,11 @@ Resume notes for the MVP builder. Spec: docs/frontend/MVP_SPEC.md + FRONTEND_PLA
   exported as namespace `Ld` from @axp/design-system/ledger. Derived view helpers: apps/product-ui/src/components/v2/derive.ts.
 - Other routes still use v1 classes; do not change them until the owner approves v2.
 - Tag axp-mvp-v2 is reserved for the dashboard redesign (an earlier local axp-mvp-v2 on the Present commit was renamed axp-present-v1).
+
+## MVP v2 notes
+- Shell: components/chrome.tsx (Ld.Shell/TopBar/SideNav + v1 InspectorProvider restyled under .ld).
+- Opportunity: components/v2/stages.tsx (server panels) + components/v2/OpportunityStages.tsx (controller, slot, hash).
+- Pillars (owner): Solana named on Settlement and channel cards; "Decided with Jev" on decisions; ContextHint (vermillion,
+  link to contexthint.com) on evidence; Overview line "Built on ContextHint data, Jev decisions and Solana settlement".
+- Plain language in main views; IDs/hashes in the Inspector. Old v1 components remain only for /design/v1/.
+- Dev cache can break after many file moves ("Cannot find module './707.js'"): stop the preview, rm -rf apps/product-ui/.next, restart.

@@ -165,6 +165,7 @@ export default function PresentPage() {
       </div>
     ),
     charge: (
+      <div className="ld-stack-lg" style={{ gap: 16 }}>
       <div className="ld-flow">
         <Ld.FlowTile step="1 · Award" title={`${nameOf(o1.award!.campaignId)} won`} state={<Ld.Money state="reserved" label="Reserved, not owed" />} value={usdc(o1.award!.priceBaseUnits)}>
           <LiveHashV2 value={o1.award!.creative} expected={o1.award!.creativeHash} label="Creative hash recomputed here" />
@@ -182,6 +183,18 @@ export default function PresentPage() {
             <Ld.Money state="authorized" label={`Voucher ${o1.voucher!.sequence}: ${usdc(o1.voucher!.cumulativeAmountBaseUnits)} authorized in total`} />
           </Ld.FlowTile>
         </F>
+      </div>
+      <F from={2}>
+        <div className="ld-cols-2">
+          {card(o1)}
+          <div className="ld-callout">
+            <span className="ld-card-title">What the app signed</span>
+            <span className="ld-secondary" style={{ color: "var(--ld-text)" }}>
+              It inserted this exact card, with its Sponsored label, for opportunity 1. The publisher key signed that statement; your browser just checked the signature.
+            </span>
+          </div>
+        </div>
+      </F>
       </div>
     ),
     cap: (

@@ -255,9 +255,9 @@ export function DecisionsPanel({ o }: { o: Opportunity }) {
                   <span className="ld-card-title">{c.businessName}</span>
                   <span className="ld-caption">Decided with Jev</span>
                 </span>
-                {diff ? <Ld.Tag tone={diff.changed ? "brand" : undefined}>{diff.changed ? "Level changed" : "Unchanged"}</Ld.Tag> : c.campaignId === "v3-leatherguard" ? <Ld.Tag tone="dashed">Excluded</Ld.Tag> : null}
+                {c.campaignId === "v3-leatherguard" ? <Ld.Tag tone="dashed">Excluded by rule</Ld.Tag> : diff ? <Ld.Tag tone={diff.changed ? "brand" : undefined}>{diff.changed ? "Level changed" : "Unchanged"}</Ld.Tag> : null}
               </div>
-              {h && c.campaignId !== "v3-leatherguard" ? <Ld.ScoreRuler min={1.5} max={3} ticks={[2, 3]} width={300} marks={marks} /> : null}
+              {h && c.campaignId !== "v3-leatherguard" ? <Ld.ScoreRuler min={1.5} max={3} ticks={[2, 3]} width={220} marks={marks} /> : null}
               {b ? <ArmRow d={b} o={o} /> : null}
               {h ? <ArmRow d={h} o={o} /> : null}
               {diff && c.campaignId !== "v3-leatherguard" ? <p className="ld-secondary">{diff.text}</p> : null}
