@@ -583,7 +583,7 @@ export function project({ runBytes, manifestBytes }) {
     },
     campaigns,
     publisher: {
-      displayName: 'Owned reference publisher app',
+      displayName: 'Demo AI app (the publisher)',
       publisherId: run.publishers[0].publisherId,
       legacyIdNote: 'ID inherited from an earlier prototype.',
       publisherKeyId: run.publishers[0].publisherKeyId,

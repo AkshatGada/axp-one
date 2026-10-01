@@ -38,7 +38,7 @@ export default function EvidencePage() {
         }
       />
       <div className="ld-kpis">
-        <Ld.Kpi label="Prompt and ad pairs" value={n(d.counts.associations)} context="In the screened wallet slice" />
+        <Ld.Kpi label="Prompt and ad pairs" value={n(d.counts.associations)} context="In the screened slice" />
         <Ld.Kpi label="Distinct prompts" value={n(d.counts.normalizedPrompts)} context="Each ranked once" />
         <Ld.Kpi label="Ad creatives" value={n(d.counts.creatives)} context="Observed, not enrolled" />
         <Ld.Kpi label="Inferred hints" value={n(d.counts.hints)} context="Hypotheses, not settings" />

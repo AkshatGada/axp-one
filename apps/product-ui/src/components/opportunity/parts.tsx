@@ -408,19 +408,18 @@ export function armDiffSentence(o: Opportunity, campaignId: string): { changed: 
   if (!b || !h) return null;
   const name = nameOf(campaignId);
   const intentChanged = b.commercialIntentLevel !== h.commercialIntentLevel;
-  const relSame = b.relevanceLevel === h.relevanceLevel;
+  const relChanged = b.relevanceLevel !== h.relevanceLevel;
   const verdictSame = b.decision === h.decision;
-  if (intentChanged) {
-    const line = b.scores.intent < 2.5 && h.scores.intent >= 2.5 ? "crossing the 2.5 rounding line" : "crossing a rounding line";
-    return {
-      changed: true,
-      text: `With history, ${name}'s intent score moved ${two(b.scores.intent)} to ${two(h.scores.intent)}, ${line}: level ${b.commercialIntentLevel} to ${h.commercialIntentLevel}. ${relSame && verdictSame ? "Relevance and bid/skip stayed the same." : "Other fields also changed."} One observation per arm; not a measured lift.`,
-    };
-  }
-  return {
-    changed: false,
-    text: `With history, ${name}'s intent score moved ${two(b.scores.intent)} to ${two(h.scores.intent)}; both round to level ${h.commercialIntentLevel}. Relevance level ${h.relevanceLevel} and the ${h.decision} stayed the same. One observation per arm; not a measured lift.`,
-  };
+  const crossing = (x: number, y: number) => (Math.min(x, y) < Math.round(Math.min(x, y)) + 0.5 && Math.max(x, y) >= Math.round(Math.min(x, y)) + 0.5 ? `crossing the ${Math.round(Math.min(x, y)) + 0.5} rounding line` : "crossing a rounding line");
+  const parts = [
+    intentChanged
+      ? `With history, ${name}'s intent score moved ${two(b.scores.intent)} to ${two(h.scores.intent)}, ${crossing(b.scores.intent, h.scores.intent)}: level ${b.commercialIntentLevel} to ${h.commercialIntentLevel}.`
+      : `With history, ${name}'s intent score moved ${two(b.scores.intent)} to ${two(h.scores.intent)}; both round to level ${h.commercialIntentLevel}.`,
+    relChanged ? `Relevance moved ${two(b.scores.relevance)} to ${two(h.scores.relevance)}: level ${b.relevanceLevel} to ${h.relevanceLevel}.` : `Relevance stayed at level ${h.relevanceLevel}.`,
+    verdictSame ? `The ${h.decision} stayed the same.` : `The answer changed from ${b.decision} to ${h.decision}.`,
+    "One observation per arm; not a measured lift.",
+  ];
+  return { changed: intentChanged || relChanged || !verdictSame, text: parts.join(" ") };
 }
 
 export function IntentRuler({ o, campaignId }: { o: Opportunity; campaignId: string }) {

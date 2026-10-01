@@ -7,7 +7,7 @@ import { polySans, polySansMono, polySansWide } from "./fonts";
 
 export const metadata: Metadata = {
   title: { default: "axp.one MVP: one recorded run", template: "%s, axp.one MVP" },
-  description: "Explore one recorded run of an ad exchange inside an AI app: agent decisions, a sealed auction, a disclosed Sponsored card, a signed receipt and test USDC settled on a hosted Solana sandbox.",
+  description: "Explore one run of an ad exchange inside an AI app: agent decisions, sealed auctions, disclosed Sponsored cards, signed receipts and test USDC settled through Solana payment channels.",
   robots: { index: false, follow: false },
 };
 

@@ -6,8 +6,8 @@
   },
   "output": {
     "path": "public/run.public.json",
-    "bytes": 176535,
-    "sha256": "3fa4dac691a19b8798c4353e643eb5ef722de629d4981a9c848070cc02e2a0a6"
+    "bytes": 176533,
+    "sha256": "397ef7475285fa762b0280ab00173f2966d51dc686a6d28cb217f216b459c790"
   },
   "counts": {
     "opportunities": 4,
@@ -361,7 +361,7 @@
     {
       "name": "size budget <= 300KB",
       "ok": true,
-      "detail": "176535 bytes"
+      "detail": "176533 bytes"
     },
     {
       "name": "verify checks pass (48)",

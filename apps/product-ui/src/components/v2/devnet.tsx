@@ -6,6 +6,7 @@ import { devnet } from "@/data/devnet";
 import type { DevnetChannel, DevnetTxRef } from "@/data/devnet-types";
 import { GLOSSARY } from "@/data/glossary";
 import { nameOf, usdc } from "@/data/select";
+import { rentWords } from "@/data/story";
 
 export const hasDevnet = !!devnet;
 const short = (s: string, h = 6, t = 4) => `${s.slice(0, h)}…${s.slice(-t)}`;
@@ -22,7 +23,7 @@ export function Ext({ href, children }: { href: string; children: ReactNode }) {
 }
 
 function TxLine({ label, t }: { label: string; t: DevnetTxRef }) {
-  const rent = [t.newRentLamports !== "0" ? `+${lam(t.newRentLamports)}` : "", t.reclaimedRentLamports !== "0" ? `−${lam(t.reclaimedRentLamports)}` : ""].filter(Boolean).join(" / ");
+  const rent = rentWords(t);
   return (
     <tr>
       <td>
@@ -35,7 +36,7 @@ function TxLine({ label, t }: { label: string; t: DevnetTxRef }) {
         <span className="ld-mono">{short(t.signature, 8, 6)}</span>
       </td>
       <td data-num>{lam(t.feeLamports)}</td>
-      <td data-num>{rent || <span className="ld-faint">0</span>}</td>
+      <td data-num>{rent}</td>
       <td>
         <Ext href={t.explorerUrl}>Explorer</Ext>
       </td>
@@ -79,6 +80,7 @@ function ChannelCard({ ch }: { ch: DevnetChannel }) {
                 <Ld.Tag tone={v.settledOnChain ? "success" : "outline"} dot={v.settledOnChain}>
                   {v.settledOnChain ? "Settled on-chain" : "Superseded, off-chain"}
                 </Ld.Tag>
+                {ch.close ? <Ext href={ch.close.explorerUrl}>{v.settledOnChain ? "Settling transaction" : `Settled within voucher ${ch.vouchers.length}`}</Ext> : null}
               </li>
             ))}
           </ol>
@@ -111,6 +113,9 @@ export function DevnetSettlementSection() {
   const d = devnet;
   const t = d.totals;
   const finalized = d.transactions.filter((x) => x.finality === "finalized").length;
+  const nReceipts = d.channels.reduce((n, c) => n + c.vouchers.length, 0);
+  const opens = d.transactions.filter((x) => x.role === "open").length;
+  const closes = d.transactions.filter((x) => x.role === "close").length;
   return (
     <section id="devnet" className="dv-section" aria-labelledby="devnet-title">
       <div className="dv-head">
@@ -121,19 +126,15 @@ export function DevnetSettlementSection() {
             </h2>
             <Ld.Tag tone="brand">Solana Devnet</Ld.Tag>
           </span>
-          <p className="ld-secondary">The 3 accepted, publisher-signed receipts from this run; no new auctions or model calls; Devnet test USDC, no real value.</p>
+          <p className="ld-secondary">The {nReceipts} accepted, publisher-signed receipts from this run; no new auctions or model calls; Devnet test USDC, no real value.</p>
         </div>
         <span className="ld-secondary">
           Program <Ext href={d.network.programExplorerUrl}>{short(d.network.program)}</Ext>
         </span>
       </div>
-      <div className="ld-kpis">
-        <Ld.Kpi label="Deposited" value={usdc(t.depositBaseUnits)} unit="USDC" context="Devnet test USDC, 2 channels" />
-        <Ld.Kpi label="Paid to the publisher" value={usdc(t.publisherPayoutBaseUnits)} unit="USDC" context="Equals the 3 accepted charges" />
-        <Ld.Kpi label="Refunded" value={usdc(t.payerRefundBaseUnits)} unit="USDC" context="Returned to the payer at close" />
-        <Ld.Kpi label="Devnet transactions" value={d.transactions.length} context={`1 funding, 2 opens, 2 closes; ${finalized} finalized`} />
-        <Ld.Kpi label="Settlement fees and new rent" value={lam(Number(t.settlementNetworkFeeLamports) + Number(t.settlementNewRentLamports))} unit="lamports" context="Devnet test SOL, opens and closes only" />
-      </div>
+      <p className="dv-summary">
+        Same amounts as above: <b>{usdc(t.depositBaseUnits)}</b> USDC deposited, <b>{usdc(t.publisherPayoutBaseUnits)}</b> paid to the publisher, <b>{usdc(t.payerRefundBaseUnits)}</b> refunded, in Devnet test USDC. <b>{d.transactions.length}</b> Devnet transactions (1 funding, {opens} opens, {closes} closes), {finalized === d.transactions.length ? "all finalized" : `${finalized} finalized`}.
+      </p>
       {d.channels.map((ch) => (
         <ChannelCard key={ch.channelId} ch={ch} />
       ))}
@@ -148,7 +149,7 @@ export function DevnetSettlementSection() {
             </span>
           </div>
         </Ld.Panel>
-        <Ld.Panel title="Devnet fees and rent in lamports (test SOL)" flush foot={<span>Kept apart from USDC, and apart from the sandbox numbers above.</span>}>
+        <Ld.Panel title="Devnet fees and rent in lamports (test SOL)" flush foot={<span>Kept apart from USDC, and apart from the sandbox numbers above. Rent differs by network, so these are not the sandbox figures.</span>}>
           <Ld.Table
             columns={[
               { key: "k", head: "", cell: (r: { k: string; v: string }) => r.k },
@@ -165,7 +166,7 @@ export function DevnetSettlementSection() {
         </Ld.Panel>
       </div>
       <Ld.Callout title="How this differs from the recorded run's own settlement">
-        A public Solana Devnet instead of the hosted sandbox, Circle&apos;s Devnet test USDC instead of the sandbox token, fresh disposable keys and new channel addresses. The charges, the cumulative vouchers ({d.channels.map((c) => c.vouchers.map((v) => usdc(v.cumulativeBaseUnits)).join(" then ")).join("; ")}), the payouts and the refunds are the same. One payer still represents both fictional advertisers. Payer <Ext href={d.identities.payerExplorerUrl}>{short(d.identities.payer)}</Ext>, publisher <Ext href={d.identities.payeeExplorerUrl}>{short(d.identities.payee)}</Ext>.
+        A public Solana Devnet instead of the hosted sandbox, Circle&apos;s Devnet test USDC instead of the sandbox token, fresh disposable keys and new channel addresses. The charges, the cumulative vouchers ({d.channels.map((c) => c.vouchers.map((v) => usdc(v.cumulativeBaseUnits)).join(" then ")).join("; ")}), the payouts and the refunds are the same. {new Set(d.channels.map(() => d.identities.payer)).size === 1 && d.channels.length > 1 ? "One payer still represents every funded advertiser." : ""} Payer <Ext href={d.identities.payerExplorerUrl}>{short(d.identities.payer)}</Ext>, publisher <Ext href={d.identities.payeeExplorerUrl}>{short(d.identities.payee)}</Ext>.
       </Ld.Callout>
     </section>
   );
@@ -198,6 +199,18 @@ export function DevnetVerifyLinks() {
         ))}
         <span className="ld-caption">Finality as observed {d.verification.checkedAt.slice(0, 10)}; public Devnet history may be pruned.</span>
       </div>
+      <div className="ld-stack" style={{ gap: 6, padding: "12px 16px", borderTop: "1px solid var(--ld-border)" }}>
+        <span className="ld-label">Each receipt and the Devnet transaction that settled it</span>
+        {d.channels.flatMap((c) =>
+          c.vouchers.map((v) => (
+            <span key={`${c.channelId}-${v.sequence}`} className="ld-secondary">
+              Opportunity {v.opportunityN} receipt <span className="ld-mono">{short(v.receiptHash, 8, 6)}</span>, {nameOf(c.campaignId)} voucher {v.sequence}
+              {v.settledOnChain ? ": settled by " : `: superseded by voucher ${c.vouchers.length}, settled by `}
+              {c.close ? <Ext href={c.close.explorerUrl}>{`the close of ${nameOf(c.campaignId)}'s channel`}</Ext> : "no close"}
+            </span>
+          )),
+        )}
+      </div>
     </Ld.Panel>
   );
 }
@@ -207,7 +220,7 @@ export function DevnetLine() {
   if (!devnet) return null;
   return (
     <span className="ld-secondary dv-line">
-      The same 3 receipts were also settled on <Term title={GLOSSARY.devnet.term} def={GLOSSARY.devnet.def}>Solana Devnet</Term>:{" "}
+      The same {devnet.channels.reduce((n, c) => n + c.vouchers.length, 0)} receipts were also settled on <Term title={GLOSSARY.devnet.term} def={GLOSSARY.devnet.def}>Solana Devnet</Term>:{" "}
       {devnet.channels.map((c, i) => (
         <span key={c.channelId}>
           {i ? ", " : ""}

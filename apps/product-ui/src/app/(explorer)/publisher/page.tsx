@@ -5,6 +5,7 @@ import { inspect } from "@/components/opportunity/parts";
 import { shortLabel } from "@/components/v2/derive";
 import { RowLink } from "@/components/v2/RowLink";
 import { LiveSignatureV2 } from "@/components/v2/live";
+import { NET } from "@/data/story";
 
 export const metadata: Metadata = { title: "Publisher" };
 
@@ -15,10 +16,10 @@ export default function PublisherPage() {
     <>
       <Ld.PageBar
         title="What the publisher saw and earned"
-        meta={<Ld.Tag>Owned reference app</Ld.Tag>}
+        meta={<Ld.Tag>Demo AI app</Ld.Tag>}
         sub="The organic answer never receives advertiser material. A no-fill turn still answers the user in full. The app is paid only for deliveries it signed."
         actions={
-          <InspectButton payload={{ key: "publisher", title: "Publisher", sourcePath: "publishers[0]", json: p, note: "The publisher ID owned-travel-app is inherited from an earlier prototype." }}>
+          <InspectButton payload={{ key: "publisher", title: "Publisher", sourcePath: "publishers[0]", json: p, note: `The publisher ID ${p.publisherId} is inherited from an earlier prototype.` }}>
             Inspect publisher
           </InspectButton>
         }
@@ -27,7 +28,7 @@ export default function PublisherPage() {
         <Ld.Kpi label="Opportunities offered" value={run.opportunities.length} context="One Sponsored slot per answer" />
         <Ld.Kpi label="Filled" value={`${filled.length} of ${run.opportunities.length}`} context="1 no fill by rule" />
         <Ld.Kpi label="Signed receipts" value={filled.length} context="Each verified in your browser" />
-        <Ld.Kpi label="Earned" value={usdc(run.totals.paidBaseUnits)} unit="USDC" context="Test USDC, paid at channel close on the hosted Solana sandbox" />
+        <Ld.Kpi label="Earned" value={usdc(run.totals.paidBaseUnits)} unit="USDC" context={`Test USDC, paid at channel close on ${NET.the}`} />
       </div>
       <div className="ov2-grid">
         <Ld.Panel title="Fill by opportunity" flush>
@@ -43,7 +44,7 @@ export default function PublisherPage() {
             rows={run.opportunities}
           />
         </Ld.Panel>
-        <Ld.Panel title="Payout by channel" sub="Payment channels on the hosted Solana sandbox, test USDC">
+        <Ld.Panel title="Payout by channel" sub={`Payment channels on ${NET.the}, test USDC`}>
           <div className="ld-stack">
             {run.channels.map((ch) => (
               <div key={ch.channelId} className="ld-between">

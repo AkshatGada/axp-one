@@ -7,7 +7,6 @@ import { formatBaseUnits } from "@axp/design-system/foundation";
 export const run = data as unknown as ProductRun;
 export const buildMeta = meta;
 
-export const CAMPAIGN_ORDER = ["v3-clearvault", "v3-keyforge", "v3-leatherguard"] as const;
 
 export function campaign(id: string): CampaignP {
   const c = run.campaigns.find((x) => x.campaignId === id);
@@ -47,17 +46,6 @@ export function outcomeLine(o: Opportunity): string {
   const w = nameOf(o.award!.campaignId);
   const cap = o.auction.notAdmitted.length ? ", cap" : "";
   return `${w} ${usdc(o.award!.priceBaseUnits)}${cap}`;
-}
-
-/** Why the winner won, in plain words, for the overview table. */
-export function whyLine(o: Opportunity): string {
-  if (o.status === "no_fill") {
-    const missing = Array.from(new Set(o.eligibility.excluded.flatMap((x) => x.missing)));
-    return `Every campaign was missing ${missing.includes("mobile_software_wallet") ? "mobile_software_wallet" : missing.join(", ")}`;
-  }
-  if (o.auction.notAdmitted.length) return "ClearVault hit its frequency cap; KeyForge was the only bidder";
-  if (o.auction.tieBreakApplied) return "Equal bids; tie goes to the lower campaign ID";
-  return "Highest bid";
 }
 
 export const ARM_LABEL = { text_only: "Baseline", history: "With history" } as const;

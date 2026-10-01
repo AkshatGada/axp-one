@@ -5,7 +5,7 @@ import { ClampText, InspectButton, Ld } from "@axp/design-system/ledger";
 import { nameOf, opportunity, run } from "@/data/select";
 import { inspect } from "@/components/opportunity/parts";
 import { outcomeTag, shortLabel } from "@/components/v2/derive";
-import { STAGES, pipeStages, stagePanels } from "@/components/v2/stages";
+import { pipeStages, stageIds, stagePanels } from "@/components/v2/stages";
 import { OPP_BOOT, OpportunityProvider, PipelineBar, SlotV2, StageNav, StageView } from "@/components/v2/OpportunityStages";
 
 const L = Link as unknown as Ld.LinkC;
@@ -29,7 +29,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ n:
   const prev = num > 1 ? num - 1 : null;
   const next = num < run.opportunities.length ? num + 1 : null;
   return (
-    <OpportunityProvider ids={noFill ? ["moment", "eligibility", "nofill"] : STAGES.map((s) => s.id)} deliveredFrom={6}>
+    <OpportunityProvider ids={stageIds(o)} deliveredFrom={6}>
       <script dangerouslySetInnerHTML={{ __html: OPP_BOOT }} />
       <Ld.PageBar
         crumbs={<Ld.Breadcrumbs Link={L} items={[{ label: "Opportunities", href: "/opportunity/1/" }, { label: `${o.n} of ${run.opportunities.length}` }]} />}
@@ -92,13 +92,13 @@ export default async function OpportunityPage({ params }: { params: Promise<{ n:
               )}
             </div>
           </div>
-          <span className="ld-caption">{noFill ? "Owned reference publisher app, specimen. No card for this turn; the answer still serves the user." : "Owned reference publisher app, specimen. In one-stage view the slot fills when the replay reaches delivery."}</span>
+          <span className="ld-caption">{noFill ? "Demo AI app (the publisher). No card for this turn; the answer still serves the user." : "Demo AI app (the publisher). In one-stage view the slot fills when the replay reaches delivery."}</span>
         </aside>
         <div className="ld-stack" style={{ gap: 16, minWidth: 0 }}>
           <StageView panels={stagePanels(o)} />
           <div className="ld-between">
             <span className="ld-caption">Recorded replay. Timings are as recorded; nothing re-executes.</span>
-            <StageNav total={noFill ? 3 : STAGES.length} next={next ? { href: `/opportunity/${next}/`, label: `Next: Opportunity ${next} →` } : { href: "/settlement/", label: "Next: Settlement →" }} />
+            <StageNav total={stageIds(o).length} next={next ? { href: `/opportunity/${next}/`, label: `Next: Opportunity ${next} →` } : { href: "/settlement/", label: "Next: Settlement →" }} />
           </div>
         </div>
       </div>

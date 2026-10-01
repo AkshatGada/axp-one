@@ -31,7 +31,7 @@ function parity() {
 
 export default function TryPage() {
   const opps: TryOpp[] = run.opportunities.map((o) => {
-    const ref = decisionFor(o, "v3-clearvault", "history");
+    const ref = (o.award ? decisionFor(o, o.award.campaignId, "history") : undefined) ?? o.decisions.find((d) => d.arm === "history" && d.decision === "bid") ?? o.decisions.find((d) => d.arm === "history");
     return {
       n: o.n,
       label: shortLabel(o),

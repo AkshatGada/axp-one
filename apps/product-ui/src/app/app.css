@@ -353,3 +353,26 @@ html[data-op-stage="charge"] [data-slot="await"] { display: none !important; }
 .ov2-kpis .ld-kpi-vrow { flex-wrap: nowrap; white-space: nowrap; }
 .vf2-kpis .ld-kpi-num { white-space: nowrap; }
 @media (max-width: 700px) { .vf2-kpis .ld-kpi-num { font-size: 22px; } }
+
+/* Overview: one plain line per proper noun */
+.ov2-defs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 24px; margin: -4px 0 0; }
+.ov2-defs > div { display: grid; gap: 2px; }
+.ov2-defs dt { font-size: 13px; font-weight: 500; color: var(--ld-text); }
+.ov2-defs dd { margin: 0; font-size: 12px; line-height: 1.4; color: var(--ld-text-2); }
+@media (max-width: 900px) { .ov2-defs { grid-template-columns: minmax(0, 1fr); } }
+.ov2-grid { align-items: start; }
+
+/* Settlement: on-chain detail behind a disclosure */
+.st2-more { border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); }
+.st2-more > summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 14px 16px; cursor: pointer; list-style: none; }
+.st2-more > summary::-webkit-details-marker { display: none; }
+.st2-more > summary::after { content: "Show"; margin-left: auto; font-size: 12px; font-weight: 500; color: var(--ld-link); }
+.st2-more[open] > summary::after { content: "Hide"; }
+.st2-more[open] > summary { border-bottom: 1px solid var(--ld-border); }
+.st2-more > div { padding: 16px; }
+.dv-summary { margin: 0; padding: 12px 16px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); font-size: 14px; line-height: 1.5; color: var(--ld-text-2); }
+.dv-summary b { font-weight: 500; color: var(--ld-text); }
+.vf2-tamper-alert { padding: 10px 16px; border-bottom: 1px solid #efc2bd; background: var(--ld-danger-wash); font-size: 13px; line-height: 1.45; color: var(--ld-text); }
+.vf2-tamper-alert b { font-weight: 500; color: var(--ld-danger); }
+#devnet-checks > .ld-panel:first-child { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+#devnet-checks > .ld-panel + .ld-panel { margin-top: -1px; border-top-left-radius: 0; border-top-right-radius: 0; }

@@ -70,15 +70,25 @@ export function activityLanes() {
     { key: "charges", label: "Paid deliveries", marks: pick(["charge_accepted"]).map((e) => ({ t: e.at, title: title(e), tone: "brand" as const })) },
   ];
 }
+/** Busy windows on the exchange clock. A gap of 10 minutes or more between events is drawn as an axis break. */
 export function activitySegments() {
-  const ts = run.events.filter((e) => e.type !== "channel_configuration_registered" && e.type !== "campaign_created" && e.type !== "v3_run_frozen").map((e) => e.at);
-  const early = ts.filter((t) => t < run.opportunities[0].createdAt - 60_000);
-  const late = ts.filter((t) => t >= run.opportunities[0].createdAt - 60_000);
+  const ts = run.events.filter((e) => e.type !== "channel_configuration_registered" && e.type !== "campaign_created" && e.type !== "v3_run_frozen").map((e) => e.at).sort((x, y) => x - y);
   const pad = 20_000;
-  return [
-    { from: Math.min(...early) - pad, to: Math.max(...early) + pad },
-    { from: Math.min(...late) - pad, to: Math.max(...late) + pad },
-  ];
+  const out: Array<{ from: number; to: number }> = [];
+  let start = ts[0];
+  for (let i = 1; i < ts.length; i++)
+    if (ts[i] - ts[i - 1] >= 10 * 60_000) {
+      out.push({ from: start - pad, to: ts[i - 1] + pad });
+      start = ts[i];
+    }
+  out.push({ from: start - pad, to: ts[ts.length - 1] + pad });
+  return out.slice(0, 3);
+}
+/** The idle gap label ("70 min"), or undefined when the run had no break. */
+export function activityGapLabel(): string | undefined {
+  const seg = activitySegments();
+  if (seg.length < 2) return undefined;
+  return `${Math.round((seg[1].from - seg[0].to) / 60_000)} min`;
 }
 export const hhmm = (ms: number) => new Date(ms).toISOString().slice(11, 16) + " UTC";
 export const hhmmss = (ms: number) => new Date(ms).toISOString().slice(11, 19);

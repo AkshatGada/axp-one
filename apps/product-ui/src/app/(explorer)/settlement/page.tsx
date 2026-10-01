@@ -5,9 +5,10 @@ import { GLOSSARY } from "@/data/glossary";
 import { campaign, nameOf, run, usdc } from "@/data/select";
 import { txPayload } from "@/components/money";
 import type { Channel, ChainTx } from "@/data/types";
-import { DevnetSettlementSection, hasDevnet } from "@/components/v2/devnet";
+import { DevnetSettlementSection, Ext, hasDevnet } from "@/components/v2/devnet";
+import { NET, list, onDevnet, onePayer, rentWords } from "@/data/story";
 
-export const metadata: Metadata = { title: hasDevnet ? "Settlement: hosted Solana sandbox and Solana Devnet" : "Hosted Solana sandbox settlement" };
+export const metadata: Metadata = { title: onDevnet ? "Settlement, live on Solana Devnet" : hasDevnet ? "Settlement: hosted Solana sandbox and Solana Devnet" : "Hosted Solana sandbox settlement" };
 const L = Link as unknown as Ld.LinkC;
 const lam = (v: string | number) => Number(v).toLocaleString("en-US");
 
@@ -17,7 +18,15 @@ function TxRow({ ch, t }: { ch: Channel; t: ChainTx }) {
       <td>
         <span className="ld-stack" style={{ gap: 2 }}>
           <span className="ld-strong">{t.kind === "open" ? "Open channel" : "Close channel"}</span>
-          <span className="ld-caption">Solana sandbox transaction, slot {t.slot.toLocaleString("en-US")}</span>
+          <span className="ld-caption">
+            {NET.tx}, slot {t.slot.toLocaleString("en-US")}
+            {t.explorerUrl ? (
+              <>
+                {" "}
+                <Ext href={t.explorerUrl}>Explorer</Ext>
+              </>
+            ) : null}
+          </span>
         </span>
       </td>
       <td>
@@ -28,7 +37,7 @@ function TxRow({ ch, t }: { ch: Channel; t: ChainTx }) {
       <td data-num>{t.tokenDeltas.payer.startsWith("-") ? `−${usdc(t.tokenDeltas.payer.slice(1))}` : `+${usdc(t.tokenDeltas.payer)}`}</td>
       <td data-num>{t.tokenDeltas.publisher === "0" ? <span className="ld-faint">0</span> : `+${usdc(t.tokenDeltas.publisher)}`}</td>
       <td data-num>{lam(t.networkFeeLamports)}</td>
-      <td data-num>{t.kind === "open" ? `+${lam(t.newRentLamports)}` : `−${lam(t.reclaimedRentLamports)}`}</td>
+      <td data-num>{rentWords(t)}</td>
       <td>
         <InspectButton payload={txPayload(ch, t)} variant="text">
           Inspect
@@ -40,15 +49,18 @@ function TxRow({ ch, t }: { ch: Channel; t: ChainTx }) {
 
 export default function SettlementPage() {
   const capOk = BigInt(run.fees.grossFeeAndRentLamports) <= BigInt(run.fees.capLamports);
-  const perOpenRent = run.channels[0].open.newRentLamports;
-  const perReclaim = run.channels[0].close.reclaimedRentLamports;
+  const perOpenRent = run.channels[0]?.open.newRentLamports ?? "0";
+  const perReclaim = run.channels[0]?.close.reclaimedRentLamports ?? "0";
+  const deposits = Array.from(new Set(run.channels.map((c) => c.depositBaseUnits)));
+  const opens = run.chainTxs.filter((t) => t.kind === "open").length;
+  const closes = run.chainTxs.filter((t) => t.kind === "close").length;
   const reclaimPct = Math.round((Number(run.fees.reclaimedRentLamports) / Number(run.fees.newRentLamports)) * 100);
   return (
     <>
       <Ld.PageBar
-        title={hasDevnet ? "Payment channels on Solana" : "Payment channels on a hosted Solana sandbox"}
+        title={onDevnet ? "Payment channels, live on Solana Devnet" : hasDevnet ? "Payment channels on Solana" : "Payment channels on a hosted Solana sandbox"}
         meta={<Ld.Tag tone="success" dot>All finalized</Ld.Tag>}
-        sub={<>Each funded advertiser locked a 0.020 USDC (test) deposit in its own <Term title={GLOSSARY.channel.term} def={GLOSSARY.channel.def}>payment channel</Term> on a <Term title={GLOSSARY.solanaSandbox.term} def={GLOSSARY.solanaSandbox.def}>hosted Solana sandbox</Term>. Every accepted delivery advanced an off-chain <Term title={GLOSSARY.voucher.term} def={GLOSSARY.voucher.def}>voucher</Term>. One close per channel paid the publisher the last authorized total and refunded the rest. No transfer per ad.{hasDevnet ? " The same 3 receipts were then settled again on Solana Devnet, shown separately below." : ""}</>}
+        sub={<>Each funded advertiser locked {deposits.length === 1 ? `a ${usdc(deposits[0])} USDC (test)` : "a test USDC"} deposit in its own <Term title={GLOSSARY.channel.term} def={GLOSSARY.channel.def}>payment channel</Term> on {onDevnet ? <Term title={GLOSSARY.devnet.term} def={GLOSSARY.devnet.def}>Solana Devnet</Term> : <>a <Term title={GLOSSARY.solanaSandbox.term} def={GLOSSARY.solanaSandbox.def}>hosted Solana sandbox</Term></>}. Every accepted delivery advanced an off-chain <Term title={GLOSSARY.voucher.term} def={GLOSSARY.voucher.def}>voucher</Term>. One close per channel paid the publisher the last authorized total and refunded the rest. No transfer per ad.{hasDevnet ? ` The same ${run.counts.receipts} receipts were then settled again on Solana Devnet, shown separately below.` : ""}{onDevnet ? " Every transaction opens in the Solana explorer." : ""}</>}
         actions={hasDevnet ? <a className="ld-btn ld-btn--primary" href="#devnet">Solana Devnet re-settlement ↓</a> : undefined}
       />
       {hasDevnet ? (
@@ -58,11 +70,11 @@ export default function SettlementPage() {
         </div>
       ) : null}
       <div className="ld-kpis">
-        <Ld.Kpi label="Deposited" value={usdc(run.totals.depositsBaseUnits)} unit="USDC" context="Test USDC across 2 channels" />
-        <Ld.Kpi label="Paid to the publisher" value={usdc(run.totals.paidBaseUnits)} unit="USDC" context="Equals the 3 accepted charges" />
+        <Ld.Kpi label="Deposited" value={usdc(run.totals.depositsBaseUnits)} unit="USDC" context={`Test USDC across ${run.channels.length} channel${run.channels.length === 1 ? "" : "s"}`} />
+        <Ld.Kpi label="Paid to the publisher" value={usdc(run.totals.paidBaseUnits)} unit="USDC" context={`Equals the ${run.counts.receipts} accepted charge${run.counts.receipts === 1 ? "" : "s"}`} />
         <Ld.Kpi label="Refunded" value={usdc(run.totals.refundedBaseUnits)} unit="USDC" context="Returned to the payer at close" />
-        <Ld.Kpi label="Sandbox transactions" value={run.chainTxs.length} context="2 opens, 2 closes, all finalized" />
-        <Ld.Kpi label="Fees and new rent" value={lam(run.fees.grossFeeAndRentLamports)} unit="lamports" context={`Test SOL, cap ${lam(run.fees.capLamports)}`} chip={<Ld.Tag tone={capOk ? "success" : "danger"} dot>{capOk ? "Within cap" : "Over cap"}</Ld.Tag>} />
+        <Ld.Kpi label={`${NET.short} transactions`} value={run.chainTxs.length} context={`${opens} open${opens === 1 ? "" : "s"}, ${closes} close${closes === 1 ? "" : "s"}, ${run.chainTxs.every((t) => t.finality === "finalized") ? "all finalized" : "see each"}`} />
+        <Ld.Kpi label="Fees and new rent, lamports" value={lam(run.fees.grossFeeAndRentLamports)} context={`Test SOL, cap ${lam(run.fees.capLamports)}`} chip={<Ld.Tag tone={capOk ? "success" : "danger"} dot>{capOk ? "Within cap" : "Over cap"}</Ld.Tag>} />
       </div>
 
       {run.channels.map((ch) => {
@@ -72,10 +84,10 @@ export default function SettlementPage() {
           <section key={ch.channelId} id={c.slug} className="st2-channel">
             <Ld.Panel
               title={`${c.businessName}`}
-              sub="Payment channel on the hosted Solana sandbox, test USDC"
+              sub={`Payment channel on ${NET.the}, test USDC`}
               actions={
                 <>
-                  <Ld.Pv kind="fictional" label="Fictional advertiser" />
+                  {ch.explorerUrl ? <Ext href={ch.explorerUrl}>Channel on the explorer</Ext> : <Ld.Pv kind="fictional" label="Fictional advertiser" />}
                   <Ld.Button variant="ghost" size="sm" href={`/advertisers/${c.slug}/`} Link={L}>
                     Campaign
                   </Ld.Button>
@@ -83,7 +95,10 @@ export default function SettlementPage() {
               }
               foot={
                 <>
-                  <span>Phase {ch.phase}, no reconciliation needed. Same disposable test payer for both channels.</span>
+                  <span>
+                    Phase {ch.phase}
+                    {ch.reconciliationRequired ? ", reconciliation required" : ", no reconciliation needed"}.{onePayer ? " Same disposable test payer for every channel." : ""}
+                  </span>
                   <span className="ld-row" style={{ gap: 6 }}>
                     <span>Channel</span>
                     <CopyHash value={ch.protocolChannelId} head={6} tail={4} label="channel address" />
@@ -121,13 +136,13 @@ export default function SettlementPage() {
                         <b>Close</b> {usdc(ch.settledBaseUnits)} paid
                       </li>
                     </ol>
-                    <span className="ld-caption">Open and close are sandbox transactions; vouchers are off-chain totals so far. {usdc(ch.refundBaseUnits)} USDC went back to the payer at close.</span>
+                    <span className="ld-caption">Open and close are {onDevnet ? "Devnet" : "sandbox"} transactions; vouchers are off-chain totals so far. {usdc(ch.refundBaseUnits)} USDC went back to the payer at close.</span>
                   </div>
                 </div>
                 <div className="ld-stack" style={{ gap: 6 }}>
                   <span className="ld-label">Cumulative authorization in USDC, against the {usdc(ch.depositBaseUnits)} deposit (campaign cap {usdc(cap)} as a line)</span>
                   <Ld.StepChart max={Number(ch.depositBaseUnits)} cap={cap} format={(x) => usdc(x)} points={ch.vouchers.map((v) => ({ key: String(v.sequence), label: `Voucher ${v.sequence}, opp ${v.opportunityN}`, value: Number(v.cumulativeAmountBaseUnits) }))} />
-                  {ch.vouchers.length > 1 ? <span className="ld-caption">Voucher 2 replaces voucher 1: {usdc(ch.vouchers[1].cumulativeAmountBaseUnits)} in total, not {usdc(ch.vouchers[0].cumulativeAmountBaseUnits)} plus {usdc(ch.vouchers[1].cumulativeAmountBaseUnits)}.</span> : null}
+                  {ch.vouchers.length > 1 ? <span className="ld-caption">Each voucher replaces the one before: voucher {ch.vouchers.length} is {usdc(ch.vouchers[ch.vouchers.length - 1].cumulativeAmountBaseUnits)} in total, not the sum of the vouchers.</span> : null}
                 </div>
               </div>
               <div className="ld-table-wrap" style={{ marginTop: 16, border: "1px solid var(--ld-border)", borderRadius: 10 }}>
@@ -154,10 +169,24 @@ export default function SettlementPage() {
         );
       })}
 
-      <Ld.Panel title={nameOf(run.unfunded[0].campaignId)} sub="No Solana channel was opened" actions={<Ld.Tag tone="dashed">Unfunded</Ld.Tag>}>
-        <p className="ld-secondary">Channel status pending open, deposit {usdc(run.unfunded[0].depositBaseUnits)}. It never reached an auction: every question required crypto storage, which it does not declare.</p>
-      </Ld.Panel>
+      {run.unfunded.map((u) => {
+        const ex = run.opportunities.filter((o) => o.eligibility.excluded.some((x) => x.campaignId === u.campaignId && x.reason === "missing_constraint"));
+        const missing = Array.from(new Set(ex.flatMap((o) => o.eligibility.excluded.find((x) => x.campaignId === u.campaignId)!.missing)));
+        return (
+          <Ld.Panel key={u.channelId} title={nameOf(u.campaignId)} sub="No Solana channel was opened" actions={<Ld.Tag tone="dashed">Unfunded</Ld.Tag>}>
+            <p className="ld-secondary">
+              Channel status {u.status.replace(/_/g, " ")}, deposit {usdc(u.depositBaseUnits)}. With no channel it could never be charged.{ex.length ? ` It was excluded by rule in ${ex.length} of ${run.opportunities.length} questions (missing ${list(missing.map((m) => m.replace(/_/g, " ")))}).` : ""}
+            </p>
+          </Ld.Panel>
+        );
+      })}
 
+      <details className="st2-more">
+        <summary>
+          <span className="ld-card-title">On-chain costs, totals and transaction order</span>
+          <span className="ld-caption">Lamports, rent and the {NET.short.toLowerCase()} transactions by slot</span>
+        </summary>
+        <div className="ld-stack-lg" style={{ gap: 16 }}>
       <div className="ld-cols-2">
         <Ld.Panel title="Totals in test USDC" flush>
           <Ld.Table
@@ -180,7 +209,7 @@ export default function SettlementPage() {
               { key: "v", head: "Lamports", num: true, cell: (r) => <span className="ld-strong">{lam(r.v)}</span> },
             ]}
             rows={[
-              { k: "Network fees, 4 transactions", v: run.fees.networkFeeLamports },
+              { k: `Network fees, ${run.chainTxs.length} transactions`, v: run.fees.networkFeeLamports },
               { k: "New rent, gross", v: run.fees.newRentLamports },
               { k: "Reclaimed rent at close", v: run.fees.reclaimedRentLamports },
               { k: "Fees plus new rent", v: run.fees.grossFeeAndRentLamports },
@@ -190,7 +219,7 @@ export default function SettlementPage() {
         </Ld.Panel>
       </div>
 
-      <Ld.Panel title="Sandbox transactions in order" sub="Ordered by slot on the hosted Solana sandbox. The sandbox keeps its own clock, so no clock times are shown here; they are in each transaction's Inspector record.">
+      <Ld.Panel title={`${NET.short} transactions in order`} sub={`Ordered by slot on ${NET.the}. The chain keeps its own clock, so no clock times are shown here; they are in each transaction's Inspector record.`}>
         <Ld.Timeline
           rows={run.chainTxs.map((t, i) => ({
             key: t.signature,
@@ -203,11 +232,13 @@ export default function SettlementPage() {
       </Ld.Panel>
 
       <Ld.Callout title="Network fees and rent, paid in test SOL">
-        Fees and <Term title={GLOSSARY.rent.term} def={GLOSSARY.rent.def}>rent</Term> are paid in test SOL, measured in <Term title={GLOSSARY.lamports.term} def={GLOSSARY.lamports.def}>lamports</Term>, and kept apart from the USDC ad spend. Each channel paid {lam(perOpenRent)} lamports of new rent at open; {lam(perReclaim)} of it ({reclaimPct}%) was reclaimed at close, so {lam(run.fees.reclaimedRentLamports)} of {lam(run.fees.newRentLamports)} in total. Network fees were {lam(run.fees.networkFeeLamports)} lamports for the 4 transactions. These costs are paid per channel, not per ad: one open and one close are shared by every delivery the channel carries, and each delivery is a signed voucher, not a transaction. Here the channels carried {run.channels.map((c) => c.vouchers.length).join(" and ")} deliveries.
+        Fees and <Term title={GLOSSARY.rent.term} def={GLOSSARY.rent.def}>rent</Term> are paid in test SOL, measured in <Term title={GLOSSARY.lamports.term} def={GLOSSARY.lamports.def}>lamports</Term>, and kept apart from the USDC ad spend. Each channel paid {lam(perOpenRent)} lamports of new rent at open; {lam(perReclaim)} of it ({reclaimPct}%) was reclaimed at close, so {lam(run.fees.reclaimedRentLamports)} of {lam(run.fees.newRentLamports)} in total. Network fees were {lam(run.fees.networkFeeLamports)} lamports for the {run.chainTxs.length} transactions. These costs are paid per channel, not per ad: one open and one close are shared by every delivery the channel carries, and each delivery is a signed voucher, not a transaction. Here the channels carried {list(run.channels.map((c) => String(c.vouchers.length)))} deliveries.
       </Ld.Callout>
+        </div>
+      </details>
 
       <Ld.Callout title="Funding is not settlement">
-        An approved one-time sandbox faucet top-up funded the payer. Absolute wallet balances include funds from before this run, so only each transaction's own changes are shown. Hosted Solana sandbox, not devnet or mainnet.
+        The payer was funded before the run, outside any channel. Absolute wallet balances include funds from before this run, so only each transaction's own changes are shown. {onDevnet ? "Solana Devnet, Devnet test tokens; not mainnet." : "Hosted Solana sandbox, not Devnet or mainnet."}
       </Ld.Callout>
       <DevnetSettlementSection />
     </>

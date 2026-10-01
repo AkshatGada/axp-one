@@ -5,12 +5,18 @@ import type { ProductRun } from "../data/types.ts";
 import type { DevnetProjection } from "../data/devnet-types.ts";
 
 const short = (h: string) => (h && h.length > 16 ? `${h.slice(0, 10)}…${h.slice(-6)}` : h);
-const name = (id: string) => id.replace(/^v3-/, "").replace(/^./, (c) => c.toUpperCase()).replace("Clearvault", "ClearVault").replace("Keyforge", "KeyForge");
+/** 6-decimal base units as USDC: 7000 -> "0.007 USDC". */
+const usdc = (v: bigint | string) => {
+  const s = BigInt(v).toString().padStart(7, "0");
+  let frac = s.slice(-6).replace(/0+$/, "");
+  if (frac.length < 3) frac = frac.padEnd(3, "0");
+  return `${s.slice(0, -6).replace(/^0+(?=\d)/, "")}.${frac} USDC`;
+};
 
-export const DEVNET_CHECK_COUNT = 7;
 
 export function verifyDevnet(run: ProductRun, d: DevnetProjection): Check[] {
   const out: Check[] = [];
+  const name = (id: string) => run.campaigns.find((c) => c.campaignId === id)?.businessName ?? id;
   const byAward = new Map(run.opportunities.filter((o) => o.receipt && o.award).map((o) => [o.award!.id, o]));
   for (const ch of d.channels)
     for (const v of ch.vouchers) {
@@ -19,7 +25,7 @@ export function verifyDevnet(run: ProductRun, d: DevnetProjection): Check[] {
       out.push({
         id: `devnet-receipt-${v.awardId}`,
         group: "devnet",
-        label: `Opportunity ${o?.n ?? "?"}: devnet receipt hash equals the recorded receipt`,
+        label: `Opportunity ${o?.n ?? "?"}: Devnet receipt hash equals the recorded receipt`,
         method: "arithmetic",
         status: rec === v.receiptHash ? "pass" : "fail",
         expected: short(rec),
@@ -32,11 +38,11 @@ export function verifyDevnet(run: ProductRun, d: DevnetProjection): Check[] {
     out.push({
       id: `devnet-conservation-${ch.campaignId}`,
       group: "devnet",
-      label: `${name(ch.campaignId)} devnet channel: payout plus refund equals the deposit`,
+      label: `${name(ch.campaignId)} Devnet channel: payout plus refund equals the deposit`,
       method: "arithmetic",
       status: sum === BigInt(ch.depositBaseUnits) ? "pass" : "fail",
-      expected: ch.depositBaseUnits,
-      actual: sum.toString(),
+      expected: usdc(ch.depositBaseUnits),
+      actual: usdc(sum),
       path: `devnet.channels[${ch.channelId}]`,
     });
   }
@@ -46,11 +52,11 @@ export function verifyDevnet(run: ProductRun, d: DevnetProjection): Check[] {
     out.push({
       id: `devnet-final-${ch.campaignId}`,
       group: "devnet",
-      label: `${name(ch.campaignId)} devnet channel: final voucher equals the recorded accepted charges`,
+      label: `${name(ch.campaignId)} Devnet channel: final voucher equals the recorded accepted charges`,
       method: "arithmetic",
       status: last && BigInt(last.cumulativeBaseUnits) === charges && BigInt(ch.payoutBaseUnits) === charges ? "pass" : "fail",
-      expected: charges.toString(),
-      actual: last ? last.cumulativeBaseUnits : "no voucher",
+      expected: usdc(charges),
+      actual: last ? usdc(last.cumulativeBaseUnits) : "no voucher",
       path: `devnet.channels[${ch.channelId}].vouchers`,
     });
   }

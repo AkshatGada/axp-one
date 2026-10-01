@@ -12,7 +12,7 @@ export type Capability =
   | "rfid_blocking";
 export type RetrievalMethod = "vector" | "lexical_fallback" | "unavailable";
 export type Arm = "text_only" | "history";
-export type AuctionRole = "research" | "competed" | "not_admitted" | "excluded";
+export type AuctionRole = "research" | "competed" | "not_admitted" | "excluded" | "skipped";
 export type Levels = Record<string, number>;
 
 export interface Creative {
@@ -273,6 +273,8 @@ export interface ChainTx {
   newRentLamports: string;
   reclaimedRentLamports: string;
   logs: string[];
+  /** Present only when the run's own network is Solana Devnet. */
+  explorerUrl?: string;
 }
 
 export interface Voucher {
@@ -313,6 +315,8 @@ export interface Channel {
   vouchers: Voucher[];
   open: ChainTx;
   close: ChainTx;
+  /** Present only when the run's own network is Solana Devnet. */
+  explorerUrl?: string | null;
 }
 
 export interface RunEvent {
@@ -340,6 +344,8 @@ export interface ProductRun {
     network: string;
     chainCheckedAt: string;
   };
+  /** Where this run's own money moved. */
+  network: { kind: "devnet" | "sandbox"; label: string; genesisHash: string | null; programExplorerUrl: string | null };
   counts: {
     opportunities: number;
     decisions: number;
@@ -420,7 +426,7 @@ export interface ProductRun {
   evidence: { records: EvidenceRecord[]; hints: EvidenceHint[] };
   channels: Channel[];
   unfunded: Array<{ channelId: string; campaignId: string; status: string; depositBaseUnits: string }>;
-  chainTxs: Array<{ slot: number; kind: "open" | "close"; channelId: string; campaignId: string; signature: string; blockTime: number; finality: string }>;
+  chainTxs: Array<{ slot: number; kind: "open" | "close"; channelId: string; campaignId: string; signature: string; blockTime: number; finality: string; explorerUrl?: string }>;
   fees: { networkFeeLamports: string; newRentLamports: string; reclaimedRentLamports: string; grossFeeAndRentLamports: string; capLamports: string };
   totals: { depositsBaseUnits: string; chargesBaseUnits: string; paidBaseUnits: string; refundedBaseUnits: string; aggregateChargeCapBaseUnits: string };
   events: RunEvent[];

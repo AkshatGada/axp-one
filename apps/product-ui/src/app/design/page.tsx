@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { Ld, InspectorProvider } from "@axp/design-system/ledger";
 import { PROVENANCE, type ProvenanceKind } from "@axp/design-system/foundation";
 import { decisionFor, evidenceHint, evidenceRecord, nameOf, opportunity, run, usdc } from "@/data/select";
-import { activityLanes, activitySegments, auctionRow, campaignStats, hhmm, shortLabel } from "@/components/v2/derive";
+import { activityGapLabel, activityLanes, activitySegments, auctionRow, campaignStats, hhmm, shortLabel } from "@/components/v2/derive";
 import { LiveHashV2, LiveSignatureV2, LiveVerifyTile, DesignPipelineDemo, DrawerDemo } from "@/components/v2/live";
 
 export const metadata: Metadata = { title: "Ledger v2 design system", robots: { index: false, follow: false } };
@@ -902,7 +902,7 @@ export default function LedgerV2() {
 
             <Doc id="activity" title="Activity" usage="The exchange log on the exchange clock only; sandbox block times never share this axis. Long idle gaps are broken and labelled rather than squeezed. Charges carry the emphasis.">
               <Ld.Panel title="Run activity" sub="Exchange clock, UTC · story order differs: the mobile question ran first">
-                <Ld.ActivityChart lanes={activityLanes()} segments={activitySegments()} fmt={hhmm} gapLabel="70 min" />
+                <Ld.ActivityChart lanes={activityLanes()} segments={activitySegments()} fmt={hhmm} gapLabel={activityGapLabel()} />
               </Ld.Panel>
               <Ld.Panel title="Opportunity 3 events" sub="Exchange clock">
                 <Ld.Timeline
@@ -1128,7 +1128,7 @@ export default function LedgerV2() {
                       </Ld.Panel>
                     </div>
                     <Ld.Panel title="Run activity" sub="Exchange clock, UTC">
-                      <Ld.ActivityChart lanes={activityLanes()} segments={activitySegments()} fmt={hhmm} gapLabel="70 min" />
+                      <Ld.ActivityChart lanes={activityLanes()} segments={activitySegments()} fmt={hhmm} gapLabel={activityGapLabel()} />
                     </Ld.Panel>
                   </div>
                 </div>
