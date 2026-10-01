@@ -110,7 +110,7 @@ export default function DotBands() {
               <li key={b.country} style={{ opacity: 0.3 + 0.7 * seg(shown, BAND_DELAY[i]! + SETTLE, BAND_DELAY[i]! + SETTLE + 0.12) }}>
                 <i style={{ background: COLORS[i] }} />
                 <span>{b.country}</span>
-                <b className="px-num">{fmt(b.placements)}</b>
+                <b>{fmt(b.placements)}</b>
               </li>
             ))}
             <li style={{ opacity: 0.3 + 0.7 * seg(shown, 0.9, 1) }}>
@@ -125,7 +125,7 @@ export default function DotBands() {
         <div className="db-viz">
           {BANDS.map((b, i) => (
             <span key={b.country} className="db-band" style={{ top: `${(L.bandTop[i]! / L.H) * 100}%`, opacity: seg(shown, BAND_DELAY[i]! + SETTLE, BAND_DELAY[i]! + SETTLE + 0.12) }}>
-              {b.country} <b className="px-num">{fmt(b.placements)}</b>
+              {b.country} <b>{fmt(b.placements)}</b>
             </span>
           ))}
           <canvas ref={canvasRef} className="db-canvas" style={{ aspectRatio: `${L.W} / ${L.H}` }} role="img" aria-label={`${fmt(LIBRARY.placements)} placements as ${fmt(TOTAL)} squares, sorted into bands: ${BANDS.map((b) => `${b.country} ${fmt(b.placements)}`).join(", ")}`} />

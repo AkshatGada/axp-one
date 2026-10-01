@@ -100,10 +100,6 @@ html[data-px-motion="on"] .pg-in { animation: pgIn 1s var(--ease-out) both; anim
 .pg-wall-foot .px-lead { max-width: 46ch; }
 
 /* ContextHint keeps its vermillion inside its own section */
-#data .px-opener-label { border-top-color: var(--contexthint); }
-#data .px-opener-label .px-label { color: var(--contexthint); }
-#data .px-action { background: var(--contexthint); border-color: var(--contexthint); }
-#data .px-action:hover { background: #d94812; border-color: #d94812; }
 
 /* Closing on ultramarine */
 .pg-close { border-top: 0; }
@@ -193,7 +189,7 @@ html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: n
 .bo-label { margin: 0; padding-top: 4px; font-size: 14px; font-weight: 500; color: var(--steel-dark); }
 .bo-item { display: grid; gap: 6px; text-decoration: none; color: var(--ink); }
 .bo-item b { font-family: var(--font-display); font-size: clamp(20px, 1.7vw, 26px); font-weight: 400; letter-spacing: -.015em; line-height: 1.15; }
-.bo-item[data-i="0"] b { color: var(--contexthint); }
+.bo-item[data-i="0"] b { color: var(--contexthint-ink); }
 .bo-item span { font-size: 15px; line-height: 1.45; color: var(--muted); }
 .bo-item u { justify-self: start; font-size: 14px; font-weight: 500; text-decoration-thickness: 1.5px; text-underline-offset: 5px; text-decoration-color: var(--brand); }
 .bo-item[data-i="0"] u { text-decoration-color: var(--contexthint); }
@@ -299,7 +295,7 @@ html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: n
 /* Hero pinned layout: the same condition as usePinned (>= 900px, motion armed before paint),
    so the layout never changes at hydration. */
 @media (min-width: 900px) {
-  html[data-px-motion="on"] .hs { height: 162vh; padding: 0; }
+  html[data-px-motion="on"] .hs { height: 156vh; padding: 0; }
   html[data-px-motion="on"] .hs .hs-stage { position: sticky; top: 0; height: 100vh; overflow: clip; }
   html[data-px-motion="on"] .hs .hs-grid { height: 100vh; min-height: 0; padding-top: calc(var(--px-header-h) + 8px); padding-bottom: 32px; align-items: center; }
   html[data-px-motion="on"] .hs .hs-copy-wrap { will-change: transform, opacity; }
@@ -368,3 +364,20 @@ html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: n
 .real-col li { font-size: 14.5px; }
 .pr-lines { margin-bottom: clamp(28px, 3vw, 40px); }
 .pr-counts-row { margin-top: 24px; }
+
+#why .px-opener { margin-bottom: 24px; }
+#why .px-opener-q { font-size: clamp(30px, 3vw, 48px); max-width: 22ch; }
+.pg-for > div { padding-top: 18px; }
+
+@media (max-width: 700px) {
+  .pr-video .px-chapters { display: none; }
+  .pay-lanes { display: none; }
+  .sp-sheet-table td:nth-child(2) { display: none; }
+  .sp-sheet-table tr { padding: 10px 16px; }
+  .pg-hero-cap { display: none; }
+}
+@media (max-width: 700px) {
+  .ss:not([data-pinned]) .ss-facts { display: none; }
+  .ld-fig { display: none; }
+  .ch-open { padding-top: 56px; }
+}

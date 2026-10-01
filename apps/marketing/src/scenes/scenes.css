@@ -28,7 +28,7 @@
 .sc-agent .px-num { font-size: 12px; color: var(--steel-dark); }
 .sc-evi { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; height: 100%; }
 .sc-evi > div { display: grid; align-content: start; gap: 6px; padding: 0 12px; border-left: 1px solid var(--line); font-size: 14px; line-height: 1.35; }
-.sc-evi-k { font-size: 13px; font-weight: 500; color: var(--contexthint); }
+.sc-evi-k { font-size: 13px; font-weight: 500; color: var(--contexthint-ink); }
 .sc-evi-wrap { display: grid; gap: 10px; height: 100%; align-content: space-between; }
 .sc-evi-note { margin: 0; font-size: 13px; color: var(--muted); }
 .sc-evi > div:first-child { border-left: 0; padding-left: 0; }
@@ -193,7 +193,8 @@
 @media (min-width: 900px) { .bk-swatch-hero { grid-column: span 3; } }
 
 @media (max-width: 600px) {
-  .sc-stack-static .sc-row:nth-child(1) .sc-plate-body, .sc-stack-static .sc-row:nth-child(6) .sc-plate-body { display: none; }
+  .sc-stack-static .sc-row:nth-child(1) .sc-plate-sheet, .sc-stack-static .sc-row:nth-child(5) .sc-plate-sheet, .sc-stack-static .sc-row:nth-child(6) .sc-plate-sheet { display: none; }
+  .sc-stack-static .sc-row { gap: 8px; }
   .sc-stack-static .sc-plate-sheet { grid-template-rows: 40px auto; }
   .sc-stack-static { gap: 12px; }
 }

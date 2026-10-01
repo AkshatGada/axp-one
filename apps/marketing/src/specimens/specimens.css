@@ -88,7 +88,7 @@ html[data-px-motion="on"] .sp-chat[data-intro] .sp-card-foot { animation: spFade
 .sp-chain-step[data-tone="brand"] { --c: var(--brand); }
 /* The handoff: ContextHint's evidence enters an AXP decision, vermillion turning into ultramarine. */
 .sp-chain-step[data-tone="hand"]::before { background: linear-gradient(180deg, var(--contexthint), var(--brand)); -webkit-mask: repeating-linear-gradient(180deg, #000 0 6px, transparent 6px 10px); mask: repeating-linear-gradient(180deg, #000 0 6px, transparent 6px 10px); }
-.sp-chain-step[data-tone="ch"] .pv, .sp-chain-step[data-tone="ch"] .sp-chain-kicker, .sp-chain-step[data-tone="hand"] .pv, .sp-chain-step[data-tone="hand"] .sp-chain-kicker { color: var(--contexthint); }
+.sp-chain-step[data-tone="ch"] .pv, .sp-chain-step[data-tone="ch"] .sp-chain-kicker, .sp-chain-step[data-tone="hand"] .pv, .sp-chain-step[data-tone="hand"] .sp-chain-kicker { color: var(--contexthint-ink); }
 .sp-chain-step[data-tone="brand"] .pv, .sp-chain-step[data-tone="brand"] .sp-chain-kicker { color: var(--brand); }
 .sp-chain-step[data-tone="brand"] .sp-chain-result { color: var(--brand); }
 .sp-chain-step:last-child::before { display: none; }
@@ -171,7 +171,9 @@ html[data-px-motion="on"] .sp-field[data-reveal][data-in] g.row { opacity: 1; }
 .sp-payoff-grid p { margin: 0; font-family: var(--font-display); font-size: 20px; line-height: 1.2; letter-spacing: -.01em; }
 .sp-payoff-grid [data-guard] p { color: var(--brand); }
 
-.sp-meter-paid { position: absolute; top: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--on-brand); white-space: nowrap; transition: opacity var(--d-move) var(--ease); }
+.sp-meter-paid { position: absolute; top: 0; bottom: 0; left: 0; display: flex; background: var(--ink); align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--on-brand); white-space: nowrap; transition: opacity var(--d-move) var(--ease); }
 .sp-meter-amt { font-variant-numeric: tabular-nums; }
 .on-stage .sp-meter-seg[data-state="settled"], [data-tone="stage"] .sp-meter-seg[data-state="settled"] { background: var(--brand); }
+.on-stage .sp-meter-paid { background: var(--brand); }
 .sc-node .sp-meter-paid { font-size: 16px; }
+@media (max-width: 440px) { .sp-chat-slot { display: none; } }

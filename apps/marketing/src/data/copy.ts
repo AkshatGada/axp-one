@@ -173,7 +173,7 @@ export const CONTEXTHINT = {
   },
   payoff: {
     title: "What the evidence did, and what it could not do.",
-    changed: { q: "On the first question", a: `With ContextHint's history, the agent was a little more sure the person wanted to buy, enough to bid the full ${usdc(policyBid(cvHist.relevanceLevel!, cvHist.intentLevel!, CV.maxBid))} instead of ${usdc(policyBid(cvText.relevanceLevel!, cvText.intentLevel!, CV.maxBid))}.` },
+    changed: { q: "On the first question", a: `With ContextHint's history, the agent was a little more sure the person wanted to buy, enough to bid the full ${usdc(policyBid(cvHist.relevanceLevel!, cvHist.intentLevel!, CV.maxBid))} instead of ${usdc(policyBid(cvText.relevanceLevel!, cvText.intentLevel!, CV.maxBid))}.` }, // claim-ok: ordinal, not a claim
     unchanged: { q: "On the second question", a: "History changed nothing." },
     leather: `${LG.name}'s evidence matched leather wallets. It was ruled out anyway, in code.`,
     note: "Each setting ran once: a demonstration, not a benchmark.",

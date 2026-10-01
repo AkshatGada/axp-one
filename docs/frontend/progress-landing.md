@@ -53,11 +53,23 @@ Owner of this file: the landing builder agent. Update at every milestone.
   Heights: 18,854px at 1440x900 (20.9 screens; v3 27,732), 16,952px reduced motion, 25,555px at 390.
   Final shots: docs/frontend/reviews/shots/landing-v4-builder/ (untracked).
 
+- `axp-landing-v5`: built from reviews/landing-v4-fixes.md items 0 to 25 (REJECTED items not done).
+  Dev hygiene, root cause found: with output: "export" and a custom distDir, `next build` FORCES its compile
+  artifacts into `.next` (node_modules/next/dist/build/index.js, hasCustomExportOutput) and only exports into the
+  custom dir, so NEXT_DIST_DIR=.next-build never protected dev. Fix: `pnpm dev` serves from `.next-dev`
+  (NEXT_DIST_DIR), `pnpm build` is a plain export to out/ (then lint both built pages incl. shipped JS, then drop
+  out/design and out/poster). Verified: a full build while dev runs leaves dev at 200 with zero errors.
+  Labs moved to apps/marketing/labs (axp-labs launch config repointed). Approved foundation token
+  `--contexthint-ink` (#c2410c). The landing imports a slim render-only slice `run.landing.json` (no model versions,
+  policy names, hashes or IDs in shipped JS; lint checks chunks). Truth, story and design fixes per the list.
+  Heights: 1440x900 16,841px = 18.7 screens; 1920 17.0; 1280x800 19.7; 390 25.2. Contrast audit: 0 failures at
+  1280/1440/390 (reduced motion, all text). CLS 0. Shots: docs/frontend/reviews/shots/landing-v5-final/ (untracked).
+
 ## Next
-- Lighthouse pass; mobile page length (30 screens at 390) could drop with lighter static plates; the niche field
-  could gain a literal sub-niche zoom.
+- 1280x800 is still 19.7 screens (pinned scenes scale with vh, content does not); the 8 stale @font-face rules in
+  steel.css need a foundation split (fonts.css) to delete; product-ui has the same export distDir trap.
 
 ## Notes
 - Dev: `pnpm --dir apps/marketing dev` (:3410). Verify in own tab, not tab-1 (the owner views :3410 there).
-- If dev 500s with MODULE_NOT_FOUND, a production build polluted `.next`: stop dev, `rm -rf .next`, restart.
+- Dev serves from `.next-dev`; builds compile into `.next` and export to `out/`. They no longer collide.
 - Run order: mobile no-fill ran first (by exchange completion); page uses story order.

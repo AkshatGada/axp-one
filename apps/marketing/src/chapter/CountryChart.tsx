@@ -24,10 +24,10 @@ export function CountryChart() {
               <span className="cc-out" style={{ width: `${(r.calls / max) * 100}%` }} />
               <span className="cc-in" style={{ width: `${(r.withAds / max) * 100}%` }} />
             </span>
-            <span className="cc-nums px-num">
+            <span className="cc-nums">
               {r.withAds} of {r.calls}
             </span>
-            <b className="cc-rate px-num">{pct(r.withAds, r.calls)}</b>
+            <b className="cc-rate">{pct(r.withAds, r.calls)}</b>
           </li>
         ))}
       </ol>

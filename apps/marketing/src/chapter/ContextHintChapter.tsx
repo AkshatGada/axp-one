@@ -37,8 +37,9 @@ export function ContextHintChapter() {
       </div>
 
       <div className="ch-wallband">
-        <AdWall />
-        <div className="px-wrap ch-wall-over">
+        <div className="ch-wall-frame">
+          <AdWall />
+          <div className="px-wrap ch-wall-over">
           <div className="ch-wall-stats">
             {c.wallStats.map((s) => (
               <div key={s.label} className="ch-wall-stat" data-reveal="mask">
@@ -48,6 +49,7 @@ export function ContextHintChapter() {
                 <span className="ch-wall-l">{s.label}</span>
               </div>
             ))}
+          </div>
           </div>
         </div>
         <p className="px-wrap ch-wall-label">{c.wallLabel}</p>

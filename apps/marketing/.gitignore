@@ -4,3 +4,4 @@ next-env.d.ts
 *.tsbuildinfo
 public/media/
 .next-build/
+.next-dev/

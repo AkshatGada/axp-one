@@ -17,13 +17,14 @@
 /* The band of observed ads, with the library numbers over it, labelled as data */
 .ch-wallband { position: relative; padding-bottom: clamp(40px, 5vw, 72px); }
 .ch-wallband .aw { height: clamp(280px, 25vw, 360px); border-left: 0; border-right: 0; }
-.ch-wall-over { position: relative; z-index: 3; margin-top: calc(-1 * clamp(130px, 13vw, 180px)); pointer-events: none; }
+.ch-wall-frame { position: relative; }
+.ch-wall-over { position: absolute; left: 0; right: 0; bottom: 28px; z-index: 3; margin: 0 auto; pointer-events: none; }
 .ch-wall-stats { display: inline-grid; grid-auto-flow: column; gap: 36px; padding: 18px 26px 20px; background: var(--paper); border: 1.5px solid var(--ink); box-shadow: 9px 9px 0 var(--contexthint-wash); }
 .ch-wall-stat { display: grid; }
 .ch-wall-n { font-family: var(--font-display); font-weight: 300; font-size: clamp(44px, 4.6vw, 84px); line-height: .92; letter-spacing: -.04em; color: var(--ch-display); font-variant-numeric: tabular-nums; }
 .ch-wall-l { font-size: 16px; color: var(--ink); }
-.ch-wall-label { margin-top: 16px; font-size: 14px; color: var(--muted); }
-@media (max-width: 700px) { .ch-wall-stats { grid-auto-flow: row; gap: 10px; } .ch-wallband .aw { height: 260px; } .ch-wall-over { margin-top: -120px; } }
+.ch-wall-label { margin-top: 14px; font-size: 15px; color: var(--ink); }
+@media (max-width: 700px) { .ch-wall-stats { grid-auto-flow: row; gap: 10px; } .ch-wallband .aw { height: 300px; } .ch-wall-over { bottom: 16px; } }
 
 .aw { position: relative; height: clamp(440px, 46vw, 640px); overflow: clip; border: 1px solid var(--line); background: var(--paper-2); }
 .aw-plane { position: absolute; inset: -12% -8%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; transform: rotate(-6deg); }
@@ -61,7 +62,7 @@ html[data-px-motion="off"] .aw-track { animation: none; }
 .db-canvas { display: block; width: 100%; height: auto; }
 .db-band { position: absolute; right: 0; transform: translateY(-115%); padding: 2px 8px; background: var(--paper); font-size: 14px; font-weight: 500; color: var(--ink); white-space: nowrap; transition: opacity .3s linear; }
 .db-band b { font-weight: 500; font-size: 14px; color: var(--ct); font-variant-numeric: tabular-nums; }
-.db[data-pinned] { height: 210vh; padding: 0; }
+.db[data-pinned] { height: 200vh; padding: 0; }
 .db[data-pinned] .db-stage { position: sticky; top: 0; height: 100vh; }
 
 /* Dive + payoff */

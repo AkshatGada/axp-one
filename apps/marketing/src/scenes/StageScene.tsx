@@ -16,7 +16,7 @@ import { io, sceneHeight, seg } from "@/motion/motion";
 import { usePinned } from "@/motion/useReduced";
 
 const ENTER = 0.15;
-const HOLD = 0.2;
+const HOLD = 0.18;
 const EXIT = 0.22;
 const N = STAGE.beats.length;
 const T = ENTER + N * HOLD + EXIT;
