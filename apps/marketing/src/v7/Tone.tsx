@@ -45,9 +45,10 @@ export default function Tone() {
       // A seam the reference line can never fully cross (the first and the last) is pulled inwards,
       // so the page's top and bottom always rest on their own world's colour.
       const maxMid = document.documentElement.scrollHeight - vh * 0.5;
-      const S0 = vh * 0.26;
+      // The last seam is short (the footer is shorter than a screen), so the closing keeps its colour.
+      const Sk = (k: number) => vh * (k === secs.length - 2 ? 0.1 : 0.26);
       for (let k = 0; k < secs.length - 1; k++) {
-        const b = Math.min(secs[k]!.bottom, maxMid - S0 - 1);
+        const b = Math.min(secs[k]!.bottom, maxMid - Sk(k) - 1);
         secs[k]!.bottom = b;
         secs[k + 1]!.top = b;
       }
@@ -58,13 +59,14 @@ export default function Tone() {
       });
       const cur = secs[i];
       if (!cur) return;
-      const S = vh * 0.26;
+      const S = Sk(Math.min(i, secs.length - 2));
+      const Sp = Sk(Math.max(0, i - 1));
       const here = WORLDS[cur.w] ?? WORLDS.paper!;
       const next = secs[i + 1];
       const prev = secs[i - 1];
       let bg = mix(here, here, 0);
       if (next && cur.bottom - mid < S) bg = mix(here, WORLDS[next.w] ?? here, smooth(0.5 - (cur.bottom - mid) / (2 * S)));
-      else if (prev && mid - cur.top < S) bg = mix(WORLDS[prev.w] ?? here, here, smooth(0.5 + (mid - cur.top) / (2 * S)));
+      else if (prev && mid - cur.top < Sp) bg = mix(WORLDS[prev.w] ?? here, here, smooth(0.5 + (mid - cur.top) / (2 * Sp)));
       if (layer.current) layer.current.style.background = bg;
       const st = (stepEl?.dataset.step as Step) ?? null;
       setStep((c) => (c === st ? c : st));

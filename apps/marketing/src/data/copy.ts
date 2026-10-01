@@ -37,7 +37,7 @@ export const HERO = {
   lede: "Advertiser agents bid for a disclosed slot beside AI answers. Code sets the price; Solana pays the app.",
   primary: "See the working MVP",
   status: "Live on public Solana Devnet, test USDC.",
-  devnet: "See the settlement on Explorer",
+  devnet: "View on Explorer",
   trio: [
     { k: "", name: "ContextHint", rest: ", the intelligence platform for ChatGPT ads", href: LIBRARY.url, tone: "ch" },
     { k: "Decisions", name: "Jev", rest: "", href: JEV.url, tone: "jev" },
@@ -71,31 +71,32 @@ export const STACK = {
 /** How it works: one rail, seven stations, the exchange's rules as captions. */
 export const HOW = {
   label: "How it works",
-  h2: "Agents advise. Code decides the money.",
-  stations: [
-    { t: "A question", s: "" },
-    { t: "Eligibility", s: "in code; no bid buys past it" },
-    { t: "Judgment", s: "each agent, its own evidence" },
-    { t: "Price", s: "in code; ties by fixed rule" },
-    { t: "The card", s: "beside the answer, never in it" },
-    { t: "Receipt", s: "signed; only then a charge" },
-    { t: "Settlement", s: "" },
+  h2: "AI agents judge each moment. Fixed rules set the price.",
+  steps: [
+    "Someone asks an AI app a buying question.",
+    "Jev judges if the moment fits each advertiser; a fixed rule makes it bid or skip.",
+    "Code sets the price, checks the rules, picks the winner.",
+    "One Sponsored card beside the answer, paid only after delivery, settled on Solana.",
   ],
+  tagline: "Agents advise. Code decides the money.",
   mustStore: "must store crypto",
+  evidence: "ContextHint evidence",
+  withJev: "with Jev",
   bidWord: "bid",
   skipWord: "skip",
-  inWord: "in",
-  outWord: "out",
-  signed: "signed",
-  oneClose: "one close",
+  outLine: "ruled out: no bid buys past this",
+  tie: "ties: a fixed rule",
+  beside: "beside the answer, never in it",
+  receipt: "signed receipt = the charge",
+  oneClose: "one close on Solana",
 };
 
 /** ContextHint: the data chapter. Scale words only. */
 export const CONTEXTHINT = {
   label: "Data from ContextHint",
   what: "ContextHint is the intelligence platform for ChatGPT ads.",
-  moat: "An auction is code. The evidence has to be collected.",
-  moatAccent: "ContextHint already collects it.",
+  moat: "An auction is code. Evidence must be collected;",
+  moatAccent: "ContextHint collects it.",
   scale: [
     { big: "Thousands", small: "of advertisers" },
     { big: "Tens of thousands", small: "of ads" },
@@ -103,7 +104,7 @@ export const CONTEXTHINT = {
     { big: "A dozen", small: "countries" },
   ],
   traction: TRACTION.line,
-  use: "Each agent gets a few real past examples and an inferred audience as evidence.",
+  use: "Agents get a few real past examples and an inferred audience.",
   wallLabel: "Real ads observed in ChatGPT. Not axp.one advertisers; no relationship implied.",
   action: "Visit ContextHint",
 };
@@ -173,7 +174,7 @@ export const MVP_TOUR = {
   action: "Open the MVP",
   tiles: [
     { key: "overview", title: "The whole run", href: mvp("/"), alt: "The MVP overview: the demo AI app with its Sponsored card, the run's totals and the auctions." },
-    { key: "opportunity", title: "One auction, step by step", href: mvp("/opportunity/1/"), alt: "The MVP opportunity page: every stage from the moment to the charge." },
+    { key: "opportunity", title: "One auction", href: mvp("/opportunity/1/"), alt: "The MVP opportunity page: every stage from the moment to the charge." },
     { key: "settlement", title: "Both Solana channels", href: mvp("/settlement/"), alt: "The MVP settlement page: deposits, payouts, refunds and each channel's vouchers." },
     { key: "verify", title: "Verify, then tamper", href: mvp("/verify/"), alt: "The MVP verify page after a one byte tamper: checks fail on the copy." },
   ],

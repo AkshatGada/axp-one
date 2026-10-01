@@ -46,79 +46,70 @@ function Specimen({ i }: { i: number }) {
     case 0:
       return (
         <>
+          <span className={s.app}>AI app</span>
           <p className={s.sq}>{CACHED.question}</p>
           <span className={s.chip}>{HOW.mustStore}</span>
         </>
       );
     case 1:
       return (
-        <ul className={s.list}>
-          <li>
-            {CV.name} <b>{HOW.inWord}</b>
-          </li>
-          <li>
-            {KF.name} <b>{HOW.inWord}</b>
-          </li>
-          <li data-out="">
-            <s>{LG.name}</s> <b>{HOW.outWord}</b>
-          </li>
-        </ul>
+        <>
+          <span className={s.chip} data-ch="">
+            {HOW.evidence}
+          </span>
+          <ul className={s.list}>
+            <li>
+              {CV.name} <b>{HOW.bidWord}</b>
+            </li>
+            <li>
+              {KF.name} <b>{HOW.bidWord}</b>
+            </li>
+            <li data-out="">
+              {LG.name} <b>{HOW.skipWord}</b>
+            </li>
+          </ul>
+          <span className={s.jev}>{HOW.withJev}</span>
+        </>
       );
     case 2:
       return (
-        <ul className={s.list}>
-          <li>
-            {CV.name} <b>{HOW.bidWord}</b>
-          </li>
-          <li>
-            {KF.name} <b>{HOW.bidWord}</b>
-          </li>
-          <li data-out="">
-            {LG.name} <b>{HOW.skipWord}</b>
-          </li>
-        </ul>
-      );
-    case 3:
-      return (
-        <div className={s.bars}>
-          {[cv, kf].map((b) =>
-            b ? (
-              <div key={b.campaign} className={s.barRow} data-win={b.campaign === CACHED.winner ? "" : undefined}>
-                <span>{b.name}</span>
-                <i style={{ "--w": Number(b.amount) / max } as CSSProperties} />
-                <span className={s.num}>{usdc(b.amount)}</span>
-              </div>
-            ) : null,
-          )}
-        </div>
-      );
-    case 4:
-      return (
-        <div className={s.mini}>
-          <i />
-          <i />
-          <div className={s.miniCard}>
-            <span>Sponsored</span> {CV.name}
+        <>
+          <div className={s.bars}>
+            {[cv, kf].map((b) =>
+              b ? (
+                <div key={b.campaign} className={s.barRow} data-win={b.campaign === CACHED.winner ? "" : undefined}>
+                  <span>{b.name}</span>
+                  <i style={{ "--w": Number(b.amount) / max } as CSSProperties} />
+                  <span className={s.num}>{usdc(b.amount)}</span>
+                </div>
+              ) : null,
+            )}
           </div>
-        </div>
-      );
-    case 5:
-      return (
-        <div className={s.receipt}>
-          <span className={s.tick}>{HOW.signed}</span>
-          <span className={s.num}>{usdc(CACHED.price!)} USDC</span>
-        </div>
+          <span className={s.rule}>
+            <s>{LG.name}</s> {HOW.outLine}
+          </span>
+          <span className={s.rule}>{HOW.tie}</span>
+        </>
       );
     default:
       return (
-        <div className={s.settle}>
+        <>
+          <div className={s.mini}>
+            <i />
+            <i />
+            <div className={s.miniCard}>
+              <span>Sponsored</span> {CV.name}
+            </div>
+          </div>
+          <span className={s.rule}>{HOW.beside}</span>
+          <span className={s.rule}>
+            {HOW.receipt} <b className={s.num}>{usdc(CACHED.price!)} USDC</b>
+          </span>
           <div className={s.solTrack}>
             <i style={{ width: `${(Number(CV_CHANNEL.settled) / Number(CV_CHANNEL.deposit)) * 100}%` }} />
           </div>
-          <span className={s.num}>
-            {usdc(CV_CHANNEL.settled)} <span className={s.dim}>{HOW.oneClose}</span>
-          </span>
-        </div>
+          <span className={s.rule}>{HOW.oneClose}</span>
+        </>
       );
   }
 }
@@ -130,11 +121,11 @@ export default function How() {
   const pinned = usePinned();
   const pinnedRef = useRef(false);
   pinnedRef.current = pinned;
-  const n = HOW.stations.length;
+  const n = HOW.steps.length;
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
   useMotionValueEvent(p, "change", (v) => {
     if (!pinnedRef.current) return;
-    const t = seg(v, 0.06, 0.82);
+    const t = seg(v, 0.06, 0.8);
     if (fillRef.current) fillRef.current.style.transform = `scaleX(${t.toFixed(4)})`;
     railRef.current?.querySelectorAll<HTMLElement>("[data-st]").forEach((el, i) => {
       const on = t >= i / (n - 1) - 0.02;
@@ -146,7 +137,6 @@ export default function How() {
     <section ref={ref} id="how" data-world="stage" className={s.how} data-tone="stage" data-header-tone="stage" aria-labelledby="how-title" data-pinned={pinned ? "" : undefined}>
       <div className={s.stage}>
         <Tape />
-        <div className={s.fog} aria-hidden />
         <div className={`px-wrap ${s.in}`}>
           <div className={s.head}>
             <p className={s.label}>{HOW.label}</p>
@@ -159,19 +149,20 @@ export default function How() {
               <i ref={fillRef} />
             </div>
             <ol ref={railRef} className={s.rail}>
-              {HOW.stations.map((st, i) => (
-                <li key={st.t} data-st="" data-on={pinned ? (i === 0 ? "1" : "") : "1"} style={{ "--i": i } as CSSProperties}>
+              {HOW.steps.map((st, i) => (
+                <li key={st} data-st="" data-on={pinned ? (i === 0 ? "1" : "") : "1"} style={{ "--i": i } as CSSProperties}>
+                  <span className={s.node} aria-hidden>
+                    {i + 1}
+                  </span>
+                  <p className={s.t}>{st}</p>
                   <div className={s.spec} data-visual="">
                     <Specimen i={i} />
                   </div>
-                  <span className={s.node} aria-hidden />
-                  <span className={s.n}>{String(i + 1).padStart(2, "0")}</span>
-                  <b className={s.t}>{st.t}</b>
-                  {st.s ? <span className={s.s}>{st.s}</span> : null}
                 </li>
               ))}
             </ol>
           </div>
+          <p className={s.tagline}>{HOW.tagline}</p>
         </div>
       </div>
     </section>
