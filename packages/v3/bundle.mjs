@@ -27,7 +27,8 @@ export function validateV3DecisionRecords(run){
  for(const r of records){
   const t=run.state.turns.find(t=>t.opportunityId===r.opportunityId),d=frozen.drafts.find(d=>d.campaign.campaignId===r.campaignId);
   if(!t||!d||seen.has(r.slotId)||r.question!==t.question||r.questionIndex!==t.scenario.questionIndex||r.campaignVersionId!==d.campaign.campaignVersionId||!['text_only','history'].includes(r.arm))throw Error('v3_slot_binding');seen.add(r.slotId);
-  const q=r.request;if(!q||q.runId!==run.runId||q.mode!=='sandbox'||q.opportunity.id!==t.opportunityId||q.opportunity.taskText!==t.question)throw Error('v3_request_binding');
+  // Harness request.mode is the V3 policy constant (not sent to Jev); see DEVNET_LIVE_PLAN.md.
+  const q=r.request;if(!q||q.runId!==run.runId||q.mode!==POLICY.financialMode||q.opportunity.id!==t.opportunityId||q.opportunity.taskText!==t.question)throw Error('v3_request_binding');
   equal(q.campaign,mlCampaign(d.campaign,d.contextHints),'v3_campaign_request');
   equal(r.packet,buildJevRequest(q,POLICY.model),'v3_packet_request');
   if(r.packetHash!==hash(r.packet)||r.packetBytes!==JSON.stringify(r.packet)||r.packetBytesHash!==sha(r.packetBytes)||r.requestHash!==hash({packet:r.packet,bindings:r.bindings,inputHash:r.inputHash}))throw Error('v3_packet_hash');
@@ -55,24 +56,33 @@ export function validateV3DecisionRecords(run){
  return true;
 }
 export function validateV3ReplayRetrieval(run){const expected=run.state.turns.filter(t=>['cached','offline'].includes(t.scenario.id)).flatMap(t=>t.records.filter(r=>r.arm==='history').map(r=>({question:t.question,campaignId:r.campaignId,result:r.retrieval})));equal(run.retrieval,expected,'v3_replay_retrieval_binding');return true;}
-export function validateV3Run(run){
- if(run.schemaVersion!=='axp.v3-run.v1'||run.state.runId!==run.runId||run.state.financialMode!=='sandbox')throw Error('v3_run_binding');
+export const V3_FINANCIAL_MODES=Object.freeze(['sandbox','devnet']);
+/** Policy frozen by a run: the V3 POLICY, with the run's settlement network for non-sandbox runs. */
+export const v3RunPolicy=mode=>mode==='sandbox'?POLICY:{...POLICY,financialMode:mode};
+/** Integrity checks always throw. Demonstration "story" gates (competition, three
+ * placements, multiple increments, mobile no-fill) throw for the recorded sandbox
+ * run; for a live devnet run they are reported in storyGates instead. */
+export function validateV3Run(run,{storyGates}={}){
+ const M=run.state?.financialMode;
+ if(run.schemaVersion!=='axp.v3-run.v1'||run.state.runId!==run.runId||!V3_FINANCIAL_MODES.includes(M))throw Error('v3_run_binding');
+ const failed=[],story=code=>{if(M==='sandbox')throw Error(code);failed.push(code);};
  validateCatalogue(run.evidence);const s=run.state,ex=s.exchange,f=s.freeze,{contentHash,...frozen}=f??{};if(!f||contentHash!==hash(frozen)||hash(run.manifest)!==hash(f.manifest))throw Error('v3_freeze_hash');
- equal(f.policy,POLICY,'v3_policy_binding');equal(f.scenarios,SCENARIOS,'v3_scenario_binding');
+ equal(f.policy,v3RunPolicy(M),'v3_policy_binding');equal(f.scenarios,SCENARIOS,'v3_scenario_binding');
  const completed=s.turns.filter(t=>t.status==='completed');if(completed.length!==4||completed.some(t=>t.organic?.status!=='completed'||t.organic.question!==t.question||t.organic.suppliedPrompt!==organicPrompt(t.question)||t.organic.inputHash!==hash(t.organic.suppliedPrompt)||t.organic.provenance?.model!=='gpt-6.1-sol'||t.organic.provenance.effort!=='low'||t.organic.advertiserMaterialReceived!==false))throw Error('v3_organic_binding');
  validateV3DecisionRecords(run);
  validateV3ReplayRetrieval(run);
- if(!completed.some(t=>(t.outcome?.bids?.length??0)>=2))throw Error('v3_genuine_competition_required');
- const mobile=completed.find(t=>t.scenario?.id==='mobile');if(!mobile||mobile.outcome?.status!=='no_fill'||mobile.records.length!==0)throw Error('v3_mobile_no_fill');
- if(ex.charges.length!==3||ex.charges.reduce((n,c)=>n+BigInt(c.amountBaseUnits),0n)>12000n)throw Error('v3_three_accepted_placements');
- for(const c of ex.charges){const a=ex.awards.find(a=>a.id===c.awardId),r=run.receipts.find(r=>r.chargeId===c.id),p=run.publishers.find(p=>p.publisherId===a?.publisherId);if(!a||!r||!p||c.channelId!==a.channelId||c.campaignVersionId!==a.campaignVersionId||c.amountBaseUnits!==a.priceBaseUnits||hash(r.receipt)!==c.receiptHash||r.receipt.creativeHash!==a.creativeHash||r.receipt.opportunityId!==a.opportunityId||r.receipt.awardId!==a.id||r.receipt.runId!==run.runId||r.receipt.mode!=='sandbox'||!verifyReceipt(r.receipt,r.signature,p.publicKeyPEM))throw Error('v3_delivery_correlation');}
+ if(!completed.some(t=>(t.outcome?.bids?.length??0)>=2))story('v3_genuine_competition_required');
+ const mobile=completed.find(t=>t.scenario?.id==='mobile');if(!mobile||mobile.outcome?.status!=='no_fill'||mobile.records.length!==0)story('v3_mobile_no_fill');
+ if(ex.charges.length>3||ex.charges.reduce((n,c)=>n+BigInt(c.amountBaseUnits),0n)>12000n)throw Error('v3_three_accepted_placements');if(ex.charges.length!==3)story('v3_three_accepted_placements');
+ for(const c of ex.charges){const a=ex.awards.find(a=>a.id===c.awardId),r=run.receipts.find(r=>r.chargeId===c.id),p=run.publishers.find(p=>p.publisherId===a?.publisherId);if(!a||!r||!p||c.channelId!==a.channelId||c.campaignVersionId!==a.campaignVersionId||c.amountBaseUnits!==a.priceBaseUnits||hash(r.receipt)!==c.receiptHash||r.receipt.creativeHash!==a.creativeHash||r.receipt.opportunityId!==a.opportunityId||r.receipt.awardId!==a.id||r.receipt.runId!==run.runId||r.receipt.mode!==M||!verifyReceipt(r.receipt,r.signature,p.publicKeyPEM))throw Error('v3_delivery_correlation');}
  if(s.payments.length!==2||new Set(s.payments.map(p=>p.protocolChannelId)).size!==2)throw Error('v3_two_native_channels');
  for(const p of s.payments){const charges=ex.charges.filter(c=>c.channelId===p.channelId).sort((a,b)=>a.sequence-b.sequence),total=charges.reduce((n,c)=>n+BigInt(c.amountBaseUnits),0n);if(p.openStatus!=='finalized'||p.closeStatus!=='finalized'||p.close?.status!=='finalized'||BigInt(p.depositBaseUnits)!==20000n||total>8000n||BigInt(p.authorizedBaseUnits)!==total||BigInt(p.settledBaseUnits)!==total||BigInt(p.refundBaseUnits)+total!==20000n)throw Error('v3_settlement_conservation');let cumulative=0n;if(p.vouchers.length!==charges.length)throw Error('v3_voucher_count');for(const [i,v]of p.vouchers.entries()){cumulative+=BigInt(charges[i].amountBaseUnits);if(v.chargeId!==charges[i].id||BigInt(v.cumulativeAmountBaseUnits)!==cumulative||!v.payloadHash||!['authorized','committed'].includes(v.status))throw Error('v3_voucher_correlation');}}
- if(!s.payments.some(p=>p.vouchers.length>=2))throw Error('v3_multiple_increments');
- const chain=run.chainEvidence;if(!chain?.allChecksPassed||chain.runId!==run.runId||chain.financialMode!=='sandbox'||chain.channels?.length!==2||BigInt(chain.grossFeeAndRentLamports)>20000000n||BigInt(chain.networkFeeLamports)+BigInt(chain.grossNewRentLamports)!==BigInt(chain.grossFeeAndRentLamports))throw Error('v3_chain_evidence_required');
+ if(!s.payments.some(p=>p.vouchers.length>=2))story('v3_multiple_increments');
+ const chain=run.chainEvidence;if(!chain?.allChecksPassed||chain.runId!==run.runId||chain.financialMode!==M||chain.channels?.length!==2||BigInt(chain.grossFeeAndRentLamports)>20000000n||BigInt(chain.networkFeeLamports)+BigInt(chain.grossNewRentLamports)!==BigInt(chain.grossFeeAndRentLamports))throw Error('v3_chain_evidence_required');
  for(const p of s.payments){const c=chain.channels.find(c=>c.channelId===p.channelId);if(!c||c.protocolChannelId!==p.protocolChannelId||c.openSignature!==p.open.txSignature||c.closeSignature!==p.close.txSignature||c.depositBaseUnits!==p.depositBaseUnits||c.publisherPayoutBaseUnits!==p.settledBaseUnits||c.payerRefundBaseUnits!==p.refundBaseUnits||c.status!=='Distributed'||!c.escrowClosed||!c.transactionStatuses.every(s=>s?.confirmationStatus==='finalized'&&!s.err))throw Error('v3_chain_correlation');}
  if(!run.restart||run.restart.beforeHash!==run.restart.afterHash||run.restart.newCalls!==0||run.restart.newCharges!==0||run.restart.newSignatures!==0||run.restart.newBroadcasts!==0)throw Error('v3_restart_evidence');
- const text=JSON.stringify(run);if(/-----BEGIN .*PRIVATE KEY|apikey_[A-Za-z0-9_]{20,}|"(?:csrf|apiKey|privateKey|vector|wireBase64|unsignedWireBase64|secretKey|highestVoucherSignature)"\s*:/.test(text))throw Error('v3_private_material');return true;
+ const text=JSON.stringify(run);if(/-----BEGIN .*PRIVATE KEY|apikey_[A-Za-z0-9_]{20,}|"(?:csrf|apiKey|privateKey|vector|wireBase64|unsignedWireBase64|secretKey|highestVoucherSignature)"\s*:/.test(text))throw Error('v3_private_material');
+ if(storyGates)storyGates.failed=failed;return true;
 }
-export function writeV3Bundle(directory,run){run=sanitized(run);validateV3Run(run);mkdirSync(directory,{recursive:true});const bytes=Buffer.from(JSON.stringify(run,null,2));writeFileSync(join(directory,'run.json'),bytes);const manifest={schemaVersion:'axp.v3-manifest.v1',runId:run.runId,createdAt:new Date().toISOString(),financialMode:'sandbox',presentation:'recorded_evidence_replay',files:{'run.json':sha(bytes)}};writeFileSync(join(directory,'manifest.json'),JSON.stringify(manifest,null,2));return loadV3Bundle(directory);}
-export function loadV3Bundle(directory){const bytes=readFileSync(join(directory,'manifest.json')),manifest=JSON.parse(bytes);if(manifest.schemaVersion!=='axp.v3-manifest.v1'||Object.keys(manifest.files).join()!=='run.json'||manifest.financialMode!=='sandbox')throw Error('v3_manifest_invalid');const raw=readFileSync(join(directory,'run.json'));if(sha(raw)!==manifest.files['run.json'])throw Error('v3_bundle_hash');const run=JSON.parse(raw);validateV3Run(run);if(run.runId!==manifest.runId)throw Error('v3_manifest_binding');return {run,manifest,bundleHash:sha(bytes)};}
+export function writeV3Bundle(directory,run){run=sanitized(run);const gates={};validateV3Run(run,{storyGates:gates});mkdirSync(directory,{recursive:true});const bytes=Buffer.from(JSON.stringify(run,null,2));writeFileSync(join(directory,'run.json'),bytes);const M=run.state.financialMode,manifest={schemaVersion:'axp.v3-manifest.v1',runId:run.runId,createdAt:new Date().toISOString(),financialMode:M,presentation:'recorded_evidence_replay',...(M==='sandbox'?{}:{storyGates:{failed:gates.failed}}),files:{'run.json':sha(bytes)}};writeFileSync(join(directory,'manifest.json'),JSON.stringify(manifest,null,2));return loadV3Bundle(directory);}
+export function loadV3Bundle(directory){const bytes=readFileSync(join(directory,'manifest.json')),manifest=JSON.parse(bytes);if(manifest.schemaVersion!=='axp.v3-manifest.v1'||Object.keys(manifest.files).join()!=='run.json'||!V3_FINANCIAL_MODES.includes(manifest.financialMode))throw Error('v3_manifest_invalid');const raw=readFileSync(join(directory,'run.json'));if(sha(raw)!==manifest.files['run.json'])throw Error('v3_bundle_hash');const run=JSON.parse(raw);validateV3Run(run);if(run.runId!==manifest.runId||run.state.financialMode!==manifest.financialMode)throw Error('v3_manifest_binding');return {run,manifest,bundleHash:sha(bytes)};}

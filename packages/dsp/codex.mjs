@@ -85,7 +85,8 @@ export async function runCodexJSON(prompt,schema,{executable=process.env.AXP_COD
     if(!completed||!msg)throw new Error('agent_result_missing');
     let value;try{value=JSON.parse(msg);}catch{throw new Error('agent_invalid_json');}
     validateOutput(value,schema);
-    return {value,provenance:{engine:'codex',model:CODEX_MODEL,effort:'low',runtime:'codex-cli',elapsedMs:Date.now()-started,inputHash:hash({prompt,schema}),usage:completed.usage??null,status:'completed',toolUse:'none',invocationScoped:true}};
+    const threadId=events.find(e=>e.type==='thread.started'&&typeof e.thread_id==='string')?.thread_id??null;
+    return {value,provenance:{engine:'codex',model:CODEX_MODEL,effort:'low',runtime:'codex-cli',elapsedMs:Date.now()-started,inputHash:hash({prompt,schema}),usage:completed.usage??null,status:'completed',toolUse:'none',invocationScoped:true},threadId};
   } finally {await rm(dir,{recursive:true,force:true});}
 }
 

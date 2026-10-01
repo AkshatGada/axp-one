@@ -37,8 +37,8 @@ function receiptPublic(receipt,status) {
   return Object.fromEntries(['status','txSignature','finality','protocolChannelId','depositBaseUnits',
     'settledBaseUnits','refundBaseUnits','publisherDeltaBaseUnits','feeAndRentLamports'].filter(k=>receipt[k]!==undefined).map(k=>[k,receipt[k]]));
 }
-export function paymentEvidenceV3(store) {
-  return store.list().filter(s=>s.terms?.runId===RUN&&IDS.includes(s.channelId)).map(s=>({
+export function paymentEvidenceV3(store,{runId=RUN,mode='sandbox'}={}) {
+  return store.list().filter(s=>s.terms?.runId===runId&&s.terms.mode===mode&&IDS.includes(s.channelId)).map(s=>({
     ...projectV3NetworkState(store,s.channelId),network:s.terms.network,rpc:s.terms.rpc,
     genesisHash:s.terms.genesisHash,program:s.terms.program,mint:s.terms.mint,payer:s.terms.payer,payee:s.terms.payee,
     open:receiptPublic(s.open.receipt,s.open.status),close:receiptPublic(s.close?.receipt,s.close?.status),
@@ -46,7 +46,7 @@ export function paymentEvidenceV3(store) {
       incrementBaseUnits:i.charge.amountBaseUnits,cumulativeAmountBaseUnits:i.cumulativeAmountBaseUnits,
       payloadHash:i.payloadHash??null,voucherRecordHash:i.voucherRecordHash??null})),
     estimatedGrossFeeAndRentLamports:s.feeReservedLamports,
-    settlementLink:s.close?.status==='finalized'?`https://explorer.solana.com/tx/${s.close.receipt.txSignature}?cluster=custom&customUrl=${encodeURIComponent(s.terms.rpc)}`:null,
+    settlementLink:s.close?.status==='finalized'?(s.terms.mode==='devnet'?`https://explorer.solana.com/tx/${s.close.receipt.txSignature}?cluster=devnet`:`https://explorer.solana.com/tx/${s.close.receipt.txSignature}?cluster=custom&customUrl=${encodeURIComponent(s.terms.rpc)}`):null,
   }));
 }
 
