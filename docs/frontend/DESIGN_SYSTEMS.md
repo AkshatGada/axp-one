@@ -1,0 +1,144 @@
+# AXP design systems
+
+Two design systems on one shared foundation, the same pattern ContextHint uses
+(editorial landing system + product system sharing tokens). Owner direction:
+the personal-site typography and spacing taste, warm neutral paper, ink, steel
+as the only accent (fine edges, emphasis, one matte dark stage). No purple, no
+green, no gloss, no chrome surfaces, no icon set, no decorative dots or numbered
+eyebrows. Light paper with one dark stage.
+
+```
+design-system/
+  foundation/   STEEL      shared tokens: colour, type families, spacing, motion, provenance, money states
+  prospectus/   PROSPECTUS landing-page system (apps/marketing)
+  ledger/       LEDGER     MVP / product system (apps/product-ui)
+```
+
+Never mix Prospectus and Ledger on one page. One sanctioned crossing: the
+landing page may embed a Ledger *specimen* (a real Sponsored card, a receipt)
+inside a Prospectus figure frame, because it is showing the product itself.
+
+---
+
+## 1. STEEL foundation (shared)
+
+### Colour
+
+| Token | Value | Role |
+|---|---|---|
+| `--paper` | #f5f4f0 | page |
+| `--paper-2` | #eeede8 | sunk band, wells |
+| `--white` | #fffefa | raised sheet |
+| `--ink` | #171b1f | primary text, solid buttons, settled money |
+| `--muted` | #444d53 | secondary text (AA on paper) |
+| `--steel` | #626c73 | emphasis colour, labels, focus-adjacent |
+| `--steel-dark` | #37444b | strong steel, active state |
+| `--silver` | #c8ccce | hatch, disabled fill |
+| `--line` | #b9bec0 | hairlines |
+| `--mist` | #e7e9e9 | quiet fills |
+| `--stage` | #1b2226 | the one matte dark stage |
+| `--stage-2` | #232c31 | raised surface on stage |
+| `--stage-line` | #677177 | hairline on stage |
+| `--stage-ink` | #eef0ee | text on stage |
+| `--stage-muted` | #9aa5ab | secondary text on stage |
+| `--focus` | #475962 | focus ring |
+
+Steel is never a background fill larger than a chip, except the stage.
+Emphasis inside prose is a colour shift to steel (`em { font-style: normal; color: var(--steel) }`), never italics.
+
+### Type families (PolySans only, 8 local files, no italics)
+
+- `--font-display`: PolySans Wide (SlimWide 300 for display, NeutralWide 400, MedianWide 500).
+- `--font-body`: PolySans (Neutral 400, Median 500, Bulky 700 rarely).
+- `--font-mono`: PolySans Mono (Neutral 400, Median 500). **Only real data**: amounts, hashes, IDs, timings, model names. Never for decoration or labels.
+
+### Spacing, widths, radii, shadow
+
+- Ladder 0/4/8/12/16/24/32/48/64/80/120 (`--space-*`).
+- Gutter `clamp(20px,5.5vw,88px)`; wide stage 1520; content 1320; prose 64ch.
+- Radii: 0 by default (square, editorial). `--radius-s` 4px for chips/inputs only.
+  The Sponsored card inside a host chat frame uses the host's own radius (it is a specimen of a third-party UI).
+- Shadow: flat hard offset only, `--shadow-offset: 9px 9px 0 #d0d5d5`; no blur shadows on paper.
+
+### Motion
+
+- One curve: `--ease: cubic-bezier(.2,.75,.25,1)`; `--ease-out: cubic-bezier(.16,1,.3,1)` for entrances.
+- Durations: `--d-micro` 120ms, `--d-ui` 220ms, `--d-move` 420ms, `--d-scene` beats of 600–900ms.
+- Grammar: cause, then effect. Anticipation, travel along a route, contact, settle. Never fake execution: a moving token in an animation is labelled Illustrative; real values come from the run.
+- `prefers-reduced-motion`: every scene has a still poster with the same information.
+
+### Provenance (the truth contract, made visual)
+
+Every claim, number and object in either system carries a provenance mark: a
+small glyph + a plain word. Glyph shape carries meaning so it works in mono print,
+video compression and for colour-blind viewers. Colour is ink/steel only.
+
+| Kind | Glyph | Word | Meaning |
+|---|---|---|---|
+| `actual` | solid square ■ | Actual output | Real Jev or app-agent response in the recorded run |
+| `observed` | solid circle ● | Observed | Historical ContextHint observation (prompt, creative) |
+| `inferred` | half circle ◐ | Inferred | ContextHint hypothesis (hint), not a fact or setting |
+| `fictional` | open square □ | Fictional | Declared by a fictional advertiser for the demo |
+| `policy` | diamond ◆ | Policy | Deterministic exchange rule (eligibility, cap, tie-break, no-fill) |
+| `settled` | solid ink bar ▬ | Settled | Finalized sandbox settlement fact |
+| `synthetic` | dashed square ⬚ | Synthetic | Laboratory or layout fixture, never acceptance |
+| `replay` | ring ◎ | Recorded replay | Read-only presentation of the saved run |
+| `illustrative` | open triangle △ | Illustrative | Marketing explanation, not a recorded event |
+| `vision` | dotted outline ⋯ | Planned | Future capability, not demonstrated |
+
+### Money states (Ledger uses these; Prospectus may show them in specimens)
+
+Distinguished by fill pattern + word, never colour alone:
+`deposit` outlined bar, `reserved` dashed fill, `accepted` steel hatch, `authorized` steel solid,
+`settled` ink solid, `refunded` paper with ink outline + return arrow, `pending` / `unknown`
+dotted outline with the word, never shown as settled. Amounts render in mono as test USDC with
+six-decimal base units available on inspect (e.g. `0.004 USDC` / `4000`).
+
+---
+
+## 2. PROSPECTUS: the landing-page system
+
+Register: an editorial prospectus for a new market. Big, quiet, confident,
+cinematic. Image-led through bespoke diagrams and real specimens, not screenshots.
+Lots of motion, scroll-driven and choreographed (overrides product motion restraint),
+always with stills.
+
+- **Type scale** (fluid): `display-xxl` clamp(72px,12vw,184px)/.88/-.04em Wide 300;
+  `display-xl` clamp(56px,8vw,128px)/.9; `h1` clamp(44px,5.8vw,88px)/.98; `h2` clamp(32px,3.6vw,56px)/1.0;
+  `h3` 28/1.12 Wide 400; `lead` clamp(20px,2vw,28px)/1.35 -.018em max 32ch; `body` 18/1.52 max 64ch;
+  `small` 15/1.45; `caption` 13/1.4 PolySans 500 tracking .02em; `figure-num` mono only when it is a real number.
+- **Layout**: 1520 stage; asymmetric 2-col grids (.86/1.14, .74/1.26); sections separated by a 1px rule and
+  `--section-y`; generous whitespace; one dark stage section per page (the exchange).
+- **Components**: SiteHeader (76px, rule below, status chip "Hackathon MVP"), Hero, Section, Rule, SplitGrid,
+  Figure (top bar title + provenance word, figcaption, Pause/Replay text controls), Scene (scroll-pinned stage),
+  BigStat (number + label + provenance + source line), StatGrid, RoleRail (five roles), FlowRoute (dashed steel
+  route with travelling marker), Quote/Claim, NowNext (demonstrated vs planned columns), SourceNote, CTA
+  (square ink button, 50px+, wide arrow gap; secondary text link with underline), Footer.
+- **Signatures**: the five-role exchange scene on the dark stage; the provenance glyph legend as a design
+  element; real specimens (the actual Sponsored card, the actual receipt) set like exhibits.
+
+---
+
+## 3. LEDGER: the MVP system
+
+Register: an instrument. Precise, calm, dense where needed, every value inspectable.
+Reads like a well-set financial document crossed with a flight recorder.
+
+- **Type scale** (fixed): `title` 40/1.0 Wide 300; `h1` 28/1.1 Wide 400; `h2` 20/1.2 PolySans 500;
+  `h3` 16/1.3 PolySans 500; `body` 16/1.5; `body-sm` 14/1.45; `label` 13/1.3 PolySans 500 (+.02em);
+  `data` mono 15/1.3 tabular; `data-sm` mono 13; essential disclosure and status text never under 14px.
+- **Layout**: app frame with left run spine (the four opportunities + settlement), main canvas, right
+  inspector drawer. Desktop-first 1280–1600; readable at 1440x900 and 1280x800 for recording.
+- **Components**: AppFrame, RunSpine (timeline of turns/events), ProvenanceTag, Amount, Hash (truncate +
+  copy + inspect), MoneyState, Stat, KeyValue list, DataTable (hairline rows, no zebra), Inspector (raw JSON +
+  hashes, collapsible), Tabs, Segmented control, Button (ink solid / outline / text), Callout (limits/claims).
+  Domain specimens: **HostChat** (publisher app chat: user message, organic answer, separate Sponsored card),
+  **SponsoredCard** (Sponsored label, approved text, fictional advertiser footer), **EvidencePacket**
+  (observed prompt -> creative -> inferred hint, method vector/lexical fallback, similarity), **DecisionCard**
+  (campaign, arm baseline/history, bid/skip, relevance + intent levels, timing, tokens), **ArmDiff**
+  (baseline vs history changes), **AuctionBoard** (bids, tie-break rule, exclusions, winner, reservation),
+  **Receipt** (signed receipt fields, receipt hash, charge), **ChannelMeter** (deposit, cumulative
+  authorizations, payout, refund), **LedgerTimeline** (event sequence), **CampaignSheet** (declared
+  capabilities, hints, caps, version, approval).
+- **Present mode**: same components at 1.25x scale, one idea per screen, keyboard driven, captions bar,
+  suitable for the recorded video and for judges clicking through.

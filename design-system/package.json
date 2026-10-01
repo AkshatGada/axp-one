@@ -1,0 +1,17 @@
+{
+  "name": "@axp/design-system",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AXP Steel foundation + Prospectus (landing) + Ledger (product) design systems.",
+  "exports": {
+    "./steel.css": "./foundation/steel.css",
+    "./foundation": "./foundation/index.ts",
+    "./prospectus": "./prospectus/index.ts",
+    "./prospectus.css": "./prospectus/prospectus.css",
+    "./ledger": "./ledger/index.ts",
+    "./ledger.css": "./ledger/ledger.css",
+    "./fonts/*": "./fonts/*"
+  },
+  "peerDependencies": { "react": ">=19" }
+}
