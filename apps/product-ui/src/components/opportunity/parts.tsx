@@ -521,9 +521,9 @@ export function RepeatRulers({ o }: { o: Opportunity }) {
 }
 
 // ---------- Step 5: auction ----------
-export function AuctionStep({ o }: { o: Opportunity }) {
+export function auctionRows(o: Opportunity) {
   const winner = o.auction.winnerCampaignId;
-  const rows = run.campaigns.map((c) => {
+  return run.campaigns.map((c) => {
     const bid = o.auction.bids.find((b) => b.campaignId === c.campaignId);
     const na = o.auction.notAdmitted.find((x) => x.campaignId === c.campaignId);
     const rej = o.auction.rejections.find((r) => r.campaignId === c.campaignId);
@@ -535,7 +535,7 @@ export function AuctionStep({ o }: { o: Opportunity }) {
         levels: bid.levels ?? "",
         formula: `${usdc(bid.maxBidBaseUnits)} × ${(bid.bps ?? 0) / 100}% =`,
         amount: usdc(bid.amountBaseUnits),
-        status: won ? <strong>Won{o.auction.tieBreakApplied ? " on the tie-break" : ""}</strong> : o.auction.tieBreakApplied ? "Equal bid, lost the tie-break" : "Lost",
+        status: won ? <strong>Won{o.auction.tieBreakApplied ? " on the tie-break" : o.auction.bids.length === 1 ? ", sole bidder" : ""}</strong> : o.auction.tieBreakApplied ? "Equal bid, lost the tie-break" : "Lost",
         winner: won,
       };
     }
@@ -549,21 +549,30 @@ export function AuctionStep({ o }: { o: Opportunity }) {
       out: true,
     };
   });
+}
+
+export function AuctionBoardFor({ o }: { o: Opportunity }) {
+  return (
+    <AuctionBoard
+      rows={auctionRows(o)}
+      floor={
+        <>
+          <Provenance kind="policy" label="Floor" />
+          <Amount baseUnits={o.floorBaseUnits} />
+          <span>Bids below the floor are rejected. The winner pays its own bid.</span>
+        </>
+      }
+      footer={o.auction.tieBreakApplied ? <TieBreakNote>Equal bids are ordered by campaign ID: v3-clearvault before v3-keyforge.</TieBreakNote> : undefined}
+    />
+  );
+}
+
+export function AuctionStep({ o }: { o: Opportunity }) {
   const activeLevels = o.auction.bids.map((b) => b.levels ?? "");
   return (
     <>
       <BidTableGrid rows={run.policy.bidTable} active={activeLevels} maxBid={run.policy.maxBidBaseUnits} />
-      <AuctionBoard
-        rows={rows}
-        floor={
-          <>
-            <Provenance kind="policy" label="Floor" />
-            <Amount baseUnits={o.floorBaseUnits} />
-            <span>Bids below the floor are rejected. The winner pays its own bid.</span>
-          </>
-        }
-        footer={o.auction.tieBreakApplied ? <TieBreakNote>Equal bids are ordered by campaign ID: v3-clearvault before v3-keyforge.</TieBreakNote> : undefined}
-      />
+      <AuctionBoardFor o={o} />
       <div className="lg-row">
         <InspectButton payload={inspect.auction(o)} />
         <span className="lg-small">

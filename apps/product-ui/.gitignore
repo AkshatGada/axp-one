@@ -4,3 +4,4 @@ next-env.d.ts
 *.tsbuildinfo
 public/run.public.json
 .next-build/
+public/present.srt

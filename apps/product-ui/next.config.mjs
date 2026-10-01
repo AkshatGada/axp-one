@@ -6,6 +6,7 @@ const nextConfig = {
   images: { unoptimized: true },
   transpilePackages: ["@axp/design-system"],
   reactStrictMode: true,
+  devIndicators: false,
   ...(basePath ? { basePath } : {}),
   // A separate build directory lets `next build` run while `next dev` is up.
   distDir: process.env.NEXT_DIST_DIR || ".next",
