@@ -5,7 +5,9 @@ const nextConfig = {
   images: { unoptimized: true },
   transpilePackages: ["@axp/design-system"],
   reactStrictMode: true,
-  // `pnpm build` exports into .next-build (moved to out/), so it never touches dev's .next.
+  devIndicators: false,
+  // Always build with NEXT_DIST_DIR=.next-build (see package.json): the export never touches the .next
+  // that `pnpm dev` serves from. It is moved to out/ afterwards.
   distDir: process.env.NEXT_DIST_DIR || ".next",
 };
 export default nextConfig;
