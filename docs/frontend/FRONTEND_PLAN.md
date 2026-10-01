@@ -377,7 +377,7 @@ The full draft copy for every heading and line comes from the landing design pas
 | Scroll fatigue | Pinned budget of about 16 viewports, anchors, skip links. |
 | Claim drift | Lint, audits, trap list. |
 | Number errors | Extraction + asserts. |
-| PolySans web licence on a public URL | Owner to confirm before deploy; fallback stack exists. |
+| PolySans web licence on a public URL | RESOLVED 2026-10-02: owner confirms PolySans is licensed for the public deploy. |
 | Real brands in observed evidence | Owner decision. |
 | Safari sticky quirks | `overflow: clip`, no preserve-3d. |
 | Ed25519 browser support | Feature-detect. |
