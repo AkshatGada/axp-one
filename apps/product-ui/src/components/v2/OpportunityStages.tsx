@@ -2,6 +2,7 @@
 // Opportunity controller: the pipeline stepper drives one stage at a time (J/K, ←/→, click, URL hash per stage),
 // or "Show all stages" stacks every panel for scrolling. The app's Sponsored slot follows the stage.
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import Link from "next/link";
 import { Ld } from "@axp/design-system/ledger";
 
 type Ctx = { active: number; all: boolean; setActive: (i: number) => void; setAll: (v: boolean) => void; ids: string[]; deliveredFrom: number };
@@ -154,9 +155,9 @@ export function StageNav({ total, next }: { total: number; next: { href: string;
         Previous stage
       </Ld.Button>
       {last ? (
-        <a className="ld-btn ld-btn--primary ld-btn--sm" href={next.href}>
+        <Link className="ld-btn ld-btn--primary ld-btn--sm" href={next.href}>
           {next.label}
-        </a>
+        </Link>
       ) : (
         <Ld.Button size="sm" onClick={() => setActive(active + 1)}>
           Next stage

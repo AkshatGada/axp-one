@@ -52,7 +52,7 @@ export function TopBar({ brand, run, chips, actions, style }: { brand: ReactNode
 }
 
 /** Run switcher. Only one recorded run exists; the menu says so instead of inventing others. */
-export function RunSwitcher({ runId, note, open, label }: { runId: string; note: ReactNode; open?: boolean; label?: ReactNode }) {
+export function RunSwitcher({ runId, note, open, label, others = [] }: { runId: string; note: ReactNode; open?: boolean; label?: ReactNode; others?: Array<{ label: ReactNode; href: string; note?: ReactNode }> }) {
   return (
     <details className="ld-switch" open={open}>
       <summary>
@@ -63,10 +63,17 @@ export function RunSwitcher({ runId, note, open, label }: { runId: string; note:
       </summary>
       <div className="ld-menu">
         <div className="ld-menu-item" aria-current="true">
-          <span className="ld-mono">{runId}</span>
+          <span>{label ?? runId}</span>
+          <span className="ld-mono ld-caption">{runId}</span>
           <span className="ld-caption">{note}</span>
         </div>
-        <div className="ld-menu-note">The only recorded run published here.</div>
+        {others.map((o) => (
+          <a key={o.href} className="ld-menu-item" href={o.href}>
+            <span>{o.label}</span>
+            {o.note ? <span className="ld-caption">{o.note}</span> : null}
+          </a>
+        ))}
+        <div className="ld-menu-note">{others.length ? "Separate runs; their numbers are never merged." : "The only run published here."}</div>
       </div>
     </details>
   );
@@ -425,9 +432,17 @@ export function StepChart({ points, max, cap, format, width = 480, height = 160,
           <text x={x(i)} y={height - 6} textAnchor="middle" className="ld-chart-t">
             {p.label}
           </text>
-          <text x={x(i) + 8} y={y(p.value) - 8} className="ld-chart-v">
-            {format(p.value)}
-          </text>
+          {(() => {
+            // Keep the value clear of the dashed cap line: above the step by default, below it when the line is close.
+            const above = y(p.value) - 8;
+            const near = cap !== undefined && Math.abs(above - 4 - y(cap)) < 12;
+            const yy = near ? Math.min(y(p.value) + 18, y(0) - 4) : above;
+            return (
+              <text x={x(i) + 8} y={yy} className="ld-chart-v ld-chart-knock">
+                {format(p.value)}
+              </text>
+            );
+          })()}
         </g>
       ))}
     </svg>

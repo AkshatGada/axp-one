@@ -10,6 +10,7 @@ import { armDiffSentence, inspect } from "@/components/opportunity/parts";
 import { bpsFor } from "@/lib/policy.ts";
 import { LiveHashV2, LiveSignatureV2 } from "./live";
 import { auctionKind, auctionSentence, capChip, capEvents, capWords, clockNote, DISCLAIMER, earlierSameQuestion, historyEffect, list, noFillSentence, tableBid, tieFacts, topicWords, winnerCaption } from "@/data/story";
+import { asset } from "@/lib/paths";
 
 const L = Link as unknown as Ld.LinkC;
 const two = (n: number) => n.toFixed(2);
@@ -335,7 +336,7 @@ function TieExplainer({ o }: { o: Opportunity }) {
         : null}{" "}
       {cap && cap.o.n !== o.n ? (
         <>
-          For a frequency-cap exclusion, see <a className="ld-link" href={`/opportunity/${cap.o.n}/#auction`}>opportunity {cap.o.n}</a>.
+          For a frequency-cap exclusion, see <a className="ld-link" href={asset(`/opportunity/${cap.o.n}/#auction`)}>opportunity {cap.o.n}</a>.
         </>
       ) : null}
     </Ld.Callout>

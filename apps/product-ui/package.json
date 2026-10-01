@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "NEXT_DIST_DIR=.next-dev next dev -p 3420",
-    "build": "node scripts/project-run.mjs && node scripts/project-devnet.mjs && node scripts/beats-to-srt.mjs && next build",
+    "build": "node scripts/build-all.mjs",
+    "build:one": "node scripts/project-run.mjs && node scripts/project-devnet.mjs && node scripts/beats-to-srt.mjs && next build",
     "project": "node scripts/project-run.mjs && node scripts/project-devnet.mjs",
     "typecheck": "tsc --noEmit",
     "test": "node --test scripts/test/*.test.mjs",

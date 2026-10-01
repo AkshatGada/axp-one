@@ -7,6 +7,7 @@ import { LiveVerifyTile } from "@/components/v2/live";
 import { RowLink } from "@/components/v2/RowLink";
 import { DevnetLine, hasDevnet } from "@/components/v2/devnet";
 import { firstPaid, highlight, onDevnet, otherAuctionsLine } from "@/data/story";
+import { asset } from "@/lib/paths";
 
 const L = Link as unknown as Ld.LinkC;
 
@@ -24,7 +25,7 @@ export default function Overview() {
   return (
     <>
       <Ld.PageBar
-        title={onDevnet ? "One live run of an ad exchange inside an AI app, settled on Solana Devnet" : "One recorded run of an ad exchange inside an AI app"}
+        title={onDevnet ? "One live run of an ad exchange inside an AI app" : "One recorded run of an ad exchange inside an AI app"}
         sub={<>People ask an AI app what to buy. Advertiser agents decide whether to bid; code sets the price; the app shows one labelled Sponsored card, paid only after a signed delivery.</>}
         actions={
           <>
@@ -80,14 +81,14 @@ export default function Overview() {
           <div className="ov2-kpis">
             <Ld.Kpi label="Questions" value={run.counts.opportunities} context={`${run.counts.auctions} filled${run.counts.noFill ? `, ${run.counts.noFill} no fill` : ""}`} href="/opportunity/1/" Link={L} />
             <Ld.Kpi label="Agent decisions" value={run.counts.decisions} context={`${bids} became bids in an auction`} />
-            <Ld.Kpi label="Prices" value={lo === hi ? (lo ?? "none") : `${lo} to ${hi}`} unit={lo ? "USDC" : undefined} context={`${prices.length} auction${prices.length === 1 ? "" : "s"} won`} />
+            <Ld.Kpi label={lo === hi ? "Price" : "Top price"} value={hi ?? "none"} unit={hi ? "USDC" : undefined} context={lo && lo !== hi ? `Lowest ${lo} USDC; ${prices.length} auctions won` : `${prices.length} auction${prices.length === 1 ? "" : "s"} won`} />
             <Ld.Kpi label="Paid to the app" value={usdc(run.totals.chargesBaseUnits)} unit="USDC" context={`Test USDC; ${usdc(run.totals.refundedBaseUnits)} USDC refunded`} href="/settlement/" Link={L} />
             <Ld.Kpi label={`${onDevnet ? "Devnet" : "Sandbox"} transactions`} value={run.chainTxs.length} context={`For ${deliveries} paid deliver${deliveries === 1 ? "y" : "ies"}`} href="/settlement/" Link={L} />
             <LiveVerifyTile context="Checked in your browser" />
           </div>
           {hl ? (
             <Ld.Callout tone="brand" title={hl.title}>
-              {hl.body} {otherAuctionsLine(hl.n)} <a className="ld-link" href={`/opportunity/${hl.n}/#auction`}>Open opportunity {hl.n}</a>
+              {hl.body} {otherAuctionsLine(hl.n)} <a className="ld-link" href={asset(`/opportunity/${hl.n}/#auction`)}>Open opportunity {hl.n}</a>
             </Ld.Callout>
           ) : null}
         </div>
@@ -110,27 +111,18 @@ export default function Overview() {
         <Ld.Panel title="Why Solana" sub="Small ads need payments that don't each touch the chain">
           <div className="ld-stack" style={{ gap: 10 }}>
             <p className="ld-secondary" style={{ color: "var(--ld-text)" }}>
-              {lo ? `An ad here costs ${lo === hi ? lo : `${lo} to ${hi}`} USDC. ` : ""}A <Term title={GLOSSARY.channel.term} def={GLOSSARY.channel.def}>payment channel</Term> locks a deposit once on Solana; each accepted delivery is a signed off-chain <Term title={GLOSSARY.voucher.term} def={GLOSSARY.voucher.def}>voucher</Term>; one close pays the publisher.
+              {lo ? `An ad here costs ${lo === hi ? lo : `${lo} to ${hi}`} USDC. ` : ""}A <Term title={GLOSSARY.channel.term} def={GLOSSARY.channel.def}>payment channel</Term> locks a deposit once on Solana; each accepted delivery is a signed off-chain <Term title={GLOSSARY.voucher.term} def={GLOSSARY.voucher.def}>voucher</Term>; one close pays the publisher.{cv ? ` ${nameOf(cv.campaignId)}'s channel: open, ${cv.vouchers.map((v) => `voucher ${v.sequence} (${usdc(v.cumulativeAmountBaseUnits)} in total)`).join(", ")}, close.` : ""}
             </p>
-            {cv ? (
-              <ol className="ov2-chan" aria-label={`${nameOf(cv.campaignId)} channel in order`}>
-                <li data-chain>
-                  <b>Open</b> <span>on chain, {usdc(cv.depositBaseUnits)} USDC locked</span>
-                </li>
-                {cv.vouchers.map((v) => (
-                  <li key={v.sequence}>
-                    <b>Voucher {v.sequence}</b> <span>off-chain, {usdc(v.cumulativeAmountBaseUnits)} in total</span>
-                  </li>
-                ))}
-                <li data-chain>
-                  <b>Close</b> <span>on chain, {usdc(cv.settledBaseUnits)} paid</span>
-                </li>
-              </ol>
-            ) : null}
             <span className="ld-caption">
               This run had {deliveries} paid deliver{deliveries === 1 ? "y" : "ies"} over {run.channels.length} channel{run.channels.length === 1 ? "" : "s"}, so channels cost about as many transactions ({run.chainTxs.length}) as deliveries here. Illustration, not from this run: a channel still needs only one open and one close for 100 deliveries.
             </span>
-            {onDevnet ? null : <DevnetLine />}
+            {onDevnet ? (
+              <a className="ld-link" href={asset("/settlement/")}>
+                Every transaction on the Solana explorer
+              </a>
+            ) : (
+              <DevnetLine />
+            )}
           </div>
         </Ld.Panel>
       </div>

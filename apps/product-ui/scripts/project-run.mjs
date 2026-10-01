@@ -7,7 +7,7 @@
 // Fails the build on: leaked strings, numeric arrays > 64, count mismatches, broken conservation,
 // any bid != computeBid(levels), any failed verify check, output > 300KB.
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve, relative, isAbsolute, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { canonical } from '../src/lib/canonical.ts';
@@ -17,7 +17,9 @@ import { verifyChecks, expectedCheckCount } from '../src/lib/verify.ts';
 const here = dirname(fileURLToPath(import.meta.url));
 const app = resolve(here, '..');
 const repo = resolve(app, '../..');
-export const RUN_DIR = process.env.AXP_RUN_DIR || 'artifacts/v3/replay';
+/** Default: the fully live Devnet run (owner decision 2026-10-02). The first recording stays at artifacts/v3/replay. */
+export const DEFAULT_RUN_DIR = 'artifacts/v3-devnet-live-rehearsal/replay';
+export const RUN_DIR = process.env.AXP_RUN_DIR || DEFAULT_RUN_DIR;
 const RUN_PATH = `${RUN_DIR.replace(/\/$/, '')}/run.json`;
 const MANIFEST_PATH = `${RUN_DIR.replace(/\/$/, '')}/manifest.json`;
 /** Solana Devnet's genesis hash: a run is "live on Devnet" only when its own chain evidence says so. */
@@ -42,7 +44,7 @@ function check(name, ok, detail = '') {
   if (!ok) failures.push(`${name}${detail ? `: ${detail}` : ''}`);
 }
 
-export function project({ runBytes, manifestBytes }) {
+export function project({ runBytes, manifestBytes, chainCheck = null }) {
   const run = JSON.parse(runBytes.toString('utf8'));
   const manifestFile = JSON.parse(manifestBytes.toString('utf8'));
   const runSha256 = sha256(runBytes);
@@ -505,6 +507,30 @@ export function project({ runBytes, manifestBytes }) {
     }
     for (const t of chainTxs) t.explorerUrl = explorer('tx', t.signature);
   }
+  // Optional sibling evidence (<run dir>/../chain-check.json): explorer links, payers and the funding transaction, as
+  // recorded by the run itself. Used only when the run is on Devnet and only after its signatures match the run's own.
+  let chainExtras = null;
+  if (onDevnet && chainCheck) {
+    const devUrl = (u) => typeof u === 'string' && u.startsWith('https://explorer.solana.com/') && u.endsWith('?cluster=devnet');
+    for (const ch of channels) {
+      const cc = chainCheck.channels?.find((x) => x.channelId === ch.channelId);
+      check(`chain-check ${ch.channelId}: signatures match the run`, !!cc && cc.openSignature === ch.open.signature && cc.closeSignature === ch.close.signature);
+      check(`chain-check ${ch.channelId}: explorer links on devnet`, !!cc && [cc.explorer?.channel, cc.explorer?.open, cc.explorer?.close].every(devUrl));
+      if (cc?.explorer) {
+        ch.explorerUrl = cc.explorer.channel;
+        ch.open.explorerUrl = cc.explorer.open;
+        ch.close.explorerUrl = cc.explorer.close;
+      }
+    }
+    for (const t of chainTxs) t.explorerUrl = channels.find((c) => c.channelId === t.channelId)[t.kind].explorerUrl;
+    const f = chainCheck.funding;
+    check('chain-check funding link on devnet', !f || devUrl(f.explorer));
+    chainExtras = {
+      funding: f ? { signature: f.signature, explorerUrl: f.explorer, slot: f.slot, lamportsPerPayer: f.lamportsPerPayer, tokenBaseUnitsPerPayer: f.tokenBaseUnitsPerPayer, payers: f.payers } : null,
+      payers: channels.map((c) => ({ campaignId: c.campaignId, address: c.payer, explorerUrl: explorer('address', c.payer) })),
+      publisher: { address: channels[0]?.payee ?? null, explorerUrl: channels[0]?.payee ? explorer('address', channels[0].payee) : null },
+    };
+  }
   const network = onDevnet
     ? { kind: 'devnet', label: 'Solana Devnet', genesisHash: DEVNET_GENESIS, programExplorerUrl: channels[0]?.program ? explorer('address', channels[0].program) : null }
     : { kind: 'sandbox', label: 'Hosted Solana sandbox', genesisHash: [...genesis][0] ?? null, programExplorerUrl: null };
@@ -529,6 +555,7 @@ export function project({ runBytes, manifestBytes }) {
       chainCheckedAt: run.chainEvidence.at,
     },
     network,
+    chainExtras,
     counts: {
       opportunities: opportunities.length,
       decisions: opportunities.reduce((n, o) => n + o.decisions.length, 0),
@@ -676,7 +703,9 @@ export function structuralChecks(p, check = recordCheck, raw = null) {
 async function main() {
   const runBytes = readFileSync(resolve(repo, RUN_PATH));
   const manifestBytes = readFileSync(resolve(repo, MANIFEST_PATH));
-  const { projection, removed } = project({ runBytes, manifestBytes });
+  const ccPath = resolve(repo, RUN_DIR, '..', 'chain-check.json');
+  const chainCheck = existsSync(ccPath) ? JSON.parse(readFileSync(ccPath, 'utf8')) : null;
+  const { projection, removed } = project({ runBytes, manifestBytes, chainCheck });
   structuralChecks(projection, recordCheck, JSON.parse(runBytes.toString('utf8')));
   const text = JSON.stringify(projection);
   const leaks = scanForbidden(text);

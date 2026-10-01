@@ -539,3 +539,5 @@ a.ld-kpi:hover { border-color: var(--ld-border-2); box-shadow: var(--ld-shadow-2
 .ld .ld-main:focus { outline: none; }
 .ld .lg-inspector:focus, .ld .lg-inspector:focus-visible { outline: none; }
 .ld .lg-inspector-body { grid-auto-rows: max-content; }
+a.ld-menu-item { color: inherit; text-decoration: none; } a.ld-menu-item:hover { background: var(--ld-hover); }
+.ld .ld-chart-knock { paint-order: stroke; stroke: var(--ld-panel); stroke-width: 4px; stroke-linejoin: round; }

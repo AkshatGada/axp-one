@@ -206,6 +206,16 @@ export function makeStory(run: ProductRun) {
     ? { name: "Solana Devnet", a: "Solana Devnet", the: "Solana Devnet", short: "Devnet", tx: "Devnet transaction", chip: "Live on Solana Devnet" }
     : { name: "hosted Solana sandbox", a: "a hosted Solana sandbox", the: "the hosted Solana sandbox", short: "Sandbox", tx: "Solana sandbox transaction", chip: "Hosted Solana sandbox" };
   const onePayer = run.channels.length > 1 && new Set(run.channels.map((c) => c.payer)).size === 1;
-  return { usdc, nameOf, tableBid, winnerCaption, auctionSentence, noFillSentence, historyEffect, moveSentence, capEvents, featuredHistory, firstPaid, firstTie, firstNoFill, firstCap, earlierSameQuestion, clockNote, tieFacts, network, onDevnet, runDate, highlight, otherAuctionsLine, NET, onePayer, topicWords };
+  /** The opportunities Present and the Overview feature, chosen from what actually happened. */
+  const picks = () => {
+    const paid = firstPaid();
+    const auction = firstTie() ?? run.opportunities.find((o) => auctionKind(o) === "different") ?? paid;
+    const hist = featuredHistory();
+    const ev = paid ?? run.opportunities.find((o) => o.decisions.length) ?? null;
+    const evMain = ev ? ev.decisions.find((d) => d.arm === "history" && d.retrieval && d.campaignId === ev.award?.campaignId) ?? ev.decisions.find((d) => d.arm === "history" && d.retrieval) ?? null : null;
+    const evOther = ev ? ev.decisions.find((d) => d.arm === "history" && d.retrieval && d.campaignId !== evMain?.campaignId && ev.eligibility.excluded.some((x) => x.campaignId === d.campaignId)) ?? ev.decisions.find((d) => d.arm === "history" && d.retrieval && d.campaignId !== evMain?.campaignId) ?? null : null;
+    return { paid, auction, hist, cap: firstCap(), nofill: firstNoFill(), ev, evMain, evOther };
+  };
+  return { picks, usdc, nameOf, tableBid, winnerCaption, auctionSentence, noFillSentence, historyEffect, moveSentence, capEvents, featuredHistory, firstPaid, firstTie, firstNoFill, firstCap, earlierSameQuestion, clockNote, tieFacts, network, onDevnet, runDate, highlight, otherAuctionsLine, NET, onePayer, topicWords };
 }
 export type Story = ReturnType<typeof makeStory>;

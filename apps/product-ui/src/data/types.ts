@@ -346,6 +346,12 @@ export interface ProductRun {
   };
   /** Where this run's own money moved. */
   network: { kind: "devnet" | "sandbox"; label: string; genesisHash: string | null; programExplorerUrl: string | null };
+  /** Devnet runs only: the run's own explorer links for payers, the publisher and the funding transaction. */
+  chainExtras: {
+    funding: { signature: string; explorerUrl: string; slot: number; lamportsPerPayer: string; tokenBaseUnitsPerPayer: string; payers: string[] } | null;
+    payers: Array<{ campaignId: string; address: string; explorerUrl: string }>;
+    publisher: { address: string | null; explorerUrl: string | null };
+  } | null;
   counts: {
     opportunities: number;
     decisions: number;

@@ -7,6 +7,7 @@ import type { DevnetChannel, DevnetTxRef } from "@/data/devnet-types";
 import { GLOSSARY } from "@/data/glossary";
 import { nameOf, usdc } from "@/data/select";
 import { rentWords } from "@/data/story";
+import { asset } from "@/lib/paths";
 
 export const hasDevnet = !!devnet;
 const short = (s: string, h = 6, t = 4) => `${s.slice(0, h)}…${s.slice(-t)}`;
@@ -227,7 +228,7 @@ export function DevnetLine() {
           <Ext href={c.channelExplorerUrl}>{`${nameOf(c.campaignId)}'s channel`}</Ext>
         </span>
       ))}
-      . <a className="ld-link" href="/settlement/#devnet">All links</a>
+      . <a className="ld-link" href={asset("/settlement/#devnet")}>All links</a>
     </span>
   );
 }

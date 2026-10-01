@@ -4,11 +4,14 @@ import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve, dirname } from 'node:path';
 import { projectDevnet } from '../project-devnet.mjs';
+import { project } from '../project-run.mjs';
 import { verifyDevnet } from '../../src/lib/verify-devnet.ts';
 
 const app = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const SRC = resolve(app, '../../artifacts/v3-devnet/settlement.json');
-const run = () => JSON.parse(readFileSync(resolve(app, 'src/data/run.public.json'), 'utf8'));
+// The re-settlement belongs to the first recording, whatever the default build input is.
+const recorded = project({ runBytes: readFileSync(resolve(app, '../../artifacts/v3/replay/run.json')), manifestBytes: readFileSync(resolve(app, '../../artifacts/v3/replay/manifest.json')) }).projection;
+const run = () => structuredClone(recorded);
 const raw = () => JSON.parse(readFileSync(SRC, 'utf8'));
 const has = existsSync(SRC);
 
@@ -35,8 +38,8 @@ for (const [name, mutate, needle] of [
     assert.ok(failures.some((f) => f.includes(needle)), failures.join('\n'));
   });
 
-test('browser devnet checks pass on the committed projection and fail when tampered', { skip: !existsSync(resolve(app, 'src/data/devnet.public.json')) }, async () => {
-  const d = JSON.parse(readFileSync(resolve(app, 'src/data/devnet.public.json'), 'utf8'));
+test('browser devnet checks pass on the projected evidence and fail when tampered', { skip: !has }, async () => {
+  const d = projectDevnet(raw(), run()).projection;
   const ok = verifyDevnet(run(), d);
   assert.equal(ok.length, 7);
   assert.ok(ok.every((c) => c.status === 'pass'), ok.filter((c) => c.status !== 'pass').map((c) => c.id).join(', '));

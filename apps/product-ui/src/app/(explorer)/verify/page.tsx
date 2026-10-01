@@ -65,7 +65,7 @@ export default async function VerifyPage() {
           <ul className="ev2-list">
             <li>That a person saw or read a card. A receipt is the app's assertion that it inserted a labelled card.</li>
             <li>{onDevnet ? "Anything on chain by itself: these checks read the file, not the chain. Open the Devnet explorer links on Settlement to compare. Devnet test USDC; not mainnet." : hasDevnet ? "Anything on chain: these checks read the files, not a chain. The recorded run settled on a hosted Solana sandbox in test USDC; Devnet links are below to open yourself." : "Anything on mainnet or Devnet: money moved on a hosted Solana sandbox in test USDC."}</li>
-            {onePayer ? <li>Independent advertisers: one disposable test payer funded every funded advertiser.</li> : null}
+            {onePayer ? <li>Independent advertisers: one disposable test payer funded every funded advertiser.</li> : run.channels.length > 1 ? <li>Independent advertisers: each has its own test wallet, but the demo operator runs all of them.</li> : null}
             <li>That history improves targeting: one observation per arm; not a measured lift.</li>
             <li>The model outputs themselves, or that displayed scores and evidence text match them: raw outputs and organic completions are recorded hashes only.</li>
             <li>That the file and the checker are independent: both are served by this site.</li>

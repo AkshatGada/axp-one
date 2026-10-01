@@ -3,21 +3,27 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve, dirname } from 'node:path';
-import { project, scanForbidden, longNumericArrays, structuralChecks } from '../project-run.mjs';
+import { existsSync } from 'node:fs';
+import { project, scanForbidden, longNumericArrays, structuralChecks, RUN_DIR } from '../project-run.mjs';
 
 const app = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const repo = resolve(app, '../..');
-const runBytes = readFileSync(resolve(repo, 'artifacts/v3/replay/run.json'));
-const manifestBytes = readFileSync(resolve(repo, 'artifacts/v3/replay/manifest.json'));
+const bundle = (dir) => {
+  const cc = resolve(repo, dir, '..', 'chain-check.json');
+  return { runBytes: readFileSync(resolve(repo, dir, 'run.json')), manifestBytes: readFileSync(resolve(repo, dir, 'manifest.json')), chainCheck: existsSync(cc) ? JSON.parse(readFileSync(cc, 'utf8')) : null };
+};
+// The first recording (hosted sandbox) has fixed, known numbers; the default build input may be another run.
+const recorded = bundle('artifacts/v3/replay');
+const runBytes = recorded.runBytes;
+const { projection } = project(recorded);
 const shipped = readFileSync(resolve(app, 'public/run.public.json'), 'utf8');
-const { projection } = project({ runBytes, manifestBytes });
 
-test('projection is deterministic and matches the shipped file', () => {
-  assert.equal(JSON.stringify(projection), shipped);
+test('projection of the selected bundle is deterministic and matches the shipped file', () => {
+  assert.equal(JSON.stringify(project(bundle(RUN_DIR)).projection), shipped);
   assert.equal(readFileSync(resolve(app, 'src/data/run.public.json'), 'utf8'), shipped);
 });
 
-test('counts, story order and joins', () => {
+test('the first recording: counts, story order and joins', () => {
   const p = projection;
   assert.deepEqual([p.counts.opportunities, p.counts.decisions, p.counts.auctions, p.counts.noFill, p.counts.receipts, p.counts.events, p.counts.channels, p.counts.txs], [4, 15, 3, 1, 3, 33, 2, 4]);
   assert.deepEqual(p.opportunities.map((o) => o.scenarioId), ['cached', 'offline', 'repeat', 'mobile']);
@@ -39,7 +45,11 @@ test('counts, story order and joins', () => {
   assert.deepEqual(cached, [2.38, 2.52]);
 });
 
-test('sanitization, vector guard and size budget', () => {
+test('sanitization, vector guard and size budget (both runs)', () => {
+  for (const text of [JSON.stringify(projection), shipped]) {
+    assert.deepEqual(scanForbidden(text), []);
+    assert.ok(Buffer.byteLength(text) <= 300 * 1024);
+  }
   const text = JSON.stringify(projection);
   assert.deepEqual(scanForbidden(text), []);
   assert.deepEqual(longNumericArrays(projection), []);
@@ -62,4 +72,12 @@ test('structural checks fail on broken conservation and count drift', () => {
   const clean = [];
   structuralChecks(projection, (name, ok) => { if (!ok) clean.push(name); }, raw);
   assert.deepEqual(clean, []);
+});
+
+test('structural checks pass on the selected bundle too', () => {
+  const b = bundle(RUN_DIR);
+  const p = project(b).projection;
+  const bad = [];
+  structuralChecks(p, (name, ok) => { if (!ok) bad.push(name); }, JSON.parse(b.runBytes.toString('utf8')));
+  assert.deepEqual(bad, []);
 });

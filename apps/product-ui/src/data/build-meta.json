@@ -1,13 +1,13 @@
 {
   "projectionVersion": "axp.product-run.v1",
   "generatedFrom": {
-    "artifacts/v3/replay/run.json": "938a0ee84b1936a02a56c8eb30b0fea0dca47f07195013f69847ee404dd6dd48",
-    "artifacts/v3/replay/manifest.json": "e34448fafa059d88c0120373fe039940ee1aca29369e3a245293a8b0f5a2152a"
+    "artifacts/v3-devnet-live-rehearsal/replay/run.json": "b4b866cf4c2589d67d1342ff111968b28f7523acff382cd7efb1beab855c6959",
+    "artifacts/v3-devnet-live-rehearsal/replay/manifest.json": "bfac185a2b6ece9c469b8dc9a5529c58a0db78262dbebf7e9d59019c360676be"
   },
   "output": {
     "path": "public/run.public.json",
-    "bytes": 176533,
-    "sha256": "397ef7475285fa762b0280ab00173f2966d51dc686a6d28cb217f216b459c790"
+    "bytes": 180669,
+    "sha256": "98b2ca06fa44391e0d1de0472c2181a9004ed0e5327c7f4265f9c4ac82589d70"
   },
   "counts": {
     "opportunities": 4,
@@ -18,7 +18,7 @@
     "events": 33,
     "channels": 2,
     "txs": 4,
-    "inputTokens": 21336,
+    "inputTokens": 21346,
     "outputTokens": 1655,
     "evidenceRecords": 13,
     "evidenceHints": 5
@@ -113,17 +113,17 @@
     {
       "name": "manifest records the run.json hash",
       "ok": true,
-      "detail": "938a0ee84b1936a02a56c8eb30b0fea0dca47f07195013f69847ee404dd6dd48 vs 938a0ee84b1936a02a56c8eb30b0fea0dca47f07195013f69847ee404dd6dd48"
+      "detail": "b4b866cf4c2589d67d1342ff111968b28f7523acff382cd7efb1beab855c6959 vs b4b866cf4c2589d67d1342ff111968b28f7523acff382cd7efb1beab855c6959"
     },
     {
       "name": "manifest run id = run id",
       "ok": true,
-      "detail": "v3-wallet-acceptance vs v3-wallet-acceptance"
+      "detail": "v3-devnet-live-rehearsal-20261002 vs v3-devnet-live-rehearsal-20261002"
     },
     {
       "name": "manifest financial mode = run financial mode",
       "ok": true,
-      "detail": "sandbox vs sandbox"
+      "detail": "devnet vs devnet"
     },
     {
       "name": "bid v3-cached/v3-clearvault = computeBid(3:3)",
@@ -135,9 +135,9 @@
       "ok": true
     },
     {
-      "name": "bid v3-cached/v3-keyforge = computeBid(3:3)",
+      "name": "bid v3-cached/v3-keyforge = computeBid(3:2)",
       "ok": true,
-      "detail": "4000 vs 4000"
+      "detail": "3000 vs 3000"
     },
     {
       "name": "bid v3-cached/v3-keyforge policy version",
@@ -170,9 +170,9 @@
       "ok": true
     },
     {
-      "name": "bid v3-repeat/v3-keyforge = computeBid(3:2)",
+      "name": "bid v3-repeat/v3-keyforge = computeBid(3:3)",
       "ok": true,
-      "detail": "3000 vs 3000"
+      "detail": "4000 vs 4000"
     },
     {
       "name": "bid v3-repeat/v3-keyforge policy version",
@@ -185,7 +185,27 @@
     {
       "name": "one network for every channel",
       "ok": true,
-      "detail": "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d"
+      "detail": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG"
+    },
+    {
+      "name": "chain-check v3-clearvault-channel: signatures match the run",
+      "ok": true
+    },
+    {
+      "name": "chain-check v3-clearvault-channel: explorer links on devnet",
+      "ok": true
+    },
+    {
+      "name": "chain-check v3-keyforge-channel: signatures match the run",
+      "ok": true
+    },
+    {
+      "name": "chain-check v3-keyforge-channel: explorer links on devnet",
+      "ok": true
+    },
+    {
+      "name": "chain-check funding link on devnet",
+      "ok": true
     },
     {
       "name": "count: at least one opportunity",
@@ -328,7 +348,7 @@
     {
       "name": "fee + new rent within cap",
       "ok": true,
-      "detail": "9463840 <= 20000000"
+      "detail": "8406760 <= 20000000"
     },
     {
       "name": "receipts joined by awardId",
@@ -361,21 +381,21 @@
     {
       "name": "size budget <= 300KB",
       "ok": true,
-      "detail": "176533 bytes"
+      "detail": "180669 bytes"
     },
     {
-      "name": "verify checks pass (48)",
+      "name": "verify checks pass (47)",
       "ok": true
     },
     {
-      "name": "verify produces exactly the checks the run's structure implies (48)",
+      "name": "verify produces exactly the checks the run's structure implies (47)",
       "ok": true,
-      "detail": "48"
+      "detail": "47"
     }
   ],
   "verify": {
-    "total": 48,
-    "passed": 48,
+    "total": 47,
+    "passed": 47,
     "failed": 0,
     "skipped": 0,
     "ids": [
@@ -383,21 +403,21 @@
       "question-2",
       "question-3",
       "question-4",
-      "packet-v3-cached:v3-clearvault-33f486d647df:text_only",
-      "packet-v3-cached:v3-clearvault-33f486d647df:history",
-      "packet-v3-cached:v3-keyforge-d4fe6a7b92d9:text_only",
-      "packet-v3-cached:v3-keyforge-d4fe6a7b92d9:history",
-      "packet-v3-cached:v3-leatherguard-6923ef3cb1d1:text_only",
-      "packet-v3-cached:v3-leatherguard-6923ef3cb1d1:history",
-      "packet-v3-offline:v3-clearvault-33f486d647df:text_only",
-      "packet-v3-offline:v3-clearvault-33f486d647df:history",
-      "packet-v3-offline:v3-keyforge-d4fe6a7b92d9:text_only",
-      "packet-v3-offline:v3-keyforge-d4fe6a7b92d9:history",
-      "packet-v3-offline:v3-leatherguard-6923ef3cb1d1:text_only",
-      "packet-v3-offline:v3-leatherguard-6923ef3cb1d1:history",
-      "packet-v3-repeat:v3-clearvault-33f486d647df:history",
-      "packet-v3-repeat:v3-keyforge-d4fe6a7b92d9:history",
-      "packet-v3-repeat:v3-leatherguard-6923ef3cb1d1:history",
+      "packet-v3-cached:v3-clearvault-340ab5741a56:text_only",
+      "packet-v3-cached:v3-clearvault-340ab5741a56:history",
+      "packet-v3-cached:v3-keyforge-ff58994594a9:text_only",
+      "packet-v3-cached:v3-keyforge-ff58994594a9:history",
+      "packet-v3-cached:v3-leatherguard-60be7f7369e8:text_only",
+      "packet-v3-cached:v3-leatherguard-60be7f7369e8:history",
+      "packet-v3-offline:v3-clearvault-340ab5741a56:text_only",
+      "packet-v3-offline:v3-clearvault-340ab5741a56:history",
+      "packet-v3-offline:v3-keyforge-ff58994594a9:text_only",
+      "packet-v3-offline:v3-keyforge-ff58994594a9:history",
+      "packet-v3-offline:v3-leatherguard-60be7f7369e8:text_only",
+      "packet-v3-offline:v3-leatherguard-60be7f7369e8:history",
+      "packet-v3-repeat:v3-clearvault-340ab5741a56:history",
+      "packet-v3-repeat:v3-keyforge-ff58994594a9:history",
+      "packet-v3-repeat:v3-leatherguard-60be7f7369e8:history",
       "creative-1",
       "creative-2",
       "creative-3",
@@ -423,7 +443,6 @@
       "bid-2-v3-clearvault",
       "bid-2-v3-keyforge",
       "bid-3-v3-keyforge",
-      "tiebreak-1",
       "tiebreak-2",
       "feecap",
       "totals"
@@ -432,7 +451,7 @@
       "recomputed": 28,
       "signature": 3,
       "arithmetic": 10,
-      "policy": 7
+      "policy": 6
     }
   }
 }

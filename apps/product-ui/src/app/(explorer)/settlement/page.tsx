@@ -181,10 +181,33 @@ export default function SettlementPage() {
         );
       })}
 
+      {run.chainExtras ? (
+        <Ld.Panel title="Everything on the Solana explorer" sub="Every transaction, channel and wallet in this run, on Solana Devnet" flush actions={<Ld.Tag tone="brand">Solana Devnet</Ld.Tag>}>
+          <Ld.Table
+            columns={[
+              { key: "k", head: "What", cell: (r: { k: string; v: string; url: string; note?: string }) => <span className="ld-stack" style={{ gap: 2 }}><span className="ld-strong">{r.k}</span>{r.note ? <span className="ld-caption">{r.note}</span> : null}</span> },
+              { key: "v", head: "Address or signature", cell: (r) => <span className="ld-mono">{`${r.v.slice(0, 8)}…${r.v.slice(-6)}`}</span> },
+              { key: "x", head: "", cell: (r) => <Ext href={r.url}>Explorer</Ext> },
+            ]}
+            rows={[
+              ...(run.network.programExplorerUrl ? [{ k: "Payment channel program", v: run.channels[0].program, url: run.network.programExplorerUrl }] : []),
+              ...(run.chainExtras.funding ? [{ k: "Funding, not settlement", v: run.chainExtras.funding.signature, url: run.chainExtras.funding.explorerUrl, note: `Funded ${run.chainExtras.funding.payers.length} payer wallet${run.chainExtras.funding.payers.length === 1 ? "" : "s"} before any channel opened` }] : []),
+              ...run.channels.flatMap((ch) => [
+                ...(ch.explorerUrl ? [{ k: `${nameOf(ch.campaignId)}'s channel`, v: ch.protocolChannelId, url: ch.explorerUrl }] : []),
+                ...(ch.open.explorerUrl ? [{ k: `Open ${nameOf(ch.campaignId)}'s channel`, v: ch.open.signature, url: ch.open.explorerUrl, note: `${usdc(ch.depositBaseUnits)} USDC locked` }] : []),
+                ...(ch.close.explorerUrl ? [{ k: `Close ${nameOf(ch.campaignId)}'s channel`, v: ch.close.signature, url: ch.close.explorerUrl, note: `${usdc(ch.settledBaseUnits)} paid, ${usdc(ch.refundBaseUnits)} back` }] : []),
+              ]),
+              ...run.chainExtras.payers.map((p) => ({ k: `${nameOf(p.campaignId)}'s payer wallet`, v: p.address, url: p.explorerUrl })),
+              ...(run.chainExtras.publisher.address && run.chainExtras.publisher.explorerUrl ? [{ k: "Publisher wallet", v: run.chainExtras.publisher.address, url: run.chainExtras.publisher.explorerUrl }] : []),
+            ]}
+          />
+        </Ld.Panel>
+      ) : null}
+
       <details className="st2-more">
         <summary>
           <span className="ld-card-title">On-chain costs, totals and transaction order</span>
-          <span className="ld-caption">Lamports, rent and the {NET.short.toLowerCase()} transactions by slot</span>
+          <span className="ld-caption">Lamports, rent and the {NET.short === "Devnet" ? "Devnet" : "sandbox"} transactions by slot</span>
         </summary>
         <div className="ld-stack-lg" style={{ gap: 16 }}>
       <div className="ld-cols-2">
@@ -238,7 +261,7 @@ export default function SettlementPage() {
       </details>
 
       <Ld.Callout title="Funding is not settlement">
-        The payer was funded before the run, outside any channel. Absolute wallet balances include funds from before this run, so only each transaction's own changes are shown. {onDevnet ? "Solana Devnet, Devnet test tokens; not mainnet." : "Hosted Solana sandbox, not Devnet or mainnet."}
+        {run.chainExtras?.funding ? `The ${run.chainExtras.funding.payers.length === 1 ? "payer was" : "payers were"} funded by one transfer before any channel opened (linked above), outside any channel.` : "The payer was funded before the run, outside any channel."} Absolute wallet balances include funds from before this run, so only each transaction's own changes are shown. {onDevnet ? "Solana Devnet, Devnet test tokens; not mainnet." : "Hosted Solana sandbox, not Devnet or mainnet."}
       </Ld.Callout>
       <DevnetSettlementSection />
     </>
