@@ -48,10 +48,10 @@ export function SiteHeader({ links, cta, chip = "Hackathon MVP" }: { links: NavL
         Skip to content
       </a>
       <div className="px-wrap px-header-in">
-        <a className="px-wordmark" href="#top" aria-label="AXP.one, back to top">
+        <a className="px-wordmark mh-wordmark" href="#top" aria-label="AXP.one, back to top">
           AXP<span>.one</span>
         </a>
-        <span className="px-chip">{chip}</span>
+        <span className="px-chip mh-chip">{chip}</span>
         <nav className="px-nav" aria-label="Sections">
           {links.map((l) => (
             <a key={l.href} href={l.href}>

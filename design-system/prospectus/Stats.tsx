@@ -24,9 +24,9 @@ export function BigStat({
   mono?: boolean;
 }) {
   return (
-    <div className="px-stat" data-size={size === "s" ? "s" : undefined} data-reveal="mask" style={{ "--d": `${delay}ms` } as CSSProperties}>
+    <div className="px-stat mh-rule" data-size={size === "s" ? "s" : undefined} data-reveal="mask" style={{ "--d": `${delay}ms` } as CSSProperties}>
       <span className="px-mask">
-        <span className={`px-mask-in px-stat-value${mono ? " px-num" : ""}`}>
+        <span className={`px-mask-in px-stat-value mh-num${mono ? " px-num" : ""}`}>
           {value}
           {unit ? <span className="px-stat-unit">{unit}</span> : null}
         </span>

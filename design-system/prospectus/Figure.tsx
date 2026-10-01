@@ -6,7 +6,7 @@ import type { ProvenanceKind } from "../foundation/provenance";
 
 export function Marks({ kinds, onStage, quiet }: { kinds: ProvenanceKind[]; onStage?: boolean; quiet?: boolean }) {
   return (
-    <span className="px-marks">
+    <span className="px-marks mh-marks">
       {kinds.map((k) => (
         <Provenance key={k} kind={k} onStage={onStage} quiet={quiet} />
       ))}
@@ -38,7 +38,7 @@ export function Figure({
 }) {
   return (
     <figure id={id} className={`px-figure${className ? ` ${className}` : ""}`}>
-      <div className="px-figure-frame">
+      <div className="px-figure-frame mh-exhibit">
         {title || kinds.length ? (
           <div className="px-figure-bar">
             <span className="px-figure-title">{title}</span>
@@ -80,7 +80,7 @@ export function Exhibit({
         <span className="px-exhibit-label">{label}</span>
         <Marks kinds={kinds} />
       </div>
-      <div className="px-exhibit-sheet">{children}</div>
+      <div className="px-exhibit-sheet mh-exhibit">{children}</div>
       {note ? <figcaption className="px-small">{note}</figcaption> : null}
     </figure>
   );

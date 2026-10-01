@@ -6,7 +6,7 @@ export function SiteFooter({ scope, base, children }: { scope: string[]; base: R
   return (
     <footer className="px-footer">
       <div className="px-wrap px-footer-in">
-        <p className="px-footer-mark" aria-label="AXP.one">
+        <p className="px-footer-mark mh-wordmark" aria-label="AXP.one">
           AXP<span>.one</span>
         </p>
         {children}

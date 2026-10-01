@@ -29,7 +29,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={`px-section${tone === "stage" ? " on-stage" : ""}${className ? ` ${className}` : ""}`}
+      className={`px-section${tone === "stage" ? " on-stage mh-stage" : ""}${className ? ` ${className}` : ""}`}
       data-tone={tone === "paper" ? undefined : tone}
       data-flush={flush ? "" : undefined}
       data-borderless={borderless ? "" : undefined}
@@ -62,7 +62,7 @@ export function Opener({
 }) {
   return (
     <header className="px-opener" data-layout={layout}>
-      <div className="px-opener-label" data-reveal="fade">
+      <div className="px-opener-label mh-rule" data-reveal="fade">
         <p className="px-label">{label}</p>
         {aside}
       </div>

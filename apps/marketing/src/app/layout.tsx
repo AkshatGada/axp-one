@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import "@axp/design-system/steel.css";
 import "@axp/design-system/prospectus.css";
+import "@/specimens/specimens.css";
+import "@/scenes/scenes.css";
 import "./site.css";
 import { MOTION_SCRIPT } from "@/motion/MotionRoot";
 

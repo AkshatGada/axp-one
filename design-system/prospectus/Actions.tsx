@@ -23,7 +23,7 @@ export function ActionPrimary({ href, children, size = "m", variant = "ink", ext
   return (
     <a
       href={href}
-      className={`px-action${className ? ` ${className}` : ""}`}
+      className={`px-action mh-action${className ? ` ${className}` : ""}`}
       data-size={size === "s" ? "s" : undefined}
       data-variant={variant === "outline" ? "outline" : undefined}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
