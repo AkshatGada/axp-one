@@ -3,7 +3,7 @@
 // Copy from src/data/copy.ts; run values from src/data/run.ts; nothing hand-typed.
 import type { CSSProperties } from "react";
 import { ActionPrimary, Words } from "@axp/design-system/prospectus";
-import { CH_URL, CONTEXTHINT, JEV_SECTION, PILLARS, SOLANA } from "@/data/copy";
+import { CH_URL, CONTEXTHINT, JEV_SECTION, PILLARS, SOLANA } from "@/data/copy-v6";
 import { DEVNET, usdc } from "@/data/run";
 import { AdWall } from "@/chapter/AdWall";
 import SolanaChannel from "./SolanaChannel";

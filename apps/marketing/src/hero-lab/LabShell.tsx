@@ -4,7 +4,7 @@
 import type { ReactNode } from "react";
 import { SiteHeader } from "@axp/design-system/prospectus";
 import MotionRoot from "@/motion/MotionRoot";
-import { HEADER, MVP_URL, NAV } from "@/data/copy";
+import { HEADER, MVP_URL, NAV } from "@/data/copy-v6";
 import s from "./lab.module.css";
 
 export default function LabShell({ children, name, other }: { children: ReactNode; name: string; other: { href: string; label: string } }) {

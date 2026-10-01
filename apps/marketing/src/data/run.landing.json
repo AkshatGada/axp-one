@@ -4,7 +4,7 @@
     "questions": 4,
     "decisions": 15,
     "auctions": 3,
-    "ties": 2,
+    "ties": 1,
     "noFill": 1,
     "receipts": 3,
     "events": 33,
@@ -56,7 +56,7 @@
       "winnerName": "ClearVault",
       "price": "4000",
       "organic": {
-        "excerpt": "I can’t reliably name the cheapest hardware wallet without checking current prices and Ethereum/Solana support. For a budget choice, compare entry-level hardware wallets by total delivered cost, then confirm that the exact model supports both networks through wallet software you’re comfortable using."
+        "excerpt": "No single 'cheapest' hardware wallet is fixed: prices and supported coins change. To find the lowest-cost option that still supports Ethereum and Solana, compare entry-level hardware wallets from established vendors on their official sites (avoid reseller markups/scams)."
       },
       "eligible": [
         "v3-clearvault",
@@ -78,7 +78,7 @@
         {
           "campaign": "v3-keyforge",
           "name": "KeyForge",
-          "amount": "4000"
+          "amount": "3000"
         }
       ],
       "decisions": [
@@ -112,7 +112,7 @@
           "arm": "history",
           "decision": "bid",
           "relevanceLevel": 3,
-          "intentLevel": 3
+          "intentLevel": 2
         },
         {
           "campaign": "v3-leatherguard",
@@ -140,7 +140,7 @@
       "winnerName": "ClearVault",
       "price": "3000",
       "organic": {
-        "excerpt": "For Ethereum and Solana, prioritize a hardware wallet if keeping private keys off your phone or computer is your main goal. Confirm that the exact device and its companion software support both networks and the transactions you need; support can differ by model, app and account type."
+        "excerpt": "For self-custody with offline key storage as priority, treat a hardware/air-gapped signer as the vault and a phone/software wallet as a watch-only interface. Hardware vs mobile: a mobile-only wallet keeps encrypted keys on an internet-connected device, so malware, phishing, clipboard hijacks, and OS compromise can reach the seed."
       },
       "eligible": [
         "v3-clearvault",
@@ -203,7 +203,7 @@
           "name": "LeatherGuard",
           "arm": "text_only",
           "decision": "skip",
-          "relevanceLevel": 0,
+          "relevanceLevel": 1,
           "intentLevel": 2
         },
         {
@@ -222,9 +222,9 @@
       "status": "awarded",
       "winner": "v3-keyforge",
       "winnerName": "KeyForge",
-      "price": "3000",
+      "price": "4000",
       "organic": {
-        "excerpt": "For the lowest-cost hardware wallet that supports both Ethereum and Solana, compare entry-level models—but verify support for both networks on the exact model before buying. I can’t reliably name today’s cheapest option without current prices and compatibility information."
+        "excerpt": "I can't name a current cheapest model or quote live prices without checking vendor pages. To find the lowest-cost hardware wallet that still supports Ethereum and Solana, compare on total cost and verified compatibility, not just sticker price."
       },
       "eligible": [
         "v3-keyforge"
@@ -245,7 +245,7 @@
         {
           "campaign": "v3-keyforge",
           "name": "KeyForge",
-          "amount": "3000"
+          "amount": "4000"
         }
       ],
       "decisions": [
@@ -255,7 +255,7 @@
           "arm": "history",
           "decision": "bid",
           "relevanceLevel": 3,
-          "intentLevel": 3
+          "intentLevel": 2
         },
         {
           "campaign": "v3-keyforge",
@@ -263,7 +263,7 @@
           "arm": "history",
           "decision": "bid",
           "relevanceLevel": 3,
-          "intentLevel": 2
+          "intentLevel": 3
         },
         {
           "campaign": "v3-leatherguard",
@@ -283,7 +283,7 @@
       "winnerName": null,
       "price": null,
       "organic": {
-        "excerpt": "For a mobile-only Ethereum and Solana wallet, compare software wallets on chain coverage, security, usability, and recovery—not hardware devices. First decide whether you prefer one app for both chains or separate chain-focused wallets."
+        "excerpt": "For mobile-only Ethereum + Solana, compare custody model, chain coverage, dapp connectivity, backup/export, and security hygiene. Since hardware is excluded, keys live on the phone: malware, phishing, clipboard hijacks, malicious dapps, and OS compromise are real."
       },
       "eligible": [],
       "excluded": [
@@ -324,7 +324,7 @@
       "turn": "v3-repeat",
       "campaign": "v3-keyforge",
       "name": "KeyForge",
-      "amount": "3000"
+      "amount": "4000"
     }
   ],
   "channels": [
@@ -352,22 +352,22 @@
       "campaign": "v3-keyforge",
       "name": "KeyForge",
       "deposit": "20000",
-      "settled": "3000",
-      "refund": "17000",
+      "settled": "4000",
+      "refund": "16000",
       "status": "finalized",
       "vouchers": [
         {
           "sequence": 1,
-          "increment": "3000",
-          "cumulative": "3000"
+          "increment": "4000",
+          "cumulative": "4000"
         }
       ]
     }
   ],
   "totals": {
     "deposits": "40000",
-    "paid": "10000",
-    "refunded": "30000"
+    "paid": "11000",
+    "refunded": "29000"
   },
   "restart": {
     "replayedTurns": 4,
@@ -391,10 +391,10 @@
     "decision": "bid",
     "relevanceLevel": 3,
     "intentLevel": 3,
-    "relevanceConfidence": 0.89,
-    "intentConfidence": 0.52,
+    "relevanceConfidence": 0.87,
+    "intentConfidence": 0.51,
     "creativeChosen": true,
-    "creativeProbability": 0.79,
+    "creativeProbability": 0.81,
     "underASecond": true
   },
   "video": {
@@ -417,10 +417,12 @@
     ]
   },
   "mvp": {
-    "verifyChecks": 48
+    "verifyChecks": 47
   },
+  "financialMode": "devnet",
   "devnet": {
     "cluster": "devnet",
+    "live": true,
     "programUrl": "https://explorer.solana.com/address/CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX?cluster=devnet",
     "receipts": 3,
     "channels": [
@@ -434,22 +436,22 @@
           "4000",
           "7000"
         ],
-        "channelUrl": "https://explorer.solana.com/address/GDsoVHnw7QWMHT7KfieYmmFsp1khHYzTWHiKLRnbhKXK?cluster=devnet",
-        "openUrl": "https://explorer.solana.com/tx/4K4aHrcKDS6F6MLffM7hZosMnP5sXU3xsbgCBAAo9YVnAZMLk8YHsRiFvZKLgSux2sF49U7LMiFLasNGMYgUtugQ?cluster=devnet",
-        "closeUrl": "https://explorer.solana.com/tx/3q1XpdeKtGWb9JRwNhxNPB79scZdxpXq69Rn6jSHvyMQSBEPBqfcXVyqa8k1nnZWGrTF6MuKzvs2SdwViEyMXwyL?cluster=devnet"
+        "channelUrl": "https://explorer.solana.com/address/G9wtRR7RBPYWT5HgfvU3gWZbXhd3F9EgGKeLEKKeEjsY?cluster=devnet",
+        "openUrl": "https://explorer.solana.com/tx/41vPwWcKmWpegmx6j9LZAow65RBs3anazJngismUyXXAdAnZ35i9FRWHRJFVEgD9ECm88gXZyAbx13x6kXxsWjcr?cluster=devnet",
+        "closeUrl": "https://explorer.solana.com/tx/5GeYRidtqb5q2AkziUF5dxBC7zRmrkjuAQj8BrwV9mJriueC2f2Ki8Axv1VcgziDUY8Jmg1LWnFmrLRN2zsPmDzm?cluster=devnet"
       },
       {
         "campaign": "v3-keyforge",
         "name": "KeyForge",
         "deposit": "20000",
-        "paid": "3000",
-        "refunded": "17000",
+        "paid": "4000",
+        "refunded": "16000",
         "vouchers": [
-          "3000"
+          "4000"
         ],
-        "channelUrl": "https://explorer.solana.com/address/3qZUw8kNDZ6HnVF8mAdhgZAtsQbPNPYZkavU9b6Rktgq?cluster=devnet",
-        "openUrl": "https://explorer.solana.com/tx/ppMyRTphb7JPvmVpF446am7pNT97xp5bv7KLYdBoajEKRJTHz6jipCWHcg9Yiqh6jKXAxV4fzg7UaKVBaDZhBMT?cluster=devnet",
-        "closeUrl": "https://explorer.solana.com/tx/2FXVkdaH4xjyUtFcepMrM3PsaMqitSPDrTj1Ce37NomQ7sF8kh4kBi6AiZVZ12FiNpT5tyTjMzv3H2eDLM74F5yo?cluster=devnet"
+        "channelUrl": "https://explorer.solana.com/address/FGG7y5AQ94Qq8CbiVDe7Ua8RpAySQmjkoHJ9DD2Xv1Wj?cluster=devnet",
+        "openUrl": "https://explorer.solana.com/tx/tK1qDyHZWqyFr3BhcynYomB2XFRnCnRcwGfByio7DHG1FbDYpeZHaVGu9e1CpNbmRizbGN47tN8Z926GbWymH2E?cluster=devnet",
+        "closeUrl": "https://explorer.solana.com/tx/3kUvLYGdns7FQ82583KXpP7xW675egDrtKkbcCedUgheASMRFgs5FCifhBWQDH6Lqbi3pxxyCAeaVNVQ9oLJ6ckj?cluster=devnet"
       }
     ]
   }

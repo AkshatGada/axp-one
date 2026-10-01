@@ -2,16 +2,18 @@
 
 // The page header: wordmark, the Hackathon MVP chip, section anchors and the one ink action.
 // It hides while you scroll down, returns when you scroll up, and flips to the stage colours
-// while a [data-header-tone="stage"] section sits under it.
+// while a [data-header-tone] section (stage, brand, ch, sol) sits under it.
 import { useEffect, useRef, useState } from "react";
 import { ActionPrimary } from "./Actions";
 import { Wordmark } from "./Type";
 
 export type NavLink = { href: string; label: string };
+type Tone = "paper" | "stage" | "brand" | "ch" | "sol";
+const TONES: Tone[] = ["stage", "brand", "ch", "sol"];
 
 export function SiteHeader({ links, cta, chip = "Hackathon MVP" }: { links: NavLink[]; cta: { href: string; label: string; external?: boolean }; chip?: string }) {
   const [hidden, setHidden] = useState(false);
-  const [tone, setTone] = useState<"paper" | "stage" | "brand">("paper");
+  const [tone, setTone] = useState<Tone>("paper");
   const last = useRef(0);
 
   useEffect(() => {
@@ -25,10 +27,10 @@ export function SiteHeader({ links, cta, chip = "Hackathon MVP" }: { links: NavL
         last.current = y;
       }
       const probe = 36;
-      let next: "paper" | "stage" | "brand" = "paper";
+      let next: Tone = "paper";
       document.querySelectorAll<HTMLElement>("[data-header-tone]").forEach((el) => {
         const r = el.getBoundingClientRect();
-        if (r.top <= probe && r.bottom >= probe) next = el.dataset.headerTone === "brand" ? "brand" : "stage";
+        if (r.top <= probe && r.bottom >= probe) next = TONES.find((x) => x === el.dataset.headerTone) ?? "stage";
       });
       setTone(next);
     };

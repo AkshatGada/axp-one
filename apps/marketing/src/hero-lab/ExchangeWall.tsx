@@ -14,7 +14,7 @@
 import { useEffect, useRef, type CSSProperties, type PointerEvent as RPointerEvent } from "react";
 import { motion, useMotionValue, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
 import { ActionPrimary, Words } from "@axp/design-system/prospectus";
-import { MVP_URL } from "@/data/copy";
+import { MVP_URL } from "@/data/copy-v6";
 import useReduced, { usePinned } from "@/motion/useReduced";
 import { io, lerp, out, seg } from "@/motion/motion";
 import { FOCAL, LAB, PROMPTS } from "./data";

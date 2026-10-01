@@ -1,5 +1,6 @@
 {
   "cluster": "devnet",
+  "live": true,
   "programUrl": "https://explorer.solana.com/address/CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX?cluster=devnet",
   "receipts": 3,
   "channels": [
@@ -13,22 +14,22 @@
         "4000",
         "7000"
       ],
-      "channelUrl": "https://explorer.solana.com/address/GDsoVHnw7QWMHT7KfieYmmFsp1khHYzTWHiKLRnbhKXK?cluster=devnet",
-      "openUrl": "https://explorer.solana.com/tx/4K4aHrcKDS6F6MLffM7hZosMnP5sXU3xsbgCBAAo9YVnAZMLk8YHsRiFvZKLgSux2sF49U7LMiFLasNGMYgUtugQ?cluster=devnet",
-      "closeUrl": "https://explorer.solana.com/tx/3q1XpdeKtGWb9JRwNhxNPB79scZdxpXq69Rn6jSHvyMQSBEPBqfcXVyqa8k1nnZWGrTF6MuKzvs2SdwViEyMXwyL?cluster=devnet"
+      "channelUrl": "https://explorer.solana.com/address/G9wtRR7RBPYWT5HgfvU3gWZbXhd3F9EgGKeLEKKeEjsY?cluster=devnet",
+      "openUrl": "https://explorer.solana.com/tx/41vPwWcKmWpegmx6j9LZAow65RBs3anazJngismUyXXAdAnZ35i9FRWHRJFVEgD9ECm88gXZyAbx13x6kXxsWjcr?cluster=devnet",
+      "closeUrl": "https://explorer.solana.com/tx/5GeYRidtqb5q2AkziUF5dxBC7zRmrkjuAQj8BrwV9mJriueC2f2Ki8Axv1VcgziDUY8Jmg1LWnFmrLRN2zsPmDzm?cluster=devnet"
     },
     {
       "campaign": "v3-keyforge",
       "name": "KeyForge",
       "deposit": "20000",
-      "paid": "3000",
-      "refunded": "17000",
+      "paid": "4000",
+      "refunded": "16000",
       "vouchers": [
-        "3000"
+        "4000"
       ],
-      "channelUrl": "https://explorer.solana.com/address/3qZUw8kNDZ6HnVF8mAdhgZAtsQbPNPYZkavU9b6Rktgq?cluster=devnet",
-      "openUrl": "https://explorer.solana.com/tx/ppMyRTphb7JPvmVpF446am7pNT97xp5bv7KLYdBoajEKRJTHz6jipCWHcg9Yiqh6jKXAxV4fzg7UaKVBaDZhBMT?cluster=devnet",
-      "closeUrl": "https://explorer.solana.com/tx/2FXVkdaH4xjyUtFcepMrM3PsaMqitSPDrTj1Ce37NomQ7sF8kh4kBi6AiZVZ12FiNpT5tyTjMzv3H2eDLM74F5yo?cluster=devnet"
+      "channelUrl": "https://explorer.solana.com/address/FGG7y5AQ94Qq8CbiVDe7Ua8RpAySQmjkoHJ9DD2Xv1Wj?cluster=devnet",
+      "openUrl": "https://explorer.solana.com/tx/tK1qDyHZWqyFr3BhcynYomB2XFRnCnRcwGfByio7DHG1FbDYpeZHaVGu9e1CpNbmRizbGN47tN8Z926GbWymH2E?cluster=devnet",
+      "closeUrl": "https://explorer.solana.com/tx/3kUvLYGdns7FQ82583KXpP7xW675egDrtKkbcCedUgheASMRFgs5FCifhBWQDH6Lqbi3pxxyCAeaVNVQ9oLJ6ckj?cluster=devnet"
     }
   ]
 }

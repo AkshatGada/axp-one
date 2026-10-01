@@ -3,7 +3,7 @@
 import type { Metadata } from "next";
 import { Wordmark } from "@axp/design-system/prospectus";
 import { CACHED, CV, HELPFUL_EXCERPT } from "@/data/run";
-import { HERO, VIDEO } from "@/data/copy";
+import { HERO, VIDEO } from "@/data/copy-v6";
 import { HostChat } from "@/specimens/HostChat";
 
 export const metadata: Metadata = { title: "Poster", robots: { index: false, follow: false } };

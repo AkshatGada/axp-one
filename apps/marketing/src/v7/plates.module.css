@@ -1,0 +1,84 @@
+/* v7 plates: Ledger-grade sheets (radius 12, hairline border, one soft edge). Each pillar's plate
+   carries its colour as a quiet left rule: evidence vermillion, agents ultramarine, payment purple.
+   No will-change and no 3D anywhere here: the plates are painted, so text stays live and crisp. */
+
+.plate {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 480px;
+  height: 210px;
+  display: grid;
+  grid-template-rows: 42px 1fr;
+  border: 1px solid #d9d9e0;
+  border-radius: var(--px-r-lg, 12px);
+  background: #fff;
+  transform-origin: 50% 50%;
+  box-shadow: 0 9px 0 -1px #e9e8e2, 0 9px 0 0 #d9d9e0, 0 30px 50px -30px rgba(14, 18, 32, 0.35);
+  color: var(--ink);
+}
+.plate[data-id="card"] { border-color: var(--brand); box-shadow: 0 9px 0 -1px var(--brand-wash), 0 9px 0 0 var(--brand), 0 30px 50px -30px rgba(43, 59, 255, 0.45); }
+.bar { display: flex; align-items: baseline; gap: 10px; padding: 12px 18px 0; border-bottom: 1px solid #ebebef; }
+.name { font-family: var(--font-display); font-size: 17px; font-weight: 500; letter-spacing: -0.01em; }
+.note { font-size: 14px; font-weight: 500; color: var(--brand-deep); }
+.plate[data-id="evidence"] .note { color: var(--contexthint-ink); }
+.plate[data-id="payment"] .note { color: #6d28d9; }
+.plate[data-id="evidence"]::before, .plate[data-id="agents"]::before, .plate[data-id="payment"]::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 14px;
+  bottom: 14px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--brand);
+}
+.plate[data-id="evidence"]::before { background: var(--contexthint); }
+.plate[data-id="payment"]::before { background: var(--sol, #9945ff); }
+.body { position: relative; min-height: 0; padding: 12px 18px 14px; overflow: hidden; font-size: 15px; line-height: 1.4; }
+
+.q { width: fit-content; max-width: 88%; margin: 0 0 10px auto; padding: 8px 12px; border-radius: 12px 12px 4px 12px; background: var(--mist); font-size: 14.5px; line-height: 1.35; }
+.lines { margin: 0; font-size: 15px; line-height: 1.5; color: var(--ink); }
+
+.card { display: grid; gap: 8px; padding: 12px 14px; border: 1.5px solid var(--brand); border-radius: var(--px-r-md, 10px); background: #fff; }
+.cardHead { display: flex; align-items: center; gap: 10px; }
+.cardHead b { font-weight: 500; font-size: 15px; }
+.card p { margin: 0; font-size: 14px; line-height: 1.45; color: var(--muted); }
+.sponsored { display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: var(--px-r-full, 999px); background: var(--brand); color: #fff; font-size: 12px; font-weight: 500; letter-spacing: 0.02em; }
+
+.rows { display: grid; gap: 6px; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; height: 34px; padding: 0 12px; border: 1px solid #ebebef; border-radius: var(--px-r-sm, 6px); font-size: 15px; }
+.row[data-win] { border-color: var(--brand); background: var(--brand); color: #fff; }
+.row[data-quiet] { border-style: dashed; color: var(--muted); font-size: 14px; }
+.num { font-variant-numeric: tabular-nums; }
+
+.agents { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; height: 100%; }
+.agent { display: grid; align-content: space-between; gap: 10px; padding: 12px; border: 1px solid #ebebef; border-radius: var(--px-r-md, 10px); background: #fafafc; }
+.agent b { font-weight: 500; font-size: 15px; }
+.agent[data-out] b { color: var(--muted); }
+.pill { justify-self: start; display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: var(--px-r-full, 999px); background: var(--brand); color: #fff; font-size: 13px; font-weight: 500; }
+.pill[data-out] { background: transparent; color: var(--muted); box-shadow: inset 0 0 0 1px #cfd0d8; }
+
+.evi { display: grid; gap: 10px; }
+.evi > div { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; align-items: baseline; font-size: 14.5px; line-height: 1.4; }
+.eviK { font-size: 12.5px; font-weight: 500; color: var(--contexthint-ink); }
+
+.pay { display: grid; gap: 14px; padding-top: 8px; }
+.payTrack { position: relative; height: 14px; border-radius: var(--px-r-full, 999px); background: #f1f0ec; box-shadow: inset 0 0 0 1px #e3e3e8; overflow: hidden; }
+.payTrack i { position: absolute; top: 0; bottom: 0; background: var(--sol, #9945ff); }
+.payTrack i + i { background: #b57bff; }
+.payRow { display: flex; justify-content: space-between; gap: 12px; font-size: 15px; font-variant-numeric: tabular-nums; }
+.dim { color: var(--muted); }
+
+/* A still exploded stack (reduced motion, /design). */
+.still { position: relative; margin-inline: auto; }
+.route { position: absolute; width: 0; border-left: 2px dashed var(--brand-line); }
+
+/* Flat list (phones): the same plates, flat and in flow. */
+.flat { display: grid; gap: 14px; }
+.flat .plate { position: relative; width: 100%; height: auto; box-shadow: var(--px-shadow-2); }
+.flat .body { overflow: visible; }
+@media (max-width: 460px) {
+  .flat .agents { grid-template-columns: 1fr; }
+  .flat .agent { grid-auto-flow: column; align-items: center; justify-content: space-between; }
+}

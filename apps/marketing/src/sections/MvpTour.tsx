@@ -5,7 +5,7 @@
 // JS the first page shows and every item is still a link. Below 900px: all four frames, stacked.
 import { useState } from "react";
 import { ActionPrimary } from "@axp/design-system/prospectus";
-import { MVP_TOUR, MVP_URL } from "@/data/copy";
+import { MVP_TOUR, MVP_URL } from "@/data/copy-v6";
 
 const T = MVP_TOUR.tiles;
 

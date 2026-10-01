@@ -1,22 +1,22 @@
 {
   "schema": "axp.landing-slice.v1",
   "generatedFrom": {
-    "run": "artifacts/v3/replay/run.json",
-    "manifest": "artifacts/v3/replay/manifest.json"
+    "run": "artifacts/v3-devnet-live-rehearsal/replay/run.json",
+    "manifest": "artifacts/v3-devnet-live-rehearsal/replay/manifest.json"
   },
-  "runId": "v3-wallet-acceptance",
-  "manifestHash": "e34448fafa059d88c0120373fe039940ee1aca29369e3a245293a8b0f5a2152a",
-  "manifestHashShort": "e34448fa...2152a",
-  "runHashShort": "938a0ee8...6dd48",
-  "financialMode": "sandbox",
-  "network": "hosted Solana sandbox",
+  "runId": "v3-devnet-live-rehearsal-20261002",
+  "manifestHash": "bfac185a2b6ece9c469b8dc9a5529c58a0db78262dbebf7e9d59019c360676be",
+  "manifestHashShort": "bfac185a...676be",
+  "runHashShort": "b4b866cf...c6959",
+  "financialMode": "devnet",
+  "network": "Solana Devnet",
   "presentation": "recorded_evidence_replay",
   "recordedAt": "2026-10-01",
   "counts": {
     "questions": 4,
     "decisions": 15,
     "auctions": 3,
-    "ties": 2,
+    "ties": 1,
     "noFill": 1,
     "receipts": 3,
     "events": 33,
@@ -34,7 +34,7 @@
     "slotId": "v3-wallet-sponsored-card",
     "publisherKeyId": "local-publisher-v1",
     "agentModel": "jev-1.13.0",
-    "organicModel": "gpt-6.1-sol"
+    "organicModel": "deepseek-flash"
   },
   "campaigns": {
     "v3-clearvault": {
@@ -90,7 +90,7 @@
     {
       "id": "v3-cached",
       "scenario": "cached",
-      "runOrder": 2,
+      "runOrder": 1,
       "question": "cheapest hardware wallet that still supports ethereum and solana",
       "required": [
         "crypto_storage"
@@ -98,8 +98,8 @@
       "status": "awarded",
       "execution": "actual-jev",
       "organic": {
-        "excerpt": "I can’t reliably name the cheapest hardware wallet without checking current prices and Ethereum/Solana support. For a budget choice, compare entry-level hardware wallets by total delivered cost, then confirm that the exact model supports both networks through wallet software you’re comfortable using.",
-        "model": "gpt-6.1-sol",
+        "excerpt": "No single 'cheapest' hardware wallet is fixed: prices and supported coins change. To find the lowest-cost option that still supports Ethereum and Solana, compare entry-level hardware wallets from established vendors on their official sites (avoid reseller markups/scams).",
+        "model": "deepseek-flash",
         "advertiserMaterialReceived": false
       },
       "eligible": [
@@ -123,14 +123,14 @@
         {
           "campaign": "v3-keyforge",
           "name": "KeyForge",
-          "amount": "4000",
+          "amount": "3000",
           "policy": "fit_intent_bid_v1"
         }
       ],
       "winner": "v3-clearvault",
       "winnerName": "ClearVault",
       "price": "4000",
-      "awardId": "award-fe97d44c-836b-4bdc-a68d-6a442d42a97a",
+      "awardId": "award-0ab43a32-2555-4a92-a3de-127d1f4f4d8f",
       "decisions": [
         {
           "campaign": "v3-clearvault",
@@ -140,9 +140,9 @@
           "decision": "bid",
           "relevanceLevel": 3,
           "intentLevel": 2,
-          "relevanceScore": 2.82,
-          "intentScore": 2.38,
-          "ms": 846,
+          "relevanceScore": 2.85,
+          "intentScore": 2.34,
+          "ms": 3830,
           "model": "jev-1.13.0"
         },
         {
@@ -153,9 +153,9 @@
           "decision": "bid",
           "relevanceLevel": 3,
           "intentLevel": 3,
-          "relevanceScore": 2.89,
-          "intentScore": 2.52,
-          "ms": 370,
+          "relevanceScore": 2.87,
+          "intentScore": 2.51,
+          "ms": 297,
           "model": "jev-1.13.0"
         },
         {
@@ -166,9 +166,9 @@
           "decision": "bid",
           "relevanceLevel": 3,
           "intentLevel": 2,
-          "relevanceScore": 2.85,
-          "intentScore": 2.29,
-          "ms": 368,
+          "relevanceScore": 2.82,
+          "intentScore": 2.38,
+          "ms": 290,
           "model": "jev-1.13.0"
         },
         {
@@ -178,10 +178,10 @@
           "category": "paired",
           "decision": "bid",
           "relevanceLevel": 3,
-          "intentLevel": 3,
-          "relevanceScore": 2.81,
-          "intentScore": 2.5,
-          "ms": 477,
+          "intentLevel": 2,
+          "relevanceScore": 2.82,
+          "intentScore": 2.46,
+          "ms": 333,
           "model": "jev-1.13.0"
         },
         {
@@ -192,9 +192,9 @@
           "decision": "skip",
           "relevanceLevel": 1,
           "intentLevel": 2,
-          "relevanceScore": 0.71,
+          "relevanceScore": 0.72,
           "intentScore": 2.44,
-          "ms": 377,
+          "ms": 298,
           "model": "jev-1.13.0"
         },
         {
@@ -205,9 +205,9 @@
           "decision": "skip",
           "relevanceLevel": 1,
           "intentLevel": 2,
-          "relevanceScore": 0.67,
-          "intentScore": 2.41,
-          "ms": 356,
+          "relevanceScore": 0.69,
+          "intentScore": 2.43,
+          "ms": 314,
           "model": "jev-1.13.0"
         }
       ]
@@ -215,7 +215,7 @@
     {
       "id": "v3-offline",
       "scenario": "offline",
-      "runOrder": 3,
+      "runOrder": 2,
       "question": "Compare self-custody options for Ethereum and Solana, prioritizing offline key storage over a mobile-only wallet.",
       "required": [
         "crypto_storage"
@@ -223,8 +223,8 @@
       "status": "awarded",
       "execution": "actual-jev",
       "organic": {
-        "excerpt": "For Ethereum and Solana, prioritize a hardware wallet if keeping private keys off your phone or computer is your main goal. Confirm that the exact device and its companion software support both networks and the transactions you need; support can differ by model, app and account type.",
-        "model": "gpt-6.1-sol",
+        "excerpt": "For self-custody with offline key storage as priority, treat a hardware/air-gapped signer as the vault and a phone/software wallet as a watch-only interface. Hardware vs mobile: a mobile-only wallet keeps encrypted keys on an internet-connected device, so malware, phishing, clipboard hijacks, and OS compromise can reach the seed.",
+        "model": "deepseek-flash",
         "advertiserMaterialReceived": false
       },
       "eligible": [
@@ -255,7 +255,7 @@
       "winner": "v3-clearvault",
       "winnerName": "ClearVault",
       "price": "3000",
-      "awardId": "award-b1283b51-d2d1-492e-b9ae-3f3f4d22bdc1",
+      "awardId": "award-c5e1c1f2-12ea-4a61-8e99-3f1f384aaf73",
       "decisions": [
         {
           "campaign": "v3-clearvault",
@@ -265,9 +265,9 @@
           "decision": "bid",
           "relevanceLevel": 3,
           "intentLevel": 2,
-          "relevanceScore": 2.99,
-          "intentScore": 1.93,
-          "ms": 540,
+          "relevanceScore": 2.98,
+          "intentScore": 1.92,
+          "ms": 469,
           "model": "jev-1.13.0"
         },
         {
@@ -278,9 +278,9 @@
           "decision": "bid",
           "relevanceLevel": 3,
           "intentLevel": 2,
-          "relevanceScore": 2.98,
-          "intentScore": 1.97,
-          "ms": 315,
+          "relevanceScore": 2.97,
+          "intentScore": 1.96,
+          "ms": 352,
           "model": "jev-1.13.0"
         },
         {
@@ -293,7 +293,7 @@
           "intentLevel": 2,
           "relevanceScore": 2.98,
           "intentScore": 1.93,
-          "ms": 352,
+          "ms": 408,
           "model": "jev-1.13.0"
         },
         {
@@ -305,8 +305,8 @@
           "relevanceLevel": 3,
           "intentLevel": 2,
           "relevanceScore": 2.96,
-          "intentScore": 1.97,
-          "ms": 322,
+          "intentScore": 1.95,
+          "ms": 338,
           "model": "jev-1.13.0"
         },
         {
@@ -315,11 +315,11 @@
           "arm": "text_only",
           "category": "paired",
           "decision": "skip",
-          "relevanceLevel": 0,
+          "relevanceLevel": 1,
           "intentLevel": 2,
-          "relevanceScore": 0.49,
+          "relevanceScore": 0.5,
           "intentScore": 1.98,
-          "ms": 378,
+          "ms": 340,
           "model": "jev-1.13.0"
         },
         {
@@ -330,9 +330,9 @@
           "decision": "skip",
           "relevanceLevel": 0,
           "intentLevel": 2,
-          "relevanceScore": 0.43,
-          "intentScore": 1.97,
-          "ms": 367,
+          "relevanceScore": 0.45,
+          "intentScore": 1.98,
+          "ms": 324,
           "model": "jev-1.13.0"
         }
       ]
@@ -340,7 +340,7 @@
     {
       "id": "v3-repeat",
       "scenario": "repeat",
-      "runOrder": 4,
+      "runOrder": 3,
       "question": "cheapest hardware wallet that still supports ethereum and solana",
       "required": [
         "crypto_storage"
@@ -348,8 +348,8 @@
       "status": "awarded",
       "execution": "actual-jev",
       "organic": {
-        "excerpt": "For the lowest-cost hardware wallet that supports both Ethereum and Solana, compare entry-level models—but verify support for both networks on the exact model before buying. I can’t reliably name today’s cheapest option without current prices and compatibility information.",
-        "model": "gpt-6.1-sol",
+        "excerpt": "I can't name a current cheapest model or quote live prices without checking vendor pages. To find the lowest-cost hardware wallet that still supports Ethereum and Solana, compare on total cost and verified compatibility, not just sticker price.",
+        "model": "deepseek-flash",
         "advertiserMaterialReceived": false
       },
       "eligible": [
@@ -371,14 +371,14 @@
         {
           "campaign": "v3-keyforge",
           "name": "KeyForge",
-          "amount": "3000",
+          "amount": "4000",
           "policy": "fit_intent_bid_v1"
         }
       ],
       "winner": "v3-keyforge",
       "winnerName": "KeyForge",
-      "price": "3000",
-      "awardId": "award-bb3d8921-5975-4633-80df-70b841be0643",
+      "price": "4000",
+      "awardId": "award-7efe3d8d-e4b6-4072-b2db-c07c771dff19",
       "decisions": [
         {
           "campaign": "v3-clearvault",
@@ -387,10 +387,10 @@
           "category": "repeat",
           "decision": "bid",
           "relevanceLevel": 3,
-          "intentLevel": 3,
-          "relevanceScore": 2.85,
-          "intentScore": 2.51,
-          "ms": 578,
+          "intentLevel": 2,
+          "relevanceScore": 2.84,
+          "intentScore": 2.48,
+          "ms": 464,
           "model": "jev-1.13.0"
         },
         {
@@ -400,10 +400,10 @@
           "category": "repeat",
           "decision": "bid",
           "relevanceLevel": 3,
-          "intentLevel": 2,
-          "relevanceScore": 2.83,
-          "intentScore": 2.49,
-          "ms": 342,
+          "intentLevel": 3,
+          "relevanceScore": 2.84,
+          "intentScore": 2.52,
+          "ms": 335,
           "model": "jev-1.13.0"
         },
         {
@@ -414,9 +414,9 @@
           "decision": "skip",
           "relevanceLevel": 1,
           "intentLevel": 2,
-          "relevanceScore": 0.71,
-          "intentScore": 2.4,
-          "ms": 368,
+          "relevanceScore": 0.63,
+          "intentScore": 2.41,
+          "ms": 331,
           "model": "jev-1.13.0"
         }
       ]
@@ -424,7 +424,7 @@
     {
       "id": "v3-mobile",
       "scenario": "mobile",
-      "runOrder": 1,
+      "runOrder": 4,
       "question": "Compare mobile-only software wallets for Ethereum and Solana. A hardware device does not satisfy my requirement.",
       "required": [
         "crypto_storage",
@@ -433,8 +433,8 @@
       "status": "no_fill",
       "execution": "deterministic-policy",
       "organic": {
-        "excerpt": "For a mobile-only Ethereum and Solana wallet, compare software wallets on chain coverage, security, usability, and recovery—not hardware devices. First decide whether you prefer one app for both chains or separate chain-focused wallets.",
-        "model": "gpt-6.1-sol",
+        "excerpt": "For mobile-only Ethereum + Solana, compare custody model, chain coverage, dapp connectivity, backup/export, and security hygiene. Since hardware is excluded, keys live on the phone: malware, phishing, clipboard hijacks, malicious dapps, and OS compromise are real.",
+        "model": "deepseek-flash",
         "advertiserMaterialReceived": false
       },
       "eligible": [],
@@ -465,24 +465,24 @@
   ],
   "charges": [
     {
-      "awardId": "award-b1283b51-d2d1-492e-b9ae-3f3f4d22bdc1",
-      "campaign": "v3-clearvault",
-      "name": "ClearVault",
-      "amount": "3000",
-      "status": "accepted"
-    },
-    {
-      "awardId": "award-bb3d8921-5975-4633-80df-70b841be0643",
-      "campaign": "v3-keyforge",
-      "name": "KeyForge",
-      "amount": "3000",
-      "status": "accepted"
-    },
-    {
-      "awardId": "award-fe97d44c-836b-4bdc-a68d-6a442d42a97a",
+      "awardId": "award-0ab43a32-2555-4a92-a3de-127d1f4f4d8f",
       "campaign": "v3-clearvault",
       "name": "ClearVault",
       "amount": "4000",
+      "status": "accepted"
+    },
+    {
+      "awardId": "award-7efe3d8d-e4b6-4072-b2db-c07c771dff19",
+      "campaign": "v3-keyforge",
+      "name": "KeyForge",
+      "amount": "4000",
+      "status": "accepted"
+    },
+    {
+      "awardId": "award-c5e1c1f2-12ea-4a61-8e99-3f1f384aaf73",
+      "campaign": "v3-clearvault",
+      "name": "ClearVault",
+      "amount": "3000",
       "status": "accepted"
     }
   ],
@@ -493,14 +493,14 @@
       "name": "ClearVault",
       "amount": "4000",
       "schemaVersion": "publisher-receipt.v1",
-      "mode": "sandbox",
+      "mode": "devnet",
       "publisherKeyId": "local-publisher-v1",
-      "awardId": "award-fe97d44c...a97a",
+      "awardId": "award-0ab43a32...4d8f",
       "opportunityId": "opp-54f84127...6db8",
       "creativeHash": "d256a61b...99746",
-      "renderAcknowledgementHash": "6a4c5b01...d41d8",
-      "receiptHash": "cdf946cc...5712b",
-      "signature": "Cnvr3o61SJC+fB8Q...",
+      "renderAcknowledgementHash": "3e596e9c...5bb16",
+      "receiptHash": "4a02db51...ff4bd",
+      "signature": "jXPWMjlEQFrx6MPY...",
       "fieldCount": 10
     },
     {
@@ -509,30 +509,30 @@
       "name": "ClearVault",
       "amount": "3000",
       "schemaVersion": "publisher-receipt.v1",
-      "mode": "sandbox",
+      "mode": "devnet",
       "publisherKeyId": "local-publisher-v1",
-      "awardId": "award-b1283b51...bdc1",
+      "awardId": "award-c5e1c1f2...af73",
       "opportunityId": "opp-bffa4a88...8a2f",
       "creativeHash": "d256a61b...99746",
-      "renderAcknowledgementHash": "54b936b0...d1fd2",
-      "receiptHash": "65d11b86...59afc",
-      "signature": "FE2lFkv5WOCMXZ+S...",
+      "renderAcknowledgementHash": "ddb970b5...233d2",
+      "receiptHash": "58c7d0b6...e3e0f",
+      "signature": "zZBbHko/xqT6zSu+...",
       "fieldCount": 10
     },
     {
       "turn": "v3-repeat",
       "campaign": "v3-keyforge",
       "name": "KeyForge",
-      "amount": "3000",
+      "amount": "4000",
       "schemaVersion": "publisher-receipt.v1",
-      "mode": "sandbox",
+      "mode": "devnet",
       "publisherKeyId": "local-publisher-v1",
-      "awardId": "award-bb3d8921...0643",
+      "awardId": "award-7efe3d8d...ff19",
       "opportunityId": "opp-387a1766...d1c7",
       "creativeHash": "89ef64ba...d1e6e",
-      "renderAcknowledgementHash": "4441967b...e40e6",
-      "receiptHash": "687a3b9b...59cb7",
-      "signature": "9OS+dl3YOInJwaOK...",
+      "renderAcknowledgementHash": "2850cf7e...7c2a9",
+      "receiptHash": "731d97a9...372e3",
+      "signature": "deEwJ/7IJmsxxWDc...",
       "fieldCount": 10
     }
   ],
@@ -556,35 +556,35 @@
           "cumulative": "7000"
         }
       ],
-      "openTx": "51y88e...RexS",
-      "closeTx": "4mH68D...ZV3i",
-      "feeAndRentLamports": "15000"
+      "openTx": "41vPwW...Wjcr",
+      "closeTx": "5GeYRi...mDzm",
+      "feeAndRentLamports": "1503440"
     },
     {
       "campaign": "v3-keyforge",
       "name": "KeyForge",
       "deposit": "20000",
-      "settled": "3000",
-      "refund": "17000",
+      "settled": "4000",
+      "refund": "16000",
       "status": "finalized",
       "vouchers": [
         {
           "sequence": 1,
-          "increment": "3000",
-          "cumulative": "3000"
+          "increment": "4000",
+          "cumulative": "4000"
         }
       ],
-      "openTx": "4Nsygw...pebz",
-      "closeTx": "2fqrnu...gV3T",
+      "openTx": "tK1qDy...mH2E",
+      "closeTx": "3kUvLY...6ckj",
       "feeAndRentLamports": "15000"
     }
   ],
   "totals": {
     "deposits": "40000",
-    "paid": "10000",
-    "refunded": "30000",
+    "paid": "11000",
+    "refunded": "29000",
     "networkFeeLamports": "40000",
-    "feeAndRentLamports": "9463840",
+    "feeAndRentLamports": "8406760",
     "feeAndRentCapLamports": "20000000"
   },
   "restart": {
@@ -641,18 +641,18 @@
     "decision": "bid",
     "relevanceLevel": 3,
     "intentLevel": 3,
-    "relevanceConfidence": 0.89,
-    "intentConfidence": 0.52,
+    "relevanceConfidence": 0.87,
+    "intentConfidence": 0.51,
     "creativeChosen": true,
-    "creativeProbability": 0.79,
+    "creativeProbability": 0.81,
     "underASecond": true
   },
   "limitations": [
     "Fictional campaigns; product capabilities are advertiser declarations.",
     "Real historical observations/inferred hints are not advertiser enrollment or targeting lift.",
-    "Same disposable test payer represents both advertisers; not independent wallets.",
-    "Hosted Solana sandbox, not Devnet or mainnet.",
-    "Organic completions use an operator-recorded isolated app-agent bridge.",
+    "Each fictional advertiser has its own disposable Devnet test wallet; both are operated by the same demo operator.",
+    "Public Solana Devnet with Devnet test USDC; not mainnet or real money.",
+    "Organic completions use an isolated, operator-recorded model bridge (see each answer's provenance).",
     "Owned-app delivery acknowledgement is not human attention, ad absorption or endorsement."
   ],
   "video": {

@@ -7,7 +7,7 @@ import { Words } from "@axp/design-system/prospectus";
 import { Fit } from "@/scenes/Fit";
 import { PlateStack, STACK_H, STACK_W } from "@/scenes/PlateStack";
 import { BOARD_H, BOARD_W, Switchboard } from "@/scenes/Switchboard";
-import { STAGE } from "@/data/copy";
+import { STAGE } from "@/data/copy-v6";
 import { CV } from "@/data/run";
 import { LIBRARY, fmt } from "@/data/library";
 import { SponsoredCard } from "@/specimens/SponsoredCard";

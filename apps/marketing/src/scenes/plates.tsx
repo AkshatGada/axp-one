@@ -3,7 +3,7 @@
 // agents, the evidence and the payment. Shared by the hero stack, the closing and /design.
 import type { ReactNode } from "react";
 import { CACHED, CV, CV_CHANNEL, HELPFUL_EXCERPT, RUN, usdc } from "@/data/run";
-import { HERO } from "@/data/copy";
+import { HERO } from "@/data/copy-v6";
 import { SponsoredCard } from "@/specimens/SponsoredCard";
 import { ChannelMeter } from "@/specimens/ChannelMeter";
 

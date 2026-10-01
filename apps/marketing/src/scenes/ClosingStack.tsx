@@ -7,7 +7,7 @@
 import { useRef, useState } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { CACHED, CV, HELPFUL_EXCERPT } from "@/data/run";
-import { CLOSING, HERO } from "@/data/copy";
+import { CLOSING, HERO } from "@/data/copy-v6";
 import { HostChat } from "@/specimens/HostChat";
 import { Fit } from "./Fit";
 import { PlateStack, STACK_H, STACK_W } from "./PlateStack";

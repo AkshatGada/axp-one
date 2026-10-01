@@ -8,7 +8,7 @@
 // JS: the finished channel. Amounts are real; the fill itself is illustrative.
 import { useRef, useState, type CSSProperties } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
-import { SOLANA } from "@/data/copy";
+import { SOLANA } from "@/data/copy-v6";
 import { CV_CHANNEL, usdc } from "@/data/run";
 import { seg } from "@/motion/motion";
 import { usePinned } from "@/motion/useReduced";

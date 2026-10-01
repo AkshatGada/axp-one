@@ -17,7 +17,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { ActionPrimary, ActionText, Actions, Words } from "@axp/design-system/prospectus";
 import { CACHED, CV, HELPFUL_EXCERPT } from "@/data/run";
-import { CH_URL, DEVNET_URL, HERO, MVP_URL, VIDEO_ANCHOR } from "@/data/copy";
+import { CH_URL, DEVNET_URL, HERO, MVP_URL, VIDEO_ANCHOR } from "@/data/copy-v6";
 import { HostChat } from "@/specimens/HostChat";
 import { Fit } from "./Fit";
 import { PlateStack, PlateStackStatic, STACK_H, STACK_W } from "./PlateStack";

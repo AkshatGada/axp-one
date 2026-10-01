@@ -28,7 +28,7 @@ import {
 import MotionRoot from "@/motion/MotionRoot";
 import { LIBRARY, fmt } from "@/data/library";
 import { CACHED, CV, CV_CHANNEL, REPEAT, RUN, receiptFor } from "@/data/run";
-import { FOOTER, HERO, MVP_URL } from "@/data/copy";
+import { FOOTER, HERO, MVP_URL } from "@/data/copy-v6";
 import { CONTEXTHINT, NEXT, ROLES, RULE } from "@/data/copy-book";
 import { EvidencePayoff } from "@/specimens/EvidenceChain";
 import { HostChat } from "@/specimens/HostChat";

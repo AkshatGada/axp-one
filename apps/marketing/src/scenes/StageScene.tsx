@@ -10,7 +10,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { Opener } from "@axp/design-system/prospectus";
-import { STAGE } from "@/data/copy";
+import { STAGE } from "@/data/copy-v6";
 import { Fit } from "./Fit";
 import { BOARD_H, BOARD_W, Switchboard } from "./Switchboard";
 import { io, sceneHeight, seg } from "@/motion/motion";

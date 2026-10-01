@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 // Build-time extraction for the AXP landing page.
-// Reads ONLY artifacts/v3/replay/run.json + manifest.json (and, for the video, the recorded
-// MP4 + walkthrough.srt) and writes src/data/run.generated.json: the small slice of the
-// recorded run the page shows. Every run value on the page comes from this file.
+// Reads ONLY the landing's main run bundle, run.json + manifest.json (and, for the video, the
+// earlier recorded walkthrough MP4 + walkthrough.srt), and writes src/data/run.generated.json:
+// the small slice of the run the page shows. Every run value on the page comes from this file.
+//
+// Main run (owner, v7): the fully live run on public Solana Devnet,
+// artifacts/v3-devnet-live-rehearsal/replay (financialMode "devnet"; its chain evidence, with the
+// explorer links, is inside run.json and so covered by the manifest hash). Override with
+// AXP_LANDING_RUN=<dir>; the asserts below are this run's numbers and fail on any other.
 //
 // Never reads sandbox-topup.json, .env*, local-state/. Never copies agent ids, agent-run ids,
 // rpc, payee or payer addresses, open salts, packet bytes, vectors or the Jev
@@ -19,8 +24,11 @@ import { fileURLToPath } from "node:url";
 const here = dirname(fileURLToPath(import.meta.url));
 const app = resolve(here, "..");
 const repo = resolve(app, "../..");
-const RUN = join(repo, "artifacts/v3/replay/run.json");
-const MANIFEST = join(repo, "artifacts/v3/replay/manifest.json");
+const LIVE = join(repo, "artifacts/v3-devnet-live-rehearsal/replay");
+const SRC = process.env.AXP_LANDING_RUN ? resolve(repo, process.env.AXP_LANDING_RUN) : LIVE;
+const RUN = join(SRC, "run.json");
+const MANIFEST = join(SRC, "manifest.json");
+const RUN_ID = "v3-devnet-live-rehearsal-20261002";
 const VIDEO = join(repo, "artifacts/v3/recording/axp-v3-four-minute-demo.mp4");
 const SRT = join(repo, "artifacts/v3/recording/walkthrough.srt");
 const POSTER = join(repo, "artifacts/v3/recording/03-cached.jpg");
@@ -63,7 +71,8 @@ const parseExample = (text) => {
 
 /* ---------------- Verify a generated slice (used for both paths) ---------------- */
 function verify(d) {
-  assert(d.runId === "v3-wallet-acceptance", "runId");
+  assert(d.runId === RUN_ID, `runId is the live devnet run (got ${d.runId})`);
+  assert(d.financialMode === "devnet", "financial mode devnet");
   assert(d.counts.questions === 4, `4 questions (got ${d.counts.questions})`);
   assert(d.counts.decisions === 15, `15 agent decisions (got ${d.counts.decisions})`);
   assert(d.counts.auctions === 3, `3 auctions (got ${d.counts.auctions})`);
@@ -73,10 +82,15 @@ function verify(d) {
   assert(d.counts.channels === 2, `2 settled channels (got ${d.counts.channels})`);
   const charges = d.charges.map((c) => B(c.amount));
   assert(charges.length === 3, "three charges");
-  assert(charges.reduce((a, b) => a + b, 0n) === 10000n, "charges 4000 + 3000 + 3000 = 10000");
-  assert(B(d.totals.paid) === 10000n, "total paid 10000");
+  assert(charges.reduce((a, b) => a + b, 0n) === 11000n, "charges 4000 + 3000 + 4000 = 11000");
+  assert(B(d.totals.paid) === 11000n, "total paid 11000");
   assert(B(d.totals.deposits) === 40000n, "deposits 40000");
-  assert(B(d.totals.deposits) - B(d.totals.paid) === 30000n && B(d.totals.refunded) === 30000n, "40000 - 10000 = 30000 refunded");
+  assert(B(d.totals.deposits) - B(d.totals.paid) === 29000n && B(d.totals.refunded) === 29000n, "40000 - 11000 = 29000 refunded");
+  assert(d.counts.ties === 1, `1 tie (got ${d.counts.ties})`);
+  const cached = d.turns.find((t) => t.id === "v3-cached");
+  assert(cached && cached.winner === "v3-clearvault" && cached.bids.length === 2 && new Set(cached.bids.map((b) => b.amount)).size === 2, "first question: real price competition, ClearVault wins");
+  const repeat = d.turns.find((t) => t.id === "v3-repeat");
+  assert(repeat && repeat.winner === "v3-keyforge" && repeat.bids.every((b) => b.campaign !== "v3-clearvault"), "repeat: frequency cap keeps ClearVault out, KeyForge wins");
   for (const ch of d.channels) {
     assert(B(ch.settled) + B(ch.refund) === B(ch.deposit), `${ch.campaign}: payout + refund = deposit`);
     let cum = 0n;
@@ -112,43 +126,40 @@ function verify(d) {
    The full slice (with model versions, policy names, hashes, IDs) stays in run.generated.json for
    the asserts and /design; the landing bundle imports run.landing.json, so none of that ships. */
 const LANDING_OUT = join(app, "src/data/run.landing.json");
-const DEVNET = join(repo, "artifacts/v3-devnet/settlement.json");
 const DEVNET_OUT = join(app, "src/data/devnet.json");
-/** The public re-settlement of the run's three receipts on Solana Devnet (optional evidence).
+/** The live run's own settlement on Solana Devnet, from its chain evidence (inside run.json).
  *  Only amounts and explorer links leave this function; no keys, hashes or addresses as text. */
+let chainEvidence = null;
 function devnet(d) {
-  if (!existsSync(DEVNET)) return existsSync(DEVNET_OUT) ? JSON.parse(readFileSync(DEVNET_OUT, "utf8")) : null;
-  const dv = JSON.parse(readFileSync(DEVNET, "utf8"));
+  if (!chainEvidence) return existsSync(DEVNET_OUT) ? JSON.parse(readFileSync(DEVNET_OUT, "utf8")) : null;
+  const ce = chainEvidence;
   const ex = (u) => typeof u === "string" && u.startsWith("https://explorer.solana.com/") && u.includes("cluster=devnet");
-  assert(dv.network?.cluster === "devnet", "devnet: cluster is devnet");
-  assert(dv.verification?.allSignaturesFinalized === true, "devnet: every signature finalized");
-  assert(dv.sourceRun?.bundleSha256 === sha256(readFileSync(RUN)), "devnet: settles this exact recorded run");
-  assert(ex(dv.network.programExplorerUrl), "devnet: program explorer link");
-  const channels = dv.channels.map((c) => {
+  assert(ce.financialMode === "devnet" && ce.runId === RUN_ID, "devnet: the live run's own chain evidence");
+  assert(ce.allChecksPassed === true, "devnet: every chain check passed");
+  const program = ce.channels[0]?.program;
+  assert(program && ce.channels.every((c) => c.program === program), "devnet: one channel program");
+  const programUrl = `https://explorer.solana.com/address/${program}?cluster=devnet`;
+  const channels = ce.channels.map((c) => {
     const id = c.channelId.replace(/-channel$/, "");
     const rec = d.channels.find((x) => x.campaign === id);
-    const tx = (role) => dv.transactions.find((t) => t.channelId === c.channelId && t.role === role);
-    const open = tx("open");
-    const close = tx("cooperative_close");
-    assert(rec, `devnet: ${id} is a recorded channel`);
-    assert(rec && String(c.publisherPayoutBaseUnits) === rec.settled && String(c.payerRefundBaseUnits) === rec.refund && String(c.depositBaseUnits) === rec.deposit, `devnet: ${id} amounts match the recorded run`);
-    for (const t of [open, close]) assert(t && t.finality === "finalized" && t.err == null && ex(t.explorerUrl), `devnet: ${id} ${t?.role} finalized with an explorer link`);
-    assert(ex(c.channelExplorerUrl), `devnet: ${id} channel explorer link`);
+    assert(rec, `devnet: ${id} is a run channel`);
+    assert(rec && String(c.publisherPayoutBaseUnits) === rec.settled && String(c.payerRefundBaseUnits) === rec.refund && String(c.depositBaseUnits) === rec.deposit, `devnet: ${id} amounts match the run`);
+    assert(c.transactionStatuses.length === 2 && c.transactionStatuses.every((s) => s.confirmationStatus === "finalized" && s.err == null), `devnet: ${id} open and close finalized`);
+    for (const k of ["channel", "open", "close"]) assert(ex(c.explorer?.[k]), `devnet: ${id} ${k} explorer link`);
     return {
       campaign: id,
       name: NAMES[id],
       deposit: String(c.depositBaseUnits),
       paid: String(c.publisherPayoutBaseUnits),
       refunded: String(c.payerRefundBaseUnits),
-      vouchers: c.receiptToVoucher.map((v) => String(v.cumulativeVoucherBaseUnits)),
-      channelUrl: c.channelExplorerUrl,
-      openUrl: open?.explorerUrl,
-      closeUrl: close?.explorerUrl,
+      vouchers: rec ? rec.vouchers.map((v) => String(v.cumulative)) : [],
+      channelUrl: c.explorer.channel,
+      openUrl: c.explorer.open,
+      closeUrl: c.explorer.close,
     };
   });
-  assert(String(dv.totals.publisherPayoutBaseUnits) === d.totals.paid && String(dv.totals.payerRefundBaseUnits) === d.totals.refunded, "devnet: totals match the recorded run");
   finish("devnet evidence");
-  const out = { cluster: "devnet", programUrl: dv.network.programExplorerUrl, receipts: channels.reduce((n, c) => n + c.vouchers.length, 0), channels };
+  const out = { cluster: "devnet", live: true, programUrl, receipts: channels.reduce((n, c) => n + c.vouchers.length, 0), channels };
   writeFileSync(DEVNET_OUT, `${JSON.stringify(out, null, 2)}\n`);
   return out;
 }
@@ -181,13 +192,14 @@ function landing(d) {
     jev: d.jev,
     video: d.video,
     mvp: { verifyChecks: verifyChecks ?? d.mvp?.verifyChecks ?? null },
+    financialMode: d.financialMode,
     devnet: devnet(d),
   };
 }
 function writeLanding(d) {
   const l = landing(d);
   const text = JSON.stringify(l);
-  for (const bad of [/jev-\d/i, /gpt-\d/i, /fit_intent/, /[0-9a-f]{40,}/, /v3-wallet-acceptance/, /\.\.\./]) assert(!bad.test(text.replace(/https:\/\/explorer\.solana\.com\/[^"]+/g, "")), `landing slice leaks ${bad}`);
+  for (const bad of [/jev-\d/i, /gpt-\d/i, /fit_intent/, /[0-9a-f]{40,}/, /v3-wallet-acceptance/, /v3-devnet-live/, /\.\.\./]) assert(!bad.test(text.replace(/https:\/\/explorer\.solana\.com\/[^"]+/g, "")), `landing slice leaks ${bad}`);
   finish("landing slice");
   writeFileSync(LANDING_OUT, `${JSON.stringify(l, null, 2)}\n`);
   console.log(`extract-specimens: wrote ${LANDING_OUT.replace(`${app}/`, "")} (${text.length} bytes).`);
@@ -196,7 +208,7 @@ function writeLanding(d) {
 /* ---------------- Fresh-clone path: verify the committed slice ---------------- */
 if (!existsSync(RUN) || !existsSync(MANIFEST)) {
   if (!existsSync(OUT)) {
-    console.error("extract-specimens: artifacts/v3/replay is missing and no committed run.generated.json exists.");
+    console.error("extract-specimens: the run bundle is missing and no committed run.generated.json exists.");
     process.exit(1);
   }
   verify(JSON.parse(readFileSync(OUT, "utf8")));
@@ -214,6 +226,7 @@ const run = JSON.parse(runBytes);
 assert(manifest.files["run.json"] === sha256(runBytes), "run.json hash matches manifest");
 const s = run.state;
 const ex = s.exchange;
+chainEvidence = run.chainEvidence?.financialMode === "devnet" ? run.chainEvidence : null;
 
 const campaigns = {};
 for (const draft of s.drafts) {
@@ -379,7 +392,7 @@ const policy = s.freeze.policy;
 
 const out = {
   schema: "axp.landing-slice.v1",
-  generatedFrom: { run: "artifacts/v3/replay/run.json", manifest: "artifacts/v3/replay/manifest.json" },
+  generatedFrom: { run: RUN.replace(`${repo}/`, ""), manifest: MANIFEST.replace(`${repo}/`, "") },
   runId: run.runId,
   manifestHash: sha256(manifestBytes),
   manifestHashShort: short(sha256(manifestBytes), 8, 5),
@@ -437,7 +450,7 @@ const out = {
   evidence,
   jev: (() => {
     // One real decision for the landing's Jev section: ClearVault, the first question, with history.
-    const c = run.callEvidence.find((x) => x.slotId === "v3-cached:v3-clearvault-33f486d647df:history");
+    const c = run.callEvidence.find((x) => x.slotId.startsWith("v3-cached:v3-clearvault-") && x.slotId.endsWith(":history"));
     const a = c.rawOutput.answers;
     const dec = c.decision;
     const creativeProb = a.creative.probabilities[a.creative.choice];
