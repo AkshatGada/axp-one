@@ -193,6 +193,7 @@
 .status a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--sol); text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
 :global(html[data-px-motion="on"]) .trio, :global(html[data-px-motion="on"]) .status { animation: labIn 1s var(--ease-out) 0.7s both; }
 .h1 { max-width: 13.2ch; font-size: clamp(50px, 5.5vw, 100px); line-height: 0.94; }
+@media (min-width: 1600px) { .copyIn { max-width: 1000px; } .h1 { max-width: 16ch; font-size: clamp(50px, 5vw, 100px); } }
 .lede { max-width: 35ch; font-size: clamp(18px, 1.45vw, 23px); color: var(--steel-dark); }
 .actions { display: flex; }
 :global(html[data-px-motion="on"]) .h1 :global(.px-wi) { animation: labRise 1.1s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 60ms + 80ms); }
@@ -321,3 +322,4 @@
 .view[data-tone="brand"] .tile { background: #fff; border-color: transparent; box-shadow: none; }
 
 :global(html[data-px-tone="on"]) .stage, :global(html[data-px-tone="on"]) .after { background: transparent; border-top-color: transparent; }
+.view[data-tone="brand"] { -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 72%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 72%, transparent 100%); }

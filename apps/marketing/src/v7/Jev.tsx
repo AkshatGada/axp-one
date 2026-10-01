@@ -60,6 +60,7 @@ export default function Jev() {
             ))}
           </div>
           <div className={s.code}>
+            <span className={s.rule}>{J.rule}</span>
             <span className={s.k}>{J.codeLabel}</span>
             <p className={s.bid}>
               <b>{J.bid}</b> USDC <span>{J.cap}</span>
