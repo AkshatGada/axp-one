@@ -8,7 +8,7 @@ import {validateDecision,validateProfile} from '../ml/engines/contract.mjs';
 import {buildJevRequest,validateJevResponse} from '../ml/engines/jev.mjs';
 import {participation} from '../ml/engines/base.mjs';
 import {mlCampaign,SCENARIOS,POLICY} from './config.mjs';
-import {organicPrompt} from './organic.mjs';
+import {organicPrompt,ORGANIC_ENGINES} from './organic.mjs';
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const equal=(a,b,code)=>{if(hash(a)!==hash(b))throw Error(code);};
 // Exchange storage canonicalizes object-key order. Original harness rows retain
@@ -58,7 +58,8 @@ export function validateV3DecisionRecords(run){
 export function validateV3ReplayRetrieval(run){const expected=run.state.turns.filter(t=>['cached','offline'].includes(t.scenario.id)).flatMap(t=>t.records.filter(r=>r.arm==='history').map(r=>({question:t.question,campaignId:r.campaignId,result:r.retrieval})));equal(run.retrieval,expected,'v3_replay_retrieval_binding');return true;}
 export const V3_FINANCIAL_MODES=Object.freeze(['sandbox','devnet']);
 /** Policy frozen by a run: the V3 POLICY, with the run's settlement network for non-sandbox runs. */
-export const v3RunPolicy=mode=>mode==='sandbox'?POLICY:{...POLICY,financialMode:mode};
+export const v3RunPolicy=(mode,organicEngine)=>mode==='sandbox'&&!organicEngine?POLICY:{...POLICY,financialMode:mode,
+ ...(organicEngine?{organicEngine,organicModel:ORGANIC_ENGINES[organicEngine].model,organicReasoning:ORGANIC_ENGINES[organicEngine].effort}:{})};
 /** Integrity checks always throw. Demonstration "story" gates (competition, three
  * placements, multiple increments, mobile no-fill) throw for the recorded sandbox
  * run; for a live devnet run they are reported in storyGates instead. */
@@ -67,8 +68,9 @@ export function validateV3Run(run,{storyGates}={}){
  if(run.schemaVersion!=='axp.v3-run.v1'||run.state.runId!==run.runId||!V3_FINANCIAL_MODES.includes(M))throw Error('v3_run_binding');
  const failed=[],story=code=>{if(M==='sandbox')throw Error(code);failed.push(code);};
  validateCatalogue(run.evidence);const s=run.state,ex=s.exchange,f=s.freeze,{contentHash,...frozen}=f??{};if(!f||contentHash!==hash(frozen)||hash(run.manifest)!==hash(f.manifest))throw Error('v3_freeze_hash');
- equal(f.policy,v3RunPolicy(M),'v3_policy_binding');equal(f.scenarios,SCENARIOS,'v3_scenario_binding');
- const completed=s.turns.filter(t=>t.status==='completed');if(completed.length!==4||completed.some(t=>t.organic?.status!=='completed'||t.organic.question!==t.question||t.organic.suppliedPrompt!==organicPrompt(t.question)||t.organic.inputHash!==hash(t.organic.suppliedPrompt)||t.organic.provenance?.model!=='gpt-6.1-sol'||t.organic.provenance.effort!=='low'||t.organic.advertiserMaterialReceived!==false))throw Error('v3_organic_binding');
+ if(f.policy?.organicEngine!==undefined&&(M==='sandbox'||!ORGANIC_ENGINES[f.policy.organicEngine]))throw Error('v3_policy_binding');
+ equal(f.policy,v3RunPolicy(M,f.policy.organicEngine),'v3_policy_binding');const OE=f.policy.organicEngine?ORGANIC_ENGINES[f.policy.organicEngine]:{model:'gpt-6.1-sol',effort:'low'};equal(f.scenarios,SCENARIOS,'v3_scenario_binding');
+ const completed=s.turns.filter(t=>t.status==='completed');if(completed.length!==4||completed.some(t=>t.organic?.status!=='completed'||t.organic.question!==t.question||t.organic.suppliedPrompt!==organicPrompt(t.question)||t.organic.inputHash!==hash(t.organic.suppliedPrompt)||t.organic.provenance?.model!==OE.model||t.organic.provenance.effort!==OE.effort||(f.policy.organicEngine!==undefined&&t.organic.provenance.engine!==f.policy.organicEngine)||t.organic.advertiserMaterialReceived!==false))throw Error('v3_organic_binding');
  validateV3DecisionRecords(run);
  validateV3ReplayRetrieval(run);
  if(!completed.some(t=>(t.outcome?.bids?.length??0)>=2))story('v3_genuine_competition_required');

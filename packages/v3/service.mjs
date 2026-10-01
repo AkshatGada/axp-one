@@ -9,13 +9,13 @@ import {createV3Harness} from './agents.mjs';
 import {projectV3NetworkState,paymentEvidenceV3} from './payments.mjs';
 import {v3RunPolicy} from './bundle.mjs';
 
-export function createV3Service({stateDir,runId='v3-wallet-acceptance',retriever,apiKey,liveEnabled=false,transport,now=Date.now,payee,financialMode:GM='sandbox'}={}){
+export function createV3Service({stateDir,runId='v3-wallet-acceptance',retriever,apiKey,liveEnabled=false,transport,now=Date.now,payee,financialMode:GM='sandbox',organicEngine}={}){
  if(!['sandbox','devnet'].includes(GM))throw new ContractError('financial_mode_invalid');
  const acceptanceDir=join(stateDir,'acceptance');mkdirSync(acceptanceDir,{recursive:true,mode:0o700});const paymentStore=new SQLitePaymentStore(join(acceptanceDir,'payments.sqlite'));
  const session=createSession({stateDir:acceptanceDir,runId,campaigns:[],mode:GM,publisherPayee:payee,networkState:id=>projectV3NetworkState(paymentStore,id),now}),ex=session.exchange;
  const labSession=createSession({stateDir:join(stateDir,'laboratory'),runId:`${runId}-laboratory`,campaigns:[],now}),lab=labSession.exchange;
  for(const db of [ex,lab])for(const t of ['v3_meta','v3_drafts','v3_turns'])db.db.exec(`CREATE TABLE IF NOT EXISTS ${t}(run TEXT NOT NULL,id TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(run,id))`);
- const organic=createOrganicBridge({exchange:ex,runId,now}),harness=createV3Harness({stateDir:acceptanceDir,runId,retriever,apiKey,liveEnabled,transport,now});
+ const organic=createOrganicBridge({exchange:ex,runId,now,...(organicEngine?{engine:organicEngine}:{})}),harness=createV3Harness({stateDir:acceptanceDir,runId,retriever,apiKey,liveEnabled,transport,now});
  for(const c of CAMPAIGNS)if(!lab.get('v3_drafts',c.campaignId))lab.put('v3_drafts',c.campaignId,{campaign:c,businessName:c.displayName,contextHints:c.contextHints,approved:false,fictional:true,version:1});
  let running=false;
  const drafts=()=>lab.all('v3_drafts');
@@ -34,7 +34,7 @@ export function createV3Service({stateDir,runId='v3-wallet-acceptance',retriever
  function freeze(){
   const prior=ex.get('v3_meta','freeze');if(prior)return prior;const ds=drafts();if(ds.length!==3||ds.some(d=>!d.approved||d.campaign.status!=='active'))throw new ContractError('approve_three_active_campaigns');
   for(const c of ds.slice(0,2).map(d=>d.campaign))if(!['crypto_storage','hardware_wallet','offline_key_storage','ethereum','solana'].every(k=>c.declaredConstraints.includes(k)))throw new ContractError('frozen_story_capabilities');
-  const f={runId,at:now(),drafts:ds,campaigns:ds.map(d=>exchangeCampaign(d.campaign)),scenarios:SCENARIOS,manifest:retriever.manifest,policy:v3RunPolicy(GM)};f.contentHash=hash(f);ex.put('v3_meta','freeze',f);initialize(f);ex.event('v3_run_frozen',{contentHash:f.contentHash});return f;
+  const f={runId,at:now(),drafts:ds,campaigns:ds.map(d=>exchangeCampaign(d.campaign)),scenarios:SCENARIOS,manifest:retriever.manifest,policy:v3RunPolicy(GM,organicEngine)};f.contentHash=hash(f);ex.put('v3_meta','freeze',f);initialize(f);ex.event('v3_run_frozen',{contentHash:f.contentHash});return f;
  }
  function initialize(f){for(const c of f.campaigns){if(!ex.get('channels',c.channelId))ex.createChannel({channelId:c.channelId,advertiserId:c.advertiserId,publisherId:'owned-travel-app',payee,depositBaseUnits:'0',mode:GM});ex.syncNetworkChannel(c.channelId);if(!ex.get('campaigns',c.campaignId))ex.createCampaign(c);}}
  function turnInput({scenarioId,turnId,question,mandatoryCapabilities,financialMode=GM}){

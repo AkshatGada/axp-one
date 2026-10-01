@@ -12,11 +12,11 @@ const root=resolve(import.meta.dirname,'../..');
 const assets={'/':['apps/v3-ui/index.html','text/html'],'/app.mjs':['apps/v3-ui/app.mjs','text/javascript'],'/style.css':['apps/v3-ui/style.css','text/css'],'/client.mjs':['packages/v3/client.mjs','text/javascript'],'/design-system/tokens.css':['design-system/tokens.css','text/css'],'/design-system/fonts.css':['design-system/fonts.css','text/css']};
 for(const font of ['Neutral','Median','Bulky','SlimWide','NeutralWide','MedianWide','NeutralMono','MedianMono'])assets[`/design-system/fonts/PolySans-${font}.woff2`]=[`design-system/fonts/PolySans-${font}.woff2`,'font/woff2'];
 const json=(res,status,value)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});const publicValue=sanitized(value);if(value?.schemaVersion==='axp.v3-bootstrap.v1')publicValue.csrf=value.csrf;res.end(JSON.stringify(publicValue));};
-export function createV3Server({stateDir=join(root,'local-state/v3'),runId='v3-wallet-acceptance',retriever,apiKey,liveEnabled=false,transport,replayDirectory=null,payee,now,financialMode='sandbox'}={}){
+export function createV3Server({stateDir=join(root,'local-state/v3'),runId='v3-wallet-acceptance',retriever,apiKey,liveEnabled=false,transport,replayDirectory=null,payee,now,financialMode='sandbox',organicEngine}={}){
  const bundle=replayDirectory?loadV3Bundle(replayDirectory):null,GM=bundle?bundle.manifest.financialMode:financialMode;
  retriever=bundle?null:retriever??loadEvidence({directory:join(root,'artifacts/v2/evidence')});
  payee=bundle?null:payee??JSON.parse(readFileSync(join(root,'artifacts/phase4/feasibility-sandbox.json'))).network.payee;
- const service=bundle?null:createV3Service({stateDir,runId,retriever,apiKey,liveEnabled,transport,payee,now,financialMode:GM}),csrf=randomBytes(24).toString('hex');
+ const service=bundle?null:createV3Service({stateDir,runId,retriever,apiKey,liveEnabled,transport,payee,now,financialMode:GM,organicEngine}),csrf=randomBytes(24).toString('hex');
  const server=createServer(async(req,res)=>{try{
   const host=req.headers.host,hosts=[`127.0.0.1:${server.address().port}`,`localhost:${server.address().port}`];if(!hosts.includes(host))throw new ContractError('local_host_required',undefined,403);
   const u=new URL(req.url,`http://${host}`),path=u.pathname;res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'");
