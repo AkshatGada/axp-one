@@ -4,8 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "extract": "node scripts/extract-specimens.mjs",
+    "lint:copy": "node scripts/lint-copy.mjs",
+    "predev": "node scripts/extract-specimens.mjs",
     "dev": "next dev -p 3410",
+    "prebuild": "node scripts/extract-specimens.mjs && node scripts/lint-copy.mjs",
     "build": "next build",
+    "postbuild": "node scripts/lint-copy.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

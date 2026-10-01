@@ -1,0 +1,647 @@
+{
+  "schema": "axp.landing-slice.v1",
+  "generatedFrom": {
+    "run": "artifacts/v3/replay/run.json",
+    "manifest": "artifacts/v3/replay/manifest.json"
+  },
+  "runId": "v3-wallet-acceptance",
+  "manifestHash": "e34448fafa059d88c0120373fe039940ee1aca29369e3a245293a8b0f5a2152a",
+  "manifestHashShort": "e34448fa...2152a",
+  "runHashShort": "938a0ee8...6dd48",
+  "financialMode": "sandbox",
+  "network": "hosted Solana sandbox",
+  "presentation": "recorded_evidence_replay",
+  "recordedAt": "2026-10-01",
+  "counts": {
+    "questions": 4,
+    "decisions": 15,
+    "auctions": 3,
+    "ties": 2,
+    "noFill": 1,
+    "receipts": 3,
+    "events": 33,
+    "channels": 2,
+    "organicAnswers": 4
+  },
+  "policy": {
+    "bidPolicy": "fit_intent_bid_v1",
+    "auction": "first-price",
+    "maxBid": "4000",
+    "budgetCap": "8000",
+    "deposit": "20000",
+    "frequencyCap": 2,
+    "floor": "1000",
+    "slotId": "v3-wallet-sponsored-card",
+    "publisherKeyId": "local-publisher-v1",
+    "agentModel": "jev-1.13.0",
+    "organicModel": "gpt-6.1-sol"
+  },
+  "campaigns": {
+    "v3-clearvault": {
+      "name": "ClearVault",
+      "fictional": true,
+      "maxBid": "4000",
+      "budgetCap": "8000",
+      "declared": [
+        "crypto_storage",
+        "hardware_wallet",
+        "offline_key_storage",
+        "ethereum",
+        "solana"
+      ],
+      "approvedText": "ClearVault is a fictional hardware wallet with offline key storage and declared Ethereum/Solana support. Straightforward self-custody guidance for people comparing hardware wallets.",
+      "destination": "https://clearvault.example/",
+      "deposit": "20000",
+      "channelStatus": "finalized"
+    },
+    "v3-keyforge": {
+      "name": "KeyForge",
+      "fictional": true,
+      "maxBid": "4000",
+      "budgetCap": "8000",
+      "declared": [
+        "crypto_storage",
+        "hardware_wallet",
+        "offline_key_storage",
+        "ethereum",
+        "solana"
+      ],
+      "approvedText": "KeyForge is a fictional hardware wallet with offline key storage and declared Ethereum/Solana support. Hardware self-custody for experienced users comparing key-storage and recovery tradeoffs.",
+      "destination": "https://keyforge.example/",
+      "deposit": "20000",
+      "channelStatus": "finalized"
+    },
+    "v3-leatherguard": {
+      "name": "LeatherGuard",
+      "fictional": true,
+      "maxBid": "4000",
+      "budgetCap": "8000",
+      "declared": [
+        "physical_wallet",
+        "rfid_blocking"
+      ],
+      "approvedText": "LeatherGuard is a fictional physical RFID-blocking wallet for payment cards. It cannot store cryptocurrency or manage blockchain private keys.",
+      "destination": "https://leatherguard.example/",
+      "deposit": "0",
+      "channelStatus": "pending_open"
+    }
+  },
+  "turns": [
+    {
+      "id": "v3-cached",
+      "scenario": "cached",
+      "runOrder": 2,
+      "question": "cheapest hardware wallet that still supports ethereum and solana",
+      "required": [
+        "crypto_storage"
+      ],
+      "status": "awarded",
+      "execution": "actual-jev",
+      "organic": {
+        "excerpt": "I can’t reliably name the cheapest hardware wallet without checking current prices and Ethereum/Solana support. For a budget choice, compare entry-level hardware wallets by total delivered cost, then confirm that the exact model supports both networks through wallet software you’re comfortable using.",
+        "model": "gpt-6.1-sol",
+        "advertiserMaterialReceived": false
+      },
+      "eligible": [
+        "v3-clearvault",
+        "v3-keyforge"
+      ],
+      "excluded": [
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "reason": "missing_constraint"
+        }
+      ],
+      "bids": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "amount": "4000",
+          "policy": "fit_intent_bid_v1"
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "amount": "4000",
+          "policy": "fit_intent_bid_v1"
+        }
+      ],
+      "winner": "v3-clearvault",
+      "winnerName": "ClearVault",
+      "price": "4000",
+      "awardId": "award-fe97d44c-836b-4bdc-a68d-6a442d42a97a",
+      "decisions": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "arm": "text_only",
+          "category": "paired",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2,
+          "relevanceScore": 2.82,
+          "intentScore": 2.38,
+          "ms": 846,
+          "model": "jev-1.13.0"
+        },
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "arm": "history",
+          "category": "paired",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 3,
+          "relevanceScore": 2.89,
+          "intentScore": 2.52,
+          "ms": 370,
+          "model": "jev-1.13.0"
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "arm": "text_only",
+          "category": "paired",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2,
+          "relevanceScore": 2.85,
+          "intentScore": 2.29,
+          "ms": 368,
+          "model": "jev-1.13.0"
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "arm": "history",
+          "category": "paired",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 3,
+          "relevanceScore": 2.81,
+          "intentScore": 2.5,
+          "ms": 477,
+          "model": "jev-1.13.0"
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "arm": "text_only",
+          "category": "paired",
+          "decision": "skip",
+          "relevanceLevel": 1,
+          "intentLevel": 2,
+          "relevanceScore": 0.71,
+          "intentScore": 2.44,
+          "ms": 377,
+          "model": "jev-1.13.0"
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "arm": "history",
+          "category": "paired",
+          "decision": "skip",
+          "relevanceLevel": 1,
+          "intentLevel": 2,
+          "relevanceScore": 0.67,
+          "intentScore": 2.41,
+          "ms": 356,
+          "model": "jev-1.13.0"
+        }
+      ]
+    },
+    {
+      "id": "v3-offline",
+      "scenario": "offline",
+      "runOrder": 3,
+      "question": "Compare self-custody options for Ethereum and Solana, prioritizing offline key storage over a mobile-only wallet.",
+      "required": [
+        "crypto_storage"
+      ],
+      "status": "awarded",
+      "execution": "actual-jev",
+      "organic": {
+        "excerpt": "For Ethereum and Solana, prioritize a hardware wallet if keeping private keys off your phone or computer is your main goal. Confirm that the exact device and its companion software support both networks and the transactions you need; support can differ by model, app and account type.",
+        "model": "gpt-6.1-sol",
+        "advertiserMaterialReceived": false
+      },
+      "eligible": [
+        "v3-clearvault",
+        "v3-keyforge"
+      ],
+      "excluded": [
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "reason": "missing_constraint"
+        }
+      ],
+      "bids": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "amount": "3000",
+          "policy": "fit_intent_bid_v1"
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "amount": "3000",
+          "policy": "fit_intent_bid_v1"
+        }
+      ],
+      "winner": "v3-clearvault",
+      "winnerName": "ClearVault",
+      "price": "3000",
+      "awardId": "award-b1283b51-d2d1-492e-b9ae-3f3f4d22bdc1",
+      "decisions": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "arm": "text_only",
+          "category": "paired",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2,
+          "relevanceScore": 2.99,
+          "intentScore": 1.93,
+          "ms": 540,
+          "model": "jev-1.13.0"
+        },
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "arm": "history",
+          "category": "paired",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2,
+          "relevanceScore": 2.98,
+          "intentScore": 1.97,
+          "ms": 315,
+          "model": "jev-1.13.0"
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "arm": "text_only",
+          "category": "paired",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2,
+          "relevanceScore": 2.98,
+          "intentScore": 1.93,
+          "ms": 352,
+          "model": "jev-1.13.0"
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "arm": "history",
+          "category": "paired",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2,
+          "relevanceScore": 2.96,
+          "intentScore": 1.97,
+          "ms": 322,
+          "model": "jev-1.13.0"
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "arm": "text_only",
+          "category": "paired",
+          "decision": "skip",
+          "relevanceLevel": 0,
+          "intentLevel": 2,
+          "relevanceScore": 0.49,
+          "intentScore": 1.98,
+          "ms": 378,
+          "model": "jev-1.13.0"
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "arm": "history",
+          "category": "paired",
+          "decision": "skip",
+          "relevanceLevel": 0,
+          "intentLevel": 2,
+          "relevanceScore": 0.43,
+          "intentScore": 1.97,
+          "ms": 367,
+          "model": "jev-1.13.0"
+        }
+      ]
+    },
+    {
+      "id": "v3-repeat",
+      "scenario": "repeat",
+      "runOrder": 4,
+      "question": "cheapest hardware wallet that still supports ethereum and solana",
+      "required": [
+        "crypto_storage"
+      ],
+      "status": "awarded",
+      "execution": "actual-jev",
+      "organic": {
+        "excerpt": "For the lowest-cost hardware wallet that supports both Ethereum and Solana, compare entry-level models—but verify support for both networks on the exact model before buying. I can’t reliably name today’s cheapest option without current prices and compatibility information.",
+        "model": "gpt-6.1-sol",
+        "advertiserMaterialReceived": false
+      },
+      "eligible": [
+        "v3-keyforge"
+      ],
+      "excluded": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "reason": "frequency_cap"
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "reason": "missing_constraint"
+        }
+      ],
+      "bids": [
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "amount": "3000",
+          "policy": "fit_intent_bid_v1"
+        }
+      ],
+      "winner": "v3-keyforge",
+      "winnerName": "KeyForge",
+      "price": "3000",
+      "awardId": "award-bb3d8921-5975-4633-80df-70b841be0643",
+      "decisions": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "arm": "history",
+          "category": "repeat",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 3,
+          "relevanceScore": 2.85,
+          "intentScore": 2.51,
+          "ms": 578,
+          "model": "jev-1.13.0"
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "arm": "history",
+          "category": "repeat",
+          "decision": "bid",
+          "relevanceLevel": 3,
+          "intentLevel": 2,
+          "relevanceScore": 2.83,
+          "intentScore": 2.49,
+          "ms": 342,
+          "model": "jev-1.13.0"
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "arm": "history",
+          "category": "repeat",
+          "decision": "skip",
+          "relevanceLevel": 1,
+          "intentLevel": 2,
+          "relevanceScore": 0.71,
+          "intentScore": 2.4,
+          "ms": 368,
+          "model": "jev-1.13.0"
+        }
+      ]
+    },
+    {
+      "id": "v3-mobile",
+      "scenario": "mobile",
+      "runOrder": 1,
+      "question": "Compare mobile-only software wallets for Ethereum and Solana. A hardware device does not satisfy my requirement.",
+      "required": [
+        "crypto_storage",
+        "mobile_software_wallet"
+      ],
+      "status": "no_fill",
+      "execution": "deterministic-policy",
+      "organic": {
+        "excerpt": "For a mobile-only Ethereum and Solana wallet, compare software wallets on chain coverage, security, usability, and recovery—not hardware devices. First decide whether you prefer one app for both chains or separate chain-focused wallets.",
+        "model": "gpt-6.1-sol",
+        "advertiserMaterialReceived": false
+      },
+      "eligible": [],
+      "excluded": [
+        {
+          "campaign": "v3-clearvault",
+          "name": "ClearVault",
+          "reason": "missing_constraint"
+        },
+        {
+          "campaign": "v3-keyforge",
+          "name": "KeyForge",
+          "reason": "missing_constraint"
+        },
+        {
+          "campaign": "v3-leatherguard",
+          "name": "LeatherGuard",
+          "reason": "missing_constraint"
+        }
+      ],
+      "bids": [],
+      "winner": null,
+      "winnerName": null,
+      "price": null,
+      "awardId": null,
+      "decisions": []
+    }
+  ],
+  "charges": [
+    {
+      "awardId": "award-b1283b51-d2d1-492e-b9ae-3f3f4d22bdc1",
+      "campaign": "v3-clearvault",
+      "name": "ClearVault",
+      "amount": "3000",
+      "status": "accepted"
+    },
+    {
+      "awardId": "award-bb3d8921-5975-4633-80df-70b841be0643",
+      "campaign": "v3-keyforge",
+      "name": "KeyForge",
+      "amount": "3000",
+      "status": "accepted"
+    },
+    {
+      "awardId": "award-fe97d44c-836b-4bdc-a68d-6a442d42a97a",
+      "campaign": "v3-clearvault",
+      "name": "ClearVault",
+      "amount": "4000",
+      "status": "accepted"
+    }
+  ],
+  "receipts": [
+    {
+      "turn": "v3-cached",
+      "campaign": "v3-clearvault",
+      "name": "ClearVault",
+      "amount": "4000",
+      "schemaVersion": "publisher-receipt.v1",
+      "mode": "sandbox",
+      "publisherKeyId": "local-publisher-v1",
+      "awardId": "award-fe97d44c...a97a",
+      "opportunityId": "opp-54f84127...6db8",
+      "creativeHash": "d256a61b...99746",
+      "renderAcknowledgementHash": "6a4c5b01...d41d8",
+      "receiptHash": "cdf946cc...5712b",
+      "signature": "Cnvr3o61SJC+fB8Q...",
+      "fieldCount": 10
+    },
+    {
+      "turn": "v3-offline",
+      "campaign": "v3-clearvault",
+      "name": "ClearVault",
+      "amount": "3000",
+      "schemaVersion": "publisher-receipt.v1",
+      "mode": "sandbox",
+      "publisherKeyId": "local-publisher-v1",
+      "awardId": "award-b1283b51...bdc1",
+      "opportunityId": "opp-bffa4a88...8a2f",
+      "creativeHash": "d256a61b...99746",
+      "renderAcknowledgementHash": "54b936b0...d1fd2",
+      "receiptHash": "65d11b86...59afc",
+      "signature": "FE2lFkv5WOCMXZ+S...",
+      "fieldCount": 10
+    },
+    {
+      "turn": "v3-repeat",
+      "campaign": "v3-keyforge",
+      "name": "KeyForge",
+      "amount": "3000",
+      "schemaVersion": "publisher-receipt.v1",
+      "mode": "sandbox",
+      "publisherKeyId": "local-publisher-v1",
+      "awardId": "award-bb3d8921...0643",
+      "opportunityId": "opp-387a1766...d1c7",
+      "creativeHash": "89ef64ba...d1e6e",
+      "renderAcknowledgementHash": "4441967b...e40e6",
+      "receiptHash": "687a3b9b...59cb7",
+      "signature": "9OS+dl3YOInJwaOK...",
+      "fieldCount": 10
+    }
+  ],
+  "channels": [
+    {
+      "campaign": "v3-clearvault",
+      "name": "ClearVault",
+      "deposit": "20000",
+      "settled": "7000",
+      "refund": "13000",
+      "status": "finalized",
+      "vouchers": [
+        {
+          "sequence": 1,
+          "increment": "4000",
+          "cumulative": "4000"
+        },
+        {
+          "sequence": 2,
+          "increment": "3000",
+          "cumulative": "7000"
+        }
+      ],
+      "openTx": "51y88e...RexS",
+      "closeTx": "4mH68D...ZV3i",
+      "feeAndRentLamports": "15000"
+    },
+    {
+      "campaign": "v3-keyforge",
+      "name": "KeyForge",
+      "deposit": "20000",
+      "settled": "3000",
+      "refund": "17000",
+      "status": "finalized",
+      "vouchers": [
+        {
+          "sequence": 1,
+          "increment": "3000",
+          "cumulative": "3000"
+        }
+      ],
+      "openTx": "4Nsygw...pebz",
+      "closeTx": "2fqrnu...gV3T",
+      "feeAndRentLamports": "15000"
+    }
+  ],
+  "totals": {
+    "deposits": "40000",
+    "paid": "10000",
+    "refunded": "30000",
+    "networkFeeLamports": "40000",
+    "feeAndRentLamports": "9463840",
+    "feeAndRentCapLamports": "20000000"
+  },
+  "restart": {
+    "replayedTurns": 4,
+    "replayedReceipts": 3,
+    "newCalls": 0,
+    "newCharges": 0,
+    "newSignatures": 0,
+    "newBroadcasts": 0,
+    "sameStateHash": true
+  },
+  "evidence": {
+    "niche": "crypto-hardware-wallets-self-custody",
+    "nicheLabel": "crypto hardware wallets self custody",
+    "method": "vector",
+    "similarity": 1,
+    "examples": 1,
+    "hints": 1,
+    "observedPrompt": "cheapest hardware wallet that still supports ethereum and solana",
+    "observedCreative": "Mercari Nano Trezor Hardware Wallet NEW - New Electronics | Color: White New in wrapping Open to offers Paid $55",
+    "observedId": "ads:mapping:1836866",
+    "hintId": "ads:hint:88501",
+    "hintText": "Crypto holders and stakers looking to buy or resell hardware wallets like Trezor and Ledger on Mercari, where listings for new and used self-custody devices surface.",
+    "hintTier": "loo",
+    "embeddingModel": "BAAI/bge-base-en-v1.5",
+    "neighbors": 5,
+    "offline": {
+      "method": "lexical_fallback",
+      "fallback": true,
+      "topScore": 0.387,
+      "examples": [
+        {
+          "id": "ads:mapping:1836866",
+          "prompt": "cheapest hardware wallet that still supports ethereum and solana",
+          "creative": "Mercari Nano Trezor Hardware Wallet NEW - New Electronics | Color: White New in wrapping Open to offers Paid $55"
+        },
+        {
+          "id": "ads:mapping:110300",
+          "prompt": "What are the risks associated with self-custody Bitcoin wallets?",
+          "creative": "OneKey Limited OneKey: Best Hardware Wallet in Asia The hardware wallet trusted by crypto users worldwide. Summer Sale Live. Buy wallet, get BTC back."
+        }
+      ]
+    },
+    "slice": {
+      "associations": 1178,
+      "prompts": 241,
+      "creatives": 537,
+      "hints": 331,
+      "niches": 5
+    }
+  },
+  "limitations": [
+    "Fictional campaigns; product capabilities are advertiser declarations.",
+    "Real historical observations/inferred hints are not advertiser enrollment or targeting lift.",
+    "Same disposable test payer represents both advertisers; not independent wallets.",
+    "Hosted Solana sandbox, not Devnet or mainnet.",
+    "Organic completions use an operator-recorded isolated app-agent bridge.",
+    "Owned-app delivery acknowledgement is not human attention, ad absorption or endorsement."
+  ]
+}
