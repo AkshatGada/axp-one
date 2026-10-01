@@ -1,14 +1,14 @@
 # V3 fully live run on Solana Devnet: feasibility and plan
 
-Status 2026-10-02: **feasibility answered; rehearsal NOT executed.** Building the
-live operator script that signs Devnet transactions was blocked by this
-session's permission guard (real-world transactions). The owner must grant
-that permission explicitly (or run the signing steps) before a rehearsal.
-Recorded run `v3-wallet-acceptance` and `artifacts/v3/**` are untouched.
+Status 2026-10-02: **rehearsal executed end to end** (`v3-devnet-live-rehearsal-20261002`,
+see `artifacts/v3-devnet-live-rehearsal/RESULT.md`). Operator:
+`scripts/demo/v3-devnet-live.mjs`. Owner decisions applied: Devnet signing
+granted; organic answers via DeepSeek `deepseek-flash`; Jev mode-label quirk kept
+(below). Recorded run `v3-wallet-acceptance` and `artifacts/v3/**` untouched.
 
 ## (a) Pipeline on Devnet: config/code
 
-Already changed (uncommitted until reviewed, tests green before the guard):
+Changes (committed, tests green):
 
 - `packages/v3/service.mjs`: `financialMode` option (`sandbox` default |
   `devnet`). Guided turns, exchange/session/channel mode, receipts and charges
@@ -28,22 +28,38 @@ Already changed (uncommitted until reviewed, tests green before the guard):
 - `packages/payments/sdk-transport.mjs`: per-network treasury (already committed).
 - `packages/v3/devnet-live.mjs`: pure helpers (terms, ledger mapping, caps).
 
+Operator: `AXP_V3_LIVE_RUN=v3-devnet-live-<label>`, optional
+`AXP_V3_LIVE_ARTIFACTS=artifacts/<dir>`; commands `init`, `fund`, `freeze`,
+`open`, `organic`, `run`, `serve` (browser delivery), `deliver` (headless
+fallback), `authorize`, `close`, `reconcile`, `verify`, `restart`, `export`.
+
 Mapping to payments (same as `v3-devnet-settlement.mjs`, but ledger = the live
 exchange): freeze campaigns → Devnet terms per channel (`zeroChargeClose:true`)
 → open both channels BEFORE auctions (bids need finalized deposits) → after each
 accepted receipt `authorize <channel>` → `drainNetworkChannel` + `close`.
 Payment state lives in `<run>/acceptance/payments.sqlite` so the service sees
-deposits. Remaining work: the operator script (blocked, see top).
+deposits.
 
-Known label limitation (owner decision 1): `packages/v3/agents.mjs` writes
+Label quirk (owner decision: keep): `packages/v3/agents.mjs` writes
 `request.mode = POLICY.financialMode` (`'sandbox'`) into each Jev slot record.
-Mode is not sent to Jev. Fixing it requires editing `agents.mjs`/`config.mjs`,
-which changes the harness implementation hash, so the recorded run's
-interactive local-state console/restart/export would refuse to reopen (replay
-bundle, artifacts and offline package unaffected). Option A: fix before
-day-of; Option B: keep and document.
+Mode is not sent to Jev. The network label comes from the run: manifest/state
+`financialMode: 'devnet'`, frozen policy, receipts and charges. Not fixed because
+editing `agents.mjs`/`config.mjs` changes the harness implementation hash and
+the recorded run's local-state console/restart/export would refuse to reopen.
 
 ## (b) Organic answers
+
+**Owner decision: DeepSeek `deepseek-flash`** (key `DEEPSEEK_API_KEY` in
+`.env.local`, location only). Provider `packages/v3/organic-providers.mjs`:
+OpenAI-compatible chat completions at https://api.deepseek.com, model pinned to
+`deepseek-flash` (pro rejected), temperature 0.2, 8000 max tokens, one user
+message = the sponsor-free `organicPrompt`, no tools, JSON mode off (it padded to
+the token limit), provenance engine `deepseek-flash-api`, execution
+`actual-api-model`. The run's organic engine is frozen into its policy. Bound:
+<=4 attempts per scenario, <=10 per run, failures logged. The Codex paths below
+stay available (`init codex-cli-exec`).
+
+Earlier finding (Codex):
 
 Recorded: isolated gpt-6.1-sol (low) Codex app subagents, operator-recorded via
 `organic.complete`. Now: the same model/effort is available on this Mac via the
@@ -115,3 +131,15 @@ replay directory; `createV3Server({replayDirectory})` already loads either.
 9. (10 min) Verify chain, restart check (0 new calls/charges), export bundle,
    `npm test`, commit artifacts. Buffer 15–20 min for RPC/model latency.
 Voucher terms expire 2 h after freeze: finish steps 3–8 within that window.
+
+## Rehearsal lessons (2026-10-02)
+
+- Public RPC 429s: one open's first broadcast never landed and one close's
+  in-process lookup errored. Recovery was identity-preserving (same signed wire
+  rebroadcast before expiry; lookup-only reconcile). `sdk-transport.mjs` now
+  retries HTTP 429 with the identical request body.
+- DeepSeek flash spends substantial hidden reasoning tokens (up to ~2.8k for
+  the mobile question); JSON mode plus low max tokens truncated 4 attempts.
+  Keep JSON mode off and 8000 max tokens.
+- Delivery through the real console page (Browser pane) works; reload the
+  page (new query string) after each `run` before clicking.

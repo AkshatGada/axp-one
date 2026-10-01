@@ -21,18 +21,20 @@ test('deepseek provider sends only the sponsor-free prompt to deepseek-flash, lo
   const r=await answer({suppliedPrompt:'Return ONLY JSON. User task: x'});
   assert.equal(f.calls[0].url,'https://api.deepseek.com/chat/completions');
   const b=f.calls[0].init.body;assert.equal(b.model,'deepseek-flash');assert.equal(b.temperature,DEEPSEEK_ORGANIC.temperature);
-  assert.deepEqual(b.messages,[{role:'user',content:'Return ONLY JSON. User task: x'}]);assert.equal(b.tools,undefined);
+  assert.deepEqual(b.messages,[{role:'user',content:'Return ONLY JSON. User task: x'}]);assert.equal(b.tools,undefined);assert.equal(b.response_format,undefined);
   assert.equal(r.answer,'General guidance.');assert.equal(r.engine,'deepseek-flash-api');assert.deepEqual(r.usage,{inputTokens:210,outputTokens:90,cachedInputTokens:0});
   assert.ok(!JSON.stringify(r).includes(KEY));
   await answer({suppliedPrompt:'p'});await assert.rejects(answer({suppliedPrompt:'p'}),/organic_call_limit/);
+  const fenced=await createDeepSeekOrganicProvider({apiKey:KEY,fetchImpl:mock(reply({choices:[{finish_reason:'stop',message:{content:'```json\n{"answer":"Fenced."}\n```'}}]}))})({suppliedPrompt:'p'});assert.equal(fenced.answer,'Fenced.');
+  await assert.rejects(createDeepSeekOrganicProvider({apiKey:KEY,fetchImpl:mock(reply({choices:[{finish_reason:'stop',message:{content:'Sure! {"answer":"x"}'}}]}))})({suppliedPrompt:'p'}),/organic_response_not_json/);
 });
 
 test('deepseek provider rejects pro models, tool calls, truncation, extra fields and HTTP errors', async () => {
   const run=body=>createDeepSeekOrganicProvider({apiKey:KEY,fetchImpl:mock(body)})({suppliedPrompt:'p'});
   await assert.rejects(run(reply({model:'deepseek-v4-pro'})),/organic_model_mismatch/);
   await assert.rejects(run(reply({choices:[{finish_reason:'tool_calls',message:{content:'',tool_calls:[{}]}}]})),/organic_response_invalid/);
-  await assert.rejects(run(reply({choices:[{finish_reason:'length',message:{content:'{"answer":"x"}'}}]})),/organic_response_invalid/);
-  await assert.rejects(run(reply({choices:[{finish_reason:'stop',message:{content:'{"answer":"x","ad":"y"}'}}]})),/organic_response_invalid/);
+  await assert.rejects(run(reply({choices:[{finish_reason:'length',message:{content:'{"answer":"x"}'}}]})),/organic_truncated/);
+  await assert.rejects(run(reply({choices:[{finish_reason:'stop',message:{content:'{"answer":"x","ad":"y"}'}}]})),/organic_response_shape/);
   await assert.rejects(createDeepSeekOrganicProvider({apiKey:KEY,fetchImpl:mock({},500)})({suppliedPrompt:'p'}),/organic_http_500/);
   assert.throws(()=>createDeepSeekOrganicProvider({apiKey:''}),/organic_key_unavailable/);
 });

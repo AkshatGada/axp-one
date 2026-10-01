@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "axp.v3-manifest.v1",
+  "runId": "v3-devnet-live-rehearsal-20261002",
+  "createdAt": "2026-10-01T22:16:25.940Z",
+  "financialMode": "devnet",
+  "presentation": "recorded_evidence_replay",
+  "storyGates": {
+    "failed": []
+  },
+  "files": {
+    "run.json": "b4b866cf4c2589d67d1342ff111968b28f7523acff382cd7efb1beab855c6959"
+  }
+}

@@ -184,12 +184,15 @@ async function organic(scenarioId) {
     const r=s.requestTurn({scenarioId,financialMode:'devnet'}).organic;
     if(r.status==='completed')return {status:'already_completed',turnId:r.turnId};
     const attempts=existsSync(attemptsPath)?JSON.parse(readFileSync(attemptsPath,'utf8')):[];
-    check(attempts.length<POLICY.maxOrganic&&attempts.filter(a=>a.turnId===r.turnId).length<2,'organic_attempt_limit');
+    // Bound: at most 4 provider attempts per scenario, 10 per run. Only format/transport/
+    // truncation failures (no answer) are retried; failures are logged, never hidden.
+    check(attempts.length<10&&attempts.filter(a=>a.turnId===r.turnId).length<4,'organic_attempt_limit');
     attempts.push({turnId:r.turnId,engine,at:new Date().toISOString()});writePrivate(attemptsPath,attempts);
     let out;
-    if(engine==='deepseek-flash-api'){const key=localConfiguration().DEEPSEEK_API_KEY;out=await createDeepSeekOrganicProvider({apiKey:key,maxCalls:1})({suppliedPrompt:r.suppliedPrompt});}
+    if(engine==='deepseek-flash-api'){const key=localConfiguration().DEEPSEEK_API_KEY;try{out=await createDeepSeekOrganicProvider({apiKey:key,maxCalls:1})({suppliedPrompt:r.suppliedPrompt});}catch(e){attempts.at(-1).outcome=e.code??'failed';if(e.details)attempts.at(-1).details=e.details;writePrivate(attemptsPath,attempts);throw e;}}
     else{const x=await runCodexJSON(r.suppliedPrompt,{type:'object',additionalProperties:false,properties:{answer:{type:'string'}},required:['answer']},{executable:CODEX_BIN});
       out={engine,answer:x.value.answer,agentId:x.threadId,model:x.provenance.model,providerModel:x.provenance.model,effort:x.provenance.effort,usage:{inputTokens:x.provenance.usage?.input_tokens??0,outputTokens:x.provenance.usage?.output_tokens??0},elapsedMs:x.provenance.elapsedMs};}
+    attempts.at(-1).outcome='completed';writePrivate(attemptsPath,attempts);
     const body={turnId:r.turnId,requestId:r.requestId,inputHash:r.inputHash,agentId:out.agentId,model:out.model,effort:out.effort,answer:out.answer,completedAt:new Date().toISOString(),engine,usage:out.usage};
     const done=s.organic.complete(body);
     writePublic(`organic/${scenarioId}.json`,{schemaVersion:'axp.v3-organic-answer.v1',runId,scenarioId,turnId:r.turnId,question:r.question,inputHash:r.inputHash,suppliedPrompt:r.suppliedPrompt,

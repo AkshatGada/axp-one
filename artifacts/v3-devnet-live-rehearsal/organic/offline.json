@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "axp.v3-organic-answer.v1",
+  "runId": "v3-devnet-live-rehearsal-20261002",
+  "scenarioId": "offline",
+  "turnId": "v3-offline",
+  "question": "Compare self-custody options for Ethereum and Solana, prioritizing offline key storage over a mobile-only wallet.",
+  "inputHash": "a8a001184a41cb7df59332474e0b031fbdd1d1f0b10a23c96dfe81bf35a3e68d",
+  "suppliedPrompt": "You are ONLY the independent organic answer for a wallet-selection demo. Do not use tools, files, web, memory, other sessions or research. You have no ads, sponsors, targeting evidence or campaign information. Give useful general wallet-selection guidance. Do not invent current prices, live product capabilities or a cheapest product. Discuss offline/hardware versus mobile/software tradeoffs when relevant. Return ONLY JSON with one field \"answer\" (string, at most 1600 characters). User task: Compare self-custody options for Ethereum and Solana, prioritizing offline key storage over a mobile-only wallet.",
+  "engine": "deepseek-flash-api",
+  "model": "deepseek-flash",
+  "providerModel": "deepseek-flash",
+  "effort": "temperature-0.2",
+  "agentId": "659d51aa-a412-4040-a9f7-82087f4a16e1",
+  "usage": {
+    "inputTokens": 175,
+    "outputTokens": 1824,
+    "cachedInputTokens": 0
+  },
+  "elapsedMs": 9179,
+  "answer": "For self-custody with offline key storage as priority, treat a hardware/air-gapped signer as the vault and a phone/software wallet as a watch-only interface. Hardware vs mobile: a mobile-only wallet keeps encrypted keys on an internet-connected device, so malware, phishing, clipboard hijacks, and OS compromise can reach the seed. A hardware wallet keeps keys in a secure element/MCU; transactions are displayed and signed on-device. Air-gapped QR/SD signers go further by avoiding USB/Bluetooth. Tradeoffs: higher cost, firmware/supply-chain trust, backup discipline, and Solana support varies.\n\nEthereum: EVM hardware signing is mature. Use a hardware wallet that supports ETH and ERC-20s, verify addresses on-screen, and connect to dapps via watch-only + WalletConnect. For large holdings, consider a Safe multisig with hardware signers. Solana: uses ed25519; support is less uniform. Check that the device/companion app supports SOL and SPL tokens, and whether it can sign transactions without blind signing. Some air-gapped devices support Solana; others need a mobile app bridge. If your priority is fully offline, pick a signer that explicitly supports both chains with on-device verification, or use separate hardware wallets for ETH and SOL.\n\nPractical setup: generate seed on device, add a BIP39 passphrase if supported, store seed/passphrase offline on metal, never type seed into a phone. Test recovery before funding. Keep a small hot mobile wallet for spending; keep the rest behind hardware/air-gapped signing. Verify firmware source. No single product is best; confirm current chain/token support in official docs.",
+  "completedAt": "2026-10-01T22:12:13.323Z",
+  "provenance": {
+    "engine": "deepseek-flash-api",
+    "model": "deepseek-flash",
+    "effort": "temperature-0.2",
+    "agentId": "659d51aa-a412-4040-a9f7-82087f4a16e1",
+    "inputHash": "a8a001184a41cb7df59332474e0b031fbdd1d1f0b10a23c96dfe81bf35a3e68d",
+    "toolUse": "not_requested",
+    "requestedMaxCharacters": 1600,
+    "actualCharacters": 1631,
+    "lengthOverrun": true,
+    "attestation": "DeepSeek API completion (single sponsor-free user message, no tools) recorded by the terminal operator, not cryptographic context proof",
+    "execution": "actual-api-model",
+    "usage": {
+      "inputTokens": 175,
+      "outputTokens": 1824,
+      "cachedInputTokens": 0
+    }
+  }
+}

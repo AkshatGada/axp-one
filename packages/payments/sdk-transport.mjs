@@ -26,7 +26,9 @@ export async function createNativeTransport({terms,statePath,walletPath=testWall
   const environment=allowed[terms.mode];
   if(!environment||terms.rpc!==environment.rpc||terms.genesisHash!==environment.genesis||terms.mint!==environment.mint||terms.program!==PROGRAM||terms.tokenProgram!==TOKEN)throw new Error('frozen_environment_mismatch');
   const sdk=await loadNativeSDK(),{kit,token,generated,paymentChannels,sessionClient,sessionServer,onChain,voucher: voucherSDK}=sdk;
-  async function rpc(method,params=[]) {const response=await fetch(terms.rpc,{method:'POST',redirect:'error',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method,params}),signal:AbortSignal.timeout(15000)});if(!response.ok)throw new Error(`rpc_http_${response.status}`);const data=await response.json();if(data.error)throw new Error(`${method}:${JSON.stringify(data.error)}`);return data.result;}
+  // HTTP 429 (public RPC rate limit) is retried with the IDENTICAL request body; for
+  // sendTransaction that is the same signed wire, so no new identity can arise.
+  async function rpc(method,params=[]) {const body=JSON.stringify({jsonrpc:'2.0',id:1,method,params});let response;for(let attempt=0;;attempt++){response=await fetch(terms.rpc,{method:'POST',redirect:'error',headers:{'Content-Type':'application/json'},body,signal:AbortSignal.timeout(15000)});if(response.status!==429||attempt>=4)break;await new Promise(r=>setTimeout(r,1000*(attempt+1)));}if(!response.ok)throw new Error(`rpc_http_${response.status}`);const data=await response.json();if(data.error)throw new Error(`${method}:${JSON.stringify(data.error)}`);return data.result;}
   if(await rpc('getGenesisHash')!==terms.genesisHash)throw new Error('genesis_mismatch');
   const program=(await rpc('getAccountInfo',[terms.program,{encoding:'base64',commitment:'finalized'}])).value;
   if(!program?.executable||sha(Buffer.from(program.data[0],'base64'))!==terms.programAccountHash)throw new Error('deployment_changed');

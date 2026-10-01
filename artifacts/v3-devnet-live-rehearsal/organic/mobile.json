@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "axp.v3-organic-answer.v1",
+  "runId": "v3-devnet-live-rehearsal-20261002",
+  "scenarioId": "mobile",
+  "turnId": "v3-mobile",
+  "question": "Compare mobile-only software wallets for Ethereum and Solana. A hardware device does not satisfy my requirement.",
+  "inputHash": "96d4ac818a19e2ff8aff27c0b01e37de8d310cffb99361fddb5cadf0ac540d2d",
+  "suppliedPrompt": "You are ONLY the independent organic answer for a wallet-selection demo. Do not use tools, files, web, memory, other sessions or research. You have no ads, sponsors, targeting evidence or campaign information. Give useful general wallet-selection guidance. Do not invent current prices, live product capabilities or a cheapest product. Discuss offline/hardware versus mobile/software tradeoffs when relevant. Return ONLY JSON with one field \"answer\" (string, at most 1600 characters). User task: Compare mobile-only software wallets for Ethereum and Solana. A hardware device does not satisfy my requirement.",
+  "engine": "deepseek-flash-api",
+  "model": "deepseek-flash",
+  "providerModel": "deepseek-flash",
+  "effort": "temperature-0.2",
+  "agentId": "4aafc9e3-d282-427f-85c0-3c3aac7f0315",
+  "usage": {
+    "inputTokens": 151,
+    "outputTokens": 2757,
+    "cachedInputTokens": 0
+  },
+  "elapsedMs": 13750,
+  "answer": "For mobile-only Ethereum + Solana, compare custody model, chain coverage, dapp connectivity, backup/export, and security hygiene. Since hardware is excluded, keys live on the phone: malware, phishing, clipboard hijacks, malicious dapps, and OS compromise are real. Mitigate with an updated non-rooted/jailbroken phone, strong passcode/biometrics, official app store, offline seed backup (never screenshot/cloud), small hot balances, approval revocation, and separate seeds. Wallet types: EVM-first (MetaMask, Rainbow, Coinbase Wallet): strong Ethereum/EVM dapps, tokens, NFTs, WalletConnect. Solana support may be absent/limited/changing; verify. Solana-native (Phantom, Solflare): usually best Solana staking, NFT, and dapp UX. Ethereum/EVM support varies; verify. Broad multi-chain (Trust Wallet, Exodus): one app for many assets, but larger attack surface and swap routing/spreads; confirm both chains and dapp support. Exchange-linked (Coinbase Wallet): easy onramps, but privacy/account linkage matters. Choice: Ethereum-primary, use an EVM-first wallet plus a Solana-native one if needed; Solana-primary, reverse. If both matter equally, one multi-chain wallet is simpler, while two specialized wallets isolate risk but double seed management. Prefer open-source/audited, frequently updated wallets with clear seed export and WalletConnect. Test recovery before funding. Never enter a seed into a site or support chat. A mobile hot wallet is best for spending, not long-term savings.",
+  "completedAt": "2026-10-01T22:16:15.595Z",
+  "provenance": {
+    "engine": "deepseek-flash-api",
+    "model": "deepseek-flash",
+    "effort": "temperature-0.2",
+    "agentId": "4aafc9e3-d282-427f-85c0-3c3aac7f0315",
+    "inputHash": "96d4ac818a19e2ff8aff27c0b01e37de8d310cffb99361fddb5cadf0ac540d2d",
+    "toolUse": "not_requested",
+    "requestedMaxCharacters": 1600,
+    "actualCharacters": 1489,
+    "lengthOverrun": false,
+    "attestation": "DeepSeek API completion (single sponsor-free user message, no tools) recorded by the terminal operator, not cryptographic context proof",
+    "execution": "actual-api-model",
+    "usage": {
+      "inputTokens": 151,
+      "outputTokens": 2757,
+      "cachedInputTokens": 0
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "axp.v3-devnet-live-feasibility.v1",
+  "runId": "v3-devnet-live-rehearsal-20261002",
+  "observedAt": "2026-10-01T22:09:57.761Z",
+  "network": {
+    "mode": "devnet",
+    "network": "solana-devnet",
+    "rpc": "https://api.devnet.solana.com",
+    "genesisHash": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+    "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+    "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+    "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "treasuryOwner": "4zTeC5mVqWLruDexgU2mV66p9t5vCA9JyiZqdGDUspap"
+  },
+  "deployment": {
+    "programAccountHash": "8d139929fe85d2acfbd67de55f6849ec58b2a158f676f199801e97f46dd7b7e0",
+    "programDataAddress": "CghQXkmw2F6p1exMETiZdNeUx9QGraWsNZ4eom1Cuiw1",
+    "programDataHash": "b7722bc01b79849ec324dfbe075c1dc017c266b1eedbafc2e54cd6b5cb7084d6",
+    "deploymentSlot": "480232051",
+    "treasuryTokenAccount": "BSMX9adNvtMHhBSbiuDeaPZZbF82cmPJkSHyptJSHecz"
+  },
+  "signed": false,
+  "broadcast": false
+}
