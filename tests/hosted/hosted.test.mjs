@@ -105,3 +105,77 @@ test('acknowledgeCard only posts after the DOM shows the label and the exact cre
   await acknowledgeCard(client,'r','t',award,node('Sponsored','Exact copy'));
   assert.deepEqual(posted,[['r','award-1',{domInserted:true,sponsoredLabelPresent:true,creativeHash:'f'.repeat(64)},'t']]);
 });
+
+// ---------- state machine with a fake engine (no models, no chain) ----------
+import {createRunner} from '../../packages/hosted/runner.mjs';
+const AWARD='award-00000000-0000-0000-0000-000000000001';
+function fakeEngine(behavior={}) {
+  return ({liveDir,artifactDir})=>{
+    const path=join(liveDir,'fake.json');
+    const st=()=>existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{opened:[],closed:[],awards:[]};
+    const save=v=>{mkdirSync(liveDir,{recursive:true});writeFileSync(path,JSON.stringify(v));};
+    const ids=['v3-clearvault-channel','v3-keyforge-channel'];
+    return {
+      prepare:async()=>save(st()),
+      openChannel:async id=>{if(behavior.openFails){const e=new Error('rpc_http_429');e.code='rpc_http_429';throw e;}const s=st();s.opened.push(id);save(s);return {status:'finalized'};},
+      organicAll:async()=>['cached','offline','repeat','mobile'].map(scenarioId=>({status:'completed',scenarioId})),
+      runScenario:async id=>{if(id==='cached'){const s=st();s.awards.push({awardId:AWARD,status:'reserved',creativeHash:'a'.repeat(64),creativeText:'copy'});save(s);}},
+      authorizePending:async()=>[],
+      publicStatus:()=>({awards:st().awards,turns:[],charges:[],payments:[]}),
+      acknowledge:async awardId=>{const s=st();s.awards.find(a=>a.awardId===awardId).status='delivered';save(s);return {chargeId:'charge-1',replayed:false};},
+      failAward:async awardId=>{const s=st();s.awards.find(a=>a.awardId===awardId).status='failed';save(s);},
+      closeChannel:async id=>{const s=st();if(s.opened.includes(id))s.closed.push(id);save(s);return {status:'finalized'};},
+      channelStates:()=>{const s=st();return Object.fromEntries(ids.filter(id=>s.opened.includes(id)).map(id=>[id,{open:'finalized',close:s.closed.includes(id)?'finalized':null}]));},
+      verify:async()=>{mkdirSync(artifactDir,{recursive:true});writeFileSync(join(artifactDir,'chain-check.json'),'{"ok":true}');},
+      restart:async()=>{},exportBundle:async()=>({bundleHash:'b'.repeat(64),storyGates:{failed:[]},charges:1}),reconcileChannel:async()=>({}),
+    };
+  };
+}
+function runnerWith(behavior,{clock}={}) {
+  const dir=tmp(),kv=createFileKV({dir}),w=generateWallets(),t={now:Date.now()};
+  const runner=createRunner({kv,stateKey:randomBytes(32),wallets:w,config:{},signingEnabled:true,modelsEnabled:true,deliveryWindowSeconds:60,now:clock??(()=>t.now),engineFactory:fakeEngine(behavior)});
+  return {runner,kv,t,cleanup:()=>rmSync(dir,{recursive:true,force:true})};
+}
+
+test('runner: phases advance under a lease, state persists between steps, browser ack needs the run token', async () => {
+  const {runner,kv,cleanup}=runnerWith({});
+  try {
+    const {record,runToken}=await runner.create({ipHash:'x'});
+    const phases=[];for(let i=0;i<3;i++)phases.push((await runner.advance(record.runId)).record.phase);
+    assert.deepEqual(phases,['opening','auctions','delivery']);
+    const waiting=await runner.advance(record.runId);assert.equal(waiting.record.phase,'delivery');assert.deepEqual(publicRecord(waiting.record).pendingAwards,[AWARD]);
+    await assert.rejects(runner.acknowledge(record.runId,AWARD,{},randomBytes(24).toString('hex')),e=>e.code==='run_token_invalid'&&e.status===403);
+    await kv.set(`axp:run:${record.runId}:lease`,'other',{nx:true,ttlSeconds:60});
+    assert.equal((await runner.advance(record.runId)).busy,true);
+    await assert.rejects(runner.acknowledge(record.runId,AWARD,{},runToken),e=>e.code==='run_busy_retry');
+    await kv.del(`axp:run:${record.runId}:lease`);
+    const ack=await runner.acknowledge(record.runId,AWARD,{},runToken);assert.equal(ack.receipt.chargeId,'charge-1');
+    for(const expected of ['closing','finalizing','completed'])assert.equal((await runner.advance(record.runId)).record.phase,expected);
+    const done=await runner.getRecord(record.runId);assert.equal(done.bundle.charges,1);assert.ok(done.files.includes('chain-check.json'));
+    assert.equal(await runner.file(record.runId,'chain-check.json'),'{"ok":true}\n'.trim());
+    assert.equal(await runner.file(record.runId,'acceptance/payments.sqlite'),null);
+    assert.equal((await runner.advance(record.runId)).record.phase,'completed');
+  } finally {cleanup();}
+});
+
+test('runner: an expired delivery window fails the award (no charge) and closes', async () => {
+  const {runner,t,cleanup}=runnerWith({});
+  try {
+    const {record}=await runner.create({ipHash:'x'});
+    for(let i=0;i<3;i++)await runner.advance(record.runId);
+    t.now+=61_000;
+    const r=(await runner.advance(record.runId)).record;assert.equal(r.phase,'closing');
+    assert.equal(r.status.awards[0].status,'failed');assert.equal(r.history.at(-1).failedAwards,1);
+  } finally {cleanup();}
+});
+
+test('runner: repeated open failures abort through closing, never past settlement', async () => {
+  const {runner,cleanup}=runnerWith({openFails:true});
+  try {
+    const {record}=await runner.create({ipHash:'x'});
+    let r=(await runner.advance(record.runId)).record;assert.equal(r.phase,'opening');
+    for(let i=0;i<4&&r.phase==='opening';i++)r=(await runner.advance(record.runId)).record;
+    assert.equal(r.phase,'closing');assert.equal(r.abortReason,'rpc_http_429');
+    r=(await runner.advance(record.runId)).record;assert.equal(r.phase,'aborted');
+  } finally {cleanup();}
+});

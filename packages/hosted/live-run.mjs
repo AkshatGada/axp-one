@@ -140,6 +140,8 @@ export function createLiveRunEngine({runId,liveDir,artifactDir,wallets,walletPat
   });
   const closeChannel=id=>withAdapter(id,async({adapter,db,service:s})=>{
     let state=db.get(id);if(!state)return {status:'never_opened'};
+    // An in-flight open (e.g. after an aborted step) is reconciled by lookup only, never re-signed.
+    if(state.open.status!=='finalized'&&!['prepared','failed'].includes(state.open.status)){await adapter.reconcile({channelId:id});state=db.get(id);}
     if(state.open.status!=='finalized')return {status:'open_not_finalized',open:state.open.status};
     if(!state.close){check(signingEnabled,'signing_disabled');s.exchange.drainNetworkChannel(id);if(state.phase==='open')await adapter.beginDrain({channelId:id});const plan=await adapter.prepareClose({channelId:id});if(plan.status!=='prepared')return plan;state=db.get(id);}
     const r=await settle(adapter,id,await adapter.confirmClose({channelId:id,planId:state.close.id}));

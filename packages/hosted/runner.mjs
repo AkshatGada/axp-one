@@ -24,7 +24,7 @@ export function newRunId(now=new Date()) {
 }
 export const tokenMatches=(token,hashHex)=>{if(typeof token!=='string'||!/^[a-f0-9]{48}$/.test(token)||typeof hashHex!=='string')return false;const a=Buffer.from(sha(token),'hex'),b=Buffer.from(hashHex,'hex');return a.length===b.length&&timingSafeEqual(a,b);};
 
-export function createRunner({kv,stateKey,wallets,config,signingEnabled,modelsEnabled,deliveryWindowSeconds=600,log=()=>{},now=Date.now}) {
+export function createRunner({kv,stateKey,wallets,config,signingEnabled,modelsEnabled,deliveryWindowSeconds=600,log=()=>{},now=Date.now,engineFactory=createLiveRunEngine}) {
   const getRecord=async id=>{const t=await kv.get(K.run(id));return t?JSON.parse(t):null;};
   const putRecord=r=>kv.set(K.run(r.runId),JSON.stringify(r),{ttlSeconds:RECORD_TTL});
 
@@ -45,7 +45,7 @@ export function createRunner({kv,stateKey,wallets,config,signingEnabled,modelsEn
     try {
       const record=await getRecord(runId);if(!record)fail('run_not_found',404);
       const snapshot=await kv.get(K.state(runId));if(snapshot)unpackDirectory(snapshot,liveDir,stateKey,{aad:runId});
-      const engine=createLiveRunEngine({runId,liveDir,artifactDir,wallets,walletPaths:w.paths,config,signingEnabled,modelsEnabled,log:(e,d)=>log(runId,e,d)});
+      const engine=engineFactory({runId,liveDir,artifactDir,wallets,walletPaths:w.paths,config,signingEnabled,modelsEnabled,log:(e,d)=>log(runId,e,d)});
       let result,error=null;
       try{result=await fn({engine,record});}catch(e){error=e;}
       // Persist whatever happened (including partial progress before an error).
