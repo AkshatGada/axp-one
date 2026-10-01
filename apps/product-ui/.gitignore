@@ -5,3 +5,5 @@ next-env.d.ts
 public/run.public.json
 .next-build/
 public/present.srt
+.next-dev/
+.next-build/
