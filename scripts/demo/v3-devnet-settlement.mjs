@@ -231,7 +231,8 @@ function status() {
 }
 
 // ---------- public, sanitized evidence (every signature re-verified finalized) ----------
-async function verifiedTx(signature,role,channelId) {
+// excluded: system wallets that receive a plain SOL transfer (not rent).
+async function verifiedTx(signature,role,channelId,excluded=[]) {
   const st=(await rpc('getSignatureStatuses',[[signature],{searchTransactionHistory:true}])).value[0];
   check(st&&st.err===null&&st.confirmationStatus==='finalized',`not_finalized:${signature}`);
   const tx=await rpc('getTransaction',[signature,{encoding:'json',commitment:'finalized',maxSupportedTransactionVersion:0}]);
@@ -240,7 +241,7 @@ async function verifiedTx(signature,role,channelId) {
   const owners={},sum=(rows,o)=>(rows??[]).filter(x=>x.mint===DEVNET_NETWORK.mint&&x.owner===o).reduce((a,x)=>a+BigInt(x.uiTokenAmount.amount),0n);
   for(const r of [...(tx.meta.preTokenBalances??[]),...(tx.meta.postTokenBalances??[])])if(r.mint===DEVNET_NETWORK.mint)owners[r.owner]=true;
   const tokenDeltas=Object.fromEntries(Object.keys(owners).map(o=>[o,(sum(tx.meta.postTokenBalances,o)-sum(tx.meta.preTokenBalances,o)).toString()]).filter(([,v])=>v!=='0'));
-  const feePayer=keys[0],newRent=tx.meta.postBalances.reduce((a,x,i)=>a+(keys[i]!==feePayer&&tx.meta.preBalances[i]===0?BigInt(x):0n),0n);
+  const feePayer=keys[0],newRent=tx.meta.postBalances.reduce((a,x,i)=>a+(keys[i]!==feePayer&&!excluded.includes(keys[i])&&tx.meta.preBalances[i]===0?BigInt(x):0n),0n);
   const reclaimed=tx.meta.preBalances.reduce((a,x,i)=>a+(keys[i]!==feePayer&&tx.meta.postBalances[i]===0?BigInt(x):0n),0n);
   return publicTransaction({signature,role,channelId,slot:tx.slot,blockTime:tx.blockTime,finality:'finalized',err:null,
     networkFeeLamports:String(tx.meta.fee),newRentLamports:newRent.toString(),reclaimedRentLamports:reclaimed.toString(),tokenDeltas,explorerUrl:explorerTx(signature)});
@@ -249,7 +250,7 @@ async function evidence() {
   const record=loadTerms(),source=loadRecordedCharges(runJson),db=store(),sdk=await loadNativeSDK(),{generated}=sdk;
   try {
     const {payer,payee}=publicWallets(),funding=readSecretFile(fundingPath);
-    const transactions=[await verifiedTx(funding.signature,'funding','n/a')],channels=[];
+    const transactions=[await verifiedTx(funding.signature,'funding','n/a',[payer])],channels=[];
     for(const terms of record.channels) {
       const s=db.get(terms.channelId);check(s&&s.open.status==='finalized'&&s.close?.status==='finalized','settlement_incomplete');
       check(s.termsHash===hashNetworkTerms(terms),'terms_mismatch');

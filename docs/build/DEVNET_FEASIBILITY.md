@@ -138,3 +138,9 @@ charge/receipt → 6. `close` each (tx 4, tx 5): final voucher verified on-chain
 by the Ed25519 precompile in `settle_and_seal`, `distribute` pays 7000/3000 and
 refunds 13000/17000 → 7. `evidence`: wait for `finalized`, verify every
 signature via RPC, write sanitized `artifacts/v3-devnet/settlement.json`.
+
+## Executed (2026-10-02)
+
+Executed as planned: 5 finalized Devnet transactions (1 funding, 2 opens,
+2 cooperative closes), payouts 7000/3000, refunds 13000/17000. Evidence:
+`artifacts/v3-devnet/settlement.json`, summary `artifacts/v3-devnet/RESULT.md`.

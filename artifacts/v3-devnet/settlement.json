@@ -1,0 +1,267 @@
+{
+  "schemaVersion": "axp.v3-devnet-settlement.v1",
+  "settlementRunId": "v3-devnet-settlement",
+  "framing": "The three accepted, publisher-signed receipts of recorded run v3-wallet-acceptance, settled on Solana Devnet through two new MPP payment channels. No new model calls, auctions or charges.",
+  "sourceRun": {
+    "runId": "v3-wallet-acceptance",
+    "bundle": "artifacts/v3/replay/run.json",
+    "bundleSha256": "938a0ee84b1936a02a56c8eb30b0fea0dca47f07195013f69847ee404dd6dd48",
+    "originalNetwork": "hosted Solana sandbox (mainnet fork, 402.surfnet.dev)",
+    "publisherId": "owned-travel-app",
+    "publisherKeyId": "local-publisher-v1"
+  },
+  "network": {
+    "cluster": "devnet",
+    "rpc": "https://api.devnet.solana.com",
+    "genesisHash": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+    "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+    "programExplorerUrl": "https://explorer.solana.com/address/CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX?cluster=devnet",
+    "programAccountHash": "8d139929fe85d2acfbd67de55f6849ec58b2a158f676f199801e97f46dd7b7e0",
+    "programDataHash": "b7722bc01b79849ec324dfbe075c1dc017c266b1eedbafc2e54cd6b5cb7084d6",
+    "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+    "mintLabel": "Circle Devnet USDC (test token, no value), 6 decimals",
+    "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "treasuryOwner": "4zTeC5mVqWLruDexgU2mV66p9t5vCA9JyiZqdGDUspap"
+  },
+  "identities": {
+    "payer": "Fynaqs7TWBQivEuR8e3uf1PYBeTzkmAbvJzZzWFDG2Md",
+    "payerExplorerUrl": "https://explorer.solana.com/address/Fynaqs7TWBQivEuR8e3uf1PYBeTzkmAbvJzZzWFDG2Md?cluster=devnet",
+    "payee": "Bayi9yaTabgtmEy6ykGf55p5SioWVSgpMfY5iN8ozVZ2",
+    "payeeExplorerUrl": "https://explorer.solana.com/address/Bayi9yaTabgtmEy6ykGf55p5SioWVSgpMfY5iN8ozVZ2?cluster=devnet",
+    "funder": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+    "note": "Fresh disposable devnet keypairs (keys local only). One payer represents both fictional advertisers, as in the recorded run. Funded once from the project's existing disposable devnet test wallet."
+  },
+  "funding": {
+    "signature": "43tteXvDotteiduSm3JB2qxMtAzfT2Ht7atZULcK9a4gRgERLNPLNDytb8wqJB256ncN5bD8rYc3PCamhwxypa4",
+    "explorerUrl": "https://explorer.solana.com/tx/43tteXvDotteiduSm3JB2qxMtAzfT2Ht7atZULcK9a4gRgERLNPLNDytb8wqJB256ncN5bD8rYc3PCamhwxypa4?cluster=devnet",
+    "lamports": "50000000",
+    "tokenBaseUnits": "40000",
+    "note": "funding, not settlement"
+  },
+  "channels": [
+    {
+      "channelId": "v3-clearvault-channel",
+      "advertiserId": "v3-clearvault-advertiser",
+      "campaignVersionId": "v3-clearvault-33f486d647df",
+      "channelAddress": "GDsoVHnw7QWMHT7KfieYmmFsp1khHYzTWHiKLRnbhKXK",
+      "channelExplorerUrl": "https://explorer.solana.com/address/GDsoVHnw7QWMHT7KfieYmmFsp1khHYzTWHiKLRnbhKXK?cluster=devnet",
+      "escrowTokenAccount": "CeyVQUScBBcUbyTKZJK3pQr5R9yWpKWqggDX1Qs5nw1Y",
+      "escrowClosed": true,
+      "channelAccountAfterClose": {
+        "exists": true,
+        "remainingRentLamports": "1950720",
+        "status": "Distributed",
+        "deposit": "20000",
+        "settlement": {
+          "settled": "7000",
+          "payoutWatermark": "0"
+        },
+        "payer": "Fynaqs7TWBQivEuR8e3uf1PYBeTzkmAbvJzZzWFDG2Md",
+        "payee": "Bayi9yaTabgtmEy6ykGf55p5SioWVSgpMfY5iN8ozVZ2",
+        "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+        "openSlot": "506403837"
+      },
+      "depositBaseUnits": "20000",
+      "publisherPayoutBaseUnits": "7000",
+      "payerRefundBaseUnits": "13000",
+      "openSignature": "4K4aHrcKDS6F6MLffM7hZosMnP5sXU3xsbgCBAAo9YVnAZMLk8YHsRiFvZKLgSux2sF49U7LMiFLasNGMYgUtugQ",
+      "closeSignature": "3q1XpdeKtGWb9JRwNhxNPB79scZdxpXq69Rn6jSHvyMQSBEPBqfcXVyqa8k1nnZWGrTF6MuKzvs2SdwViEyMXwyL",
+      "receiptToVoucher": [
+        {
+          "chargeId": "charge-award-fe97d44c-836b-4bdc-a68d-6a442d42a97a",
+          "sequence": "1",
+          "awardId": "award-fe97d44c-836b-4bdc-a68d-6a442d42a97a",
+          "deliveryId": "delivery-award-fe97d44c-836b-4bdc-a68d-6a442d42a97a",
+          "publisherReceiptHash": "cdf946cc5387d8a859630fc36deff88600b9195ca6d9c24ce6dd5247de85712b",
+          "publisherReceiptSignatureVerified": true,
+          "sourceChargeHash": "fda1cc8ec6f9542c054f21516bda2b5d72afb6d570bd2280a074493b93a074c5",
+          "incrementBaseUnits": "4000",
+          "cumulativeVoucherBaseUnits": "4000",
+          "voucherStatus": "authorized",
+          "voucherPayloadHash": "f0fb2ff628db9e3b175113af234c263468334caeae1f1f559a0c8a42250c8a54",
+          "voucherRecordHash": "1766b6b070d89ed1e3bbd2fa1fb4e35b4dffe0a99404c3633f4f146db29361e9",
+          "settledOnChainBy": {
+            "note": "superseded by the later cumulative voucher (off-chain only, as in the recorded run)"
+          }
+        },
+        {
+          "chargeId": "charge-award-b1283b51-d2d1-492e-b9ae-3f3f4d22bdc1",
+          "sequence": "2",
+          "awardId": "award-b1283b51-d2d1-492e-b9ae-3f3f4d22bdc1",
+          "deliveryId": "delivery-award-b1283b51-d2d1-492e-b9ae-3f3f4d22bdc1",
+          "publisherReceiptHash": "65d11b86a82e6071f1b54dd096a8e831af830c94be2fa24424fbf47bf2759afc",
+          "publisherReceiptSignatureVerified": true,
+          "sourceChargeHash": "20854c7475044cfce0656643017cab38fe9b991bbdc6bd776b7c9c8ef6859267",
+          "incrementBaseUnits": "3000",
+          "cumulativeVoucherBaseUnits": "7000",
+          "voucherStatus": "authorized",
+          "voucherPayloadHash": "ac41b94a9da4b60eaf2e53f00bc083362acacafba266fd6c5ba335995981d30f",
+          "voucherRecordHash": "7221ff5a14132d27eb607cd8255e2e321e67dda7b09d69445afb17b680a97ebb",
+          "settledOnChainBy": {
+            "closeSignature": "3q1XpdeKtGWb9JRwNhxNPB79scZdxpXq69Rn6jSHvyMQSBEPBqfcXVyqa8k1nnZWGrTF6MuKzvs2SdwViEyMXwyL",
+            "note": "final cumulative voucher verified on-chain by the Ed25519 precompile in settle_and_seal"
+          }
+        }
+      ]
+    },
+    {
+      "channelId": "v3-keyforge-channel",
+      "advertiserId": "v3-keyforge-advertiser",
+      "campaignVersionId": "v3-keyforge-d4fe6a7b92d9",
+      "channelAddress": "3qZUw8kNDZ6HnVF8mAdhgZAtsQbPNPYZkavU9b6Rktgq",
+      "channelExplorerUrl": "https://explorer.solana.com/address/3qZUw8kNDZ6HnVF8mAdhgZAtsQbPNPYZkavU9b6Rktgq?cluster=devnet",
+      "escrowTokenAccount": "3dKmwtYALLE1D1QgX1LrwEuCyRi35UuH3MsTJvbqTgsa",
+      "escrowClosed": true,
+      "channelAccountAfterClose": {
+        "exists": true,
+        "remainingRentLamports": "1950720",
+        "status": "Distributed",
+        "deposit": "20000",
+        "settlement": {
+          "settled": "3000",
+          "payoutWatermark": "0"
+        },
+        "payer": "Fynaqs7TWBQivEuR8e3uf1PYBeTzkmAbvJzZzWFDG2Md",
+        "payee": "Bayi9yaTabgtmEy6ykGf55p5SioWVSgpMfY5iN8ozVZ2",
+        "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+        "openSlot": "506403873"
+      },
+      "depositBaseUnits": "20000",
+      "publisherPayoutBaseUnits": "3000",
+      "payerRefundBaseUnits": "17000",
+      "openSignature": "ppMyRTphb7JPvmVpF446am7pNT97xp5bv7KLYdBoajEKRJTHz6jipCWHcg9Yiqh6jKXAxV4fzg7UaKVBaDZhBMT",
+      "closeSignature": "2FXVkdaH4xjyUtFcepMrM3PsaMqitSPDrTj1Ce37NomQ7sF8kh4kBi6AiZVZ12FiNpT5tyTjMzv3H2eDLM74F5yo",
+      "receiptToVoucher": [
+        {
+          "chargeId": "charge-award-bb3d8921-5975-4633-80df-70b841be0643",
+          "sequence": "1",
+          "awardId": "award-bb3d8921-5975-4633-80df-70b841be0643",
+          "deliveryId": "delivery-award-bb3d8921-5975-4633-80df-70b841be0643",
+          "publisherReceiptHash": "687a3b9b276a599e9b7627397cc044c22187a7450abf8487f67a445ac5c59cb7",
+          "publisherReceiptSignatureVerified": true,
+          "sourceChargeHash": "96828afb4ab6fcf16bb62f6b0d5f8c18bf48b1427a67d354bbe07a76eecbc387",
+          "incrementBaseUnits": "3000",
+          "cumulativeVoucherBaseUnits": "3000",
+          "voucherStatus": "authorized",
+          "voucherPayloadHash": "545f8560adb76bea0619e94c70215547e17caf6f2d67bbd43df18fa6f05ceb24",
+          "voucherRecordHash": "d3e3daf59b351e295dfec80c76037f55963607527da0d0d6fb9f07519396dc32",
+          "settledOnChainBy": {
+            "closeSignature": "2FXVkdaH4xjyUtFcepMrM3PsaMqitSPDrTj1Ce37NomQ7sF8kh4kBi6AiZVZ12FiNpT5tyTjMzv3H2eDLM74F5yo",
+            "note": "final cumulative voucher verified on-chain by the Ed25519 precompile in settle_and_seal"
+          }
+        }
+      ]
+    }
+  ],
+  "transactions": [
+    {
+      "signature": "43tteXvDotteiduSm3JB2qxMtAzfT2Ht7atZULcK9a4gRgERLNPLNDytb8wqJB256ncN5bD8rYc3PCamhwxypa4",
+      "role": "funding",
+      "channelId": "n/a",
+      "slot": 506403777,
+      "blockTime": 1790888483,
+      "finality": "finalized",
+      "err": null,
+      "networkFeeLamports": "5000",
+      "newRentLamports": "1488440",
+      "reclaimedRentLamports": "0",
+      "tokenDeltas": {
+        "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST": "-40000",
+        "Fynaqs7TWBQivEuR8e3uf1PYBeTzkmAbvJzZzWFDG2Md": "40000"
+      },
+      "explorerUrl": "https://explorer.solana.com/tx/43tteXvDotteiduSm3JB2qxMtAzfT2Ht7atZULcK9a4gRgERLNPLNDytb8wqJB256ncN5bD8rYc3PCamhwxypa4?cluster=devnet"
+    },
+    {
+      "signature": "4K4aHrcKDS6F6MLffM7hZosMnP5sXU3xsbgCBAAo9YVnAZMLk8YHsRiFvZKLgSux2sF49U7LMiFLasNGMYgUtugQ",
+      "role": "open",
+      "channelId": "v3-clearvault-channel",
+      "slot": 506403851,
+      "blockTime": 1790888501,
+      "finality": "finalized",
+      "err": null,
+      "networkFeeLamports": "5000",
+      "newRentLamports": "3439160",
+      "reclaimedRentLamports": "0",
+      "tokenDeltas": {
+        "Fynaqs7TWBQivEuR8e3uf1PYBeTzkmAbvJzZzWFDG2Md": "-20000",
+        "GDsoVHnw7QWMHT7KfieYmmFsp1khHYzTWHiKLRnbhKXK": "20000"
+      },
+      "explorerUrl": "https://explorer.solana.com/tx/4K4aHrcKDS6F6MLffM7hZosMnP5sXU3xsbgCBAAo9YVnAZMLk8YHsRiFvZKLgSux2sF49U7LMiFLasNGMYgUtugQ?cluster=devnet"
+    },
+    {
+      "signature": "3q1XpdeKtGWb9JRwNhxNPB79scZdxpXq69Rn6jSHvyMQSBEPBqfcXVyqa8k1nnZWGrTF6MuKzvs2SdwViEyMXwyL",
+      "role": "cooperative_close",
+      "channelId": "v3-clearvault-channel",
+      "slot": 506403970,
+      "blockTime": 1790888529,
+      "finality": "finalized",
+      "err": null,
+      "networkFeeLamports": "15000",
+      "newRentLamports": "1488440",
+      "reclaimedRentLamports": "1488440",
+      "tokenDeltas": {
+        "GDsoVHnw7QWMHT7KfieYmmFsp1khHYzTWHiKLRnbhKXK": "-20000",
+        "Fynaqs7TWBQivEuR8e3uf1PYBeTzkmAbvJzZzWFDG2Md": "13000",
+        "Bayi9yaTabgtmEy6ykGf55p5SioWVSgpMfY5iN8ozVZ2": "7000"
+      },
+      "explorerUrl": "https://explorer.solana.com/tx/3q1XpdeKtGWb9JRwNhxNPB79scZdxpXq69Rn6jSHvyMQSBEPBqfcXVyqa8k1nnZWGrTF6MuKzvs2SdwViEyMXwyL?cluster=devnet"
+    },
+    {
+      "signature": "ppMyRTphb7JPvmVpF446am7pNT97xp5bv7KLYdBoajEKRJTHz6jipCWHcg9Yiqh6jKXAxV4fzg7UaKVBaDZhBMT",
+      "role": "open",
+      "channelId": "v3-keyforge-channel",
+      "slot": 506403881,
+      "blockTime": 1790888508,
+      "finality": "finalized",
+      "err": null,
+      "networkFeeLamports": "5000",
+      "newRentLamports": "3439160",
+      "reclaimedRentLamports": "0",
+      "tokenDeltas": {
+        "Fynaqs7TWBQivEuR8e3uf1PYBeTzkmAbvJzZzWFDG2Md": "-20000",
+        "3qZUw8kNDZ6HnVF8mAdhgZAtsQbPNPYZkavU9b6Rktgq": "20000"
+      },
+      "explorerUrl": "https://explorer.solana.com/tx/ppMyRTphb7JPvmVpF446am7pNT97xp5bv7KLYdBoajEKRJTHz6jipCWHcg9Yiqh6jKXAxV4fzg7UaKVBaDZhBMT?cluster=devnet"
+    },
+    {
+      "signature": "2FXVkdaH4xjyUtFcepMrM3PsaMqitSPDrTj1Ce37NomQ7sF8kh4kBi6AiZVZ12FiNpT5tyTjMzv3H2eDLM74F5yo",
+      "role": "cooperative_close",
+      "channelId": "v3-keyforge-channel",
+      "slot": 506404021,
+      "blockTime": 1790888541,
+      "finality": "finalized",
+      "err": null,
+      "networkFeeLamports": "15000",
+      "newRentLamports": "0",
+      "reclaimedRentLamports": "1488440",
+      "tokenDeltas": {
+        "3qZUw8kNDZ6HnVF8mAdhgZAtsQbPNPYZkavU9b6Rktgq": "-20000",
+        "Bayi9yaTabgtmEy6ykGf55p5SioWVSgpMfY5iN8ozVZ2": "3000",
+        "Fynaqs7TWBQivEuR8e3uf1PYBeTzkmAbvJzZzWFDG2Md": "17000"
+      },
+      "explorerUrl": "https://explorer.solana.com/tx/2FXVkdaH4xjyUtFcepMrM3PsaMqitSPDrTj1Ce37NomQ7sF8kh4kBi6AiZVZ12FiNpT5tyTjMzv3H2eDLM74F5yo?cluster=devnet"
+    }
+  ],
+  "totals": {
+    "depositBaseUnits": "40000",
+    "publisherPayoutBaseUnits": "10000",
+    "payerRefundBaseUnits": "30000",
+    "settlementNetworkFeeLamports": "40000",
+    "settlementNewRentLamports": "8366760",
+    "settlementReclaimedRentLamports": "2976880",
+    "fundingNetworkFeeLamports": "5000",
+    "fundingNewRentLamports": "1488440"
+  },
+  "verification": {
+    "allSignaturesFinalized": true,
+    "checkedAt": "2026-10-01T21:02:49.131Z",
+    "method": "getSignatureStatuses(searchTransactionHistory) + getTransaction(commitment=finalized) on api.devnet.solana.com"
+  },
+  "limitations": [
+    "Devnet test tokens only; not mainnet, not real money.",
+    "Receipts, auctions and model decisions come from the recorded sandbox run; only settlement is new.",
+    "Same disposable payer represents both fictional advertisers.",
+    "An owned-app receipt is not proof of human attention.",
+    "Public devnet history may be pruned; this file preserves the finalized observations."
+  ]
+}
