@@ -9,7 +9,7 @@
     "predev": "node scripts/extract-specimens.mjs",
     "dev": "NEXT_DIST_DIR=.next-dev next dev -p 3410",
     "prebuild": "node scripts/extract-specimens.mjs && node scripts/lint-copy.mjs --source-only",
-    "build": "rm -rf out && next build && node scripts/lint-copy.mjs && rm -rf out/design out/poster out/hero-lab",
+    "build": "rm -rf out && next build && node scripts/lint-copy.mjs && rm -rf out/design out/poster",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

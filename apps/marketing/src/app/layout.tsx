@@ -4,9 +4,6 @@ import "@axp/design-system/steel.css";
 import "@axp/design-system/prospectus.css";
 import "./fonts.css";
 import "@/specimens/specimens.css";
-import "@/scenes/scenes.css";
-import "@/chapter/chapter.css";
-import "@/sections/sections.css";
 import "./site.css";
 import { MOTION_SCRIPT } from "@/motion/MotionRoot";
 

@@ -2,31 +2,24 @@
 
 // ?film=1 scrolls the page through a fixed cue list so a screen recording is repeatable:
 // hidden cursor, no hover tilt, the hero intro at t0. &from=<cue> starts at a named cue
-// (hero, stage, data, proof, close). ?still=1 (MotionRoot) renders every scene still instead.
+// (hero, how, data, jev, solana, mvp, proof, close). ?still=1 (MotionRoot) renders every scene still instead.
 import { useEffect } from "react";
 
 type Cue = { name?: string; sel: string; at?: number; offset?: number; dur: number; hold: number; linear?: boolean };
 
 const CUES: Cue[] = [
   { name: "hero", sel: "#top", dur: 0, hold: 3.6 },
-  { sel: ".hs", at: 1, dur: 11, hold: 1.6, linear: true },
-  { sel: ".bo", offset: -120, dur: 2.2, hold: 2.6 },
-  { sel: "#why", dur: 2.4, hold: 3 },
-  { name: "stage", sel: ".ss-shutter", at: 0, offset: 0, dur: 3.2, hold: 0.6 },
-  { sel: ".ss", at: 1, dur: 16, hold: 1, linear: true },
-  { sel: "#rule", dur: 2.6, hold: 3.4 },
-  { sel: "#payments", dur: 3, hold: 3 },
-  { name: "data", sel: "#data", dur: 3, hold: 3.6 },
-  { sel: ".db", at: 1, dur: 7, hold: 1.4, linear: true },
-  { sel: ".ld", at: 1, dur: 8, hold: 1.6, linear: true },
-  { sel: ".sp-payoff", offset: -160, dur: 2.4, hold: 2.6 },
-  { sel: ".ch-pair", offset: -40, dur: 2.6, hold: 3.4 },
-  { sel: ".ch-moat", dur: 2.6, hold: 3.4 },
-  { name: "proof", sel: "#proof", dur: 3, hold: 3 },
-  { sel: ".pr-pair", offset: -60, dur: 2.6, hold: 3 },
-  { sel: ".pr-row", offset: -80, dur: 2.6, hold: 3 },
-  { sel: "#next", dur: 3, hold: 2.6 },
-  { name: "close", sel: ".pg-close", dur: 3.4, hold: 5 },
+  { sel: "#top", at: 1, dur: 10, hold: 2.4, linear: true },
+  { name: "how", sel: "#how", dur: 2.4, hold: 0.6 },
+  { sel: "#how", at: 1, dur: 5, hold: 2, linear: true },
+  { name: "data", sel: "#data", dur: 2.6, hold: 4 },
+  { name: "jev", sel: "#jev", dur: 2.6, hold: 4 },
+  { name: "solana", sel: "#solana", dur: 2.6, hold: 0.6 },
+  { sel: "#solana", at: 0.62, dur: 6, hold: 2, linear: true },
+  { sel: "#solana", at: 1, dur: 2.4, hold: 3 },
+  { name: "mvp", sel: "#mvp", dur: 2.6, hold: 3.4 },
+  { name: "proof", sel: "#proof", dur: 2.6, hold: 3.4 },
+  { name: "close", sel: "#close-title", offset: -260, dur: 3, hold: 5 },
 ];
 
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);

@@ -1,6 +1,6 @@
 /* v7 inside the MVP: paper, framed captures (radius 16 frame, 12 inside), shadow 3, lift on hover. */
 .tour { position: relative; padding: clamp(88px, 13vh, 150px) 0 clamp(72px, 10vh, 120px); background: var(--paper); }
-.head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px 48px; margin-bottom: clamp(32px, 5vh, 56px); }
+.head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px 48px; margin-bottom: clamp(32px, 5vh, 56px); }
 .label { margin: 0 0 14px; font-size: 14px; font-weight: 500; color: var(--brand); }
 .grid { display: grid; gap: clamp(20px, 2.4vw, 36px); margin: 0; padding: 0; list-style: none; }
 @media (max-width: 759px) {
