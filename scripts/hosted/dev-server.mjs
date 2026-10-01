@@ -42,6 +42,14 @@ const server=createServer(async(req,res)=>{
   res.writeHead(200,{'Content-Type':TYPES[extname(file)]??'application/octet-stream','X-Content-Type-Options':'nosniff'});res.end(readFileSync(file));
 });
 server.listen(port,'127.0.0.1',()=>console.error(`AXP hosted dev server http://127.0.0.1:${port}  (live runs ${api.live?'ENABLED':'disabled'}; store ${api.runner?'ready':'unconfigured'})\n  harness: http://127.0.0.1:${port}/__live/`));
+// AXP_LIVE_ENABLED=1 but not live: say what is missing (names only, never values).
+if(api.settings.enabled&&!api.live){
+  const missing=[];
+  if(!(config.JEV_API_KEY||config.TYPESAFE_API_KEY))missing.push('JEV_API_KEY');
+  if(!config.DEEPSEEK_API_KEY)missing.push('DEEPSEEK_API_KEY');
+  if(!api.runner)missing.push('Devnet wallets (node scripts/hosted/wallets.mjs init, or AXP_DEVNET_WALLETS_PATH / AXP_DEVNET_WALLETS)');
+  console.error(`  AXP_LIVE_ENABLED=1 but live runs are off; missing: ${missing.join(', ')}. Set them in .env.local (README step 3).`);
+}
 // Local stand-in for the hosted cron: move abandoned runs along (delivery window, closing).
 const sweeper=setInterval(()=>api.sweep().then(r=>r.length&&console.error(JSON.stringify({sweep:r}))).catch(()=>{}),30000);sweeper.unref();
 for(const s of ['SIGINT','SIGTERM'])process.once(s,()=>{server.close();server.closeAllConnections();process.exit(0);});

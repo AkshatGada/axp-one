@@ -7,8 +7,8 @@ Old absolute paths in research/provenance documents describe history, not setup.
 
 ## 1. Present the recorded demonstration
 
-Use Node 25 or newer (the tested runtime; includes native SQLite). From the
-repository root:
+Use Node 22.18 or newer (the `engines` field in `package.json`: native SQLite plus
+TypeScript type stripping); Node 25.5 is the tested runtime. From the repository root:
 
 ```sh
 npm run demo:v3:replay

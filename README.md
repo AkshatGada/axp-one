@@ -13,12 +13,12 @@ credentials. Fictional advertisers; not mainnet, not real money.
 
 ## Quickstart (judges)
 
-Requirements: **Node 25+** (tested on 25.5; it needs built-in `node:sqlite` and
-TypeScript type stripping, so 22.18+ should work but is untested) and **pnpm 10+**
-(tested 11.9; `corepack enable`). Tested on macOS.
+Requirements: **Node 22.18+** (the `engines` field in `package.json`; it needs built-in
+`node:sqlite` and TypeScript type stripping; tested on 25.5, 22.x untested) and
+**pnpm 10+** (tested 11.9; `corepack enable`). Tested on macOS.
 
 ```sh
-git clone <this repository> && cd agentic-dsp
+git clone <this repository> agentic-dsp && cd agentic-dsp
 npm test                       # repository suite (no install, no keys, no network)
 ```
 
@@ -28,6 +28,12 @@ npm test                       # repository suite (no install, no keys, no netwo
 npm run demo:v3:replay         # http://127.0.0.1:8794 (AXP_V3_PORT to change)
 node scripts/demo/v3-replay-check.mjs artifacts/v3/replay   # read-only bundle check
 ```
+
+If a port is already taken (`EADDRINUSE`), pick another one for that command:
+`AXP_V3_PORT=8795 npm run demo:v3:replay`, `AXP_HOSTED_PORT=3101 node scripts/hosted/dev-server.mjs`.
+The replay check covers the original sandbox recording (`artifacts/v3/replay`). The live
+Devnet runs are verified by the MVP build instead (`apps/product-ui/scripts/project-run.mjs`
+fails the build if any check fails) and by the MVP's Verify page (`/verify`).
 
 Bundles: `artifacts/v3/replay` (first recording, hosted sandbox),
 `artifacts/v3-devnet-live-rehearsal/replay` (live Devnet, terminal operator),
