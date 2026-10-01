@@ -55,7 +55,7 @@ export const PLATES: PlateDef[] = [
     body: (
       <div>
         {CACHED.bids.map((b) => (
-          <div key={b.campaign} className="sp-row">
+          <div key={b.campaign} className="sp-row" data-win={b.campaign === CACHED.winner ? "" : undefined}>
             <span>
               {b.name} {b.campaign === CACHED.winner ? <span className="sp-tag" data-solid="">Won</span> : null}
             </span>
@@ -126,7 +126,7 @@ export const CALLOUTS = PLATES.map((p) => ({ id: p.id, kinds: p.kinds, ...HERO.c
 
 export function PlateSheet({ p }: { p: PlateDef }) {
   return (
-    <div className="sc-plate-sheet mh-plate">
+    <div className="sc-plate-sheet">
       <div className="sc-plate-bar">
         <span className="sc-plate-name">{p.name}</span>
         <span className="px-marks">

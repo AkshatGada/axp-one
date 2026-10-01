@@ -5,12 +5,13 @@
 // while a [data-header-tone="stage"] section sits under it.
 import { useEffect, useRef, useState } from "react";
 import { ActionPrimary } from "./Actions";
+import { Wordmark } from "./Type";
 
 export type NavLink = { href: string; label: string };
 
 export function SiteHeader({ links, cta, chip = "Hackathon MVP" }: { links: NavLink[]; cta: { href: string; label: string }; chip?: string }) {
   const [hidden, setHidden] = useState(false);
-  const [tone, setTone] = useState<"paper" | "stage">("paper");
+  const [tone, setTone] = useState<"paper" | "stage" | "brand">("paper");
   const last = useRef(0);
 
   useEffect(() => {
@@ -24,12 +25,12 @@ export function SiteHeader({ links, cta, chip = "Hackathon MVP" }: { links: NavL
         last.current = y;
       }
       const probe = 36;
-      let onStage = false;
-      document.querySelectorAll<HTMLElement>('[data-header-tone="stage"]').forEach((el) => {
+      let next: "paper" | "stage" | "brand" = "paper";
+      document.querySelectorAll<HTMLElement>("[data-header-tone]").forEach((el) => {
         const r = el.getBoundingClientRect();
-        if (r.top <= probe && r.bottom >= probe) onStage = true;
+        if (r.top <= probe && r.bottom >= probe) next = el.dataset.headerTone === "brand" ? "brand" : "stage";
       });
-      setTone(onStage ? "stage" : "paper");
+      setTone(next);
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(tick);
@@ -43,15 +44,15 @@ export function SiteHeader({ links, cta, chip = "Hackathon MVP" }: { links: NavL
   }, []);
 
   return (
-    <header className="px-header" data-hidden={hidden ? "" : undefined} data-tone={tone === "stage" ? "stage" : undefined} onFocusCapture={() => setHidden(false)}>
+    <header className="px-header" data-hidden={hidden ? "" : undefined} data-tone={tone === "paper" ? undefined : tone} onFocusCapture={() => setHidden(false)}>
       <a className="px-skip" href="#main">
         Skip to content
       </a>
       <div className="px-wrap px-header-in">
-        <a className="px-wordmark mh-wordmark" href="#top" aria-label="AXP.one, back to top">
-          AXP<span>.one</span>
+        <a className="px-wordmark" href="#top" aria-label="axp.one, back to top">
+          <Wordmark />
         </a>
-        <span className="px-chip mh-chip">{chip}</span>
+        <span className="px-chip">{chip}</span>
         <nav className="px-nav" aria-label="Sections">
           {links.map((l) => (
             <a key={l.href} href={l.href}>

@@ -18,9 +18,9 @@
 .sp-chat-wait { height: 112px; border: 1.5px dashed var(--line); border-radius: 12px; display: grid; place-items: center; font-size: 13px; color: var(--steel); }
 
 /* ---------- Sponsored card ---------- */
-.sp-card { position: relative; display: grid; gap: 8px; padding: 14px 16px 15px; border: 1px solid var(--ink); border-radius: 12px; background: var(--white); box-shadow: 6px 6px 0 #d0d5d5; }
+.sp-card { position: relative; display: grid; gap: 8px; padding: 14px 16px 15px; border: 2px solid var(--brand); border-radius: 12px; background: var(--white); box-shadow: 7px 7px 0 var(--brand-wash); }
 .sp-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.sp-card-label { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border: 1px solid var(--ink); border-radius: 4px; font-size: 12px; font-weight: 500; letter-spacing: .03em; color: var(--ink); }
+.sp-card-label { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 4px; background: var(--brand); font-size: 12px; font-weight: 500; letter-spacing: .03em; color: var(--on-brand); }
 .sp-card-name { font-size: 15px; font-weight: 500; color: var(--ink); }
 .sp-card-text { margin: 0; font-size: 14px; line-height: 1.5; color: var(--muted); }
 .sp-card-foot { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--steel); }
@@ -38,7 +38,7 @@ html[data-px-motion="on"] .sp-chat[data-intro] .sp-card-text,
 html[data-px-motion="on"] .sp-chat[data-intro] .sp-card-foot { animation: spFade .45s linear 1.98s both; }
 @keyframes spFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes spWord { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-@keyframes spLand { 0% { opacity: 0; transform: translate(6px, -26px); box-shadow: 0 0 0 #d0d5d5; } 55% { opacity: 1; } 100% { opacity: 1; transform: none; box-shadow: 6px 6px 0 #d0d5d5; } }
+@keyframes spLand { 0% { opacity: 0; transform: translate(7px, -28px); box-shadow: 0 0 0 var(--brand-wash); } 55% { opacity: 1; } 100% { opacity: 1; transform: none; box-shadow: 7px 7px 0 var(--brand-wash); } }
 .sp-tw { display: inline-block; }
 
 /* ---------- Receipt sheet ---------- */
@@ -60,20 +60,20 @@ html[data-px-motion="on"] .sp-chat[data-intro] .sp-card-foot { animation: spFade
 .sp-meter-dep .px-num { color: var(--ink); }
 .sp-meter-track { position: relative; height: 44px; border: 1.5px solid var(--ink); background: var(--white); }
 .sp-meter-seg { position: absolute; top: 0; bottom: 0; left: 0; transform-origin: 0 50%; transition: transform var(--d-move) var(--ease), background var(--d-move) var(--ease), opacity var(--d-ui) linear; }
-.sp-meter-seg[data-state="accepted"] { background: var(--hatch-steel); border-right: 1.5px solid var(--steel); }
-.sp-meter-seg[data-state="authorized"] { background: var(--steel); }
+.sp-meter-seg[data-state="accepted"] { background: var(--brand-hatch); border-right: 2px solid var(--brand); }
+.sp-meter-seg[data-state="authorized"] { background: var(--brand); }
 .sp-meter-seg[data-state="settled"] { background: var(--ink); }
 .sp-meter-refund { position: absolute; top: 0; bottom: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--ink); transition: opacity var(--d-move) var(--ease); }
 .sp-meter-ticks { position: relative; height: 34px; }
 .sp-meter-tick { position: absolute; top: 0; display: grid; gap: 2px; transform: translateX(-1px); padding-left: 6px; border-left: 1px solid var(--ink); font-size: 12px; line-height: 1.25; color: var(--muted); white-space: nowrap; transition: opacity var(--d-ui) linear; }
-.sp-meter-tick .px-num { font-size: 13px; color: var(--ink); }
+.sp-meter-tick .px-num { font-size: 13px; color: var(--brand-deep); }
 .sp-meter-tick[data-end] { transform: translateX(-100%); padding: 0 6px 0 0; border-left: 0; border-right: 1px solid var(--ink); text-align: right; }
 .sp-meter-legend { display: flex; flex-wrap: wrap; gap: 10px 22px; }
 .sp-meter-legend .px-num { font-size: 13px; color: var(--muted); margin-left: 2px; }
 .on-stage .sp-meter-track, [data-tone="stage"] .sp-meter-track { border-color: var(--stage-ink); background: transparent; }
 .on-stage .sp-meter-seg[data-state="settled"], [data-tone="stage"] .sp-meter-seg[data-state="settled"] { background: var(--stage-ink); }
-.on-stage .sp-meter-seg[data-state="accepted"], [data-tone="stage"] .sp-meter-seg[data-state="accepted"] { background: repeating-linear-gradient(135deg, var(--stage-steel) 0 1.5px, transparent 1.5px 6px); border-right-color: var(--stage-steel); }
-.on-stage .sp-meter-seg[data-state="authorized"], [data-tone="stage"] .sp-meter-seg[data-state="authorized"] { background: var(--stage-steel); }
+.on-stage .sp-meter-seg[data-state="accepted"], [data-tone="stage"] .sp-meter-seg[data-state="accepted"] { background: repeating-linear-gradient(135deg, var(--stage-brand) 0 1.5px, transparent 1.5px 6px); border-right-color: var(--stage-brand); }
+.on-stage .sp-meter-seg[data-state="authorized"], [data-tone="stage"] .sp-meter-seg[data-state="authorized"] { background: var(--stage-brand); }
 .on-stage .sp-meter-refund, .on-stage .sp-meter-tick, .on-stage .sp-meter-tick .px-num, .on-stage .sp-meter-name { color: var(--stage-ink); }
 .on-stage .sp-meter-tick { border-color: var(--stage-line); }
 .on-stage .sp-meter-dep, .on-stage .sp-meter-dep .px-num { color: var(--stage-muted); }
@@ -83,7 +83,14 @@ html[data-px-motion="on"] .sp-chat[data-intro] .sp-card-foot { animation: spFade
 .sp-chain { position: relative; display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
 .sp-chain-step { position: relative; display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 0 18px; padding-bottom: 26px; }
 .sp-chain-step:last-child { padding-bottom: 0; }
-.sp-chain-step::before { content: ""; position: absolute; left: 13px; top: 18px; bottom: 0; width: 1px; background: repeating-linear-gradient(180deg, var(--steel) 0 5px, transparent 5px 9px); }
+.sp-chain-step::before { content: ""; position: absolute; left: 13px; top: 18px; bottom: 0; width: 2px; background: repeating-linear-gradient(180deg, var(--c, var(--steel)) 0 6px, transparent 6px 10px); }
+.sp-chain-step[data-tone="ch"] { --c: var(--contexthint); }
+.sp-chain-step[data-tone="brand"] { --c: var(--brand); }
+/* The handoff: ContextHint's evidence enters an AXP decision, vermillion turning into ultramarine. */
+.sp-chain-step[data-tone="hand"]::before { background: linear-gradient(180deg, var(--contexthint), var(--brand)); -webkit-mask: repeating-linear-gradient(180deg, #000 0 6px, transparent 6px 10px); mask: repeating-linear-gradient(180deg, #000 0 6px, transparent 6px 10px); }
+.sp-chain-step[data-tone="ch"] .pv, .sp-chain-step[data-tone="ch"] .sp-chain-kicker { color: var(--contexthint); }
+.sp-chain-step[data-tone="hand"] .pv, .sp-chain-step[data-tone="brand"] .pv, .sp-chain-step[data-tone="brand"] .sp-chain-kicker { color: var(--brand); }
+.sp-chain-step[data-tone="brand"] .sp-chain-result { color: var(--brand); }
 .sp-chain-step:last-child::before { display: none; }
 .sp-chain-node { position: relative; z-index: 1; width: 28px; height: 28px; display: grid; place-items: center; background: var(--paper); }
 .sp-chain-node .pv { gap: 0; }
@@ -102,10 +109,10 @@ html[data-px-motion="on"] .sp-chat[data-intro] .sp-card-foot { animation: spFade
 .sp-ruler-axis { position: absolute; left: 0; right: 0; top: 52px; height: 1px; background: var(--ink); }
 .sp-ruler-tick { position: absolute; top: 47px; width: 1px; height: 11px; background: var(--ink); }
 .sp-ruler-tick span { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
-.sp-ruler-line { position: absolute; top: 0; height: 58px; width: 0; border-left: 1.5px dashed var(--steel); }
+.sp-ruler-line { position: absolute; top: 0; height: 58px; width: 0; border-left: 2px dashed var(--brand); }
 .sp-ruler-line span { position: absolute; top: -2px; left: 8px; font-size: 12px; font-weight: 500; color: var(--steel-dark); white-space: nowrap; }
 .sp-ruler-mark { position: absolute; top: 47px; width: 11px; height: 11px; transform: translateX(-50%); border: 1.5px solid var(--ink); background: var(--paper); }
-.sp-ruler-mark[data-filled] { background: var(--ink); }
+.sp-ruler-mark[data-filled] { background: var(--brand); border-color: var(--brand); }
 .sp-ruler-mark span { position: absolute; bottom: 16px; font-family: var(--font-mono); font-size: 12px; color: var(--ink); white-space: nowrap; }
 .sp-ruler-mark span[data-side="left"] { right: 2px; }
 .sp-ruler-mark span[data-side="right"] { left: 2px; }
@@ -115,8 +122,8 @@ html[data-px-motion="on"] .sp-chat[data-intro] .sp-card-foot { animation: spFade
 .sp-field svg { width: 100%; height: auto; overflow: visible; }
 .sp-field rect.f { fill: var(--silver); }
 .sp-field rect.o { fill: none; stroke: var(--steel); stroke-width: 1; }
-.sp-field rect.hit { fill: var(--ink); }
-.sp-field .ring { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+.sp-field rect.hit { fill: var(--contexthint); }
+.sp-field .ring { fill: none; stroke: var(--contexthint); stroke-width: 2; }
 .sp-field-legend { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 13px; color: var(--muted); }
 .sp-field-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 8px; vertical-align: -1px; }
 html[data-px-motion="on"] .sp-field[data-reveal] g.row { opacity: 0; transition: opacity .5s var(--ease-out); transition-delay: calc(var(--r) * 22ms); }
@@ -135,6 +142,7 @@ html[data-px-motion="on"] .sp-field[data-reveal][data-in] g.row { opacity: 1; }
 .sp-sheet-table td .px-num { font-size: 14px; }
 .sp-sheet-table td.o { color: var(--muted); }
 .sp-sheet-table td.o b { display: block; font-weight: 500; color: var(--ink); }
+.sp-sheet-table td.o b .px-num { color: var(--brand); }
 .sp-sheet-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 14px 24px 16px; font-size: 13px; color: var(--muted); }
 .sp-sheet-foot .px-num { font-size: 13px; color: var(--ink); }
 @media (max-width: 720px) {
@@ -148,4 +156,4 @@ html[data-px-motion="on"] .sp-field[data-reveal][data-in] g.row { opacity: 1; }
 .sp-row:last-child { border-bottom: 0; }
 .sp-row .px-num { font-size: 13px; }
 .sp-tag { display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border: 1px solid currentColor; font-size: 11px; font-weight: 500; letter-spacing: .03em; }
-.sp-tag[data-solid] { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.sp-tag[data-solid] { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }

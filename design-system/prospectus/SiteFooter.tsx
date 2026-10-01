@@ -1,14 +1,13 @@
 // The footer: the big wordmark, the full provenance legend and the scope lines.
 import type { ReactNode } from "react";
 import { ProvenanceLegend } from "./Blocks";
+import { Wordmark } from "./Type";
 
 export function SiteFooter({ scope, base, children }: { scope: string[]; base: ReactNode; children?: ReactNode }) {
   return (
     <footer className="px-footer">
       <div className="px-wrap px-footer-in">
-        <p className="px-footer-mark mh-wordmark" aria-label="AXP.one">
-          AXP<span>.one</span>
-        </p>
+        <Wordmark as="p" className="px-footer-mark" />
         {children}
         <div className="px-footer-grid">
           <ul className="px-footer-scope">

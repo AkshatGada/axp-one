@@ -2,7 +2,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Words } from "./Type";
 
-export type Tone = "paper" | "paper2" | "stage";
+export type Tone = "paper" | "paper2" | "stage" | "brand";
 
 export function Section({
   id,
@@ -24,16 +24,16 @@ export function Section({
   borderless?: boolean;
   style?: CSSProperties;
   /** Marks the section so the SiteHeader flips its colours while it sits under it. */
-  headerTone?: "stage";
+  headerTone?: "stage" | "brand";
 }) {
   return (
     <section
       id={id}
-      className={`px-section${tone === "stage" ? " on-stage mh-stage" : ""}${className ? ` ${className}` : ""}`}
+      className={`px-section${tone === "stage" ? " on-stage" : ""}${className ? ` ${className}` : ""}`}
       data-tone={tone === "paper" ? undefined : tone}
       data-flush={flush ? "" : undefined}
       data-borderless={borderless ? "" : undefined}
-      data-header-tone={headerTone ?? (tone === "stage" ? "stage" : undefined)}
+      data-header-tone={headerTone ?? (tone === "stage" || tone === "brand" ? tone : undefined)}
       aria-labelledby={labelledBy}
       style={style}
     >
@@ -62,7 +62,7 @@ export function Opener({
 }) {
   return (
     <header className="px-opener" data-layout={layout}>
-      <div className="px-opener-label mh-rule" data-reveal="fade">
+      <div className="px-opener-label" data-reveal="fade">
         <p className="px-label">{label}</p>
         {aside}
       </div>

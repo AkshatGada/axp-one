@@ -30,7 +30,7 @@ export function ChannelMeter({ ch, t = 1, onStage, compact }: { ch: Channel; t?:
           Deposit <span className="px-num">{usdc(ch.deposit)}</span> USDC
         </span>
       </div>
-      <div className="sp-meter-track mh-meter" role="img" aria-label={`${ch.name}: deposit ${usdc(ch.deposit)}, paid ${usdc(ch.settled)}, refunded ${usdc(ch.refund)} USDC`}>
+      <div className="sp-meter-track" role="img" aria-label={`${ch.name}: deposit ${usdc(ch.deposit)}, paid ${usdc(ch.settled)}, refunded ${usdc(ch.refund)} USDC`}>
         <i className="sp-meter-seg" data-state="accepted" style={{ width: "100%", transform: `scaleX(${share})`, opacity: 1 - closed }} />
         <i className="sp-meter-seg" data-state="settled" style={{ width: "100%", transform: `scaleX(${share})`, opacity: closed }} />
         <span className="sp-meter-refund" style={{ width: `${(1 - Number(ch.settled) / dep) * 100}%`, opacity: closed }}>

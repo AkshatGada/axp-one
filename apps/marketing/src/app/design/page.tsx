@@ -22,6 +22,7 @@ import {
   SourceNote,
   SplitGrid,
   StatGrid,
+  Wordmark,
   Wrap,
 } from "@axp/design-system/prospectus";
 import MotionRoot from "@/motion/MotionRoot";
@@ -40,7 +41,7 @@ import { BoardBeats, ExplodeScrubber, MotionDemos } from "@/showcase/Demos";
 import { GlyphPlate } from "@/showcase/Glyphs";
 import { PLATE_M, css } from "@/motion/motion";
 
-export const metadata: Metadata = { title: "AXP.one brand book: Prospectus", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "axp.one brand book: Prospectus", robots: { index: false, follow: false } };
 
 const INDEX: [string, string][] = [
   ["type", "Type"],
@@ -61,18 +62,18 @@ const INDEX: [string, string][] = [
 ];
 
 const COLOURS: [string, string, string][] = [
-  ["--paper", "#f5f4f0", "Page"],
-  ["--paper-2", "#eeede8", "Sunk band"],
-  ["--white", "#fffefa", "Raised sheet"],
-  ["--ink", "#171b1f", "Text, solid actions, paid money"],
-  ["--muted", "#444d53", "Secondary text"],
-  ["--steel", "#626c73", "The one accent"],
-  ["--steel-dark", "#37444b", "Labels, active"],
-  ["--silver", "#c8ccce", "Hatch, filled squares"],
-  ["--line", "#b9bec0", "Hairlines"],
-  ["--stage", "#1b2226", "The one dark stage"],
-  ["--stage-2", "#232c31", "Cells on stage"],
-  ["--stage-ink", "#eef0ee", "Text on stage"],
+  ["--brand", "#2b3bff", "Ultramarine: the winning bid, the route, the Sponsored frame, the primary action"],
+  ["--brand-deep", "#1a26cf", "Hover, small brand text"],
+  ["--brand-wash", "#e7e9ff", "Tint, card shadow"],
+  ["--paper", "#f4f2ec", "Page"],
+  ["--paper-2", "#ecebe4", "Sunk band"],
+  ["--white", "#fbfaf6", "Raised sheet"],
+  ["--ink", "#0e1220", "Text, paid money"],
+  ["--muted", "#4c5266", "Secondary text"],
+  ["--line", "#c9cad3", "Hairlines"],
+  ["--stage", "#0a0e2a", "The one stage: ultramarine night"],
+  ["--stage-brand", "#6573ff", "Ultramarine on the stage"],
+  ["--contexthint", "#f65a20", "ContextHint, only in its own section"],
 ];
 const MONEY: MoneyState[] = ["deposit", "reserved", "accepted", "authorized", "settled", "refunded", "pending", "unknown"];
 
@@ -81,7 +82,7 @@ function Chapter({ id, name, title, lead, children, tone }: { id: string; name: 
     <Section id={id} tone={tone}>
       <Wrap>
         <header className="bk-chapter">
-          <div className="px-opener-label mh-rule">
+          <div className="px-opener-label">
             <p className="px-label">{name}</p>
           </div>
           <Display size="h1">{title}</Display>
@@ -100,18 +101,16 @@ export default function BrandBook() {
     <>
       <MotionRoot />
       <SiteHeader links={[{ href: "#stack", label: "Exploded card" }, { href: "#board", label: "Switchboard" }, { href: "#motion", label: "Motion" }, { href: "/", label: "The page" }]} cta={{ href: MVP_URL, label: "See the MVP" }} chip="Brand book" />
-      <main id="main" style={{ paddingTop: "var(--px-header-h)" }}>
-        <section id="top">
+      <main id="main">
+        <section id="top" className="bk-cover-band" data-header-tone="brand">
           <Wrap>
             <div className="bk-cover">
               <GlyphPlate kinds={["actual", "observed", "inferred", "fictional", "policy", "settled", "synthetic", "replay", "illustrative", "vision"]} />
-              <p className="bk-mark mh-wordmark" aria-label="AXP.one">
-                AXP<span>.one</span>
-              </p>
+              <Wordmark as="p" className="bk-mark" />
               <div className="bk-meta">
                 <div className="px-stack">
                   <p className="px-lead" style={{ maxWidth: "36ch" }}>
-                    Prospectus: the landing system for {HERO.h1.toLowerCase().replace(/\.$/, "")}. Paper, ink, one steel accent, one dark stage. Every mark says where a fact came from.
+                    Prospectus: the landing system for {HERO.h1.toLowerCase().replace(/\.$/, "")}. Paper, ink, one ultramarine, one ultramarine night. Every mark says where a fact came from.
                   </p>
                   <p className="px-small">Brand book, version 2. Built with the recorded run {RUN.runId} and the ContextHint snapshot of {LIBRARY.snapshotDate}.</p>
                 </div>
@@ -148,11 +147,11 @@ export default function BrandBook() {
           </div>
         </Chapter>
 
-        <Chapter id="colour" name="Colour" title="Paper, ink and one steel accent." tone="paper2">
+        <Chapter id="colour" name="Colour" title="Paper, ink and one ultramarine." tone="paper2" lead="Ultramarine is the money and the route: it appears where the story peaks and nowhere else. ContextHint keeps its own vermillion, and its evidence turns ultramarine the moment it enters an axp decision.">
           <div className="px-swatches">
             {COLOURS.map(([n, v, role]) => (
-              <div key={n} className="px-swatch">
-                <i style={{ background: `var(${n})` }} />
+              <div key={n} className={`px-swatch${n === "--brand" ? " bk-swatch-hero" : ""}`}>
+                <i style={{ background: `var(${n})`, height: n === "--brand" ? 200 : undefined }} />
                 <span style={{ color: "var(--ink)", fontWeight: 500 }}>{role}</span>
                 <span>
                   {n} <span className="px-num">{v}</span>
@@ -168,7 +167,7 @@ export default function BrandBook() {
               <div className="dp-box" style={{ boxShadow: "none" }}>Flat, 1px ink rule</div>
               <div className="dp-box" style={{ boxShadow: "var(--shadow-offset-s)" }}>Offset small, 5px</div>
               <div className="dp-box" style={{ boxShadow: "var(--shadow-offset)" }}>Offset, 9px</div>
-              <div className="dp-box mh-exhibit" style={{ boxShadow: "var(--shadow-offset)", transform: "rotate(-1.1deg)" }}>Exhibit, tilted</div>
+              <div className="dp-box" style={{ boxShadow: "var(--shadow-offset)", transform: "rotate(-1.1deg)" }}>Exhibit, tilted</div>
             </div>
             <div className="dp-iso">
               <div className="dp-iso-cell">
@@ -184,12 +183,12 @@ export default function BrandBook() {
               <div className="px-stack">
                 <p className="px-h3">The plate matrix</p>
                 <p className="px-body">One 2D matrix, no 3D: squash to 58 percent, shear 36 degrees, turn 4 degrees. Text stays horizontal and readable, Safari never sees preserve-3d, and the flat sheet morphs into the plate by mixing two matrices.</p>
-                <code className="px-small">{css(PLATE_M)}</code>
+                <code className="px-small" style={{ overflowWrap: "anywhere" }}>{css(PLATE_M)}</code>
               </div>
             </div>
             <div className="dp-row">
-              <span className="px-chip mh-chip">Hackathon MVP</span>
-              <span className="px-chip mh-chip">Hosted Solana sandbox</span>
+              <span className="px-chip">Hackathon MVP</span>
+              <span className="px-chip">Hosted Solana sandbox</span>
               <span className="sp-tag">Skip</span>
               <span className="sp-tag" data-solid="">Bid</span>
               <span className="sp-card-label">Sponsored</span>

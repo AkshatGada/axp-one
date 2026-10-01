@@ -36,7 +36,7 @@ export function VideoFigure({
   return (
     <div className="px-video">
       <figure className="px-figure">
-        <div className="px-video-frame mh-exhibit" style={{ "--ratio": ratio } as CSSProperties}>
+        <div className="px-video-frame" style={{ "--ratio": ratio } as CSSProperties}>
           <video
             ref={ref}
             controls

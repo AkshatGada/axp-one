@@ -34,11 +34,11 @@ export function PlateStack({ tilt = 1, explode = 1, callouts = 1, marker = -1, s
   return (
     <div className="sc-stack" aria-hidden>
       {/* The route runs through every plate's centre. */}
-      <i className="sc-route mh-route" style={{ left: CX, top: CY + ys[0]!, height: Math.max(0, ys[n - 1]! - ys[0]!), opacity: explode > 0.05 ? 1 : 0 }} />
+      <i className="sc-route" style={{ left: CX, top: CY + ys[0]!, height: Math.max(0, ys[n - 1]! - ys[0]!), opacity: explode > 0.05 ? 1 : 0 }} />
       {PLATES.map((p, i) => {
         const m = mul(translate(0, ys[i]!), mul([scale, 0, 0, scale, 0, 0], base));
         return (
-          <div key={p.id} className="sc-plate" style={{ left: CX - PW / 2, top: CY - PH / 2, transform: css(m), zIndex: n - i }}>
+          <div key={p.id} className="sc-plate" data-id={p.id} style={{ left: CX - PW / 2, top: CY - PH / 2, transform: css(m), zIndex: n - i }}>
             <PlateSheet p={p} />
           </div>
         );
@@ -68,7 +68,7 @@ export function PlateStack({ tilt = 1, explode = 1, callouts = 1, marker = -1, s
         );
       })}
       {marker >= 0 ? (
-        <i className="sc-marker mh-glyph" style={{ left: CX, top: CY + y1 + (y5 - y1) * marker, zIndex: n + 1 }}>
+        <i className="sc-marker" style={{ left: CX, top: CY + y1 + (y5 - y1) * marker, zIndex: n + 1 }}>
           <span className="sc-marker-tag">
             <Provenance kind="illustrative" />
           </span>

@@ -50,10 +50,10 @@ const WIRES: Record<string, string> = {
 
 function Node({ id, beat, children, ruled, label }: { id: string; beat: number; children: ReactNode; ruled?: boolean; label?: string }) {
   const b = B[id]!;
-  const on = BEAT_LIGHT[beat]?.nodes.includes(id);
+  const on = beat < 0 || BEAT_LIGHT[beat]?.nodes.includes(id);
   const seen = !on && BEAT_LIGHT.slice(0, beat).some((l) => l.nodes.includes(id));
   return (
-    <div className="sc-node mh-cell" data-on={on ? "" : undefined} data-seen={seen ? "" : undefined} data-ruled={ruled ? "" : undefined} aria-label={label} style={{ left: b.x, top: b.y, width: b.w, height: b.h } as CSSProperties}>
+    <div className="sc-node" data-on={on ? "" : undefined} data-seen={seen ? "" : undefined} data-ruled={ruled ? "" : undefined} aria-label={label} style={{ left: b.x, top: b.y, width: b.w, height: b.h } as CSSProperties}>
       {children}
     </div>
   );
@@ -67,7 +67,7 @@ export function Switchboard({ beat }: { beat: number }) {
   const kf = decision(CACHED, "v3-keyforge", "history");
   const lg = decision(CACHED, "v3-leatherguard", "history");
   const r = receiptFor("v3-cached");
-  const lit = BEAT_LIGHT[beat]?.wires ?? [];
+  const lit = beat < 0 ? Object.keys(WIRES) : (BEAT_LIGHT[beat]?.wires ?? []);
   const agents = [
     { id: "a0", name: CV.name, d: cv },
     { id: "a1", name: RUN.campaigns["v3-keyforge"].name, d: kf },
@@ -75,7 +75,7 @@ export function Switchboard({ beat }: { beat: number }) {
   ];
   const excl = CACHED.excluded[0]!;
   return (
-    <div className="sc-board on-stage mh-stage">
+    <div className="sc-board on-stage">
       <svg className="sc-wires" viewBox={`0 0 ${BOARD_W} ${BOARD_H}`} width={BOARD_W} height={BOARD_H} aria-hidden>
         {Object.entries(WIRES).map(([k, d]) => (
           <path key={k} className="sc-wire" d={d} data-on={lit.includes(k) ? "" : undefined} />
@@ -94,7 +94,7 @@ export function Switchboard({ beat }: { beat: number }) {
         </div>
         <div className="sc-kv">
           <span>Slot</span>
-          <span>{beat >= 5 ? <span className="sp-tag" data-solid="">Sponsored card shown</span> : "Sponsored card, separate"}</span>
+          <span>{beat >= 5 || beat < 0 ? <span className="sp-tag" data-solid="">Sponsored card shown</span> : "Sponsored card, separate"}</span>
         </div>
       </Node>
 
@@ -251,7 +251,7 @@ export function Switchboard({ beat }: { beat: number }) {
       </Node>
 
       <Node id="chan" beat={beat} label="Payment channel">
-        <ChannelMeter ch={CV_CHANNEL} t={beat >= 6 ? 1 : beat >= 5 ? 0.45 : 0} onStage compact />
+        <ChannelMeter ch={CV_CHANNEL} t={beat >= 6 || beat < 0 ? 1 : beat >= 5 ? 0.45 : 0} onStage compact />
         <div className="sc-kv" style={{ marginTop: 4 }}>
           <span>
             Vouchers {CV_CHANNEL.vouchers.map((v) => usdc(v.cumulative)).join(" then ")}. Paid {usdc(CV_CHANNEL.settled)}, refunded {usdc(CV_CHANNEL.refund)}.

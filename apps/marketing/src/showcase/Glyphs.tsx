@@ -2,7 +2,7 @@
 import type { ReactElement } from "react";
 import { PROVENANCE, type ProvenanceKind } from "@axp/design-system/foundation";
 
-const S = "var(--ink)";
+const S = "currentColor";
 export const GLYPHS: Record<ProvenanceKind, ReactElement> = {
   actual: <rect x="18" y="18" width="64" height="64" fill={S} />,
   observed: <circle cx="50" cy="50" r="33" fill={S} />,
@@ -31,7 +31,7 @@ export function GlyphPlate({ kinds }: { kinds: ProvenanceKind[] }) {
     <div className="bk-glyphs">
       {kinds.map((k) => (
         <div key={k} className="bk-glyph">
-          <svg viewBox="0 0 100 100" className="mh-glyph" aria-hidden>
+          <svg viewBox="0 0 100 100" className="" aria-hidden>
             {GLYPHS[k]}
           </svg>
           <span>{PROVENANCE[k].word}</span>

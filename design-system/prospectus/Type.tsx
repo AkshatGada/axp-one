@@ -3,13 +3,25 @@ import { Fragment, createElement, type CSSProperties, type ReactNode } from "rea
 
 /** A line of text split into word masks. Each word rises from its own mask when its
  *  [data-reveal] ancestor gets data-in (armed by the app's MotionRoot). Still otherwise. */
-export function Words({ text, start = 0 }: { text: string; start?: number }) {
+export function Words({ text, start = 0, accent }: { text: string; start?: number; /** A phrase inside `text` set in ultramarine. */ accent?: string }) {
   const words = text.split(" ");
+  let from = -1;
+  let to = -1;
+  if (accent) {
+    const acc = accent.split(" ");
+    for (let i = 0; i + acc.length <= words.length; i++) {
+      if (acc.every((a, k) => words[i + k]!.replace(/[.,?!:]$/, "") === a.replace(/[.,?!:]$/, ""))) {
+        from = i;
+        to = i + acc.length - 1;
+        break;
+      }
+    }
+  }
   return (
     <>
       {words.map((w, n) => (
         <Fragment key={`${w}-${n}`}>
-          <span className="px-w">
+          <span className={`px-w${n >= from && n <= to ? " px-accent" : ""}`}>
             <span className="px-wi" style={{ "--i": start + n } as CSSProperties}>
               {w}
             </span>
@@ -46,5 +58,16 @@ export function Display({
     as,
     { id, className: `px-${size}${className ? ` ${className}` : ""}`, "data-reveal": reveal ? "" : undefined, style },
     content,
+  );
+}
+
+/** The lowercase wordmark: axp, an ultramarine full stop, one. */
+export function Wordmark({ className, as = "span" }: { className?: string; as?: "span" | "p" }) {
+  return createElement(
+    as,
+    { className: `px-mark${className ? ` ${className}` : ""}`, "aria-label": "axp.one" },
+    <>
+      axp<span className="px-mark-dot">.</span>one
+    </>,
   );
 }

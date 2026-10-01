@@ -10,7 +10,7 @@ const REASON: Record<string, string> = {
 
 export function RunSheet() {
   return (
-    <div className="sp-sheet mh-exhibit">
+    <div className="sp-sheet">
       <div className="sp-sheet-head">
         <div className="sp-sheet-id">
           <span className="px-caption">Recorded run</span>

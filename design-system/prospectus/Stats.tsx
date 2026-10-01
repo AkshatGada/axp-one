@@ -12,6 +12,7 @@ export function BigStat({
   size = "m",
   delay = 0,
   mono,
+  accent,
 }: {
   value: ReactNode;
   unit?: ReactNode;
@@ -22,11 +23,13 @@ export function BigStat({
   delay?: number;
   /** Amounts and identifiers are real data: set them in mono. */
   mono?: boolean;
+  /** Key numbers in ultramarine; ContextHint's own numbers in its vermillion. */
+  accent?: "brand" | "ch";
 }) {
   return (
-    <div className="px-stat mh-rule" data-size={size === "s" ? "s" : undefined} data-reveal="mask" style={{ "--d": `${delay}ms` } as CSSProperties}>
+    <div className="px-stat" data-size={size === "s" ? "s" : undefined} data-accent={accent} data-reveal="mask" style={{ "--d": `${delay}ms` } as CSSProperties}>
       <span className="px-mask">
-        <span className={`px-mask-in px-stat-value mh-num${mono ? " px-num" : ""}`}>
+        <span className={`px-mask-in px-stat-value${mono ? " px-num" : ""}`}>
           {value}
           {unit ? <span className="px-stat-unit">{unit}</span> : null}
         </span>
