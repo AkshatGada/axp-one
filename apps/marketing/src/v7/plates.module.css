@@ -78,7 +78,6 @@
 .flat { display: grid; gap: 14px; }
 .flat .plate { position: relative; width: 100%; height: auto; box-shadow: var(--px-shadow-2); }
 .flat .body { overflow: visible; }
-@media (max-width: 460px) {
-  .flat .agents { grid-template-columns: 1fr; }
-  .flat .agent { grid-auto-flow: column; align-items: center; justify-content: space-between; }
-}
+/* Phones: a swipe row, one plate per view. */
+.flat { grid-auto-flow: column; grid-auto-columns: min(86%, 420px); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; margin: 0 calc(-1 * var(--gutter)); padding: 4px var(--gutter) 18px; scroll-padding-inline: var(--gutter); }
+.flat .plate { scroll-snap-align: start; height: 100%; }

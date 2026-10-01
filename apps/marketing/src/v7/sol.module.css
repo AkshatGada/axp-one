@@ -67,5 +67,6 @@
   .lane, .lane[data-lane="chain"] { grid-template-columns: 1fr; padding: 44px 16px 16px; gap: 14px; }
   .laneK { top: 16px; left: 16px; translate: none; }
   .vouchers { margin: 0; height: 84px; }
-  .voucher { width: 150px; }
+  .voucher { width: 150px; left: 0; translate: none; }
+  .voucher[data-v="1"] { left: 118px; }
 }
