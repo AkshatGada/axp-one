@@ -502,7 +502,7 @@ a.ld-kpi:hover { border-color: var(--ld-border-2); box-shadow: var(--ld-shadow-2
 @media (max-width: 899px) { .ld .lg-inspector { top: auto; left: 8px; right: 8px; width: auto; height: min(78vh, 680px); } }
 
 .ld .ld-kpi-unit { font-size: 13px; font-weight: 500; color: var(--ld-text-2); white-space: nowrap; }
-.ld .ld-kpi-vrow { flex-wrap: nowrap; white-space: nowrap; }
+.ld .ld-kpi-vrow { flex-wrap: wrap; }
 .ld-pipe-step[data-status="upcoming"] .ld-pipe-ix { background: var(--ld-panel); box-shadow: inset 0 0 0 1px var(--ld-border-2); color: var(--ld-text-3); }
 .ld-pipe-step[data-status="upcoming"] .ld-pipe-top { color: var(--ld-text-3); }
 .ld-pipe-step[data-status="upcoming"] .ld-pipe-v { color: var(--ld-text-3); }

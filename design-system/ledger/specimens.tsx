@@ -140,7 +140,7 @@ export function MethodBadge({ method, detail }: { method: "vector" | "lexical_fa
   );
 }
 
-export function ObservedRecord({ prompt, advertiser, creative, similarity, refNote = "Observed historical reference, not an AXP advertiser", id, actions }: { prompt: string; advertiser: string; creative: string; similarity?: ReactNode; refNote?: ReactNode; id?: string; actions?: ReactNode }) {
+export function ObservedRecord({ prompt, advertiser, creative, similarity, refNote = "Observed historical reference, not an axp.one advertiser", id, actions }: { prompt: string; advertiser: string; creative: string; similarity?: ReactNode; refNote?: ReactNode; id?: string; actions?: ReactNode }) {
   const body = creative.startsWith(advertiser) ? creative.slice(advertiser.length).trim() : creative;
   return (
     <article className="lg-observed" id={id}>

@@ -650,7 +650,7 @@ export function EvidenceCard({ prompt, advertiser, creative, sim, method, hint }
       <p className="ld-evidence-ad">
         <b>{advertiser}</b> {body}
       </p>
-      <span className="ld-caption">Observed historical reference, not an AXP advertiser</span>
+      <span className="ld-caption">Observed historical reference, not an axp.one advertiser</span>
       {hint}
     </article>
   );

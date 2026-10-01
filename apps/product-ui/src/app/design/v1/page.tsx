@@ -661,7 +661,7 @@ export default function DesignPage() {
             {[
               ["Agent said bid. Exchange did not admit it.", "Opportunity 3, ClearVault: the frequency cap is a rule, not the agent."],
               ["One observation per arm; not a measured lift.", "Every arm comparison ends with this sentence."],
-              ["Observed historical reference, not an AXP advertiser", "Under every real brand from ContextHint."],
+              ["Observed historical reference, not an axp.one advertiser", "Under every real brand from ContextHint."],
               ["The two lanes use different clocks and are not aligned in time.", "Timeline banner: exchange clock and sandbox clock."],
               ["This proves the app's assertion that it inserted a labelled card, not that a person read it.", "Under every signed receipt."],
               ["No sponsored placement for this turn", "The no-fill note. Never an empty ad box."],
