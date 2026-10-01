@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "axp.v3-organic-answer.v1",
+  "runId": "v3-devnet-live-h20261001-8897d4114d",
+  "scenarioId": "offline",
+  "turnId": "v3-offline",
+  "question": "Compare self-custody options for Ethereum and Solana, prioritizing offline key storage over a mobile-only wallet.",
+  "inputHash": "a8a001184a41cb7df59332474e0b031fbdd1d1f0b10a23c96dfe81bf35a3e68d",
+  "suppliedPrompt": "You are ONLY the independent organic answer for a wallet-selection demo. Do not use tools, files, web, memory, other sessions or research. You have no ads, sponsors, targeting evidence or campaign information. Give useful general wallet-selection guidance. Do not invent current prices, live product capabilities or a cheapest product. Discuss offline/hardware versus mobile/software tradeoffs when relevant. Return ONLY JSON with one field \"answer\" (string, at most 1600 characters). User task: Compare self-custody options for Ethereum and Solana, prioritizing offline key storage over a mobile-only wallet.",
+  "engine": "deepseek-flash-api",
+  "model": "deepseek-flash",
+  "providerModel": "deepseek-flash",
+  "effort": "temperature-0.2",
+  "agentId": "c72648e0-6460-4828-b780-73cca449f4ac",
+  "usage": {
+    "inputTokens": 153,
+    "outputTokens": 5290,
+    "cachedInputTokens": 0
+  },
+  "elapsedMs": 19149,
+  "answer": "For meaningful self-custody, prioritize a hardware or air-gapped signer as the key custodian, and treat mobile/software wallets as interfaces or watch-only companions. Offline/hardware tradeoffs: stronger key isolation against malware, phishing, and device compromise; requires a device, secure seed backup, firmware hygiene, and slightly more friction. Mobile/software tradeoffs: convenient and often free, but keys live on an internet-connected device, so higher risk for larger balances. For Ethereum and Solana, choose a hardware wallet whose vendor explicitly documents support for both chains and for your preferred software interface. Ethereum typically uses BIP-39/BIP-44 paths; Solana often uses a different derivation path, so confirm the hardware wallet and software interface derive the same addresses. Practical setup: generate the seed offline, never digitize it, store it geographically separate, optionally use a BIP-39 passphrase, connect the hardware wallet to a reputable software wallet for Ethereum and a Solana-compatible interface for Solana, and use watch-only mode on mobile. For larger amounts, consider multisig: Ethereum has mature smart-contract multisig options with hardware signers; Solana multisig exists but verify current tooling. Avoid mobile-only as primary storage for significant funds. Never share seed phrases; verify addresses on the hardware screen; test recovery with a small amount before large transfers. Support, firmware, and chain compatibility change, so verify current details before buying.",
+  "completedAt": "2026-10-01T22:48:52.487Z",
+  "provenance": {
+    "engine": "deepseek-flash-api",
+    "model": "deepseek-flash",
+    "effort": "temperature-0.2",
+    "agentId": "c72648e0-6460-4828-b780-73cca449f4ac",
+    "inputHash": "a8a001184a41cb7df59332474e0b031fbdd1d1f0b10a23c96dfe81bf35a3e68d",
+    "toolUse": "not_requested",
+    "requestedMaxCharacters": 1600,
+    "actualCharacters": 1542,
+    "lengthOverrun": false,
+    "attestation": "DeepSeek API completion (single sponsor-free user message, no tools) recorded by the terminal operator, not cryptographic context proof",
+    "execution": "actual-api-model",
+    "usage": {
+      "inputTokens": 153,
+      "outputTokens": 5290,
+      "cachedInputTokens": 0
+    }
+  }
+}

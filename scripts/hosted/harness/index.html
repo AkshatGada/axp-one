@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AXP live run harness</title>
+<style>
+  body{font:15px/1.5 system-ui,sans-serif;margin:24px;max-width:960px;color:#171b1f;background:#f5f4f0}
+  .ad{border:1px solid #171b1f;padding:12px 14px;margin:10px 0;background:#fff;max-width:520px}
+  .ad strong{display:inline-block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+  pre{background:#fff;border:1px solid #ccc;padding:10px;overflow:auto;max-height:420px;font-size:12px}
+  button{font:inherit;padding:6px 12px}
+  .muted{color:#555}
+</style>
+</head>
+<body>
+<h1>AXP live run harness (local development)</h1>
+<p class="muted">Development page for the hosted live-run API. It starts one real Devnet run, drives it, and acts as
+the publisher's owned app: each award is inserted into this page's DOM with a visible Sponsored label before the
+delivery is acknowledged. The MVP's "Run it live" UI replaces this page.</p>
+<p><label>Passcode (if required) <input id="passcode" type="password" autocomplete="off"></label>
+<button id="start">Start a live run</button> <button id="resume">Resume this tab's run</button></p>
+<p id="phase">Idle.</p>
+<div id="slot" aria-label="Publisher slot"></div>
+<h2>Links</h2><ul id="links"></ul>
+<h2>Status</h2><pre id="status">—</pre>
+<script type="module" src="./harness.mjs"></script>
+</body>
+</html>

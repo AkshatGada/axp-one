@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "axp.v3-restart.v1",
+  "runId": "v3-devnet-live-h20261001-8897d4114d",
+  "beforeHash": "13d9b2458f5f66ef7400fef8166e332c115d7d341b4f43f1f4e47a8a4f8f6f57",
+  "afterHash": "13d9b2458f5f66ef7400fef8166e332c115d7d341b4f43f1f4e47a8a4f8f6f57",
+  "newCalls": 0,
+  "newCharges": 0,
+  "newSignatures": 0,
+  "newBroadcasts": 0,
+  "duplicateReceipts": [
+    {
+      "chargeId": "charge-award-204a6a40-7de3-4926-8aa5-e5dc2bdd0efe",
+      "replayed": true
+    },
+    {
+      "chargeId": "charge-award-a49b312a-ab2e-4bc1-9ad8-eedd76ee3852",
+      "replayed": true
+    },
+    {
+      "chargeId": "charge-award-ab7a5e3b-d28d-48b3-ada0-97039614db0f",
+      "replayed": true
+    }
+  ],
+  "method": "Restart without provider authorization; replay four completed turns and the original signed publisher receipts using saved outcomes. No payment transport or signer instantiated.",
+  "at": "2026-10-01T22:49:41.841Z"
+}

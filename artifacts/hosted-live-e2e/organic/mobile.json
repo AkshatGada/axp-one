@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "axp.v3-organic-answer.v1",
+  "runId": "v3-devnet-live-h20261001-8897d4114d",
+  "scenarioId": "mobile",
+  "turnId": "v3-mobile",
+  "question": "Compare mobile-only software wallets for Ethereum and Solana. A hardware device does not satisfy my requirement.",
+  "inputHash": "96d4ac818a19e2ff8aff27c0b01e37de8d310cffb99361fddb5cadf0ac540d2d",
+  "suppliedPrompt": "You are ONLY the independent organic answer for a wallet-selection demo. Do not use tools, files, web, memory, other sessions or research. You have no ads, sponsors, targeting evidence or campaign information. Give useful general wallet-selection guidance. Do not invent current prices, live product capabilities or a cheapest product. Discuss offline/hardware versus mobile/software tradeoffs when relevant. Return ONLY JSON with one field \"answer\" (string, at most 1600 characters). User task: Compare mobile-only software wallets for Ethereum and Solana. A hardware device does not satisfy my requirement.",
+  "engine": "deepseek-flash-api",
+  "model": "deepseek-flash",
+  "providerModel": "deepseek-flash",
+  "effort": "temperature-0.2",
+  "agentId": "cca6dddd-eae7-4dc9-ae96-7a11ef89600e",
+  "usage": {
+    "inputTokens": 151,
+    "outputTokens": 7932,
+    "cachedInputTokens": 0
+  },
+  "elapsedMs": 30159,
+  "answer": "Mobile-only software wallets are hot wallets: keys/seed stay on the phone, encrypted if designed well. This is convenient but weaker than offline/hardware signing, which keeps keys off networked devices. Since hardware is excluded, use mobile wallets as low-balance/spending tools: strong passcode+biometrics, offline seed backup, no cloud seed, small test sends, revoke approvals, verify addresses. Compare on: 1) Chain coverage: EVM/Ethereum+L2s only, Solana only, or multi-chain. Multi-chain=one seed/app; chain-specific often better native UX. 2) Custody: prefer non-custodial, local encrypted keys, clear seed backup; avoid hidden custody. 3) Dapp access: WalletConnect and/or in-app browser; confirm both Ethereum and Solana dapp support. 4) Safety: transaction simulation/preview, scam warnings, fee controls (EIP-1559/L2 fees on Ethereum; priority fees/compute units on Solana). 5) Assets: ERC-20/721/1155 and L2s vs SPL tokens/compressed NFTs. 6) Extras: staking, swaps, NFT display, open source/audits, privacy. Typical patterns: MetaMask/Rainbow are EVM-first, strong for Ethereum/L2 dapps; Solana support may be limited/absent. Phantom/Solflare are Solana-first, strong for Solana dapps/NFTs/staking; EVM support varies. Trust Wallet/Coinbase Wallet are broad multi-chain but features, custody style, and on-ramp/KYC vary—verify current support. Good fit: one reputable multi-chain non-custodial mobile wallet with WalletConnect, biometric lock, seed backup, previews. Better: separate EVM and Solana mobile wallets with separate seeds. Test small amounts; confirm official app listing.",
+  "completedAt": "2026-10-01T22:49:03.498Z",
+  "provenance": {
+    "engine": "deepseek-flash-api",
+    "model": "deepseek-flash",
+    "effort": "temperature-0.2",
+    "agentId": "cca6dddd-eae7-4dc9-ae96-7a11ef89600e",
+    "inputHash": "96d4ac818a19e2ff8aff27c0b01e37de8d310cffb99361fddb5cadf0ac540d2d",
+    "toolUse": "not_requested",
+    "requestedMaxCharacters": 1600,
+    "actualCharacters": 1598,
+    "lengthOverrun": false,
+    "attestation": "DeepSeek API completion (single sponsor-free user message, no tools) recorded by the terminal operator, not cryptographic context proof",
+    "execution": "actual-api-model",
+    "usage": {
+      "inputTokens": 151,
+      "outputTokens": 7932,
+      "cachedInputTokens": 0
+    }
+  }
+}
