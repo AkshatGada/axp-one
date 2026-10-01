@@ -103,10 +103,11 @@ export function VerifyRunner({ rows, expectedIds, devnetRows = [], devnetLinks }
         </Ld.Callout>
       ) : null}
       <div className="ld-kpis vf2-kpis" role="status" aria-live="polite">
-        <Ld.Kpi tone="live" label="The served file, checked in your browser" value={done ? `${summary!.pass}/${expectedIds.length}` : "Not run yet"} context={done ? `run.public.json, ${bytes?.toLocaleString("en-US")} bytes${devnetRows.length ? `; plus ${devnetRows.length} Devnet checks, ${devnetResults ? `${devnetRows.filter((r) => devnetResults[r.id]?.status === "pass").length}/${devnetRows.length}` : "not run yet"}` : ""}` : `${expectedIds.length} checks to run${devnetRows.length ? `, plus ${devnetRows.length} Devnet checks` : ""}`} chip={<Ld.Tag tone={!done ? undefined : summary!.passing ? "success" : "danger"} dot>{headline}</Ld.Tag>} />
+        <Ld.Kpi tone="live" label="The served file, checked in your browser" value={done ? `${summary!.pass}/${expectedIds.length}` : "Not run yet"} context={done ? `run.public.json, ${bytes?.toLocaleString("en-US")} bytes` : `${expectedIds.length} checks to run`} chip={<Ld.Tag tone={!done ? undefined : summary!.passing ? "success" : "danger"} dot>{headline}</Ld.Tag>} />
         <Ld.Kpi label="Hash checks" value={done ? `${ok(["recomputed"])} of ${total(["recomputed"])}` : "Not run yet"} context="Questions, packets, creatives, acknowledgements, receipts" />
         <Ld.Kpi label="Signature checks" value={done ? `${ok(["signature"])} of ${total(["signature"])}` : "Not run yet"} context="Ed25519 receipts from the publisher" />
         <Ld.Kpi label="Sum and rule checks" value={done ? `${ok(["arithmetic", "policy"])} of ${total(["arithmetic", "policy"])}` : "Not run yet"} context="Vouchers, conservation, bids, tie rule, fee cap" />
+        {devnetRows.length ? <Ld.Kpi label="Plus Devnet checks" value={devnetResults ? `${devnetRows.filter((r) => devnetResults[r.id]?.status === "pass").length} of ${devnetRows.length}` : "Not run yet"} context="The re-settlement file against these receipts" href="#devnet-checks" /> : null}
       </div>
       {failed.length ? (
         <Ld.Panel title={`${failed.length} check${failed.length > 1 ? "s" : ""} failed`} raised>

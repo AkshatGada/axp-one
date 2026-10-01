@@ -393,3 +393,6 @@ html[data-op-stage="charge"] [data-slot="await"] { display: none !important; }
 .pr2-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding: 14px 16px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); }
 .pr2-seq li { font-size: 14px; padding: 8px 12px; }
 .pr2-defs { margin: 0; padding: 10px 14px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); }
+.vf2-kpis .ld-kpi { min-height: 136px; }
+.vf2-tamper .ld-table td { height: 48px; }
+@media (max-width: 700px) { .vf2-kpis .ld-kpi { min-height: 150px; } .vf2-tamper .ld-table td { height: 64px; } }
