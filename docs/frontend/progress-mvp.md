@@ -115,3 +115,19 @@ Resume notes for the MVP builder. Spec: docs/frontend/MVP_SPEC.md + FRONTEND_PLA
   with links inside the group and a "48 + 7" nav count. Settlement detail behind a disclosure; rent in words.
 - Checked: 144 static route/viewport combos (both runs) with 0 errors, 0 overflow, max CLS 0.016; Present 1280 to 2560
   centred, zoom 1.7 to 1.9; tests 32/32; tamper flow on both runs (45/47 live, 46/48 first recording).
+
+## MVP v6: Run it live, tag axp-mvp-v6
+- Nav "Run it live" (/live/): explains the run in one line; passcode field only when the config asks; Start; live
+  pipeline (queued, answers, decisions, delivery, settlement, record, done) built from the API's status; questions with
+  the app's answers and Jev decisions; each winning card inserted in this page (Ld.SponsoredCard now carries
+  `data-sponsored-label` and `data-creative-copy`) and acknowledged from the page's DOM with `acknowledgeCard`;
+  settlement rows with explorer links as transactions land; states for paused, busy (someone else's run), daily caps,
+  errors and aborts (no charge for undelivered cards; refunds at close); recent runs.
+- /live/run/?id=: fetches the run's exact bytes from the API, projects them in the browser with the shared core
+  (`src/lib/project-core.mjs`, pure-JS SHA-256), runs the structural and browser checks, and shows the run.
+- The API client is a copy (`src/lib/live-client.mjs`) with a drift test against packages/hosted/client.mjs.
+- Gate: only builds with `NEXT_PUBLIC_LIVE_API=1` look for the API; a static copy shows "Live runs are available on
+  the hosted site" and never probes (no console errors). Hosted build for the local dev server:
+  `NEXT_PUBLIC_BASE_PATH=/mvp NEXT_PUBLIC_LIVE_API=1 pnpm build`, then `AXP_LIVE_ENABLED=1 node scripts/hosted/dev-server.mjs`.
+- Checked with one real run through the page (61 s, 3 cards acknowledged, 0 console errors), and its finished view
+  projected in the browser (48/48 checks).
