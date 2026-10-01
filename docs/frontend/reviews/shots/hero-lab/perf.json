@@ -1,0 +1,137 @@
+{
+ "note": "Headless system Chrome (new headless), dev server (next dev, unminified). frames: rAF deltas over 3s; idle = after load, scroll = scripted wheel scroll through the pinned hero. mainThreadBusyPct/styleMs/scriptMs from CDP Performance.getMetrics over the same 3s. longFrames = long-animation-frame entries over 50ms during the run.",
+ "runs": [
+  {
+   "route": "a",
+   "size": "1440x900",
+   "still": false,
+   "idle": {
+    "frames": 181,
+    "avgMs": 16.59,
+    "p50": 16.7,
+    "p95": 16.7,
+    "max": 16.8,
+    "over20": 0,
+    "mainThreadBusyPct": 4.1,
+    "styleMs": 30.9,
+    "layoutMs": 0.4,
+    "scriptMs": 5.2,
+    "layers": null
+   },
+   "nodes": 1190,
+   "scroll": {
+    "frames": 181,
+    "avgMs": 16.63,
+    "p50": 16.7,
+    "p95": 16.8,
+    "max": 16.8,
+    "over20": 0,
+    "mainThreadBusyPct": 14.5,
+    "styleMs": 24.9,
+    "layoutMs": 0.2,
+    "scriptMs": 41.8,
+    "layers": null
+   },
+   "longFrames": 0
+  },
+  {
+   "route": "a",
+   "size": "1920x1080",
+   "still": false,
+   "idle": {
+    "frames": 181,
+    "avgMs": 16.63,
+    "p50": 16.7,
+    "p95": 16.7,
+    "max": 16.8,
+    "over20": 0,
+    "mainThreadBusyPct": 3.7,
+    "styleMs": 29.6,
+    "layoutMs": 0.2,
+    "scriptMs": 4.4,
+    "layers": null
+   },
+   "nodes": 1190,
+   "scroll": {
+    "frames": 181,
+    "avgMs": 16.62,
+    "p50": 16.7,
+    "p95": 16.8,
+    "max": 16.8,
+    "over20": 0,
+    "mainThreadBusyPct": 12.7,
+    "styleMs": 21.9,
+    "layoutMs": 0.3,
+    "scriptMs": 38.1,
+    "layers": null
+   },
+   "longFrames": 0
+  },
+  {
+   "route": "b",
+   "size": "1440x900",
+   "still": false,
+   "idle": {
+    "frames": 181,
+    "avgMs": 16.62,
+    "p50": 16.7,
+    "p95": 16.8,
+    "max": 16.8,
+    "over20": 0,
+    "mainThreadBusyPct": 10.7,
+    "styleMs": 143,
+    "layoutMs": 0,
+    "scriptMs": 11.2,
+    "layers": null
+   },
+   "nodes": 214,
+   "scroll": {
+    "frames": 181,
+    "avgMs": 16.61,
+    "p50": 16.7,
+    "p95": 16.7,
+    "max": 16.8,
+    "over20": 0,
+    "mainThreadBusyPct": 14.4,
+    "styleMs": 31.7,
+    "layoutMs": 1.6,
+    "scriptMs": 103.6,
+    "layers": null
+   },
+   "longFrames": 0
+  },
+  {
+   "route": "b",
+   "size": "1920x1080",
+   "still": false,
+   "idle": {
+    "frames": 181,
+    "avgMs": 16.62,
+    "p50": 16.7,
+    "p95": 16.7,
+    "max": 16.8,
+    "over20": 0,
+    "mainThreadBusyPct": 10,
+    "styleMs": 129.1,
+    "layoutMs": 0,
+    "scriptMs": 9.9,
+    "layers": null
+   },
+   "nodes": 214,
+   "scroll": {
+    "frames": 181,
+    "avgMs": 16.62,
+    "p50": 16.7,
+    "p95": 16.7,
+    "max": 16.8,
+    "over20": 0,
+    "mainThreadBusyPct": 13.6,
+    "styleMs": 29.4,
+    "layoutMs": 1.9,
+    "scriptMs": 95.7,
+    "layers": null
+   },
+   "longFrames": 0
+  }
+ ]
+}

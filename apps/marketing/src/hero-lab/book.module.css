@@ -1,0 +1,174 @@
+/* Hero lab B, "The Order Book". The deep stage (ultramarine night), ultramarine bids, Solana purple
+   for the settle tick alone. Every moving thing moves by transform or opacity. */
+
+.hero { position: relative; background: var(--stage); color: var(--stage-ink); }
+.stage { position: relative; background: var(--stage); }
+.screen { position: relative; height: 100svh; min-height: 640px; overflow: hidden; }
+@media (min-width: 900px) {
+  :global(html[data-px-motion="on"]) .hero { height: 300vh; }
+  :global(html[data-px-motion="on"]) .stage { position: sticky; top: 0; height: 100svh; min-height: 640px; overflow: hidden; }
+  :global(html[data-px-motion="on"]) .focalPos { position: absolute; inset: 0; z-index: 4; display: grid; place-content: center; justify-items: center; padding: calc(var(--px-header-h, 72px) + 8px) var(--gutter) 24px; pointer-events: none; }
+  :global(html[data-px-motion="on"]) .focalMove { opacity: 0; }
+  :global(html[data-px-motion="on"]) .cap { opacity: 0; }
+}
+
+/* The floor: a long plane seen in perspective; the tape travels down it towards the viewer. */
+.view { position: absolute; inset: 0; perspective: 900px; perspective-origin: 70% 40%; pointer-events: none; }
+.floor {
+  position: absolute;
+  left: calc(70% - 290px);
+  top: calc(40% - 840px);
+  width: 580px;
+  height: 1400px;
+  transform-origin: 50% 840px;
+  transform: rotateX(64deg);
+  will-change: transform;
+}
+.grid {
+  position: absolute;
+  inset: -120px -700px 0;
+  background:
+    repeating-linear-gradient(180deg, var(--stage-line-soft) 0 1px, transparent 1px 110.83px),
+    repeating-linear-gradient(90deg, color-mix(in oklab, var(--stage-line-soft) 70%, transparent) 0 1px, transparent 1px 140px);
+  animation: gridRun 1.25s linear infinite;
+  will-change: transform;
+}
+@keyframes gridRun { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, 110.83px, 0); } }
+
+.row {
+  --d: calc(var(--t) * var(--i) / var(--n) * -1);
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 108px 88px 52px 56px;
+  align-items: center;
+  gap: 12px;
+  width: 580px;
+  height: 52px;
+  padding: 0 12px 0 14px;
+  border: 1px solid var(--stage-line-soft);
+  background: color-mix(in oklab, var(--stage-2) 88%, transparent);
+  opacity: 0;
+  animation: rowRun var(--t) linear var(--d) infinite;
+  will-change: transform, opacity;
+}
+.rq { display: -webkit-box; overflow: hidden; font-size: 13px; line-height: 1.25; color: var(--stage-ink); -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.rn { overflow: hidden; font-size: 12px; color: var(--stage-muted); white-space: nowrap; text-overflow: ellipsis; }
+.rb { display: grid; gap: 4px; }
+.bar { position: relative; display: block; height: 6px; background: var(--stage-line-soft); }
+.bar b { display: block; width: calc(var(--b) * 100%); height: 100%; background: var(--stage-brand); transform-origin: 0 50%; transform: scaleX(0); animation: barGrow var(--t) linear calc(var(--d) + var(--k) * 0.22s) infinite; }
+.bar:not([data-win]) b { animation-name: barLose; }
+.bar[data-win] b { animation-name: barWin; }
+.bar[data-win]::after { content: ""; position: absolute; inset: -3px -4px; border: 1px solid var(--stage-ink); opacity: 0; animation: winRing var(--t) linear var(--d) infinite; }
+.rw { font-size: 12px; font-weight: 500; color: var(--stage-ink); opacity: 0; animation: cleared var(--t) linear var(--d) infinite; }
+.rs { justify-self: end; height: 20px; padding: 0 8px; border-radius: 10px; background: #9945ff; color: #fff; font-size: 11px; font-weight: 500; line-height: 20px; letter-spacing: 0.03em; opacity: 0; animation: settled var(--t) linear var(--d) infinite; }
+
+.floor[data-hold="1"] .row, .floor[data-hold="1"] .row *, .floor[data-hold="1"] .row *::after, .floor[data-hold="1"] .grid,
+.floor[data-paused="1"] .row, .floor[data-paused="1"] .row *, .floor[data-paused="1"] .row *::after, .floor[data-paused="1"] .grid { animation-play-state: paused; }
+/* Reduced motion / no JS: the same frame, held (negative delays spread the rows down the floor). */
+:global(html:not([data-px-motion="on"])) .row,
+:global(html:not([data-px-motion="on"])) .row *,
+:global(html:not([data-px-motion="on"])) .row *::after,
+:global(html:not([data-px-motion="on"])) .grid { animation-play-state: paused; }
+
+@keyframes rowRun {
+  0% { opacity: 0; transform: translate3d(0, 0, 0); }
+  9% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(0, 1330px, 0); }
+}
+@keyframes barGrow { 0%, 46% { transform: scaleX(0); } 54%, 100% { transform: scaleX(1); } }
+@keyframes barLose { 0%, 46% { transform: scaleX(0); opacity: 1; } 54% { transform: scaleX(1); opacity: 1; } 60%, 100% { transform: scaleX(1); opacity: 0.32; } }
+@keyframes barWin { 0%, 46% { transform: scaleX(0); } 54%, 100% { transform: scaleX(1); } }
+@keyframes winRing { 0%, 58% { opacity: 0; } 61%, 100% { opacity: 0.9; } }
+@keyframes cleared { 0%, 59% { opacity: 0; } 63%, 100% { opacity: 1; } }
+@keyframes settled { 0%, 66% { opacity: 0; transform: scale(0.6); } 69% { opacity: 1; transform: scale(1.14); } 72%, 100% { opacity: 1; transform: scale(1); } }
+
+/* Depth fog: the horizon dissolves into the night; the left side protects the headline. */
+.fog {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 26% at 70% 36%, color-mix(in oklab, var(--brand) 26%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--stage) 0%, var(--stage) 14%, color-mix(in oklab, var(--stage) 78%, transparent) 26%, transparent 44%, transparent 82%, color-mix(in oklab, var(--stage) 70%, transparent) 100%),
+    linear-gradient(90deg, color-mix(in oklab, var(--stage) 94%, transparent) 0%, color-mix(in oklab, var(--stage) 82%, transparent) 32%, transparent 52%),
+    radial-gradient(74% 88% at 4% 94%, var(--stage) 0%, color-mix(in oklab, var(--stage) 96%, transparent) 50%, color-mix(in oklab, var(--stage) 68%, transparent) 68%, transparent 88%);
+}
+
+/* The copy. */
+.copy { position: absolute; inset: 0; z-index: 3; display: flex; align-items: flex-end; padding: 0 var(--gutter) clamp(44px, 8.5vh, 96px); pointer-events: none; }
+.copyIn { display: grid; gap: clamp(20px, 2.6vh, 30px); max-width: 780px; pointer-events: auto; }
+.h1 { max-width: 13.2ch; font-size: clamp(50px, 5.5vw, 100px); line-height: 0.94; color: var(--stage-ink); }
+.lede { max-width: 35ch; font-size: clamp(18px, 1.45vw, 23px); color: var(--stage-steel); }
+.actions { display: flex; }
+:global(html[data-px-motion="on"]) .h1 :global(.px-wi) { animation: labRise 1.1s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 60ms + 80ms); }
+:global(html[data-px-motion="on"]) .lede { animation: labIn 1s var(--ease-out) 0.42s both; }
+:global(html[data-px-motion="on"]) .actions { animation: labIn 1s var(--ease-out) 0.56s both; }
+@keyframes labRise { from { transform: translate3d(0, 110%, 0); } }
+@keyframes labIn { from { opacity: 0; transform: translate3d(0, 16px, 0); } }
+.note { position: absolute; z-index: 3; right: var(--gutter); bottom: clamp(18px, 3.4vh, 36px); margin: 0; font-size: 13px; line-height: 1.35; color: var(--stage-muted); }
+
+/* The recorded opportunity, resolved. */
+.focalPos { position: relative; padding: clamp(32px, 6vh, 64px) var(--gutter) clamp(64px, 10vh, 120px); }
+.focalPersp { perspective: 1100px; width: min(1120px, 100%); }
+.focalMove { transform-origin: 50% 100%; will-change: transform, opacity; }
+.focal {
+  position: relative;
+  padding: 24px 30px 30px;
+  border: 1px solid var(--stage-line);
+  background: var(--stage-2);
+  box-shadow: 9px 9px 0 #05071c, 0 50px 140px -50px color-mix(in oklab, var(--brand) 70%, transparent);
+}
+.fHead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.fK { font-size: 13px; font-weight: 500; letter-spacing: 0.02em; color: var(--stage-brand); }
+.fApp { font-size: 13px; color: var(--stage-muted); }
+.fQ { margin: 12px 0 24px; max-width: 30ch; font-family: var(--font-display); font-size: clamp(26px, 2.5vw, 40px); font-weight: 300; line-height: 1.08; letter-spacing: -0.02em; color: var(--stage-ink); }
+.fGrid { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr); border-top: 1px solid var(--stage-line-soft); }
+.fCell { display: grid; align-content: start; gap: 12px; padding: 18px 22px 0 0; }
+.fCell + .fCell { padding-left: 22px; border-left: 1px solid var(--stage-line-soft); }
+.fL { font-size: 12px; font-weight: 500; letter-spacing: 0.04em; color: var(--stage-muted); }
+.fNeeds { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 15px; line-height: 1.35; color: var(--stage-ink); }
+.fBids { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.fBids li { display: grid; grid-template-columns: 92px minmax(0, 1fr); align-items: center; gap: 12px; }
+.fName { font-size: 14px; color: var(--stage-ink); }
+.fBids li[data-out] .fName { color: var(--stage-muted); }
+.fOut { font-size: 13px; color: var(--stage-muted); }
+.fBar { position: relative; display: block; height: 8px; background: var(--stage-line-soft); }
+.fBar b { display: block; height: 100%; background: var(--stage-brand); transform-origin: 0 50%; transition: transform 0.9s var(--ease-out), opacity 0.5s var(--ease); transition-delay: calc(var(--k, 0) * 140ms); }
+.fBar[data-win]::after { content: ""; position: absolute; inset: -4px -5px; border: 1px solid var(--stage-ink); transition: opacity 0.4s var(--ease); }
+.fWin, .fPaid { display: grid; gap: 8px; margin: 0; transition: opacity 0.5s var(--ease), transform 0.6s var(--ease-out); }
+.fWinName { font-family: var(--font-display); font-size: 22px; font-weight: 400; letter-spacing: -0.01em; color: var(--stage-ink); }
+.fWhy { font-size: 13.5px; line-height: 1.45; color: var(--stage-steel); }
+.fTick { justify-self: start; height: 24px; padding: 0 10px; border-radius: 12px; background: #9945ff; color: #fff; font-size: 12.5px; font-weight: 500; line-height: 24px; letter-spacing: 0.03em; transition: transform 0.5s cubic-bezier(0.3, 1.6, 0.5, 1); }
+.cap { max-width: 64ch; margin: 22px auto 0; text-align: center; font-size: 15px; line-height: 1.45; color: var(--stage-muted); }
+
+/* Scroll-driven states (pinned only): bids draw, then the winner, then the payment. */
+@media (min-width: 900px) {
+  :global(html[data-px-motion="on"]) .focal:not([data-bids="1"]) .fBar b { transform: scaleX(0); }
+  :global(html[data-px-motion="on"]) .focal:not([data-win="1"]) .fBar[data-win]::after { opacity: 0; }
+  :global(html[data-px-motion="on"]) .focal[data-win="1"] .fBar:not([data-win]) b { opacity: 0.4; }
+  :global(html[data-px-motion="on"]) .focal:not([data-win="1"]) .fWin { opacity: 0; transform: translate3d(0, 10px, 0); }
+  :global(html[data-px-motion="on"]) .focal:not([data-paid="1"]) .fPaid { opacity: 0; transform: translate3d(0, 10px, 0); }
+  :global(html[data-px-motion="on"]) .focal:not([data-paid="1"]) .fTick { transform: scale(0.6); }
+}
+
+/* Below 900px: a still, stacked hero. The copy, a band of the tape, the resolved row. */
+@media (max-width: 899px) {
+  .screen { display: flex; flex-direction: column; gap: 22px; height: auto; min-height: 0; padding: calc(var(--px-header-h, 72px) + 28px) var(--gutter) 0; }
+  .view { position: relative; inset: auto; order: 2; height: 300px; margin: 0 calc(-1 * var(--gutter)); overflow: hidden; perspective-origin: 50% 0%; }
+  .floor { left: calc(50% - 290px); top: calc(16% - 840px); scale: 0.58; }
+  .fog { display: none; }
+  .copy { position: static; order: 1; padding: 0; }
+  .h1 { font-size: clamp(40px, 10vw, 64px); }
+  .note { position: static; order: 3; }
+  .fGrid { grid-template-columns: 1fr 1fr; }
+  .fCell:nth-child(3) { padding-left: 0; border-left: 0; }
+  .fCell { padding-bottom: 18px; }
+}
+@media (max-width: 560px) {
+  .fGrid { grid-template-columns: 1fr; }
+  .fCell + .fCell { padding-left: 0; border-left: 0; border-top: 1px solid var(--stage-line-soft); }
+}

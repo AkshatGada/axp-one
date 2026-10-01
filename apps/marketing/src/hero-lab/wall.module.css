@@ -9,18 +9,18 @@
 }
 
 /* The wall: a perspective view, a camera that dollies, a tilted plane, columns at depth. */
-.view { position: absolute; inset: -20% -34% -36% -14%; perspective: 1500px; perspective-origin: 62% 26%; pointer-events: none; }
+.view { position: absolute; inset: -22% -36% -38% -16%; perspective: 1500px; perspective-origin: 62% 26%; pointer-events: none; }
 .cam { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
 .plane {
   position: absolute;
   inset: 0;
   display: flex;
   justify-content: center;
-  gap: 22px;
-  transform: rotateX(26deg) rotateY(7deg) rotateZ(-11deg);
+  gap: 20px;
+  transform: translateZ(-170px) rotateX(26deg) rotateY(7deg) rotateZ(-11deg);
   transform-style: preserve-3d;
 }
-.col { flex: none; width: 296px; transform-style: preserve-3d; }
+.col { flex: none; width: 272px; transform-style: preserve-3d; }
 .track { display: grid; gap: 20px; animation: wallDrift var(--dur, 100s) linear infinite; will-change: transform; transform-style: preserve-3d; }
 .col:nth-child(even) .track { animation-direction: reverse; }
 .view[data-paused="1"] .track,
@@ -46,7 +46,7 @@
   transform-style: preserve-3d;
 }
 .tile::after { content: ""; position: absolute; inset: -1px; border: 1.5px solid var(--brand); border-radius: 16px; opacity: 0; pointer-events: none; }
-.q { justify-self: end; max-width: 90%; margin: 0; padding: 9px 12px; border-radius: 13px 13px 4px 13px; background: var(--mist); font-size: 13.5px; line-height: 1.38; color: var(--ink); text-wrap: pretty; }
+.q { justify-self: end; max-width: 90%; margin: 0; padding: 9px 12px; border-radius: 13px 13px 4px 13px; background: var(--mist); font-size: 13px; line-height: 1.38; color: var(--ink); text-wrap: pretty; }
 .ans { display: grid; gap: 7px; padding: 2px 8px 0 0; }
 .ans i { display: block; width: var(--w, 80%); height: 7px; border-radius: 4px; background: var(--paper-2); }
 
@@ -102,10 +102,10 @@
 .tile[data-filled] .settle { opacity: 0.9; }
 
 /* Bid pulses: three thin ultramarine lines fly in over the wall and drop onto the slot. */
-.pulse { position: absolute; top: 50%; width: 150px; height: 2px; margin-top: -1px; opacity: 0; pointer-events: none; }
+.pulse { position: absolute; top: 50%; width: 170px; height: 3px; margin-top: -1.5px; border-radius: 2px; opacity: 0; pointer-events: none; box-shadow: 0 0 10px color-mix(in oklab, var(--brand) 45%, transparent); }
 .pl { right: 100%; background: linear-gradient(90deg, transparent, var(--brand) 82%, var(--brand-deep)); }
 .pr { left: 100%; background: linear-gradient(270deg, transparent, var(--brand) 82%, var(--brand-deep)); }
-.pb { top: 100%; left: 50%; width: 2px; height: 130px; margin: 0 0 0 -1px; background: linear-gradient(0deg, transparent, var(--brand) 82%, var(--brand-deep)); }
+.pb { top: 100%; left: 50%; width: 3px; height: 140px; margin: 0 0 0 -1.5px; background: linear-gradient(0deg, transparent, var(--brand) 82%, var(--brand-deep)); }
 
 .tile[data-run]::after { animation: tileRing 6.4s var(--ease-out) both; }
 .tile[data-run] .pl { animation: pulseL 1s cubic-bezier(0.55, 0, 0.25, 1) both; }
@@ -174,13 +174,13 @@
   pointer-events: none;
   background:
     linear-gradient(180deg, var(--paper) 0%, color-mix(in oklab, var(--paper) 72%, transparent) 9%, transparent 22%, transparent 74%, color-mix(in oklab, var(--paper) 55%, transparent) 90%, var(--paper) 100%),
-    radial-gradient(64% 78% at 10% 86%, color-mix(in oklab, var(--paper) 98%, transparent) 0%, color-mix(in oklab, var(--paper) 92%, transparent) 40%, color-mix(in oklab, var(--paper) 50%, transparent) 64%, transparent 84%);
+    radial-gradient(76% 90% at 5% 93%, color-mix(in oklab, var(--paper) 98%, transparent) 0%, color-mix(in oklab, var(--paper) 96%, transparent) 50%, color-mix(in oklab, var(--paper) 70%, transparent) 68%, transparent 88%);
 }
 
 /* The copy. */
 .copy { position: absolute; inset: 0; z-index: 3; display: flex; align-items: flex-end; padding: 0 var(--gutter) clamp(44px, 8.5vh, 96px); pointer-events: none; }
 .copyIn { display: grid; gap: clamp(20px, 2.6vh, 30px); max-width: 780px; pointer-events: auto; }
-.h1 { max-width: 12.4ch; font-size: clamp(50px, 5.5vw, 100px); line-height: 0.94; }
+.h1 { max-width: 13.2ch; font-size: clamp(50px, 5.5vw, 100px); line-height: 0.94; }
 .lede { max-width: 35ch; font-size: clamp(18px, 1.45vw, 23px); color: var(--steel-dark); }
 .actions { display: flex; }
 :global(html[data-px-motion="on"]) .h1 :global(.px-wi) { animation: labRise 1.1s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 60ms + 80ms); }

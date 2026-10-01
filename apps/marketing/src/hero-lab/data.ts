@@ -10,7 +10,7 @@ export const LAB = {
   primary: "See the working MVP",
   wallNote: "Questions observed by ContextHint. Bidding shown is illustrative.",
   focalNote: "A real question from our recorded run, with an excerpt of the answer. ClearVault is a fictional advertiser.",
-  rowNote: "The recorded opportunity. ClearVault, KeyForge and LeatherGuard are fictional advertisers.",
+  rowNote: "From our recorded run. ClearVault, KeyForge and LeatherGuard are fictional advertisers.",
 };
 
 /** Observed buyer questions for the wall and the tape (real prompt text, lightly varied topics). */

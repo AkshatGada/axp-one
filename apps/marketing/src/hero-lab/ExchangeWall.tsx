@@ -7,9 +7,9 @@
 // Solana purple settle tick flashes. The wall follows the cursor. One tile, the run's recorded
 // question with ClearVault's card, is lifted off the wall. On scroll (>= 900px, motion on):
 //   0.00 to 0.18  the headline lifts away and the paper fog clears;
-//   0.05 to 0.66  the camera dollies into the wall while the plane straightens and dims;
-//   0.08 to 0.60  the lifted tile travels to the centre, flattens and grows to full size;
-//   0.60 to 0.76  its frame and caption settle; then a hold, ready for the exploded card stack.
+//   0.05 to 0.62  the camera dollies into the wall while the plane straightens (dims from 0.30);
+//   0.05 to 0.52  the lifted tile travels to the centre, flattens and grows to full size;
+//   0.52 to 0.74  its frame and caption settle; then a hold, ready for the exploded card stack.
 // Reduced motion, no JS and below 900px: a still wall, the copy and the tile in flow.
 import { useEffect, useRef, type CSSProperties, type PointerEvent as RPointerEvent } from "react";
 import { motion, useMotionValue, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
@@ -20,13 +20,13 @@ import { io, lerp, out, seg } from "@/motion/motion";
 import { FOCAL, LAB, PROMPTS } from "./data";
 import s from "./wall.module.css";
 
-const COLS = 6;
+const COLS = 7;
 const PER = 5;
-const DURS = [96, 118, 88, 124, 104, 112];
-const DEPTH = [-110, 30, -40, 70, -80, 10];
-const LIFT = [-6, 4, -10, 1, -7, 6];
+const DURS = [96, 118, 88, 124, 104, 112, 92];
+const DEPTH = [-110, 30, -40, 70, -80, 10, -60];
+const LIFT = [-6, 4, -10, 1, -7, 6, -3];
 /** Tiles that already carry a card at first paint (column, row), so the still frame reads too. */
-const PREFILLED = new Set(["0-3", "1-1", "2-4", "3-0", "4-2", "5-3", "2-1"]);
+const PREFILLED = new Set(["0-3", "1-1", "2-4", "3-0", "4-2", "5-3", "2-1", "6-0", "6-3"]);
 
 const cols = Array.from({ length: COLS }, (_, c) => Array.from({ length: PER }, (_, r) => PROMPTS[(c * PER + r * 7 + c) % PROMPTS.length]!));
 
@@ -60,7 +60,7 @@ function Wall({ plane, cam, opacity, wallRef }: { plane: { x: MV; y: MV; z: MV }
   return (
     <motion.div ref={wallRef} className={s.view} style={{ opacity }} aria-hidden>
       <motion.div className={s.cam} style={{ z: cam.z, y: cam.y }}>
-        <motion.div className={s.plane} style={{ rotateX: plane.x, rotateY: plane.y, rotateZ: plane.z }}>
+        <motion.div className={s.plane} style={{ z: -170, rotateX: plane.x, rotateY: plane.y, rotateZ: plane.z }}>
           {cols.map((qs, c) => (
             <div key={c} className={s.col} style={{ transform: `translateZ(${DEPTH[c]}px) translateY(${LIFT[c]}rem)` }}>
               <div className={s.track} style={{ "--dur": `${DURS[c]}s` } as CSSProperties}>
@@ -164,16 +164,16 @@ export default function ExchangeWall() {
   const rotX = useTransform([flat, smy] as MotionValue<number>[], ([f, m]: number[]) => 26 * (1 - f!) - m! * 3.5 * (1 - f!));
   const rotY = useTransform([flat, smx] as MotionValue<number>[], ([f, m]: number[]) => 7 * (1 - f!) + m! * 5 * (1 - f!));
   const rotZ = useTransform(flat, (f) => -11 * (1 - f));
-  const camZ = useTransform(p, (v) => 880 * io(seg(v, 0.05, 0.66)));
+  const camZ = useTransform(p, (v) => 900 * io(seg(v, 0.05, 0.62)));
   const camY = useTransform(p, (v) => -80 * out(seg(v, 0, 0.5)));
-  const wallO = useTransform(p, (v) => 1 - 0.86 * io(seg(v, 0.4, 0.68)));
+  const wallO = useTransform(p, (v) => 1 - 0.92 * io(seg(v, 0.3, 0.62)));
   const copyY = useTransform(p, (v) => -140 * out(seg(v, 0, 0.2)));
   const copyO = useTransform(p, (v) => 1 - seg(v, 0.02, 0.14));
   const fogO = useTransform(p, (v) => 1 - 0.9 * seg(v, 0.04, 0.22));
   const noteO = useTransform(p, (v) => 1 - seg(v, 0.02, 0.1));
 
   // The lifted tile: sits on the tilted wall, then flattens and travels to the centre.
-  const m = useTransform(p, (v) => io(seg(v, 0.08, 0.6)));
+  const m = useTransform(p, (v) => io(seg(v, 0.05, 0.52)));
   const fx = useTransform(m, (t) => geo.current.dx * t);
   const fy = useTransform(m, (t) => geo.current.dy * t);
   const fs = useTransform(m, (t) => lerp(geo.current.k0, geo.current.k1, t));
@@ -181,9 +181,9 @@ export default function ExchangeWall() {
   const frX = useTransform([rotX, m] as MotionValue<number>[], ([r, t]: number[]) => r! * 0.45 * (1 - t!));
   const frY = useTransform([rotY, m] as MotionValue<number>[], ([r, t]: number[]) => r! * 0.45 * (1 - t!));
   const frZ = useTransform([rotZ, m] as MotionValue<number>[], ([r, t]: number[]) => r! * 0.45 * (1 - t!));
-  const frame = useTransform(p, (v) => seg(v, 0.58, 0.7));
-  const cap = useTransform(p, (v) => seg(v, 0.64, 0.76));
-  const capY = useTransform(p, (v) => 14 * (1 - out(seg(v, 0.64, 0.78))));
+  const frame = useTransform(p, (v) => seg(v, 0.52, 0.64));
+  const cap = useTransform(p, (v) => seg(v, 0.6, 0.72));
+  const capY = useTransform(p, (v) => 14 * (1 - out(seg(v, 0.6, 0.74))));
 
   const pinnedRef = useRef(false);
   pinnedRef.current = pinned;
