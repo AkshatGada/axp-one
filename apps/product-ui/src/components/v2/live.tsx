@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { Ld } from "@axp/design-system/ledger";
 import { canonical, hashCanonical, verifyEd25519 } from "@/lib/canonical.ts";
-import { verifyChecks, summarize, summaryWords, EXPECTED_CHECK_COUNT, type CheckSummary } from "@/lib/verify.ts";
+import { verifyChecks, summarize, summaryWords, type CheckSummary } from "@/lib/verify.ts";
+import { CHECK_TOTAL } from "@/data/checks";
 import meta from "@/data/build-meta.json";
 import type { ProductRun } from "@/data/types";
 import { asset } from "@/lib/paths";
@@ -42,7 +43,7 @@ export function useVerifySummary() {
       .then((x) => x.json() as Promise<ProductRun>)
       .then((run) => verifyChecks(run))
       .then((cs) => live && setR(summarize(cs, meta.verify.ids)))
-      .catch(() => live && setR({ expected: EXPECTED_CHECK_COUNT, pass: 0, fail: 1, skip: 0, missing: 0, extra: 0, passing: false }));
+      .catch(() => live && setR({ expected: CHECK_TOTAL, pass: 0, fail: 1, skip: 0, missing: 0, extra: 0, passing: false }));
     return () => {
       live = false;
     };
@@ -56,7 +57,7 @@ export function LiveVerifyTile({ context }: { context?: string }) {
     <Ld.Kpi
       tone="live"
       label="Verify"
-      value={r ? `${r.pass}/${EXPECTED_CHECK_COUNT}` : `${EXPECTED_CHECK_COUNT} checks`}
+      value={r ? `${r.pass}/${CHECK_TOTAL}` : `${CHECK_TOTAL} checks`}
       context={r ? context ?? "Checked in your browser on the public file" : "Not run yet"}
       chip={r ? <Ld.Tag tone={r.passing ? "success" : "danger"} dot>{summaryWords(r)}</Ld.Tag> : <Ld.Tag dot>Not run yet</Ld.Tag>}
     />
@@ -121,17 +122,18 @@ export function DrawerDemo() {
 
 /** Present: the tamper flow, computed live on a copy of the public file (one changed character in a receipt). */
 export function LiveTamperResult() {
-  const [r, setR] = useState<{ s: CheckSummary; receipt: boolean; signature: boolean } | null>(null);
+  const [r, setR] = useState<{ s: CheckSummary; receipt: boolean; signature: boolean; n: number } | null>(null);
   useEffect(() => {
     let live = true;
     fetch(asset("/run.public.json"))
       .then((x) => x.json() as Promise<ProductRun>)
       .then(async (run) => {
-        const f = run.opportunities[0].receipt!.fields;
+        const target = run.opportunities.find((o) => o.receipt)!;
+        const f = target.receipt!.fields;
         f.nonce = f.nonce.slice(0, -1) + (f.nonce.endsWith("a") ? "b" : "a");
         const cs = await verifyChecks(run);
         const st = (id: string) => cs.find((c) => c.id === id)?.status === "pass";
-        if (live) setR({ s: summarize(cs, meta.verify.ids), receipt: st("receipt-1"), signature: st("signature-1") });
+        if (live) setR({ s: summarize(cs, meta.verify.ids), receipt: st(`receipt-${target.n}`), signature: st(`signature-${target.n}`), n: target.n });
       })
       .catch(() => live && setR(null));
     return () => {
@@ -149,10 +151,10 @@ export function LiveTamperResult() {
       <div className="ld-between">
         <span className="ld-card-title">Change one byte of a receipt</span>
         <Ld.Tag tone={r ? "danger" : undefined} dot>
-          {r ? `${r.s.pass} of ${EXPECTED_CHECK_COUNT}` : "Checking"}
+          {r ? `${r.s.pass} of ${CHECK_TOTAL}` : "Checking"}
         </Ld.Tag>
       </div>
-      <span className="ld-caption">One character of opportunity 1&apos;s receipt nonce, changed in a copy and re-checked here</span>
+      <span className="ld-caption">One character of {r ? `opportunity ${r.n}'s` : "a"} receipt nonce, changed in a copy and re-checked here</span>
       {row("Receipt hash", r?.receipt)}
       {row("Publisher signature (Ed25519)", r?.signature)}
     </div>

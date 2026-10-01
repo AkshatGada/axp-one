@@ -6,8 +6,8 @@
   },
   "output": {
     "path": "public/run.public.json",
-    "bytes": 176387,
-    "sha256": "6c2560ded6275c98bdef6470d617fe495eafa5860ca4d0f92692fa6c9dfe81ee"
+    "bytes": 176535,
+    "sha256": "3fa4dac691a19b8798c4353e643eb5ef722de629d4981a9c848070cc02e2a0a6"
   },
   "counts": {
     "opportunities": 4,
@@ -116,6 +116,16 @@
       "detail": "938a0ee84b1936a02a56c8eb30b0fea0dca47f07195013f69847ee404dd6dd48 vs 938a0ee84b1936a02a56c8eb30b0fea0dca47f07195013f69847ee404dd6dd48"
     },
     {
+      "name": "manifest run id = run id",
+      "ok": true,
+      "detail": "v3-wallet-acceptance vs v3-wallet-acceptance"
+    },
+    {
+      "name": "manifest financial mode = run financial mode",
+      "ok": true,
+      "detail": "sandbox vs sandbox"
+    },
+    {
       "name": "bid v3-cached/v3-clearvault = computeBid(3:3)",
       "ok": true,
       "detail": "4000 vs 4000"
@@ -173,50 +183,82 @@
       "ok": true
     },
     {
-      "name": "count: 4 opportunities",
+      "name": "one network for every channel",
+      "ok": true,
+      "detail": "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d"
+    },
+    {
+      "name": "count: at least one opportunity",
       "ok": true,
       "detail": "4"
     },
     {
-      "name": "count: 15 agent decisions",
-      "ok": true,
-      "detail": "15"
-    },
-    {
-      "name": "count: 3 auctions + 1 no-fill",
+      "name": "count: decisions = sum of per-opportunity decisions",
       "ok": true
     },
     {
-      "name": "count: 3 receipts",
+      "name": "count: auctions + no-fills = opportunities",
       "ok": true,
-      "detail": "3"
+      "detail": "3 + 1 vs 4"
     },
     {
-      "name": "count: 33 events",
-      "ok": true,
-      "detail": "33"
-    },
-    {
-      "name": "count: 2 funded channels",
-      "ok": true,
-      "detail": "2"
-    },
-    {
-      "name": "count: 4 chain transactions",
-      "ok": true,
-      "detail": "4"
-    },
-    {
-      "name": "evidence: 13 records, 5 hints",
-      "ok": true,
-      "detail": "13/5"
-    },
-    {
-      "name": "story order: questionIndex 0..3",
+      "name": "count: receipts = awards = charges",
       "ok": true
     },
     {
-      "name": "story order: mobile no-fill is last",
+      "name": "count: vouchers = charges",
+      "ok": true
+    },
+    {
+      "name": "count: 2 chain transactions per funded channel",
+      "ok": true,
+      "detail": "4 vs 2 x 2"
+    },
+    {
+      "name": "manifest: model completed calls = decisions",
+      "ok": true,
+      "detail": "15/15 vs 15"
+    },
+    {
+      "name": "manifest: no failed or uncertain calls",
+      "ok": true
+    },
+    {
+      "name": "manifest: signed receipts = receipts",
+      "ok": true,
+      "detail": "3 vs 3"
+    },
+    {
+      "name": "manifest: events = projected events",
+      "ok": true
+    },
+    {
+      "name": "manifest: run id agrees",
+      "ok": true
+    },
+    {
+      "name": "manifest: chain evidence fees = transactions",
+      "ok": true,
+      "detail": "40000 vs 40000"
+    },
+    {
+      "name": "manifest: chain evidence gross fee and rent = transactions",
+      "ok": true
+    },
+    {
+      "name": "manifest: chain evidence reports all checks passed",
+      "ok": true
+    },
+    {
+      "name": "manifest: paid deliveries within the frozen limit",
+      "ok": true
+    },
+    {
+      "name": "evidence: every referenced record and hint is present",
+      "ok": true
+    },
+    {
+      "name": "story order: questionIndex 0..n-1",
       "ok": true
     },
     {
@@ -228,11 +270,11 @@
       "ok": true
     },
     {
-      "name": "charges 4000 + 3000 + 3000 = 10000",
+      "name": "charges sum to the total",
       "ok": true
     },
     {
-      "name": "running totals 0.004 / 0.007 / 0.010 / 0.010",
+      "name": "running totals accumulate charges in story order",
       "ok": true
     },
     {
@@ -252,6 +294,10 @@
       "ok": true
     },
     {
+      "name": "vouchers are cumulative v3-clearvault",
+      "ok": true
+    },
+    {
       "name": "conservation v3-keyforge: settled + refund = deposit",
       "ok": true
     },
@@ -268,7 +314,15 @@
       "ok": true
     },
     {
-      "name": "payout + refund = deposits (0.010 + 0.030 = 0.040)",
+      "name": "vouchers are cumulative v3-keyforge",
+      "ok": true
+    },
+    {
+      "name": "payout + refund = deposits",
+      "ok": true
+    },
+    {
+      "name": "payouts = accepted charges",
       "ok": true
     },
     {
@@ -285,7 +339,15 @@
       "ok": true
     },
     {
-      "name": "ClearVault repeat: agent bid, not admitted",
+      "name": "not-admitted bidders never appear among bids",
+      "ok": true
+    },
+    {
+      "name": "no-fill opportunities have no award, receipt or charge",
+      "ok": true
+    },
+    {
+      "name": "winner is the top-ranked bid",
       "ok": true
     },
     {
@@ -299,14 +361,14 @@
     {
       "name": "size budget <= 300KB",
       "ok": true,
-      "detail": "176387 bytes"
+      "detail": "176535 bytes"
     },
     {
       "name": "verify checks pass (48)",
       "ok": true
     },
     {
-      "name": "verify produces exactly 48 checks",
+      "name": "verify produces exactly the checks the run's structure implies (48)",
       "ok": true,
       "detail": "48"
     }
@@ -365,6 +427,12 @@
       "tiebreak-2",
       "feecap",
       "totals"
-    ]
+    ],
+    "byMethod": {
+      "recomputed": 28,
+      "signature": 3,
+      "arithmetic": 10,
+      "policy": 7
+    }
   }
 }

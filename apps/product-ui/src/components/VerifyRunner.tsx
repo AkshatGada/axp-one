@@ -4,7 +4,7 @@
 // "Recorded in the file" shows values read from the fetched file, never build-time copies.
 import { useEffect, useState } from "react";
 import { Ld } from "@axp/design-system/ledger";
-import { verifyChecks, summarize, summaryWords, GROUP_LABEL, EXPECTED_CHECK_COUNT, type Check, type CheckGroup, type CheckSummary } from "@/lib/verify.ts";
+import { verifyChecks, summarize, summaryWords, GROUP_LABEL, type Check, type CheckGroup, type CheckSummary } from "@/lib/verify.ts";
 import type { ProductRun } from "@/data/types";
 import { asset } from "@/lib/paths";
 import { verifyDevnet } from "@/lib/verify-devnet.ts";
@@ -79,7 +79,7 @@ export function VerifyRunner({ rows, expectedIds, devnetRows = [] }: { rows: Che
     if (!run) return;
     const copy = JSON.parse(JSON.stringify(run)) as ProductRun;
     if (on) {
-      const f = copy.opportunities[0].receipt!.fields;
+      const f = copy.opportunities.find((o) => o.receipt)!.receipt!.fields;
       f.nonce = f.nonce.slice(0, -1) + (f.nonce.endsWith("a") ? "b" : "a");
     }
     const cs = await verifyChecks(copy);
@@ -106,19 +106,19 @@ export function VerifyRunner({ rows, expectedIds, devnetRows = [] }: { rows: Che
         {tamper?.tampered ? (
           <Ld.Callout
             tone="danger"
-            title={`Tampered copy: ${tamper.summary.pass} of ${EXPECTED_CHECK_COUNT} pass`}
+            title={`Tampered copy: ${tamper.summary.pass} of ${expectedIds.length} pass`}
             actions={
               <Ld.Button variant="secondary" size="sm" onClick={() => void runTamper(false)}>
                 Reset
               </Ld.Button>
             }
           >
-            One changed character in opportunity 1&apos;s receipt breaks its hash and its signature. The served file is unchanged: {summary?.pass ?? 0} of {EXPECTED_CHECK_COUNT}.
+            One changed character in opportunity {run?.opportunities.find((o) => o.receipt)?.n}&apos;s receipt breaks its hash and its signature. The served file is unchanged: {summary?.pass ?? 0} of {expectedIds.length}.
           </Ld.Callout>
         ) : null}
       </div>
       <div className="ld-kpis vf2-kpis" role="status" aria-live="polite">
-        <Ld.Kpi tone="live" label="The served file, checked in your browser" value={done ? `${summary!.pass}/${EXPECTED_CHECK_COUNT}` : "Not run yet"} context={done ? `run.public.json, ${bytes?.toLocaleString("en-US")} bytes` : `${EXPECTED_CHECK_COUNT} checks to run`} chip={<Ld.Tag tone={!done ? undefined : summary!.passing ? "success" : "danger"} dot>{headline}</Ld.Tag>} />
+        <Ld.Kpi tone="live" label="The served file, checked in your browser" value={done ? `${summary!.pass}/${expectedIds.length}` : "Not run yet"} context={done ? `run.public.json, ${bytes?.toLocaleString("en-US")} bytes` : `${expectedIds.length} checks to run`} chip={<Ld.Tag tone={!done ? undefined : summary!.passing ? "success" : "danger"} dot>{headline}</Ld.Tag>} />
         <Ld.Kpi label="Hash checks" value={done ? `${ok(["recomputed"])} of ${total(["recomputed"])}` : "Not run yet"} context="Questions, packets, creatives, acknowledgements, receipts" />
         <Ld.Kpi label="Signature checks" value={done ? `${ok(["signature"])} of ${total(["signature"])}` : "Not run yet"} context="Ed25519 receipts from the publisher" />
         <Ld.Kpi label="Sum and rule checks" value={done ? `${ok(["arithmetic", "policy"])} of ${total(["arithmetic", "policy"])}` : "Not run yet"} context="Vouchers, conservation, bids, tie rule, fee cap" />
@@ -134,7 +134,7 @@ export function VerifyRunner({ rows, expectedIds, devnetRows = [] }: { rows: Che
           </div>
         </Ld.Panel>
       ) : null}
-      <TamperDemo ready={!!run} state={tamper} onTamper={() => void runTamper(true)} onReset={() => void runTamper(false)} nonce={run?.opportunities[0].receipt?.fields.nonce ?? ""} />
+      <TamperDemo ready={!!run} state={tamper} onTamper={() => void runTamper(true)} onReset={() => void runTamper(false)} nonce={run?.opportunities.find((o) => o.receipt)?.receipt?.fields.nonce ?? ""} n={run?.opportunities.find((o) => o.receipt)?.n ?? 1} total={expectedIds.length} />
       {groups.map((g) => {
         const gr = rows.filter((r) => r.group === g);
         const res = gr.map((r) => results?.[r.id]);
@@ -187,13 +187,13 @@ function CheckGroupPanel({ title, sub, rows, results }: { title: string; sub: st
 }
 
 /** Flip one character of a receipt in an in-memory copy and re-run every check; Reset restores the file. */
-function TamperDemo({ ready, state, onTamper, onReset, nonce }: { ready: boolean; state: Tamper; onTamper: () => void; onReset: () => void; nonce: string }) {
-  const ids = ["receipt-1", "signature-1"];
+function TamperDemo({ ready, state, onTamper, onReset, nonce, n, total }: { ready: boolean; state: Tamper; onTamper: () => void; onReset: () => void; nonce: string; n: number; total: number }) {
+  const ids = [`receipt-${n}`, `signature-${n}`];
   const row = (id: string) => state?.checks.find((x) => x.id === id);
   return (
     <Ld.Panel
       title="Tamper with one byte"
-      sub="Changes the last character of opportunity 1's receipt nonce in a copy held in this tab, then re-runs all 48 checks on the copy. The served file is never changed."
+      sub={`Changes the last character of opportunity ${n}'s receipt nonce in a copy held in this tab, then re-runs all ${total} checks on the copy. The served file is never changed.`}
       actions={
         <>
           <Ld.Button variant="danger" size="sm" disabled={!ready || state?.tampered} onClick={onTamper}>
@@ -212,13 +212,13 @@ function TamperDemo({ ready, state, onTamper, onReset, nonce }: { ready: boolean
             Nonce in the copy: <span className="ld-mono">{state?.tampered ? `${nonce.slice(0, -1)}${nonce.endsWith("a") ? "b" : "a"}` : nonce}</span>
           </span>
           <Ld.Tag tone={!state ? undefined : state.tampered ? "danger" : "success"} dot>
-            {!state ? "Not run yet" : state.tampered ? `Tampered copy: ${state.summary.pass} of ${EXPECTED_CHECK_COUNT}` : `Original file: ${state.summary.pass} of ${EXPECTED_CHECK_COUNT}`}
+            {!state ? "Not run yet" : state.tampered ? `Tampered copy: ${state.summary.pass} of ${total}` : `Original file: ${state.summary.pass} of ${total}`}
           </Ld.Tag>
         </div>
         <Ld.Table
           columns={[
             { key: "s", head: "", width: "40px", cell: (id: string) => { const c = row(id); return <Ld.Verified state={!c ? "idle" : c.status === "pass" ? "pass" : "fail"}>{""}</Ld.Verified>; } },
-            { key: "l", head: "Check", cell: (id) => (id === "receipt-1" ? "Opportunity 1: receipt hash" : "Opportunity 1: publisher signature (Ed25519)") },
+            { key: "l", head: "Check", cell: (id) => (id.startsWith("receipt") ? `Opportunity ${n}: receipt hash` : `Opportunity ${n}: publisher signature (Ed25519)`) },
             { key: "e", head: "Recorded in the copy", cell: (id) => { const c = row(id); return c ? <Val v={c.expected} /> : <span className="ld-faint">not run yet</span>; } },
             { key: "a", head: "Computed now", cell: (id) => { const c = row(id); return c?.status === "fail" ? <span className="ld-row" style={{ gap: 8 }}><Val v={c.actual} danger /><Ld.Tag tone="danger">Mismatch</Ld.Tag></span> : c ? <Val v={c.actual} /> : <span className="ld-faint">not run yet</span>; } },
           ]}

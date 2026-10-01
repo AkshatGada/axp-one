@@ -8,3 +8,4 @@ public/present.srt
 .next-dev/
 .next-build/
 public/devnet.public.json
+.fixtures/

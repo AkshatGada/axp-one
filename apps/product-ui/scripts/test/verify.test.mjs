@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve, dirname } from 'node:path';
-import { verifyChecks, summarize, EXPECTED_CHECK_COUNT } from '../../src/lib/verify.ts';
+import { verifyChecks, summarize, expectedCheckCount } from '../../src/lib/verify.ts';
 const meta = () => JSON.parse(readFileSync(resolve(app, 'src/data/build-meta.json'), 'utf8'));
 
 const app = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -59,12 +59,12 @@ for (const [name, mutate] of [
     assert.equal(checks.filter((c) => c.status === 'skip').length, 0);
   });
 
-test('the shipped projection summarizes as exactly 48 passing', async () => {
+test('the shipped projection summarizes as all expected checks passing', async () => {
   const ids = meta().verify.ids;
-  assert.equal(ids.length, EXPECTED_CHECK_COUNT);
+  assert.equal(ids.length, expectedCheckCount(load()));
   const s = summarize(await verifyChecks(load()), ids);
   assert.equal(s.passing, true);
-  assert.equal(s.pass, 48);
+  assert.equal(s.pass, ids.length);
 });
 
 for (const [name, mutate] of [

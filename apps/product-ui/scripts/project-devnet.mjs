@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const app = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = resolve(app, '../..');
-const SRC = 'artifacts/v3-devnet/settlement.json';
+const SRC = process.env.AXP_DEVNET_EVIDENCE || 'artifacts/v3-devnet/settlement.json';
 const OUT_SRC = resolve(app, 'src/data/devnet.public.json');
 const OUT_PUB = resolve(app, 'public/devnet.public.json');
 const RUN = resolve(app, 'src/data/run.public.json');
@@ -157,6 +157,14 @@ async function main() {
   }
   const bytes = readFileSync(srcPath);
   const run = JSON.parse(readFileSync(RUN, 'utf8'));
+  const ev = JSON.parse(bytes.toString('utf8'));
+  if (ev.sourceRun?.bundleSha256 !== run.source.runSha256) {
+    // Evidence for a different run (for example a perturbed fixture or a new live run): no re-settlement to show.
+    rmSync(OUT_SRC, { force: true });
+    rmSync(OUT_PUB, { force: true });
+    console.log(`project-devnet: ${SRC} re-settles run ${ev.sourceRun?.runId}, not the selected bundle; re-settlement hidden.`);
+    return;
+  }
   const { projection: p, failures } = projectDevnet(JSON.parse(bytes.toString('utf8')), run);
   if (failures.length || !p) {
     console.error('project-devnet: FAILED');

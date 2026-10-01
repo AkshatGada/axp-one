@@ -55,10 +55,11 @@ test('structural checks fail on broken conservation and count drift', () => {
   broken.channels[0].refundBaseUnits = '12999';
   broken.counts.events = 32;
   const failed = [];
-  structuralChecks(broken, (name, ok) => { if (!ok) failed.push(name); });
+  const raw = JSON.parse(runBytes.toString('utf8'));
+  structuralChecks(broken, (name, ok) => { if (!ok) failed.push(name); }, raw);
   assert.ok(failed.some((n) => n.startsWith('conservation v3-clearvault')), failed.join());
-  assert.ok(failed.includes('count: 33 events'));
+  assert.ok(failed.includes('manifest: events = projected events'), failed.join());
   const clean = [];
-  structuralChecks(projection, (name, ok) => { if (!ok) clean.push(name); });
+  structuralChecks(projection, (name, ok) => { if (!ok) clean.push(name); }, raw);
   assert.deepEqual(clean, []);
 });

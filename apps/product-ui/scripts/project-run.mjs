@@ -1,23 +1,32 @@
 #!/usr/bin/env node
 // Build-time projection of the recorded run into the public, vector-free, sanitized data the explorer ships.
-// Inputs (read-only): artifacts/v3/replay/run.json, artifacts/v3/replay/manifest.json.
+// Inputs (read-only): <run dir>/run.json and <run dir>/manifest.json. The run dir is AXP_RUN_DIR (relative to the repo
+// or absolute), default artifacts/v3/replay. Any bundle in the replay schema works; nothing here assumes one run's story.
 // Never reads: artifacts/v3/sandbox-topup.json, .env*, local-state/, voucher stores.
 // Outputs: src/data/run.public.json, public/run.public.json, src/data/build-meta.json.
 // Fails the build on: leaked strings, numeric arrays > 64, count mismatches, broken conservation,
 // any bid != computeBid(levels), any failed verify check, output > 300KB.
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { dirname, resolve, relative, isAbsolute, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { canonical } from '../src/lib/canonical.ts';
 import { computeBid, rankBids, missingCapabilities, BID_TABLE, BID_POLICY_VERSION } from '../src/lib/policy.ts';
-import { verifyChecks, EXPECTED_CHECK_COUNT } from '../src/lib/verify.ts';
+import { verifyChecks, expectedCheckCount } from '../src/lib/verify.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const app = resolve(here, '..');
 const repo = resolve(app, '../..');
-const RUN_PATH = 'artifacts/v3/replay/run.json';
-const MANIFEST_PATH = 'artifacts/v3/replay/manifest.json';
+export const RUN_DIR = process.env.AXP_RUN_DIR || 'artifacts/v3/replay';
+const RUN_PATH = `${RUN_DIR.replace(/\/$/, '')}/run.json`;
+const MANIFEST_PATH = `${RUN_DIR.replace(/\/$/, '')}/manifest.json`;
+/** Solana Devnet's genesis hash: a run is "live on Devnet" only when its own chain evidence says so. */
+export const DEVNET_GENESIS = 'EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG';
+const shownPath = (p) => {
+  const abs = isAbsolute(p) ? p : resolve(repo, p);
+  const rel = relative(repo, abs);
+  return rel.startsWith('..') ? `external/${basename(dirname(abs))}/${basename(abs)}` : rel;
+};
 export const PROJECTION_VERSION = 'axp.product-run.v1';
 const SIZE_BUDGET = 300 * 1024;
 
@@ -43,6 +52,8 @@ export function project({ runBytes, manifestBytes }) {
   const drop = (label, n = 1) => removed.set(label, (removed.get(label) ?? 0) + n);
 
   check('manifest records the run.json hash', manifestFile.files?.['run.json'] === runSha256, `${manifestFile.files?.['run.json']} vs ${runSha256}`);
+  check('manifest run id = run id', manifestFile.runId === run.runId, `${manifestFile.runId} vs ${run.runId}`);
+  check('manifest financial mode = run financial mode', manifestFile.financialMode === run.state.financialMode, `${manifestFile.financialMode} vs ${run.state.financialMode}`);
 
   // ---------- campaigns (draft order: ClearVault, KeyForge, LeatherGuard) ----------
   const recordFor = (campaignId) => s.turns.flatMap((t) => t.records).find((x) => x.campaignId === campaignId);
@@ -134,7 +145,8 @@ export function project({ runBytes, manifestBytes }) {
       if (x.arm === 'text_only') auctionRole = 'research';
       else if (competed) auctionRole = 'competed';
       else if (excludedIds.has(x.campaignId) && rejectionReason.get(x.campaignId) === 'frequency_cap') auctionRole = 'not_admitted';
-      else auctionRole = 'excluded';
+      else if (excludedIds.has(x.campaignId)) auctionRole = 'excluded';
+      else auctionRole = 'skipped';
       const rt = x.retrieval;
       if (x.packetBytes) drop('decisions: packetBytes');
       if (x.request) drop('decisions: request (kept requestHash)');
@@ -480,6 +492,23 @@ export function project({ runBytes, manifestBytes }) {
     aggregateChargeCapBaseUnits: s.freeze.policy.aggregateChargeCapBaseUnits,
   };
 
+  // ---------- network: where this run's own money moved ----------
+  const genesis = new Set(channels.map((c) => c.genesisHash));
+  const onDevnet = channels.length > 0 && [...genesis].every((g) => g === DEVNET_GENESIS);
+  check('one network for every channel', genesis.size <= 1, [...genesis].join(', '));
+  const explorer = (kind, id) => `https://explorer.solana.com/${kind}/${id}?cluster=devnet`;
+  if (onDevnet) {
+    for (const ch of channels) {
+      ch.open.explorerUrl = explorer('tx', ch.open.signature);
+      ch.close.explorerUrl = explorer('tx', ch.close.signature);
+      ch.explorerUrl = ch.protocolChannelId ? explorer('address', ch.protocolChannelId) : null;
+    }
+    for (const t of chainTxs) t.explorerUrl = explorer('tx', t.signature);
+  }
+  const network = onDevnet
+    ? { kind: 'devnet', label: 'Solana Devnet', genesisHash: DEVNET_GENESIS, programExplorerUrl: channels[0]?.program ? explorer('address', channels[0].program) : null }
+    : { kind: 'sandbox', label: 'Hosted Solana sandbox', genesisHash: [...genesis][0] ?? null, programExplorerUrl: null };
+
   // ---------- policy, model, dataset ----------
   const anyPacket = s.turns.flatMap((t) => t.records)[0].packet;
   const m = run.manifest;
@@ -489,9 +518,9 @@ export function project({ runBytes, manifestBytes }) {
       runId: run.runId,
       runSchema: run.schemaVersion,
       createdAt: run.createdAt,
-      runPath: RUN_PATH,
+      runPath: shownPath(RUN_PATH),
       runSha256,
-      manifestPath: MANIFEST_PATH,
+      manifestPath: shownPath(MANIFEST_PATH),
       manifestSha256: sha256(manifestBytes),
       manifestCreatedAt: manifestFile.createdAt,
       financialMode: manifestFile.financialMode,
@@ -499,6 +528,7 @@ export function project({ runBytes, manifestBytes }) {
       network: run.chainEvidence.network,
       chainCheckedAt: run.chainEvidence.at,
     },
+    network,
     counts: {
       opportunities: opportunities.length,
       decisions: opportunities.reduce((n, o) => n + o.decisions.length, 0),
@@ -591,46 +621,63 @@ export function longNumericArrays(value, path = '$', out = []) {
   return out;
 }
 
-export function structuralChecks(p, check = recordCheck) {
+/** Structure, conservation and hash bindings. No run-specific counts: every count is checked against the bundle's own
+ *  records (manifest, model counters, chain evidence totals), so a different run passes or fails on its own terms. */
+export function structuralChecks(p, check = recordCheck, raw = null) {
   const c = p.counts;
-  check('count: 4 opportunities', c.opportunities === 4, String(c.opportunities));
-  check('count: 15 agent decisions', c.decisions === 15, String(c.decisions));
-  check('count: 3 auctions + 1 no-fill', c.auctions === 3 && c.noFill === 1);
-  check('count: 3 receipts', c.receipts === 3, String(c.receipts));
-  check('count: 33 events', c.events === 33, String(c.events));
-  check('count: 2 funded channels', c.channels === 2, String(c.channels));
-  check('count: 4 chain transactions', c.txs === 4, String(c.txs));
-  check('evidence: 13 records, 5 hints', p.evidence.records.length === 13 && p.evidence.hints.length === 5, `${p.evidence.records.length}/${p.evidence.hints.length}`);
-  check('story order: questionIndex 0..3', p.opportunities.every((o, i) => o.questionIndex === i));
-  check('story order: mobile no-fill is last', p.opportunities[3].scenarioId === 'mobile' && p.opportunities[3].status === 'no_fill');
+  const opps = p.opportunities;
+  check('count: at least one opportunity', c.opportunities > 0, String(c.opportunities));
+  check('count: decisions = sum of per-opportunity decisions', c.decisions === opps.reduce((n, o) => n + o.decisions.length, 0));
+  check('count: auctions + no-fills = opportunities', c.auctions + c.noFill === c.opportunities, `${c.auctions} + ${c.noFill} vs ${c.opportunities}`);
+  check('count: receipts = awards = charges', c.receipts === opps.filter((o) => o.award).length && c.receipts === opps.filter((o) => o.charge).length);
+  check('count: vouchers = charges', p.channels.reduce((n, ch) => n + ch.vouchers.length, 0) === opps.filter((o) => o.charge).length);
+  check('count: 2 chain transactions per funded channel', c.txs === 2 * c.channels, `${c.txs} vs 2 x ${c.channels}`);
+  if (raw) {
+    const m = raw.state.model;
+    check('manifest: model completed calls = decisions', m.completedCalls === c.decisions && m.admittedCalls === c.decisions, `${m.completedCalls}/${m.admittedCalls} vs ${c.decisions}`);
+    check('manifest: no failed or uncertain calls', (m.failedCalls ?? 0) === 0 && (m.uncertainCalls ?? 0) === 0);
+    check('manifest: signed receipts = receipts', raw.receipts.length === c.receipts, `${raw.receipts.length} vs ${c.receipts}`);
+    check('manifest: events = projected events', raw.events.length === c.events);
+    check('manifest: run id agrees', raw.runId === raw.state.runId && raw.restart.runId === raw.runId && raw.chainEvidence.runId === raw.runId);
+    const ce = raw.chainEvidence;
+    check('manifest: chain evidence fees = transactions', String(ce.networkFeeLamports) === p.fees.networkFeeLamports, `${ce.networkFeeLamports} vs ${p.fees.networkFeeLamports}`);
+    check('manifest: chain evidence gross fee and rent = transactions', String(ce.grossFeeAndRentLamports) === p.fees.grossFeeAndRentLamports);
+    check('manifest: chain evidence reports all checks passed', ce.allChecksPassed === true);
+    check('manifest: paid deliveries within the frozen limit', c.receipts <= Number(raw.state.freeze.policy.maxPaidDeliveries ?? c.receipts));
+  }
+  const evIds = new Set(p.evidence.records.map((r) => r.id));
+  const hintIds = new Set(p.evidence.hints.map((h) => h.id));
+  check('evidence: every referenced record and hint is present', opps.every((o) => o.decisions.every((d) => !d.retrieval || (d.retrieval.examples.every((e) => evIds.has(e.id)) && d.retrieval.hintIds.every((h) => hintIds.has(h))))));
+  check('story order: questionIndex 0..n-1', opps.every((o, i) => o.questionIndex === i));
   check('events sorted by seq', p.events.every((e, i) => e.seq === i + 1));
   check('chain txs sorted by slot', p.chainTxs.every((t, i, a) => i === 0 || a[i - 1].slot < t.slot));
-  const charges = p.opportunities.filter((o) => o.charge).map((o) => BigInt(o.charge.amountBaseUnits));
-  check('charges 4000 + 3000 + 3000 = 10000', charges.join('+') === '4000+3000+3000' && p.totals.chargesBaseUnits === '10000');
-  check('running totals 0.004 / 0.007 / 0.010 / 0.010', p.opportunities.map((o) => o.runningTotalBaseUnits).join('/') === '4000/7000/10000/10000');
+  const charges = opps.filter((o) => o.charge).reduce((n, o) => n + BigInt(o.charge.amountBaseUnits), 0n);
+  check('charges sum to the total', charges.toString() === p.totals.chargesBaseUnits);
+  let run = 0n;
+  check('running totals accumulate charges in story order', opps.every((o) => { run += BigInt(o.charge?.amountBaseUnits ?? '0'); return o.runningTotalBaseUnits === run.toString(); }));
   for (const ch of p.channels) {
     check(`conservation ${ch.campaignId}: settled + refund = deposit`, BigInt(ch.settledBaseUnits) + BigInt(ch.refundBaseUnits) === BigInt(ch.depositBaseUnits));
     check(`conservation ${ch.campaignId}: close deltas = settled, refund`, ch.close.tokenDeltas.publisher === ch.settledBaseUnits && ch.close.tokenDeltas.payer === ch.refundBaseUnits);
     check(`conservation ${ch.campaignId}: open delta = -deposit`, ch.open.tokenDeltas.payer === `-${ch.depositBaseUnits}`);
     const last = ch.vouchers[ch.vouchers.length - 1];
-    check(`settled = last voucher ${ch.campaignId}`, last.cumulativeAmountBaseUnits === ch.settledBaseUnits);
+    check(`settled = last voucher ${ch.campaignId}`, (last?.cumulativeAmountBaseUnits ?? '0') === ch.settledBaseUnits);
+    check(`vouchers are cumulative ${ch.campaignId}`, ch.vouchers.every((v, i) => BigInt(v.cumulativeAmountBaseUnits) === (i ? BigInt(ch.vouchers[i - 1].cumulativeAmountBaseUnits) : 0n) + BigInt(v.incrementBaseUnits)));
   }
-  check('payout + refund = deposits (0.010 + 0.030 = 0.040)', BigInt(p.totals.paidBaseUnits) + BigInt(p.totals.refundedBaseUnits) === BigInt(p.totals.depositsBaseUnits) && p.totals.paidBaseUnits === '10000' && p.totals.refundedBaseUnits === '30000');
+  check('payout + refund = deposits', BigInt(p.totals.paidBaseUnits) + BigInt(p.totals.refundedBaseUnits) === BigInt(p.totals.depositsBaseUnits));
+  check('payouts = accepted charges', p.totals.paidBaseUnits === p.totals.chargesBaseUnits);
   check('fee + new rent within cap', BigInt(p.fees.grossFeeAndRentLamports) <= BigInt(p.fees.capLamports), `${p.fees.grossFeeAndRentLamports} <= ${p.fees.capLamports}`);
-  check('receipts joined by awardId', p.opportunities.filter((o) => o.receipt).every((o) => o.receipt.fields.awardId === o.award.id));
-  check('no decision exposes a conversion field', p.opportunities.every((o) => o.decisions.every((d) => !('conversionProbability' in d))));
-  check('ClearVault repeat: agent bid, not admitted', (() => {
-    const o3 = p.opportunities[2];
-    const cv = o3.decisions.find((d) => d.campaignId === 'v3-clearvault');
-    return cv.decision === 'bid' && cv.auctionRole === 'not_admitted' && !o3.auction.bids.some((b) => b.campaignId === 'v3-clearvault');
-  })());
+  check('receipts joined by awardId', opps.filter((o) => o.receipt).every((o) => o.receipt.fields.awardId === o.award.id));
+  check('no decision exposes a conversion field', opps.every((o) => o.decisions.every((d) => !('conversionProbability' in d))));
+  check('not-admitted bidders never appear among bids', opps.every((o) => o.auction.notAdmitted.every((x) => !o.auction.bids.some((b) => b.campaignId === x.campaignId))));
+  check('no-fill opportunities have no award, receipt or charge', opps.filter((o) => o.status === 'no_fill').every((o) => !o.award && !o.receipt && !o.charge));
+  check('winner is the top-ranked bid', opps.filter((o) => o.award).every((o) => o.auction.bids[0]?.campaignId === o.award.campaignId));
 }
 
 async function main() {
   const runBytes = readFileSync(resolve(repo, RUN_PATH));
   const manifestBytes = readFileSync(resolve(repo, MANIFEST_PATH));
   const { projection, removed } = project({ runBytes, manifestBytes });
-  structuralChecks(projection);
+  structuralChecks(projection, recordCheck, JSON.parse(runBytes.toString('utf8')));
   const text = JSON.stringify(projection);
   const leaks = scanForbidden(text);
   check('sanitization: no forbidden strings', leaks.length === 0, leaks.join(', '));
@@ -641,7 +688,8 @@ async function main() {
   const verify = await verifyChecks(projection);
   const vFail = verify.filter((v) => v.status === 'fail');
   check(`verify checks pass (${verify.length})`, vFail.length === 0, vFail.map((v) => v.id).join(', '));
-  check(`verify produces exactly ${EXPECTED_CHECK_COUNT} checks`, verify.length === EXPECTED_CHECK_COUNT, `${verify.length}`);
+  const want = expectedCheckCount(projection);
+  check(`verify produces exactly the checks the run's structure implies (${want})`, verify.length === want, `${verify.length}`);
 
   if (failures.length) {
     console.error('project-run: FAILED');
@@ -654,12 +702,12 @@ async function main() {
   writeFileSync(resolve(app, 'public/run.public.json'), text);
   const meta = {
     projectionVersion: PROJECTION_VERSION,
-    generatedFrom: { [RUN_PATH]: projection.source.runSha256, [MANIFEST_PATH]: projection.source.manifestSha256 },
+    generatedFrom: { [shownPath(RUN_PATH)]: projection.source.runSha256, [shownPath(MANIFEST_PATH)]: projection.source.manifestSha256 },
     output: { path: 'public/run.public.json', bytes, sha256: sha256(text) },
     counts: { ...projection.counts, evidenceRecords: projection.evidence.records.length, evidenceHints: projection.evidence.hints.length },
     sanitization: { removed, forbiddenStringsScanned: FORBIDDEN, vectorGuard: 'no numeric array longer than 64' },
     selfChecks,
-    verify: { total: verify.length, passed: verify.filter((v) => v.status === 'pass').length, failed: vFail.length, skipped: verify.filter((v) => v.status === 'skip').length, ids: verify.map((v) => v.id) },
+    verify: { total: verify.length, passed: verify.filter((v) => v.status === 'pass').length, failed: vFail.length, skipped: verify.filter((v) => v.status === 'skip').length, ids: verify.map((v) => v.id), byMethod: Object.fromEntries(['recomputed', 'signature', 'arithmetic', 'policy'].map((m) => [m, verify.filter((v) => v.method === m).length])) },
   };
   writeFileSync(resolve(app, 'src/data/build-meta.json'), JSON.stringify(meta, null, 2) + '\n');
   console.log(`project-run: ok. ${bytes} bytes, ${selfChecks.length} self-checks, ${verify.length} verify checks passed.`);

@@ -54,8 +54,14 @@ export const GROUP_LABEL: Record<CheckGroup, string> = {
   devnet: "Devnet re-settlement",
 };
 
-/** The run publishes exactly this many checks. "Passing" needs all of them, present and passing. */
-export const EXPECTED_CHECK_COUNT = 48;
+/** How many checks a run's structure implies: one per question, packet, paid delivery (creative, acknowledgement,
+ *  receipt, signature, linkage), voucher, channel, bid and tie, plus the fee cap and totals. The build asserts that
+ *  verifyChecks produces exactly this many; the browser compares against the build-time list of IDs. */
+export function expectedCheckCount(run: ProductRun): number {
+  const o = run.opportunities;
+  const paid = o.filter((x) => x.award && x.receipt && x.delivery && x.charge && x.voucher).length;
+  return o.length + o.reduce((n, x) => n + x.decisions.length, 0) + 5 * paid + run.channels.reduce((n, c) => n + c.vouchers.length, 0) + run.channels.length + o.reduce((n, x) => n + x.auction.bids.length, 0) + o.filter((x) => x.auction.tieBreakApplied).length + 2;
+}
 
 export interface CheckSummary {
   expected: number;
@@ -82,7 +88,8 @@ export function summarize(checks: Check[], expectedIds: readonly string[]): Chec
     else skip++;
   }
   const extra = checks.filter((c) => !want.has(c.id)).length;
-  const passing = expectedIds.length === EXPECTED_CHECK_COUNT && want.size === EXPECTED_CHECK_COUNT && pass === EXPECTED_CHECK_COUNT && checks.length === EXPECTED_CHECK_COUNT && extra === 0;
+  const n = expectedIds.length;
+  const passing = n > 0 && want.size === n && pass === n && checks.length === n && extra === 0;
   return { expected: expectedIds.length, pass, fail, skip, missing, extra, passing };
 }
 
@@ -98,6 +105,7 @@ const short = (h: string) => (h && h.length > 16 ? `${h.slice(0, 10)}…${h.slic
 
 export async function verifyChecks(run: ProductRun, opts: { onCheck?: (c: Check) => void } = {}): Promise<Check[]> {
   const out: Check[] = [];
+  const nm = (id: string) => run.campaigns.find((c) => c.campaignId === id)?.businessName ?? id;
   const push = (c: Check) => {
     out.push(c);
     opts.onCheck?.(c);
@@ -132,7 +140,7 @@ export async function verifyChecks(run: ProductRun, opts: { onCheck?: (c: Check)
   // 2. Packets: sha256(canonical(packet)) for all 15 calls, and the packet carries this opportunity's question.
   for (const [i, o] of opps.entries())
     for (const [j, d] of o.decisions.entries()) {
-      await safe({ id: `packet-${d.slotId}`, group: "packet", label: `Opportunity ${o.n}, ${d.campaignId === "v3-clearvault" ? "ClearVault" : d.campaignId === "v3-keyforge" ? "KeyForge" : "LeatherGuard"}, ${d.arm === "text_only" ? "baseline" : "with history"}`, method: "recomputed", path: `opportunities[${i}].decisions[${j}].packet` }, async () => {
+      await safe({ id: `packet-${d.slotId}`, group: "packet", label: `Opportunity ${o.n}, ${nm(d.campaignId)}, ${d.arm === "text_only" ? "baseline" : "with history"}`, method: "recomputed", path: `opportunities[${i}].decisions[${j}].packet` }, async () => {
         const h = await hashCanonical(d.packet);
         const p = d.packet as { state?: { opportunity?: { id?: string; taskText?: string } } };
         const bound = p.state?.opportunity?.id === o.opportunityId && p.state?.opportunity?.taskText === o.question;
@@ -194,7 +202,7 @@ export async function verifyChecks(run: ProductRun, opts: { onCheck?: (c: Check)
   // 8. Cumulative arithmetic per voucher (cumulative = previous cumulative in the channel + increment).
   for (const [ci, ch] of run.channels.entries())
     for (const [vi, v] of ch.vouchers.entries())
-      await safe({ id: `cumulative-${ch.campaignId}-${v.sequence}`, group: "cumulative", label: `${ch.campaignId === "v3-clearvault" ? "ClearVault" : "KeyForge"} voucher ${v.sequence}`, method: "arithmetic", path: `channels[${ci}].vouchers[${vi}]` }, async () => {
+      await safe({ id: `cumulative-${ch.campaignId}-${v.sequence}`, group: "cumulative", label: `${nm(ch.campaignId)} voucher ${v.sequence}`, method: "arithmetic", path: `channels[${ci}].vouchers[${vi}]` }, async () => {
         const prev = vi === 0 ? BigInt(0) : BigInt(ch.vouchers[vi - 1].cumulativeAmountBaseUnits);
         const want = prev + BigInt(v.incrementBaseUnits);
         return { ok: want.toString() === v.cumulativeAmountBaseUnits && v.sequence === vi + 1, expected: `${prev} + ${v.incrementBaseUnits} = ${want}`, actual: v.cumulativeAmountBaseUnits };
@@ -202,7 +210,7 @@ export async function verifyChecks(run: ProductRun, opts: { onCheck?: (c: Check)
 
   // 9. Conservation per channel.
   for (const [ci, ch] of run.channels.entries())
-    await safe({ id: `conservation-${ch.campaignId}`, group: "conservation", label: `${ch.campaignId === "v3-clearvault" ? "ClearVault" : "KeyForge"} channel`, method: "arithmetic", path: `channels[${ci}]` }, async () => {
+    await safe({ id: `conservation-${ch.campaignId}`, group: "conservation", label: `${nm(ch.campaignId)} channel`, method: "arithmetic", path: `channels[${ci}]` }, async () => {
       const dep = BigInt(ch.depositBaseUnits), set = BigInt(ch.settledBaseUnits), ref = BigInt(ch.refundBaseUnits);
       const last = ch.vouchers[ch.vouchers.length - 1];
       const ok =
@@ -217,7 +225,7 @@ export async function verifyChecks(run: ProductRun, opts: { onCheck?: (c: Check)
   // 10. Bids: every recorded bid equals computeBid(levels) at the budget available then.
   for (const [i, o] of opps.entries())
     for (const [j, b] of o.auction.bids.entries())
-      await safe({ id: `bid-${o.n}-${b.campaignId}`, group: "bid", label: `Opportunity ${o.n}: ${b.campaignId === "v3-clearvault" ? "ClearVault" : "KeyForge"} at levels ${b.levels}`, method: "policy", path: `opportunities[${i}].auction.bids[${j}]` }, async () => {
+      await safe({ id: `bid-${o.n}-${b.campaignId}`, group: "bid", label: `Opportunity ${o.n}: ${nm(b.campaignId)} at relevance ${b.levels?.split(":")[0]}, intent ${b.levels?.split(":")[1]}`, method: "policy", path: `opportunities[${i}].auction.bids[${j}]` }, async () => {
         const d = o.decisions.find((x) => x.campaignId === b.campaignId && x.arm === "history");
         if (!d) return { ok: false, expected: "a history decision", actual: "none" };
         const r = computeBid({ decision: d.decision, relevanceLevel: d.relevanceLevel, commercialIntentLevel: d.commercialIntentLevel }, { maxBidBaseUnits: b.maxBidBaseUnits }, b.availableCampaignBaseUnits, b.availableChannelBaseUnits, o.floorBaseUnits);
@@ -231,7 +239,8 @@ export async function verifyChecks(run: ProductRun, opts: { onCheck?: (c: Check)
     await safe({ id: `tiebreak-${o.n}`, group: "tiebreak", label: `Opportunity ${o.n}: equal bids`, method: "policy", path: `opportunities[${i}].auction` }, async () => {
       const { ranked } = rankBids(o.auction.bids.map((b) => ({ ...b })).reverse());
       const order = ranked.map((b) => b.campaignId).join(" > ");
-      return { ok: ranked[0].campaignId === o.auction.winnerCampaignId && order === o.auction.bids.map((b) => b.campaignId).join(" > "), expected: o.auction.bids.map((b) => b.campaignId).join(" > "), actual: order };
+      const words = (ids: string[]) => ids.map(nm).join(" before ");
+      return { ok: ranked[0].campaignId === o.auction.winnerCampaignId && order === o.auction.bids.map((b) => b.campaignId).join(" > "), expected: words(o.auction.bids.map((b) => b.campaignId)), actual: words(ranked.map((b) => b.campaignId)), note: "Equal amounts are ordered by campaign ID; the first one wins." };
     });
   }
 
