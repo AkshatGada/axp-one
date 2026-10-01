@@ -6,7 +6,11 @@ Resume notes for the MVP builder. Spec: docs/frontend/MVP_SPEC.md + FRONTEND_PLA
 - [x] Step 1: data layer (checkpoint A)
 - [x] Step 2: Ledger primitives + /design showcase (tag axp-ledger-v1)
 - [x] Step 3: Opportunity screen x4 + step-through (tag axp-mvp-v1)
-- [ ] Step 4: Settlement, Overview, Advertisers, Present, Verify, Evidence, Publisher, Timeline, Try
+- [x] Present mode (10 beats, keys, autoplay, captions, SRT) tag axp-present-v1 (commit a8502d1)
+- [x] Settlement, Overview (v1 look), Verify pages (v1 look)
+- [x] Ledger v2 design system on /design/ (v1 archived at /design/v1/), docs/frontend/LEDGER_SYSTEM.md, tag axp-ledger-v2
+- [ ] WAITING for owner approval of Ledger v2, then: dashboard redesign of all routes on Ld.* (Overview dashboard, opportunity pipeline, campaign pages, settlement), tag axp-mvp-v2
+- [ ] Then: Advertisers/campaign pages, Evidence, Publisher, Timeline, Try (all on v2)
 
 ## Checkpoint A (data layer)
 - `scripts/project-run.mjs` -> `src/data/run.public.json` (committed), `public/run.public.json` (generated, gitignored; `predev`/`build` regenerate), `src/data/build-meta.json`.
@@ -27,3 +31,12 @@ Resume notes for the MVP builder. Spec: docs/frontend/MVP_SPEC.md + FRONTEND_PLA
 - Opportunity: /opportunity/[1-4]/ server-rendered; StepThrough client (J/K/arrows/Esc, hash per step, dim 35%, RouteLine, slot awaiting until step 7, replay chip). Live checks in browser: packet, creative, ack, receipt hashes and Ed25519.
 - Screens verified headless (puppeteer-core + local Chrome, scratchpad helper) because the Browser pane tab is backgrounded by other agents: 1440x900, 1920x1080, 390 wide, zero console errors, no off-origin requests.
 - Build while dev runs: `NEXT_DIST_DIR=.next-build pnpm --dir apps/product-ui build` (export lands in .next-build/; plain `pnpm build` exports to out/).
+
+## Ledger v2 (owner direction 2026-10-02)
+- Owner rejected the v1 look for the product (too document-like, square, stiff type, too much mono). Ledger v2 is a
+  dashboard system: radius 6/10/14/full, soft shadow tokens, PolySans Median/Neutral 14 px body, Wide only for big
+  numbers, mono only for hashes/IDs, ultramarine = live/selected/winning, muted semantic states, ContextHint vermillion only for evidence.
+- Code: design-system/ledger/v2.css (scoped to `.ld`, imported at the top of ledger.css), v2.tsx + v2-client.tsx
+  exported as namespace `Ld` from @axp/design-system/ledger. Derived view helpers: apps/product-ui/src/components/v2/derive.ts.
+- Other routes still use v1 classes; do not change them until the owner approves v2.
+- Tag axp-mvp-v2 is reserved for the dashboard redesign (an earlier local axp-mvp-v2 on the Present commit was renamed axp-present-v1).

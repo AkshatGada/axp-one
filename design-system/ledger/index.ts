@@ -4,3 +4,4 @@ export * from "./primitives";
 export * from "./specimens";
 export * from "./client";
 export { Provenance, Amount, Hash, MoneyStateMark } from "../foundation/marks";
+export * as Ld from "./v2";

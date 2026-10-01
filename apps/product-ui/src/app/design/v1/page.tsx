@@ -61,7 +61,7 @@ import { channelMeter, ladder, txCard } from "@/components/money";
 import { CardIntoSlotDemo, RevealDemo, RouteDemo, VerifyDemo } from "@/components/design-demos";
 import { GLOSSARY } from "@/data/glossary";
 
-export const metadata: Metadata = { title: "Ledger design system", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "Ledger v1 design system (archived)", robots: { index: false, follow: false } };
 
 function Spec({ name, source, children, note }: { name: string; source: string; children: ReactNode; note?: ReactNode }) {
   return (

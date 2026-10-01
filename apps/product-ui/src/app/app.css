@@ -124,3 +124,74 @@
 @media (prefers-reduced-motion: reduce) { .pr-from { transition: none; } }
 .pr-card { display: grid; gap: 14px; align-content: start; padding: 20px 22px; background: var(--white); border: 1px solid var(--line); }
 .pr-amount { font-family: var(--font-mono); font-size: 40px; line-height: 1; letter-spacing: -.02em; }
+
+/* Advertisers onboarding grid */
+.ad-grid { display: grid; grid-template-columns: 150px repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); background: var(--white); }
+.ad-corner, .ad-head { padding: 16px 18px; border-bottom: 1px solid var(--ink); }
+.ad-head { display: grid; gap: 4px; border-left: 1px solid var(--line-soft); }
+.ad-stage { display: grid; gap: 6px; align-content: start; padding: 16px 18px; border-top: 1px solid var(--line-soft); background: var(--paper); }
+.ad-stage-n { display: grid; place-items: center; width: 26px; height: 26px; border: 1px solid var(--brand); color: var(--brand-deep); font-size: 13px; font-weight: 500; }
+.ad-cell { padding: 16px 18px; border-top: 1px solid var(--line-soft); border-left: 1px solid var(--line-soft); min-width: 0; }
+@media (max-width: 1100px) {
+  .ad-grid { grid-template-columns: minmax(0, 1fr); }
+  .ad-corner { display: none; }
+  .ad-head { display: none; }
+  .ad-cell { border-left: 0; }
+}
+
+/* ---------- Ledger v2 design page ---------- */
+.ds2 { min-height: 100vh; }
+.ds2 .ld-top { position: sticky; }
+.ds2-body { display: grid; grid-template-columns: 232px minmax(0, 1fr); }
+.ds2-index { position: sticky; top: var(--ld-top-h); align-self: start; height: calc(100vh - var(--ld-top-h)); overflow-y: auto; padding: 14px 10px 32px; border-right: 1px solid var(--ld-border); display: grid; gap: 16px; align-content: start; }
+.ds2-index .ld-nav-item { min-height: 28px; font-size: 13px; }
+.ds2-main { min-width: 0; padding: 28px 36px 96px; max-width: 1360px; display: grid; gap: 56px; }
+.ds2-cover { display: grid; gap: 24px; padding-bottom: 8px; }
+.ds2-cover-t { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 1.1; letter-spacing: -.03em; }
+.ds2-doc { display: grid; gap: 16px; scroll-margin-top: 72px; }
+.ds2-doc-head { display: grid; gap: 4px; padding-bottom: 12px; border-bottom: 1px solid var(--ld-border); }
+.ds2-spec { border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); min-width: 0; }
+.ds2-spec[data-canvas] { background: var(--ld-canvas); }
+.ds2-spec-l { padding: 10px 16px; border-bottom: 1px solid var(--ld-border); font-size: 12px; font-weight: 500; color: var(--ld-text-2); }
+.ds2-spec-b { padding: 16px; }
+.ds2-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 12px; }
+.ds2-sw { display: grid; gap: 2px; font-size: 13px; }
+.ds2-sw i { display: block; height: 48px; margin-bottom: 6px; border-radius: var(--ld-r-sm); box-shadow: inset 0 0 0 1px rgba(14, 18, 32, .08); }
+.ds2-type { display: grid; }
+.ds2-type-row { display: grid; grid-template-columns: 130px 170px minmax(0, 1fr) 200px; gap: 16px; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--ld-border); }
+.ds2-type-row:last-child { border-bottom: 0; }
+.ds2-space { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
+.ds2-space > div { display: grid; gap: 6px; justify-items: center; }
+.ds2-space i { display: block; border-radius: 3px; background: var(--ld-accent-wash); box-shadow: inset 0 0 0 1px var(--ld-accent-line); }
+.ds2-shellmap { display: grid; grid-template-columns: 84px minmax(0, 1fr); grid-template-rows: 30px 150px; border: 1px solid var(--ld-border-2); border-radius: var(--ld-r-md); overflow: hidden; font-size: 12px; color: var(--ld-text-2); }
+.ds2-sm-top { grid-column: 1 / -1; display: flex; align-items: center; padding: 0 10px; background: var(--ld-panel); border-bottom: 1px solid var(--ld-border); }
+.ds2-sm-side { padding: 8px 10px; border-right: 1px solid var(--ld-border); background: var(--ld-canvas); }
+.ds2-sm-main { display: grid; gap: 8px; align-content: start; padding: 8px 12px; background: var(--ld-canvas); }
+.ds2-sm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.ds2-sm-grid i { height: 36px; border-radius: 6px; background: var(--ld-panel); border: 1px solid var(--ld-border); }
+.ds2-shape { display: grid; gap: 4px; place-content: center; min-height: 96px; padding: 16px; text-align: center; background: var(--ld-panel); border: 1px solid var(--ld-border); }
+.ds2-states { display: grid; gap: 16px; }
+.ds2-state-row { display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+.ds2-state { display: grid; gap: 6px; justify-items: start; }
+.ds2-list { display: grid; }
+.ds2-list-row { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--ld-border); }
+.ds2-list-row:last-child { border-bottom: 0; }
+.ds2-shellpreview, .ds2-composition { border: 1px solid var(--ld-border-2); border-radius: var(--ld-r-lg); overflow: hidden; box-shadow: var(--ld-shadow-2); background: var(--ld-canvas); }
+.ds2-shellpreview .ld-switch .ld-menu { position: absolute; }
+.ds2-shellpreview { padding-bottom: 0; }
+.ds2-shellpreview-body { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: 260px; }
+.ds2-shellpreview .ld-side, .ds2-composition .ld-side { position: relative; top: 0; height: auto; }
+.ds2-comp-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.ds2-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
+.ds2-flow > div { display: grid; gap: 6px; padding: 4px 16px; border-left: 1px solid var(--ld-border); }
+.ds2-flow > div:first-child { border-left: 0; padding-left: 0; }
+.ds2-foot { padding-top: 24px; border-top: 1px solid var(--ld-border); }
+@media (max-width: 1100px) {
+  .ds2-body { grid-template-columns: minmax(0, 1fr); }
+  .ds2-index { display: none; }
+  .ds2-main { padding: 20px 16px 64px; }
+  .ds2-type-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .ds2-shellpreview-body { grid-template-columns: minmax(0, 1fr); }
+  .ds2-comp-grid, .ds2-flow { grid-template-columns: minmax(0, 1fr); }
+  .ds2-list-row { grid-template-columns: minmax(0, 1fr); }
+}
