@@ -5,6 +5,7 @@ import { GLOSSARY } from "@/data/glossary";
 import { campaign, nameOf, run, usdc } from "@/data/select";
 import { txPayload } from "@/components/money";
 import type { Channel, ChainTx } from "@/data/types";
+import { DevnetPanel } from "@/components/v2/devnet";
 
 export const metadata: Metadata = { title: "Hosted Solana sandbox settlement" };
 const L = Link as unknown as Ld.LinkC;
@@ -39,6 +40,9 @@ function TxRow({ ch, t }: { ch: Channel; t: ChainTx }) {
 
 export default function SettlementPage() {
   const capOk = BigInt(run.fees.grossFeeAndRentLamports) <= BigInt(run.fees.capLamports);
+  const perOpenRent = run.channels[0].open.newRentLamports;
+  const perReclaim = run.channels[0].close.reclaimedRentLamports;
+  const reclaimPct = Math.round((Number(run.fees.reclaimedRentLamports) / Number(run.fees.newRentLamports)) * 100);
   return (
     <>
       <Ld.PageBar
@@ -96,16 +100,21 @@ export default function SettlementPage() {
                     ]}
                   />
                   <div className="ld-stack" style={{ gap: 6 }}>
-                    <span className="ld-label">In order (no clock times)</span>
-                    <div className="st2-seq">
-                      <span data-chain>Open on the sandbox: {usdc(ch.depositBaseUnits)} USDC locked</span>
+                    <span className="ld-label">In order, USDC (no clock times)</span>
+                    <ol className="st2-seq" aria-label={`${c.businessName} channel in order`}>
+                      <li data-chain>
+                        <b>Open</b> {usdc(ch.depositBaseUnits)} locked
+                      </li>
                       {ch.vouchers.map((v) => (
-                        <span key={v.sequence} id={`voucher-${c.slug}-${v.sequence}`}>
-                          Charge {v.sequence}, voucher {v.sequence}: {usdc(v.cumulativeAmountBaseUnits)} USDC in total
-                        </span>
+                        <li key={v.sequence} id={`voucher-${c.slug}-${v.sequence}`}>
+                          <b>Voucher {v.sequence}</b> {usdc(v.cumulativeAmountBaseUnits)} in total
+                        </li>
                       ))}
-                      <span data-chain>Close on the sandbox: {usdc(ch.settledBaseUnits)} paid, {usdc(ch.refundBaseUnits)} back</span>
-                    </div>
+                      <li data-chain>
+                        <b>Close</b> {usdc(ch.settledBaseUnits)} paid
+                      </li>
+                    </ol>
+                    <span className="ld-caption">Open and close are sandbox transactions; vouchers are off-chain. {usdc(ch.refundBaseUnits)} USDC went back to the payer at close.</span>
                   </div>
                 </div>
                 <div className="ld-stack" style={{ gap: 6 }}>
@@ -186,9 +195,11 @@ export default function SettlementPage() {
         />
       </Ld.Panel>
 
-      <Ld.Callout title="Why fees are larger than the ad spend here">
-        Fees and <Term title={GLOSSARY.rent.term} def={GLOSSARY.rent.def}>rent</Term> are paid in test SOL, measured in <Term title={GLOSSARY.lamports.term} def={GLOSSARY.lamports.def}>lamports</Term>, and never mixed with USDC. Most rent is reclaimed when a channel closes. One open and one close are shared by every delivery in a channel, which is why channels exist: the per-ad cost is a signed voucher, not a transaction.
+      <Ld.Callout title="Network fees and rent, paid in test SOL">
+        Fees and <Term title={GLOSSARY.rent.term} def={GLOSSARY.rent.def}>rent</Term> are paid in test SOL, measured in <Term title={GLOSSARY.lamports.term} def={GLOSSARY.lamports.def}>lamports</Term>, and kept apart from the USDC ad spend. Each channel paid {lam(perOpenRent)} lamports of new rent at open; {lam(perReclaim)} of it ({reclaimPct}%) was reclaimed at close, so {lam(run.fees.reclaimedRentLamports)} of {lam(run.fees.newRentLamports)} in total. Network fees were {lam(run.fees.networkFeeLamports)} lamports for the 4 transactions. These costs are paid per channel, not per ad: one open and one close are shared by every delivery the channel carries, and each delivery is a signed voucher, not a transaction. Here the channels carried {run.channels.map((c) => c.vouchers.length).join(" and ")} deliveries.
       </Ld.Callout>
+
+      <DevnetPanel context="settlement" />
 
       <Ld.Callout title="Funding is not settlement">
         An approved one-time sandbox faucet top-up funded the payer. Absolute wallet balances include funds from before this run, so only each transaction's own changes are shown. Hosted Solana sandbox, not devnet or mainnet.

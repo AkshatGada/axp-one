@@ -15,6 +15,13 @@ const two = (n: number) => n.toFixed(2);
 const utc = (ms: number) => `${new Date(ms).toISOString().slice(11, 19)} UTC`;
 const plain = (s: string) => s.replace(/_/g, " ");
 
+/** "3:2" -> "relevance 3, intent 2" */
+export const levelsWords = (lv?: string | null) => {
+  if (!lv) return "";
+  const [r, i] = lv.split(":");
+  return `relevance ${r}, intent ${i}`;
+};
+
 export const STAGES = [
   { id: "moment", label: "Moment" },
   { id: "eligibility", label: "Eligibility" },
@@ -119,7 +126,11 @@ export function EligibilityPanel({ o }: { o: Opportunity }) {
           };
         })}
       />
-      <span className="ld-caption">For the research comparison every agent was asked; an excluded campaign can never bid. Funding is checked at auction time, and history never adds a capability.</span>
+      <span className="ld-caption">
+        {o.decisions.length
+          ? "Every agent was asked here, even an excluded one, for the research comparison; an excluded campaign can never bid. Funding is checked at auction time, and history never adds a capability."
+          : "No campaign was eligible, so no agent was asked."}
+      </span>
     </StagePanel>
   );
 }
@@ -275,10 +286,10 @@ export function DecisionsPanel({ o }: { o: Opportunity }) {
       {o.scenarioId === "repeat" ? (
         <Ld.Callout title="Only the history arm was asked on the repeat">The paired baseline arm ran only for the first two questions. KeyForge's intent score was {two(decisionFor(o, "v3-keyforge", "history")!.scores.intent)}, just under the 2.5 line, so level 2.</Ld.Callout>
       ) : wb && wh ? (
-        <Ld.Callout tone="brand" title="What the bid table makes of each arm">
+        <Ld.Callout tone="brand" title="What the bid table makes of each answer">
           {wb.relevanceLevel === wh.relevanceLevel && wb.commercialIntentLevel === wh.commercialIntentLevel
-            ? `Both arms gave ${nameOf(winner)} levels ${wh.relevanceLevel}:${wh.commercialIntentLevel}, so the bid table gives ${amt(wh)} either way. Only the history arm competed.`
-            : `Bid table applied to the baseline levels (${wb.relevanceLevel}:${wb.commercialIntentLevel}) would give ${amt(wb)}; the history arm (${wh.relevanceLevel}:${wh.commercialIntentLevel}) gives ${amt(wh)}. Only the history arm competed.`}
+            ? `With and without history, ${nameOf(winner)} got relevance ${wh.relevanceLevel} of 3 and intent ${wh.commercialIntentLevel} of 3, so the bid table gives ${amt(wh)} USDC either way. Only the answer with history competed.`
+            : `Without history, ${nameOf(winner)}'s levels (relevance ${wb.relevanceLevel} of 3, intent ${wb.commercialIntentLevel} of 3) would bid ${amt(wb)} USDC; with history (relevance ${wh.relevanceLevel} of 3, intent ${wh.commercialIntentLevel} of 3) it bid ${amt(wh)} USDC. Only the answer with history competed. One observation per arm; not a measured lift.`}
         </Ld.Callout>
       ) : null}
     </StagePanel>
@@ -295,8 +306,13 @@ function TieExplainer({ o }: { o: Opportunity }) {
   const changed = b && (b.relevanceLevel !== h.relevanceLevel || b.commercialIntentLevel !== h.commercialIntentLevel);
   return (
     <Ld.Callout title="Why the bids are equal">
-      Both wallets declared the same capabilities, offered the same 0.004 USDC max bid, and got the same ratings ({h.relevanceLevel} of 3 and {h.commercialIntentLevel} of 3), so the bid table gave them the same bid. A fixed <Term title={GLOSSARY.tieRule.term} def={GLOSSARY.tieRule.def}>tie rule</Term>, published before the run, decides: the lower campaign ID wins, so {nameOf(w)}.{" "}
-      {b ? (changed ? `History made a real difference to the price: without it ${nameOf(w)}'s ratings gave ${amt(b)} USDC; with it, ${amt(h)} USDC.` : `History made no difference here: both arms gave ${amt(h)} USDC.`) : null} For a rule that changes the winner, see opportunity 3.
+      Both wallets declared the same capabilities, offered the same 0.004 USDC max bid, and got the same ratings (relevance {h.relevanceLevel} of 3, intent {h.commercialIntentLevel} of 3), so the bid table gave them the same bid. A fixed <Term title={GLOSSARY.tieRule.term} def={GLOSSARY.tieRule.def}>tie rule</Term>, fixed in the exchange code before the run, decides: the lower campaign ID wins, so {nameOf(w)}.{" "}
+      {b
+        ? changed
+          ? `With history ${nameOf(w)}'s levels rose from ${b.relevanceLevel} and ${b.commercialIntentLevel} to ${h.relevanceLevel} and ${h.commercialIntentLevel}, so the bid table gave ${amt(h)} USDC instead of ${amt(b)}. One observation per arm; not a measured lift.`
+          : `History made no difference here: with and without it the bid table gave ${amt(h)} USDC.`
+        : null}{" "}
+      For a frequency-cap exclusion, see <a className="ld-link" href="/opportunity/3/#auction">opportunity 3</a>.
     </Ld.Callout>
   );
 }
@@ -309,7 +325,7 @@ export function AuctionPanel({ o }: { o: Opportunity }) {
       <div className="op2-bidtable">
         {run.policy.bidTable.map((r) => (
           <div key={r.levels} data-active={active.includes(r.levels) || undefined}>
-            <span className="ld-caption">Levels {r.levels}</span>
+            <span className="ld-caption">{levelsWords(r.levels).replace(/^r/, "R")}</span>
             <span className="ld-stat-v">{r.bps / 100}%</span>
             <span className="ld-caption">{usdc((max * r.bps) / 10000)}</span>
           </div>
@@ -327,7 +343,7 @@ export function AuctionPanel({ o }: { o: Opportunity }) {
           return {
             key: c.campaignId,
             label: c.businessName,
-            sub: b ? `levels ${b.levels}` : capped ? "agent said bid" : "excluded by rule",
+            sub: b ? levelsWords(b.levels) : capped ? "agent said bid" : "excluded by rule",
             value: b ? Number(b.amountBaseUnits) : null,
             winner: c.campaignId === o.auction.winnerCampaignId,
             note: capped ? "Not admitted: frequency cap" : ex ? `Missing ${ex.missing.map(plain).join(", ")}` : "No bid",
@@ -341,8 +357,8 @@ export function AuctionPanel({ o }: { o: Opportunity }) {
       </div>
       {o.auction.tieBreakApplied ? <TieExplainer o={o} /> : null}
       {o.auction.notAdmitted.length ? (
-        <Ld.Callout tone="warning" title="A rule changed the winner. Agent said bid. Exchange did not admit it.">
-          ClearVault had already been placed twice in this session, so the frequency cap kept its bid out of the auction (no bid, no amount). KeyForge, the only admitted bidder, won at {usdc(o.award!.priceBaseUnits)} USDC with ratings {o.auction.bids[0].levels?.replace(":", " and ")}.
+        <Ld.Callout tone="warning" title="A rule kept a bidder out. Agent said bid. Exchange did not admit it.">
+          ClearVault had already been placed twice in this session, so the frequency cap kept it out of the auction (no bid, no amount). KeyForge, the only admitted bidder, won at {usdc(o.award!.priceBaseUnits)} USDC with {levelsWords(o.auction.bids[0].levels)}.
         </Ld.Callout>
       ) : null}
     </StagePanel>

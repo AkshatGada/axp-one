@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve, dirname } from 'node:path';
-import { verifyChecks } from '../../src/lib/verify.ts';
+import { verifyChecks, summarize, EXPECTED_CHECK_COUNT } from '../../src/lib/verify.ts';
+const meta = () => JSON.parse(readFileSync(resolve(app, 'src/data/build-meta.json'), 'utf8'));
 
 const app = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const load = () => JSON.parse(readFileSync(resolve(app, 'public/run.public.json'), 'utf8'));
@@ -56,4 +57,26 @@ for (const [name, mutate] of [
     assert.equal(sig.length, 3);
     for (const c of sig) assert.equal(c.status, 'fail', c.id);
     assert.equal(checks.filter((c) => c.status === 'skip').length, 0);
+  });
+
+test('the shipped projection summarizes as exactly 48 passing', async () => {
+  const ids = meta().verify.ids;
+  assert.equal(ids.length, EXPECTED_CHECK_COUNT);
+  const s = summarize(await verifyChecks(load()), ids);
+  assert.equal(s.passing, true);
+  assert.equal(s.pass, 48);
+});
+
+for (const [name, mutate] of [
+  ['a deleted receipt', (r) => { delete r.opportunities[0].receipt; }],
+  ['a cleared tie flag', (r) => { r.opportunities[0].auction.tieBreakApplied = false; }],
+  ['a dropped opportunity', (r) => { r.opportunities.pop(); }],
+])
+  test(`structural deletion never reads as passing: ${name}`, async () => {
+    const r = load();
+    mutate(r);
+    const checks = await verifyChecks(r);
+    const s = summarize(checks, meta().verify.ids);
+    assert.equal(s.passing, false);
+    assert.ok(s.missing + s.fail > 0);
   });

@@ -702,9 +702,10 @@ export function Timeline({ rows }: { rows: Array<{ key: string; time: ReactNode;
 }
 
 // ---------- Additions for the dashboard routes ----------
-export function Callout({ title, children, tone }: { title?: ReactNode; children: ReactNode; tone?: "brand" | "warning" | "ch" | "neutral" }) {
+export function Callout({ title, children, tone, actions }: { title?: ReactNode; children: ReactNode; tone?: "brand" | "warning" | "ch" | "neutral" | "danger"; actions?: ReactNode }) {
   return (
-    <div className="ld-callout" data-tone={tone}>
+    <div className="ld-callout" data-tone={tone} role={tone === "danger" ? "alert" : undefined}>
+      {actions ? <span className="ld-callout-actions">{actions}</span> : null}
       {title ? <span className="ld-card-title">{title}</span> : null}
       <div className="ld-secondary" style={{ color: "var(--ld-text)" }}>
         {children}

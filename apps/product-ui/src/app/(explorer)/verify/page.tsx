@@ -4,14 +4,16 @@ import { VerifyRunner, type CheckRow } from "@/components/VerifyRunner";
 import { buildMeta, run } from "@/data/select";
 import { verifyChecks } from "@/lib/verify.ts";
 import { asset } from "@/lib/paths";
+import { DevnetPanel, hasDevnet } from "@/components/v2/devnet";
 
 export const metadata: Metadata = { title: "Verify" };
 
 export default async function VerifyPage() {
   const r = run.restart;
   // The list of checks (labels and recorded values) is laid out at build time; the browser computes the results.
-  const rows: CheckRow[] = (await verifyChecks(run)).map(({ id, group, label, method, expected }) => ({ id, group, label, method, expected }));
-  const removed = ["agent and agent-run IDs", "raw model requests and outputs (their hashes are kept)", "the conversion field", "packet byte copies", "the sandbox network address and settlement links", "absolute wallet balances", "the full evidence catalogue", "laboratory data"];
+  const rows: CheckRow[] = (await verifyChecks(run)).map(({ id, group, label, method }) => ({ id, group, label, method }));
+  const expectedIds = buildMeta.verify.ids;
+  const removed = ["agent and agent-run IDs", "raw model requests and outputs (their hashes are kept)", "model output fields the demo does not use", "packet byte copies", "the sandbox network address and settlement links", "absolute wallet balances", "the full evidence catalogue", "laboratory data"];
   return (
     <>
       <Ld.PageBar
@@ -23,7 +25,7 @@ export default async function VerifyPage() {
           </a>
         }
       />
-      <VerifyRunner rows={rows} />
+      <VerifyRunner rows={rows} expectedIds={expectedIds} />
       <div className="ld-cols-2">
         <Ld.Panel title="Restart without models or payments" sub="Recorded when the run was restarted; reported here, not recomputed">
           <div className="ld-cols-2">
@@ -39,7 +41,7 @@ export default async function VerifyPage() {
         <Ld.Panel title="The public file" sub="What it contains and what was left out">
           <div className="ld-stack" style={{ gap: 8 }}>
             <span className="ld-secondary">
-              Projected from the run's saved record, whose hash matches its manifest. {buildMeta.selfChecks.filter((c) => c.ok).length} of {buildMeta.selfChecks.length} build checks passed, including a vector guard (no embeddings ship) and a scan for private fields.
+              Projected from the run's saved record, whose hash matches its manifest. {buildMeta.selfChecks.filter((c) => c.ok).length} of {buildMeta.selfChecks.length} build checks passed, including a check that no embeddings ship and a scan for private fields.
             </span>
             <span className="ld-secondary">Left out: {removed.join(", ")}.</span>
           </div>
@@ -58,7 +60,7 @@ export default async function VerifyPage() {
         <Ld.Panel title="What it does not prove">
           <ul className="ev2-list">
             <li>That a person saw or read a card. A receipt is the app's assertion that it inserted a labelled card.</li>
-            <li>Anything on mainnet or devnet: money moved on a hosted Solana sandbox in test USDC.</li>
+            <li>{hasDevnet ? "Anything on chain: these checks read the file, not a chain. The recorded run settled on a hosted Solana sandbox in test USDC; devnet links are below to open yourself." : "Anything on mainnet or devnet: money moved on a hosted Solana sandbox in test USDC."}</li>
             <li>Independent advertisers: one disposable test payer funded both fictional advertisers.</li>
             <li>That history improves targeting: one observation per arm; not a measured lift.</li>
             <li>The model outputs themselves, or that displayed scores and evidence text match them: raw outputs and organic completions are recorded hashes only.</li>
@@ -66,6 +68,7 @@ export default async function VerifyPage() {
           </ul>
         </Ld.Panel>
       </div>
+      <DevnetPanel context="verify" />
     </>
   );
 }

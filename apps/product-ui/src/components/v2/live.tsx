@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { Ld } from "@axp/design-system/ledger";
 import { canonical, hashCanonical, verifyEd25519 } from "@/lib/canonical.ts";
-import { verifyChecks } from "@/lib/verify.ts";
+import { verifyChecks, summarize, summaryWords, EXPECTED_CHECK_COUNT, type CheckSummary } from "@/lib/verify.ts";
+import meta from "@/data/build-meta.json";
 import type { ProductRun } from "@/data/types";
 import { asset } from "@/lib/paths";
 
@@ -32,26 +33,32 @@ export function LiveSignatureV2({ fields, signature, pem }: { fields: unknown; s
   return <Ld.Verified state={s}>{s === "recorded" ? "Ed25519 not supported in this browser" : s === "fail" ? "Signature invalid or key unreadable" : s === "idle" ? "Ed25519 signature: checking" : "Ed25519 signature verified here"}</Ld.Verified>;
 }
 
-export function LiveVerifyTile() {
-  const [r, setR] = useState<{ pass: number; total: number; fail: number } | null>(null);
+/** Runs all checks on the served file. "Passing" only when exactly the expected 48 ran and passed. */
+export function useVerifySummary() {
+  const [r, setR] = useState<CheckSummary | null>(null);
   useEffect(() => {
     let live = true;
     fetch(asset("/run.public.json"))
       .then((x) => x.json() as Promise<ProductRun>)
       .then((run) => verifyChecks(run))
-      .then((cs) => live && setR({ pass: cs.filter((c) => c.status === "pass").length, total: cs.length, fail: cs.filter((c) => c.status !== "pass").length }))
-      .catch(() => live && setR({ pass: 0, total: 0, fail: 1 }));
+      .then((cs) => live && setR(summarize(cs, meta.verify.ids)))
+      .catch(() => live && setR({ expected: EXPECTED_CHECK_COUNT, pass: 0, fail: 1, skip: 0, missing: 0, extra: 0, passing: false }));
     return () => {
       live = false;
     };
   }, []);
+  return r;
+}
+
+export function LiveVerifyTile({ context }: { context?: string }) {
+  const r = useVerifySummary();
   return (
     <Ld.Kpi
       tone="live"
       label="Verify"
-      value={r ? `${r.pass}/${r.total}` : "48"}
-      context={r ? "Checks run in your browser on the public file" : "Checks not run yet"}
-      chip={r ? <Ld.Tag tone={r.fail ? "danger" : "success"} dot>{r.fail ? `${r.fail} not passing` : "Passing"}</Ld.Tag> : <Ld.Tag dot>Not run yet</Ld.Tag>}
+      value={r ? `${r.pass}/${EXPECTED_CHECK_COUNT}` : `${EXPECTED_CHECK_COUNT} checks`}
+      context={r ? context ?? "Checked in your browser on the public file" : "Not run yet"}
+      chip={r ? <Ld.Tag tone={r.passing ? "success" : "danger"} dot>{summaryWords(r)}</Ld.Tag> : <Ld.Tag dot>Not run yet</Ld.Tag>}
     />
   );
 }

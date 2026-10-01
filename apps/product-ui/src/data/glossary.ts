@@ -1,7 +1,7 @@
 // Inline glossary (Term). Plain words; no claims beyond the recorded run.
 export const GLOSSARY = {
   opportunity: { term: "Opportunity", def: "One chance to show one Sponsored card beside one answer in the app. The app sends only a coarse intent, required capabilities and a floor price." },
-  eligibility: { term: "Eligibility", def: "A rule in code that decides who can enter the auction: a campaign must declare every capability the moment requires. For the research comparison every agent was asked; an excluded campaign can never bid." },
+  eligibility: { term: "Eligibility", def: "A rule in code that decides who can enter the auction: a campaign must declare every capability the moment requires. On opportunities 1 to 3 every agent was asked, even when excluded, for the research comparison; an excluded campaign can never bid. When no campaign is eligible, no agent is asked." },
   frequencyCap: { term: "Frequency cap", def: "A campaign may be placed at most twice in one session. A third decision is not admitted to the auction." },
   firstPrice: { term: "First price", def: "The winner pays its own bid. There is no second-price discount." },
   floor: { term: "Floor", def: "The lowest bid the app will accept for this slot: 0.001 test USDC here." },
@@ -13,12 +13,12 @@ export const GLOSSARY = {
   rent: { term: "Rent", def: "SOL locked to keep a sandbox account open. New rent is paid when accounts are created; some is reclaimed when they close." },
   finalized: { term: "Finalized", def: "The sandbox chain's strongest confirmation level, read back from the chain for each transaction." },
   receipt: { term: "Signed receipt", def: "The app's Ed25519-signed statement that it inserted the awarded card with its Sponsored label. It is not proof that a person read it." },
-  arm: { term: "Arm", def: "Each agent was asked twice for the first two questions: once with the question and campaign only (baseline), once with ContextHint history added. Only the history arm competed." },
+  arm: { term: "With and without history", def: "For the first two questions each agent was asked twice: once with the question and campaign only (baseline, research only), once with ContextHint history added. Only the answer with history competed." },
   cosine: { term: "Cosine similarity", def: "How close two prompt embeddings are, from 0 to 1. Used only when the exact question already had a stored vector." },
   lexical: { term: "Lexical fallback", def: "When no stored vector exists, retrieval ranks prompts by shared words. It is an overlap score, not semantic similarity." },
   inferred: { term: "Inferred hint", def: "A ContextHint hypothesis about who an observed ad targeted. A hypothesis, never an advertiser setting." },
-  jev: { term: "Jev", def: "The judgment model each advertiser's agent used. It rates relevance and buying intent as levels from 0 to 3. It never names a price; code does." },
+  jev: { term: "Jev", def: "The judgment model each advertiser's agent used. Jev returns scores with probabilities; the exchange rounds them to levels 0 to 3 for relevance and buying intent. It never names a price; code does." },
   contexthint: { term: "ContextHint", def: "A recorded library of prompts and the ads that appeared beside them in AI answers, with inferred targeting hints. Agents receive its history as evidence." },
-  tieRule: { term: "Tie rule", def: "Published before the run: when bids are equal, the campaign with the lower campaign ID wins. Here v3-clearvault sorts before v3-keyforge." },
+  tieRule: { term: "Tie rule", def: "Fixed in the exchange code before the run: when bids are equal, the campaign with the lower campaign ID wins. Here v3-clearvault sorts before v3-keyforge." },
   solanaSandbox: { term: "Hosted Solana sandbox", def: "A hosted test network that runs Solana programs. Test USDC and test SOL only; not devnet or mainnet." },
 } as const;

@@ -52,6 +52,46 @@ export const GROUP_LABEL: Record<CheckGroup, string> = {
   totals: "Run totals",
 };
 
+/** The run publishes exactly this many checks. "Passing" needs all of them, present and passing. */
+export const EXPECTED_CHECK_COUNT = 48;
+
+export interface CheckSummary {
+  expected: number;
+  pass: number;
+  fail: number;
+  skip: number;
+  /** Expected checks that the file did not produce (a deleted receipt, a dropped opportunity). */
+  missing: number;
+  /** Checks the file produced that were not expected. */
+  extra: number;
+  passing: boolean;
+}
+
+/** Compare results with the build-time list of check IDs. Removing checks never passes. */
+export function summarize(checks: Check[], expectedIds: readonly string[]): CheckSummary {
+  const by = new Map(checks.map((c) => [c.id, c]));
+  const want = new Set(expectedIds);
+  let pass = 0, fail = 0, skip = 0, missing = 0;
+  for (const id of expectedIds) {
+    const c = by.get(id);
+    if (!c) missing++;
+    else if (c.status === "pass") pass++;
+    else if (c.status === "fail") fail++;
+    else skip++;
+  }
+  const extra = checks.filter((c) => !want.has(c.id)).length;
+  const passing = expectedIds.length === EXPECTED_CHECK_COUNT && want.size === EXPECTED_CHECK_COUNT && pass === EXPECTED_CHECK_COUNT && checks.length === EXPECTED_CHECK_COUNT && extra === 0;
+  return { expected: expectedIds.length, pass, fail, skip, missing, extra, passing };
+}
+
+/** Short headline for a summary: "Passing", "2 failed", "5 not checked". */
+export function summaryWords(s: CheckSummary): string {
+  if (s.passing) return "Passing";
+  if (s.fail) return `${s.fail} failed`;
+  const nc = s.skip + s.missing + s.extra;
+  return nc ? `${nc} not checked` : "Not passing";
+}
+
 const short = (h: string) => (h && h.length > 16 ? `${h.slice(0, 10)}…${h.slice(-6)}` : h);
 
 export async function verifyChecks(run: ProductRun, opts: { onCheck?: (c: Check) => void } = {}): Promise<Check[]> {

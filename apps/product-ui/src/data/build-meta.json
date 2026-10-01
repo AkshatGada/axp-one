@@ -304,12 +304,67 @@
     {
       "name": "verify checks pass (48)",
       "ok": true
+    },
+    {
+      "name": "verify produces exactly 48 checks",
+      "ok": true,
+      "detail": "48"
     }
   ],
   "verify": {
     "total": 48,
     "passed": 48,
     "failed": 0,
-    "skipped": 0
+    "skipped": 0,
+    "ids": [
+      "question-1",
+      "question-2",
+      "question-3",
+      "question-4",
+      "packet-v3-cached:v3-clearvault-33f486d647df:text_only",
+      "packet-v3-cached:v3-clearvault-33f486d647df:history",
+      "packet-v3-cached:v3-keyforge-d4fe6a7b92d9:text_only",
+      "packet-v3-cached:v3-keyforge-d4fe6a7b92d9:history",
+      "packet-v3-cached:v3-leatherguard-6923ef3cb1d1:text_only",
+      "packet-v3-cached:v3-leatherguard-6923ef3cb1d1:history",
+      "packet-v3-offline:v3-clearvault-33f486d647df:text_only",
+      "packet-v3-offline:v3-clearvault-33f486d647df:history",
+      "packet-v3-offline:v3-keyforge-d4fe6a7b92d9:text_only",
+      "packet-v3-offline:v3-keyforge-d4fe6a7b92d9:history",
+      "packet-v3-offline:v3-leatherguard-6923ef3cb1d1:text_only",
+      "packet-v3-offline:v3-leatherguard-6923ef3cb1d1:history",
+      "packet-v3-repeat:v3-clearvault-33f486d647df:history",
+      "packet-v3-repeat:v3-keyforge-d4fe6a7b92d9:history",
+      "packet-v3-repeat:v3-leatherguard-6923ef3cb1d1:history",
+      "creative-1",
+      "creative-2",
+      "creative-3",
+      "ack-1",
+      "ack-2",
+      "ack-3",
+      "receipt-1",
+      "receipt-2",
+      "receipt-3",
+      "signature-1",
+      "signature-2",
+      "signature-3",
+      "linkage-1",
+      "linkage-2",
+      "linkage-3",
+      "cumulative-v3-clearvault-1",
+      "cumulative-v3-clearvault-2",
+      "cumulative-v3-keyforge-1",
+      "conservation-v3-clearvault",
+      "conservation-v3-keyforge",
+      "bid-1-v3-clearvault",
+      "bid-1-v3-keyforge",
+      "bid-2-v3-clearvault",
+      "bid-2-v3-keyforge",
+      "bid-3-v3-keyforge",
+      "tiebreak-1",
+      "tiebreak-2",
+      "feecap",
+      "totals"
+    ]
   }
 }

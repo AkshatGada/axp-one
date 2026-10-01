@@ -1,13 +1,14 @@
 "use client";
 // Runs every recomputable check in the viewer's browser against /run.public.json (the same file as the download).
 // Rows are laid out from the build-time list first ("Not run yet"), so nothing jumps when results arrive.
+// "Recorded in the file" shows values read from the fetched file, never build-time copies.
 import { useEffect, useState } from "react";
 import { Ld } from "@axp/design-system/ledger";
-import { verifyChecks, GROUP_LABEL, type Check, type CheckGroup } from "@/lib/verify.ts";
+import { verifyChecks, summarize, summaryWords, GROUP_LABEL, EXPECTED_CHECK_COUNT, type Check, type CheckGroup, type CheckSummary } from "@/lib/verify.ts";
 import type { ProductRun } from "@/data/types";
 import { asset } from "@/lib/paths";
 
-export type CheckRow = Pick<Check, "id" | "group" | "label" | "method" | "expected">;
+export type CheckRow = Pick<Check, "id" | "group" | "label" | "method">;
 
 const METHOD: Record<Check["method"], string> = {
   recomputed: "SHA-256 of canonical JSON, recomputed in your browser",
@@ -37,26 +38,49 @@ function useRun() {
   return { run, bytes, error };
 }
 
-export function VerifyRunner({ rows }: { rows: CheckRow[] }) {
+const isHashLike = (v: string) => /^[0-9a-f]{6,}…[0-9a-f]{4,}$/i.test(v) || /^[0-9]+$/.test(v) || /^[0-9a-f]{16,}$/i.test(v);
+/** Hashes and numbers in mono; prose results (for example "signature does not match") in body type. */
+const Val = ({ v, danger }: { v: string; danger?: boolean }) => <span className={isHashLike(v) ? "ld-mono" : undefined} style={danger ? { color: "var(--ld-danger)", fontWeight: 500 } : undefined}>{v}</span>;
+
+type Tamper = { tampered: boolean; checks: Check[]; summary: CheckSummary } | null;
+
+export function VerifyRunner({ rows, expectedIds }: { rows: CheckRow[]; expectedIds: string[] }) {
   const { run, bytes, error } = useRun();
   const [results, setResults] = useState<Record<string, Check> | null>(null);
+  const [summary, setSummary] = useState<CheckSummary | null>(null);
+  const [tamper, setTamper] = useState<Tamper>(null);
   useEffect(() => {
     if (!run) return;
     let live = true;
-    verifyChecks(run).then((cs) => live && setResults(Object.fromEntries(cs.map((c) => [c.id, c]))));
+    verifyChecks(run).then((cs) => {
+      if (!live) return;
+      setResults(Object.fromEntries(cs.map((c) => [c.id, c])));
+      setSummary(summarize(cs, expectedIds));
+    });
     return () => {
       live = false;
     };
+  }, [run, expectedIds]);
+  const runTamper = async (on: boolean) => {
+    if (!run) return;
+    const copy = JSON.parse(JSON.stringify(run)) as ProductRun;
+    if (on) {
+      const f = copy.opportunities[0].receipt!.fields;
+      f.nonce = f.nonce.slice(0, -1) + (f.nonce.endsWith("a") ? "b" : "a");
+    }
+    const cs = await verifyChecks(copy);
+    setTamper({ tampered: on, checks: cs, summary: summarize(cs, expectedIds) });
+  };
+  useEffect(() => {
+    if (run) void runTamper(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [run]);
-  const done = !!results;
-  const list = rows.map((r) => results?.[r.id]).filter(Boolean) as Check[];
-  const passed = list.filter((c) => c.status === "pass").length;
-  const failed = list.filter((c) => c.status === "fail");
-  const skipped = list.filter((c) => c.status === "skip");
-  const missing = done ? rows.length - list.length : 0;
-  const allPass = done && passed === rows.length && missing === 0;
+  const done = !!results && !!summary;
   const groups = Array.from(new Set(rows.map((r) => r.group))) as CheckGroup[];
-  const headline = !done ? "Not run yet" : allPass ? "Passing" : failed.length ? `${failed.length} failed` : `${skipped.length + missing} not checked`;
+  const failed = done ? (Object.values(results!).filter((c) => c.status === "fail") as Check[]) : [];
+  const ok = (m: Check["method"][]) => (done ? rows.filter((r) => m.includes(r.method) && results![r.id]?.status === "pass").length : 0);
+  const total = (m: Check["method"][]) => rows.filter((r) => m.includes(r.method)).length;
+  const headline = !done ? "Not run yet" : summaryWords(summary!);
   return (
     <div className="ld-stack-lg vf2" style={{ gap: 16 }}>
       {error ? (
@@ -64,11 +88,26 @@ export function VerifyRunner({ rows }: { rows: CheckRow[] }) {
           {error}
         </Ld.Callout>
       ) : null}
+      <div className="vf2-banner-slot">
+        {tamper?.tampered ? (
+          <Ld.Callout
+            tone="danger"
+            title={`Tampered copy: ${tamper.summary.pass} of ${EXPECTED_CHECK_COUNT} pass`}
+            actions={
+              <Ld.Button variant="secondary" size="sm" onClick={() => void runTamper(false)}>
+                Reset
+              </Ld.Button>
+            }
+          >
+            One changed character in opportunity 1&apos;s receipt breaks its hash and its signature. The served file is unchanged: {summary?.pass ?? 0} of {EXPECTED_CHECK_COUNT}.
+          </Ld.Callout>
+        ) : null}
+      </div>
       <div className="ld-kpis vf2-kpis" role="status" aria-live="polite">
-        <Ld.Kpi tone="live" label="Checks in your browser" value={done ? `${passed}/${rows.length}` : `0/${rows.length}`} context={done ? `On run.public.json, ${bytes?.toLocaleString("en-US")} bytes` : "Not run yet"} chip={<Ld.Tag tone={!done ? undefined : allPass ? "success" : "danger"} dot>{headline}</Ld.Tag>} />
-        <Ld.Kpi label="Hashes recomputed" value={rows.filter((r) => r.method === "recomputed").length} context="Questions, packets, creatives, acknowledgements, receipts" />
-        <Ld.Kpi label="Signatures checked" value={rows.filter((r) => r.method === "signature").length} context={skipped.length ? "This browser cannot verify Ed25519; hashes still ran" : "Ed25519 receipts from the publisher"} />
-        <Ld.Kpi label="Sums and rules" value={rows.filter((r) => r.method === "arithmetic" || r.method === "policy").length} context="Vouchers, conservation, bids, tie rule, fee cap" />
+        <Ld.Kpi tone="live" label="The served file, checked in your browser" value={done ? `${summary!.pass}/${EXPECTED_CHECK_COUNT}` : "Not run yet"} context={done ? `run.public.json, ${bytes?.toLocaleString("en-US")} bytes` : `${EXPECTED_CHECK_COUNT} checks to run`} chip={<Ld.Tag tone={!done ? undefined : summary!.passing ? "success" : "danger"} dot>{headline}</Ld.Tag>} />
+        <Ld.Kpi label="Hash checks" value={done ? `${ok(["recomputed"])} of ${total(["recomputed"])}` : "Not run yet"} context="Questions, packets, creatives, acknowledgements, receipts" />
+        <Ld.Kpi label="Signature checks" value={done ? `${ok(["signature"])} of ${total(["signature"])}` : "Not run yet"} context="Ed25519 receipts from the publisher" />
+        <Ld.Kpi label="Sum and rule checks" value={done ? `${ok(["arithmetic", "policy"])} of ${total(["arithmetic", "policy"])}` : "Not run yet"} context="Vouchers, conservation, bids, tie rule, fee cap" />
       </div>
       {failed.length ? (
         <Ld.Panel title={`${failed.length} check${failed.length > 1 ? "s" : ""} failed`} raised>
@@ -81,7 +120,7 @@ export function VerifyRunner({ rows }: { rows: CheckRow[] }) {
           </div>
         </Ld.Panel>
       ) : null}
-      {run ? <TamperDemo run={run} /> : <TamperDemo run={null} />}
+      <TamperDemo ready={!!run} state={tamper} onTamper={() => void runTamper(true)} onReset={() => void runTamper(false)} nonce={run?.opportunities[0].receipt?.fields.nonce ?? ""} />
       {groups.map((g) => {
         const gr = rows.filter((r) => r.group === g);
         const res = gr.map((r) => results?.[r.id]);
@@ -101,8 +140,8 @@ export function VerifyRunner({ rows }: { rows: CheckRow[] }) {
                   },
                 },
                 { key: "l", head: "Check", cell: (r) => <span className="ld-stack" style={{ gap: 2 }}><span>{r.label}</span>{results?.[r.id]?.note ? <span className="ld-caption">{results[r.id].note}</span> : null}</span> },
-                { key: "e", head: "Recorded in the file", cell: (r) => <span className="ld-mono">{r.expected}</span> },
-                { key: "a", head: "Computed in your browser", cell: (r) => <span className="ld-mono">{results?.[r.id]?.actual ?? "not run yet"}</span> },
+                { key: "e", head: "Recorded in the file", cell: (r) => (results?.[r.id] ? <Val v={results[r.id].expected} /> : <span className="ld-faint">not run yet</span>) },
+                { key: "a", head: "Computed in your browser", cell: (r) => (results?.[r.id] ? <Val v={results[r.id].actual} danger={results[r.id].status === "fail"} /> : <span className="ld-faint">not run yet</span>) },
               ]}
               rows={gr}
             />
@@ -113,35 +152,20 @@ export function VerifyRunner({ rows }: { rows: CheckRow[] }) {
   );
 }
 
-/** Flip one character of a receipt in an in-memory copy and re-run its checks; Reset restores the file. */
-function TamperDemo({ run }: { run: ProductRun | null }) {
-  const [state, setState] = useState<{ tampered: boolean; rows: Check[] } | null>(null);
+/** Flip one character of a receipt in an in-memory copy and re-run every check; Reset restores the file. */
+function TamperDemo({ ready, state, onTamper, onReset, nonce }: { ready: boolean; state: Tamper; onTamper: () => void; onReset: () => void; nonce: string }) {
   const ids = ["receipt-1", "signature-1"];
-  const runChecks = async (tamper: boolean) => {
-    if (!run) return;
-    const copy = JSON.parse(JSON.stringify(run)) as ProductRun;
-    if (tamper) {
-      const f = copy.opportunities[0].receipt!.fields;
-      f.nonce = f.nonce.slice(0, -1) + (f.nonce.endsWith("a") ? "b" : "a");
-    }
-    const cs = await verifyChecks(copy);
-    setState({ tampered: tamper, rows: cs.filter((c) => ids.includes(c.id)) });
-  };
-  useEffect(() => {
-    if (run) void runChecks(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [run]);
-  const nonce = run?.opportunities[0].receipt?.fields.nonce ?? "";
+  const row = (id: string) => state?.checks.find((x) => x.id === id);
   return (
     <Ld.Panel
       title="Tamper with one byte"
-      sub="Changes the last character of opportunity 1's receipt nonce in a copy held in this tab, then re-runs its checks. The file itself is never changed."
+      sub="Changes the last character of opportunity 1's receipt nonce in a copy held in this tab, then re-runs all 48 checks on the copy. The served file is never changed."
       actions={
         <>
-          <Ld.Button variant="danger" size="sm" disabled={!run || state?.tampered} onClick={() => void runChecks(true)}>
+          <Ld.Button variant="danger" size="sm" disabled={!ready || state?.tampered} onClick={onTamper}>
             Tamper with one byte
           </Ld.Button>
-          <Ld.Button variant="secondary" size="sm" disabled={!run || !state?.tampered} onClick={() => void runChecks(false)}>
+          <Ld.Button variant="secondary" size="sm" disabled={!ready || !state?.tampered} onClick={onReset}>
             Reset
           </Ld.Button>
         </>
@@ -154,15 +178,15 @@ function TamperDemo({ run }: { run: ProductRun | null }) {
             Nonce in the copy: <span className="ld-mono">{state?.tampered ? `${nonce.slice(0, -1)}${nonce.endsWith("a") ? "b" : "a"}` : nonce}</span>
           </span>
           <Ld.Tag tone={!state ? undefined : state.tampered ? "danger" : "success"} dot>
-            {!state ? "Not run yet" : state.tampered ? "Tampered copy" : "Original file"}
+            {!state ? "Not run yet" : state.tampered ? `Tampered copy: ${state.summary.pass} of ${EXPECTED_CHECK_COUNT}` : `Original file: ${state.summary.pass} of ${EXPECTED_CHECK_COUNT}`}
           </Ld.Tag>
         </div>
         <Ld.Table
           columns={[
-            { key: "s", head: "", width: "40px", cell: (id: string) => { const c = state?.rows.find((x) => x.id === id); return <Ld.Verified state={!c ? "idle" : c.status === "pass" ? "pass" : "fail"}>{""}</Ld.Verified>; } },
+            { key: "s", head: "", width: "40px", cell: (id: string) => { const c = row(id); return <Ld.Verified state={!c ? "idle" : c.status === "pass" ? "pass" : "fail"}>{""}</Ld.Verified>; } },
             { key: "l", head: "Check", cell: (id) => (id === "receipt-1" ? "Opportunity 1: receipt hash" : "Opportunity 1: publisher signature (Ed25519)") },
-            { key: "e", head: "Recorded in the file", cell: (id) => <span className="ld-mono">{state?.rows.find((x) => x.id === id)?.expected ?? ""}</span> },
-            { key: "a", head: "Computed now", cell: (id) => { const c = state?.rows.find((x) => x.id === id); return c?.status === "fail" ? <span className="ld-row" style={{ gap: 8 }}><span className="ld-mono" style={{ color: "var(--ld-danger)", fontWeight: 500 }}>{c.actual}</span><Ld.Tag tone="danger">Mismatch</Ld.Tag></span> : <span className="ld-mono">{c ? c.actual : "not run yet"}</span>; } },
+            { key: "e", head: "Recorded in the copy", cell: (id) => { const c = row(id); return c ? <Val v={c.expected} /> : <span className="ld-faint">not run yet</span>; } },
+            { key: "a", head: "Computed now", cell: (id) => { const c = row(id); return c?.status === "fail" ? <span className="ld-row" style={{ gap: 8 }}><Val v={c.actual} danger /><Ld.Tag tone="danger">Mismatch</Ld.Tag></span> : c ? <Val v={c.actual} /> : <span className="ld-faint">not run yet</span>; } },
           ]}
           rows={ids}
         />

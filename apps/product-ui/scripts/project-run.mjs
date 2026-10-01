@@ -11,7 +11,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { canonical } from '../src/lib/canonical.ts';
 import { computeBid, rankBids, missingCapabilities, BID_TABLE, BID_POLICY_VERSION } from '../src/lib/policy.ts';
-import { verifyChecks } from '../src/lib/verify.ts';
+import { verifyChecks, EXPECTED_CHECK_COUNT } from '../src/lib/verify.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const app = resolve(here, '..');
@@ -641,6 +641,7 @@ async function main() {
   const verify = await verifyChecks(projection);
   const vFail = verify.filter((v) => v.status === 'fail');
   check(`verify checks pass (${verify.length})`, vFail.length === 0, vFail.map((v) => v.id).join(', '));
+  check(`verify produces exactly ${EXPECTED_CHECK_COUNT} checks`, verify.length === EXPECTED_CHECK_COUNT, `${verify.length}`);
 
   if (failures.length) {
     console.error('project-run: FAILED');
@@ -658,7 +659,7 @@ async function main() {
     counts: { ...projection.counts, evidenceRecords: projection.evidence.records.length, evidenceHints: projection.evidence.hints.length },
     sanitization: { removed, forbiddenStringsScanned: FORBIDDEN, vectorGuard: 'no numeric array longer than 64' },
     selfChecks,
-    verify: { total: verify.length, passed: verify.filter((v) => v.status === 'pass').length, failed: vFail.length, skipped: verify.filter((v) => v.status === 'skip').length },
+    verify: { total: verify.length, passed: verify.filter((v) => v.status === 'pass').length, failed: vFail.length, skipped: verify.filter((v) => v.status === 'skip').length, ids: verify.map((v) => v.id) },
   };
   writeFileSync(resolve(app, 'src/data/build-meta.json'), JSON.stringify(meta, null, 2) + '\n');
   console.log(`project-run: ok. ${bytes} bytes, ${selfChecks.length} self-checks, ${verify.length} verify checks passed.`);
