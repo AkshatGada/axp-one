@@ -1,74 +1,85 @@
 "use client";
+// The product shell (Ledger v2): top bar with run switcher and scope, sidebar sections, inspector drawer.
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { AppFrame, InspectorProvider, RunSpine, ScopeBar, ScopeChip, Provenance, Wordmark, type LinkComponent, type SpineItem } from "@axp/design-system/ledger";
+import { InspectorProvider, Ld } from "@axp/design-system/ledger";
 import { LANDING_URL } from "@/lib/paths";
 
-export type SpineOpp = { n: number; question: string; outcome: string; glyph: "filled" | "capped" | "nofill"; total: string };
+export type NavOpp = { n: number; label: string; meta: string };
+export type NavCampaign = { slug: string; name: string; meta: string };
 
-const L = Link as unknown as LinkComponent;
+const L = Link as unknown as Ld.LinkC;
 
-export function Chrome({ runId, opps, children }: { runId: string; opps: SpineOpp[]; children: ReactNode }) {
+export function Chrome({ runId, opps, campaigns, verifyMeta, children }: { runId: string; opps: NavOpp[]; campaigns: NavCampaign[]; verifyMeta: string; children: ReactNode }) {
   const path = usePathname() ?? "/";
   const is = (p: string) => path === p || path === p.replace(/\/$/, "");
   const starts = (p: string) => path.startsWith(p);
-  const link = (href: string, label: string, current?: boolean): SpineItem => ({ kind: "link", href, label, current: current ?? is(href) });
-  const groups: Array<{ label: string; items: SpineItem[] }> = [
-    { label: "Run", items: [link("/", "Overview")] },
-    { label: "Setup", items: [link("/advertisers/", "Advertisers", starts("/advertisers")), link("/publisher/", "Publisher"), link("/evidence/", "Evidence")] },
-    {
-      label: "Opportunities, by question",
-      items: opps.map((o) => ({ kind: "opportunity", href: `/opportunity/${o.n}/`, n: o.n, question: o.question, outcome: o.outcome, glyph: o.glyph, total: o.total, current: starts(`/opportunity/${o.n}`) })),
-    },
-    { label: "Money and proof", items: [link("/settlement/", "Settlement"), link("/timeline/", "Timeline"), link("/verify/", "Verify")] },
-  ];
   return (
     <InspectorProvider verifyHref="/verify/">
-      <AppFrame
-        scopeBar={
-          <ScopeBar
-            Link={L}
-            brand={<Wordmark />}
-            brandHref={LANDING_URL}
-            runId={runId}
+      <Ld.Shell
+        top={
+          <Ld.TopBar
+            brand={<Ld.Wordmark href={LANDING_URL} Link={L} />}
+            run={<Ld.RunSwitcher runId={runId} note="Recorded replay · hosted Solana sandbox · test USDC" />}
             chips={
               <>
-                <ScopeChip kind="replay" label="Recorded replay" title="Read-only presentation of the saved run. Nothing executes again." />
-                <ScopeChip kind="settled" label="Hosted Solana sandbox" title="Not devnet, not mainnet." />
-                <ScopeChip label="Test USDC" title="Test tokens on the hosted sandbox, not real money." />
-                <ScopeChip kind="fictional" label="Fictional advertisers" title="ClearVault, KeyForge and LeatherGuard were created for this demonstration." />
+                <Ld.Pv kind="replay" />
+                <Ld.Pv kind="settled" label="Hosted Solana sandbox" />
+                <Ld.Tag>Test USDC</Ld.Tag>
+                <Ld.Pv kind="fictional" label="Fictional advertisers" />
               </>
             }
             actions={
               <>
-                <Link className="lg-btn" data-variant="outline" href="/present/">
+                <Ld.Button variant="secondary" href="/present/" Link={L}>
                   Present
-                </Link>
-                <Link className="lg-btn" href="/verify/">
+                </Ld.Button>
+                <Ld.Button href="/verify/" Link={L}>
                   Verify
-                </Link>
+                </Ld.Button>
               </>
             }
           />
         }
-        spine={
-          <RunSpine
+        side={
+          <Ld.SideNav
             Link={L}
-            groups={groups}
-            foot={
-              <>
-                Ordered by question. Recorded order: the mobile question ran first. <Link href="/timeline/">See the timeline</Link>.
-                <div style={{ marginTop: 10 }}>
-                  <Provenance kind="replay" quiet />
-                </div>
-              </>
-            }
+            groups={[
+              {
+                items: [
+                  { key: "overview", href: "/", label: "Overview", current: is("/") },
+                  {
+                    key: "opps",
+                    href: "/opportunity/1/",
+                    label: "Opportunities",
+                    meta: String(opps.length),
+                    children: opps.map((o) => ({ key: `o${o.n}`, href: `/opportunity/${o.n}/`, label: `${o.n}  ${o.label}`, current: starts(`/opportunity/${o.n}`) })),
+                  },
+                  {
+                    key: "campaigns",
+                    href: "/advertisers/",
+                    label: "Campaigns",
+                    meta: String(campaigns.length),
+                    current: is("/advertisers/"),
+                    children: [
+                      ...campaigns.map((c) => ({ key: c.slug, href: `/advertisers/${c.slug}/`, label: c.name, meta: c.meta, current: starts(`/advertisers/${c.slug}`) })),
+                      { key: "try", href: "/try/", label: "Draft a campaign", meta: "synthetic", current: starts("/try") },
+                    ],
+                  },
+                  { key: "publisher", href: "/publisher/", label: "Publisher", current: starts("/publisher") },
+                  { key: "settlement", href: "/settlement/", label: "Settlement", current: starts("/settlement") },
+                  { key: "evidence", href: "/evidence/", label: "Evidence", current: starts("/evidence") },
+                  { key: "verify", href: "/verify/", label: "Verify", meta: verifyMeta, current: starts("/verify") },
+                ],
+              },
+            ]}
+            foot="Opportunities are in story order. On the exchange clock, the mobile question ran first."
           />
         }
       >
         {children}
-      </AppFrame>
+      </Ld.Shell>
     </InspectorProvider>
   );
 }

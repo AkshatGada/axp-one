@@ -1,75 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Provenance } from "@axp/design-system/ledger";
-import { opportunity, run, usdc, nameOf } from "@/data/select";
-import type { Opportunity } from "@/data/types";
-import {
-  AppSpecimen,
-  ArmDiffs,
-  AuctionStep,
-  AwardStep,
-  ChargeStep,
-  DecisionsGrid,
-  DeliveryStep,
-  EligibilityStep,
-  EvidenceHook,
-  EvidencePanel,
-  LeatherGuardLine,
-  MomentStep,
-  NoFillCollapsed,
-  PolicyLine,
-  ReceiptStep,
-  RepeatRulers,
-  SlotAwaiting,
-  SlotNoFill,
-  WinnerCard,
-} from "@/components/opportunity/parts";
-import { ReplayChip, SlotSwitch, StartButton, StepShell, StepThrough, type StepDef } from "@/components/opportunity/StepThrough";
-import { Tabs } from "@/components/opportunity/Tabs";
+import { ClampText, InspectButton, Ld } from "@axp/design-system/ledger";
+import { nameOf, opportunity, run } from "@/data/select";
+import { inspect } from "@/components/opportunity/parts";
+import { outcomeTag, shortLabel } from "@/components/v2/derive";
+import { STAGES, pipeStages, stagePanels } from "@/components/v2/stages";
+import { OpportunityProvider, PipelineBar, SlotV2, StageNav, StageView } from "@/components/v2/OpportunityStages";
+
+const L = Link as unknown as Ld.LinkC;
 
 export function generateStaticParams() {
   return run.opportunities.map((o) => ({ n: String(o.n) }));
 }
-
 export async function generateMetadata({ params }: { params: Promise<{ n: string }> }): Promise<Metadata> {
   const { n } = await params;
   const o = run.opportunities.find((x) => String(x.n) === n);
-  return { title: o ? `Opportunity ${o.n}: ${o.question}` : "Opportunity" };
-}
-
-const ALL_STEPS: Array<Omit<StepDef, "n">> = [
-  { id: "moment", title: "The moment", target: "answer" },
-  { id: "eligibility", title: "Who may compete", target: "slot" },
-  { id: "evidence", title: "What each agent was shown", target: "slot" },
-  { id: "decisions", title: "What each agent decided", target: "slot" },
-  { id: "auction", title: "Auction", target: "slot" },
-  { id: "award", title: "Award (not a charge yet)", target: "slot" },
-  { id: "delivery", title: "Delivery", target: "slot" },
-  { id: "receipt", title: "Signed receipt", target: "slot" },
-  { id: "charge", title: "Charge and voucher", target: "slot" },
-];
-
-function stripItems(o: Opportunity): Array<{ id: string; k: string; v: string }> {
-  if (o.status === "no_fill")
-    return [
-      { id: "moment", k: "Required", v: o.mandatoryCapabilities.join(" + ") },
-      { id: "eligibility", k: "May compete", v: `0 of ${run.campaigns.length}` },
-      { id: "nofill", k: "Agent calls", v: "0" },
-      { id: "nofill", k: "Outcome", v: "No fill" },
-      { id: "nofill", k: "Charged", v: "nothing" },
-    ];
-  const bids = o.auction.bids;
-  const amounts = Array.from(new Set(bids.map((b) => usdc(b.amountBaseUnits))));
-  return [
-    { id: "eligibility", k: "May compete", v: `${o.eligibility.eligible.length} of ${run.campaigns.length}` },
-    { id: "evidence", k: "Evidence", v: o.decisions.find((d) => d.retrieval)?.retrieval?.method === "vector" ? "vector match" : "lexical fallback" },
-    { id: "decisions", k: "Agent calls", v: String(o.decisions.length) },
-    { id: "auction", k: "Bids", v: bids.length > 1 && amounts.length === 1 ? `${bids.length} × ${amounts[0]}` : bids.map((b) => usdc(b.amountBaseUnits)).join(", ") },
-    { id: "award", k: "Winner", v: `${nameOf(o.award!.campaignId)}${o.auction.tieBreakApplied ? ", tie-break" : o.auction.notAdmitted.length ? ", cap applied" : ""}` },
-    { id: "receipt", k: "Receipt", v: "signed" },
-    { id: "charge", k: "Charged", v: usdc(o.charge!.amountBaseUnits) },
-  ];
+  return { title: o ? `Opportunity ${o.n}: ${shortLabel(o)}` : "Opportunity" };
 }
 
 export default async function OpportunityPage({ params }: { params: Promise<{ n: string }> }) {
@@ -77,128 +24,83 @@ export default async function OpportunityPage({ params }: { params: Promise<{ n:
   const num = Number(n);
   if (!run.opportunities.some((x) => x.n === num)) notFound();
   const o = opportunity(num);
+  const tag = outcomeTag(o);
   const noFill = o.status === "no_fill";
-  const steps: StepDef[] = (noFill ? ALL_STEPS.slice(0, 2) : ALL_STEPS).map((s, i) => ({ ...s, n: i + 1 }));
   const prev = num > 1 ? num - 1 : null;
   const next = num < run.opportunities.length ? num + 1 : null;
-  const historyDecisions = o.decisions.filter((d) => d.arm === "history" && d.retrieval);
-  const explain = {
-    evidence: "Each agent received its own packet: past observations from ContextHint and inferred targeting hints. Evidence informs the judgment; it cannot add a capability.",
-    decisions: "Each agent answered in levels: relevance (does the approved card fit this question?) and commercial intent (is the person comparing offers?). A level is the rounded score.",
-    auction: "Code turns levels into a bid: a share of the campaign's max bid from the bid table. The highest bid wins; the model never names a price.",
-    award: "The winner's card is reserved for the slot.",
-    delivery: "The app inserted the approved card with its Sponsored label and acknowledged it.",
-    receipt: "The app signed what it did, with its own key.",
-    charge: "Only an accepted, signed delivery becomes a charge. The charge advances the advertiser's payment channel.",
-  };
   return (
-    <StepThrough steps={steps}>
-      <header className="op-head">
-        <div className="op-head-top">
-          <span className="lg-row" style={{ gap: 14 }}>
-            <span className="lg-label" style={{ color: "var(--ink)" }}>
-              Opportunity {o.n} of {run.opportunities.length}
-            </span>
-            <Provenance kind="replay" />
-          </span>
-          <StartButton />
-        </div>
-        <h1 className="lg-display op-question">{o.question}</h1>
-        <nav className="op-strip" aria-label="Outcome">
-          {stripItems(o).map((s, i) => (
-            <a key={`${s.id}-${i}`} href={`#${s.id}`}>
-              <span>{s.k}</span>
-              <span className={/\d/.test(s.v) ? "lg-data-sm" : undefined}>{s.v}</span>
-            </a>
-          ))}
-        </nav>
-      </header>
-
-      <div className="op-grid">
-        <aside className="op-app" aria-label="In the app">
-          <div className="op-app-label">
-            <span className="lg-label" style={{ color: "var(--ink)" }}>
-              In the app
-            </span>
-            <span className="lg-small">The answer never receives advertiser material.</span>
-          </div>
-          <AppSpecimen o={o} slot={noFill ? <SlotNoFill /> : <SlotSwitch deliveredFrom={6} card={<WinnerCard o={o} />} awaiting={<SlotAwaiting />} />} />
-        </aside>
-
-        <div className="op-rail">
-          <span className="lg-label" style={{ color: "var(--ink)" }}>
-            Behind the answer
-          </span>
-          <ReplayChip />
-          <ol className="lg-steprail" style={{ listStyle: "none", margin: 0, padding: 0 }}>
-            <StepShell index={0} id="moment" n={1} title="The moment" explain="The app offered one Sponsored slot beside its answer. Only these fields reach the exchange.">
-              <MomentStep o={o} />
-            </StepShell>
-            <StepShell index={1} id="eligibility" n={2} title="Who may compete" explain="Eligibility is a rule in code, checked before any agent is asked. A campaign must declare every required capability.">
-              <EligibilityStep o={o} />
-            </StepShell>
-            {noFill ? (
-              <li id="nofill" className="lg-step" data-collapsed>
-                <span className="lg-step-node" aria-hidden>
-                  3
-                </span>
-                <div className="lg-step-body">
-                  <NoFillCollapsed o={o} />
-                </div>
-              </li>
-            ) : (
-              <>
-                <StepShell index={2} id="evidence" n={3} title="What each agent was shown" explain={explain.evidence}>
-                  <EvidenceHook o={o} />
-                  <Tabs
-                    label="Evidence packet by campaign"
-                    tabs={historyDecisions.map((d) => ({ key: `${o.n}-${d.campaignId}`, label: nameOf(d.campaignId), panel: <EvidencePanel o={o} d={d} /> }))}
-                  />
-                </StepShell>
-                <StepShell index={3} id="decisions" n={4} title="What each agent decided" explain={explain.decisions}>
-                  <DecisionsGrid o={o} />
-                  {o.scenarioId === "repeat" ? <RepeatRulers o={o} /> : <ArmDiffs o={o} />}
-                  {o.scenarioId !== "repeat" ? <PolicyLine o={o} /> : null}
-                  <LeatherGuardLine o={o} />
-                </StepShell>
-                <StepShell index={4} id="auction" n={5} title="Auction" explain={explain.auction}>
-                  <AuctionStep o={o} />
-                </StepShell>
-                <StepShell index={5} id="award" n={6} title="Award (not a charge yet)" explain={explain.award}>
-                  <AwardStep o={o} />
-                </StepShell>
-                <StepShell index={6} id="delivery" n={7} title="Delivery" explain={explain.delivery}>
-                  <DeliveryStep o={o} />
-                </StepShell>
-                <StepShell index={7} id="receipt" n={8} title="Signed receipt" explain={explain.receipt}>
-                  <ReceiptStep o={o} />
-                </StepShell>
-                <StepShell index={8} id="charge" n={9} title="Charge and voucher" explain={explain.charge}>
-                  <ChargeStep o={o} />
-                </StepShell>
-              </>
-            )}
-          </ol>
-          <nav className="op-nav" aria-label="Opportunities">
+    <OpportunityProvider ids={STAGES.map((s) => s.id)} deliveredFrom={6}>
+      <Ld.PageBar
+        crumbs={<Ld.Breadcrumbs Link={L} items={[{ label: "Opportunities", href: "/opportunity/1/" }, { label: `${o.n} of ${run.opportunities.length}` }]} />}
+        title={shortLabel(o)}
+        meta={
+          <>
+            <Ld.Tag tone={tag.tone}>{tag.label}</Ld.Tag>
+            {o.award ? <Ld.Tag>{`${nameOf(o.award.campaignId)} won`}</Ld.Tag> : null}
+          </>
+        }
+        sub={`“${o.question}”`}
+        actions={
+          <>
             {prev ? (
-              <Link className="lg-btn" data-variant="outline" href={`/opportunity/${prev}/`}>
-                <span className="lg-arrow">←</span> Opportunity {prev}
-              </Link>
-            ) : (
-              <span />
-            )}
+              <Ld.Button variant="secondary" href={`/opportunity/${prev}/`} Link={L}>
+                ← Opportunity {prev}
+              </Ld.Button>
+            ) : null}
             {next ? (
-              <Link className="lg-btn" href={`/opportunity/${next}/`}>
-                Opportunity {next} <span className="lg-arrow">→</span>
-              </Link>
+              <Ld.Button variant="secondary" href={`/opportunity/${next}/`} Link={L}>
+                Opportunity {next} →
+              </Ld.Button>
             ) : (
-              <Link className="lg-btn" href="/settlement/">
-                Settlement <span className="lg-arrow">→</span>
-              </Link>
+              <Ld.Button variant="secondary" href="/settlement/" Link={L}>
+                Settlement →
+              </Ld.Button>
             )}
-          </nav>
+          </>
+        }
+      />
+      <PipelineBar stages={pipeStages(o)} />
+      <div className="op2-grid">
+        <aside className="op2-app" aria-label="In the app">
+          <div className="ld-between">
+            <span className="ld-label">In the app</span>
+            <InspectButton payload={inspect.organic(o)} variant="text">
+              Inspect answer
+            </InspectButton>
+          </div>
+          <div className="ld-chat">
+            <div className="ld-chat-bar">
+              <span>{run.publisher.displayName}</span>
+              <Ld.Pv kind="replay" label="Recorded" />
+            </div>
+            <div className="ld-chat-body">
+              <div className="ld-chat-q">{o.question}</div>
+              <div className="ld-chat-meta">
+                <Ld.Pv kind="actual" />
+                <span>The app's own answer, no advertiser material</span>
+              </div>
+              <div className="op2-answer">
+                <ClampText text={o.organic.answer} lines={7} />
+              </div>
+              {noFill ? (
+                <div className="ld-nofill">
+                  <Ld.Pv kind="policy" label="No fill" /> No sponsored placement for this turn
+                </div>
+              ) : (
+                <SlotV2 card={<Ld.SponsoredCard text={o.award!.creative.approvedText} advertiser={nameOf(o.award!.campaignId)} url={o.award!.creative.destinationURL} />} awaiting={<div className="ld-await">Sponsored slot, awaiting auction</div>} />
+              )}
+            </div>
+          </div>
+          <span className="ld-caption">Owned reference publisher app, specimen. The slot fills when the replay reaches delivery.</span>
+        </aside>
+        <div className="ld-stack" style={{ gap: 16, minWidth: 0 }}>
+          <StageView panels={stagePanels(o)} />
+          <div className="ld-between">
+            <span className="ld-caption">Recorded replay. Timings are as recorded; nothing re-executes.</span>
+            <StageNav total={STAGES.length} />
+          </div>
         </div>
       </div>
-    </StepThrough>
+    </OpportunityProvider>
   );
 }

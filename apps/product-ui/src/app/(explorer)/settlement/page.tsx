@@ -1,149 +1,193 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Amount, Callout, CheckMark, CopyHash, DataTable, KeyValue, Lamports, PageHead, Provenance, Section, StatusStamp, Term } from "@axp/design-system/ledger";
+import { CopyHash, InspectButton, Ld } from "@axp/design-system/ledger";
 import { campaign, nameOf, run, usdc } from "@/data/select";
-import { channelMeter, ladder, txCard } from "@/components/money";
-import { GLOSSARY } from "@/data/glossary";
+import { txPayload } from "@/components/money";
+import type { Channel, ChainTx } from "@/data/types";
 
-export const metadata: Metadata = { title: "Settlement" };
+export const metadata: Metadata = { title: "Solana settlement" };
+const L = Link as unknown as Ld.LinkC;
+const lam = (v: string | number) => Number(v).toLocaleString("en-US");
+
+function TxRow({ ch, t }: { ch: Channel; t: ChainTx }) {
+  return (
+    <tr>
+      <td>
+        <span className="ld-stack" style={{ gap: 2 }}>
+          <span className="ld-strong">{t.kind === "open" ? "Open channel" : "Close channel"}</span>
+          <span className="ld-caption">Solana transaction, slot {t.slot.toLocaleString("en-US")}</span>
+        </span>
+      </td>
+      <td>
+        <Ld.Tag tone="success" dot>
+          {t.finality === "finalized" ? "Finalized" : t.finality}
+        </Ld.Tag>
+      </td>
+      <td data-num>{t.tokenDeltas.payer.startsWith("-") ? `−${usdc(t.tokenDeltas.payer.slice(1))}` : `+${usdc(t.tokenDeltas.payer)}`}</td>
+      <td data-num>{t.tokenDeltas.publisher === "0" ? <span className="ld-faint">0</span> : `+${usdc(t.tokenDeltas.publisher)}`}</td>
+      <td data-num>{lam(t.networkFeeLamports)}</td>
+      <td data-num>{t.kind === "open" ? `+${lam(t.newRentLamports)}` : `−${lam(t.reclaimedRentLamports)}`}</td>
+      <td>
+        <InspectButton payload={txPayload(ch, t)} variant="text">
+          Inspect
+        </InspectButton>
+      </td>
+    </tr>
+  );
+}
 
 export default function SettlementPage() {
-  const [cv] = run.channels;
-  const samePayer = run.channels.every((c) => c.payer === cv.payer);
   const capOk = BigInt(run.fees.grossFeeAndRentLamports) <= BigInt(run.fees.capLamports);
   return (
     <>
-      <PageHead
-        kicker={<Provenance kind="settled" label="Settled on the hosted Solana sandbox" />}
-        title="Two payment channels, three receipts, one settlement each."
-        lede="Each funded advertiser locked a 0.020 test USDC deposit in its own channel. Every accepted delivery advanced a cumulative off-chain authorization (a voucher). At close, the publisher received the last authorized total and the rest went back. No transfer per ad."
+      <Ld.PageBar
+        title="Solana payment channels"
+        meta={<Ld.Tag tone="success" dot>Both finalized</Ld.Tag>}
+        sub="Each funded advertiser locked a 0.020 test USDC deposit in its own Solana payment channel on a hosted sandbox. Every accepted delivery advanced an off-chain voucher. One close per channel paid the publisher the last authorized total and refunded the rest. No transfer per ad."
       />
+      <div className="ld-kpis">
+        <Ld.Kpi label="Deposited" value={usdc(run.totals.depositsBaseUnits)} context="Test USDC across 2 channels" />
+        <Ld.Kpi label="Paid to the publisher" value={usdc(run.totals.paidBaseUnits)} context="Equals the 3 accepted charges" />
+        <Ld.Kpi label="Refunded" value={usdc(run.totals.refundedBaseUnits)} context="Returned to the payer at close" />
+        <Ld.Kpi label="Solana transactions" value={run.chainTxs.length} context="2 opens, 2 closes, all finalized" />
+        <Ld.Kpi label="Fees and new rent" value={`${(Number(run.fees.grossFeeAndRentLamports) / 1e6).toFixed(2)}M`} context={`lamports, cap ${(Number(run.fees.capLamports) / 1e6).toFixed(0)}M`} chip={<Ld.Tag tone={capOk ? "success" : "danger"} dot>{capOk ? "Within cap" : "Over cap"}</Ld.Tag>} />
+      </div>
 
       {run.channels.map((ch) => {
         const c = campaign(ch.campaignId);
-        const seq = [
-          { k: "Open", v: `deposit ${usdc(ch.depositBaseUnits)}`, chain: true },
-          ...ch.vouchers.flatMap((v) => [
-            { k: `Charge ${v.sequence}`, v: `opportunity ${v.opportunityN}, ${usdc(v.incrementBaseUnits)}`, chain: false },
-            { k: `Voucher ${v.sequence}`, v: `${usdc(v.cumulativeAmountBaseUnits)} in total`, chain: false },
-          ]),
-          { k: "Close", v: `${usdc(ch.settledBaseUnits)} paid, ${usdc(ch.refundBaseUnits)} back`, chain: true },
-        ];
+        const cap = Number(c.budgetCapBaseUnits);
         return (
-          <section key={ch.channelId} id={c.slug} className="lg-section">
-            <div className="lg-section-head">
-              <h2 className="lg-h1">{c.businessName}</h2>
-              <span className="lg-row" style={{ gap: 10 }}>
-                <Provenance kind="fictional" label="Fictional advertiser" />
-                <span className="lg-data-sm">{ch.channelId}</span>
-              </span>
-            </div>
-            <div className="st-channel">
-              {channelMeter(ch)}
-              <div className="lg-stack-sm">
-                <span className="lg-label">In order, without timestamps. Shaded steps are on chain; the rest are off chain.</span>
-                <div className="lg-seq">
-                  {seq.map((s, i) => (
-                    <div key={i} data-kind={s.chain ? "chain" : undefined}>
-                      <span className="lg-label">{s.k}</span>
-                      <span className="lg-small" style={{ color: "var(--ink)" }}>
-                        {s.v}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="st-cols">
-                <div className="lg-stack">
-                  <span className="lg-h3">
-                    <Term title={GLOSSARY.cumulative.term} def={GLOSSARY.cumulative.def}>
-                      Cumulative vouchers
-                    </Term>
+          <section key={ch.channelId} id={c.slug} className="st2-channel">
+            <Ld.Panel
+              title={`${c.businessName}`}
+              sub="Solana payment channel · hosted sandbox · test USDC"
+              actions={
+                <>
+                  <Ld.Pv kind="fictional" label="Fictional advertiser" />
+                  <Ld.Button variant="ghost" size="sm" href={`/advertisers/${c.slug}/`} Link={L}>
+                    Campaign
+                  </Ld.Button>
+                </>
+              }
+              foot={
+                <>
+                  <span>Phase {ch.phase}, no reconciliation needed. Same disposable test payer for both channels.</span>
+                  <span className="ld-row" style={{ gap: 6 }}>
+                    <span>Channel</span>
+                    <CopyHash value={ch.protocolChannelId} head={6} tail={4} label="channel address" />
                   </span>
-                  {ladder(ch)}
-                  {ch.vouchers.length > 1 ? (
-                    <p className="lg-small">
-                      #2 replaces #1's authority: {usdc(ch.vouchers[1].cumulativeAmountBaseUnits)} in total, not {usdc(ch.vouchers[0].cumulativeAmountBaseUnits)} + {usdc(ch.vouchers[1].cumulativeAmountBaseUnits)}.
-                    </p>
-                  ) : null}
-                  <KeyValue
-                    dense
-                    rows={[
-                      { k: "Phase", v: <span className="lg-row" style={{ gap: 8 }}><span className="lg-data-sm">{ch.phase}</span><span className="lg-small">No reconciliation needed</span></span> },
-                      { k: "Channel on chain", v: <CopyHash value={ch.protocolChannelId} label="channel" /> },
-                      { k: "Terms hash", v: <CopyHash value={ch.termsHash} label="terms hash" /> },
-                      { k: "Program", v: <CopyHash value={ch.program} label="program" /> },
-                      { k: "Mint", v: <CopyHash value={ch.mint} label="mint" /> },
-                      { k: "Payer", v: <span className="lg-stack-sm" style={{ gap: 2 }}><CopyHash value={ch.payer} label="payer" />{samePayer ? <span className="lg-small">Same disposable payer for both channels</span> : null}</span> },
-                      { k: "Payee", v: <span className="lg-stack-sm" style={{ gap: 2 }}><CopyHash value={ch.payee} label="payee" /><span className="lg-small">{run.publisher.displayName}</span></span> },
+                </>
+              }
+            >
+              <div className="st2-cols">
+                <div className="ld-stack" style={{ gap: 14 }}>
+                  <div className="ld-cols-3">
+                    <Ld.Stat label="Deposit" value={usdc(ch.depositBaseUnits)} caption="Locked at open" />
+                    <Ld.Stat label="Paid out" value={usdc(ch.settledBaseUnits)} caption="Last voucher total" />
+                    <Ld.Stat label="Refunded" value={usdc(ch.refundBaseUnits)} caption="Back to the payer" />
+                  </div>
+                  <Ld.BalanceBar
+                    total={Number(ch.depositBaseUnits)}
+                    legend
+                    segments={[
+                      ...ch.vouchers.map((v) => ({ key: `v${v.sequence}`, value: Number(v.incrementBaseUnits), state: "settled" as const, label: `Charge ${v.sequence}, opportunity ${v.opportunityN}: ${usdc(v.incrementBaseUnits)}` })),
+                      { key: "r", value: Number(ch.refundBaseUnits), state: "refunded" as const, label: `Refunded ${usdc(ch.refundBaseUnits)}` },
                     ]}
                   />
+                  <div className="ld-stack" style={{ gap: 6 }}>
+                    <span className="ld-label">In order, without timestamps</span>
+                    <div className="st2-seq">
+                      <span data-chain>Open on Solana · deposit {usdc(ch.depositBaseUnits)}</span>
+                      {ch.vouchers.map((v) => (
+                        <span key={v.sequence} id={`voucher-${c.slug}-${v.sequence}`}>
+                          Charge {v.sequence} → voucher {v.sequence}: {usdc(v.cumulativeAmountBaseUnits)} in total
+                        </span>
+                      ))}
+                      <span data-chain>Close on Solana · {usdc(ch.settledBaseUnits)} paid, {usdc(ch.refundBaseUnits)} back</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="lg-stack">
-                  {txCard(ch, ch.open)}
-                  {txCard(ch, ch.close)}
+                <div className="ld-stack" style={{ gap: 6 }}>
+                  <span className="ld-label">Cumulative authorization, against the {usdc(cap)} cap</span>
+                  <Ld.StepChart max={cap} format={(x) => usdc(x)} points={ch.vouchers.map((v) => ({ key: String(v.sequence), label: `#${v.sequence} · opp ${v.opportunityN}`, value: Number(v.cumulativeAmountBaseUnits) }))} />
+                  {ch.vouchers.length > 1 ? <span className="ld-caption">Voucher 2 replaces voucher 1: {usdc(ch.vouchers[1].cumulativeAmountBaseUnits)} in total, not {usdc(ch.vouchers[0].cumulativeAmountBaseUnits)} plus {usdc(ch.vouchers[1].cumulativeAmountBaseUnits)}.</span> : null}
                 </div>
               </div>
-            </div>
+              <div className="ld-table-wrap" style={{ marginTop: 16, border: "1px solid var(--ld-border)", borderRadius: 10 }}>
+                <table className="ld-table" id={`tx-close-${c.slug}`}>
+                  <thead>
+                    <tr>
+                      <th>Transaction</th>
+                      <th>Status</th>
+                      <th data-num>Payer USDC</th>
+                      <th data-num>Publisher USDC</th>
+                      <th data-num>Fee, lamports</th>
+                      <th data-num>Rent, lamports</th>
+                      <th />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <TxRow ch={ch} t={ch.open} />
+                    <TxRow ch={ch} t={ch.close} />
+                  </tbody>
+                </table>
+              </div>
+            </Ld.Panel>
           </section>
         );
       })}
 
-      <section className="lg-section" id="leatherguard">
-        <div className="lg-row" style={{ justifyContent: "space-between" }}>
-          <span className="lg-row" style={{ gap: 14 }}>
-            <span className="lg-h2">{nameOf(run.unfunded[0].campaignId)}</span>
-            <StatusStamp tone="dashed">Unfunded: no channel</StatusStamp>
-          </span>
-          <span className="lg-small">Channel status {run.unfunded[0].status.replace("_", " ")}, deposit <Amount baseUnits={run.unfunded[0].depositBaseUnits} />. It never reached an auction.</span>
-        </div>
-      </section>
+      <Ld.Panel title={nameOf(run.unfunded[0].campaignId)} sub="No Solana channel was opened" actions={<Ld.Tag tone="dashed">Unfunded</Ld.Tag>}>
+        <p className="ld-secondary">Channel status pending open, deposit {usdc(run.unfunded[0].depositBaseUnits)}. It never reached an auction: every question required crypto storage, which it does not declare.</p>
+      </Ld.Panel>
 
-      <Section id="totals" title="Totals" lede="Test USDC and test SOL are counted separately. They never share a column.">
-        <div className="st-cols">
-          <div className="lg-stack-sm">
-            <span className="lg-label">Test USDC</span>
-            <DataTable
-              columns={[
-                { key: "k", head: "", cell: (r: { k: string; v: string }) => r.k },
-                { key: "v", head: "USDC", num: true, cell: (r) => <Amount baseUnits={r.v} unit="" /> },
-              ]}
-              rows={[
-                { k: "Deposits", v: run.totals.depositsBaseUnits },
-                { k: "Paid to the publisher", v: run.totals.paidBaseUnits },
-                { k: "Refunded to the payer", v: run.totals.refundedBaseUnits },
-              ]}
-            />
-            <p className="lg-small">Paid plus refunded equals deposited. Paid equals the three accepted charges.</p>
-          </div>
-          <div className="lg-stack-sm">
-            <span className="lg-label">
-              Test SOL, in <Term title={GLOSSARY.lamports.term} def={GLOSSARY.lamports.def}>lamports</Term>
-            </span>
-            <DataTable
-              columns={[
-                { key: "k", head: "", cell: (r: { k: string; v: string }) => r.k },
-                { key: "v", head: "Lamports", num: true, cell: (r) => <Lamports value={r.v} /> },
-              ]}
-              rows={[
-                { k: "Network fees, 4 transactions", v: run.fees.networkFeeLamports },
-                { k: "New rent, gross", v: run.fees.newRentLamports },
-                { k: "Reclaimed rent at close", v: run.fees.reclaimedRentLamports },
-                { k: "Fees plus new rent, gross", v: run.fees.grossFeeAndRentLamports },
-                { k: "Run cap", v: run.fees.capLamports },
-              ]}
-            />
-            <CheckMark state={capOk ? "pass" : "fail"}>{capOk ? "Within the cap" : "Over the cap"}</CheckMark>
-            <p className="lg-small">Fees and rent are paid in test SOL (lamports) and never mixed with USDC. Reclaimed rent is not subtracted from the cap.</p>
-          </div>
-        </div>
-        <Callout title="Funding is not settlement">
-          <p>An approved one-time sandbox faucet top-up funded the payer. Funding is not settlement. Absolute wallet balances include funds from before this run, so only per-transaction changes are shown.</p>
-        </Callout>
-        <p className="lg-small">
-          Exchange times and sandbox block times come from different clocks; the <Link href="/timeline/">timeline</Link> keeps them in separate lanes.
-        </p>
-      </Section>
+      <div className="ld-cols-2">
+        <Ld.Panel title="Totals in test USDC" flush>
+          <Ld.Table
+            columns={[
+              { key: "k", head: "", cell: (r: { k: string; v: string }) => r.k },
+              { key: "v", head: "Test USDC", num: true, cell: (r) => <span className="ld-strong">{usdc(r.v)}</span> },
+            ]}
+            rows={[
+              { k: "Deposits", v: run.totals.depositsBaseUnits },
+              { k: "Accepted charges", v: run.totals.chargesBaseUnits },
+              { k: "Paid to the publisher", v: run.totals.paidBaseUnits },
+              { k: "Refunded to the payer", v: run.totals.refundedBaseUnits },
+            ]}
+          />
+        </Ld.Panel>
+        <Ld.Panel title="Fees and rent in lamports (test SOL)" flush foot={<span>Kept apart from USDC. Reclaimed rent is not subtracted from the cap.</span>}>
+          <Ld.Table
+            columns={[
+              { key: "k", head: "", cell: (r: { k: string; v: string }) => r.k },
+              { key: "v", head: "Lamports", num: true, cell: (r) => <span className="ld-strong">{lam(r.v)}</span> },
+            ]}
+            rows={[
+              { k: "Network fees, 4 transactions", v: run.fees.networkFeeLamports },
+              { k: "New rent, gross", v: run.fees.newRentLamports },
+              { k: "Reclaimed rent at close", v: run.fees.reclaimedRentLamports },
+              { k: "Fees plus new rent", v: run.fees.grossFeeAndRentLamports },
+              { k: "Run cap", v: run.fees.capLamports },
+            ]}
+          />
+        </Ld.Panel>
+      </div>
+
+      <Ld.Panel title="Solana transactions by slot" sub="Sandbox clock. These block times are not aligned with the exchange clock on the Overview and must not be compared with it.">
+        <Ld.Timeline
+          rows={run.chainTxs.map((t) => ({
+            key: t.signature,
+            time: `slot ${t.slot.toLocaleString("en-US")}`,
+            what: `${t.kind === "open" ? "Open" : "Close"} ${nameOf(t.campaignId)}'s channel`,
+            detail: `Solana transaction · ${t.finality} · ${new Date(t.blockTime * 1000).toISOString().slice(11, 19)} sandbox clock`,
+            tone: t.kind === "close" ? ("brand" as const) : ("ink" as const),
+          }))}
+        />
+      </Ld.Panel>
+
+      <Ld.Callout title="Funding is not settlement">
+        An approved one-time sandbox faucet top-up funded the payer. Absolute wallet balances include funds from before this run, so only each transaction's own changes are shown. Hosted Solana sandbox, not devnet or mainnet.
+      </Ld.Callout>
     </>
   );
 }

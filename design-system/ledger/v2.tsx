@@ -690,3 +690,79 @@ export function Timeline({ rows }: { rows: Array<{ key: string; time: ReactNode;
     </div>
   );
 }
+
+// ---------- Additions for the dashboard routes ----------
+export function Callout({ title, children, tone }: { title?: ReactNode; children: ReactNode; tone?: "brand" | "warning" | "ch" | "neutral" }) {
+  return (
+    <div className="ld-callout" data-tone={tone}>
+      {title ? <span className="ld-card-title">{title}</span> : null}
+      <div className="ld-secondary" style={{ color: "var(--ld-text)" }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export function Stat({ label, value, caption, big }: { label: ReactNode; value: ReactNode; caption?: ReactNode; big?: boolean }) {
+  return (
+    <div className="ld-stat">
+      <span className="ld-label">{label}</span>
+      <span className={big ? "ld-kpi-num" : "ld-stat-v"}>{value}</span>
+      {caption ? <span className="ld-caption">{caption}</span> : null}
+    </div>
+  );
+}
+
+/** Capability × campaign grid of ticks and crosses, with the ruling at the end of each row. */
+export function CapGrid({ caps, rows }: { caps: string[]; rows: Array<{ key: string; name: ReactNode; has: string[]; ok: boolean; result: ReactNode }> }) {
+  return (
+    <div className="ld-table-wrap">
+      <table className="ld-table ld-capgrid">
+        <thead>
+          <tr>
+            <th>Campaign</th>
+            {caps.map((c) => (
+              <th key={c}>{c.replace(/_/g, " ")}</th>
+            ))}
+            <th>Ruling</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.key}>
+              <td>
+                <span className="ld-strong">{r.name}</span>
+              </td>
+              {caps.map((c) => {
+                const has = r.has.includes(c);
+                return (
+                  <td key={c}>
+                    <span className="ld-row" style={{ gap: 6 }}>
+                      <i className={has ? "ld-tick" : "ld-cross"} role="img" aria-label={has ? "declared" : "not declared"}>
+                        {has ? "✓" : "✕"}
+                      </i>
+                      <span className="ld-caption">{has ? "Declared" : "Not declared"}</span>
+                    </span>
+                  </td>
+                );
+              })}
+              <td>{r.ok ? <Tag tone="success" dot>May compete</Tag> : <span className="ld-row" style={{ gap: 6 }}><Tag tone="dashed">Excluded</Tag><span className="ld-caption">{r.result}</span></span>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export function FlowTile({ step, title, state, value, children }: { step: ReactNode; title: ReactNode; state?: ReactNode; value?: ReactNode; children?: ReactNode }) {
+  return (
+    <div className="ld-flowtile">
+      <span className="ld-flowtile-step">{step}</span>
+      <span className="ld-card-title">{title}</span>
+      {state}
+      {value ? <span className="ld-kpi-num">{value}</span> : null}
+      {children}
+    </div>
+  );
+}

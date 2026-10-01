@@ -1,36 +1,31 @@
 "use client";
 // Runs every recomputable check in the viewer's browser against /run.public.json (the same file as the download).
 import { useEffect, useState } from "react";
-import { CheckMark, VerifyRow } from "@axp/design-system/ledger";
+import { Ld } from "@axp/design-system/ledger";
 import { verifyChecks, GROUP_LABEL, type Check, type CheckGroup } from "@/lib/verify.ts";
 import type { ProductRun } from "@/data/types";
 import { asset } from "@/lib/paths";
 
 const METHOD: Record<Check["method"], string> = {
-  recomputed: "sha256 of canonical JSON, recomputed here",
-  signature: "Ed25519 signature checked here with the publisher's public key",
-  arithmetic: "re-added here in whole base units",
-  policy: "re-run here with the ported exchange rules",
+  recomputed: "SHA-256 of canonical JSON, recomputed here",
+  signature: "Ed25519 signature, checked here with the publisher's public key",
+  arithmetic: "Re-added here in whole base units",
+  policy: "Re-run here with the exchange's own rules",
 };
 
 export function VerifyRunner() {
   const [checks, setChecks] = useState<Check[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState(false);
   const [bytes, setBytes] = useState<number | null>(null);
   useEffect(() => {
     let live = true;
     (async () => {
       try {
-        const res = await fetch(asset("/run.public.json"), { cache: "no-store" });
-        const text = await res.text();
+        const text = await (await fetch(asset("/run.public.json"), { cache: "no-store" })).text();
         if (!live) return;
         setBytes(new TextEncoder().encode(text).length);
-        const run = JSON.parse(text) as ProductRun;
-        const out = await verifyChecks(run);
-        if (!live) return;
-        setChecks(out);
-        setDone(true);
+        const out = await verifyChecks(JSON.parse(text) as ProductRun);
+        if (live) setChecks(out);
       } catch (e) {
         if (live) setError(e instanceof Error ? e.message : String(e));
       }
@@ -39,70 +34,52 @@ export function VerifyRunner() {
       live = false;
     };
   }, []);
+  if (error) return <Ld.Callout tone="warning" title="Could not load run.public.json">{error}</Ld.Callout>;
+  const done = checks.length > 0;
   const passed = checks.filter((c) => c.status === "pass").length;
   const failed = checks.filter((c) => c.status === "fail");
   const skipped = checks.filter((c) => c.status === "skip");
   const groups = Array.from(new Set(checks.map((c) => c.group))) as CheckGroup[];
-  if (error)
-    return (
-      <div className="lg-stamp" data-tone="fail">
-        Could not load run.public.json: {error}
-      </div>
-    );
   return (
-    <div className="lg-stack-lg">
-      <div className="vf-summary" data-state={!done ? "idle" : failed.length ? "fail" : "pass"} role="status" aria-live="polite">
-        {done ? (
-          <>
-            <span className="vf-big">
-              {passed} of {checks.length}
-            </span>
-            <span className="lg-stack-sm" style={{ gap: 4 }}>
-              <span className="lg-h2" style={{ color: "inherit" }}>
-                {failed.length ? `${failed.length} check${failed.length > 1 ? "s" : ""} FAILED in this browser` : "checks passed in this browser"}
-              </span>
-              <span className="lg-small" style={{ color: "inherit" }}>
-                Computed from run.public.json ({bytes?.toLocaleString("en-US")} bytes), the same file you can download above.{skipped.length ? ` ${skipped.length} signature check${skipped.length > 1 ? "s" : ""} could not run: this browser cannot verify Ed25519 signatures; the hash checks still ran.` : ""}
-              </span>
-            </span>
-          </>
-        ) : (
-          <span className="lg-h2" style={{ color: "inherit" }}>
-            Checks run in this browser when the page loads.
-          </span>
-        )}
+    <div className="ld-stack-lg" style={{ gap: 16 }}>
+      <div className="ld-kpis" role="status" aria-live="polite">
+        <Ld.Kpi
+          tone="live"
+          label="Checks in this browser"
+          value={done ? `${passed}/${checks.length}` : ""}
+          context={done ? `Computed from run.public.json, ${bytes?.toLocaleString("en-US")} bytes` : "Recomputing hashes, signatures and sums here"}
+          chip={done ? <Ld.Tag tone={failed.length ? "danger" : "success"} dot>{failed.length ? `${failed.length} failed` : "Passing"}</Ld.Tag> : null}
+        />
+        <Ld.Kpi label="Hashes recomputed" value={done ? checks.filter((c) => c.method === "recomputed").length : ""} context="Questions, packets, creatives, receipts" />
+        <Ld.Kpi label="Signatures verified" value={done ? checks.filter((c) => c.method === "signature" && c.status === "pass").length : ""} context={skipped.length ? "This browser cannot verify Ed25519; hashes still ran" : "Ed25519, publisher key"} />
+        <Ld.Kpi label="Sums and rules" value={done ? checks.filter((c) => c.method === "arithmetic" || c.method === "policy").length : ""} context="Vouchers, conservation, bids, tie-break, cap" />
       </div>
       {failed.length ? (
-        <div className="lg-stack-sm">
-          {failed.map((c) => (
-            <VerifyRow key={c.id} status="fail" label={c.label} method={`${GROUP_LABEL[c.group]} · ${c.path}`} note={c.note} expected={`expected ${c.expected}`} actual={`got ${c.actual}`} />
-          ))}
-        </div>
+        <Ld.Panel title={`${failed.length} check${failed.length > 1 ? "s" : ""} failed`} raised>
+          <div className="ld-stack">
+            {failed.map((c) => (
+              <Ld.Callout key={c.id} tone="warning" title={c.label}>
+                Expected {c.expected}, got {c.actual}. {c.note}
+              </Ld.Callout>
+            ))}
+          </div>
+        </Ld.Panel>
       ) : null}
       {groups.map((g) => {
         const rows = checks.filter((c) => c.group === g);
         const ok = rows.every((c) => c.status === "pass");
         return (
-          <section key={g} className="vf-group">
-            <div className="vf-group-head">
-              <span className="lg-h3">{GROUP_LABEL[g]}</span>
-              <span className="lg-row" style={{ gap: 12 }}>
-                <span className="lg-small">{METHOD[rows[0].method]}</span>
-                <CheckMark state={ok ? "pass" : rows.some((c) => c.status === "fail") ? "fail" : "skip"}>
-                  {rows.filter((c) => c.status === "pass").length}/{rows.length}
-                </CheckMark>
-              </span>
-            </div>
-            <div className="lg-verify-row vf-colhead" aria-hidden>
-              <span />
-              <span className="lg-label">Check</span>
-              <span className="lg-label">Recorded</span>
-              <span className="lg-label">Computed here</span>
-            </div>
-            {rows.map((c) => (
-              <VerifyRow key={c.id} status={c.status} label={c.label} note={c.note} expected={c.expected} actual={c.actual} />
-            ))}
-          </section>
+          <Ld.Panel key={g} title={GROUP_LABEL[g]} sub={METHOD[rows[0].method]} actions={<Ld.Tag tone={ok ? "success" : rows.some((c) => c.status === "fail") ? "danger" : "warning"} dot>{rows.filter((c) => c.status === "pass").length} of {rows.length}</Ld.Tag>} flush>
+            <Ld.Table
+              columns={[
+                { key: "s", head: "", width: "40px", cell: (c: Check) => <Ld.Verified state={c.status === "pass" ? "pass" : c.status === "fail" ? "fail" : "recorded"}>{""}</Ld.Verified> },
+                { key: "l", head: "Check", cell: (c) => <span className="ld-stack" style={{ gap: 2 }}><span>{c.label}</span>{c.note ? <span className="ld-caption">{c.note}</span> : null}</span> },
+                { key: "e", head: "Recorded", cell: (c) => <span className="ld-mono">{c.expected}</span> },
+                { key: "a", head: "Computed here", cell: (c) => <span className="ld-mono">{c.actual}</span> },
+              ]}
+              rows={rows}
+            />
+          </Ld.Panel>
         );
       })}
     </div>

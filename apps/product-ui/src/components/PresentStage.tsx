@@ -122,7 +122,7 @@ export function PresentStage({ beats, views }: { beats: BeatMeta[]; views: React
 
   return (
     <div className="lg-present" data-cursor={auto ? "hidden" : undefined}>
-      <div className="lg-present-frame pr-frame" style={{ transform: `scale(${scale})` }} onClick={() => !auto && next()}>
+      <div className="lg-present-frame pr-frame ld" style={{ transform: `scale(${scale})` }} onClick={() => !auto && next()}>
         <header className="pr-top">
           <span className="pr-brand">
             <Wordmark />

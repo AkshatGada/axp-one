@@ -1,271 +1,253 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import {
-  Amount,
-  AuctionBoard,
-  BidTableGrid,
-  CapabilityChips,
-  Handoff,
-  InferredHint,
-  InspectorProvider,
-  MoneyStateMark,
-  NoFillSlot,
-  NotAdmittedStamp,
-  NumberStrip,
-  ObservedRecord,
-  Provenance,
-  ScopeChip,
-  SponsoredCard,
-  StatusStamp,
-  TieBreakNote,
-} from "@axp/design-system/ledger";
+import { InspectorProvider, Ld } from "@axp/design-system/ledger";
 import { PresentStage, type BeatMeta } from "@/components/PresentStage";
-import { LiveVerifyCount } from "@/components/LiveVerifyCount";
 import { BEATS } from "@/present/beats";
-import { decisionFor, evidenceHint, evidenceRecord, nameOf, opportunity, outcomeLine, run, usdc } from "@/data/select";
-import { AppSpecimen, ArmDiffs, AuctionBoardFor, SimilarityLabel, WinnerCard, RepeatRulers } from "@/components/opportunity/parts";
-import { LiveHash, LiveSignature } from "@/components/live";
-import { channelMeter, ladder } from "@/components/money";
+import { decisionFor, evidenceHint, evidenceRecord, nameOf, opportunity, run, usdc } from "@/data/select";
+import { auctionRow, campaignStats } from "@/components/v2/derive";
+import { LiveHashV2, LiveSignatureV2, LiveVerifyTile } from "@/components/v2/live";
 
 export const metadata: Metadata = { title: "Present", robots: { index: false, follow: false } };
 
-const F = ({ from, children, className }: { from: number; children: ReactNode; className?: string }) => (
-  <div data-from={from} className={`pr-from${className ? ` ${className}` : ""}`}>
+const F = ({ from, children }: { from: number; children: ReactNode }) => (
+  <div data-from={from} className="pr-from">
     {children}
   </div>
 );
+const fmt = (v: number) => usdc(v);
 
 export default function PresentPage() {
   const o1 = opportunity(1);
   const o3 = opportunity(3);
   const o4 = opportunity(4);
-  const cv = run.channels[0];
-  const kf = run.channels[1];
-  const cvHist = decisionFor(o1, "v3-clearvault", "history")!;
-  const lgHist = decisionFor(o1, "v3-leatherguard", "history")!;
-  const mercari = evidenceRecord(cvHist.retrieval!.examples[0].id)!;
-  const hint = evidenceHint(cvHist.retrieval!.hintIds[0])!;
-  const leather = lgHist.retrieval!.examples.map((e) => ({ e, r: evidenceRecord(e.id)! }));
+  const cvB = decisionFor(o1, "v3-clearvault", "text_only")!;
+  const cvH = decisionFor(o1, "v3-clearvault", "history")!;
+  const kfB = decisionFor(o1, "v3-keyforge", "text_only")!;
+  const kfH = decisionFor(o1, "v3-keyforge", "history")!;
+  const lgH = decisionFor(o1, "v3-leatherguard", "history")!;
+  const mercari = evidenceRecord(cvH.retrieval!.examples[0].id)!;
+  const hint = evidenceHint(cvH.retrieval!.hintIds[0])!;
+  const max = Number(run.policy.maxBidBaseUnits);
+  const rows = run.opportunities.map(auctionRow);
+  const bars = (o: typeof o1) =>
+    run.campaigns.map((c) => {
+      const b = o.auction.bids.find((x) => x.campaignId === c.campaignId);
+      const capped = o.auction.notAdmitted.some((x) => x.campaignId === c.campaignId);
+      return { key: c.campaignId, label: c.businessName, sub: b ? `levels ${b.levels}` : capped ? "agent said bid" : "excluded by rule", value: b ? Number(b.amountBaseUnits) : null, winner: c.campaignId === o.auction.winnerCampaignId, note: capped ? "Not admitted: frequency cap" : "Missing crypto storage" };
+    });
+  const card = (o: typeof o1) => <Ld.SponsoredCard text={o.award!.creative.approvedText} advertiser={nameOf(o.award!.campaignId)} url={o.award!.creative.destinationURL} />;
 
   const views: Record<string, ReactNode> = {
     chat: (
-      <div className="pr-split" style={{ gridTemplateColumns: "1fr 560px" }}>
-        <div className="pr-lede">
-          <span className="pr-kicker">
-            <Provenance kind="actual" /> The answer
-          </span>
-          <p className="pr-big">An AI app answers the question on its own. No advertiser material reaches the answer.</p>
+      <div className="pr2-split" style={{ gridTemplateColumns: "1fr 600px" }}>
+        <div className="pr2-lede">
+          <Ld.Pv kind="actual" label="The answer" />
+          <p className="pr2-big">An AI app answers on its own. No advertiser material reaches the answer.</p>
           <F from={2}>
-            <span className="pr-kicker">
-              <Provenance kind="fictional" /> The card
-            </span>
-            <p className="pr-big">Below it, one disclosed Sponsored card, bought in a sealed auction.</p>
+            <Ld.Pv kind="fictional" label="The card" />
+            <p className="pr2-big">Below it, one disclosed Sponsored card, bought in a sealed auction.</p>
           </F>
         </div>
-        <div className="pr-app">
-          <AppSpecimen
-            o={o1}
-            slot={
-              <div className="pr-slot">
-                <div data-hide-from={2}>
-                  <div className="lg-slot-await">
-                    <strong>Sponsored slot, awaiting auction</strong>
-                  </div>
-                </div>
-                <div data-show-from={2} hidden className="lg-ad-enter">
-                  <WinnerCard o={o1} />
-                </div>
+        <Ld.ChatSpecimen
+          app={run.publisher.displayName}
+          question={o1.question}
+          meta={<><Ld.Pv kind="actual" /> <span>no advertiser material</span></>}
+          answer={o1.organic.answer}
+          slot={
+            <>
+              <div data-hide-from={2}>
+                <div className="ld-await">Sponsored slot, awaiting auction</div>
               </div>
-            }
-          />
-        </div>
+              <div data-show-from={2} hidden className="ld-ad-enter">
+                {card(o1)}
+              </div>
+            </>
+          }
+        />
       </div>
     ),
     numbers: (
-      <div className="lg-stack-lg" style={{ gap: 36 }}>
-        <div className="lg-row" style={{ gap: 10 }}>
-          <ScopeChip kind="replay" label="Recorded replay" />
-          <ScopeChip kind="settled" label="Hosted Solana sandbox" />
-          <ScopeChip label="Test USDC" />
-          <ScopeChip kind="fictional" label="Fictional advertisers" />
-          <span className="lg-data-sm" style={{ marginLeft: 8 }}>{run.source.runId}</span>
+      <div className="ld-stack-lg" style={{ gap: 24 }}>
+        <div className="ld-kpis">
+          <Ld.Kpi label="Questions" value={run.counts.opportunities} context="Asked in the app" />
+          <Ld.Kpi label="Agent decisions" value={run.counts.decisions} context="Decided with Jev" />
+          <Ld.Kpi label="Auctions" value={run.counts.auctions} context="Plus 1 no fill" />
+          <Ld.Kpi label="Signed deliveries" value={run.counts.receipts} context="Publisher receipts" />
+          <Ld.Kpi label="Settled" value={usdc(run.totals.paidBaseUnits)} context="Test USDC on a hosted Solana sandbox" />
         </div>
-        <NumberStrip
-          items={[
-            { value: run.counts.opportunities, label: "questions" },
-            { value: run.counts.decisions, label: "agent decisions" },
-            { value: run.counts.auctions, label: "auctions" },
-            { value: run.counts.noFill, label: "no fill" },
-            { value: run.counts.receipts, label: "signed deliveries" },
-          ]}
-        />
-        <div className="pr-qs">
-          {run.opportunities.map((o) => (
-            <div key={o.n} className="pr-q">
-              <span className="pr-qn">{o.n}</span>
-              <span className="pr-qt">{o.question}</span>
-              <span className="pr-qo">{outcomeLine(o)}</span>
-            </div>
-          ))}
-        </div>
+        <Ld.Panel title="The four questions" sub="Story order" flush>
+          <Ld.Table
+            columns={[
+              { key: "q", head: "Question", cell: (r: (typeof rows)[number]) => <span><span className="ld-faint">{r.o.n}</span> <span className="ld-strong">{r.o.question}</span></span> },
+              { key: "w", head: "Winner", cell: (r) => r.winner ?? <span className="ld-faint">nobody</span> },
+              { key: "p", head: "Price", num: true, cell: (r) => r.price ?? <span className="ld-faint">none</span> },
+              { key: "t", head: "Outcome", cell: (r) => <Ld.Tag tone={r.tag.tone}>{r.tag.label}</Ld.Tag> },
+            ]}
+            rows={rows}
+          />
+        </Ld.Panel>
       </div>
     ),
     advertisers: (
-      <div className="pr-three">
-        {run.campaigns.map((c) => (
-          <div key={c.campaignId} className="lg-stack">
-            <SponsoredCard square text={c.creative.approvedText} advertiser={c.businessName} url={c.creative.destinationURL} />
-            <CapabilityChips caps={c.declaredConstraints.map((x) => ({ name: x }))} />
-            {c.funded ? (
-              <span className="lg-row" style={{ gap: 12 }}>
-                <MoneyStateMark state="deposit" label="Deposit" />
-                <Amount baseUnits={c.depositBaseUnits} />
-              </span>
-            ) : (
-              <StatusStamp tone="dashed">Unfunded: no channel opened</StatusStamp>
-            )}
-          </div>
-        ))}
+      <div className="ld-stack" style={{ gap: 14 }}>
+        {run.campaigns.map((c) => {
+          const s = campaignStats(c.campaignId);
+          return (
+            <Ld.CampaignHeader
+              key={c.campaignId}
+              initial={c.businessName[0]}
+              muted={!c.funded}
+              name={c.businessName}
+              status={<>{c.funded ? <Ld.Tag tone="success" dot>{`Funded ${usdc(c.depositBaseUnits)}`}</Ld.Tag> : <Ld.Tag tone="dashed">Unfunded</Ld.Tag>}<Ld.Pv kind="fictional" /></>}
+              kpis={<span className="ld-secondary">Declares {c.declaredConstraints.map((x) => x.replace(/_/g, " ")).join(", ")} · max bid {usdc(c.maxBidBaseUnits)} · cap {usdc(s.cap)}</span>}
+            />
+          );
+        })}
       </div>
     ),
     evidence: (
-      <div className="pr-split" style={{ gridTemplateColumns: "1fr 1fr" }}>
-        <div className="lg-stack">
-          <span className="pr-kicker">
-            <Provenance kind="observed" /> Seen before, by ContextHint
-          </span>
-          <ObservedRecord prompt={mercari.promptText} advertiser={mercari.advertiser} creative={mercari.creativeText} similarity={<SimilarityLabel method="vector" value={1} />} />
-          <InferredHint text={hint.text} tier={`tier ${hint.tier}`} />
-          <Handoff to={`Handed to ${nameOf("v3-clearvault")}'s and ${nameOf("v3-keyforge")}'s agents`} />
+      <div className="pr2-split" style={{ gridTemplateColumns: "1fr 1fr" }}>
+        <div className="ld-stack">
+          <Ld.Callout tone="ch" title="ContextHint had seen this exact question before">Next to a hardware-wallet listing. That history goes to the agents as evidence.</Ld.Callout>
+          <Ld.EvidenceCard prompt={mercari.promptText} advertiser={mercari.advertiser} creative={mercari.creativeText} sim={1} method="vector" hint={<span className="ld-stack" style={{ gap: 4 }}><Ld.Pv kind="inferred" label="Inferred hint" /><span className="ld-secondary">{hint.text}</span></span>} />
         </div>
         <F from={2}>
-          <div className="lg-stack">
-            <span className="pr-kicker">
-              <Provenance kind="observed" /> LeatherGuard's packet: the word “wallet” is ambiguous
-            </span>
-            {leather.slice(0, 2).map(({ e, r }) => (
-              <ObservedRecord key={e.id} prompt={r.promptText} advertiser={r.advertiser} creative={r.creativeText} similarity={<SimilarityLabel method="vector" value={e.similarity} />} />
-            ))}
-            <p className="pr-note">Evidence informs a judgment. It cannot add a capability LeatherGuard never declared.</p>
+          <div className="ld-stack">
+            <Ld.Callout title="LeatherGuard's packet: the word “wallet” is ambiguous">Crypto prompts that drew leather and RFID wallet ads. Evidence cannot add a capability it never declared.</Ld.Callout>
+            {lgH.retrieval!.examples.slice(0, 2).map((e) => {
+              const r = evidenceRecord(e.id)!;
+              return <Ld.EvidenceCard key={e.id} prompt={r.promptText} advertiser={r.advertiser} creative={r.creativeText} sim={e.similarity} method="vector" />;
+            })}
           </div>
         </F>
       </div>
     ),
     decisions: (
-      <div className="lg-stack-lg">
-        <ArmDiffs o={o1} />
+      <div className="ld-stack-lg" style={{ gap: 16 }}>
+        <div className="ld-cols-2">
+          {([
+            [nameOf("v3-clearvault"), cvB, cvH],
+            [nameOf("v3-keyforge"), kfB, kfH],
+          ] as const).map(([name, b, h]) => (
+            <Ld.Panel key={name} title={`${name} · intent`} sub="Decided with Jev · level = rounded score" actions={<Ld.Tag tone="brand">{`Level ${b.commercialIntentLevel} to ${h.commercialIntentLevel}`}</Ld.Tag>}>
+              <Ld.ScoreRuler min={1.5} max={3} ticks={[2, 3]} width={520} marks={[{ value: b.scores.intent, kind: "baseline", label: "Baseline" }, { value: h.scores.intent, kind: "history", label: "With history" }]} />
+              <p className="ld-secondary" style={{ marginTop: 8 }}>
+                Moved {b.scores.intent.toFixed(2)} to {h.scores.intent.toFixed(2)}, crossing the 2.5 rounding line. One observation per arm; not a measured lift.
+              </p>
+            </Ld.Panel>
+          ))}
+        </div>
         <F from={2}>
-          <div className="pr-band">
-            <span className="lg-verdict" data-v="skip">
-              Skip
-            </span>
-            <span className="pr-note" style={{ margin: 0 }}>
-              LeatherGuard's agent: relevance <span className="lg-data">{lgHist.scores.relevance.toFixed(2)}</span>, level {lgHist.relevanceLevel}, creative no fit. Excluded by rule as well: missing <span className="lg-data">crypto_storage</span>.
-            </span>
-          </div>
+          <Ld.Panel title="LeatherGuard" sub="Decided with Jev" actions={<Ld.Tag tone="dashed">Skip · no fit</Ld.Tag>}>
+            <p className="ld-secondary" style={{ color: "var(--ld-text)" }}>
+              Relevance level {lgH.relevanceLevel} ({lgH.scores.relevance.toFixed(2)}): its agent chose no fitting creative. It is also excluded by rule for missing crypto storage. Evidence cannot add a capability.
+            </p>
+          </Ld.Panel>
         </F>
       </div>
     ),
     auction: (
-      <div className="lg-stack-lg">
-        <BidTableGrid rows={run.policy.bidTable} active={o1.auction.bids.map((b) => b.levels ?? "")} maxBid={run.policy.maxBidBaseUnits} />
-        <F from={2}>
-          <AuctionBoardFor o={o1} />
-        </F>
-      </div>
-    ),
-    charge: (
-      <div className="pr-three" style={{ alignItems: "stretch" }}>
-        <div className="pr-card">
-          <span className="pr-kicker">1 · Award</span>
-          <MoneyStateMark state="reserved" label="Reserved, not owed" />
-          <span className="pr-amount"><Amount baseUnits={o1.award!.priceBaseUnits} /></span>
-          <span className="pr-note">{nameOf(o1.award!.campaignId)} won. Budget is reserved; nothing is owed until the app proves delivery.</span>
-          <LiveHash value={o1.award!.creative} expected={o1.award!.creativeHash} label="Creative hash" />
-        </div>
-        <F from={2} className="pr-card">
-          <span className="pr-kicker">2 · Delivery and signed receipt</span>
-          <span className="pr-note">
-            Card inserted with its Sponsored label, received <span className="lg-data">+{(o1.delivery!.msAfterAward / 1000).toFixed(1)} s</span> after the award. Signed with <span className="lg-data">{run.publisher.publisherKeyId}</span>.
-          </span>
-          <div className="lg-stack-sm">
-            <LiveHash value={{ awardId: o1.award!.id, creativeHash: o1.award!.creativeHash, domInserted: o1.delivery!.acknowledgement.domInserted, sponsoredLabelPresent: o1.delivery!.acknowledgement.sponsoredLabelPresent }} expected={o1.delivery!.renderAcknowledgementHash} label="Acknowledgement hash" />
-            <LiveHash value={o1.receipt!.fields} expected={o1.receipt!.receiptHash} label="Receipt hash" />
-            <LiveSignature fields={o1.receipt!.fields} signature={o1.receipt!.signature} publicKeyPEM={run.publisher.publicKeyPEM} />
-          </div>
-          <span className="lg-small">A receipt proves the app's assertion that it inserted a labelled card, not that a person read it.</span>
-        </F>
-        <F from={3} className="pr-card">
-          <span className="pr-kicker">3 · Charge, then voucher</span>
-          <MoneyStateMark state="accepted" label="Accepted charge" />
-          <span className="pr-amount"><Amount baseUnits={o1.charge!.amountBaseUnits} /></span>
-          <MoneyStateMark state="authorized" label={`Voucher ${o1.voucher!.sequence}: ${usdc(o1.voucher!.cumulativeAmountBaseUnits)} authorized in total`} />
-          <span className="pr-note">Off chain. Nothing moves on chain until the channel closes.</span>
-        </F>
-      </div>
-    ),
-    cap: (
-      <div className="pr-split" style={{ gridTemplateColumns: "1fr 520px" }}>
-        <div className="lg-stack">
-          <span className="pr-kicker">Opportunity 3: the same question again</span>
-          <NotAdmittedStamp detail={`Frequency cap: ClearVault was already placed twice in this session (2 of 2). No bid, no amount.`} />
-          <RepeatRulers o={o3} />
-          <AuctionBoardFor o={o3} />
-        </div>
-        <F from={2}>
-          <div className="lg-stack">
-            <span className="pr-kicker">Opportunity 4: mobile only</span>
-            <AppSpecimen o={o4} slot={<NoFillSlot />} />
-            <span className="pr-note">0 agent calls. No auction, award, receipt or charge.</span>
-          </div>
-        </F>
-      </div>
-    ),
-    settlement: (
-      <div className="lg-stack-lg" style={{ gap: 32 }}>
-        <div className="pr-split" style={{ gridTemplateColumns: "1fr 1fr" }}>
-          {[cv, kf].map((ch) => (
-            <div className="lg-stack" key={ch.channelId}>
-              <span className="pr-kicker">{nameOf(ch.campaignId)}</span>
-              {channelMeter(ch, { legend: false })}
-              <F from={2}>{ladder(ch)}</F>
+      <div className="ld-stack-lg" style={{ gap: 18 }}>
+        <div className="op2-bidtable">
+          {run.policy.bidTable.map((r) => (
+            <div key={r.levels} data-active={r.levels === "3:3" || undefined}>
+              <span className="ld-caption">Levels {r.levels}</span>
+              <span className="ld-stat-v">{r.bps / 100}%</span>
+              <span className="ld-caption">{usdc((max * r.bps) / 10000)}</span>
             </div>
           ))}
         </div>
         <F from={2}>
-          <NumberStrip
-            items={[
-              { value: usdc(run.totals.depositsBaseUnits), label: "test USDC deposited" },
-              { value: usdc(run.totals.paidBaseUnits), label: "to the publisher" },
-              { value: usdc(run.totals.refundedBaseUnits), label: "refunded" },
-              { value: Number(run.fees.networkFeeLamports).toLocaleString("en-US"), label: "lamports in network fees, kept apart" },
-            ]}
-          />
+          <Ld.Panel title="Opportunity 1 · bids" sub="Highest bid wins; equal bids go to the lower campaign ID" actions={<Ld.Tag tone="brand">Tie-break</Ld.Tag>}>
+            <Ld.BidBars reveal max={max} floor={Number(o1.floorBaseUnits)} format={fmt} rows={bars(o1)} />
+          </Ld.Panel>
+        </F>
+      </div>
+    ),
+    charge: (
+      <div className="ld-flow">
+        <Ld.FlowTile step="1 · Award" title={`${nameOf(o1.award!.campaignId)} won`} state={<Ld.Money state="reserved" label="Reserved, not owed" />} value={usdc(o1.award!.priceBaseUnits)}>
+          <LiveHashV2 value={o1.award!.creative} expected={o1.award!.creativeHash} label="Creative hash recomputed here" />
+        </Ld.FlowTile>
+        <F from={2}>
+          <Ld.FlowTile step="2 · Delivery and signed receipt" title={`Card inserted with its label, +${(o1.delivery!.msAfterAward / 1000).toFixed(1)} s`}>
+            <LiveHashV2 value={{ awardId: o1.award!.id, creativeHash: o1.award!.creativeHash, domInserted: true, sponsoredLabelPresent: true }} expected={o1.delivery!.renderAcknowledgementHash} label="Acknowledgement hash recomputed here" />
+            <LiveHashV2 value={o1.receipt!.fields} expected={o1.receipt!.receiptHash} label="Receipt hash recomputed here" />
+            <LiveSignatureV2 fields={o1.receipt!.fields} signature={o1.receipt!.signature} pem={run.publisher.publicKeyPEM} />
+            <span className="ld-caption">Proves the app inserted a labelled card, not that a person read it.</span>
+          </Ld.FlowTile>
+        </F>
+        <F from={3}>
+          <Ld.FlowTile step="3 · Charge, then voucher" title="Only now is it owed" state={<Ld.Money state="accepted" label="Accepted charge" />} value={usdc(o1.charge!.amountBaseUnits)}>
+            <Ld.Money state="authorized" label={`Voucher ${o1.voucher!.sequence}: ${usdc(o1.voucher!.cumulativeAmountBaseUnits)} authorized in total`} />
+          </Ld.FlowTile>
+        </F>
+      </div>
+    ),
+    cap: (
+      <div className="pr2-split" style={{ gridTemplateColumns: "1fr 520px" }}>
+        <div className="ld-stack">
+          <Ld.Callout tone="warning" title="Agent said bid. Exchange did not admit it.">
+            Opportunity 3: ClearVault was already placed twice in this session (2 of 2). The frequency cap is a rule, not the agent.
+          </Ld.Callout>
+          <Ld.Panel title="Opportunity 3 · bids" actions={<Ld.Tag tone="warning">Frequency cap</Ld.Tag>}>
+            <Ld.BidBars max={max} floor={Number(o3.floorBaseUnits)} format={fmt} rows={bars(o3)} />
+          </Ld.Panel>
+        </div>
+        <F from={2}>
+          <Ld.ChatSpecimen app={run.publisher.displayName} question={o4.question} meta={<Ld.Pv kind="actual" />} answer={o4.organic.answer} slot={<div className="ld-nofill"><Ld.Pv kind="policy" label="No fill" /> No sponsored placement for this turn</div>} />
+          <p className="ld-secondary" style={{ marginTop: 10, color: "var(--ld-text)" }}>
+            Opportunity 4: 0 agent calls. No auction, award, receipt or charge.
+          </p>
+        </F>
+      </div>
+    ),
+    settlement: (
+      <div className="ld-stack-lg" style={{ gap: 18 }}>
+        <div className="ld-cols-2">
+          {run.channels.map((ch) => (
+            <Ld.Panel key={ch.channelId} title={nameOf(ch.campaignId)} sub="Solana payment channel · hosted sandbox · test USDC" actions={<Ld.Tag tone="success" dot>Finalized</Ld.Tag>}>
+              <div className="ld-stack">
+                <Ld.BalanceBar total={Number(ch.depositBaseUnits)} legend segments={[...ch.vouchers.map((v) => ({ key: `v${v.sequence}`, value: Number(v.incrementBaseUnits), state: "settled" as const, label: `Paid ${usdc(v.incrementBaseUnits)}` })), { key: "r", value: Number(ch.refundBaseUnits), state: "refunded" as const, label: `Refunded ${usdc(ch.refundBaseUnits)}` }]} />
+                <F from={2}>
+                  <Ld.StepChart max={8000} format={fmt} width={520} height={140} points={ch.vouchers.map((v) => ({ key: String(v.sequence), label: `voucher ${v.sequence}`, value: Number(v.cumulativeAmountBaseUnits) }))} />
+                </F>
+              </div>
+            </Ld.Panel>
+          ))}
+        </div>
+        <F from={2}>
+          <div className="ld-kpis">
+            <Ld.Kpi label="Paid to the publisher" value={usdc(run.totals.paidBaseUnits)} context="Test USDC, one close per channel" />
+            <Ld.Kpi label="Refunded" value={usdc(run.totals.refundedBaseUnits)} context="Back to the payer" />
+            <Ld.Kpi label="Network fees" value={Number(run.fees.networkFeeLamports).toLocaleString("en-US")} context="Lamports, kept apart from USDC" />
+          </div>
         </F>
       </div>
     ),
     verify: (
-      <div className="pr-split" style={{ gridTemplateColumns: "1fr 1fr" }}>
-        <div className="lg-stack">
-          <LiveVerifyCount />
-          <NumberStrip
-            items={[
-              { value: run.restart.newCalls, label: "new model calls on restart" },
-              { value: run.restart.newCharges, label: "new charges" },
-              { value: run.restart.newSignatures, label: "new signatures" },
-            ]}
-          />
+      <div className="pr2-split" style={{ gridTemplateColumns: "1fr 1fr" }}>
+        <div className="ld-stack">
+          <div className="ld-kpis">
+            <LiveVerifyTile />
+          </div>
+          <div className="ld-kpis">
+            <Ld.Kpi label="New calls on restart" value={run.restart.newCalls} context="Models off" />
+            <Ld.Kpi label="New charges" value={run.restart.newCharges} context="No double charge" />
+            <Ld.Kpi label="New signatures" value={run.restart.newSignatures} context="Receipts replayed, not re-signed" />
+          </div>
         </div>
         <F from={2}>
-          <div className="lg-stack">
-            <span className="pr-kicker">What this run does not show</span>
-            <ul className="pr-limits">
+          <Ld.Panel title="What this run does not show">
+            <ul className="ev2-list" style={{ fontSize: 15, color: "var(--ld-text)" }}>
               {run.limitations.run.map((l) => (
                 <li key={l}>{l}</li>
               ))}
             </ul>
-            <span className="pr-big" style={{ fontSize: 32 }}>Explore every hash yourself.</span>
-          </div>
+          </Ld.Panel>
+          <p className="pr2-big" style={{ fontSize: 30, marginTop: 18 }}>
+            Explore every hash yourself.
+          </p>
         </F>
       </div>
     ),
