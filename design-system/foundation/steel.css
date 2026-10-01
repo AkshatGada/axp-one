@@ -52,6 +52,7 @@
   /* ContextHint's own colour: only in the ContextHint section and where its evidence enters AXP */
   --contexthint: #f65a20;
   --contexthint-wash: #ffe4d6;
+  --contexthint-ink: #c2410c;  /* ContextHint vermillion for text under 24px (AA on paper) */
 
   /* Type families: PolySans only */
   --font-body: "PolySans", system-ui, sans-serif;
