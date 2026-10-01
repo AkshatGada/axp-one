@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en" data-brand="ultramarine">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AXP Colour Lab</title>
+<style>
+@font-face { font-family: "PolySans"; src: url("../metal-lab/fonts/PolySans-Neutral.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "PolySans"; src: url("../metal-lab/fonts/PolySans-Median.woff2") format("woff2"); font-weight: 500; }
+@font-face { font-family: "PolySans Wide"; src: url("../metal-lab/fonts/PolySans-SlimWide.woff2") format("woff2"); font-weight: 300; }
+@font-face { font-family: "PolySans Wide"; src: url("../metal-lab/fonts/PolySans-NeutralWide.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "PolySans Wide"; src: url("../metal-lab/fonts/PolySans-MedianWide.woff2") format("woff2"); font-weight: 500; }
+@font-face { font-family: "PolySans Mono"; src: url("../metal-lab/fonts/PolySans-NeutralMono.woff2") format("woff2"); font-weight: 400; }
+
+/* Three candidate identities for AXP.one, same content. ContextHint keeps its own vermillion. */
+:root {
+  --ch: #f65a20;             /* ContextHint vermillion, only in its own section and the evidence flow */
+  --ch-soft: #ffe2d4;
+}
+/* A. ULTRAMARINE on paper, deep blue-black stage */
+[data-brand="ultramarine"] {
+  color-scheme: light;
+  --bg: #f4f2ec; --surface: #fbfaf6; --fg: #0e1220; --muted: #4c5266; --line: #c9cad3; --line-soft: #e2e2e8;
+  --brand: #2a3bff; --brand-deep: #1724c4; --brand-tint: #e3e6ff; --on-brand: #ffffff;
+  --stage: #0a0e2a; --stage-2: #121842; --stage-fg: #eef0ff; --stage-muted: #98a0d8; --stage-line: #262e66;
+  --stage-brand: #5c6bff;
+}
+/* B. CADMIUM on ink, dark-led */
+[data-brand="cadmium"] {
+  color-scheme: dark;
+  --bg: #111210; --surface: #1a1b18; --fg: #f3f0e6; --muted: #a29f94; --line: #34352f; --line-soft: #26271f;
+  --brand: #ffcc00; --brand-deep: #e0a800; --brand-tint: #3a3410; --on-brand: #111210;
+  --stage: #070806; --stage-2: #151612; --stage-fg: #f3f0e6; --stage-muted: #8f8c82; --stage-line: #2c2d27;
+  --stage-brand: #ffcc00;
+}
+/* C. EMERALD on ink */
+[data-brand="emerald"] {
+  color-scheme: dark;
+  --bg: #0c1411; --surface: #12201b; --fg: #eef3ef; --muted: #93a49b; --line: #24372f; --line-soft: #1b2a24;
+  --brand: #19c48a; --brand-deep: #0e9a6a; --brand-tint: #0f3a2b; --on-brand: #04130d;
+  --stage: #06100c; --stage-2: #0e1d17; --stage-fg: #eef3ef; --stage-muted: #86998f; --stage-line: #1d3229;
+  --stage-brand: #19c48a;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--fg); font: 400 17px/1.5 "PolySans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; transition: background .5s cubic-bezier(.2,.75,.25,1), color .5s; }
+.wrap { max-width: 1440px; margin: 0 auto; padding-inline: clamp(16px, 4.5vw, 72px); }
+.mono { font-family: "PolySans Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+.wide { font-family: "PolySans Wide", system-ui, sans-serif; }
+.label { font: 500 13px/1 "PolySans"; letter-spacing: .04em; color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 32px; }
+.grid > * { min-width: 0; }
+
+/* Switcher */
+.switch { position: sticky; top: 0; z-index: 50; background: color-mix(in oklab, var(--bg) 86%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.switch .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 64px; flex-wrap: wrap; }
+.opts { display: flex; gap: 8px; flex-wrap: wrap; }
+.opt { display: inline-flex; align-items: center; gap: 10px; height: 38px; padding: 0 14px; border: 1px solid var(--line); background: transparent; color: var(--fg); font: 500 14px/1 "PolySans"; cursor: pointer; }
+.opt[aria-pressed="true"] { border-color: var(--fg); background: var(--surface); }
+.sw { width: 14px; height: 14px; }
+
+/* Hero */
+.hero { padding-block: 72px 104px; }
+.wordmark { font: 500 18px/1 "PolySans Wide"; letter-spacing: -.02em; display: flex; align-items: center; gap: 10px; }
+.wordmark .sq { width: 14px; height: 14px; background: var(--brand); }
+h1 { font: 300 clamp(50px, 6.2vw, 100px)/.92 "PolySans Wide"; letter-spacing: -.045em; margin: 56px 0 0; text-wrap: balance; }
+h1 em { font-style: normal; color: var(--brand); }
+.lede { font-size: clamp(19px, 1.6vw, 23px); line-height: 1.4; color: var(--muted); max-width: 40ch; margin: 30px 0 0; }
+.actions { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; margin-top: 40px; }
+.btn { display: inline-flex; align-items: center; gap: 44px; height: 58px; padding: 0 22px 0 26px; background: var(--brand); color: var(--on-brand); font: 500 16px/1 "PolySans"; text-decoration: none; }
+.btn:hover { background: var(--brand-deep); }
+.link { color: var(--fg); font: 500 16px/1 "PolySans"; text-decoration: underline; text-underline-offset: 6px; text-decoration-color: var(--line); }
+.arrow { width: 22px; height: 12px; }
+
+.chat { background: #ffffff; color: #15181d; border-radius: 18px; padding: 22px; box-shadow: 0 30px 60px -36px rgba(0,0,0,.45); }
+[data-brand="cadmium"] .chat, [data-brand="emerald"] .chat { box-shadow: 0 30px 70px -30px rgba(0,0,0,.9); }
+.bu { margin-left: auto; width: fit-content; max-width: 82%; background: #f1f1f1; border-radius: 16px; padding: 10px 14px; font-size: 15px; }
+.ans { font-size: 15px; color: #2a2e33; margin: 16px 0 18px; }
+.spons { border-radius: 12px; padding: 16px 18px; border: 1.5px solid var(--brand); position: relative; }
+[data-brand="cadmium"] .spons { border-color: #d9ad00; }
+.spons small { font: 500 12px/1 "PolySans"; letter-spacing: .04em; color: #59606a; }
+.spons p { margin: 8px 0 0; font-size: 15px; }
+.bids { margin-top: 18px; display: grid; gap: 8px; }
+.bid { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 12px 14px; border: 1px solid var(--line); background: var(--surface); }
+.bid.win { background: var(--brand); color: var(--on-brand); border-color: var(--brand); }
+.bid .who { font: 500 15px/1 "PolySans"; }
+.bid .tag { font: 500 12px/1 "PolySans"; opacity: .8; margin-left: 10px; }
+
+/* Stage */
+.stage { background: var(--stage); color: var(--stage-fg); padding-block: 112px; }
+.stage h2 { font: 300 clamp(44px, 5vw, 80px)/.96 "PolySans Wide"; letter-spacing: -.04em; margin: 22px 0 0; max-width: 16ch; text-wrap: balance; }
+.stage .label { color: var(--stage-muted); }
+.board { margin-top: 64px; display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 22px; align-items: stretch; position: relative; }
+.node { background: var(--stage-2); border: 1px solid var(--stage-line); padding: 22px; min-height: 190px; }
+.node h3 { margin: 0 0 14px; font: 500 15px/1.2 "PolySans"; letter-spacing: .02em; color: var(--stage-muted); }
+.node .v { font: 400 14px/1.7 "PolySans Mono"; color: var(--stage-fg); }
+.node.live { border-color: var(--stage-brand); box-shadow: inset 0 0 0 1px var(--stage-brand); }
+.node.live h3 { color: var(--stage-brand); }
+.hl { color: var(--stage-brand); }
+.route { margin-top: 26px; height: 2px; background: repeating-linear-gradient(90deg, var(--stage-brand) 0 10px, transparent 10px 18px); position: relative; overflow: hidden; }
+.route i { position: absolute; top: -5px; width: 12px; height: 12px; background: var(--stage-brand); animation: travel 4.5s cubic-bezier(.2,.75,.25,1) infinite; }
+@keyframes travel { from { left: 0 } to { left: calc(100% - 12px) } }
+.beats { margin-top: 30px; display: flex; gap: 8px; flex-wrap: wrap; }
+.beats span { font: 500 13px/1 "PolySans"; padding: 9px 12px; border: 1px solid var(--stage-line); color: var(--stage-muted); }
+.beats span.on { color: var(--stage-fg); border-color: var(--stage-brand); }
+
+/* ContextHint */
+.ch { padding-block: 112px; border-bottom: 1px solid var(--line); }
+.ch h2 { font: 300 clamp(40px, 4.6vw, 72px)/.98 "PolySans Wide"; letter-spacing: -.04em; margin: 22px 0 0; text-wrap: balance; }
+.ch-badge { display: inline-flex; align-items: center; gap: 10px; font: 500 15px/1 "PolySans"; color: var(--fg); }
+.ch-badge .dot { width: 12px; height: 12px; background: var(--ch); }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 56px; border-top: 1px solid var(--line); }
+.stat { padding: 26px 24px 0 0; }
+.stat .n { font: 300 clamp(52px, 6vw, 96px)/.9 "PolySans Wide"; letter-spacing: -.045em; }
+.stat .c { margin-top: 12px; color: var(--muted); font-size: 15px; }
+.flow { margin-top: 64px; display: grid; grid-template-columns: 1fr 120px 1fr; align-items: center; gap: 0; }
+.rec { padding: 22px; background: var(--surface); border: 1px solid var(--line); }
+.rec .k { font: 500 12px/1 "PolySans"; letter-spacing: .04em; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.rec .k i { width: 9px; height: 9px; display: inline-block; }
+.rec p { margin: 0 0 14px; font-size: 15px; }
+.rec p:last-child { margin-bottom: 0; }
+.pipe { height: 3px; background: linear-gradient(90deg, var(--ch), var(--brand)); position: relative; }
+.pipe::after { content: ""; position: absolute; right: -2px; top: -5px; border-left: 10px solid var(--brand); border-top: 6.5px solid transparent; border-bottom: 6.5px solid transparent; }
+.agent { padding: 22px; border: 1.5px solid var(--brand); background: var(--surface); }
+.agent .k { color: var(--brand); }
+.note { margin-top: 26px; font-size: 14px; color: var(--muted); max-width: 80ch; }
+
+/* Proof */
+.proof { padding-block: 112px; }
+.proof h2 { font: 300 clamp(40px, 4.6vw, 72px)/.98 "PolySans Wide"; letter-spacing: -.04em; margin: 22px 0 0; }
+.strip { margin-top: 48px; display: grid; grid-template-columns: repeat(6, 1fr); border-top: 1px solid var(--line); }
+.strip div { padding: 22px 18px 0 0; }
+.strip b { display: block; font: 300 44px/1 "PolySans Wide"; letter-spacing: -.03em; color: var(--brand); }
+.strip span { display: block; margin-top: 10px; font-size: 14px; color: var(--muted); }
+.meter { margin-top: 56px; }
+.bar { display: flex; height: 52px; border: 1px solid var(--fg); }
+.bar .paid { width: 35%; background: var(--brand); }
+.bar .ref { width: 65%; background: repeating-linear-gradient(135deg, var(--line) 0 1px, transparent 1px 7px); }
+.legend { display: flex; justify-content: space-between; margin-top: 12px; font-size: 14px; color: var(--muted); flex-wrap: wrap; gap: 10px; }
+footer { padding-block: 72px 56px; border-top: 1px solid var(--line); }
+.big { font: 500 clamp(90px, 15vw, 230px)/.85 "PolySans Wide"; letter-spacing: -.055em; }
+.big em { font-style: normal; color: var(--brand); }
+.verdict { margin-top: 28px; font-size: 16px; color: var(--muted); max-width: 70ch; }
+
+@media (max-width: 900px) {
+  .grid > * { grid-column: 1 / -1 !important; }
+  .board { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr; }
+  .strip { grid-template-columns: repeat(2, 1fr); }
+  .flow { grid-template-columns: 1fr; gap: 18px; }
+  .pipe { height: 40px; width: 3px; margin-left: 24px; background: linear-gradient(180deg, var(--ch), var(--brand)); }
+  .pipe::after { right: auto; left: -5px; top: auto; bottom: -2px; border-left: 6.5px solid transparent; border-right: 6.5px solid transparent; border-top: 10px solid var(--brand); border-bottom: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .route i { animation: none; left: 60%; } body { transition: none; } }
+</style>
+</head>
+<body>
+
+<div class="switch">
+  <div class="wrap">
+    <div class="wordmark"><span class="sq"></span>AXP.one colour lab</div>
+    <div class="opts" role="group" aria-label="Colourway">
+      <button class="opt" data-set="ultramarine" aria-pressed="true"><i class="sw" style="background:#2a3bff"></i>A. Ultramarine</button>
+      <button class="opt" data-set="cadmium" aria-pressed="false"><i class="sw" style="background:#ffcc00"></i>B. Cadmium</button>
+      <button class="opt" data-set="emerald" aria-pressed="false"><i class="sw" style="background:#19c48a"></i>C. Emerald</button>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap grid">
+    <div style="grid-column: span 7">
+      <div class="label">Hackathon MVP. Hosted Solana sandbox, test USDC.</div>
+      <h1>The advertising exchange for the <em>agentic internet</em>.</h1>
+      <p class="lede">Advertiser agents bid for a disclosed place beside the answer in AI apps. Code decides who wins and what it costs. Publishers are paid in stablecoins for each card they deliver.</p>
+      <div class="actions">
+        <a class="btn" href="#proof">See the working MVP <svg class="arrow" viewBox="0 0 22 12"><path d="M0 6h20M15 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
+        <a class="link" href="#stage">Watch the four minute video</a>
+      </div>
+    </div>
+    <div style="grid-column: 9 / span 4; padding-top: 24px">
+      <div class="chat">
+        <div class="bu">cheapest hardware wallet that still supports ethereum and solana</div>
+        <p class="ans">I can't reliably name the cheapest hardware wallet without checking current prices and Ethereum/Solana support. For a budget choice, compare entry-level hardware wallets by total delivered cost...</p>
+        <div class="spons"><small>Sponsored</small><p>ClearVault is a fictional hardware wallet with offline key storage and declared Ethereum/Solana support.</p></div>
+      </div>
+      <div class="bids">
+        <div class="bid win"><div><span class="who">ClearVault</span><span class="tag">won the tie</span></div><span class="mono">0.004</span></div>
+        <div class="bid"><div><span class="who">KeyForge</span><span class="tag">lost, paid nothing</span></div><span class="mono">0.004</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- STAGE -->
+<section class="stage" id="stage">
+  <div class="wrap">
+    <div class="label">How it works</div>
+    <h2>What happens between the question and the card?</h2>
+    <div class="board">
+      <div class="node"><h3>Buying agents</h3><div class="v">ClearVault bid R3 I3<br>KeyForge bid R3 I3<br>LeatherGuard skip</div></div>
+      <div class="node live"><h3>Exchange</h3><div class="v">eligibility checked in code<br>fit_intent_bid_v1, max 0.004<br><span class="hl">two bids 0.004, tie by campaign ID</span><br>budget reserved</div></div>
+      <div class="node"><h3>AI app</h3><div class="v">Sponsored card delivered<br>receipt signed<br>charge 0.004 accepted</div></div>
+    </div>
+    <div class="route"><i></i></div>
+    <div class="beats"><span>The app offers a moment</span><span>Eligibility in code</span><span>Own evidence</span><span>Agents judge</span><span class="on">Code sets the price</span><span>Delivered and signed</span><span>Settled once</span></div>
+  </div>
+</section>
+
+<!-- CONTEXTHINT -->
+<section class="ch">
+  <div class="wrap">
+    <div class="ch-badge"><span class="dot"></span>Built on ContextHint</div>
+    <h2>What does an advertiser's agent know?</h2>
+    <div class="stats">
+      <div class="stat"><div class="n">11,730</div><div class="c">observed advertisers</div></div>
+      <div class="stat"><div class="n">45,947</div><div class="c">unique ad creatives</div></div>
+      <div class="stat"><div class="n">420,540</div><div class="c">observed ad placements inside ChatGPT</div></div>
+    </div>
+    <div class="flow">
+      <div class="rec">
+        <div class="k"><i style="background:var(--ch)"></i>ContextHint record. Observed</div>
+        <p>Prompt: cheapest hardware wallet that still supports ethereum and solana</p>
+        <p>Ad it drew: a marketplace listing for a Trezor hardware wallet</p>
+        <div class="k" style="margin-top:6px"><i style="border:1.5px solid var(--ch); border-radius:50%"></i>Inferred audience</div>
+        <p>Crypto holders comparing hardware wallets</p>
+      </div>
+      <div class="pipe" aria-hidden="true"></div>
+      <div class="agent rec">
+        <div class="k"><i style="background:var(--brand)"></i>Handed to ClearVault's agent</div>
+        <p>Intent rated 3, not 2.</p>
+        <p class="mono" style="font-size:14px; color:var(--muted)">relevance 3, intent 3, bid 0.004</p>
+      </div>
+    </div>
+    <p class="note">ContextHint keeps its own orange. As its evidence enters an AXP decision, the colour turns into AXP's. Library snapshot, September 26, 2026.</p>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="proof" id="proof">
+  <div class="wrap">
+    <div class="label">Proof</div>
+    <h2>Does it actually run?</h2>
+    <div class="strip">
+      <div><b>4</b><span>real questions</span></div>
+      <div><b>15</b><span>agent decisions</span></div>
+      <div><b>3</b><span>auctions, 1 no fill</span></div>
+      <div><b>3</b><span>signed deliveries</span></div>
+      <div><b class="mono">0.010</b><span>USDC to the publisher</span></div>
+      <div><b class="mono">0.030</b><span>USDC refunded</span></div>
+    </div>
+    <div class="meter">
+      <div class="label" style="margin-bottom:12px">ClearVault payment channel, test USDC</div>
+      <div class="bar"><div class="paid"></div><div class="ref"></div></div>
+      <div class="legend"><span class="mono">paid 0.007</span><span class="mono">refunded 0.013</span><span class="mono">deposit 0.020</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="big">AXP<em>.</em>one</div>
+    <p class="verdict" id="verdict"></p>
+  </div>
+</footer>
+
+<script>
+  const notes = {
+    ultramarine: "A. Ultramarine on paper. Trust, money and clearing, bold without looking like a bank. Sibling to ContextHint's orange (its complement), so the data story turns orange into blue.",
+    cadmium: "B. Cadmium on ink. Loudest and most memorable, trading floor energy. Pushes the whole site dark; the orange to yellow handoff is less distinct.",
+    emerald: "C. Emerald on ink. Money and settlement, calm and premium. Reads close to fintech and crypto defaults."
+  };
+  const root = document.documentElement;
+  function set(b) {
+    root.dataset.brand = b;
+    document.querySelectorAll('.opt').forEach(o => o.setAttribute('aria-pressed', String(o.dataset.set === b)));
+    document.getElementById('verdict').textContent = notes[b];
+    try { history.replaceState(null, '', '#' + b); } catch (e) {}
+  }
+  document.querySelectorAll('.opt').forEach(o => o.addEventListener('click', () => set(o.dataset.set)));
+  addEventListener('keydown', e => { const m = { '1': 'ultramarine', '2': 'cadmium', '3': 'emerald' }[e.key]; if (m) set(m); });
+  set(['ultramarine', 'cadmium', 'emerald'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'ultramarine');
+</script>
+</body>
+</html>
