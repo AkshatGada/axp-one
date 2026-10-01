@@ -66,6 +66,14 @@ const textOf = (f) =>
     .replace(/<[^>]+>/g, " ");
 const INTERNAL = [/ads:(mapping|hint):/, /fit_intent/, /jev-\d/i, /gpt-\d/i, /\bR\d I\d\b/, /\b[0-9a-f]{8}\.\.\.[0-9a-f]{4,}/, /v3-wallet-acceptance/, /missing_constraint/, /frequency_cap/, /crypto_storage/, /campaign ID/i, /base units/i, /lamport/i, /legacy/i];
 const sourceOnly = process.argv.includes("--source-only");
+const libSrc = readFileSync(join(app, "src/data/library.ts"), "utf8").replace(/\/\/.*$|\/\*[\s\S]*?\*\//gm, "");
+const gen = existsSync(join(app, "src/data/run.generated.json")) ? JSON.parse(readFileSync(join(app, "src/data/run.generated.json"), "utf8")) : {};
+const EXACT_COUNTS = [
+  ...new Set([
+    ...[...libSrc.matchAll(/(?<![\w.])(\d{3,})(?![\w.])/g)].map((m) => Number(m[1])).filter((n) => n > 100 && (n < 1900 || n > 2100)),
+    ...Object.values(gen.evidence?.slice ?? {}).filter((n) => typeof n === "number" && n >= 100),
+  ]),
+];
 const builtPages = sourceOnly ? [] : [join(app, "out/index.html"), join(app, "out/design/index.html")].filter(existsSync);
 for (const page of builtPages) {
   const text = textOf(page);
@@ -73,6 +81,17 @@ for (const page of builtPages) {
   const m = text.match(/.{0,60}[\u2013\u2014].{0,60}/g);
   if (m) for (const x of m) hits.push(`${name}  dash in rendered text: ${x.trim()}`);
   if (name === "out/index.html") {
+    // No exact ContextHint dataset counts on the landing: scale words only (owner, v6). The counts
+    // are read from library.ts and the run's screened-slice figures, so a new figure is covered too.
+    for (const n of EXACT_COUNTS) {
+      const forms = [String(n), n.toLocaleString("en-US")];
+      for (const f of new Set(forms)) {
+        const k = text.match(new RegExp(`.{0,40}(?<![\\d.,])${f.replace(/,/g, ",")}(?![\\d]|,\\d)(?!\\.\\d).{0,40}`));
+        if (k) hits.push(`${name}  exact library count on the landing (${f}): ${k[0].trim()}`);
+      }
+    }
+    const pc = text.match(/.{0,40}\b\d{1,3}%(?! confident).{0,40}/);
+    if (pc) hits.push(`${name}  percentage on the landing (hit rates and shares belong on contexthint.com): ${pc[0].trim()}`);
     for (const re of INTERNAL) {
       const k = text.match(new RegExp(`.{0,40}${re.source}.{0,40}`, re.flags));
       if (k) hits.push(`${name}  internal detail on the landing (${re}): ${k[0].trim()}`);

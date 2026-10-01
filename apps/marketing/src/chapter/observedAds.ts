@@ -20,6 +20,5 @@ export const OBSERVED_ADS: ObservedAd[] = [
   { slug: "legalzoom", brand: "LegalZoom", title: "Turn Your Idea Into a Business", body: "LegalZoom helps you register and set up the business structure that fits." },
   { slug: "cursor", brand: "Cursor", title: "AI Code Editor", body: "The next generation AI IDE for developers." },
   { slug: "mastercard", brand: "Mastercard", title: "AI Identity Verification", body: "Build trust in digital interactions with Mastercard." },
-  { slug: "figma", brand: "Figma", title: "The No. 1 Product Design Tool", body: "95% of Fortune 500 companies design in Figma. Find out why. Start for free." },
   { slug: "crowdstrike", brand: "CrowdStrike", title: "Track AI Activity", body: "Monitor prompts, models, users, and agents." },
 ];

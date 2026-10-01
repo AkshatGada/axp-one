@@ -167,9 +167,10 @@ export const SOLANA = {
   devnetH: "Settled on Solana. Check it yourself.",
   devnetBody: "The three signed receipts from our recorded run, settled through two payment channels on Solana Devnet with test USDC. No real value, no new auctions.", // claim-ok: limit
   devnetNote: "The recorded run itself settled on a hosted Solana sandbox; Devnet is a public re-settlement of the same receipts.",
-  openTx: "Open on Explorer",
-  closeTx: "Close on Explorer",
-  channel: "Channel on Explorer",
+  explorer: "View on Solana Explorer:",
+  openTx: "Open",
+  closeTx: "Close",
+  channel: "Channel",
   program: "The channel program on Explorer",
 };
 

@@ -131,7 +131,8 @@ html[data-px-motion="on"] .jv-out[data-reveal][data-in] .jv-bar i { transform: n
 .sol-dev-name b { font-weight: 500; }
 .sol-dev-name span { margin-left: 8px; font-size: 14px; color: var(--muted); }
 .sol-dev-sum { margin: 0; font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.sol-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.sol-btns { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.sol-btns-k { margin-right: 4px; font-size: 14px; font-weight: 500; color: var(--ink); }
 .sol-btn { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border: 1.5px solid var(--sol-ink); background: var(--white); color: var(--sol-ink); font-size: 14px; font-weight: 500; text-decoration: none; transition: transform var(--d-move) var(--ease-out), box-shadow var(--d-move) var(--ease-out); }
 .sol-btn::after { content: "\2197"; margin-left: 8px; }
 .sol-btn:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--sol); }
@@ -186,3 +187,43 @@ html[data-px-motion="on"] .jv-out[data-reveal][data-in] .jv-bar i { transform: n
 .pr .pr-video .px-chapters { display: none; }
 .pr .real-col li { font-size: 14.5px; }
 .pr .real-col ul { gap: 6px; }
+@media (max-width: 899px) {
+  .pl-why { font-size: 22px; }
+  .pl-grid { gap: 18px; }
+  .jv-inputs li { padding: 12px 14px; }
+  .sol-btn { min-height: 38px; padding: 0 12px; }
+  .mt-list li { padding: 12px 0 14px; }
+}
+@media (max-width: 899px) {
+  .sc2-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .sc2-step { padding: 10px 12px; }
+  .sc2-v { font-size: 17px; }
+  .sc2-s { font-size: 13px; }
+  .mt-frame img { aspect-ratio: 16 / 9; }
+  .pr .real-col ul { display: block; }
+  .pr .real-col li { display: inline; font-size: 14.5px; }
+  .pr .real-col li + li::before { content: " "; }
+  .pr .real-grid { gap: 18px; }
+}
+@media (max-width: 899px) {
+  .sc2-track { height: 36px; margin-bottom: 30px; }
+  .sc2-paid-l, .sc2-refund-l { top: calc(100% + 6px); transform: none; }
+  .sc2-paid-l { left: 0; }
+  .sc2-refund-l { right: 0; }
+  .mt-bar-t { display: none; }
+  .mt-bar { justify-content: flex-end; padding: 8px 12px; }
+  .mt-head { margin-bottom: 20px; }
+}
+@media (max-width: 899px) {
+  .ch-lede, .jv-lede, .sol-lede, .mt-lede, .sol-dev-b { font-size: 16px; }
+  .ch-more, .ch-wall-label { font-size: 14px; }
+  .jv-panel .jv-outputs li { padding: 10px 0; }
+  .pr-counts { font-size: 21px; }
+  .pr-video .px-video-caption, .pr-video .px-figcaption { font-size: 14px; }
+}
+/* Phones: the four MVP pages as one swipeable row (the page itself never scrolls sideways). */
+@media (max-width: 899px) {
+  .mt-list { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; margin-inline: calc(-1 * var(--gutter)); padding: 14px var(--gutter) 18px; border-top: 0; scroll-padding-inline: var(--gutter); }
+  .mt-list li { flex: 0 0 84%; scroll-snap-align: start; display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 10px; padding: 0; border-bottom: 0; }
+  .mt-mobile-frame { margin-top: 0; }
+}

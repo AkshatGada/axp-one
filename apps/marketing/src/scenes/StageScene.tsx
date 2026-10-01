@@ -42,7 +42,7 @@ export default function StageScene() {
   const { scrollYProgress: q } = useScroll({ target: sceneRef, offset: ["start start", "end end"] });
   const onScene = (v: number) => {
     const at = v * T;
-    const c = 1 - seg(at, 0.1, 0.24);
+    const c = 1 - seg(at, 0.08, 0.26);
     setCurtain((x) => (Math.abs(x - c) < 0.003 ? x : c));
     const b = Math.min(N - 1, Math.max(0, Math.floor((at - ENTER + HOLD * 0.3) / HOLD)));
     setBeat((x) => (x === b ? x : b));
@@ -69,7 +69,7 @@ export default function StageScene() {
       <div ref={sceneRef} className="ss" data-pinned={pinned ? "" : undefined} style={{ "--scene-h": sceneHeight(N, { hold: HOLD, enter: ENTER, exit: EXIT }) } as CSSProperties}>
         <div className="ss-pin" style={pinned ? { clipPath: `inset(${inset}% ${inset * 1.1}% ${inset}% ${inset * 1.1}%)` } : undefined}>
           {pinned ? (
-            <div className="ss-curtain" aria-hidden style={{ opacity: curtain, visibility: curtain > 0.01 ? "visible" : "hidden" }}>
+            <div className="ss-curtain" aria-hidden style={{ transform: `translate3d(0, ${-io(1 - curtain) * 100}%, 0)`, visibility: curtain > 0.001 ? "visible" : "hidden" }}>
               <div className="ss-shutter-in" style={{ opacity: seg(open, 0.55, 1) }}>
                 <span className="ss-shutter-label">{STAGE.label}</span>
                 <span className="ss-shutter-q">{STAGE.h2}</span>

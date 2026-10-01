@@ -184,13 +184,14 @@ export function SolanaSection() {
                     Deposit {usdc(c.deposit)}, vouchers {c.vouchers.map((v) => usdc(v)).join(" then ")}, paid {usdc(c.paid)}, refunded {usdc(c.refunded)} USDC
                   </p>
                   <span className="sol-btns">
-                    <a className="sol-btn" href={c.openUrl} {...ext}>
+                    <span className="sol-btns-k">{s.explorer}</span>
+                    <a className="sol-btn" href={c.openUrl} {...ext} aria-label={`${c.name}: the channel open on Solana Explorer`}>
                       {s.openTx}
                     </a>
-                    <a className="sol-btn" href={c.closeUrl} {...ext}>
+                    <a className="sol-btn" href={c.closeUrl} {...ext} aria-label={`${c.name}: the channel close on Solana Explorer`}>
                       {s.closeTx}
                     </a>
-                    <a className="sol-btn" href={c.channelUrl} {...ext}>
+                    <a className="sol-btn" href={c.channelUrl} {...ext} aria-label={`${c.name}: the channel account on Solana Explorer`}>
                       {s.channel}
                     </a>
                   </span>
