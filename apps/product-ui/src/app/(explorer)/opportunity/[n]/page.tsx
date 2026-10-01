@@ -98,7 +98,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ n:
           <StageView panels={stagePanels(o)} />
           <div className="ld-between">
             <span className="ld-caption">Recorded replay. Timings are as recorded; nothing re-executes.</span>
-            <StageNav total={noFill ? 3 : STAGES.length} />
+            <StageNav total={noFill ? 3 : STAGES.length} next={next ? { href: `/opportunity/${next}/`, label: `Next: Opportunity ${next} →` } : { href: "/settlement/", label: "Next: Settlement →" }} />
           </div>
         </div>
       </div>

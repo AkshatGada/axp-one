@@ -49,12 +49,11 @@ export function TopBar({ brand, run, chips, actions, style }: { brand: ReactNode
 }
 
 /** Run switcher. Only one recorded run exists; the menu says so instead of inventing others. */
-export function RunSwitcher({ runId, note, open }: { runId: string; note: ReactNode; open?: boolean }) {
+export function RunSwitcher({ runId, note, open, label }: { runId: string; note: ReactNode; open?: boolean; label?: ReactNode }) {
   return (
     <details className="ld-switch" open={open}>
       <summary>
-        <span className="ld-switch-k">Run</span>
-        <span className="ld-mono">{runId}</span>
+        {label ? <span>{label}</span> : <><span className="ld-switch-k">Run</span><span className="ld-mono">{runId}</span></>}
         <span className="ld-switch-caret" aria-hidden>
           ▾
         </span>
@@ -189,7 +188,7 @@ export function Kpi({ label, value, unit, context, delta, tone, href, Link = A, 
         <span>{label}</span>
         {chip}
       </span>
-      <span className="ld-row" style={{ alignItems: "baseline", gap: 8 }}>
+      <span className="ld-row ld-kpi-vrow" style={{ alignItems: "baseline", gap: 8 }}>
         <span className="ld-kpi-num">{value}</span>
         {unit ? <span className="ld-kpi-unit">{unit}</span> : null}
         {delta ? <span className="ld-caption">{delta}</span> : null}
@@ -467,69 +466,80 @@ export function BalanceBar({ total, segments, legend }: { total: number; segment
 }
 
 export type Lane = { key: string; label: string; marks: Array<{ t: number; title: string; tone?: "brand" | "ink" }> };
-/** Activity on the exchange clock as swimlanes, with an explicit axis break between busy windows. Exchange clock only. */
+/** Activity on the exchange clock as swimlanes, with an explicit axis break between busy windows. Exchange clock only.
+ *  HTML labels over a percentage-positioned plot, so text stays the same size at every width. Marks closer than
+ *  about 1% are merged into one dot with a count. Under 900 px a compact list replaces the chart. */
 export function ActivityChart({ lanes, segments, fmt, gapLabel }: { lanes: Lane[]; segments: Array<{ from: number; to: number }>; fmt: (t: number) => string; gapLabel?: string }) {
-  const W = 1100, labelW = 150, gap = 64, laneH = 32, top = 6;
-  const H = top + lanes.length * laneH + 30;
-  const plotW = W - labelW - 8;
-  const segW = (plotW - gap * (segments.length - 1)) / segments.length;
+  const gapPct = 6;
+  const segPct = (100 - gapPct * (segments.length - 1)) / segments.length;
   const xOf = (t: number) => {
     for (let i = 0; i < segments.length; i++) {
-      const s = segments[i];
-      if (t >= s.from && t <= s.to) return labelW + i * (segW + gap) + ((t - s.from) / (s.to - s.from)) * segW;
+      const sg = segments[i];
+      if (t >= sg.from && t <= sg.to) return i * (segPct + gapPct) + ((t - sg.from) / (sg.to - sg.from)) * segPct;
     }
     return null;
   };
-  const yA = top + lanes.length * laneH + 4;
+  const clusters = (l: Lane) => {
+    const pts = l.marks.map((m) => ({ ...m, x: xOf(m.t) })).filter((m): m is typeof m & { x: number } => m.x !== null).sort((p, q) => p.x - q.x);
+    const out: Array<{ x: number; n: number; titles: string[]; tone?: "brand" | "ink" }> = [];
+    for (const m of pts) {
+      const last = out[out.length - 1];
+      if (last && m.x - last.x < 1.1) {
+        last.n++;
+        last.titles.push(`${m.title}, ${fmt(m.t)}`);
+      } else out.push({ x: m.x, n: 1, titles: [`${m.title}, ${fmt(m.t)}`], tone: m.tone });
+    }
+    return out;
+  };
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label="Exchange events by type on the exchange clock">
-      {lanes.map((l, i) => {
-        const yc = top + i * laneH + laneH / 2;
-        return (
-          <g key={l.key}>
-            <text x={0} y={yc + 4} className="ld-chart-lane">
-              {l.label}
-            </text>
-            {segments.map((_, si) => (
-              <line key={si} x1={labelW + si * (segW + gap)} x2={labelW + si * (segW + gap) + segW} y1={yc} y2={yc} className="ld-chart-grid" />
+    <div className="ld-act">
+      <div className="ld-act-chart" role="img" aria-label="Exchange events by type on the exchange clock">
+        {lanes.map((l) => (
+          <div className="ld-act-lane" key={l.key}>
+            <span className="ld-act-label">{l.label}</span>
+            <div className="ld-act-plot">
+              {segments.map((_, si) => (
+                <i key={si} className="ld-act-grid" style={{ left: `${si * (segPct + gapPct)}%`, width: `${segPct}%` }} />
+              ))}
+              {clusters(l).map((c, j) => (
+                <span key={j} className="ld-act-mark" data-tone={c.tone} style={{ left: `${c.x}%` }} title={c.titles.join("\n")}>
+                  {c.n > 1 ? <b>{c.n}</b> : null}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+        <div className="ld-act-lane ld-act-axisrow">
+          <span className="ld-act-label" />
+          <div className="ld-act-plot">
+            {segments.map((sg, si) => (
+              <span key={si} className="ld-act-axis" style={{ left: `${si * (segPct + gapPct)}%`, width: `${segPct}%` }}>
+                <span>{fmt(sg.from)}</span>
+                <span>{fmt(sg.to)}</span>
+              </span>
             ))}
-            {l.marks.map((m, j) => {
-              const x = xOf(m.t);
-              return x === null ? null : (
-                <circle key={j} cx={x} cy={yc} r={5} className="ld-chart-mark" data-tone={m.tone} stroke="var(--ld-panel)" strokeWidth={2}>
-                  <title>{`${m.title} · ${fmt(m.t)}`}</title>
-                </circle>
-              );
-            })}
-          </g>
-        );
-      })}
-      {segments.map((s, si) => {
-        const x0 = labelW + si * (segW + gap);
-        return (
-          <g key={si}>
-            <line x1={x0} x2={x0 + segW} y1={yA} y2={yA} className="ld-chart-axis" />
-            <text x={x0} y={yA + 18} className="ld-chart-t">
-              {fmt(s.from)}
-            </text>
-            <text x={x0 + segW} y={yA + 18} textAnchor="end" className="ld-chart-t">
-              {fmt(s.to)}
-            </text>
-            {si < segments.length - 1 ? (
-              <g className="ld-chart-break">
-                <line x1={x0 + segW + 14} x2={x0 + segW + 20} y1={yA + 5} y2={yA - 5} />
-                <line x1={x0 + segW + 22} x2={x0 + segW + 28} y1={yA + 5} y2={yA - 5} />
-                {gapLabel ? (
-                  <text x={x0 + segW + gap / 2} y={yA - 8} textAnchor="middle" className="ld-chart-t">
+            {gapLabel
+              ? segments.slice(0, -1).map((_, si) => (
+                  <span key={si} className="ld-act-gap" style={{ left: `${(si + 1) * segPct + si * gapPct}%`, width: `${gapPct}%` }}>
                     {gapLabel}
-                  </text>
-                ) : null}
-              </g>
-            ) : null}
-          </g>
-        );
-      })}
-    </svg>
+                  </span>
+                ))
+              : null}
+          </div>
+        </div>
+      </div>
+      <ul className="ld-act-list">
+        {lanes.map((l) => {
+          const ts = l.marks.map((m) => m.t).sort((p, q) => p - q);
+          return (
+            <li key={l.key}>
+              <span className="ld-strong">{l.label}</span>
+              <span className="ld-caption">{ts.length ? `${ts.length}, ${fmt(ts[0])}${ts.length > 1 ? ` to ${fmt(ts[ts.length - 1])}` : ""}` : "none"}</span>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
 

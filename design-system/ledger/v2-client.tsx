@@ -34,7 +34,7 @@ export function Pipeline({ stages, active, onSelect, keys = true }: { stages: Pi
             <span className="ld-pipe-ix">{s.status === "done" && i !== cur ? "✓" : i + 1}</span>
             {s.label}
           </span>
-          <span className="ld-pipe-v">{s.status === "upcoming" ? "Not reached yet" : s.value}</span>
+          <span className="ld-pipe-v">{s.status === "upcoming" ? "Upcoming" : s.value}</span>
         </button>
       ))}
     </div>

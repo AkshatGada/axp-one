@@ -16,17 +16,27 @@ export function OpportunityProvider({ ids, deliveredFrom, children }: { ids: str
   const [active, setA] = useState(0);
   const [all, setAllS] = useState(false);
   useEffect(() => {
+    // The stage follows the URL hash: deep links, Back/Forward and in-page #stage links all move it.
     const read = () => {
       const h = window.location.hash.replace("#", "");
       const i = ids.indexOf(h);
-      if (i >= 0) setA(i);
-      else document.documentElement.removeAttribute("data-op-stage");
-      if (new URLSearchParams(window.location.search).get("all") === "1") setAllS(true);
+      if (i >= 0) {
+        setA(i);
+        document.documentElement.dataset.opStage = ids[i];
+      } else {
+        setA(0);
+        document.documentElement.removeAttribute("data-op-stage");
+      }
+      const wantAll = new URLSearchParams(window.location.search).get("all") === "1";
+      setAllS(wantAll);
+      document.documentElement.classList.toggle("op-all", wantAll);
     };
     read();
     window.addEventListener("hashchange", read);
+    window.addEventListener("popstate", read);
     return () => {
       window.removeEventListener("hashchange", read);
+      window.removeEventListener("popstate", read);
       document.documentElement.removeAttribute("data-op-stage");
       document.documentElement.classList.remove("op-all");
     };
@@ -36,8 +46,15 @@ export function OpportunityProvider({ ids, deliveredFrom, children }: { ids: str
       const j = Math.max(0, Math.min(ids.length - 1, i));
       setA(j);
       document.documentElement.dataset.opStage = ids[j];
-      history.replaceState(history.state, "", `${window.location.pathname}${window.location.search}#${ids[j]}`);
-      if (all) document.getElementById(`stage-${ids[j]}`)?.scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      if (window.location.hash !== `#${ids[j]}`) history.pushState(history.state, "", `${window.location.pathname}${window.location.search}#${ids[j]}`);
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (all) document.getElementById(`stage-${ids[j]}`)?.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+      else {
+        // On a tall stage the next one starts at the top of the stage area, under the sticky stepper.
+        const el = document.getElementById(`stage-${ids[j]}`);
+        const top = el ? el.getBoundingClientRect().top : 0;
+        if (el && top < 0) el.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+      }
     },
     [ids, all],
   );
@@ -71,8 +88,10 @@ export function PipelineBar({ stages }: { stages: Ld.PipeStage[] }) {
   // In one-stage view, later stages stay unrevealed until reached.
   const shown = stages.map((s, i) => (!all && i > active && s.status === "done" ? { ...s, status: "upcoming" as const } : s));
   return (
-    <div className="ld-stack" style={{ gap: 10 }}>
-      <Ld.Pipeline stages={shown} active={active} onSelect={setActive} keys={false} />
+    <>
+      <div className="op2-pipe">
+        <Ld.Pipeline stages={shown} active={active} onSelect={setActive} keys={false} />
+      </div>
       <div className="ld-between">
         <span className="ld-row" style={{ gap: 6 }}>
           <Ld.Key>J</Ld.Key>
@@ -88,7 +107,7 @@ export function PipelineBar({ stages }: { stages: Ld.PipeStage[] }) {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -126,16 +145,23 @@ export function SlotV2({ card, awaiting }: { card: ReactNode; awaiting: ReactNod
 /** Runs before first paint: applies ?all=1 and #stage so the server HTML does not jump on hydration. */
 export const OPP_BOOT = `(function(){try{var d=document.documentElement;if(new URLSearchParams(location.search).get("all")==="1")d.classList.add("op-all");var h=location.hash.slice(1);if(["moment","eligibility","evidence","decisions","auction","award","delivery","receipt","charge","nofill"].indexOf(h)>=0)d.setAttribute("data-op-stage",h);}catch(e){}})();`;
 
-export function StageNav({ total }: { total: number }) {
-  const { active, setActive } = use();
+export function StageNav({ total, next }: { total: number; next: { href: string; label: string } }) {
+  const { active, setActive, all } = use();
+  const last = all || active === total - 1;
   return (
     <div className="ld-row" style={{ gap: 8 }}>
-      <Ld.Button variant="secondary" size="sm" disabled={active === 0} onClick={() => setActive(active - 1)}>
+      <Ld.Button variant="secondary" size="sm" disabled={active === 0 || all} onClick={() => setActive(active - 1)}>
         Previous stage
       </Ld.Button>
-      <Ld.Button size="sm" disabled={active === total - 1} onClick={() => setActive(active + 1)}>
-        Next stage
-      </Ld.Button>
+      {last ? (
+        <a className="ld-btn ld-btn--primary ld-btn--sm" href={next.href}>
+          {next.label}
+        </a>
+      ) : (
+        <Ld.Button size="sm" onClick={() => setActive(active + 1)}>
+          Next stage
+        </Ld.Button>
+      )}
     </div>
   );
 }

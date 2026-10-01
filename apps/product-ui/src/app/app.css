@@ -204,7 +204,17 @@
 .ld .ld-table tbody tr { position: relative; }
 .ld .ld-table tbody tr:has(.ld-rowlink) { cursor: pointer; }
 .ld .ld-table tbody tr:has(.ld-rowlink):hover .ld-rowlink .ld-strong { color: var(--brand-deep); }
-.ov2-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(300px, 1fr); gap: var(--ld-gap); align-items: start; }
+.ov2-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(300px, 1fr); gap: var(--ld-gap); align-items: stretch; }
+.ov2-grid > * { min-width: 0; }
+.ov2-hero { display: grid; grid-template-columns: minmax(340px, 0.9fr) minmax(0, 1.25fr); gap: var(--ld-gap); align-items: start; }
+.ov2-hero > * { min-width: 0; }
+.ov2-pic { margin: 0; display: grid; gap: 8px; }
+.ov2-pic .ld-chat { box-shadow: 0 1px 2px rgba(10, 14, 40, 0.06), 0 8px 24px rgba(10, 14, 40, 0.06); }
+.ov2-answer { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.ov2-side { display: grid; gap: var(--ld-gap); align-content: start; }
+.ov2-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1100px) { .ov2-hero { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 700px) { .ov2-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 1100px) { .ov2-grid { grid-template-columns: minmax(0, 1fr); } }
 .op2-grid { display: grid; grid-template-columns: minmax(300px, 380px) minmax(0, 1fr); gap: 20px; align-items: start; }
 .op2-app { position: sticky; top: calc(var(--ld-top-h) + 16px); display: grid; gap: 10px; }
@@ -217,7 +227,12 @@
 .op2-bidtable { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 .op2-bidtable > div { display: grid; gap: 2px; padding: 10px 12px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-sm); background: var(--ld-panel); }
 .op2-bidtable > div[data-active] { border-color: var(--ld-accent); background: var(--ld-accent-wash); }
-@media (max-width: 1280px) { .op2-grid { grid-template-columns: minmax(0, 1fr); } .op2-app { position: relative; top: 0; } }
+@media (max-width: 1366px) { .op2-grid { grid-template-columns: minmax(280px, 320px) minmax(0, 1fr); } }
+@media (max-width: 1100px) { .op2-grid { grid-template-columns: minmax(0, 1fr); } .op2-app { position: relative; top: 0; } }
+/* The stepper stays in view on tall stages */
+.op2-pipe { position: sticky; top: var(--ld-top-h); z-index: 6; margin: 0 -8px; padding: 8px 8px; background: var(--ld-canvas); }
+.op2-app { top: calc(var(--ld-top-h) + var(--op-pipe-h, 84px) + 12px); }
+.op2-stage { scroll-margin-top: calc(var(--ld-top-h) + var(--op-pipe-h, 84px) + 12px) !important; }
 @media (max-width: 899px) { .op2-neighbor { grid-template-columns: minmax(0, 1fr); } .op2-bidtable { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .st2-channel { scroll-margin-top: calc(var(--ld-top-h) + 16px); }
 .st2-cols { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
@@ -296,3 +311,11 @@ html[data-op-stage="charge"] [data-slot="await"] { display: none !important; }
 .vf2-banner-slot { position: fixed; right: 24px; bottom: 24px; z-index: 40; width: min(520px, calc(100vw - 32px)); }
 .vf2-banner-slot:empty { display: none; }
 .vf2-banner-slot .ld-callout { box-shadow: inset 3px 0 0 var(--ld-danger), 0 12px 32px rgba(10, 14, 40, 0.18); padding-right: 96px; }
+
+/* Overview "Why Solana": a channel as a short vertical sequence; on-chain steps carry the accent rail */
+.ov2-chan { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-left: 2px solid var(--ld-border); }
+.ov2-chan li { display: flex; gap: 8px; align-items: baseline; padding: 5px 0 5px 12px; font-size: 13px; color: var(--ld-text-2); margin-left: -2px; border-left: 2px solid transparent; }
+.ov2-chan li b { font-weight: 500; color: var(--ld-text); min-width: 72px; }
+.ov2-chan li[data-chain] { border-left-color: var(--brand); }
+.ov2-grid > .ld-panel { display: flex; flex-direction: column; }
+.ov2-grid > .ld-panel > .ld-panel-body { flex: 1 1 auto; }

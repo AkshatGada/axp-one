@@ -485,7 +485,9 @@ a.ld-kpi:hover { border-color: var(--ld-border-2); box-shadow: var(--ld-shadow-2
 .ld .lg-inspector-hash { border-top-color: var(--ld-border); }
 .ld .lg-inspector .lg-label { font-size: 12px; font-weight: 500; color: var(--ld-text-2); letter-spacing: 0; }
 .ld .lg-inspector .lg-small { font-size: 13px; color: var(--ld-text-2); }
-.ld .lg-json { border-radius: var(--ld-r-sm); background: var(--ld-sunken); border-color: var(--ld-border); }
+.ld .lg-json { border-radius: var(--ld-r-sm); background: var(--ld-sunken); border-color: var(--ld-border); white-space: pre; overflow-wrap: normal; overflow-x: auto; max-width: 100%; }
+.ld .lg-inspector .lg-hash-value { overflow-wrap: anywhere; }
+.ld .lg-inspector-hash-top { flex-wrap: wrap; }
 .ld .lg-inspect-btn { height: 28px; padding: 0 10px; border: 1px solid var(--ld-border-2); border-radius: var(--ld-r-sm); background: var(--ld-panel); font-size: 12px; font-weight: 500; color: var(--ld-text); box-shadow: var(--ld-shadow-1); transition: background var(--ld-fast) var(--ld-ease); }
 .ld .lg-inspect-btn:hover { background: var(--ld-hover); border-color: var(--ld-text-3); color: var(--ld-text); }
 .ld .lg-inspect-btn[data-active] { background: var(--ld-accent-wash); border-color: var(--ld-accent-line); color: var(--brand-deep); }
@@ -498,7 +500,8 @@ a.ld-kpi:hover { border-color: var(--ld-border-2); box-shadow: var(--ld-shadow-2
 .ld .lg-key { border-radius: var(--ld-r-xs); }
 @media (max-width: 899px) { .ld .lg-inspector { top: auto; left: 8px; right: 8px; width: auto; height: min(78vh, 680px); } }
 
-.ld .ld-kpi-unit { font-size: 13px; font-weight: 500; color: var(--ld-text-2); }
+.ld .ld-kpi-unit { font-size: 13px; font-weight: 500; color: var(--ld-text-2); white-space: nowrap; }
+.ld .ld-kpi-vrow { flex-wrap: nowrap; white-space: nowrap; }
 .ld-pipe-step[data-status="upcoming"] .ld-pipe-ix { background: var(--ld-panel); box-shadow: inset 0 0 0 1px var(--ld-border-2); color: var(--ld-text-3); }
 .ld-pipe-step[data-status="upcoming"] .ld-pipe-top { color: var(--ld-text-3); }
 .ld-pipe-step[data-status="upcoming"] .ld-pipe-v { color: var(--ld-text-3); }
@@ -512,3 +515,20 @@ a.ld-kpi:hover { border-color: var(--ld-border-2); box-shadow: var(--ld-shadow-2
 .ld .ld-hashtag { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: var(--ld-r-full); font-size: 12px; font-weight: 500; white-space: nowrap; }
 .ld .ld-hashtag[data-kind="recomputable"] { background: var(--ld-accent-wash); color: var(--brand-deep); text-decoration: none; }
 .ld .ld-hashtag[data-kind="recorded"] { background: var(--ld-neutral-wash); color: var(--ld-neutral); }
+
+/* ActivityChart (HTML) */
+.ld .ld-act-chart { display: grid; gap: 0; }
+.ld .ld-act-lane { display: grid; grid-template-columns: 136px minmax(0, 1fr); align-items: center; height: 32px; }
+.ld .ld-act-label { font-size: 12px; color: var(--ld-text-2); white-space: nowrap; }
+.ld .ld-act-plot { position: relative; height: 100%; }
+.ld .ld-act-grid { position: absolute; top: 50%; height: 1px; background: var(--ld-chart-grid); }
+.ld .ld-act-mark { position: absolute; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--ld-chart-context); box-shadow: 0 0 0 2px var(--ld-panel); }
+.ld .ld-act-mark[data-tone="ink"] { background: var(--ld-text); }
+.ld .ld-act-mark[data-tone="brand"] { background: var(--ld-chart-1); }
+.ld .ld-act-mark b { position: absolute; left: 9px; top: -11px; font-size: 10px; font-weight: 500; color: var(--ld-text-2); }
+.ld .ld-act-axisrow { height: 28px; align-items: start; }
+.ld .ld-act-axis { position: absolute; top: 0; display: flex; justify-content: space-between; border-top: 1px solid var(--ld-chart-axis); padding-top: 6px; font-size: 12px; color: var(--ld-text-3); }
+.ld .ld-act-gap { position: absolute; top: -8px; text-align: center; font-size: 12px; color: var(--ld-text-3); }
+.ld .ld-act-list { display: none; list-style: none; margin: 0; padding: 0; }
+.ld .ld-act-list li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-top: 1px solid var(--ld-border); font-size: 13px; }
+@media (max-width: 899px) { .ld .ld-act-chart { display: none; } .ld .ld-act-list { display: grid; } }

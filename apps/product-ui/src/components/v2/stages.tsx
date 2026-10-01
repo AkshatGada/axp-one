@@ -56,9 +56,9 @@ export function pipeStages(o: Opportunity): Ld.PipeStage[] {
   return STAGES.map((s, i) => ({ id: s.id, label: s.label, value: values[i], status: "done" as const }));
 }
 
-function StagePanel({ n, title, sub, inspectPayload, children }: { n: number; title: string; sub: ReactNode; inspectPayload?: Parameters<typeof InspectButton>[0]["payload"]; children: ReactNode }) {
+function StagePanel({ n, title, sub, inspectPayload, inspectLabel = "Inspect record", children }: { n: number; title: string; sub: ReactNode; inspectPayload?: Parameters<typeof InspectButton>[0]["payload"]; inspectLabel?: string; children: ReactNode }) {
   return (
-    <Ld.Panel title={`${n}. ${title}`} sub={sub} actions={inspectPayload ? <InspectButton payload={inspectPayload} primary>Inspect record</InspectButton> : undefined}>
+    <Ld.Panel title={`${n}. ${title}`} sub={sub} actions={inspectPayload ? <InspectButton payload={inspectPayload} primary>{inspectLabel}</InspectButton> : undefined}>
       <div className="ld-stack-lg" style={{ gap: 16 }}>
         {children}
       </div>
@@ -204,7 +204,7 @@ export function EvidencePanel({ o }: { o: Opportunity }) {
   const ex = cv?.retrieval?.examples[0];
   const r = ex ? evidenceRecord(ex.id) : undefined;
   return (
-    <StagePanel n={3} title="What each agent was shown" sub={<>Each agent got its own packet of <Term title={GLOSSARY.contexthint.term} def={GLOSSARY.contexthint.def}>ContextHint</Term> history (<a className="ld-link" href="https://contexthint.com" target="_blank" rel="noopener noreferrer">contexthint.com</a>): past prompts, the ads that appeared beside them, and inferred targeting hints.</>}>
+    <StagePanel n={3} title="What each agent was shown" inspectPayload={cv ? inspect.packet(o, cv) : undefined} inspectLabel="Inspect packet" sub={<>Each agent got its own packet of <Term title={GLOSSARY.contexthint.term} def={GLOSSARY.contexthint.def}>ContextHint</Term> history (<a className="ld-link" href="https://contexthint.com" target="_blank" rel="noopener noreferrer">contexthint.com</a>): past prompts, the ads that appeared beside them, and inferred targeting hints.</>}>
       {cv && r && ex ? (
         cv.retrieval!.method === "vector" && ex.similarity === 1 ? (
           <Ld.Callout tone="ch" title="ContextHint had seen this exact question before">
@@ -256,7 +256,7 @@ export function DecisionsPanel({ o }: { o: Opportunity }) {
   const wh = winner ? decisionFor(o, winner, "history") : undefined;
   const amt = (d: Decision) => usdc(((BigInt(run.policy.maxBidBaseUnits) * BigInt(bpsFor(d.relevanceLevel, d.commercialIntentLevel) ?? 0)) / BigInt(10000)).toString());
   return (
-    <StagePanel n={4} title="What each agent decided" sub={<>Decided with <Term title={GLOSSARY.jev.term} def={GLOSSARY.jev.def}>Jev</Term>. Each agent answers in levels: relevance (does the approved card fit?) and commercial intent (is the person comparing offers?). A level is the rounded score, from 0 to 3.</>}>
+    <StagePanel n={4} title="What each agent decided" inspectPayload={wh ? inspect.decision(o, wh) : undefined} inspectLabel={wh ? `Inspect ${nameOf(winner)}'s decision` : undefined} sub={<>Decided with <Term title={GLOSSARY.jev.term} def={GLOSSARY.jev.def}>Jev</Term>. Each agent answers in levels: relevance (does the approved card fit?) and commercial intent (is the person comparing offers?). A level is the rounded score, from 0 to 3.</>}>
       <div className="ld-cols-3">
         {run.campaigns.map((c) => {
           const b = decisionFor(o, c.campaignId, "text_only");
@@ -415,6 +415,7 @@ export function ReceiptPanel({ o }: { o: Opportunity }) {
           { k: "Statement", v: "Inserted the awarded card with its Sponsored label" },
           { k: "For", v: `Opportunity ${o.n}, ${nameOf(o.award!.campaignId)}'s card` },
           { k: "Publisher", v: run.publisher.displayName },
+          { k: "Publisher ID, signed", v: <><span className="ld-mono">{r.fields.publisherId}</span> <span className="ld-caption">legacy ID from an earlier prototype; it stays because changing signed data would break the signature</span></> },
           { k: "Mode", v: r.fields.mode, mono: true },
           { k: "Receipt hash", v: `${r.receiptHash.slice(0, 20)}…`, mono: true },
           { k: "Signature", v: `${r.signature.slice(0, 20)}…`, mono: true },

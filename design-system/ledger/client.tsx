@@ -26,7 +26,7 @@ function writeParam(key: string | null) {
 }
 
 /** Holds the inspector drawer. Any InspectButton on the page registers its payload so ?inspect=<key> deep links open it. */
-export function InspectorProvider({ children, verifyHref = "/verify/", initial }: { children: ReactNode; verifyHref?: string; initial?: InspectPayload | null }) {
+export function InspectorProvider({ children, verifyHref = "/verify/", initial, scopeClass }: { children: ReactNode; verifyHref?: string; initial?: InspectPayload | null; scopeClass?: string }) {
   const [current, setCurrent] = useState<InspectPayload | null>(initial ?? null);
   const registry = useRef(new Map<string, InspectPayload>());
   const wanted = useRef<string | null>(null);
@@ -81,7 +81,13 @@ export function InspectorProvider({ children, verifyHref = "/verify/", initial }
   return (
     <InspectorCtx.Provider value={value}>
       {children}
-      <InspectorDrawer payload={current} onClose={close} verifyHref={verifyHref} />
+      {scopeClass ? (
+        <div className={scopeClass} style={{ display: "contents" }}>
+          <InspectorDrawer payload={current} onClose={close} verifyHref={verifyHref} />
+        </div>
+      ) : (
+        <InspectorDrawer payload={current} onClose={close} verifyHref={verifyHref} />
+      )}
     </InspectorCtx.Provider>
   );
 }

@@ -146,7 +146,7 @@ export default function LedgerV2() {
   );
 
   return (
-    <InspectorProvider>
+    <InspectorProvider scopeClass="ld">
       <div className="ld ds2">
         <Ld.TopBar
           brand={<Ld.Wordmark href="/" Link={L} />}

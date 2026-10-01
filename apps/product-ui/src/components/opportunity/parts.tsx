@@ -136,6 +136,7 @@ export const inspect = {
         { label: "Receipt hash", value: o.receipt!.receiptHash, recomputable: true },
         { label: "Ed25519 signature", value: o.receipt!.signature, recomputable: true, note: `Signed by ${run.publisher.publisherKeyId}.` },
       ],
+      note: `publisherId "${o.receipt!.fields.publisherId}" is a legacy ID from an earlier prototype of the app. It stays because it is part of the signed data: changing it would break the signature.`,
     };
   },
   charge(o: Opportunity): InspectPayload {

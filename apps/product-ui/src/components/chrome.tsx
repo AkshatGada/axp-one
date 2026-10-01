@@ -11,17 +11,17 @@ export type NavCampaign = { slug: string; name: string; meta: string };
 
 const L = Link as unknown as Ld.LinkC;
 
-export function Chrome({ runId, opps, campaigns, verifyMeta, children }: { runId: string; opps: NavOpp[]; campaigns: NavCampaign[]; verifyMeta: string; children: ReactNode }) {
+export function Chrome({ runId, runLabel, opps, campaigns, verifyMeta, children }: { runId: string; runLabel: string; opps: NavOpp[]; campaigns: NavCampaign[]; verifyMeta: string; children: ReactNode }) {
   const path = usePathname() ?? "/";
   const is = (p: string) => path === p || path === p.replace(/\/$/, "");
   const starts = (p: string) => path.startsWith(p);
   return (
-    <InspectorProvider verifyHref="/verify/">
+    <InspectorProvider verifyHref="/verify/" scopeClass="ld">
       <Ld.Shell
         top={
           <Ld.TopBar
             brand={<Ld.Wordmark href={LANDING_URL} Link={L} />}
-            run={<Ld.RunSwitcher runId={runId} note="Recorded replay on a hosted Solana sandbox, test USDC" />}
+            run={<Ld.RunSwitcher runId={runId} label={runLabel} note="Recorded replay on a hosted Solana sandbox, test USDC" />}
             chips={
               <>
                 <Ld.Pv kind="replay" />
