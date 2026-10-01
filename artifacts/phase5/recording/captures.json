@@ -1,0 +1,143 @@
+{
+  "schemaVersion": "axp.browser-captures.v1",
+  "source": "Actual read-only browser navigation via Previous/Next controls",
+  "browser": "Codex in-app browser",
+  "runId": "phase4-20261001-acceptance",
+  "presentationKind": "recorded_evidence_replay",
+  "frames": [
+    {
+      "step": "purpose",
+      "file": "01-purpose.jpg",
+      "capturedAt": "2026-10-01T09:18:05.026Z",
+      "width": 1265,
+      "height": 999,
+      "sha256": "93d64078f39ca602dbc06c33b3ae4ee650cff0be1a25560004f26c77a0e89ee6",
+      "startSeconds": 0,
+      "durationSeconds": 30,
+      "caption": "Advertiser agents buy disclosed placements in participating AI applications. This is a recorded evidence walkthrough, not fresh execution.",
+      "narration": "AXP.one is an advertising exchange for the agentic internet. Advertiser agents buy separate, disclosed sponsored cards in AI applications. Agents judge fit; code enforces the money rules. This is a recorded replay, not a fresh run or purchase. The original experiment used the official hosted Solana payment sandbox—not Devnet or mainnet. The replay needs no credentials and cannot spend."
+    },
+    {
+      "step": "campaigns",
+      "file": "02-campaigns.jpg",
+      "capturedAt": "2026-10-01T09:18:05.328Z",
+      "width": 1265,
+      "height": 966,
+      "sha256": "30940318a9a76d0e3b4c436911daed9787146088bea0715242f6e7174836052f",
+      "startSeconds": 30,
+      "durationSeconds": 20,
+      "caption": "Three fictional advertisers declare their capabilities. Code enforces bid and spending caps. Only TripDesk had a funded channel.",
+      "narration": "TripDesk, AgentPass and HotelOps are fictional advertisers with declared travel-related capabilities. Their maximum bid is four thousand base units; the spending cap is eight thousand. Only TripDesk was funded. All three agents evaluated task fit before the separate financial eligibility check."
+    },
+    {
+      "step": "evidence",
+      "file": "03-evidence.jpg",
+      "capturedAt": "2026-10-01T09:18:06.706Z",
+      "width": 1265,
+      "height": 1123,
+      "sha256": "583180344f5cdb04512b2842e70e77a339590f387379be16bfe5bd53116533e3",
+      "startSeconds": 50,
+      "durationSeconds": 20,
+      "caption": "Historical ContextHint prompt and inferred-hint evidence informed the recorded profiles. These brands are not enrolled AXP advertisers.",
+      "narration": "Real historical ContextHint observations informed these profiles. Travel prompts were associated with Navan, Auth0 and Software Connect creatives; some profiles also contain inferred context hints. These brands are evidence, not enrolled advertisers. Saved creative IDs preserve the association. This is not a reconstruction of ChatGPT’s proprietary algorithm or proof of targeting lift."
+    },
+    {
+      "step": "decisions",
+      "file": "04-decisions.jpg",
+      "capturedAt": "2026-10-01T09:18:32.883Z",
+      "width": 1265,
+      "height": 1187,
+      "sha256": "3ab2834fa6011401d7dbbe6c5d4de9e9d922e5457f35e6a5f4aaaa71759020ff",
+      "startSeconds": 70,
+      "durationSeconds": 25,
+      "caption": "Six recorded Jev decisions: TripDesk bids twice; AgentPass and HotelOps skip twice. Observed decision times were about 1.24–1.51 seconds.",
+      "narration": "Here are six actual Jev decisions. TripDesk bids twice; AgentPass and HotelOps skip twice. Code maps fit and intent to a bid: four thousand times seventy-five percent equals three thousand base units. Jev cannot transfer funds or bypass constraints. Measured attempts took about one point two four to one point five one seconds—no low-latency advantage is demonstrated."
+    },
+    {
+      "step": "answers",
+      "file": "05-answers.jpg",
+      "capturedAt": "2026-10-01T09:18:33.287Z",
+      "width": 1265,
+      "height": 1033,
+      "sha256": "a8a688ce551176a61e51d2cf8ac7fe9003cec247ea2ef738ec2581a40a537d3c",
+      "startSeconds": 95,
+      "durationSeconds": 25,
+      "caption": "Two gpt-6.1-sol low app-agent answers were generated separately from advertiser material, then entered through an operator-recorded bridge.",
+      "narration": "The task asks for corporate travel booking and automatic expense capture. Two gpt-6.1-sol low app agents generated independent organic answers without advertiser material. An operator-recorded bridge delivered those answers to the publisher app. The Sponsored card is separate, not an undisclosed recommendation. This does not demonstrate an unattended CLI integration or cryptographic context isolation."
+    },
+    {
+      "step": "delivery-one",
+      "file": "06-delivery-one.jpg",
+      "capturedAt": "2026-10-01T09:18:34.702Z",
+      "width": 1265,
+      "height": 995,
+      "sha256": "ad78fe23c08868481f217f636b715463fbee894bcb66a24a4e1c433e9dfa571b",
+      "startSeconds": 120,
+      "durationSeconds": 18,
+      "caption": "A Sponsored card was inserted in the owned publisher app. The accepted receipt created one 0.003 test-USDC charge—not payment finality.",
+      "narration": "The first owned-app placement displayed Sponsored. Its accepted acknowledgement binds the opportunity, award and creative hash, creating a three-thousand-unit charge. Acceptance is not payment finality or attention. The public signed receipt packet was reconstructed on later replay."
+    },
+    {
+      "step": "delivery-two",
+      "file": "07-delivery-two.jpg",
+      "capturedAt": "2026-10-01T09:18:36.115Z",
+      "width": 1265,
+      "height": 995,
+      "sha256": "6fa9b218f44034968c0247d5fa47bb3f0e48186a862a4d962b020dc06170094c",
+      "startSeconds": 138,
+      "durationSeconds": 17,
+      "caption": "A second accepted delivery created another 0.003 charge on the same channel. Losing campaigns incurred zero charges.",
+      "narration": "A second disclosed placement creates another three-thousand-unit charge on the same channel. The other campaigns incur zero charges. Only one advertiser was funded; hypothetical competition and failure cases are labelled synthetic, separate from this recorded run."
+    },
+    {
+      "step": "vouchers",
+      "file": "08-vouchers.jpg",
+      "capturedAt": "2026-10-01T09:18:36.418Z",
+      "width": 1265,
+      "height": 1016,
+      "sha256": "b3822edb88a0dd6e309a031dc84472a4bc875fa04a18c4cda0d397c09a553c29",
+      "startSeconds": 155,
+      "durationSeconds": 20,
+      "caption": "The trusted worker signed saved native MPP cumulative vouchers: 3000, then 6000 base units. Agents and browsers do not control payment signing.",
+      "narration": "The trusted worker reads immutable accepted charges. Native MPP sessions verify cumulative authorizations of three thousand, then six thousand base units. Vouchers are saved before submission. Agents and browsers do not supply charge amounts or hold wallet keys. Closing uses the final voucher without another spending increment."
+    },
+    {
+      "step": "settlement",
+      "file": "09-settlement.jpg",
+      "capturedAt": "2026-10-01T09:18:36.823Z",
+      "width": 1265,
+      "height": 1005,
+      "sha256": "915d4637eac2f3832762a9e8d9d2e1d70dd9858b5fafdbc612fb84f80aea14d0",
+      "startSeconds": 175,
+      "durationSeconds": 30,
+      "caption": "One finalized sandbox settlement paid 0.006 test USDC and returned the unused 0.014 deposit. Fees and account rent are separate.",
+      "narration": "One finalized settlement reconciles a deposit of zero point zero two test USDC, a publisher payout of zero point zero zero six, and an unused refund of zero point zero one four. Transaction fees and account rent are separate test-SOL amounts. The sandbox may reset, so saved transaction and account evidence matters more than permanent explorer availability."
+    },
+    {
+      "step": "replay",
+      "file": "10-replay.jpg",
+      "capturedAt": "2026-10-01T09:19:51.764Z",
+      "width": 1265,
+      "height": 992,
+      "sha256": "9a7a0c149e65803fcf858cb58a13de338865db270a9d7f31ed1eb6c1753e3f68",
+      "startSeconds": 205,
+      "durationSeconds": 20,
+      "caption": "A fresh-process replay kept charges, payment records and eight model admissions unchanged. This offline presentation cannot create another payment.",
+      "narration": "The original fresh-process restart preserved two charges, eight model admissions and the payment record hash. No new payment was needed. This presentation only reads files: Previous and Next cannot call models, acknowledge delivery or sign payments. Same-Mac approval remains a demo boundary, not production isolation."
+    },
+    {
+      "step": "limits",
+      "file": "11-limits.jpg",
+      "capturedAt": "2026-10-01T09:19:52.065Z",
+      "width": 1265,
+      "height": 966,
+      "sha256": "1545e8c2101b4e7ba8d71d63f0978024de469705e31a287a7c7059e69cf0bf94",
+      "startSeconds": 225,
+      "durationSeconds": 15,
+      "caption": "The connected test-network exchange works. Attention, absorption, conversion lift, production authorization and ultra-low latency remain unproven.",
+      "narration": "The connected exchange works. Attention, absorption, conversion lift and Jev’s advantage remain unproven. Rules stay the default; Jev is replaceable. The frontend specialist receives implemented APIs and labelled fixtures, while backend code retains financial authority."
+    }
+  ],
+  "bundleHash": "eafd8a40088ace494a69bf04f0475a1f3fa23eaa1be6a6aee280ff061ce0781a",
+  "captureMethod": "Actual browser navigation, full-page screenshots; edited frame holds, not continuous fresh execution"
+}

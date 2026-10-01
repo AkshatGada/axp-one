@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "axp.v3-restart.v1",
+  "runId": "v3-wallet-acceptance",
+  "beforeHash": "58c9ee45e35adc6a09764f386f6a8cff9fa0c54bf3476bb84b40e3b733619d9b",
+  "afterHash": "58c9ee45e35adc6a09764f386f6a8cff9fa0c54bf3476bb84b40e3b733619d9b",
+  "newCalls": 0,
+  "newCharges": 0,
+  "newSignatures": 0,
+  "newBroadcasts": 0,
+  "duplicateReceipts": [
+    {
+      "chargeId": "charge-award-b1283b51-d2d1-492e-b9ae-3f3f4d22bdc1",
+      "replayed": true
+    },
+    {
+      "chargeId": "charge-award-bb3d8921-5975-4633-80df-70b841be0643",
+      "replayed": true
+    },
+    {
+      "chargeId": "charge-award-fe97d44c-836b-4bdc-a68d-6a442d42a97a",
+      "replayed": true
+    }
+  ],
+  "method": "Restart without provider authorization; replay four completed turns and three original signed publisher receipts using saved outcomes. No payment transport or signer instantiated.",
+  "at": "2026-10-01T15:03:29.723Z"
+}

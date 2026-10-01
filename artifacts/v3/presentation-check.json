@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "axp.v3-presentation-check.v1",
+  "observedDate": "2026-10-01",
+  "runId": "v3-wallet-acceptance",
+  "bundleHash": "e34448fafa059d88c0120373fe039940ee1aca29369e3a245293a8b0f5a2152a",
+  "presentation": "recorded_evidence_replay",
+  "financialMode": "sandbox",
+  "recording": {
+    "durationSeconds": 240,
+    "segments": 10,
+    "capture": "Actual read-only Chrome navigation, edited explanatory frame holds",
+    "audio": "None; operator narration provided",
+    "captions": "Baked-in browser chapter captions and matching detailed SRT",
+    "visualChecks": "Source evidence, auction, disclosure and settlement captures inspected; decoded MP4 settlement frame legible with original network/replay labels",
+    "privateMaterial": "No credentials, vectors, private spending vouchers or wallet keys present in captured public UI"
+  },
+  "portablePackage": {
+    "nodeVersionTested": "25.5.0",
+    "files": 84,
+    "startup": "npm run demo:v3:replay on separate loopback port 8795",
+    "npmInstallRequired": false,
+    "credentialsRequired": false,
+    "databaseRequired": false,
+    "providerRequired": false,
+    "sandboxRequired": false,
+    "browserAcceptance": "Two finalized native channels and exact payout/refund/cumulative totals visibly verified in standalone package"
+  },
+  "finalVisualDesign": "Deferred to frontend specialist",
+  "marketingHomepage": "Separate and deferred"
+}

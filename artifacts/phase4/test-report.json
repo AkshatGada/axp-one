@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "axp.phase4-test-report.v1",
+  "observedAt": "2026-10-01T08:49:38.727Z",
+  "scope": "repository tests/ only; ignored vendor tests excluded",
+  "command": "npm test -- --phase4-report",
+  "exitCode": 0,
+  "tests": 214,
+  "passed": 208,
+  "failed": 0,
+  "skipped": 6
+}

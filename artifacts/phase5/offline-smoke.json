@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "axp.phase5-offline-smoke.v1",
+  "observedAt": "2026-10-01T09:32:30.827Z",
+  "launch": "env -i; standalone package; no local-state or execution dependencies",
+  "runId": "phase4-20261001-acceptance",
+  "financialMode": "sandbox",
+  "presentationKind": "recorded_evidence_replay",
+  "bundleHash": "eafd8a40088ace494a69bf04f0475a1f3fa23eaa1be6a6aee280ff061ce0781a",
+  "readOnly": true,
+  "before": {
+    "requests": 2,
+    "modelCalls": 0,
+    "deliveryAcknowledgements": 0,
+    "paymentSigning": 0,
+    "paymentBroadcasts": 0,
+    "readOnly": true,
+    "scope": "This process has no execution adapters; counts describe this server only."
+  },
+  "after": {
+    "requests": 12,
+    "modelCalls": 0,
+    "deliveryAcknowledgements": 0,
+    "paymentSigning": 0,
+    "paymentBroadcasts": 0,
+    "readOnly": true,
+    "scope": "This process has no execution adapters; counts describe this server only."
+  },
+  "unchangedExecutionCounters": true
+}

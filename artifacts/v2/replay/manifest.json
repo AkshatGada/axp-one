@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "axp.v2-replay-manifest.v1",
+  "runId": "v2-wallet-acceptance",
+  "createdAt": "2026-10-01T12:21:54.513Z",
+  "presentation": "recorded-replay",
+  "financialMode": "synthetic",
+  "files": {
+    "run.json": "e74df43bb913da1ac683154a2181a44fdff2acb2a67e286b4e21368dde80fde3"
+  }
+}

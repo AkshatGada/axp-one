@@ -1,0 +1,11 @@
+import {resolve} from 'node:path';
+import {statfsSync} from 'node:fs';
+import {createV3Server} from '../../apps/backend/v3.mjs';
+import {jevApiKey} from '../../packages/config/local.mjs';
+const root=resolve(import.meta.dirname,'../..'),replay=process.argv.includes('--replay'),liveEnabled=!replay&&process.env.AXP_V3_ENABLE_MODELS==='1';
+const disk=statfsSync(root);if(disk.bavail*disk.bsize<40*1024**3)throw Error('40GiB_free_space_floor');
+let apiKey;if(liveEnabled)apiKey=jevApiKey();
+const port=Number(process.env.AXP_V3_PORT??8794);if(!Number.isSafeInteger(port)||port<1024||port>65535)throw Error('port_invalid');
+const server=createV3Server({stateDir:resolve(root,'local-state/v3'),apiKey,liveEnabled,replayDirectory:replay?resolve(root,'artifacts/v3/replay'):null});
+server.listen(port,'127.0.0.1',()=>console.log(`AXP V3 http://127.0.0.1:${port} · ${replay?'recorded evidence replay':liveEnabled?'bounded actual Jev enabled':'preview only'} · hosted Solana sandbox acceptance / synthetic laboratory · no HTTP wallet operations`));
+for(const sig of ['SIGINT','SIGTERM'])process.once(sig,()=>{server.close();server.closeAllConnections();});

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "v2-evidence-manifest.v1",
+  "snapshotId": "v2-wallet:68183f606aea93992630a8ff",
+  "capturedAt": "2026-10-01T12:03:37.814Z",
+  "source": {
+    "container": "adsdb",
+    "database": "ads",
+    "readOnly": true,
+    "transaction": "repeatable-read-read-only-rollback",
+    "queryHash": "2f0231c0e7d13a05011d58de875f969f59c9f2675b757b9795eaa19bfdbc217c",
+    "embeddingCalls": 0,
+    "observationWindow": null,
+    "embeddingRevision": "unrecorded"
+  },
+  "selection": {
+    "version": "wallet-five-category-screened-v2.2",
+    "niches": [
+      "crypto-hardware-wallets-self-custody",
+      "crypto-investing",
+      "web3-infrastructure",
+      "crypto-tax-software-defi-accounting",
+      "privacy-preserving-blockchains-zk-compliance"
+    ],
+    "promptPattern": "wallet|cold[space-or-hyphen]*storage|self[space-or-hyphen]*custody",
+    "limits": {
+      "associations": 1500,
+      "normalizedPrompts": 512,
+      "bytes": 16777216,
+      "neighbors": 5,
+      "examples": 3,
+      "hints": 2,
+      "packetText": 2400
+    },
+    "order": "normalizedHash then mappingId; final mappingId",
+    "normalization": "legacy-python-lower-whitespace-sha256",
+    "rawAssociationsPreserved": true,
+    "classifier": "aws normalized prompt hash + classification text hash + chosen=current mapping niche + llm; verseodin native mapping niche"
+  },
+  "counts": {
+    "associations": 1178,
+    "normalizedPrompts": 241,
+    "probes": 266,
+    "creatives": 537,
+    "hints": 331,
+    "vectors": 241,
+    "queryVectors": 1,
+    "sources": {
+      "aws": 1031,
+      "verseodin": 147
+    }
+  },
+  "omissions": {
+    "candidateAssociations": 1186,
+    "eligibleAssociations": 1178,
+    "eligibleNormalizedPrompts": 241,
+    "failedProbes": 6,
+    "unsupportedSource": 0,
+    "requestAssociated": 0,
+    "customerGenerated": 0,
+    "invalidClassification": 0,
+    "sqlUnsafeText": 2,
+    "selectedAssociations": 1178,
+    "creativeCount": 537,
+    "creativesWithoutScreenedHint": 6,
+    "cappedAssociations": 0,
+    "jsUnsafeAssociations": 0,
+    "jsUnsafeHints": 0,
+    "unusableVectors": 0,
+    "promptsWithoutVector": 0,
+    "fixedQuestionsWithoutVector": 1
+  },
+  "files": {
+    "catalogue.json": "17227525a9e0f80febf5f4836cbd7fc8dd26e72b2293a8c78ae13fd0ccd588e0",
+    "index.backend.json": "206b895f0ae73d3e204b9149e0dc29e022826c99cd015df967bd3506d62238fc"
+  },
+  "limitations": [
+    "Within the measured prompt panel; not all AI demand or real-world query volume.",
+    "Distinct source mappings remain raw associations, not impressions, conversions or independent fit labels. Retrieval ranks each normalized prompt once.",
+    "Historical brands are references, not enrolled bidders or declarations of fictional campaign capabilities.",
+    "Hints are inferred historical hypotheses, not advertiser configuration; sparse tier is retained.",
+    "No raw probes, answers, HTML, URLs, images, geo, customers, credentials or import-spread timestamps exported.",
+    "Model revision is unrecorded. Only existing matching BGE 768-D prompt vectors; no embedding generation or provider calls.",
+    "Vectors are backend-only. publicCatalogue and retrieval/model packets never return vectors.",
+    "Exact cached text uses vector cosine; authored uncached text uses labelled lexical fallback. No training, targeting accuracy or causal-lift claim."
+  ],
+  "contentHash": "18659a4a1fa194be7d741aef526ad72e8981c7864c12a49ec1a9f360e3f69fc7"
+}

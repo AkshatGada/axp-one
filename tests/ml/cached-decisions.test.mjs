@@ -117,7 +117,7 @@ test('capability mismatch forces at most one, low intent skips, preferences choo
   const tie = await request(); tie.opportunity.taskConstraints = {}; assert.equal((await engine.scoreOpportunity(tie)).creativeVersionId, 'creative:a');
   const campaignMissing = await request(); campaignMissing.campaign.declaredConstraints.requiredCapabilities = []; campaignMissing.profile = await profile(campaignMissing.campaign); assert.equal((await engine.scoreOpportunity(campaignMissing)).decision, 'skip');
   const scalar = await request(); scalar.opportunity.taskConstraints.requiredCapabilities = 'booking_api';
-  const invalid = await engine.scoreOpportunity(scalar); assert.equal(invalid.decision, 'abstain'); assert.equal(invalid.engineProvenance.failureReason, 'capabilities_invalid');
+  await assert.rejects(engine.scoreOpportunity(scalar), /capabilities_invalid/);
 });
 test('unrelated historical creative or advertiser-name overlap never supports relevance or gets cited', async () => {
   const r = await request(), row = raw(TASK, 1, 99); const d = await new CachedHistoryDecisionEngine({ lookup: () => cached(row) }).scoreOpportunity(r);

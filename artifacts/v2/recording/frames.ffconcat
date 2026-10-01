@@ -1,0 +1,20 @@
+ffconcat version 1.0
+file '01-foundation-frame.png'
+duration 25
+file '02-onboarding-frame.png'
+duration 25
+file '03-cached-frame.png'
+duration 20
+file '04-fallback-frame.png'
+duration 20
+file '05-decisions-frame.png'
+duration 45
+file '06-publisher-frame.png'
+duration 30
+file '07-accounting-frame.png'
+duration 25
+file '08-payment-frame.png'
+duration 25
+file '09-limits-frame.png'
+duration 25
+file '09-limits-frame.png'

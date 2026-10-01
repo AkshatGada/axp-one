@@ -1,0 +1,228 @@
+{
+  "runId": "phase4-20261001-acceptance",
+  "mode": "sandbox",
+  "freshProcess": true,
+  "before": {
+    "charges": [
+      {
+        "acceptedAt": 1790843279064,
+        "amountBaseUnits": "3000",
+        "awardId": "award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+        "campaignId": "tripdesk",
+        "campaignVersionId": "tripdesk-v1",
+        "channelId": "phase4-channel-tripdesk",
+        "delivery": {
+          "awardId": "award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "id": "delivery-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "receiptHash": "ce41a9fb4a58dba611fc44a2843ed1d36e0abce799b44cbc7f7dc002da2218d1",
+          "receivedAt": 1790843279064,
+          "status": "accepted"
+        },
+        "deliveryId": "delivery-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+        "id": "charge-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+        "mode": "sandbox",
+        "receiptHash": "ce41a9fb4a58dba611fc44a2843ed1d36e0abce799b44cbc7f7dc002da2218d1",
+        "runId": "phase4-20261001-acceptance",
+        "sequence": 1,
+        "status": "accepted"
+      },
+      {
+        "acceptedAt": 1790843417250,
+        "amountBaseUnits": "3000",
+        "awardId": "award-b5f64769-7932-4f28-95c9-731838b8c381",
+        "campaignId": "tripdesk",
+        "campaignVersionId": "tripdesk-v1",
+        "channelId": "phase4-channel-tripdesk",
+        "delivery": {
+          "awardId": "award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "id": "delivery-award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "receiptHash": "242c9f09dfce070b47616dd450f264ad32772ca4acfe62114a4240ddc3e2dc59",
+          "receivedAt": 1790843417250,
+          "status": "accepted"
+        },
+        "deliveryId": "delivery-award-b5f64769-7932-4f28-95c9-731838b8c381",
+        "id": "charge-award-b5f64769-7932-4f28-95c9-731838b8c381",
+        "mode": "sandbox",
+        "receiptHash": "242c9f09dfce070b47616dd450f264ad32772ca4acfe62114a4240ddc3e2dc59",
+        "runId": "phase4-20261001-acceptance",
+        "sequence": 2,
+        "status": "accepted"
+      }
+    ],
+    "paymentRecordHash": "1e06f6bce38dfdf367756f5ed4df2fd836b7ce68a1ed391538377b8c32ff88e8",
+    "modelAdmissions": 8
+  },
+  "after": {
+    "charges": [
+      {
+        "acceptedAt": 1790843279064,
+        "amountBaseUnits": "3000",
+        "awardId": "award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+        "campaignId": "tripdesk",
+        "campaignVersionId": "tripdesk-v1",
+        "channelId": "phase4-channel-tripdesk",
+        "delivery": {
+          "awardId": "award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "id": "delivery-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "receiptHash": "ce41a9fb4a58dba611fc44a2843ed1d36e0abce799b44cbc7f7dc002da2218d1",
+          "receivedAt": 1790843279064,
+          "status": "accepted"
+        },
+        "deliveryId": "delivery-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+        "id": "charge-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+        "mode": "sandbox",
+        "receiptHash": "ce41a9fb4a58dba611fc44a2843ed1d36e0abce799b44cbc7f7dc002da2218d1",
+        "runId": "phase4-20261001-acceptance",
+        "sequence": 1,
+        "status": "accepted"
+      },
+      {
+        "acceptedAt": 1790843417250,
+        "amountBaseUnits": "3000",
+        "awardId": "award-b5f64769-7932-4f28-95c9-731838b8c381",
+        "campaignId": "tripdesk",
+        "campaignVersionId": "tripdesk-v1",
+        "channelId": "phase4-channel-tripdesk",
+        "delivery": {
+          "awardId": "award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "id": "delivery-award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "receiptHash": "242c9f09dfce070b47616dd450f264ad32772ca4acfe62114a4240ddc3e2dc59",
+          "receivedAt": 1790843417250,
+          "status": "accepted"
+        },
+        "deliveryId": "delivery-award-b5f64769-7932-4f28-95c9-731838b8c381",
+        "id": "charge-award-b5f64769-7932-4f28-95c9-731838b8c381",
+        "mode": "sandbox",
+        "receiptHash": "242c9f09dfce070b47616dd450f264ad32772ca4acfe62114a4240ddc3e2dc59",
+        "runId": "phase4-20261001-acceptance",
+        "sequence": 2,
+        "status": "accepted"
+      }
+    ],
+    "paymentRecordHash": "1e06f6bce38dfdf367756f5ed4df2fd836b7ce68a1ed391538377b8c32ff88e8",
+    "modelAdmissions": 8
+  },
+  "result": {
+    "authorizations": [
+      {
+        "channelId": "phase4-channel-tripdesk",
+        "chargeId": "charge-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+        "intentId": "voucher:bddedcf743bb954bfd7054e6486ad5f70b77072c70ab94efd6ac94f84fd24f7e",
+        "status": "authorized",
+        "mode": "sandbox",
+        "evidenceLabel": "native_mpp_test_network",
+        "reasonCode": null,
+        "deliveryId": "charge-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+        "sequence": "1",
+        "incrementBaseUnits": "3000",
+        "previousAmountBaseUnits": "0",
+        "cumulativeAmountBaseUnits": "3000",
+        "payloadHash": "8a8c2812049972dce5a72637a94c4f109424d1ad74bbaff295aa81c56b2ff60b",
+        "voucherRecordHash": "15f615cdf6afffa89f88c8ba5d359b01ca3afa7821f55c299b5a3cbf2b7f3c0d"
+      },
+      {
+        "channelId": "phase4-channel-tripdesk",
+        "chargeId": "charge-award-b5f64769-7932-4f28-95c9-731838b8c381",
+        "intentId": "voucher:b50228ace5f9222b796716c3a78ea8d316d3c44768fab26ac0e4bb50dcdb2710",
+        "status": "authorized",
+        "mode": "sandbox",
+        "evidenceLabel": "native_mpp_test_network",
+        "reasonCode": null,
+        "deliveryId": "charge-award-b5f64769-7932-4f28-95c9-731838b8c381",
+        "sequence": "2",
+        "incrementBaseUnits": "3000",
+        "previousAmountBaseUnits": "3000",
+        "cumulativeAmountBaseUnits": "6000",
+        "payloadHash": "a4d543764a46bad22e72c2eda3f280f7bd8071eb8a5fe0216fc9a0cf7fa52d83",
+        "voucherRecordHash": "cee412366a9aa9ed9a0af8772bc0a847d312ba679036f8cf39005ffa37971622"
+      }
+    ],
+    "receiptReplays": [
+      {
+        "delivery": {
+          "awardId": "award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "id": "delivery-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "receiptHash": "ce41a9fb4a58dba611fc44a2843ed1d36e0abce799b44cbc7f7dc002da2218d1",
+          "receivedAt": 1790843279064,
+          "status": "accepted"
+        },
+        "charge": {
+          "acceptedAt": 1790843279064,
+          "amountBaseUnits": "3000",
+          "awardId": "award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "campaignId": "tripdesk",
+          "campaignVersionId": "tripdesk-v1",
+          "channelId": "phase4-channel-tripdesk",
+          "delivery": {
+            "awardId": "award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+            "id": "delivery-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+            "receiptHash": "ce41a9fb4a58dba611fc44a2843ed1d36e0abce799b44cbc7f7dc002da2218d1",
+            "receivedAt": 1790843279064,
+            "status": "accepted"
+          },
+          "deliveryId": "delivery-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "id": "charge-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "mode": "sandbox",
+          "receiptHash": "ce41a9fb4a58dba611fc44a2843ed1d36e0abce799b44cbc7f7dc002da2218d1",
+          "runId": "phase4-20261001-acceptance",
+          "sequence": 1,
+          "status": "accepted"
+        },
+        "replayed": true
+      },
+      {
+        "delivery": {
+          "awardId": "award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "id": "delivery-award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "receiptHash": "242c9f09dfce070b47616dd450f264ad32772ca4acfe62114a4240ddc3e2dc59",
+          "receivedAt": 1790843417250,
+          "status": "accepted"
+        },
+        "charge": {
+          "acceptedAt": 1790843417250,
+          "amountBaseUnits": "3000",
+          "awardId": "award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "campaignId": "tripdesk",
+          "campaignVersionId": "tripdesk-v1",
+          "channelId": "phase4-channel-tripdesk",
+          "delivery": {
+            "awardId": "award-b5f64769-7932-4f28-95c9-731838b8c381",
+            "id": "delivery-award-b5f64769-7932-4f28-95c9-731838b8c381",
+            "receiptHash": "242c9f09dfce070b47616dd450f264ad32772ca4acfe62114a4240ddc3e2dc59",
+            "receivedAt": 1790843417250,
+            "status": "accepted"
+          },
+          "deliveryId": "delivery-award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "id": "charge-award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "mode": "sandbox",
+          "receiptHash": "242c9f09dfce070b47616dd450f264ad32772ca4acfe62114a4240ddc3e2dc59",
+          "runId": "phase4-20261001-acceptance",
+          "sequence": 2,
+          "status": "accepted"
+        },
+        "replayed": true
+      }
+    ],
+    "close": {
+      "id": "close:0dd5a7a220fa080d59087df4d87913726db84ad5d4da3d1a10489b6933e3036b",
+      "planId": "close:0dd5a7a220fa080d59087df4d87913726db84ad5d4da3d1a10489b6933e3036b",
+      "channelId": "phase4-channel-tripdesk",
+      "protocolChannelId": "7gtxLwQBRuNwug1wWk395goUzmEsbobJcPPp611cLcRR",
+      "mode": "sandbox",
+      "evidenceLabel": "native_mpp_test_network",
+      "termsHash": "c067648d31c7087ce2ef8edb83c8e9e274ee6e289af612252826e6728eb7c425",
+      "status": "finalized",
+      "reasonCode": null,
+      "txSignature": "66oQbyfw6x9y4MAARyzJHuRnmxJ2U2vtFND4suBDkrSwnDQt3VccQwaNZxnYYvBvM38Nw44umKfD3idohQ8bQGqo",
+      "finality": "finalized",
+      "settledBaseUnits": "6000",
+      "refundBaseUnits": "14000",
+      "publisherDeltaBaseUnits": "6000",
+      "feeAndRentLamports": "2054280"
+    }
+  },
+  "newSigning": 0,
+  "newBroadcasts": 0,
+  "newModelCalls": 0,
+  "boundary": "Operator replays the recorded accepted acknowledgements; not a fresh browser delivery."
+}

@@ -1,0 +1,28 @@
+{
+  "runId": "v3-wallet-acceptance",
+  "bundleHash": "e34448fafa059d88c0120373fe039940ee1aca29369e3a245293a8b0f5a2152a",
+  "presentation": "recorded_evidence_replay",
+  "financialMode": "sandbox",
+  "programs": [],
+  "stream_groups": [],
+  "streams": [
+    {
+      "codec_name": "h264",
+      "codec_type": "video",
+      "width": 1400,
+      "height": 1352,
+      "side_data_list": [
+        {}
+      ]
+    }
+  ],
+  "format": {
+    "duration": "240.000000",
+    "size": "3254157"
+  },
+  "videoHash": "011fd921b3057c8c77f68489a00cd3af8582440b4a5801d497cbd766f2fd4a32",
+  "subtitleHash": "6e598d47f63d38e2a91940f0c0e78445e7fca09eb2353183952cb5a2d45a8bd8",
+  "captions": "Baked-in browser chapter captions; matching detailed sidecar SRT",
+  "audio": "None; narration script included",
+  "visualInspection": "Required separately"
+}

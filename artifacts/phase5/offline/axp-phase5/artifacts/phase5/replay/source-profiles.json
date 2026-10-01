@@ -1,0 +1,150 @@
+{
+  "runId": "phase4-20261001-acceptance",
+  "task": "Find a tool for corporate travel booking and automatic expense capture.",
+  "profiles": [
+    {
+      "schemaVersion": "cached-campaign-profile.v1",
+      "campaignId": "tripdesk",
+      "campaignVersionId": "tripdesk-v1",
+      "campaignContentHash": "ec14e0de023fe5f8692b6cfd629e57a8e71fad8bedd38947533e99da288a1af4",
+      "profileBuilderVersion": "cached-profile-v1",
+      "snapshotContentHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+      "approvedTargetingText": "Corporate travel booking and automatic expense capture.",
+      "approvedCreativeVersionIds": [
+        "tripdesk-creative-v1"
+      ],
+      "sourceSeedHash": "051977a6ba668790a15d5faf7ba37ad7dc6ab5de1c820fccabbeb528c6b28fea",
+      "sourceVectorRevision": "unrecorded",
+      "sourceCreativeIds": [
+        5441,
+        26176
+      ],
+      "observedExamples": [
+        {
+          "id": "source:mapping:53989",
+          "promptId": 57933,
+          "creativeId": 26176,
+          "mappingId": 53989,
+          "text": "AI agent travel booking automation",
+          "advertiser": "Navan",
+          "similarity": 1
+        },
+        {
+          "id": "source:mapping:688879",
+          "promptId": 1064588,
+          "creativeId": 5441,
+          "mappingId": 688879,
+          "text": "best all in one tool to manage remote team travel bookings",
+          "advertiser": "Navan",
+          "similarity": 0.7530671659788145
+        }
+      ],
+      "inferredHints": [],
+      "qualityFlags": [
+        "association_not_fit_label",
+        "no_independent_fit_labels",
+        "revision_unrecorded",
+        "sparse_history"
+      ],
+      "historyStatus": "ready",
+      "profileHash": "59a428a3729139e3b1aec76ad5c824ec76bc960aac6ed430337327fc77b22d58"
+    },
+    {
+      "schemaVersion": "cached-campaign-profile.v1",
+      "campaignId": "agentpass",
+      "campaignVersionId": "agentpass-v1",
+      "campaignContentHash": "067ffcac8eee49713bcace8de6b68ac585f3b9c650aba109d089fc0bfa804a40",
+      "profileBuilderVersion": "cached-profile-v1",
+      "snapshotContentHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+      "approvedTargetingText": "Authentication and identity for AI travel agents.",
+      "approvedCreativeVersionIds": [
+        "agentpass-creative-v1"
+      ],
+      "sourceSeedHash": "051977a6ba668790a15d5faf7ba37ad7dc6ab5de1c820fccabbeb528c6b28fea",
+      "sourceVectorRevision": "unrecorded",
+      "sourceCreativeIds": [
+        7668
+      ],
+      "observedExamples": [
+        {
+          "id": "source:mapping:110136",
+          "promptId": 55670,
+          "creativeId": 7668,
+          "mappingId": 110136,
+          "text": "AI-powered insights synthesis tool for travel insights teams",
+          "advertiser": "Auth0",
+          "similarity": 0.7886511087417603
+        }
+      ],
+      "inferredHints": [
+        {
+          "id": "source:hint:12362",
+          "creativeId": 7668,
+          "text": "Product and engineering teams at travel and hospitality companies building AI-powered agent or insights tools who need secure authentication and identity for both human users and the agents themselves.",
+          "tier": "sparse",
+          "modelVersion": "MiniMax-M3@v1"
+        }
+      ],
+      "qualityFlags": [
+        "association_not_fit_label",
+        "inferred_not_fit_groundtruth",
+        "no_independent_fit_labels",
+        "revision_unrecorded",
+        "sparse_hint",
+        "sparse_history"
+      ],
+      "historyStatus": "ready",
+      "profileHash": "27f3299c3109200f5dd37395dd65a70c392b98391269fd008321787534a3ca31"
+    },
+    {
+      "schemaVersion": "cached-campaign-profile.v1",
+      "campaignId": "hotelops",
+      "campaignVersionId": "hotelops-v1",
+      "campaignContentHash": "e5497f558f8ced9260531bb11d882d7380305da420422b598ce789f971586964",
+      "profileBuilderVersion": "cached-profile-v1",
+      "snapshotContentHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+      "approvedTargetingText": "Hotel ERP vendor comparison and expert shortlists.",
+      "approvedCreativeVersionIds": [
+        "hotelops-creative-v1"
+      ],
+      "sourceSeedHash": "051977a6ba668790a15d5faf7ba37ad7dc6ab5de1c820fccabbeb528c6b28fea",
+      "sourceVectorRevision": "unrecorded",
+      "sourceCreativeIds": [
+        3422
+      ],
+      "observedExamples": [
+        {
+          "id": "source:mapping:4442",
+          "promptId": 10851,
+          "creativeId": 3422,
+          "mappingId": 4442,
+          "text": "how to implement AI for revenue optimization in hotels",
+          "advertiser": "Software Connect",
+          "similarity": 0.7920993566513062
+        }
+      ],
+      "inferredHints": [
+        {
+          "id": "source:hint:9295",
+          "creativeId": 3422,
+          "text": "Hotel and hospitality leaders evaluating ERP and revenue-management software who are wary of AI-first vendor hype and want expert-built vendor shortlists over algorithm-generated picks.",
+          "tier": "sparse",
+          "modelVersion": "MiniMax-M3@v1"
+        }
+      ],
+      "qualityFlags": [
+        "association_not_fit_label",
+        "inferred_not_fit_groundtruth",
+        "no_independent_fit_labels",
+        "revision_unrecorded",
+        "sparse_hint",
+        "sparse_history"
+      ],
+      "historyStatus": "ready",
+      "profileHash": "356cc2667e2660bf06dd0826d81c018c39af7aa27c0d4538617496cba771ba17"
+    }
+  ],
+  "capturedAt": "2026-10-01T09:05:20.496Z",
+  "captureKind": "existing_public_local_bootstrap",
+  "noNewLookup": true
+}

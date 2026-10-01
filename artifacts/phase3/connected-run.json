@@ -1,0 +1,1818 @@
+{
+  "schemaVersion": "phase3-connected-evidence.v1",
+  "createdAt": "2026-10-01T07:42:00.140Z",
+  "runId": "phase3-20261001-acceptance",
+  "mode": "actual_models_synthetic_accounting",
+  "task": {
+    "id": "booking-0",
+    "familyId": "booking",
+    "prompt": "Find a tool for corporate travel booking and automatic expense capture.",
+    "requiredCapabilities": [
+      "travel_booking",
+      "expense_management"
+    ],
+    "expectedCampaign": "tripdesk",
+    "coarseIntent": "travel_tools",
+    "rep": 0,
+    "labelProvenance": "authored_fixture_assertion_not_human_or_historical_label"
+  },
+  "checks": {
+    "twoActualOrganicAnswers": true,
+    "sixActualBuyerDecisions": true,
+    "genuineEligibleSkip": true,
+    "twoAcceptedChargesOneChannel": true,
+    "losingCampaignsUncharged": true,
+    "cumulativeAuthorization": true,
+    "noRealSettlement": true,
+    "boundedAttempts": true
+  },
+  "phase3ChecksPassed": true,
+  "actualPayment": false,
+  "renderEvidence": "Owned browser SDK DOM insertion/disclosure acknowledgement, publisher backend signed receipt; not independent viewability proof.",
+  "researchConclusion": "Phase 2 did not establish history or Jev superiority; rules remain the default outside this bounded integration.",
+  "buyerUsage": {
+    "calls": 6,
+    "inputTokens": 7315,
+    "outputTokens": 526,
+    "unknownUsageCalls": 0,
+    "estimatedKnownProviderUsd": 0.00030723,
+    "excludesCodexAndLocalCompute": true,
+    "notInvoice": true
+  },
+  "admissions": [
+    {
+      "admittedAt": 1790840029355,
+      "agentRunId": "agent:473f86b0342f1a6c1f546b2f",
+      "completedAt": 1790840029918,
+      "id": "jev:opp-4be38843d6b0b19fd82e57f3:agentpass-v1",
+      "inputHash": "9d291ca51ac346f60f50e82b65410832e2477b11f2867c19f4554d390555add2",
+      "kind": "jev",
+      "status": "valid",
+      "usage": {
+        "inputTokens": 1213,
+        "outputTokens": 86
+      }
+    },
+    {
+      "admittedAt": 1790840029360,
+      "agentRunId": "agent:e62611e09a03a8bddc2cf705",
+      "completedAt": 1790840029922,
+      "id": "jev:opp-4be38843d6b0b19fd82e57f3:hotelops-v1",
+      "inputHash": "aa36a777e92796b3e3c05caac273a6aff0108e554459e951e3fbdcbe11393743",
+      "kind": "jev",
+      "status": "valid",
+      "usage": {
+        "inputTokens": 1237,
+        "outputTokens": 87
+      }
+    },
+    {
+      "admittedAt": 1790840029361,
+      "agentRunId": "agent:dbe42072b6a248668e8b3f99",
+      "completedAt": 1790840029914,
+      "id": "jev:opp-4be38843d6b0b19fd82e57f3:tripdesk-v1",
+      "inputHash": "520fe7b883a6699a98ff1930854c6eb74981c07a54e06cc694f74f6aa2048131",
+      "kind": "jev",
+      "status": "valid",
+      "usage": {
+        "inputTokens": 1209,
+        "outputTokens": 90
+      }
+    },
+    {
+      "admittedAt": 1790839661360,
+      "agentRunId": "agent:cc9b05a52dc3ee9ec676c79c",
+      "completedAt": 1790839662352,
+      "id": "jev:opp-6db08d7a150f4d0704a5ccd6:agentpass-v1",
+      "inputHash": "0e01b1704954e32311d7d8c06920b9860667b391c077f51b92ef13e1f8c44213",
+      "kind": "jev",
+      "status": "valid",
+      "usage": {
+        "inputTokens": 1212,
+        "outputTokens": 86
+      }
+    },
+    {
+      "admittedAt": 1790839661365,
+      "agentRunId": "agent:306392ac928e2f729d0dccc4",
+      "completedAt": 1790839662390,
+      "id": "jev:opp-6db08d7a150f4d0704a5ccd6:hotelops-v1",
+      "inputHash": "d8dae547a41eefe7e20fd5efbe79a5c69c3af5ee0e510dd3652451e52d8d0e1b",
+      "kind": "jev",
+      "status": "valid",
+      "usage": {
+        "inputTokens": 1236,
+        "outputTokens": 87
+      }
+    },
+    {
+      "admittedAt": 1790839661366,
+      "agentRunId": "agent:91f0adecee6557678ab5013d",
+      "completedAt": 1790839662353,
+      "id": "jev:opp-6db08d7a150f4d0704a5ccd6:tripdesk-v1",
+      "inputHash": "52b3ae81dcc31435750f7b78a714108c245638c3b2f43f3f96e9e366df51b66b",
+      "kind": "jev",
+      "status": "valid",
+      "usage": {
+        "inputTokens": 1208,
+        "outputTokens": 90
+      }
+    },
+    {
+      "admittedAt": 1790839661359,
+      "completedAt": 1790839667885,
+      "id": "organic:opp-6db08d7a150f4d0704a5ccd6",
+      "inputHash": "b98b3b88143f3774013e79de011c4ab8e8142bb0608f2a37d4a655c846bd555e",
+      "kind": "organic",
+      "reason": "agent_model_unsupported",
+      "status": "unavailable"
+    },
+    {
+      "admittedAt": 1790840029353,
+      "completedAt": 1790840029362,
+      "id": "organic_app:opp-4be38843d6b0b19fd82e57f3",
+      "inputHash": "b98b3b88143f3774013e79de011c4ab8e8142bb0608f2a37d4a655c846bd555e",
+      "kind": "organic_app",
+      "provenance": {
+        "agentId": "01a0f65e-1ece-7c52-9fc6-c00d9dd973e1",
+        "attestation": "operator-recorded completion, not cryptographic context proof",
+        "completedAt": "2026-10-01T07:31:55.372Z",
+        "delivery": "saved completion bridge",
+        "effort": "low",
+        "engine": "codex-app-subagent",
+        "inputHash": "93d42d92a69dc57fb55f7e128794043a209bf67126183f81a67460bfdf524c45",
+        "invocationScoped": true,
+        "model": "gpt-6.1-sol",
+        "runtime": "isolated-app-agent-operator-bridge",
+        "status": "completed",
+        "toolUse": "not_requested"
+      },
+      "status": "completed"
+    },
+    {
+      "admittedAt": 1790840010892,
+      "completedAt": 1790840010893,
+      "id": "organic_app:opp-6db08d7a150f4d0704a5ccd6",
+      "inputHash": "b98b3b88143f3774013e79de011c4ab8e8142bb0608f2a37d4a655c846bd555e",
+      "kind": "organic_app",
+      "provenance": {
+        "agentId": "01a0f65e-1e55-7ce2-b8f4-a97a60d15b52",
+        "attestation": "operator-recorded completion, not cryptographic context proof",
+        "completedAt": "2026-10-01T07:31:55.372Z",
+        "delivery": "saved completion bridge",
+        "effort": "low",
+        "engine": "codex-app-subagent",
+        "inputHash": "93d42d92a69dc57fb55f7e128794043a209bf67126183f81a67460bfdf524c45",
+        "invocationScoped": true,
+        "model": "gpt-6.1-sol",
+        "runtime": "isolated-app-agent-operator-bridge",
+        "status": "completed",
+        "toolUse": "not_requested"
+      },
+      "status": "completed"
+    }
+  ],
+  "results": [
+    {
+      "attempts": [
+        {
+          "campaignId": "agentpass",
+          "decision": {
+            "advertiserId": "fictional-agentpass",
+            "agentRunId": "agent:473f86b0342f1a6c1f546b2f",
+            "campaignVersionId": "agentpass-v1",
+            "commercialIntent": 0.6666666666666666,
+            "commercialIntentLevel": 2,
+            "conversionProbability": null,
+            "creativeVersionId": null,
+            "decision": "skip",
+            "engineProvenance": {
+              "candidateLevels": [],
+              "elapsedMs": 559.5176659999997,
+              "engine": "history_jev_v1",
+              "engineConfigVersion": "phase3-jev-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": "jev-1.13.0",
+              "outcome": "valid",
+              "profileHash": "27f3299c3109200f5dd37395dd65a70c392b98391269fd008321787534a3ca31",
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+              "transportMode": "live",
+              "usage": {
+                "inputTokens": 1213,
+                "outputTokens": 86
+              }
+            },
+            "evidenceFieldIds": [],
+            "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+            "reasonCodes": [
+              "no_fit"
+            ],
+            "relevance": 0.3333333333333333,
+            "relevanceLevel": 1,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "elapsedMs": 565.2551669999957,
+          "status": "completed"
+        },
+        {
+          "campaignId": "hotelops",
+          "decision": {
+            "advertiserId": "fictional-hotelops",
+            "agentRunId": "agent:e62611e09a03a8bddc2cf705",
+            "campaignVersionId": "hotelops-v1",
+            "commercialIntent": 0.6666666666666666,
+            "commercialIntentLevel": 2,
+            "conversionProbability": null,
+            "creativeVersionId": null,
+            "decision": "skip",
+            "engineProvenance": {
+              "candidateLevels": [],
+              "elapsedMs": 561.3934999999983,
+              "engine": "history_jev_v1",
+              "engineConfigVersion": "phase3-jev-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": "jev-1.13.0",
+              "outcome": "valid",
+              "profileHash": "356cc2667e2660bf06dd0826d81c018c39af7aa27c0d4538617496cba771ba17",
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+              "transportMode": "live",
+              "usage": {
+                "inputTokens": 1237,
+                "outputTokens": 87
+              }
+            },
+            "evidenceFieldIds": [],
+            "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+            "reasonCodes": [
+              "no_fit"
+            ],
+            "relevance": 0.3333333333333333,
+            "relevanceLevel": 1,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "elapsedMs": 562.3596249999973,
+          "status": "completed"
+        },
+        {
+          "campaignId": "tripdesk",
+          "decision": {
+            "advertiserId": "fictional-tripdesk",
+            "agentRunId": "agent:dbe42072b6a248668e8b3f99",
+            "campaignVersionId": "tripdesk-v1",
+            "commercialIntent": 0.6666666666666666,
+            "commercialIntentLevel": 2,
+            "conversionProbability": null,
+            "creativeVersionId": "tripdesk-creative-v1",
+            "decision": "bid",
+            "engineProvenance": {
+              "candidateLevels": [],
+              "elapsedMs": 552.520666999997,
+              "engine": "history_jev_v1",
+              "engineConfigVersion": "phase3-jev-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": "jev-1.13.0",
+              "outcome": "valid",
+              "profileHash": "59a428a3729139e3b1aec76ad5c824ec76bc960aac6ed430337327fc77b22d58",
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+              "transportMode": "live",
+              "usage": {
+                "inputTokens": 1209,
+                "outputTokens": 90
+              }
+            },
+            "evidenceFieldIds": [
+              "declaration:tripdesk:capabilities"
+            ],
+            "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+            "reasonCodes": [
+              "fit_supported"
+            ],
+            "relevance": 1,
+            "relevanceLevel": 3,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "elapsedMs": 553.7046670000054,
+          "status": "completed"
+        }
+      ],
+      "eligibility": {
+        "eligible": [
+          "agentpass",
+          "hotelops",
+          "tripdesk"
+        ],
+        "excluded": []
+      },
+      "engine": "phase3-live",
+      "mode": "synthetic",
+      "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+      "organic": {
+        "provenance": {
+          "agentId": "01a0f65e-1ece-7c52-9fc6-c00d9dd973e1",
+          "attestation": "operator-recorded completion, not cryptographic context proof",
+          "completedAt": "2026-10-01T07:31:55.372Z",
+          "delivery": "saved completion bridge",
+          "effort": "low",
+          "engine": "codex-app-subagent",
+          "inputHash": "93d42d92a69dc57fb55f7e128794043a209bf67126183f81a67460bfdf524c45",
+          "invocationScoped": true,
+          "model": "gpt-6.1-sol",
+          "runtime": "isolated-app-agent-operator-bridge",
+          "status": "completed",
+          "toolUse": "not_requested"
+        },
+        "source": "actual-model",
+        "status": "completed",
+        "text": "Look for a corporate travel platform that combines flight, hotel and rail booking with expense management. For automatic expense capture, evaluate receipt scanning, emailed-receipt import, corporate-card transaction feeds, receipt-to-transaction matching and automatic expense-report creation. Confirm which steps are truly automatic and which still require employee review.\n\nCompare tools on travel-policy enforcement, approval workflows, booking inventory, traveler support, cancellation handling, accounting integrations, reimbursement workflows and coverage in the countries where your team operates. Check privacy controls, audit trails and how exceptions or missing receipts are handled.\n\nRun a small pilot: book a trip, change a reservation, pay with your usual card, submit a receipt and export the expense to accounting. Measure manual steps, matching accuracy and total cost, including booking, support and integration fees.\n\nTo narrow the choice, specify your team size, operating countries, accounting software and whether you use corporate cards or employee reimbursements."
+      },
+      "outcome": {
+        "award": {
+          "advertiserId": "fictional-tripdesk",
+          "campaignId": "tripdesk",
+          "campaignVersionId": "tripdesk-v1",
+          "channelId": "phase3-channel-tripdesk",
+          "createdAt": 1790840029924,
+          "creative": {
+            "approvedText": "Fictional tripdesk: Corporate travel booking and automatic expense capture.",
+            "creativeVersionId": "tripdesk-creative-v1",
+            "destinationURL": "https://tripdesk.example/",
+            "evidenceFieldIds": [
+              "declaration:tripdesk:capabilities"
+            ],
+            "fictional": true,
+            "softFitTags": [
+              "travel_booking",
+              "expense_management",
+              "policy_enforcement"
+            ]
+          },
+          "creativeHash": "1eb7399788c6acc34399141466ef6a2dd70232ee063ef5a4d03d9c9d14461aaf",
+          "creativeVersionId": "tripdesk-creative-v1",
+          "expiresAt": 1790840209352,
+          "id": "award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+          "mode": "synthetic",
+          "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+          "payee": "synthetic:owned-travel-publisher",
+          "priceBaseUnits": "3000",
+          "publisherId": "owned-travel-app",
+          "randomSessionId": "phase3-owned-session",
+          "runId": "phase3-20261001-acceptance",
+          "status": "delivered",
+          "winningBidId": "bid-8d9c5986-180b-4237-ad24-0e80418eb7ce"
+        },
+        "bids": [
+          {
+            "advertiserId": "fictional-tripdesk",
+            "agentRunId": "agent:dbe42072b6a248668e8b3f99",
+            "amountBaseUnits": "3000",
+            "bidPolicyVersion": "fit_intent_bid_v1",
+            "campaignId": "tripdesk",
+            "campaignVersionId": "tripdesk-v1",
+            "creativeVersionId": "tripdesk-creative-v1",
+            "id": "bid-8d9c5986-180b-4237-ad24-0e80418eb7ce",
+            "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+            "status": "bid"
+          }
+        ],
+        "rejections": [
+          {
+            "campaignId": "agentpass",
+            "reason": "agent_skip"
+          },
+          {
+            "campaignId": "hotelops",
+            "reason": "agent_skip"
+          }
+        ],
+        "status": "awarded"
+      },
+      "replayed": false,
+      "runId": "phase3-20261001-acceptance"
+    },
+    {
+      "attempts": [
+        {
+          "campaignId": "agentpass",
+          "decision": {
+            "advertiserId": "fictional-agentpass",
+            "agentRunId": "agent:cc9b05a52dc3ee9ec676c79c",
+            "campaignVersionId": "agentpass-v1",
+            "commercialIntent": 0.6666666666666666,
+            "commercialIntentLevel": 2,
+            "conversionProbability": null,
+            "creativeVersionId": null,
+            "decision": "skip",
+            "engineProvenance": {
+              "candidateLevels": [],
+              "elapsedMs": 990.3648329999996,
+              "engine": "history_jev_v1",
+              "engineConfigVersion": "phase3-jev-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": "jev-1.13.0",
+              "outcome": "valid",
+              "profileHash": "27f3299c3109200f5dd37395dd65a70c392b98391269fd008321787534a3ca31",
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+              "transportMode": "live",
+              "usage": {
+                "inputTokens": 1212,
+                "outputTokens": 86
+              }
+            },
+            "evidenceFieldIds": [],
+            "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+            "reasonCodes": [
+              "no_fit"
+            ],
+            "relevance": 0.3333333333333333,
+            "relevanceLevel": 1,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "elapsedMs": 991.7169579999972,
+          "status": "completed"
+        },
+        {
+          "campaignId": "hotelops",
+          "decision": {
+            "advertiserId": "fictional-hotelops",
+            "agentRunId": "agent:306392ac928e2f729d0dccc4",
+            "campaignVersionId": "hotelops-v1",
+            "commercialIntent": 0.6666666666666666,
+            "commercialIntentLevel": 2,
+            "conversionProbability": null,
+            "creativeVersionId": null,
+            "decision": "skip",
+            "engineProvenance": {
+              "candidateLevels": [],
+              "elapsedMs": 1024.744458000001,
+              "engine": "history_jev_v1",
+              "engineConfigVersion": "phase3-jev-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": "jev-1.13.0",
+              "outcome": "valid",
+              "profileHash": "356cc2667e2660bf06dd0826d81c018c39af7aa27c0d4538617496cba771ba17",
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+              "transportMode": "live",
+              "usage": {
+                "inputTokens": 1236,
+                "outputTokens": 87
+              }
+            },
+            "evidenceFieldIds": [],
+            "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+            "reasonCodes": [
+              "no_fit"
+            ],
+            "relevance": 0.3333333333333333,
+            "relevanceLevel": 1,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "elapsedMs": 1025.4032920000027,
+          "status": "completed"
+        },
+        {
+          "campaignId": "tripdesk",
+          "decision": {
+            "advertiserId": "fictional-tripdesk",
+            "agentRunId": "agent:91f0adecee6557678ab5013d",
+            "campaignVersionId": "tripdesk-v1",
+            "commercialIntent": 0.6666666666666666,
+            "commercialIntentLevel": 2,
+            "conversionProbability": null,
+            "creativeVersionId": "tripdesk-creative-v1",
+            "decision": "bid",
+            "engineProvenance": {
+              "candidateLevels": [],
+              "elapsedMs": 987.2303750000065,
+              "engine": "history_jev_v1",
+              "engineConfigVersion": "phase3-jev-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": "jev-1.13.0",
+              "outcome": "valid",
+              "profileHash": "59a428a3729139e3b1aec76ad5c824ec76bc960aac6ed430337327fc77b22d58",
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+              "transportMode": "live",
+              "usage": {
+                "inputTokens": 1208,
+                "outputTokens": 90
+              }
+            },
+            "evidenceFieldIds": [
+              "declaration:tripdesk:capabilities"
+            ],
+            "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+            "reasonCodes": [
+              "fit_supported"
+            ],
+            "relevance": 1,
+            "relevanceLevel": 3,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "elapsedMs": 987.8268339999995,
+          "status": "completed"
+        }
+      ],
+      "eligibility": {
+        "eligible": [
+          "agentpass",
+          "hotelops",
+          "tripdesk"
+        ],
+        "excluded": []
+      },
+      "engine": "phase3-live",
+      "mode": "synthetic",
+      "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+      "organic": {
+        "provenance": {
+          "agentId": "01a0f65e-1e55-7ce2-b8f4-a97a60d15b52",
+          "attestation": "operator-recorded completion, not cryptographic context proof",
+          "completedAt": "2026-10-01T07:31:55.372Z",
+          "delivery": "saved completion bridge",
+          "effort": "low",
+          "engine": "codex-app-subagent",
+          "inputHash": "93d42d92a69dc57fb55f7e128794043a209bf67126183f81a67460bfdf524c45",
+          "invocationScoped": true,
+          "model": "gpt-6.1-sol",
+          "runtime": "isolated-app-agent-operator-bridge",
+          "status": "completed",
+          "toolUse": "not_requested"
+        },
+        "source": "actual-model",
+        "status": "completed",
+        "text": "Look for a corporate travel and expense platform that combines booking with automatic receipt and transaction capture. Evaluate whether it supports flights, hotels and ground transport; applies company travel policies and approval workflows; and offers traveler support for changes or disruptions. For expenses, verify receipt scanning, corporate-card feeds, transaction matching, duplicate detection and missing-receipt reminders. Ask which steps are genuinely automatic and which still require employee review. Check integrations with your accounting system, HR directory and existing cards, plus multi-currency handling, reimbursement workflows, audit trails and data security. Compare total costs, including subscriptions, booking fees, support and implementation. In a demo, test a complete trip: book within policy, change a reservation, capture a receipt, match the card charge and export an approved expense. Your employee count, operating countries, accounting software and card setup will help narrow the shortlist."
+      },
+      "outcome": {
+        "award": {
+          "advertiserId": "fictional-tripdesk",
+          "campaignId": "tripdesk",
+          "campaignVersionId": "tripdesk-v1",
+          "channelId": "phase3-channel-tripdesk",
+          "createdAt": 1790839662391,
+          "creative": {
+            "approvedText": "Fictional tripdesk: Corporate travel booking and automatic expense capture.",
+            "creativeVersionId": "tripdesk-creative-v1",
+            "destinationURL": "https://tripdesk.example/",
+            "evidenceFieldIds": [
+              "declaration:tripdesk:capabilities"
+            ],
+            "fictional": true,
+            "softFitTags": [
+              "travel_booking",
+              "expense_management",
+              "policy_enforcement"
+            ]
+          },
+          "creativeHash": "1eb7399788c6acc34399141466ef6a2dd70232ee063ef5a4d03d9c9d14461aaf",
+          "creativeVersionId": "tripdesk-creative-v1",
+          "expiresAt": 1790839841358,
+          "id": "award-1e2021c9-045e-4352-b754-58820f6a2579",
+          "mode": "synthetic",
+          "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+          "payee": "synthetic:owned-travel-publisher",
+          "priceBaseUnits": "3000",
+          "publisherId": "owned-travel-app",
+          "randomSessionId": "phase3-owned-session",
+          "runId": "phase3-20261001-acceptance",
+          "status": "delivered",
+          "winningBidId": "bid-d0c08d6b-8f30-45ca-8b85-323604d2ea6b"
+        },
+        "bids": [
+          {
+            "advertiserId": "fictional-tripdesk",
+            "agentRunId": "agent:91f0adecee6557678ab5013d",
+            "amountBaseUnits": "3000",
+            "bidPolicyVersion": "fit_intent_bid_v1",
+            "campaignId": "tripdesk",
+            "campaignVersionId": "tripdesk-v1",
+            "creativeVersionId": "tripdesk-creative-v1",
+            "id": "bid-d0c08d6b-8f30-45ca-8b85-323604d2ea6b",
+            "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+            "status": "bid"
+          }
+        ],
+        "rejections": [
+          {
+            "campaignId": "agentpass",
+            "reason": "agent_skip"
+          },
+          {
+            "campaignId": "hotelops",
+            "reason": "agent_skip"
+          }
+        ],
+        "status": "awarded"
+      },
+      "replayed": false,
+      "runId": "phase3-20261001-acceptance",
+      "originalOrganic": {
+        "reason": "agent_model_unsupported",
+        "source": "actual-model",
+        "status": "unavailable",
+        "text": "Organic model unavailable; no model answer fabricated."
+      },
+      "organicRecovery": {
+        "noAuctionOrCharge": true,
+        "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+        "organic": {
+          "provenance": {
+            "agentId": "01a0f65e-1e55-7ce2-b8f4-a97a60d15b52",
+            "attestation": "operator-recorded completion, not cryptographic context proof",
+            "completedAt": "2026-10-01T07:31:55.372Z",
+            "delivery": "saved completion bridge",
+            "effort": "low",
+            "engine": "codex-app-subagent",
+            "inputHash": "93d42d92a69dc57fb55f7e128794043a209bf67126183f81a67460bfdf524c45",
+            "invocationScoped": true,
+            "model": "gpt-6.1-sol",
+            "runtime": "isolated-app-agent-operator-bridge",
+            "status": "completed",
+            "toolUse": "not_requested"
+          },
+          "source": "actual-model",
+          "status": "completed",
+          "text": "Look for a corporate travel and expense platform that combines booking with automatic receipt and transaction capture. Evaluate whether it supports flights, hotels and ground transport; applies company travel policies and approval workflows; and offers traveler support for changes or disruptions. For expenses, verify receipt scanning, corporate-card feeds, transaction matching, duplicate detection and missing-receipt reminders. Ask which steps are genuinely automatic and which still require employee review. Check integrations with your accounting system, HR directory and existing cards, plus multi-currency handling, reimbursement workflows, audit trails and data security. Compare total costs, including subscriptions, booking fees, support and implementation. In a demo, test a complete trip: book within policy, change a reservation, capture a receipt, match the card charge and export an approved expense. Your employee count, operating countries, accounting software and card setup will help narrow the shortlist."
+        },
+        "recoveredAt": 1790840010893
+      }
+    }
+  ],
+  "state": {
+    "runId": "phase3-20261001-acceptance",
+    "mode": "synthetic",
+    "schemaVersion": "axp.runtime.v1",
+    "campaigns": [
+      {
+        "advertiserId": "fictional-agentpass",
+        "allowedIntents": [
+          "travel_tools"
+        ],
+        "budgetCapBaseUnits": "20000",
+        "campaignId": "agentpass",
+        "campaignVersionId": "agentpass-v1",
+        "channelId": "phase3-channel-agentpass",
+        "creatives": [
+          {
+            "approvedText": "Fictional agentpass: Authentication and identity for AI travel agents.",
+            "creativeVersionId": "agentpass-creative-v1",
+            "destinationURL": "https://agentpass.example/",
+            "evidenceFieldIds": [
+              "declaration:agentpass:capabilities"
+            ],
+            "fictional": true,
+            "softFitTags": [
+              "agent_identity",
+              "authentication"
+            ]
+          }
+        ],
+        "declaredConstraints": [],
+        "destination": "unknown",
+        "maxBidBaseUnits": "9000",
+        "policyVersion": "fit_intent_bid_v1",
+        "softFitTags": [
+          "agent_identity",
+          "authentication"
+        ],
+        "status": "active"
+      },
+      {
+        "advertiserId": "fictional-hotelops",
+        "allowedIntents": [
+          "travel_tools"
+        ],
+        "budgetCapBaseUnits": "20000",
+        "campaignId": "hotelops",
+        "campaignVersionId": "hotelops-v1",
+        "channelId": "phase3-channel-hotelops",
+        "creatives": [
+          {
+            "approvedText": "Fictional hotelops: Hotel ERP vendor comparison and expert shortlists.",
+            "creativeVersionId": "hotelops-creative-v1",
+            "destinationURL": "https://hotelops.example/",
+            "evidenceFieldIds": [
+              "declaration:hotelops:capabilities"
+            ],
+            "fictional": true,
+            "softFitTags": [
+              "hotel_erp",
+              "expert_shortlist"
+            ]
+          }
+        ],
+        "declaredConstraints": [],
+        "destination": "unknown",
+        "maxBidBaseUnits": "8000",
+        "policyVersion": "fit_intent_bid_v1",
+        "softFitTags": [
+          "hotel_erp",
+          "expert_shortlist"
+        ],
+        "status": "active"
+      },
+      {
+        "advertiserId": "fictional-tripdesk",
+        "allowedIntents": [
+          "travel_tools"
+        ],
+        "budgetCapBaseUnits": "20000",
+        "campaignId": "tripdesk",
+        "campaignVersionId": "tripdesk-v1",
+        "channelId": "phase3-channel-tripdesk",
+        "creatives": [
+          {
+            "approvedText": "Fictional tripdesk: Corporate travel booking and automatic expense capture.",
+            "creativeVersionId": "tripdesk-creative-v1",
+            "destinationURL": "https://tripdesk.example/",
+            "evidenceFieldIds": [
+              "declaration:tripdesk:capabilities"
+            ],
+            "fictional": true,
+            "softFitTags": [
+              "travel_booking",
+              "expense_management",
+              "policy_enforcement"
+            ]
+          }
+        ],
+        "declaredConstraints": [],
+        "destination": "unknown",
+        "maxBidBaseUnits": "4000",
+        "policyVersion": "fit_intent_bid_v1",
+        "softFitTags": [
+          "travel_booking",
+          "expense_management",
+          "policy_enforcement"
+        ],
+        "status": "active"
+      }
+    ],
+    "channels": [
+      {
+        "advertiserId": "fictional-agentpass",
+        "authorizedBaseUnits": "0",
+        "channelId": "phase3-channel-agentpass",
+        "depositBaseUnits": "20000",
+        "mode": "synthetic",
+        "payee": "synthetic:owned-travel-publisher",
+        "publisherId": "owned-travel-app",
+        "refundBaseUnits": "0",
+        "settledBaseUnits": "0",
+        "status": "open",
+        "txSignature": null
+      },
+      {
+        "advertiserId": "fictional-hotelops",
+        "authorizedBaseUnits": "0",
+        "channelId": "phase3-channel-hotelops",
+        "depositBaseUnits": "20000",
+        "mode": "synthetic",
+        "payee": "synthetic:owned-travel-publisher",
+        "publisherId": "owned-travel-app",
+        "refundBaseUnits": "0",
+        "settledBaseUnits": "0",
+        "status": "open",
+        "txSignature": null
+      },
+      {
+        "advertiserId": "fictional-tripdesk",
+        "authorizedBaseUnits": "6000",
+        "channelId": "phase3-channel-tripdesk",
+        "depositBaseUnits": "20000",
+        "mode": "synthetic",
+        "payee": "synthetic:owned-travel-publisher",
+        "publisherId": "owned-travel-app",
+        "refundBaseUnits": "0",
+        "settledBaseUnits": "0",
+        "status": "open",
+        "txSignature": null
+      }
+    ],
+    "opportunities": [
+      {
+        "bodyHash": "c9f4cf0b1abee431aca9eeb5c64c83a91352e7e844a94083a00d87df3d75afcc",
+        "coarseIntent": "travel_tools",
+        "createdAt": 1790840029353,
+        "destination": "unknown",
+        "expiresAt": 1790840209352,
+        "floorBaseUnits": "1000",
+        "id": "opp-4be38843d6b0b19fd82e57f3",
+        "mode": "synthetic",
+        "publisherId": "owned-travel-app",
+        "randomSessionId": "phase3-owned-session",
+        "runId": "phase3-20261001-acceptance",
+        "slotId": "sponsored-card",
+        "softPreferences": [
+          "travel_booking",
+          "expense_management"
+        ],
+        "status": "awarded",
+        "taskConstraints": [],
+        "turnId": "placement-two",
+        "outcome": {
+          "award": {
+            "advertiserId": "fictional-tripdesk",
+            "campaignId": "tripdesk",
+            "campaignVersionId": "tripdesk-v1",
+            "channelId": "phase3-channel-tripdesk",
+            "createdAt": 1790840029924,
+            "creative": {
+              "approvedText": "Fictional tripdesk: Corporate travel booking and automatic expense capture.",
+              "creativeVersionId": "tripdesk-creative-v1",
+              "destinationURL": "https://tripdesk.example/",
+              "evidenceFieldIds": [
+                "declaration:tripdesk:capabilities"
+              ],
+              "fictional": true,
+              "softFitTags": [
+                "travel_booking",
+                "expense_management",
+                "policy_enforcement"
+              ]
+            },
+            "creativeHash": "1eb7399788c6acc34399141466ef6a2dd70232ee063ef5a4d03d9c9d14461aaf",
+            "creativeVersionId": "tripdesk-creative-v1",
+            "expiresAt": 1790840209352,
+            "id": "award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+            "mode": "synthetic",
+            "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+            "payee": "synthetic:owned-travel-publisher",
+            "priceBaseUnits": "3000",
+            "publisherId": "owned-travel-app",
+            "randomSessionId": "phase3-owned-session",
+            "runId": "phase3-20261001-acceptance",
+            "status": "delivered",
+            "winningBidId": "bid-8d9c5986-180b-4237-ad24-0e80418eb7ce"
+          },
+          "bids": [
+            {
+              "advertiserId": "fictional-tripdesk",
+              "agentRunId": "agent:dbe42072b6a248668e8b3f99",
+              "amountBaseUnits": "3000",
+              "bidPolicyVersion": "fit_intent_bid_v1",
+              "campaignId": "tripdesk",
+              "campaignVersionId": "tripdesk-v1",
+              "creativeVersionId": "tripdesk-creative-v1",
+              "id": "bid-8d9c5986-180b-4237-ad24-0e80418eb7ce",
+              "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+              "status": "bid"
+            }
+          ],
+          "rejections": [
+            {
+              "campaignId": "agentpass",
+              "reason": "agent_skip"
+            },
+            {
+              "campaignId": "hotelops",
+              "reason": "agent_skip"
+            }
+          ],
+          "status": "awarded"
+        }
+      },
+      {
+        "bodyHash": "1e8cf5a9a0e33608d6a0994d03a4444411971d8e6820795eca9b98c18a12fe40",
+        "coarseIntent": "travel_tools",
+        "createdAt": 1790839661358,
+        "destination": "unknown",
+        "expiresAt": 1790839841358,
+        "floorBaseUnits": "1000",
+        "id": "opp-6db08d7a150f4d0704a5ccd6",
+        "mode": "synthetic",
+        "publisherId": "owned-travel-app",
+        "randomSessionId": "phase3-owned-session",
+        "runId": "phase3-20261001-acceptance",
+        "slotId": "sponsored-card",
+        "softPreferences": [
+          "travel_booking",
+          "expense_management"
+        ],
+        "status": "awarded",
+        "taskConstraints": [],
+        "turnId": "placement-one",
+        "outcome": {
+          "award": {
+            "advertiserId": "fictional-tripdesk",
+            "campaignId": "tripdesk",
+            "campaignVersionId": "tripdesk-v1",
+            "channelId": "phase3-channel-tripdesk",
+            "createdAt": 1790839662391,
+            "creative": {
+              "approvedText": "Fictional tripdesk: Corporate travel booking and automatic expense capture.",
+              "creativeVersionId": "tripdesk-creative-v1",
+              "destinationURL": "https://tripdesk.example/",
+              "evidenceFieldIds": [
+                "declaration:tripdesk:capabilities"
+              ],
+              "fictional": true,
+              "softFitTags": [
+                "travel_booking",
+                "expense_management",
+                "policy_enforcement"
+              ]
+            },
+            "creativeHash": "1eb7399788c6acc34399141466ef6a2dd70232ee063ef5a4d03d9c9d14461aaf",
+            "creativeVersionId": "tripdesk-creative-v1",
+            "expiresAt": 1790839841358,
+            "id": "award-1e2021c9-045e-4352-b754-58820f6a2579",
+            "mode": "synthetic",
+            "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+            "payee": "synthetic:owned-travel-publisher",
+            "priceBaseUnits": "3000",
+            "publisherId": "owned-travel-app",
+            "randomSessionId": "phase3-owned-session",
+            "runId": "phase3-20261001-acceptance",
+            "status": "delivered",
+            "winningBidId": "bid-d0c08d6b-8f30-45ca-8b85-323604d2ea6b"
+          },
+          "bids": [
+            {
+              "advertiserId": "fictional-tripdesk",
+              "agentRunId": "agent:91f0adecee6557678ab5013d",
+              "amountBaseUnits": "3000",
+              "bidPolicyVersion": "fit_intent_bid_v1",
+              "campaignId": "tripdesk",
+              "campaignVersionId": "tripdesk-v1",
+              "creativeVersionId": "tripdesk-creative-v1",
+              "id": "bid-d0c08d6b-8f30-45ca-8b85-323604d2ea6b",
+              "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+              "status": "bid"
+            }
+          ],
+          "rejections": [
+            {
+              "campaignId": "agentpass",
+              "reason": "agent_skip"
+            },
+            {
+              "campaignId": "hotelops",
+              "reason": "agent_skip"
+            }
+          ],
+          "status": "awarded"
+        }
+      }
+    ],
+    "awards": [
+      {
+        "advertiserId": "fictional-tripdesk",
+        "campaignId": "tripdesk",
+        "campaignVersionId": "tripdesk-v1",
+        "channelId": "phase3-channel-tripdesk",
+        "createdAt": 1790839662391,
+        "creative": {
+          "approvedText": "Fictional tripdesk: Corporate travel booking and automatic expense capture.",
+          "creativeVersionId": "tripdesk-creative-v1",
+          "destinationURL": "https://tripdesk.example/",
+          "evidenceFieldIds": [
+            "declaration:tripdesk:capabilities"
+          ],
+          "fictional": true,
+          "softFitTags": [
+            "travel_booking",
+            "expense_management",
+            "policy_enforcement"
+          ]
+        },
+        "creativeHash": "1eb7399788c6acc34399141466ef6a2dd70232ee063ef5a4d03d9c9d14461aaf",
+        "creativeVersionId": "tripdesk-creative-v1",
+        "expiresAt": 1790839841358,
+        "id": "award-1e2021c9-045e-4352-b754-58820f6a2579",
+        "mode": "synthetic",
+        "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+        "payee": "synthetic:owned-travel-publisher",
+        "priceBaseUnits": "3000",
+        "publisherId": "owned-travel-app",
+        "randomSessionId": "phase3-owned-session",
+        "runId": "phase3-20261001-acceptance",
+        "status": "delivered",
+        "winningBidId": "bid-d0c08d6b-8f30-45ca-8b85-323604d2ea6b"
+      },
+      {
+        "advertiserId": "fictional-tripdesk",
+        "campaignId": "tripdesk",
+        "campaignVersionId": "tripdesk-v1",
+        "channelId": "phase3-channel-tripdesk",
+        "createdAt": 1790840029924,
+        "creative": {
+          "approvedText": "Fictional tripdesk: Corporate travel booking and automatic expense capture.",
+          "creativeVersionId": "tripdesk-creative-v1",
+          "destinationURL": "https://tripdesk.example/",
+          "evidenceFieldIds": [
+            "declaration:tripdesk:capabilities"
+          ],
+          "fictional": true,
+          "softFitTags": [
+            "travel_booking",
+            "expense_management",
+            "policy_enforcement"
+          ]
+        },
+        "creativeHash": "1eb7399788c6acc34399141466ef6a2dd70232ee063ef5a4d03d9c9d14461aaf",
+        "creativeVersionId": "tripdesk-creative-v1",
+        "expiresAt": 1790840209352,
+        "id": "award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+        "mode": "synthetic",
+        "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+        "payee": "synthetic:owned-travel-publisher",
+        "priceBaseUnits": "3000",
+        "publisherId": "owned-travel-app",
+        "randomSessionId": "phase3-owned-session",
+        "runId": "phase3-20261001-acceptance",
+        "status": "delivered",
+        "winningBidId": "bid-8d9c5986-180b-4237-ad24-0e80418eb7ce"
+      }
+    ],
+    "charges": [
+      {
+        "acceptedAt": 1790839667889,
+        "amountBaseUnits": "3000",
+        "awardId": "award-1e2021c9-045e-4352-b754-58820f6a2579",
+        "campaignId": "tripdesk",
+        "campaignVersionId": "tripdesk-v1",
+        "channelId": "phase3-channel-tripdesk",
+        "delivery": {
+          "awardId": "award-1e2021c9-045e-4352-b754-58820f6a2579",
+          "id": "delivery-award-1e2021c9-045e-4352-b754-58820f6a2579",
+          "receiptHash": "6e1ba5d9b2aaa3e1855e4cd3e09a264a2c9b0a9d21108af32d10df98d7abe91e",
+          "receivedAt": 1790839667889,
+          "status": "accepted"
+        },
+        "deliveryId": "delivery-award-1e2021c9-045e-4352-b754-58820f6a2579",
+        "id": "charge-award-1e2021c9-045e-4352-b754-58820f6a2579",
+        "mode": "synthetic",
+        "receiptHash": "6e1ba5d9b2aaa3e1855e4cd3e09a264a2c9b0a9d21108af32d10df98d7abe91e",
+        "runId": "phase3-20261001-acceptance",
+        "sequence": 1,
+        "status": "authorized"
+      },
+      {
+        "acceptedAt": 1790840029928,
+        "amountBaseUnits": "3000",
+        "awardId": "award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+        "campaignId": "tripdesk",
+        "campaignVersionId": "tripdesk-v1",
+        "channelId": "phase3-channel-tripdesk",
+        "delivery": {
+          "awardId": "award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+          "id": "delivery-award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+          "receiptHash": "dc408a6d123bf645303a698a85af57417a8d40aba5ea842c48f3efdec19328ca",
+          "receivedAt": 1790840029928,
+          "status": "accepted"
+        },
+        "deliveryId": "delivery-award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+        "id": "charge-award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+        "mode": "synthetic",
+        "receiptHash": "dc408a6d123bf645303a698a85af57417a8d40aba5ea842c48f3efdec19328ca",
+        "runId": "phase3-20261001-acceptance",
+        "sequence": 2,
+        "status": "authorized"
+      }
+    ],
+    "events": [
+      {
+        "seq": 1,
+        "type": "synthetic_channel_opened",
+        "at": 1790839627580,
+        "data": {
+          "channelId": "phase3-channel-tripdesk",
+          "depositBaseUnits": "20000"
+        }
+      },
+      {
+        "seq": 2,
+        "type": "campaign_created",
+        "at": 1790839627580,
+        "data": {
+          "campaignId": "tripdesk",
+          "campaignVersionId": "tripdesk-v1"
+        }
+      },
+      {
+        "seq": 3,
+        "type": "synthetic_channel_opened",
+        "at": 1790839627580,
+        "data": {
+          "channelId": "phase3-channel-agentpass",
+          "depositBaseUnits": "20000"
+        }
+      },
+      {
+        "seq": 4,
+        "type": "campaign_created",
+        "at": 1790839627581,
+        "data": {
+          "campaignId": "agentpass",
+          "campaignVersionId": "agentpass-v1"
+        }
+      },
+      {
+        "seq": 5,
+        "type": "synthetic_channel_opened",
+        "at": 1790839627581,
+        "data": {
+          "channelId": "phase3-channel-hotelops",
+          "depositBaseUnits": "20000"
+        }
+      },
+      {
+        "seq": 6,
+        "type": "campaign_created",
+        "at": 1790839627581,
+        "data": {
+          "campaignId": "hotelops",
+          "campaignVersionId": "hotelops-v1"
+        }
+      },
+      {
+        "seq": 7,
+        "type": "opportunity_created",
+        "at": 1790839661358,
+        "data": {
+          "coarseIntent": "travel_tools",
+          "opportunityId": "opp-6db08d7a150f4d0704a5ccd6"
+        }
+      },
+      {
+        "seq": 8,
+        "type": "model_call_admitted",
+        "at": 1790839661359,
+        "data": {
+          "admittedAt": 1790839661359,
+          "id": "organic:opp-6db08d7a150f4d0704a5ccd6",
+          "inputHash": "b98b3b88143f3774013e79de011c4ab8e8142bb0608f2a37d4a655c846bd555e",
+          "kind": "organic",
+          "status": "reserved"
+        }
+      },
+      {
+        "seq": 9,
+        "type": "model_call_admitted",
+        "at": 1790839661360,
+        "data": {
+          "admittedAt": 1790839661360,
+          "id": "jev:opp-6db08d7a150f4d0704a5ccd6:agentpass-v1",
+          "inputHash": "0e01b1704954e32311d7d8c06920b9860667b391c077f51b92ef13e1f8c44213",
+          "kind": "jev",
+          "status": "reserved"
+        }
+      },
+      {
+        "seq": 10,
+        "type": "model_call_admitted",
+        "at": 1790839661365,
+        "data": {
+          "admittedAt": 1790839661365,
+          "id": "jev:opp-6db08d7a150f4d0704a5ccd6:hotelops-v1",
+          "inputHash": "d8dae547a41eefe7e20fd5efbe79a5c69c3af5ee0e510dd3652451e52d8d0e1b",
+          "kind": "jev",
+          "status": "reserved"
+        }
+      },
+      {
+        "seq": 11,
+        "type": "model_call_admitted",
+        "at": 1790839661366,
+        "data": {
+          "admittedAt": 1790839661366,
+          "id": "jev:opp-6db08d7a150f4d0704a5ccd6:tripdesk-v1",
+          "inputHash": "52b3ae81dcc31435750f7b78a714108c245638c3b2f43f3f96e9e366df51b66b",
+          "kind": "jev",
+          "status": "reserved"
+        }
+      },
+      {
+        "seq": 12,
+        "type": "model_call_completed",
+        "at": 1790839662352,
+        "data": {
+          "agentRunId": "agent:cc9b05a52dc3ee9ec676c79c",
+          "id": "jev:opp-6db08d7a150f4d0704a5ccd6:agentpass-v1",
+          "kind": "jev",
+          "status": "valid",
+          "usage": {
+            "inputTokens": 1212,
+            "outputTokens": 86
+          }
+        }
+      },
+      {
+        "seq": 13,
+        "type": "model_call_completed",
+        "at": 1790839662353,
+        "data": {
+          "agentRunId": "agent:91f0adecee6557678ab5013d",
+          "id": "jev:opp-6db08d7a150f4d0704a5ccd6:tripdesk-v1",
+          "kind": "jev",
+          "status": "valid",
+          "usage": {
+            "inputTokens": 1208,
+            "outputTokens": 90
+          }
+        }
+      },
+      {
+        "seq": 14,
+        "type": "model_call_completed",
+        "at": 1790839662390,
+        "data": {
+          "agentRunId": "agent:306392ac928e2f729d0dccc4",
+          "id": "jev:opp-6db08d7a150f4d0704a5ccd6:hotelops-v1",
+          "kind": "jev",
+          "status": "valid",
+          "usage": {
+            "inputTokens": 1236,
+            "outputTokens": 87
+          }
+        }
+      },
+      {
+        "seq": 15,
+        "type": "buyer_decision",
+        "at": 1790839662390,
+        "data": {
+          "decision": {
+            "advertiserId": "fictional-agentpass",
+            "agentRunId": "agent:cc9b05a52dc3ee9ec676c79c",
+            "campaignVersionId": "agentpass-v1",
+            "commercialIntent": 0.6666666666666666,
+            "commercialIntentLevel": 2,
+            "conversionProbability": null,
+            "creativeVersionId": null,
+            "decision": "skip",
+            "engineProvenance": {
+              "candidateLevels": [],
+              "elapsedMs": 990.3648329999996,
+              "engine": "history_jev_v1",
+              "engineConfigVersion": "phase3-jev-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": "jev-1.13.0",
+              "outcome": "valid",
+              "profileHash": "27f3299c3109200f5dd37395dd65a70c392b98391269fd008321787534a3ca31",
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+              "transportMode": "live",
+              "usage": {
+                "inputTokens": 1212,
+                "outputTokens": 86
+              }
+            },
+            "evidenceFieldIds": [],
+            "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+            "reasonCodes": [
+              "no_fit"
+            ],
+            "relevance": 0.3333333333333333,
+            "relevanceLevel": 1,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "opportunityId": "opp-6db08d7a150f4d0704a5ccd6"
+        }
+      },
+      {
+        "seq": 16,
+        "type": "buyer_decision",
+        "at": 1790839662390,
+        "data": {
+          "decision": {
+            "advertiserId": "fictional-hotelops",
+            "agentRunId": "agent:306392ac928e2f729d0dccc4",
+            "campaignVersionId": "hotelops-v1",
+            "commercialIntent": 0.6666666666666666,
+            "commercialIntentLevel": 2,
+            "conversionProbability": null,
+            "creativeVersionId": null,
+            "decision": "skip",
+            "engineProvenance": {
+              "candidateLevels": [],
+              "elapsedMs": 1024.744458000001,
+              "engine": "history_jev_v1",
+              "engineConfigVersion": "phase3-jev-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": "jev-1.13.0",
+              "outcome": "valid",
+              "profileHash": "356cc2667e2660bf06dd0826d81c018c39af7aa27c0d4538617496cba771ba17",
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+              "transportMode": "live",
+              "usage": {
+                "inputTokens": 1236,
+                "outputTokens": 87
+              }
+            },
+            "evidenceFieldIds": [],
+            "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+            "reasonCodes": [
+              "no_fit"
+            ],
+            "relevance": 0.3333333333333333,
+            "relevanceLevel": 1,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "opportunityId": "opp-6db08d7a150f4d0704a5ccd6"
+        }
+      },
+      {
+        "seq": 17,
+        "type": "buyer_decision",
+        "at": 1790839662391,
+        "data": {
+          "decision": {
+            "advertiserId": "fictional-tripdesk",
+            "agentRunId": "agent:91f0adecee6557678ab5013d",
+            "campaignVersionId": "tripdesk-v1",
+            "commercialIntent": 0.6666666666666666,
+            "commercialIntentLevel": 2,
+            "conversionProbability": null,
+            "creativeVersionId": "tripdesk-creative-v1",
+            "decision": "bid",
+            "engineProvenance": {
+              "candidateLevels": [],
+              "elapsedMs": 987.2303750000065,
+              "engine": "history_jev_v1",
+              "engineConfigVersion": "phase3-jev-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": "jev-1.13.0",
+              "outcome": "valid",
+              "profileHash": "59a428a3729139e3b1aec76ad5c824ec76bc960aac6ed430337327fc77b22d58",
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+              "transportMode": "live",
+              "usage": {
+                "inputTokens": 1208,
+                "outputTokens": 90
+              }
+            },
+            "evidenceFieldIds": [
+              "declaration:tripdesk:capabilities"
+            ],
+            "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+            "reasonCodes": [
+              "fit_supported"
+            ],
+            "relevance": 1,
+            "relevanceLevel": 3,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "opportunityId": "opp-6db08d7a150f4d0704a5ccd6"
+        }
+      },
+      {
+        "seq": 18,
+        "type": "award_reserved",
+        "at": 1790839662391,
+        "data": {
+          "awardId": "award-1e2021c9-045e-4352-b754-58820f6a2579",
+          "campaignId": "tripdesk",
+          "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+          "priceBaseUnits": "3000"
+        }
+      },
+      {
+        "seq": 19,
+        "type": "model_call_completed",
+        "at": 1790839667885,
+        "data": {
+          "id": "organic:opp-6db08d7a150f4d0704a5ccd6",
+          "kind": "organic",
+          "reason": "agent_model_unsupported",
+          "status": "unavailable"
+        }
+      },
+      {
+        "seq": 20,
+        "type": "delivery_accepted",
+        "at": 1790839667889,
+        "data": {
+          "awardId": "award-1e2021c9-045e-4352-b754-58820f6a2579",
+          "deliveryId": "delivery-award-1e2021c9-045e-4352-b754-58820f6a2579"
+        }
+      },
+      {
+        "seq": 21,
+        "type": "charge_accepted",
+        "at": 1790839667889,
+        "data": {
+          "amountBaseUnits": "3000",
+          "channelId": "phase3-channel-tripdesk",
+          "chargeId": "charge-award-1e2021c9-045e-4352-b754-58820f6a2579"
+        }
+      },
+      {
+        "seq": 22,
+        "type": "model_call_admitted",
+        "at": 1790840010892,
+        "data": {
+          "admittedAt": 1790840010892,
+          "id": "organic_app:opp-6db08d7a150f4d0704a5ccd6",
+          "inputHash": "b98b3b88143f3774013e79de011c4ab8e8142bb0608f2a37d4a655c846bd555e",
+          "kind": "organic_app",
+          "status": "reserved"
+        }
+      },
+      {
+        "seq": 23,
+        "type": "model_call_completed",
+        "at": 1790840010893,
+        "data": {
+          "id": "organic_app:opp-6db08d7a150f4d0704a5ccd6",
+          "kind": "organic_app",
+          "provenance": {
+            "agentId": "01a0f65e-1e55-7ce2-b8f4-a97a60d15b52",
+            "attestation": "operator-recorded completion, not cryptographic context proof",
+            "completedAt": "2026-10-01T07:31:55.372Z",
+            "delivery": "saved completion bridge",
+            "effort": "low",
+            "engine": "codex-app-subagent",
+            "inputHash": "93d42d92a69dc57fb55f7e128794043a209bf67126183f81a67460bfdf524c45",
+            "invocationScoped": true,
+            "model": "gpt-6.1-sol",
+            "runtime": "isolated-app-agent-operator-bridge",
+            "status": "completed",
+            "toolUse": "not_requested"
+          },
+          "status": "completed"
+        }
+      },
+      {
+        "seq": 24,
+        "type": "organic_answer_recovered",
+        "at": 1790840010893,
+        "data": {
+          "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+          "provenance": {
+            "agentId": "01a0f65e-1e55-7ce2-b8f4-a97a60d15b52",
+            "attestation": "operator-recorded completion, not cryptographic context proof",
+            "completedAt": "2026-10-01T07:31:55.372Z",
+            "delivery": "saved completion bridge",
+            "effort": "low",
+            "engine": "codex-app-subagent",
+            "inputHash": "93d42d92a69dc57fb55f7e128794043a209bf67126183f81a67460bfdf524c45",
+            "invocationScoped": true,
+            "model": "gpt-6.1-sol",
+            "runtime": "isolated-app-agent-operator-bridge",
+            "status": "completed",
+            "toolUse": "not_requested"
+          },
+          "source": "actual-model"
+        }
+      },
+      {
+        "seq": 25,
+        "type": "opportunity_created",
+        "at": 1790840029353,
+        "data": {
+          "coarseIntent": "travel_tools",
+          "opportunityId": "opp-4be38843d6b0b19fd82e57f3"
+        }
+      },
+      {
+        "seq": 26,
+        "type": "model_call_admitted",
+        "at": 1790840029353,
+        "data": {
+          "admittedAt": 1790840029353,
+          "id": "organic_app:opp-4be38843d6b0b19fd82e57f3",
+          "inputHash": "b98b3b88143f3774013e79de011c4ab8e8142bb0608f2a37d4a655c846bd555e",
+          "kind": "organic_app",
+          "status": "reserved"
+        }
+      },
+      {
+        "seq": 27,
+        "type": "model_call_admitted",
+        "at": 1790840029355,
+        "data": {
+          "admittedAt": 1790840029355,
+          "id": "jev:opp-4be38843d6b0b19fd82e57f3:agentpass-v1",
+          "inputHash": "9d291ca51ac346f60f50e82b65410832e2477b11f2867c19f4554d390555add2",
+          "kind": "jev",
+          "status": "reserved"
+        }
+      },
+      {
+        "seq": 28,
+        "type": "model_call_admitted",
+        "at": 1790840029360,
+        "data": {
+          "admittedAt": 1790840029360,
+          "id": "jev:opp-4be38843d6b0b19fd82e57f3:hotelops-v1",
+          "inputHash": "aa36a777e92796b3e3c05caac273a6aff0108e554459e951e3fbdcbe11393743",
+          "kind": "jev",
+          "status": "reserved"
+        }
+      },
+      {
+        "seq": 29,
+        "type": "model_call_admitted",
+        "at": 1790840029361,
+        "data": {
+          "admittedAt": 1790840029361,
+          "id": "jev:opp-4be38843d6b0b19fd82e57f3:tripdesk-v1",
+          "inputHash": "520fe7b883a6699a98ff1930854c6eb74981c07a54e06cc694f74f6aa2048131",
+          "kind": "jev",
+          "status": "reserved"
+        }
+      },
+      {
+        "seq": 30,
+        "type": "model_call_completed",
+        "at": 1790840029362,
+        "data": {
+          "id": "organic_app:opp-4be38843d6b0b19fd82e57f3",
+          "kind": "organic_app",
+          "provenance": {
+            "agentId": "01a0f65e-1ece-7c52-9fc6-c00d9dd973e1",
+            "attestation": "operator-recorded completion, not cryptographic context proof",
+            "completedAt": "2026-10-01T07:31:55.372Z",
+            "delivery": "saved completion bridge",
+            "effort": "low",
+            "engine": "codex-app-subagent",
+            "inputHash": "93d42d92a69dc57fb55f7e128794043a209bf67126183f81a67460bfdf524c45",
+            "invocationScoped": true,
+            "model": "gpt-6.1-sol",
+            "runtime": "isolated-app-agent-operator-bridge",
+            "status": "completed",
+            "toolUse": "not_requested"
+          },
+          "status": "completed"
+        }
+      },
+      {
+        "seq": 31,
+        "type": "model_call_completed",
+        "at": 1790840029915,
+        "data": {
+          "agentRunId": "agent:dbe42072b6a248668e8b3f99",
+          "id": "jev:opp-4be38843d6b0b19fd82e57f3:tripdesk-v1",
+          "kind": "jev",
+          "status": "valid",
+          "usage": {
+            "inputTokens": 1209,
+            "outputTokens": 90
+          }
+        }
+      },
+      {
+        "seq": 32,
+        "type": "model_call_completed",
+        "at": 1790840029920,
+        "data": {
+          "agentRunId": "agent:473f86b0342f1a6c1f546b2f",
+          "id": "jev:opp-4be38843d6b0b19fd82e57f3:agentpass-v1",
+          "kind": "jev",
+          "status": "valid",
+          "usage": {
+            "inputTokens": 1213,
+            "outputTokens": 86
+          }
+        }
+      },
+      {
+        "seq": 33,
+        "type": "model_call_completed",
+        "at": 1790840029922,
+        "data": {
+          "agentRunId": "agent:e62611e09a03a8bddc2cf705",
+          "id": "jev:opp-4be38843d6b0b19fd82e57f3:hotelops-v1",
+          "kind": "jev",
+          "status": "valid",
+          "usage": {
+            "inputTokens": 1237,
+            "outputTokens": 87
+          }
+        }
+      },
+      {
+        "seq": 34,
+        "type": "buyer_decision",
+        "at": 1790840029923,
+        "data": {
+          "decision": {
+            "advertiserId": "fictional-agentpass",
+            "agentRunId": "agent:473f86b0342f1a6c1f546b2f",
+            "campaignVersionId": "agentpass-v1",
+            "commercialIntent": 0.6666666666666666,
+            "commercialIntentLevel": 2,
+            "conversionProbability": null,
+            "creativeVersionId": null,
+            "decision": "skip",
+            "engineProvenance": {
+              "candidateLevels": [],
+              "elapsedMs": 559.5176659999997,
+              "engine": "history_jev_v1",
+              "engineConfigVersion": "phase3-jev-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": "jev-1.13.0",
+              "outcome": "valid",
+              "profileHash": "27f3299c3109200f5dd37395dd65a70c392b98391269fd008321787534a3ca31",
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+              "transportMode": "live",
+              "usage": {
+                "inputTokens": 1213,
+                "outputTokens": 86
+              }
+            },
+            "evidenceFieldIds": [],
+            "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+            "reasonCodes": [
+              "no_fit"
+            ],
+            "relevance": 0.3333333333333333,
+            "relevanceLevel": 1,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "opportunityId": "opp-4be38843d6b0b19fd82e57f3"
+        }
+      },
+      {
+        "seq": 35,
+        "type": "buyer_decision",
+        "at": 1790840029924,
+        "data": {
+          "decision": {
+            "advertiserId": "fictional-hotelops",
+            "agentRunId": "agent:e62611e09a03a8bddc2cf705",
+            "campaignVersionId": "hotelops-v1",
+            "commercialIntent": 0.6666666666666666,
+            "commercialIntentLevel": 2,
+            "conversionProbability": null,
+            "creativeVersionId": null,
+            "decision": "skip",
+            "engineProvenance": {
+              "candidateLevels": [],
+              "elapsedMs": 561.3934999999983,
+              "engine": "history_jev_v1",
+              "engineConfigVersion": "phase3-jev-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": "jev-1.13.0",
+              "outcome": "valid",
+              "profileHash": "356cc2667e2660bf06dd0826d81c018c39af7aa27c0d4538617496cba771ba17",
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+              "transportMode": "live",
+              "usage": {
+                "inputTokens": 1237,
+                "outputTokens": 87
+              }
+            },
+            "evidenceFieldIds": [],
+            "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+            "reasonCodes": [
+              "no_fit"
+            ],
+            "relevance": 0.3333333333333333,
+            "relevanceLevel": 1,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "opportunityId": "opp-4be38843d6b0b19fd82e57f3"
+        }
+      },
+      {
+        "seq": 36,
+        "type": "buyer_decision",
+        "at": 1790840029924,
+        "data": {
+          "decision": {
+            "advertiserId": "fictional-tripdesk",
+            "agentRunId": "agent:dbe42072b6a248668e8b3f99",
+            "campaignVersionId": "tripdesk-v1",
+            "commercialIntent": 0.6666666666666666,
+            "commercialIntentLevel": 2,
+            "conversionProbability": null,
+            "creativeVersionId": "tripdesk-creative-v1",
+            "decision": "bid",
+            "engineProvenance": {
+              "candidateLevels": [],
+              "elapsedMs": 552.520666999997,
+              "engine": "history_jev_v1",
+              "engineConfigVersion": "phase3-jev-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": "jev-1.13.0",
+              "outcome": "valid",
+              "profileHash": "59a428a3729139e3b1aec76ad5c824ec76bc960aac6ed430337327fc77b22d58",
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": "8fc7bfd81459ad1b2eaabf381add9b3262be523b7de6afda3f910954288a7309",
+              "transportMode": "live",
+              "usage": {
+                "inputTokens": 1209,
+                "outputTokens": 90
+              }
+            },
+            "evidenceFieldIds": [
+              "declaration:tripdesk:capabilities"
+            ],
+            "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+            "reasonCodes": [
+              "fit_supported"
+            ],
+            "relevance": 1,
+            "relevanceLevel": 3,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "opportunityId": "opp-4be38843d6b0b19fd82e57f3"
+        }
+      },
+      {
+        "seq": 37,
+        "type": "award_reserved",
+        "at": 1790840029924,
+        "data": {
+          "awardId": "award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+          "campaignId": "tripdesk",
+          "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+          "priceBaseUnits": "3000"
+        }
+      },
+      {
+        "seq": 38,
+        "type": "delivery_accepted",
+        "at": 1790840029929,
+        "data": {
+          "awardId": "award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+          "deliveryId": "delivery-award-57113b3c-5ff4-48be-ae1f-194f9d77361c"
+        }
+      },
+      {
+        "seq": 39,
+        "type": "charge_accepted",
+        "at": 1790840029929,
+        "data": {
+          "amountBaseUnits": "3000",
+          "channelId": "phase3-channel-tripdesk",
+          "chargeId": "charge-award-57113b3c-5ff4-48be-ae1f-194f9d77361c"
+        }
+      },
+      {
+        "seq": 40,
+        "type": "synthetic_voucher_authorized",
+        "at": 1790840118024,
+        "data": {
+          "channelId": "phase3-channel-tripdesk",
+          "chargeId": "charge-award-1e2021c9-045e-4352-b754-58820f6a2579",
+          "cumulativeAmountBaseUnits": "3000"
+        }
+      },
+      {
+        "seq": 41,
+        "type": "synthetic_voucher_authorized",
+        "at": 1790840118024,
+        "data": {
+          "channelId": "phase3-channel-tripdesk",
+          "chargeId": "charge-award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+          "cumulativeAmountBaseUnits": "6000"
+        }
+      }
+    ]
+  },
+  "limitations": [
+    "Fictional advertiser declarations, not verified product capabilities.",
+    "No endorsement, attention, hidden context absorption or conversion evidence.",
+    "No MPP/channel settlement, x402 transfer or deployed service in this run.",
+    "Same-Mac publisher/operator is a demo trust boundary."
+  ],
+  "contentHash": "bf17d5083677907e812db17d4d1b1638d7d715a209321ac4bad482f1541e3a84"
+}

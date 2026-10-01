@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "axp.v3-frontend-fixtures.v1",
+  "provenance": "synthetic_contract_examples_only",
+  "recordedAcceptance": false,
+  "warning": "These are hypothetical UI fragments, not actual Jev decisions, funding, deliveries or settlement. Do not mix them into V3 acceptance/replay.",
+  "cases": [
+    {
+      "id": "unfunded",
+      "financialMode": "sandbox",
+      "presentation": "interactive-reference",
+      "execution": "not_executed",
+      "state": "unfunded",
+      "channel": {
+        "openStatus": "prepared",
+        "depositBaseUnits": "0",
+        "acceptedBaseUnits": "0",
+        "authorizedBaseUnits": "0",
+        "settledBaseUnits": "0",
+        "refundBaseUnits": "0"
+      }
+    },
+    {
+      "id": "awarded",
+      "financialMode": "synthetic",
+      "presentation": "interactive-reference",
+      "execution": "fixture",
+      "state": "reserved",
+      "award": {
+        "id": "synthetic-award",
+        "campaignId": "v3-clearvault",
+        "status": "reserved",
+        "priceBaseUnits": "3000"
+      },
+      "acceptedCharges": []
+    },
+    {
+      "id": "no-fill",
+      "financialMode": "synthetic",
+      "presentation": "interactive-reference",
+      "execution": "deterministic-policy",
+      "state": "no_fill",
+      "bids": [],
+      "acceptedCharges": [],
+      "policyExclusions": [
+        "mandatory mobile_software_wallet absent"
+      ]
+    },
+    {
+      "id": "failed-delivery",
+      "financialMode": "synthetic",
+      "presentation": "interactive-reference",
+      "execution": "fixture",
+      "state": "failed",
+      "award": {
+        "id": "synthetic-award",
+        "status": "failed"
+      },
+      "acceptedCharges": []
+    },
+    {
+      "id": "accepted-unpaid",
+      "financialMode": "synthetic",
+      "presentation": "interactive-reference",
+      "execution": "fixture",
+      "state": "accepted",
+      "channel": {
+        "depositBaseUnits": "20000",
+        "acceptedBaseUnits": "3000",
+        "authorizedBaseUnits": "0",
+        "settledBaseUnits": "0",
+        "refundBaseUnits": "0"
+      }
+    },
+    {
+      "id": "authorized",
+      "financialMode": "synthetic",
+      "presentation": "interactive-reference",
+      "execution": "fixture",
+      "state": "authorized",
+      "channel": {
+        "depositBaseUnits": "20000",
+        "acceptedBaseUnits": "6000",
+        "authorizedBaseUnits": "6000",
+        "settledBaseUnits": "0",
+        "refundBaseUnits": "0"
+      }
+    },
+    {
+      "id": "uncertain",
+      "financialMode": "synthetic",
+      "presentation": "interactive-reference",
+      "execution": "fixture",
+      "state": "unknown",
+      "channel": {
+        "phase": "draining",
+        "closeStatus": "unknown",
+        "reconciliationRequired": true,
+        "depositBaseUnits": "20000",
+        "acceptedBaseUnits": "6000",
+        "authorizedBaseUnits": "6000",
+        "settledBaseUnits": "0",
+        "refundBaseUnits": "0"
+      },
+      "nextAction": "reconcile_saved_identity"
+    },
+    {
+      "id": "finalized",
+      "financialMode": "synthetic",
+      "presentation": "recorded_evidence_replay",
+      "execution": "fixture",
+      "state": "finalized",
+      "channel": {
+        "closeStatus": "finalized",
+        "depositBaseUnits": "20000",
+        "acceptedBaseUnits": "6000",
+        "authorizedBaseUnits": "6000",
+        "settledBaseUnits": "6000",
+        "refundBaseUnits": "14000",
+        "txSignature": null
+      }
+    }
+  ]
+}

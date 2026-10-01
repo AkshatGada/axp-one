@@ -1,0 +1,35 @@
+1
+00:00:00,000 --> 00:00:25,000
+Real ContextHint observations inform AXP. Historical brands are references, not enrolled advertisers.
+
+2
+00:00:25,000 --> 00:00:50,000
+Fictional advertiser onboarding: independent creative, context hints, capabilities and capped synthetic spending.
+
+3
+00:00:50,000 --> 00:01:10,000
+Exact cached question: cosine retrieval over existing BGE vectors. No new embedding generation.
+
+4
+00:01:10,000 --> 00:01:30,000
+Uncached question: explicit lexical fallback with observed Mercari / OneKey references and inferred hints.
+
+5
+00:01:30,000 --> 00:02:15,000
+10 actual Jev responses; 2 unavailable history slots. History alone enters deterministic auctions.
+
+6
+00:02:15,000 --> 00:02:45,000
+Two actually acknowledged Sponsored cards. Organic text is a sponsor-free deterministic reference.
+
+7
+00:02:45,000 --> 00:03:10,000
+V2: synthetic cumulative authorization 4,000 → 7,000; payout 0.007, refund 0.013. Losing campaigns charged zero.
+
+8
+00:03:10,000 --> 00:03:35,000
+Separate V1 example: actual hosted-sandbox MPP payment. It did NOT settle V2 crypto placements.
+
+9
+00:03:35,000 --> 00:04:00,000
+Evidence-informed advertiser decisions demonstrated. No ChatGPT algorithm replication, targeting lift or attention claim.

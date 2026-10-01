@@ -1,0 +1,22 @@
+ffconcat version 1.0
+file '01-foundation-frame.png'
+duration 20
+file '02-onboarding-frame.png'
+duration 25
+file '03-cached-frame.png'
+duration 20
+file '04-fallback-frame.png'
+duration 20
+file '05-organic-frame.png'
+duration 20
+file '06-decisions-frame.png'
+duration 30
+file '07-competition-frame.png'
+duration 20
+file '08-delivery-frame.png'
+duration 25
+file '09-settlement-frame.png'
+duration 30
+file '10-limits-frame.png'
+duration 30
+file '10-limits-frame.png'

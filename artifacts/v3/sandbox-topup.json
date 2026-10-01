@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "axp.v3-sandbox-topup.v1",
+  "status": "confirmed",
+  "admittedAt": "2026-10-01T14:55:04.117Z",
+  "network": {
+    "mode": "sandbox",
+    "network": "solana-payment-sandbox",
+    "rpc": "https://402.surfnet.dev:8899",
+    "genesisHash": "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d",
+    "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+    "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+    "payee": "DB4GyrEU7KPXzC4oYfKPfvct5Ja2pxXa7WZnREk3URsV"
+  },
+  "tokenAccount": "2dmoK37UwBD98ggjf4P7ecQD54paw1kxWFQxtK8cSxmQ",
+  "beforeBaseUnits": "14000",
+  "incrementBaseUnits": "26000",
+  "targetBaseUnits": "40000",
+  "solAddedLamports": "0",
+  "kind": "sandbox_faucet_not_settlement",
+  "authorization": "User approved exact 0.026 sandbox test USDC exception",
+  "signed": false,
+  "broadcast": false,
+  "afterBaseUnits": "40000",
+  "completedAt": "2026-10-01T14:55:05.025Z"
+}

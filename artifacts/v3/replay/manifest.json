@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "axp.v3-manifest.v1",
+  "runId": "v3-wallet-acceptance",
+  "createdAt": "2026-10-01T15:05:59.161Z",
+  "financialMode": "sandbox",
+  "presentation": "recorded_evidence_replay",
+  "files": {
+    "run.json": "938a0ee84b1936a02a56c8eb30b0fea0dca47f07195013f69847ee404dd6dd48"
+  }
+}

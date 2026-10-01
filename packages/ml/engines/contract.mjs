@@ -3,13 +3,14 @@ import { validateCachedCampaignProfile } from '../profiles/cached.mjs';
 
 export const RUBRIC = freeze({ version: 'fit-intent-v1', relevance: ['Unrelated service', 'Broad category but different need or soft conflict', 'Relevant general service; specific soft fit incomplete', 'Direct supported task fit and stated soft preferences supported'], intent: ['Educational; no offer seeking', 'Broad exploration', 'Bounded offer comparison or shortlist', 'Find or book offer with destination and concrete feature, dates or event'] });
 export const RUBRIC_HASH = hash(RUBRIC);
-const INTENTS = ['hotel_booking', 'hotel_comparison', 'travel_tools', 'informational', 'blocked'];
+const INTENTS = ['hotel_booking', 'hotel_comparison', 'travel_tools', 'crypto_wallet_tools', 'informational', 'blocked'];
 const CONSTRAINTS = ['destination', 'freeCancellation', 'wheelchairAccessible', 'event', 'dates', 'travellers', 'requiredCapabilities'];
 function constraints(value) {
   object(value, CONSTRAINTS, []);
   for (const [key, v] of Object.entries(value)) {
     if (['freeCancellation', 'wheelchairAccessible'].includes(key)) { assert(typeof v === 'boolean'); continue; }
     if (key === 'travellers') { assert(Number.isInteger(v) && v > 0 && v <= 100); continue; }
+    if (key === 'requiredCapabilities') { assert(Array.isArray(v), 'capabilities_invalid'); ids(v, 12); continue; }
     if (Array.isArray(v)) { array(v, 12, x => safeText(x, 120)); continue; }
     safeText(v, 120);
   }
@@ -40,6 +41,22 @@ export function validateRequest(r) {
   return r;
 }
 export function validateProfile(p, campaign) {
+  if(p?.schemaVersion === 'retrieved-campaign-profile.v1') {
+    object(p, ['schemaVersion','profileId','profileHash','campaignId','campaignVersionId','campaignContentHash','snapshotId','snapshotContentHash','retrievalMethod','historyStatus','observedExamples','contrastExamples','inferredHints']);
+    ['profileId','campaignId','campaignVersionId','snapshotId'].forEach(k=>id(p[k]));
+    assert(p.campaignId===campaign.campaignId && p.campaignVersionId===campaign.campaignVersionId && p.campaignContentHash===hash(campaign),'profile_campaign_mismatch');
+    const {profileHash,...content}=p;assert(profileHash===hash(content),'profile_hash_mismatch');
+    assert(/^[a-f0-9]{64}$/.test(p.snapshotContentHash),'snapshot_hash_invalid');
+    assert(['vector','lexical_fallback','unavailable'].includes(p.retrievalMethod));
+    assert(['ready','unavailable'].includes(p.historyStatus));
+    array(p.observedExamples,3,e=>{object(e,['id','text']);id(e.id);safeText(e.text,600);});
+    array(p.contrastExamples,0);
+    array(p.inferredHints,2,h=>{object(h,['id','text','tier','qualityFlags']);id(h.id);safeText(h.text,600);safeText(h.tier,80);ids(h.qualityFlags,20);});
+    ids([...p.observedExamples,...p.inferredHints].map(e=>e.id),5);
+    assert([...p.observedExamples,...p.inferredHints].reduce((n,e)=>n+e.text.length,0)<=2400,'profile_text_limit');
+    if(p.historyStatus==='ready')assert(p.retrievalMethod!=='unavailable'&&p.observedExamples.length>0,'thin_profile');
+    return;
+  }
   if(p?.schemaVersion === 'cached-campaign-profile.v1') return validateCachedCampaignProfile(p,campaign);
   object(p, ['schemaVersion', 'profileId', 'profileHash', 'campaignId', 'campaignVersionId', 'campaignContentHash', 'snapshotId', 'snapshotContentHash', 'splitManifestHash', 'profileBuilderVersion', 'approvedTargetingText', 'approvedCreativeVersionIds', 'embeddingSpace', 'observedExamples', 'contrastExamples', 'inferredHints', 'independentPromptFamilyCount', 'historicalAdvertiserCount', 'qualityFlags', 'historyStatus']);
   assert(p.schemaVersion === 'campaign-evidence-profile.v1');

@@ -1,0 +1,25 @@
+{
+  "runId": "v2-wallet-acceptance",
+  "bundleHash": "9e89752345b6f1533fc6b4507fd3d67390a68ea24553a4ae4eeefe851479cc1e",
+  "presentation": "recorded-replay",
+  "financialMode": "synthetic",
+  "programs": [],
+  "stream_groups": [],
+  "streams": [
+    {
+      "codec_name": "h264",
+      "codec_type": "video",
+      "width": 1280,
+      "height": 1800
+    }
+  ],
+  "format": {
+    "duration": "240.000000",
+    "size": "3302806"
+  },
+  "videoHash": "d1f6b0e2443cda65d18ba4cde876e3934d4310dceb2702782f5dffcf6f2e9b63",
+  "subtitleHash": "7f6c94195062b9a90ad9855cdc5b819b1bf91bc34aee1dac3466e6045356eb76",
+  "captions": "Browser-rendered captions plus matching segment SRT",
+  "audio": "None; operator narration script included",
+  "visualInspection": "Main inspected source decision capture and decoded video at80,130,150,200 seconds: readable captions, disclosure and mode labels, no secrets. Fresh reviewer inspected all nine normalized browser frames and fully decoded the240-second MP4 without errors; see docs/build/V2_REVIEW.md."
+}

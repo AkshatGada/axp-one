@@ -1,0 +1,43 @@
+1
+00:00:00,000 --> 00:00:30,000
+Advertiser agents buy disclosed placements in participating AI applications. This is a recorded evidence walkthrough, not fresh execution.
+
+2
+00:00:30,000 --> 00:00:50,000
+Three fictional advertisers declare their capabilities. Code enforces bid and spending caps. Only TripDesk had a funded channel.
+
+3
+00:00:50,000 --> 00:01:10,000
+Historical ContextHint prompt and inferred-hint evidence informed the recorded profiles. These brands are not enrolled AXP advertisers.
+
+4
+00:01:10,000 --> 00:01:35,000
+Six recorded Jev decisions: TripDesk bids twice; AgentPass and HotelOps skip twice. Observed decision times were about 1.24–1.51 seconds.
+
+5
+00:01:35,000 --> 00:02:00,000
+Two gpt-6.1-sol low app-agent answers were generated separately from advertiser material, then entered through an operator-recorded bridge.
+
+6
+00:02:00,000 --> 00:02:18,000
+A Sponsored card was inserted in the owned publisher app. The accepted receipt created one 0.003 test-USDC charge—not payment finality.
+
+7
+00:02:18,000 --> 00:02:35,000
+A second accepted delivery created another 0.003 charge on the same channel. Losing campaigns incurred zero charges.
+
+8
+00:02:35,000 --> 00:02:55,000
+The trusted worker signed saved native MPP cumulative vouchers: 3000, then 6000 base units. Agents and browsers do not control payment signing.
+
+9
+00:02:55,000 --> 00:03:25,000
+One finalized sandbox settlement paid 0.006 test USDC and returned the unused 0.014 deposit. Fees and account rent are separate.
+
+10
+00:03:25,000 --> 00:03:45,000
+A fresh-process replay kept charges, payment records and eight model admissions unchanged. This offline presentation cannot create another payment.
+
+11
+00:03:45,000 --> 00:04:00,000
+The connected test-network exchange works. Attention, absorption, conversion lift, production authorization and ultra-low latency remain unproven.

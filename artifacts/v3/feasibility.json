@@ -1,0 +1,186 @@
+{
+  "schemaVersion": "axp.v3-payment-feasibility.v1",
+  "network": {
+    "mode": "sandbox",
+    "network": "solana-payment-sandbox",
+    "rpc": "https://402.surfnet.dev:8899",
+    "genesisHash": "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d",
+    "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+    "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+    "payee": "DB4GyrEU7KPXzC4oYfKPfvct5Ja2pxXa7WZnREk3URsV"
+  },
+  "observedAt": "2026-10-01T14:55:25.482Z",
+  "signed": false,
+  "broadcast": false,
+  "funded": false,
+  "compatible": true,
+  "zeroCloseCompatibility": "passed_unsigned_simulation",
+  "positiveCloseCompatibility": "historical_phase4_only",
+  "sdk": {
+    "sourceCommit": "c294f8903f18efc746584e3cc2961d6033b8365c",
+    "packageVersion": "0.11.0"
+  },
+  "programAccountHash": "8d139929fe85d2acfbd67de55f6849ec58b2a158f676f199801e97f46dd7b7e0",
+  "programDataAddress": "CghQXkmw2F6p1exMETiZdNeUx9QGraWsNZ4eom1Cuiw1",
+  "programDataHash": "1b15152c73203b9ecbd78733225a4955a8045f64686a6b071e01a3a3610fed71",
+  "historicalDeploymentComparison": {
+    "evidence": "artifacts/phase4/frozen-environment.json",
+    "programAccountHashMatches": true,
+    "programDataHashComparison": "unavailable_phase4_did_not_record_program_data_hash"
+  },
+  "mintDecimals": 6,
+  "accounts": {
+    "payer": "2dmoK37UwBD98ggjf4P7ecQD54paw1kxWFQxtK8cSxmQ",
+    "payee": "63EJhEKedh8wEt2esm2gbuoBUoCi5j2x98qrbkRPscLX",
+    "treasury": "3m3xS513PgjPwnLbmGbgL4Nk62QEtwzuoXphVN3kfMNh"
+  },
+  "balances": {
+    "payerBaseUnits": "40000",
+    "payeeBaseUnits": "6000",
+    "treasuryBaseUnits": "210001",
+    "payerLamports": "15268080"
+  },
+  "openReserveLamports": "4716920",
+  "closeReserveLamports": "10000",
+  "aggregateFeeRentReserveLamports": "9453840",
+  "requiredDepositBaseUnits": "40000",
+  "balancesSufficient": true,
+  "simulation": {
+    "err": null,
+    "logs": [
+      "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL invoke [1]",
+      "Program log: CreateIdempotent",
+      "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL consumed 4436 of 1000000 compute units",
+      "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL success",
+      "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL invoke [1]",
+      "Program log: CreateIdempotent",
+      "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL consumed 4437 of 995564 compute units",
+      "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL success",
+      "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX invoke [1]",
+      "Program 11111111111111111111111111111111 invoke [2]",
+      "Program 11111111111111111111111111111111 success",
+      "Program 11111111111111111111111111111111 invoke [2]",
+      "Program 11111111111111111111111111111111 success",
+      "Program 11111111111111111111111111111111 invoke [2]",
+      "Program 11111111111111111111111111111111 success",
+      "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL invoke [2]",
+      "Program log: CreateIdempotent",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [3]",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 183 of 971821 compute units",
+      "Program return: TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA pQAAAAAAAAA=",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+      "Program 11111111111111111111111111111111 invoke [3]",
+      "Program 11111111111111111111111111111111 success",
+      "Program log: Initialize the associated token account",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [3]",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 38 of 966728 compute units",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [3]",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 235 of 964264 compute units",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+      "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL consumed 15025 of 978750 compute units",
+      "Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL success",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 105 of 962500 compute units",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+      "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX invoke [2]",
+      "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX consumed 83 of 961237 compute units",
+      "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX success",
+      "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX consumed 29996 of 991127 compute units",
+      "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX success",
+      "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX invoke [1]",
+      "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX consumed 309 of 961131 compute units",
+      "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX success",
+      "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX invoke [1]",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 105 of 950081 compute units",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke [2]",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA consumed 118 of 948790 compute units",
+      "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success",
+      "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX consumed 12333 of 960822 compute units",
+      "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX success"
+    ],
+    "unitsConsumed": 51511,
+    "slot": 452225084
+  },
+  "status": "checked",
+  "previousAttempts": [
+    {
+      "schemaVersion": "axp.v3-payment-feasibility.v1",
+      "observedAt": "2026-10-01T13:23:19.611Z",
+      "status": "blocked",
+      "reasonCode": "insufficient_test_balances",
+      "signed": false,
+      "broadcast": false,
+      "funded": false,
+      "compatible": false,
+      "zeroCloseCompatibility": "blocked_insufficient_test_balance",
+      "positiveCloseCompatibility": "historical_phase4_only",
+      "network": {
+        "mode": "sandbox",
+        "network": "solana-payment-sandbox",
+        "rpc": "https://402.surfnet.dev:8899",
+        "genesisHash": "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d",
+        "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+        "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+        "payee": "DB4GyrEU7KPXzC4oYfKPfvct5Ja2pxXa7WZnREk3URsV"
+      },
+      "sdk": {
+        "sourceCommit": "c294f8903f18efc746584e3cc2961d6033b8365c",
+        "packageVersion": "0.11.0"
+      },
+      "programAccountHash": "8d139929fe85d2acfbd67de55f6849ec58b2a158f676f199801e97f46dd7b7e0",
+      "programDataAddress": "CghQXkmw2F6p1exMETiZdNeUx9QGraWsNZ4eom1Cuiw1",
+      "programDataHash": "1b15152c73203b9ecbd78733225a4955a8045f64686a6b071e01a3a3610fed71",
+      "historicalDeploymentComparison": {
+        "evidence": "artifacts/phase4/frozen-environment.json",
+        "programAccountHashMatches": true,
+        "programDataHashComparison": "unavailable_phase4_did_not_record_program_data_hash"
+      },
+      "mintDecimals": 6,
+      "accounts": {
+        "payer": "2dmoK37UwBD98ggjf4P7ecQD54paw1kxWFQxtK8cSxmQ",
+        "payee": "63EJhEKedh8wEt2esm2gbuoBUoCi5j2x98qrbkRPscLX",
+        "treasury": "3m3xS513PgjPwnLbmGbgL4Nk62QEtwzuoXphVN3kfMNh"
+      },
+      "balances": {
+        "payerBaseUnits": "14000",
+        "payeeBaseUnits": "6000",
+        "treasuryBaseUnits": "210001",
+        "payerLamports": "15268080"
+      },
+      "openReserveLamports": "4716920",
+      "closeReserveLamports": "10000",
+      "aggregateFeeRentReserveLamports": "9453840",
+      "requiredDepositBaseUnits": "40000",
+      "balancesSufficient": false,
+      "simulation": {
+        "err": {
+          "InstructionError": [
+            2,
+            {
+              "Custom": 1
+            }
+          ]
+        },
+        "unitsConsumed": 49693,
+        "slot": 452211283,
+        "logsExcerpt": [
+          "Program log: Error: insufficient funds",
+          "Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA failed: custom program error: 0x1",
+          "Program CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX failed: custom program error: 0x1"
+        ]
+      },
+      "initialAttempt": {
+        "reasonCode": "zero_close_simulation_failed",
+        "zeroCloseCompatibility": "failed_unsigned_simulation",
+        "classificationCorrection": "Open instruction failed for insufficient tokens; zero-charge seal/distribute never ran. No SDK incompatibility established. No rerun performed."
+      }
+    }
+  ]
+}

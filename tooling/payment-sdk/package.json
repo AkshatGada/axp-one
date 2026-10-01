@@ -1,0 +1,10 @@
+{
+  "name": "axp-payment-sdk-build-tools",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pinned local compiler tools; not another application's dependencies",
+  "devDependencies": {
+    "semver": "7.7.2",
+    "typescript": "5.9.3"
+  }
+}

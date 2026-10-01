@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "axp.frontend-fixture.v1",
+  "id": "no-fill",
+  "sourceKind": "synthetic_test",
+  "financialMode": "synthetic",
+  "description": "Hypothetical frontend state, not a measured original Phase4 timeline or additional network run.",
+  "source": null,
+  "response": {
+    "runId": "frontend-hypothetical",
+    "mode": "synthetic",
+    "engine": "deterministic-fixture",
+    "opportunityId": "fixture-no-fill",
+    "organic": {
+      "status": "completed",
+      "source": "synthetic_test",
+      "text": "Fixture independent answer remains available without an ad."
+    },
+    "outcome": {
+      "status": "no_fill",
+      "bids": [],
+      "rejections": [
+        {
+          "campaignId": "fixture-campaign",
+          "reason": "agent_skip"
+        }
+      ]
+    },
+    "attempts": [],
+    "replayed": false
+  },
+  "limitations": [
+    "Hypothetical frontend state, not a measured original Phase4 timeline or additional network run.",
+    "No award, charge or payment."
+  ]
+}

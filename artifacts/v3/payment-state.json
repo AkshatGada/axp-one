@@ -1,0 +1,156 @@
+{
+  "status": "frozen",
+  "runId": "v3-wallet-acceptance",
+  "mode": "sandbox",
+  "signingEnabled": true,
+  "channels": [
+    {
+      "channelId": "v3-clearvault-channel",
+      "runId": "v3-wallet-acceptance",
+      "mode": "sandbox",
+      "phase": "finalized",
+      "openStatus": "finalized",
+      "closeStatus": "finalized",
+      "depositBaseUnits": "20000",
+      "authorizedBaseUnits": "7000",
+      "acceptedBaseUnits": "7000",
+      "settledBaseUnits": "7000",
+      "refundBaseUnits": "13000",
+      "protocolChannelId": "28GSbZP4KTDWyx1hmjHDTdtQfCheSP9kte8wSVnq9bvF",
+      "termsHash": "8b7dbb1121abcb2cb63f267e27b45d354e3ebe7741ed0dc5882ac102e6cc7930",
+      "reconciliationRequired": false
+    },
+    {
+      "channelId": "v3-keyforge-channel",
+      "runId": "v3-wallet-acceptance",
+      "mode": "sandbox",
+      "phase": "finalized",
+      "openStatus": "finalized",
+      "closeStatus": "finalized",
+      "depositBaseUnits": "20000",
+      "authorizedBaseUnits": "3000",
+      "acceptedBaseUnits": "3000",
+      "settledBaseUnits": "3000",
+      "refundBaseUnits": "17000",
+      "protocolChannelId": "9LyDdJTppGVVEkvJzAaFhdKDbF7YRM9KYGvhBAM1H3un",
+      "termsHash": "d610853c5f7b33cbe3f2371d24dd09f281a73b99f0728ffe767f305b83150837",
+      "reconciliationRequired": false
+    }
+  ],
+  "payments": [
+    {
+      "channelId": "v3-clearvault-channel",
+      "runId": "v3-wallet-acceptance",
+      "mode": "sandbox",
+      "phase": "finalized",
+      "openStatus": "finalized",
+      "closeStatus": "finalized",
+      "depositBaseUnits": "20000",
+      "authorizedBaseUnits": "7000",
+      "acceptedBaseUnits": "7000",
+      "settledBaseUnits": "7000",
+      "refundBaseUnits": "13000",
+      "protocolChannelId": "28GSbZP4KTDWyx1hmjHDTdtQfCheSP9kte8wSVnq9bvF",
+      "termsHash": "8b7dbb1121abcb2cb63f267e27b45d354e3ebe7741ed0dc5882ac102e6cc7930",
+      "reconciliationRequired": false,
+      "network": "solana-payment-sandbox",
+      "rpc": "https://402.surfnet.dev:8899",
+      "genesisHash": "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d",
+      "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+      "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+      "payee": "DB4GyrEU7KPXzC4oYfKPfvct5Ja2pxXa7WZnREk3URsV",
+      "open": {
+        "status": "finalized",
+        "txSignature": "51y88eH1prKaBkdPcucpT4HqT3TUUyXmaQVnjBWcKEsAdNsp5FNqnbBEJ75cZyNMMr3SHFDkPcnK2RUpFWmmRexS",
+        "finality": "finalized",
+        "protocolChannelId": "28GSbZP4KTDWyx1hmjHDTdtQfCheSP9kte8wSVnq9bvF",
+        "depositBaseUnits": "20000"
+      },
+      "close": {
+        "status": "finalized",
+        "txSignature": "4mH68DRNaW4zSYdxNyhDoui2jpZPhFbufn7hZQW4S2XhhMkcqKZu7CnPzVPRHr7EYvnGspys6CDUZuA6nzWBZV3i",
+        "finality": "finalized",
+        "settledBaseUnits": "7000",
+        "refundBaseUnits": "13000",
+        "publisherDeltaBaseUnits": "7000",
+        "feeAndRentLamports": "15000"
+      },
+      "vouchers": [
+        {
+          "chargeId": "charge-award-fe97d44c-836b-4bdc-a68d-6a442d42a97a",
+          "sequence": "1",
+          "status": "authorized",
+          "incrementBaseUnits": "4000",
+          "cumulativeAmountBaseUnits": "4000",
+          "payloadHash": "d9f9401e2b3c510c6a4be8c7122b913d804d5d058afb441f306d9b8d5017c103",
+          "voucherRecordHash": "da5712e6abf7b941b67cef666288e05199d9b878e3b9e0b4536b78ee877eeae5"
+        },
+        {
+          "chargeId": "charge-award-b1283b51-d2d1-492e-b9ae-3f3f4d22bdc1",
+          "sequence": "2",
+          "status": "authorized",
+          "incrementBaseUnits": "3000",
+          "cumulativeAmountBaseUnits": "7000",
+          "payloadHash": "562e9c6e21cedfc535220e5fbb8696775d3de835fec464c6e94cf25526b3c0d0",
+          "voucherRecordHash": "25e823257af3bc10a89e2982dbb6b856b8161d0105437b0a09ab8d3a4daabe3c"
+        }
+      ],
+      "estimatedGrossFeeAndRentLamports": "4731920",
+      "settlementLink": "https://explorer.solana.com/tx/4mH68DRNaW4zSYdxNyhDoui2jpZPhFbufn7hZQW4S2XhhMkcqKZu7CnPzVPRHr7EYvnGspys6CDUZuA6nzWBZV3i?cluster=custom&customUrl=https%3A%2F%2F402.surfnet.dev%3A8899"
+    },
+    {
+      "channelId": "v3-keyforge-channel",
+      "runId": "v3-wallet-acceptance",
+      "mode": "sandbox",
+      "phase": "finalized",
+      "openStatus": "finalized",
+      "closeStatus": "finalized",
+      "depositBaseUnits": "20000",
+      "authorizedBaseUnits": "3000",
+      "acceptedBaseUnits": "3000",
+      "settledBaseUnits": "3000",
+      "refundBaseUnits": "17000",
+      "protocolChannelId": "9LyDdJTppGVVEkvJzAaFhdKDbF7YRM9KYGvhBAM1H3un",
+      "termsHash": "d610853c5f7b33cbe3f2371d24dd09f281a73b99f0728ffe767f305b83150837",
+      "reconciliationRequired": false,
+      "network": "solana-payment-sandbox",
+      "rpc": "https://402.surfnet.dev:8899",
+      "genesisHash": "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d",
+      "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+      "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+      "payee": "DB4GyrEU7KPXzC4oYfKPfvct5Ja2pxXa7WZnREk3URsV",
+      "open": {
+        "status": "finalized",
+        "txSignature": "4NsygwzmBEe735QXMm5XQdn6P5SwvLZ12rqci2qdD99cN1wKQKssSFGTizCrEb1LnNosGy62a9hsNYm2SSX2pebz",
+        "finality": "finalized",
+        "protocolChannelId": "9LyDdJTppGVVEkvJzAaFhdKDbF7YRM9KYGvhBAM1H3un",
+        "depositBaseUnits": "20000"
+      },
+      "close": {
+        "status": "finalized",
+        "txSignature": "2fqrnujji4pSUQfj4nVEYwJ4VbxTa4AA6cXo6aJRfvFQ3tELgHcd3sq2FigtGqL8uGbqY7Rf863hwcBZK9DYgV3T",
+        "finality": "finalized",
+        "settledBaseUnits": "3000",
+        "refundBaseUnits": "17000",
+        "publisherDeltaBaseUnits": "3000",
+        "feeAndRentLamports": "15000"
+      },
+      "vouchers": [
+        {
+          "chargeId": "charge-award-bb3d8921-5975-4633-80df-70b841be0643",
+          "sequence": "1",
+          "status": "authorized",
+          "incrementBaseUnits": "3000",
+          "cumulativeAmountBaseUnits": "3000",
+          "payloadHash": "f6d3aa5a9b1834b2e4dd621eaa95b23dba44af409f2db60622867c082ce1a0eb",
+          "voucherRecordHash": "73a5ff49ed66d4e05e840330cfb74e24a2aba42f4395ceb0ee85a49ece4f0653"
+        }
+      ],
+      "estimatedGrossFeeAndRentLamports": "4731920",
+      "settlementLink": "https://explorer.solana.com/tx/2fqrnujji4pSUQfj4nVEYwJ4VbxTa4AA6cXo6aJRfvFQ3tELgHcd3sq2FigtGqL8uGbqY7Rf863hwcBZK9DYgV3T?cluster=custom&customUrl=https%3A%2F%2F402.surfnet.dev%3A8899"
+    }
+  ],
+  "generatedAt": "2026-10-01T15:02:18.998Z"
+}

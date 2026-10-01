@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "axp.phase5-test-report.v1",
+  "observedAt": "2026-10-01T09:32:35.984Z",
+  "scope": "repository tests/ only; ignored vendor tests excluded",
+  "command": "npm test -- --phase5-report",
+  "exitCode": 0,
+  "tests": 233,
+  "passed": 227,
+  "failed": 0,
+  "skipped": 6
+}

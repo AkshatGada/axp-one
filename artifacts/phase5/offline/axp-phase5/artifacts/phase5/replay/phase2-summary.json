@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "phase2-public-summary.v1",
+  "mode": "recorded_comparison_not_live_execution",
+  "executedAt": "2026-10-01",
+  "model": "jev-1.13.0",
+  "adoption": "inconclusive_keep_rules_default",
+  "fixtureScope": {"cases":40,"families":10,"repetitions":4,"fictionalCampaigns":3,"independentHistoricalLabels":false},
+  "initialComparison": {
+    "artifact": "local-state/phase2/0a6e9676-91e5-4a62-9ed3-cc9ff26d3cb8/result.json",
+    "caseHash": "7d3ec0cd97e60770522d949bc91fcfce79886e15f1f48f3a43de6c593bcff508",
+    "campaignHash": "4cf2251c49f2d1b22734ebb9c4ee2a13b34407f3d4700c2d4f6917666ed184f1",
+    "rules": {"attempts":120,"valid":120,"fixtureAgreement":1,"p95EngineMs":0.06974549999695227},
+    "cachedHistory": {"attempts":120,"valid":12,"abstentions":108,"fixtureAgreement":0.1,"p95EngineMs":2328.2186898999994,"cachedTaskPatterns":1,"totalTaskPatterns":10},
+    "jev": {"actualProviderCalls":24,"valid":0,"invalid":18,"insufficientEvidence":6,"p50AllAttemptMs":336.2750000000001,"p95AllAttemptMs":519.2664016999995,"inputTokens":26140,"outputTokens":2098,"estimatedProviderUsd":0.00109788},
+    "questionVersion": "original-declared-evidence-v1",
+    "mappingVersion": "zero-index-nearest-level-v1",
+    "unchangedInitialFailureArtifact": true
+  },
+  "diagnosticCorrection": {
+    "actualProviderCalls":4,
+    "firstProbeFailed":true,
+    "mappingVersion":"zero-index-nearest-level-rounded-provider-v2",
+    "questionVersion":"declared-packet-completeness-v2",
+    "changes":["Bound score/distribution differences caused by independently rounded hundredths.","Ask whether advertiser declarations permit a provisional fit or no-fit judgment, not whether product performance was independently verified."],
+    "notAnIndependentRetest":true,
+    "successfulDecisions":[
+      {"artifact":"local-state/phase2/probes/56fac1bb-c346-45b6-bcbb-2705355eb824.json","caseId":"booking-0","campaignId":"tripdesk","decision":"bid","relevanceLevel":3,"commercialIntentLevel":2,"creativeVersionId":"tripdesk-creative-v1","outcome":"valid","engineElapsedMs":522.4824170000002,"profileHash":"59a428a3729139e3b1aec76ad5c824ec76bc960aac6ed430337327fc77b22d58"},
+      {"artifact":"local-state/phase2/probes/c76c6e0d-8038-4e01-994b-ab85000ddda5.json","caseId":"booking-0","campaignId":"agentpass","decision":"skip","relevanceLevel":1,"commercialIntentLevel":2,"creativeVersionId":null,"outcome":"valid","engineElapsedMs":529.3242909999999,"profileHash":"27f3299c3109200f5dd37395dd65a70c392b98391269fd008321787534a3ca31"},
+      {"artifact":"local-state/phase2/probes/624f20fd-0aba-4ded-ae7a-5822a672bed7.json","caseId":"education-0","campaignId":"tripdesk","decision":"skip","relevanceLevel":1,"commercialIntentLevel":0,"creativeVersionId":null,"outcome":"valid","engineElapsedMs":512.2574999999997,"profileHash":"59a428a3729139e3b1aec76ad5c824ec76bc960aac6ed430337327fc77b22d58"}
+    ]
+  },
+  "totalProviderUsage":{"calls":28,"inputTokens":30789,"outputTokens":2450,"estimatedUsd":0.001293138,"source":"https://docs.typesafe.ai/models","excludesLocalCompute":true},
+  "conclusions":[
+    "Actual Jev bid, off-target skip and educational skip demonstrated after one bounded correction.",
+    "All three corrected calls exceeded 500ms in this small sequential probe; no sub-500ms suitability demonstrated.",
+    "Existing cache supports one of ten authored task patterns; unavailable prompts remain explicit abstentions.",
+    "Rules match authored declarations by construction; this is not independent targeting accuracy.",
+    "No quality advantage from history or Jev demonstrated. Keep rules as exchange default."
+  ],
+  "limitations":["Recorded evidence replay, not a fresh provider call.","No history-free model ablation, historical held-out labels, calibrated conversions or load benchmark.","Provider charges are token/price estimates, not invoiced totals.","No auction, delivery, charge, wallet transaction or final frontend in Phase 2."]
+}

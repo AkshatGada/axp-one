@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "axp.package-check.v1",
+  "runId": "phase4-20261001-acceptance",
+  "bundleHash": "eafd8a40088ace494a69bf04f0475a1f3fa23eaa1be6a6aee280ff061ce0781a",
+  "archive": "/Users/akshat/agentic-dsp/artifacts/phase5/axp-phase5-offline.tar.gz",
+  "archiveHash": "0dd821b98b3009184cd37a12ed469b552bd06c534b0f25fda0d4c8bb45a03282",
+  "files": 84,
+  "noExecutionDependencies": true
+}

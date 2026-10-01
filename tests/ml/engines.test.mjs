@@ -84,6 +84,18 @@ test('Jev invalid IDs, model changes, probability shapes, monetary fields and sc
     const d = await engine.scoreOpportunity(request()); assert.equal(d.decision, 'abstain'); assert.equal(d.engineProvenance.outcome, 'invalid'); assert.equal(d.creativeVersionId, null);
   }
 });
+test('Jev live hundredth rounding has a bounded numerical tolerance, not arbitrary acceptance',()=>{
+  const payload=buildJevRequest(request(),'jev-1.13.0'),response=jevResponse(payload);
+  response.answers.intent.score=1.72;
+  response.answers.intent.probabilities={0:0,1:.28,2:.71,3:.01};
+  assert.equal(validateJevResponse(response,payload).commercialIntentLevel,2);
+  response.answers.intent.score=1.60;
+  assert.throws(()=>validateJevResponse(response,payload),/jev_response_invalid/);
+  response.answers.intent.score=1.72;
+  response.answers.intent.probabilities={0:0,1:.28,2:.71,3:.1};
+  assert.throws(()=>validateJevResponse(response,payload),/jev_response_invalid/);
+  assert.match(payload.questions.sufficient.instructions,/provisional fit OR no-fit/);
+});
 test('Jev unapproved live invocation never calls transport; generic errors never export raw secrets', async () => {
   let calls = 0; const blocked = new JevDecisionEngine({ model: 'jev-1.13.0', transport: async () => { calls++; throw new Error('secret must not be exported'); } });
   const d = await blocked.scoreOpportunity(request()); assert.equal(calls, 0); assert.equal(d.engineProvenance.outcome, 'unavailable'); assert.equal(d.engineProvenance.failureReason, 'paid_calls_unapproved');

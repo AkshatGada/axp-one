@@ -1,0 +1,24 @@
+ffconcat version 1.0
+file '01-purpose-frame.png'
+duration 30
+file '02-campaigns-frame.png'
+duration 20
+file '03-evidence-frame.png'
+duration 20
+file '04-decisions-frame.png'
+duration 25
+file '05-answers-frame.png'
+duration 25
+file '06-delivery-one-frame.png'
+duration 18
+file '07-delivery-two-frame.png'
+duration 17
+file '08-vouchers-frame.png'
+duration 20
+file '09-settlement-frame.png'
+duration 30
+file '10-replay-frame.png'
+duration 20
+file '11-limits-frame.png'
+duration 15
+file '11-limits-frame.png'

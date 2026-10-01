@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "axp.v3-replay-check.v1",
+  "observedAt": "2026-10-01T15:31:21.072Z",
+  "runId": "v3-wallet-acceptance",
+  "bundleHash": "e34448fafa059d88c0120373fe039940ee1aca29369e3a245293a8b0f5a2152a",
+  "financialMode": "sandbox",
+  "presentation": "recorded_evidence_replay",
+  "serviceInstantiated": false,
+  "credentialsAbsent": true,
+  "upstreamUnavailable": true,
+  "upstreamAttempts": 0,
+  "requests": 30,
+  "retrievalMethods": [
+    "vector",
+    "lexical_fallback"
+  ],
+  "rejectedMutations": [
+    "/v3/campaign",
+    "/v3/preview",
+    "/v3/turn/request",
+    "/v3/turn/run",
+    "/v3/awards/recorded/render",
+    "/v3/awards/recorded/fail",
+    "/v3/replay/run"
+  ],
+  "bundleUnchanged": true,
+  "stableRepeatedState": true,
+  "newCalls": 0,
+  "newCharges": 0,
+  "newSignatures": 0,
+  "newBroadcasts": 0,
+  "allChecksPassed": true
+}

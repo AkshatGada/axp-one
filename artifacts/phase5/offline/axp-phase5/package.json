@@ -1,0 +1,13 @@
+{
+  "name": "axp-phase5-offline-replay",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "demo:replay": "node scripts/demo/phase5.mjs",
+    "verify": "node scripts/demo/phase5-check.mjs"
+  }
+}

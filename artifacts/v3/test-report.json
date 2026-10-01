@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "axp.v3-test-report.v1",
+  "observedDate": "2026-10-01",
+  "command": "npm test",
+  "scope": "repository tests only; no actual Jev invocation or on-chain transaction",
+  "exitCode": 0,
+  "tests": 367,
+  "passed": 361,
+  "failed": 0,
+  "skipped": 6,
+  "durationMs": 3586.110084,
+  "preservation": {"status": "unchanged", "files": 205},
+  "liveAcceptance": "completed_hosted_sandbox_two_channels_three_deliveries",
+  "runId": "v3-wallet-acceptance",
+  "recordingMode": "recorded_evidence_replay"
+}

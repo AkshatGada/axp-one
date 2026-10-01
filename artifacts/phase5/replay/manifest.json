@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "axp.replay-bundle.v1",
+  "runId": "phase4-20261001-acceptance",
+  "financialMode": "sandbox",
+  "presentationKind": "recorded_evidence_replay",
+  "createdAt": "2026-10-01T09:05:20.497Z",
+  "files": {
+    "chain-check.json": "5b0a934fa3303f8c7bf4c850ff28c05ab9f82fa7cd96c5015ef5f1b5cd49dd4a",
+    "connected-run.json": "5e71d3786f47ca700c292270da4a2a1a1b1779706ecf20c4472e4409d8873792",
+    "phase2-summary.json": "ec05e47c6985d2e614aa4c20dd81c633eb72fe6cfe309293a005beb3eb42531d",
+    "restart-replay.json": "070ecbc85297f385c48289160842a4e2c8d38995eff1ebe523de8e23e35ca259",
+    "source-profiles.json": "9c22053b9a79ddaf2f02bd00d795176566eb011fff7bea251ec147cbb8a3d772"
+  },
+  "integrityBoundary": "SHA256 prevents accidental alteration; not an independently trusted attestation or original-time signature."
+}

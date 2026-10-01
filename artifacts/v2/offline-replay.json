@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "axp.v2-check.v1",
+  "observedAt": "2026-10-01T12:31:59.585Z",
+  "kind": "credential-free-read-only-replay",
+  "bundleHash": "9e89752345b6f1533fc6b4507fd3d67390a68ea24553a4ae4eeefe851479cc1e",
+  "before": {
+    "runId": "v2-wallet-acceptance",
+    "admitted": 10,
+    "completedAt": 1790856456190,
+    "chargesHash": "2b3b219977e96e017c2a276ca110b8246f7c73e254176f892d830b7ffe06fc14",
+    "channelsHash": "e1b68b23a36150feb21f1b8ad2076ac6d222cb43fb219f0b01731de08a7b1ea6",
+    "eventsHash": "b5982655d72031f251dcc493b77c3133afb61f54763a6e0d9b3a7db0c5f511e1",
+    "decisionsHash": "0b6e29e984ff0c9a7820d6f6f8e3518968809b316170c6acd43c2ea70f966503"
+  },
+  "after": {
+    "runId": "v2-wallet-acceptance",
+    "admitted": 10,
+    "completedAt": 1790856456190,
+    "chargesHash": "2b3b219977e96e017c2a276ca110b8246f7c73e254176f892d830b7ffe06fc14",
+    "channelsHash": "e1b68b23a36150feb21f1b8ad2076ac6d222cb43fb219f0b01731de08a7b1ea6",
+    "eventsHash": "b5982655d72031f251dcc493b77c3133afb61f54763a6e0d9b3a7db0c5f511e1",
+    "decisionsHash": "0b6e29e984ff0c9a7820d6f6f8e3518968809b316170c6acd43c2ea70f966503"
+  },
+  "newModelCalls": 0,
+  "newCharges": 0,
+  "newPayments": 0,
+  "unchanged": true,
+  "postRequestsRejected": true
+}

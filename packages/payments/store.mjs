@@ -32,10 +32,10 @@ export function createMemoryPaymentStore(snapshot = { schemaVersion: 1, channels
 
 /** Single local payment worker; short synchronous transactions, never signing/RPC in mutators. */
 export class SQLitePaymentStore {
-  constructor(path) {
-    this.db = new DatabaseSync(path);
-    if (path !== ':memory:') chmodSync(path, 0o600);
-    this.db.exec('CREATE TABLE IF NOT EXISTS c06_payment_state (channel_id TEXT PRIMARY KEY, body TEXT NOT NULL)');
+  constructor(path, { readOnly = false } = {}) {
+    this.db = new DatabaseSync(path, { readOnly });
+    if (!readOnly && path !== ':memory:') chmodSync(path, 0o600);
+    if (!readOnly) this.db.exec('CREATE TABLE IF NOT EXISTS c06_payment_state (channel_id TEXT PRIMARY KEY, body TEXT NOT NULL)');
     this.read = this.db.prepare('SELECT body FROM c06_payment_state WHERE channel_id = ?');
     this.write = this.db.prepare('INSERT INTO c06_payment_state VALUES (?, ?) ON CONFLICT(channel_id) DO UPDATE SET body = excluded.body');
   }

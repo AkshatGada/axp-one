@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "axp.frontend-fixture.v1",
+  "id": "failed_delivery",
+  "sourceKind": "synthetic_test",
+  "financialMode": "synthetic",
+  "description": "Hypothetical frontend state, not a measured original Phase4 timeline or additional network run.",
+  "source": null,
+  "response": {
+    "id": "fixture-award",
+    "runId": "frontend-hypothetical",
+    "mode": "synthetic",
+    "opportunityId": "fixture-opportunity",
+    "campaignId": "fixture-campaign",
+    "campaignVersionId": "fixture-campaign-v1",
+    "advertiserId": "fictional-frontend",
+    "publisherId": "fixture-publisher",
+    "randomSessionId": "fixture-session",
+    "channelId": "fixture-channel",
+    "creativeVersionId": "fixture-creative-v1",
+    "creativeHash": "fixture-not-network-hash",
+    "creative": {
+      "creativeVersionId": "fixture-creative-v1",
+      "approvedText": "Fictional frontend offer.",
+      "destinationURL": "https://frontend.example/",
+      "fictional": true
+    },
+    "priceBaseUnits": "3000",
+    "payee": "synthetic:fixture-payee",
+    "winningBidId": "fixture-bid",
+    "status": "failed",
+    "expiresAt": 2000,
+    "createdAt": 1000
+  },
+  "limitations": [
+    "Hypothetical frontend state, not a measured original Phase4 timeline or additional network run.",
+    "Failed render has no accepted charge or authorization."
+  ]
+}

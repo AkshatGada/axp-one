@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "axp.video-check.v1",
+  "observedAt": "2026-10-01T09:25:44.569Z",
+  "runId": "phase4-20261001-acceptance",
+  "bundleHash": "eafd8a40088ace494a69bf04f0475a1f3fa23eaa1be6a6aee280ff061ce0781a",
+  "presentationKind": "recorded_evidence_replay",
+  "financialMode": "sandbox",
+  "programs": [],
+  "stream_groups": [],
+  "streams": [
+    {
+      "codec_name": "h264",
+      "codec_type": "video",
+      "width": 1280,
+      "height": 1200,
+      "side_data_list": [
+        {}
+      ]
+    }
+  ],
+  "format": {
+    "duration": "240.000000",
+    "size": "3354922"
+  },
+  "videoHash": "0acab23e01298598d8fe9aaf7468475592af57af620e251438ddc2cd57b50f5c",
+  "subtitleHash": "25fb8d9f58e3ba92cf4561b3ef42da405f2744ae7d478460d35aa74701b359b9",
+  "captions": "Baked into captured browser frames; matching sidecar SRT",
+  "audio": "None; matching operator narration script",
+  "visualInspection": "Required separately; ffprobe is not a legibility check"
+}

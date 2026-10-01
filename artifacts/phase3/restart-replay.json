@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "phase3-restart-replay.v1",
+  "createdAt": "2026-10-01T07:40:22.205Z",
+  "runId": "phase3-20261001-acceptance",
+  "mode": "recorded_results_no_new_model_execution",
+  "newModelCalls": 0,
+  "newCharges": 0,
+  "beforeStateHash": "1dee56d24ce7e79697af32d3384a4edc0ea128f08f954389494fee444e29d478",
+  "afterStateHash": "1dee56d24ce7e79697af32d3384a4edc0ea128f08f954389494fee444e29d478",
+  "beforeAdmissionsHash": "88c520bbc07b512d1cb4dbdc0014004163b5ca75bb1f3bda270e54f5055698dc",
+  "afterAdmissionsHash": "88c520bbc07b512d1cb4dbdc0014004163b5ca75bb1f3bda270e54f5055698dc",
+  "replays": [
+    {
+      "turnId": "placement-one",
+      "opportunityId": "opp-6db08d7a150f4d0704a5ccd6",
+      "awardId": "award-1e2021c9-045e-4352-b754-58820f6a2579",
+      "chargeId": "charge-award-1e2021c9-045e-4352-b754-58820f6a2579",
+      "replayed": true
+    },
+    {
+      "turnId": "placement-two",
+      "opportunityId": "opp-4be38843d6b0b19fd82e57f3",
+      "awardId": "award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+      "chargeId": "charge-award-57113b3c-5ff4-48be-ae1f-194f9d77361c",
+      "replayed": true
+    }
+  ],
+  "passed": true
+}

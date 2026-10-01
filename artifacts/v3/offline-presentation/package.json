@@ -1,0 +1,11 @@
+{
+  "name": "axp-v3-offline-presentation",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=25"
+  },
+  "scripts": {
+    "demo:v3:replay": "node replay.mjs"
+  }
+}

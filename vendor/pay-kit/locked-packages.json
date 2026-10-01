@@ -1,0 +1,1476 @@
+[
+  {
+    "name": "@solana/kit",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/accounts": "6.10.0",
+      "@solana/addresses": "6.10.0",
+      "@solana/codecs": "6.10.0",
+      "@solana/functional": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/instruction-plans": "6.10.0",
+      "@solana/keys": "6.10.0",
+      "@solana/instructions": "6.10.0",
+      "@solana/plugin-core": "6.10.0",
+      "@solana/plugin-interfaces": "6.10.0",
+      "@solana/program-client-core": "6.10.0",
+      "@solana/programs": "6.10.0",
+      "@solana/rpc": "6.10.0",
+      "@solana/rpc-api": "6.10.0",
+      "@solana/rpc-parsed-types": "6.10.0",
+      "@solana/rpc-spec-types": "6.10.0",
+      "@solana/offchain-messages": "6.10.0",
+      "@solana/rpc-types": "6.10.0",
+      "@solana/signers": "6.10.0",
+      "@solana/rpc-subscriptions": "6.10.0",
+      "@solana/sysvars": "6.10.0",
+      "@solana/transaction-confirmation": "6.10.0",
+      "@solana/transaction-messages": "6.10.0",
+      "@solana/transactions": "6.10.0",
+      "@solana/subscribable": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 3678582,
+      "integrity": "sha512-/WnnQp3uARh2JCFSfAakejTAqwmXVuMVTcRn5r2yDwY2yzZ4R6mt/Cl59VPimVLNSoTyN/KsEwhv9omr3ERazQ==",
+      "tarball": "https://registry.npmjs.org/@solana/kit/-/kit-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/addresses",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/assertions": "6.10.0",
+      "@solana/codecs-strings": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/codecs-core": "6.10.0",
+      "@solana/nominal-types": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 297034,
+      "integrity": "sha512-vEoCGBTxG0HCERAn84KXkrJjl+pDaNzOpZ0qbgcPS98fYxP5yzbKB8SNOY2bzrbkRUmmw5Q3hqTRERemUN2Gcw==",
+      "tarball": "https://registry.npmjs.org/@solana/addresses/-/addresses-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/program-client-core",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/addresses": "6.10.0",
+      "@solana/codecs-core": "6.10.0",
+      "@solana/instruction-plans": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/accounts": "6.10.0",
+      "@solana/instructions": "6.10.0",
+      "@solana/plugin-interfaces": "6.10.0",
+      "@solana/signers": "6.10.0",
+      "@solana/rpc-api": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 194693,
+      "integrity": "sha512-4PPbTLdC1ylHIuvhOFDP8RnSkXPCFjNFWGslzc+UFKnoR4ajzBcByX94jmaruDMk5ncxgj7tr9pzJTvfGHIaMA==",
+      "tarball": "https://registry.npmjs.org/@solana/program-client-core/-/program-client-core-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana-program/token",
+    "version": "0.11.0",
+    "dependencies": {
+      "@solana-program/system": "^0.12.0"
+    },
+    "peerDependencies": {
+      "@solana/kit": "^6.1.0"
+    },
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 1299966,
+      "integrity": "sha512-/lB72Pcmkn5kjUfP1Vd8F86HBlhN9RN4hJYgUG5csc23w9LCdYom2CiRdGsK25KkR9UFf6ndCCAMh83hMo+ftw==",
+      "tarball": "https://registry.npmjs.org/@solana-program/token/-/token-0.11.0.tgz"
+    }
+  },
+  {
+    "name": "mppx",
+    "version": "0.8.15",
+    "dependencies": {
+      "@stripe/stripe-js": "9.9.0",
+      "eventsource-parser": "3.1.0",
+      "incur": "^0.4.10",
+      "ox": "0.14.33",
+      "zod": "^4.4.3"
+    },
+    "peerDependencies": {
+      "@modelcontextprotocol/sdk": ">=1.25.0",
+      "elysia": ">=1",
+      "express": ">=5",
+      "hono": ">=4.12.25",
+      "viem": ">=2.54.0"
+    },
+    "peerDependenciesMeta": {
+      "@modelcontextprotocol/sdk": {
+        "optional": true
+      },
+      "elysia": {
+        "optional": true
+      },
+      "express": {
+        "optional": true
+      },
+      "hono": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 9771241,
+      "integrity": "sha512-+4jQRYB3AbgATfsZZAen7SxDC4miAPhUokTmBgda5OORZKvPnbWKAKHMHK1oMKsxWTVMYBwfgxmiJYAEe6I47g==",
+      "tarball": "https://registry.npmjs.org/mppx/-/mppx-0.8.15.tgz"
+    }
+  },
+  {
+    "name": "@solana/rpc",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/errors": "6.10.0",
+      "@solana/fast-stable-stringify": "6.10.0",
+      "@solana/functional": "6.10.0",
+      "@solana/rpc-api": "6.10.0",
+      "@solana/rpc-spec": "6.10.0",
+      "@solana/rpc-spec-types": "6.10.0",
+      "@solana/rpc-transformers": "6.10.0",
+      "@solana/rpc-transport-http": "6.10.0",
+      "@solana/rpc-types": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 168393,
+      "integrity": "sha512-EwxsqoD+NXV+m+iobnWNtATD93gTgaNsOiQOzYB1/2e+8S6fl6obdNPB55yfXgtl4jt6GV6/ae4xuPhLv76vvg==",
+      "tarball": "https://registry.npmjs.org/@solana/rpc/-/rpc-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/keys",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/codecs-core": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/codecs-strings": "6.10.0",
+      "@solana/nominal-types": "6.10.0",
+      "@solana/assertions": "6.10.0",
+      "@solana/promises": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 360402,
+      "integrity": "sha512-26IRfdm/hTUCmM7MeEeX0ULSbCM6OzkZTkfkrPircqmRM7xyNqP4hq7u0P7wjb9dl7NfgyG6K7cdvUxrj2e3mA==",
+      "tarball": "https://registry.npmjs.org/@solana/keys/-/keys-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/codecs",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/codecs-data-structures": "6.10.0",
+      "@solana/codecs-strings": "6.10.0",
+      "@solana/fixed-points": "6.10.0",
+      "@solana/options": "6.10.0",
+      "@solana/codecs-core": "6.10.0",
+      "@solana/codecs-numbers": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 18929,
+      "integrity": "sha512-lLVuxod4ChWp9i7OvpgIykYG8Q9OGPVXKnHM9VlzDDLylsx7Y1FoQL00sHa7PqFkJVmkBufaA6dcGbQ7FU+lAQ==",
+      "tarball": "https://registry.npmjs.org/@solana/codecs/-/codecs-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/errors",
+    "version": "6.10.0",
+    "dependencies": {
+      "chalk": "5.6.2",
+      "commander": "15.0.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 2137994,
+      "integrity": "sha512-KBLAxCtAXr357JNhCyIDQXWbuSj5vN6w+28FSfcYY6OOSiphmXLAV3V58jgV0C6iNbIzFJFi6yatFyDTdeJsNg==",
+      "tarball": "https://registry.npmjs.org/@solana/errors/-/errors-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/rpc-api",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/addresses": "6.10.0",
+      "@solana/codecs-strings": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/codecs-core": "6.10.0",
+      "@solana/keys": "6.10.0",
+      "@solana/rpc-parsed-types": "6.10.0",
+      "@solana/rpc-types": "6.10.0",
+      "@solana/rpc-transformers": "6.10.0",
+      "@solana/transactions": "6.10.0",
+      "@solana/transaction-messages": "6.10.0",
+      "@solana/rpc-spec": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 563800,
+      "integrity": "sha512-RjPIVsAb/85P1ptoO3WpC0x7QG6gG/e4q/3lo6gbSznUZOcoM+8sSBnCX7BwP1ZkCDS6NK/ClXLnhhhYZx+OGg==",
+      "tarball": "https://registry.npmjs.org/@solana/rpc-api/-/rpc-api-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/signers",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/codecs-core": "6.10.0",
+      "@solana/keys": "6.10.0",
+      "@solana/addresses": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/nominal-types": "6.10.0",
+      "@solana/offchain-messages": "6.10.0",
+      "@solana/instructions": "6.10.0",
+      "@solana/transactions": "6.10.0",
+      "@solana/transaction-messages": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 945641,
+      "integrity": "sha512-+vtCc+mT1FpGxrA5oL2aaMxSHiMJ2hH5PcDIfjo2XJkHz2klZiCZyT5F9+zpltc9vdi1QTElQq59Sfplmtd33A==",
+      "tarball": "https://registry.npmjs.org/@solana/signers/-/signers-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/sysvars",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/accounts": "6.10.0",
+      "@solana/codecs-core": "6.10.0",
+      "@solana/codecs-numbers": "6.10.0",
+      "@solana/codecs-data-structures": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/rpc-types": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 426429,
+      "integrity": "sha512-cG13p1+onxz+20iWjwWQr1Z1jQwPm0fnjoW75fqZq7p4rVCie3L2sXvaJsYPjWKrUvpOzOIEHnqZGkG05rCpjg==",
+      "tarball": "https://registry.npmjs.org/@solana/sysvars/-/sysvars-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/accounts",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/addresses": "6.10.0",
+      "@solana/codecs-core": "6.10.0",
+      "@solana/codecs-strings": "6.10.0",
+      "@solana/rpc-spec": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/rpc-types": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 312160,
+      "integrity": "sha512-+FxfDOrnifoPlBkF+fr8eeQdgM6xtIgAg9xKMu3WnIz60oZd4Xnry6+ff6t+ePPoZZp397FSg9ZJet68VCWm5Q==",
+      "tarball": "https://registry.npmjs.org/@solana/accounts/-/accounts-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/programs",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/addresses": "6.10.0",
+      "@solana/errors": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 28316,
+      "integrity": "sha512-qn/HeLP5KGUJXVub3fyGe69/rWaLX4jzwm6V/1pNxJDbdF+MBdgn18hP6F+VmhfdNmwK0lue3J/1HQ1UTMuQeQ==",
+      "tarball": "https://registry.npmjs.org/@solana/programs/-/programs-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/rpc-types",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/addresses": "6.10.0",
+      "@solana/codecs-core": "6.10.0",
+      "@solana/codecs-numbers": "6.10.0",
+      "@solana/codecs-strings": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/nominal-types": "6.10.0",
+      "@solana/fixed-points": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 354973,
+      "integrity": "sha512-zaSecTfCPvz/vcoAmKD6XoRstGHTr1EKJBD8T9UcpEFFB6CtF6DxerDB+wrzkamuT6msmnR2DWXMrYOGDAsgIg==",
+      "tarball": "https://registry.npmjs.org/@solana/rpc-types/-/rpc-types-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/functional",
+    "version": "6.10.0",
+    "dependencies": {},
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 84884,
+      "integrity": "sha512-P8cevu4mAqHTXC37h1TVoOh8zhWB2tlOI/R9vWjYPpcLwcyWf8p2qq4LEGHl5kY+1C+4PNX39HsmCocXOPCDkQ==",
+      "tarball": "https://registry.npmjs.org/@solana/functional/-/functional-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/plugin-core",
+    "version": "6.10.0",
+    "dependencies": {},
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 143086,
+      "integrity": "sha512-JE70YTQOfFACVFGvoJon4Scc/eHUWjMu8Ovo35CcV2kHTAHYMCd4UkBd2gmlhK0vRMMomsQi1ZLPlAlTq0OoUQ==",
+      "tarball": "https://registry.npmjs.org/@solana/plugin-core/-/plugin-core-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/instructions",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/codecs-core": "6.10.0",
+      "@solana/errors": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 121120,
+      "integrity": "sha512-0TToYF+8LXQ3ofPMx+yF6yaM9l4YJvcAPMy0qV5JsrBUFlWXBSANRuudKBQLHMvb+a3OiUTq5X7omuorKMBB3A==",
+      "tarball": "https://registry.npmjs.org/@solana/instructions/-/instructions-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/subscribable",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/errors": "6.10.0",
+      "@solana/promises": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 392508,
+      "integrity": "sha512-VsR6XMwkiDBkZJUcoGkEOhf397pOV75gKCL9Bx8bpi2T3Bbs0CxUpMn4yaUgAnRba3eXmjbXMNCXjttfa6sKbw==",
+      "tarball": "https://registry.npmjs.org/@solana/subscribable/-/subscribable-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/transactions",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/addresses": "6.10.0",
+      "@solana/codecs-core": "6.10.0",
+      "@solana/codecs-numbers": "6.10.0",
+      "@solana/codecs-strings": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/codecs-data-structures": "6.10.0",
+      "@solana/functional": "6.10.0",
+      "@solana/keys": "6.10.0",
+      "@solana/nominal-types": "6.10.0",
+      "@solana/instructions": "6.10.0",
+      "@solana/rpc-types": "6.10.0",
+      "@solana/transaction-messages": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 632059,
+      "integrity": "sha512-VADSqP9OTYmhrox4pcgDd4+RjVmednXSE0+8Y7SPK4PN1pK5Az2RJ0nSsy0xcTnaOr8mF/crwFktqPrRQwSbQA==",
+      "tarball": "https://registry.npmjs.org/@solana/transactions/-/transactions-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/rpc-spec-types",
+    "version": "6.10.0",
+    "dependencies": {},
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 190181,
+      "integrity": "sha512-NDZrKyZrJk4HaMFhTE/lAiMB824cWAodKqDHyKi0UteHU9pyRmil3BN1jt7e+j08mwMWwfklSgyrTaq52g6DIQ==",
+      "tarball": "https://registry.npmjs.org/@solana/rpc-spec-types/-/rpc-spec-types-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/rpc-parsed-types",
+    "version": "6.10.0",
+    "dependencies": {},
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 32359,
+      "integrity": "sha512-5275mvSV1mxhwvrMVa+K7BU/nAetpHfcb+8Ql9rtA8RRf6DyiimFQFZUukE4Ez6XJihEpCHNy98yhkgai9wytQ==",
+      "tarball": "https://registry.npmjs.org/@solana/rpc-parsed-types/-/rpc-parsed-types-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/instruction-plans",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/errors": "6.10.0",
+      "@solana/instructions": "6.10.0",
+      "@solana/keys": "6.10.0",
+      "@solana/promises": "6.10.0",
+      "@solana/transaction-messages": "6.10.0",
+      "@solana/transactions": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 1699848,
+      "integrity": "sha512-YG7mo4zykzdc6ZTV0BuN6pveK9qeBySzlYYerq578A4eQu3xcypMAYRGAvhMZtWTanjjmD6CKtM0M7kVp0TNxg==",
+      "tarball": "https://registry.npmjs.org/@solana/instruction-plans/-/instruction-plans-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/offchain-messages",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/addresses": "6.10.0",
+      "@solana/codecs-data-structures": "6.10.0",
+      "@solana/codecs-core": "6.10.0",
+      "@solana/codecs-strings": "6.10.0",
+      "@solana/codecs-numbers": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/keys": "6.10.0",
+      "@solana/nominal-types": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 845494,
+      "integrity": "sha512-RiEgAueeMkFMC1suOXBIcmCZgtXRxy24yk0DldPB37bB4zwOF1SAaRjNRPjIkGK8RhCYrEpPosnzLyavw9ueRg==",
+      "tarball": "https://registry.npmjs.org/@solana/offchain-messages/-/offchain-messages-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/plugin-interfaces",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/addresses": "6.10.0",
+      "@solana/instruction-plans": "6.10.0",
+      "@solana/keys": "6.10.0",
+      "@solana/rpc-spec": "6.10.0",
+      "@solana/rpc-subscriptions-spec": "6.10.0",
+      "@solana/signers": "6.10.0",
+      "@solana/rpc-types": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 50531,
+      "integrity": "sha512-vr0/l9wcM4orwGr8cjkFWaJ9A4HvzuAv00jMFNMg0Spd0GZqnwnpW+D/fXa1lIJnTRaF3EeEjLh4VjKU037T0Q==",
+      "tarball": "https://registry.npmjs.org/@solana/plugin-interfaces/-/plugin-interfaces-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/rpc-subscriptions",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/errors": "6.10.0",
+      "@solana/fast-stable-stringify": "6.10.0",
+      "@solana/functional": "6.10.0",
+      "@solana/promises": "6.10.0",
+      "@solana/rpc-subscriptions-api": "6.10.0",
+      "@solana/rpc-spec-types": "6.10.0",
+      "@solana/rpc-subscriptions-channel-websocket": "6.10.0",
+      "@solana/rpc-subscriptions-spec": "6.10.0",
+      "@solana/rpc-transformers": "6.10.0",
+      "@solana/rpc-types": "6.10.0",
+      "@solana/subscribable": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 347044,
+      "integrity": "sha512-6mfuHp/K7unFKCOTCCBC9ziEGnxe2tyJ74EbR51QUnBeCUdYD7Hhdpxic1WRSJ3UeNW/mG4OzFM6z8Wi64Eh9Q==",
+      "tarball": "https://registry.npmjs.org/@solana/rpc-subscriptions/-/rpc-subscriptions-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/transaction-messages",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/addresses": "6.10.0",
+      "@solana/codecs-core": "6.10.0",
+      "@solana/codecs-data-structures": "6.10.0",
+      "@solana/codecs-numbers": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/functional": "6.10.0",
+      "@solana/instructions": "6.10.0",
+      "@solana/nominal-types": "6.10.0",
+      "@solana/rpc-types": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 2419857,
+      "integrity": "sha512-s7v8G3BTxGlKYIj3eWCG0g1296v+1LBt16mVnlRH5FuyaJ5AdhlhtRho5HUDpdwE8EXun+y1c48V6uhcZ8wdbQ==",
+      "tarball": "https://registry.npmjs.org/@solana/transaction-messages/-/transaction-messages-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/transaction-confirmation",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/addresses": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/keys": "6.10.0",
+      "@solana/promises": "6.10.0",
+      "@solana/codecs-strings": "6.10.0",
+      "@solana/rpc": "6.10.0",
+      "@solana/rpc-subscriptions": "6.10.0",
+      "@solana/transaction-messages": "6.10.0",
+      "@solana/transactions": "6.10.0",
+      "@solana/rpc-types": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 309665,
+      "integrity": "sha512-ULvtg65qfenh4T/GYcIlKSUv5EqDcng9UN0dxbHU4kuZdR2e0B8HN2xDC4WhcFQVeFJSbTZmaYFkeTY/Y4gfGQ==",
+      "tarball": "https://registry.npmjs.org/@solana/transaction-confirmation/-/transaction-confirmation-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/assertions",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/errors": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 62016,
+      "integrity": "sha512-lKSAdVo+P/6Lp4vs6shstXmFOpvxrABwn4o1462tb7sKkNapk6o9pPFVPGw4DUgPS3WqWRs1j2tmpuVjhQRntg==",
+      "tarball": "https://registry.npmjs.org/@solana/assertions/-/assertions-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/codecs-core",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/errors": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 1098299,
+      "integrity": "sha512-nfAl9OMGo4HanIMxGsQoVB7BxMoqBCYEUxl8oEAZZ09pDxnaXQZkTRXEwPPccag37XfW1ciPd1vWPKwB2b0HHQ==",
+      "tarball": "https://registry.npmjs.org/@solana/codecs-core/-/codecs-core-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/nominal-types",
+    "version": "6.10.0",
+    "dependencies": {},
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 20268,
+      "integrity": "sha512-9ykyBBvnkInH7fCacjJi7zu2PJyd+OCt+VTjIISv070fHzKIMFqZqJJ/dJ0SRH2aHwfB3n86iVsmtBtuxi4KKA==",
+      "tarball": "https://registry.npmjs.org/@solana/nominal-types/-/nominal-types-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/codecs-strings",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/errors": "6.10.0",
+      "@solana/codecs-core": "6.10.0",
+      "@solana/codecs-numbers": "6.10.0"
+    },
+    "peerDependencies": {
+      "fastestsmallesttextencoderdecoder": "^1.0.22",
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "fastestsmallesttextencoderdecoder": {
+        "optional": true
+      },
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 369870,
+      "integrity": "sha512-zlaqkg7K6F6IN4V/Ec8TWkTn054gxv7ZLagvGkuEyAdPQ6BzzsehOm2TqCuyXgJJTCGPLY1bEk6yH9NxANe0kA==",
+      "tarball": "https://registry.npmjs.org/@solana/codecs-strings/-/codecs-strings-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana-program/system",
+    "version": "0.12.2",
+    "dependencies": {},
+    "peerDependencies": {
+      "@solana/kit": "^6.4.0"
+    },
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 695330,
+      "integrity": "sha512-MaBeOxlvTruQhA7UYkOb3hVTEHPPagOtd+PvTm6a8rGgvEAP0kD4BbC37NceOaR4ABNqdaCmD5OMVRKgrE6KAg==",
+      "tarball": "https://registry.npmjs.org/@solana-program/system/-/system-0.12.2.tgz"
+    }
+  },
+  {
+    "name": "ox",
+    "version": "0.14.33",
+    "dependencies": {
+      "@adraffy/ens-normalize": "^1.11.0",
+      "@noble/ciphers": "^1.3.0",
+      "@noble/curves": "1.9.1",
+      "@noble/hashes": "^1.8.0",
+      "@scure/bip32": "^1.7.0",
+      "@scure/bip39": "^1.6.0",
+      "abitype": "^1.2.3",
+      "eventemitter3": "5.0.1"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 7857423,
+      "integrity": "sha512-rooA/4o7bBof4Ge2VH/eovfNPb/AEEYyrNj03wggc55g5HZD8Pjs/OeWhttgjic3dDcqn0r29bDuvQEdTiUemQ==",
+      "tarball": "https://registry.npmjs.org/ox/-/ox-0.14.33.tgz"
+    }
+  },
+  {
+    "name": "zod",
+    "version": "4.4.3",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 4558122,
+      "integrity": "sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==",
+      "tarball": "https://registry.npmjs.org/zod/-/zod-4.4.3.tgz"
+    }
+  },
+  {
+    "name": "incur",
+    "version": "0.4.26",
+    "dependencies": {
+      "@cfworker/json-schema": "^4.1.1",
+      "@modelcontextprotocol/server": "2.0.0-alpha.4",
+      "@scalar/openapi-types": "^0.8.0",
+      "@toon-format/toon": "^2.1.0",
+      "tokenx": "^1.3.0",
+      "yaml": "^2.8.2",
+      "zod": "^4.3.6"
+    },
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 2015294,
+      "integrity": "sha512-63lwOc8+o1VeFkIW3sWWMrDSP5Dd1NsvucUWyxLUk+DoNRiNl7cj481nlLdlboXkq+tqYPBSlV/7XbylS2S4BA==",
+      "tarball": "https://registry.npmjs.org/incur/-/incur-0.4.26.tgz"
+    }
+  },
+  {
+    "name": "@stripe/stripe-js",
+    "version": "9.9.0",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 999354,
+      "integrity": "sha512-Vwqe6Q5cU4i82tPyAv2BpaW/fQSNdOSO4/J8EeDLPp5/oIZiMmdB+Hgh863zFH+rtoxpuWGvD1L7QPh8k1Rdvw==",
+      "tarball": "https://registry.npmjs.org/@stripe/stripe-js/-/stripe-js-9.9.0.tgz"
+    }
+  },
+  {
+    "name": "eventsource-parser",
+    "version": "3.1.0",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 123218,
+      "integrity": "sha512-kJezFj9YFAMLeORyi7aCLxLbD5/qWMQnoMVlVPyHIll7lgRJCc3JVln9Vgl9nwQi0YkMnhdGTMNn7CkRRAptMg==",
+      "tarball": "https://registry.npmjs.org/eventsource-parser/-/eventsource-parser-3.1.0.tgz"
+    }
+  },
+  {
+    "name": "viem",
+    "version": "2.55.10",
+    "dependencies": {
+      "@noble/curves": "1.9.1",
+      "@noble/hashes": "1.8.0",
+      "@scure/bip32": "1.7.0",
+      "@scure/bip39": "1.6.0",
+      "abitype": "1.2.3",
+      "isows": "1.0.7",
+      "ox": "0.14.33",
+      "ws": "8.21.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.0.4"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 25992867,
+      "integrity": "sha512-Q9Ba+/ma81U2M5o5P2AQ7Ux8rTIwmCZvUcr8rKdQ22bV0IBFHllM2m5gWDP8hFaUN2nH2oW3QG44amRazflYNQ==",
+      "tarball": "https://registry.npmjs.org/viem/-/viem-2.55.10.tgz"
+    }
+  },
+  {
+    "name": "@solana/rpc-spec",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/errors": "6.10.0",
+      "@solana/rpc-spec-types": "6.10.0",
+      "@solana/subscribable": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 127621,
+      "integrity": "sha512-yQdbWw5mZEWrwsunHR9NHkuhMXIB9sPOObwm18D53v5tAJnxTB0IcHvO647XqFDLTK/yQ4AdDtlYD1vsY07AMQ==",
+      "tarball": "https://registry.npmjs.org/@solana/rpc-spec/-/rpc-spec-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/rpc-transformers",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/nominal-types": "6.10.0",
+      "@solana/rpc-spec-types": "6.10.0",
+      "@solana/rpc-types": "6.10.0",
+      "@solana/functional": "6.10.0",
+      "@solana/errors": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 313142,
+      "integrity": "sha512-2nFUrVTiE720pJOY4XKx3HuYmishw0of/4oScu76YGm6O8wsmvFvPNAkrEinmieWXQkfpBfRvLZmpl8PaAy+ug==",
+      "tarball": "https://registry.npmjs.org/@solana/rpc-transformers/-/rpc-transformers-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/rpc-transport-http",
+    "version": "6.10.0",
+    "dependencies": {
+      "undici-types": "^8.4.1",
+      "@solana/rpc-spec": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/rpc-spec-types": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 158365,
+      "integrity": "sha512-JrdNuYi0nBbD3X8JUtgX1dQJwIwz/WJvmigDdELysXfGB2bTJpfjqGDLhCLOz2sRl66FASIEqgG/LVa2C9VXcA==",
+      "tarball": "https://registry.npmjs.org/@solana/rpc-transport-http/-/rpc-transport-http-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/fast-stable-stringify",
+    "version": "6.10.0",
+    "dependencies": {},
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 54752,
+      "integrity": "sha512-iCNed27wk6PKSS3QUtHovRfMWF/jbVWogs2vB4tukKUCsqG4rDfDInIwZ6ur/nY6XTrgi2gMMdZq9GAUlWsbfw==",
+      "tarball": "https://registry.npmjs.org/@solana/fast-stable-stringify/-/fast-stable-stringify-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/promises",
+    "version": "6.10.0",
+    "dependencies": {},
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 80119,
+      "integrity": "sha512-oJSIn+VBBMWDo8oqw7RV3tI6Jih+Ieup6FcQLYLDUriaeo7+8l1Zdezl8zh7SIfeU4lOfAbRg6mR0huaS/Lltg==",
+      "tarball": "https://registry.npmjs.org/@solana/promises/-/promises-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/options",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/codecs-data-structures": "6.10.0",
+      "@solana/codecs-core": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/codecs-numbers": "6.10.0",
+      "@solana/codecs-strings": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 264021,
+      "integrity": "sha512-RO9UT3UYD8/Cu2uM6ZXbKvLeMnVD42+g9JRds7Pfs4AhiOyg4R4TJrQUAppTgavPTO3PBRlWtWOC05ZH/yAIbg==",
+      "tarball": "https://registry.npmjs.org/@solana/options/-/options-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/fixed-points",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/codecs-core": "6.10.0",
+      "@solana/errors": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 1058854,
+      "integrity": "sha512-ZkKL0alXH3L7/wMiVG8YUuG8qBKunlM810+YBD7nUPRhifiGsX1zwADViHLYNqLr/jUk0mTYFUcKznTpB/K+Gg==",
+      "tarball": "https://registry.npmjs.org/@solana/fixed-points/-/fixed-points-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/codecs-numbers",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/errors": "6.10.0",
+      "@solana/codecs-core": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 512153,
+      "integrity": "sha512-CcM+wX4zOiA9zkh8A7t1787A0Ehgmu5+6Z2tKoHew6cNw/dkaUTPa8JnNHbvfsLC8dfHC1BhAEJl86sKmRsfkQ==",
+      "tarball": "https://registry.npmjs.org/@solana/codecs-numbers/-/codecs-numbers-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/codecs-data-structures",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/codecs-numbers": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/codecs-core": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 1532830,
+      "integrity": "sha512-CNasJW3bq5u+632Zt5aJ8rOjAjv2HyenpV8o9kAIqdmV4CBpjCCoBnKn8LkuR/sbeREZxJYfhKTXO/9ruAkw7A==",
+      "tarball": "https://registry.npmjs.org/@solana/codecs-data-structures/-/codecs-data-structures-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "chalk",
+    "version": "5.6.2",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 44342,
+      "integrity": "sha512-7NzBL0rN6fMUW+f7A6Io4h40qQlG+xGmtMxfbnH/K7TAtt8JQWVQK+6g0UXKMeVJoyV5EkkNsErQ8pVD3bLHbA==",
+      "tarball": "https://registry.npmjs.org/chalk/-/chalk-5.6.2.tgz"
+    }
+  },
+  {
+    "name": "commander",
+    "version": "15.0.0",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 207368,
+      "integrity": "sha512-z67u4ZhzCL/Tydu1lJARtEZYWbWaN7oYLHbsuzocr6y4N6WZAagG3RQ4FW61V1/0+jImpj293XfrcYnd1qxtPg==",
+      "tarball": "https://registry.npmjs.org/commander/-/commander-15.0.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/rpc-subscriptions-spec",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/errors": "6.10.0",
+      "@solana/promises": "6.10.0",
+      "@solana/rpc-spec-types": "6.10.0",
+      "@solana/subscribable": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 292547,
+      "integrity": "sha512-nWMwGaG4ulzeX2sskY5TywXF3cwEd8FDmUpLe2JBWxE8XDAOGOKcsYPYFcBgb8ee9KqfPT2PTNdcz9jOhJf34w==",
+      "tarball": "https://registry.npmjs.org/@solana/rpc-subscriptions-spec/-/rpc-subscriptions-spec-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/rpc-subscriptions-api",
+    "version": "6.10.0",
+    "dependencies": {
+      "@solana/keys": "6.10.0",
+      "@solana/rpc-subscriptions-spec": "6.10.0",
+      "@solana/addresses": "6.10.0",
+      "@solana/rpc-transformers": "6.10.0",
+      "@solana/rpc-types": "6.10.0",
+      "@solana/transaction-messages": "6.10.0",
+      "@solana/transactions": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 245188,
+      "integrity": "sha512-CRPQoTtT1cOwOQUsqS7jgo7wYdAj7jB5ab/UmMPWVpecf2FNMhWhgvxP2s82M7VkDGTGl13qaQ0WySmi7Egrlg==",
+      "tarball": "https://registry.npmjs.org/@solana/rpc-subscriptions-api/-/rpc-subscriptions-api-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "@solana/rpc-subscriptions-channel-websocket",
+    "version": "6.10.0",
+    "dependencies": {
+      "ws": "^8.21.0",
+      "@solana/functional": "6.10.0",
+      "@solana/errors": "6.10.0",
+      "@solana/subscribable": "6.10.0",
+      "@solana/rpc-subscriptions-spec": "6.10.0"
+    },
+    "peerDependencies": {
+      "typescript": ">=5.4.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 105112,
+      "integrity": "sha512-KkqP1186HELPlJftA88SNAT2znR8knCVzsUipXVzY4zfW8sN3LOa0ePMzh9VZ/V+J+raTt55laR87ovAO0n+zw==",
+      "tarball": "https://registry.npmjs.org/@solana/rpc-subscriptions-channel-websocket/-/rpc-subscriptions-channel-websocket-6.10.0.tgz"
+    }
+  },
+  {
+    "name": "abitype",
+    "version": "1.2.3",
+    "dependencies": {},
+    "peerDependencies": {
+      "typescript": ">=5.0.4",
+      "zod": "^3.22.0 || ^4.0.0"
+    },
+    "peerDependenciesMeta": {
+      "typescript": {
+        "optional": true
+      },
+      "zod": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 1353963,
+      "integrity": "sha512-Ofer5QUnuUdTFsBRwARMoWKOH1ND5ehwYhJ3OJ/BQO+StkwQjHw0XyVh4vDttzHB7QOFhPHa/o413PJ82gU/Tg==",
+      "tarball": "https://registry.npmjs.org/abitype/-/abitype-1.2.3.tgz"
+    }
+  },
+  {
+    "name": "@scure/bip32",
+    "version": "1.7.0",
+    "dependencies": {
+      "@noble/curves": "~1.9.0",
+      "@noble/hashes": "~1.8.0",
+      "@scure/base": "~1.2.5"
+    },
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 66700,
+      "integrity": "sha512-E4FFX/N3f4B80AKWp5dP6ow+flD1LQZo/w8UnLGYZO674jS6YnYeepycOOksv+vLPSpgN35wgKgy+ybfTb2SMw==",
+      "tarball": "https://registry.npmjs.org/@scure/bip32/-/bip32-1.7.0.tgz"
+    }
+  },
+  {
+    "name": "@scure/bip39",
+    "version": "1.6.0",
+    "dependencies": {
+      "@noble/hashes": "~1.8.0",
+      "@scure/base": "~1.2.5"
+    },
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 383974,
+      "integrity": "sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A==",
+      "tarball": "https://registry.npmjs.org/@scure/bip39/-/bip39-1.6.0.tgz"
+    }
+  },
+  {
+    "name": "@noble/curves",
+    "version": "1.9.1",
+    "dependencies": {
+      "@noble/hashes": "1.8.0"
+    },
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 1813637,
+      "integrity": "sha512-k11yZxZg+t+gWvBbIswW0yoJlu8cHOC7dhunwOzoWH/mXGBiYyR4YY6hAEK/3EUs4UpB8la1RfdRpeGsFHkWsA==",
+      "tarball": "https://registry.npmjs.org/@noble/curves/-/curves-1.9.1.tgz"
+    }
+  },
+  {
+    "name": "@noble/hashes",
+    "version": "1.8.0",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 1145416,
+      "integrity": "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A==",
+      "tarball": "https://registry.npmjs.org/@noble/hashes/-/hashes-1.8.0.tgz"
+    }
+  },
+  {
+    "name": "eventemitter3",
+    "version": "5.0.1",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 73390,
+      "integrity": "sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==",
+      "tarball": "https://registry.npmjs.org/eventemitter3/-/eventemitter3-5.0.1.tgz"
+    }
+  },
+  {
+    "name": "@noble/ciphers",
+    "version": "1.3.0",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 752840,
+      "integrity": "sha512-2I0gnIVPtfnMw9ee9h1dJG7tp81+8Ob3OJb3Mv37rx5L40/b0i7djjCVvGOVqc9AEIQyvyu1i6ypKdFw8R8gQw==",
+      "tarball": "https://registry.npmjs.org/@noble/ciphers/-/ciphers-1.3.0.tgz"
+    }
+  },
+  {
+    "name": "@adraffy/ens-normalize",
+    "version": "1.11.1",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 455684,
+      "integrity": "sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ==",
+      "tarball": "https://registry.npmjs.org/@adraffy/ens-normalize/-/ens-normalize-1.11.1.tgz"
+    }
+  },
+  {
+    "name": "yaml",
+    "version": "2.9.0",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 685953,
+      "integrity": "sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA==",
+      "tarball": "https://registry.npmjs.org/yaml/-/yaml-2.9.0.tgz"
+    }
+  },
+  {
+    "name": "tokenx",
+    "version": "1.3.0",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 17028,
+      "integrity": "sha512-NLdXTEZkKiO0gZuLtMoZKjCXTREXeZZt8nnnNeyoXtNZAfG/GKGSbQtLU5STspc0rMSwcA+UJfWZkbNU01iKmQ==",
+      "tarball": "https://registry.npmjs.org/tokenx/-/tokenx-1.3.0.tgz"
+    }
+  },
+  {
+    "name": "@toon-format/toon",
+    "version": "2.3.1",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 122593,
+      "integrity": "sha512-sWqEMeAJGMda9qRrfPKrX3C4c33CO9SJuvJzzrcBEn5sbDB+k6pSLkDsfN0rVnLQwR97MV3sDgVbcxQNsq8xVw==",
+      "tarball": "https://registry.npmjs.org/@toon-format/toon/-/toon-2.3.1.tgz"
+    }
+  },
+  {
+    "name": "@cfworker/json-schema",
+    "version": "4.1.1",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 173840,
+      "integrity": "sha512-gAmrUZSGtKc3AiBL71iNWxDsyUC5uMaKKGdvzYsBoTW/xi42JQHl7eKV2OYzCUqvc+D2RCcf7EXY2iCyFIk6og==",
+      "tarball": "https://registry.npmjs.org/@cfworker/json-schema/-/json-schema-4.1.1.tgz"
+    }
+  },
+  {
+    "name": "@scalar/openapi-types",
+    "version": "0.8.0",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 399024,
+      "integrity": "sha512-WmaxVSfvY5K/TwcG2B2TU1WOe1As1uc2s7myswtP6dBlcjU3hM08SApxv/jmyGaCE8t4gO5BBhmHY4pDUfmr2g==",
+      "tarball": "https://registry.npmjs.org/@scalar/openapi-types/-/openapi-types-0.8.0.tgz"
+    }
+  },
+  {
+    "name": "@modelcontextprotocol/server",
+    "version": "2.0.0-alpha.4",
+    "dependencies": {
+      "zod": "^4.2.0"
+    },
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 3429217,
+      "integrity": "sha512-/KEo3ZJ50HlagHp0lz2vPgfBZFtXHu6zTBXT9XqPc+4O9i4+IbBVWKq/a9yAfv/ifp0u3+mRo8SUk5kMKzhN8A==",
+      "tarball": "https://registry.npmjs.org/@modelcontextprotocol/server/-/server-2.0.0-alpha.4.tgz"
+    }
+  },
+  {
+    "name": "ws",
+    "version": "8.21.0",
+    "dependencies": {},
+    "peerDependencies": {
+      "bufferutil": "^4.0.1",
+      "utf-8-validate": ">=5.0.2"
+    },
+    "peerDependenciesMeta": {
+      "bufferutil": {
+        "optional": true
+      },
+      "utf-8-validate": {
+        "optional": true
+      }
+    },
+    "dist": {
+      "unpackedSize": 151087,
+      "integrity": "sha512-Vsp28b7DRcimFQvrqu2Wek3z1iYxDCWqHYB8Qsnk/S4RfaCQzPGPyBNuVjJV3cd6UiKtUtp6sNM77gWvzcCH+g==",
+      "tarball": "https://registry.npmjs.org/ws/-/ws-8.21.0.tgz"
+    }
+  },
+  {
+    "name": "isows",
+    "version": "1.0.7",
+    "dependencies": {},
+    "peerDependencies": {
+      "ws": "*"
+    },
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 11154,
+      "integrity": "sha512-I1fSfDCZL5P0v33sVqeTDSpcstAg/N+wF5HS033mogOVIp4B+oHC7oOCsA3axAbBSGTJ8QubbNmnIRN/h8U7hg==",
+      "tarball": "https://registry.npmjs.org/isows/-/isows-1.0.7.tgz"
+    }
+  },
+  {
+    "name": "undici-types",
+    "version": "8.5.0",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 119015,
+      "integrity": "sha512-+FxhD+5RUdCZHlVPt+pd0DaYYHBPsgoHovxhMnFq9R1SOejHGE4ma0swzuRoKhOisEzsjFWdFedyD0JQmftrHg==",
+      "tarball": "https://registry.npmjs.org/undici-types/-/undici-types-8.5.0.tgz"
+    }
+  },
+  {
+    "name": "@scure/base",
+    "version": "1.2.6",
+    "dependencies": {},
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 164644,
+      "integrity": "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg==",
+      "tarball": "https://registry.npmjs.org/@scure/base/-/base-1.2.6.tgz"
+    }
+  },
+  {
+    "name": "@noble/curves",
+    "version": "1.9.7",
+    "dependencies": {
+      "@noble/hashes": "1.8.0"
+    },
+    "peerDependencies": {},
+    "peerDependenciesMeta": {},
+    "dist": {
+      "unpackedSize": 2059987,
+      "integrity": "sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw==",
+      "tarball": "https://registry.npmjs.org/@noble/curves/-/curves-1.9.7.tgz"
+    }
+  }
+]

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "axp.phase4-chain-check.v1",
+  "runId": "phase4-20261001-acceptance",
+  "mode": "sandbox",
+  "network": "solana-payment-sandbox",
+  "rpc": "https://402.surfnet.dev:8899",
+  "genesisHash": "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d",
+  "observedAt": "2026-10-01T08:50:56.797Z",
+  "transactionStatuses": [
+    {
+      "confirmationStatus": "finalized",
+      "confirmations": null,
+      "err": null,
+      "slot": 452166628,
+      "status": {
+        "Ok": null
+      }
+    },
+    {
+      "confirmationStatus": "finalized",
+      "confirmations": null,
+      "err": null,
+      "slot": 452167798,
+      "status": {
+        "Ok": null
+      }
+    }
+  ],
+  "channel": {
+    "address": "7gtxLwQBRuNwug1wWk395goUzmEsbobJcPPp611cLcRR",
+    "owner": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+    "status": "Distributed",
+    "depositBaseUnits": "20000",
+    "remainingRentLamports": "2672640",
+    "openSlot": "452166621",
+    "settlement": {
+      "settled": "6000",
+      "payoutWatermark": "0"
+    }
+  },
+  "escrow": {
+    "address": "7fPZC9wfdp8rsA78ygaLTPT9qLEPA36VRyLgdEgout6T",
+    "closed": true
+  },
+  "charges": 2,
+  "buyerCalls": 6,
+  "organicAnswers": 2,
+  "cumulativeBaseUnits": "6000",
+  "publisherPayoutBaseUnits": "6000",
+  "payerRefundBaseUnits": "14000",
+  "networkFeeLamports": "20000",
+  "grossNewRentLamports": "6751200",
+  "reclaimedRentLamports": "2039280",
+  "grossFeeAndRentLamports": "6771200",
+  "feeAndRentCapLamports": "20000000",
+  "rentBoundary": "Channel PDA and publisher ATA rent remain separate from token refund. No reclaim transaction performed.",
+  "links": {
+    "open": "https://explorer.solana.com/tx/5pvC7TCFRYkyxTAK4TFWVYNqiDs9gdZUr7So3cyTqjXcprNNnny7nDDBvuzh8X1GWCzBKHYnEcNhrn22sSLS8KWe?cluster=custom&customUrl=https%3A%2F%2F402.surfnet.dev%3A8899",
+    "settlement": "https://explorer.solana.com/tx/66oQbyfw6x9y4MAARyzJHuRnmxJ2U2vtFND4suBDkrSwnDQt3VccQwaNZxnYYvBvM38Nw44umKfD3idohQ8bQGqo?cluster=custom&customUrl=https%3A%2F%2F402.surfnet.dev%3A8899"
+  },
+  "allChecksPassed": true
+}

@@ -1,0 +1,19 @@
+{
+ "openapi":"3.1.0","info":{"title":"AXP V2 functional demo API","version":"v2.1"},
+ "servers":[{"url":"http://127.0.0.1:8793"}],
+ "paths":{
+  "/health":{"get":{"responses":{"200":{"description":"Financial and presentation modes"}}}},
+  "/v2/bootstrap":{"get":{"responses":{"200":{"description":"Read-only questions, manifest and operator CSRF token; null in replay"}}}},
+  "/v2/state":{"get":{"responses":{"200":{"description":"Run, drafts, frozen paired decisions, awards, receipts and synthetic accounting"}}}},
+  "/v2/evidence":{"get":{"responses":{"200":{"description":"Screened public historical prompt–creative–hint catalogue without vectors"}}}},
+  "/v2/retrieval":{"get":{"parameters":[{"in":"query","name":"question","schema":{"type":"integer","enum":[0,1]}},{"in":"query","name":"campaign","schema":{"type":"string"}}],"responses":{"200":{"description":"Bounded vector, lexical fallback or unavailable packet"}}}},
+  "/v2/v1-payment":{"get":{"responses":{"200":{"description":"Separate original V1 sandbox evidence, not V2 payment"}}}},
+  "/v2/campaign":{"post":{"requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","additionalProperties":false,"required":["campaignId","businessName","creative","contextHints","approved"],"properties":{"campaignId":{"type":"string"},"businessName":{"type":"string","maxLength":400},"creative":{"type":"string","maxLength":800},"contextHints":{"type":"string","maxLength":400},"approved":{"type":"boolean"}}}}}},"responses":{"200":{"description":"Saved fictional draft"},"409":{"description":"Run frozen"},"405":{"description":"Replay read-only"}}}},
+  "/v2/preview":{"post":{"responses":{"200":{"description":"Deterministic preview, zero provider calls"},"405":{"description":"Replay read-only"}}}},
+  "/v2/run":{"post":{"responses":{"200":{"description":"Bounded actual model run or saved outcome recovery"},"403":{"description":"Operator model flag absent"},"409":{"description":"Run in progress or changed freeze"},"405":{"description":"Replay read-only"}}}},
+  "/v2/close":{"post":{"responses":{"200":{"description":"Authorize and close synthetic accounting only"},"409":{"description":"Outstanding reservations"},"405":{"description":"Replay read-only"}}}},
+  "/v1/awards/{id}/render":{"post":{"parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","additionalProperties":false,"required":["domInserted","sponsoredLabelPresent","creativeHash"],"properties":{"domInserted":{"const":true},"sponsoredLabelPresent":{"const":true},"creativeHash":{"type":"string"}}}}}},"responses":{"200":{"description":"Accepted owned-app receipt and unique charge"},"409":{"description":"Expired/failed award"},"405":{"description":"Replay read-only"}}}},
+  "/v1/awards/{id}/fail":{"post":{"parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"Failed delivery, no accepted charge"},"405":{"description":"Replay read-only"}}}}
+ },
+ "components":{"securitySchemes":{"operatorToken":{"type":"apiKey","in":"header","name":"x-axp-csrf"}}}
+}

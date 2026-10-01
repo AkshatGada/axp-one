@@ -1,0 +1,10 @@
+{
+  "turnId": "v3-mobile",
+  "requestId": "organic-75661194993dd34de9bbbcb8",
+  "inputHash": "96d4ac818a19e2ff8aff27c0b01e37de8d310cffb99361fddb5cadf0ac540d2d",
+  "agentId": "01a0f7b1-ca57-7431-b2d2-59f304838120",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "completedAt": "2026-10-01T13:42:34.577Z",
+  "answer": "For a mobile-only Ethereum and Solana wallet, compare software wallets on chain coverage, security, usability, and recovery—not hardware devices.\n\nFirst decide whether you prefer one app for both chains or separate chain-focused wallets. One app simplifies balances and backups; separate apps can offer workflows better suited to each ecosystem, but add recovery and maintenance overhead. Verify current support for both Ethereum and Solana in the official mobile app; do not assume a browser extension’s features also exist on mobile.\n\nCheck these before choosing:\n• Self-custody versus custodial: who controls the keys, and can you recover access independently?\n• Recovery: understand seed-phrase, cloud-backup, or other recovery methods and their risks. Never share recovery secrets or enter them into a website.\n• Transactions: look for clear network, recipient, fee, and approval details. Ethereum token allowances and Solana signing requests deserve careful review.\n• Mobile usability: test your needed dApp connections, token handling, and network switching with a small amount first.\n• Costs: distinguish blockchain fees from wallet charges and swap/provider fees. No wallet is universally cheapest.\n• Authenticity: install through links from the official website and verify the app publisher.\n\nMobile software wallets are convenient, but keys stored on an internet-connected phone face device-compromise and phishing risks. Hardware wallets can isolate signing keys, but they do not meet your requirement. For mobile-only use, keep the phone updated, enable a strong device lock, secure recovery backups, and consider a separate low-balance wallet for unfamiliar dApps."
+}

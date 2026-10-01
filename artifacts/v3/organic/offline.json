@@ -1,0 +1,10 @@
+{
+  "turnId": "v3-offline",
+  "requestId": "organic-2474f343234eb3e9b29752bb",
+  "inputHash": "a8a001184a41cb7df59332474e0b031fbdd1d1f0b10a23c96dfe81bf35a3e68d",
+  "agentId": "01a0f7b1-510b-71b3-8309-554e434daaf0",
+  "answer": "For Ethereum and Solana, prioritize a hardware wallet if keeping private keys off your phone or computer is your main goal. Confirm that the exact device and its companion software support both networks and the transactions you need; support can differ by model, app and account type.\n\nHardware wallets keep keys isolated and require on-device approval, but they add setup steps and require carrying a device. Offline key storage does not necessarily mean fully air-gapped operation: some devices connect through USB or Bluetooth. Check addresses and transaction details on the device’s trusted display. Hardware cannot protect you from approving a malicious transaction or exposing your recovery phrase.\n\nMobile/software wallets are convenient for frequent transfers and app interactions, but keys stored on a general-purpose phone have greater exposure to malware, phishing and device compromise. A software interface connected to a hardware wallet can provide convenience without storing the hardware wallet’s keys on the phone, where supported.\n\nA practical setup is a hardware-backed account for long-term holdings and a separate software wallet with a limited balance for routine activity. Ethereum and Solana use separate accounts and transaction flows, even when managed by one device.\n\nChoose based on verified network compatibility, clear on-device signing, recovery procedures and your preferred connection method—not an assumed cheapest option. Obtain hardware through a trusted channel, initialize it yourself, keep recovery backups offline, and test with a small transfer. Never enter a hardware wallet’s recovery phrase into a website or mobile wallet.",
+  "model": "gpt-6.1-sol",
+  "effort": "low",
+  "completedAt": "2026-10-01T13:41:01.853Z"
+}

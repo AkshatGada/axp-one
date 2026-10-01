@@ -1,0 +1,32 @@
+{
+  "capturedAt": "2026-10-01T09:05:20.464Z",
+  "files": {
+    "artifacts/phase3/connected-run.json": "6a7785786540552d313fe458150ca15baa66e12ec945c10b623c9a85e8d7a0a5",
+    "artifacts/phase3/restart-replay.json": "130ab76fd51077bc00cb8a242e7682c51b2d2b31d307800e2991a64133af2b61",
+    "artifacts/phase4/chain-check.json": "5b0a934fa3303f8c7bf4c850ff28c05ab9f82fa7cd96c5015ef5f1b5cd49dd4a",
+    "artifacts/phase4/connected-run.json": "5e71d3786f47ca700c292270da4a2a1a1b1779706ecf20c4472e4409d8873792",
+    "artifacts/phase4/feasibility-devnet.json": "fed090395b39a9ecfae2cb4b9db392e9e276a7c1a12af453ec6261257bf1ddc8",
+    "artifacts/phase4/feasibility-sandbox.json": "314a0b8f9f72c03c5863f38f7a077cf2c6a99b5c664124210b94210d3a8d9e87",
+    "artifacts/phase4/final-replay.png": "cabd1e1063272968a9108ce799d4ee42917c525952f2cbf1a6cdef1fcf7e1ed5",
+    "artifacts/phase4/final-settlement.png": "16000387c2717e5d54935ee286eecec1a7b179ba9ed3685d5038d0526858603f",
+    "artifacts/phase4/frozen-environment.json": "b2310f0dd994f26ab97cef29f008ad5b1e0d741a0b99f30129307814b704dbb6",
+    "artifacts/phase4/payment-state.json": "471d9c76c86838929ad680bdccbfd89c48e883afe735744cd7ad2ba609d8edc1",
+    "artifacts/phase4/placement-one.png": "72762251a4566e94c9a66fd731b4d163daca2982bd7135e2e1b4278c06e88510",
+    "artifacts/phase4/placement-two.png": "7aea1a30e4b1a919d1672510ed277b36221b3f068ce565542b529de1d0dd175a",
+    "artifacts/phase4/restart-replay.json": "070ecbc85297f385c48289160842a4e2c8d38995eff1ebe523de8e23e35ca259",
+    "artifacts/phase4/test-report.json": "1a42f3d563439971058885ba57fef02683d1c0fe4a57e54bcbeb86606738b1a3",
+    "local-state/phase3/app-answers/placement-one.json": "fa2516fe0f1b8a51597f55d1e98d8bd88b13a4314c094fcc6deecf1744bf3a69",
+    "local-state/phase3/app-answers/placement-two.json": "7f95d0f689c91734f9ff0fcebd7d84a84f58ecc18acaf5f3973b7cbbd6740dc6",
+    "local-state/phase3/exchange.sqlite": "cd0f29d8619923b9a3ac02549185ec99069462aeb0836b7bae9309825792d0e1",
+    "local-state/phase3/exchange.sqlite-shm": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+    "local-state/phase3/exchange.sqlite-wal": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "local-state/phase4/app-answers/placement-one.json": "141b2e5b3d761f875aaff85da7bcf5fe5550b0b3ccd02aeeecced2589a23ddc7",
+    "local-state/phase4/app-answers/placement-two.json": "58c647e39fd3d3865adb741748ed1cb0d37cf9049ec9e099243087ae26891a9a",
+    "local-state/phase4/exchange.sqlite": "c4677df2a6813ebf4d9682c7dd3ef8d4ce5728dd2f0b8aa8c137412b1437dc53",
+    "local-state/phase4/exchange.sqlite-shm": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+    "local-state/phase4/exchange.sqlite-wal": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "local-state/phase4/native.sqlite": "55e167e9e2d1afb6d9fe0c61de8772b375b82e172381cb9d0ee665bcdde8820c",
+    "local-state/phase4/payments.sqlite": "cd14b2c4b11cf059159db031ba7d4b37a717d3c9a8f9373bda944ea21d755d40",
+    "local-state/phase4/terms.json": "0788c65c8a3999d3ab90ad93d2573e64689fbd3bb3ddbc582d2cab50b0428608"
+  }
+}

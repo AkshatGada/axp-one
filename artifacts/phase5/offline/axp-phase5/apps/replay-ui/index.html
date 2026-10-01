@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AXP — recorded exchange walkthrough</title>
+  <link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/tokens.css"><link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.mjs"></script>
+</head>
+<body>
+  <header><a class="brand" href="/">AXP.one</a><div class="mode"><strong>Recorded evidence replay</strong><span>Original network: Solana payment sandbox · not Devnet or mainnet</span></div><span class="readonly">Read only · no spending</span></header>
+  <main>
+    <div class="identity"><span id="run">Loading verified bundle…</span><span id="timestamp"></span></div>
+    <nav aria-label="Walkthrough"><button id="previous" type="button">← Previous</button><label for="step">Section</label><select id="step"></select><button id="next" type="button">Next →</button><span id="position"></span></nav>
+    <article id="screen" aria-live="polite" aria-atomic="true" tabindex="-1"></article>
+    <div class="caption" aria-label="Walkthrough caption" id="caption"></div>
+    <aside class="examples"><label for="example">Separate synthetic examples</label><select id="example"><option value="">Recorded story only</option></select><div id="example-content" aria-live="polite"></div></aside>
+    <details class="audit"><summary>Bundle and historical events</summary><p id="hash"></p><p>Hashes detect changed files; they are not independent third-party attestation. Timestamps belong to the original records, not this presentation. Sandbox chain time and local event time are distinct clocks.</p><button id="events" type="button">Read saved events</button><pre id="event-text"></pre></details>
+  </main>
+  <footer>Offline replay of an owned-app experiment. Not advertiser enrollment, human attention, endorsement or production authorization.</footer>
+</body>
+</html>

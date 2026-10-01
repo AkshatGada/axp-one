@@ -1,0 +1,580 @@
+{
+  "schemaVersion": "advertiser-evidence.v1",
+  "capturedAt": "2026-10-01T09:56:36.321Z",
+  "sourceMode": "cached_database_export",
+  "limitations": [
+    "Narrow travel-hospitality background subset within the measured prompt panel, not all ContextHint data or all AI demand.",
+    "Historical prompt-creative associations are not task-fit labels, impressions, conversions, economic value or real-world query volume.",
+    "Historical brands are not enrolled AXP advertisers; captured copy is reference evidence, not approved campaign creative or licensed inventory.",
+    "Hints are inferred targeting hypotheses, not advertiser configuration; sparse tiers and reconstruction diagnostics are not conversion probabilities.",
+    "CapturedAt is catalogue export time, not an observation window; source capture times and database revision remain unknown.",
+    "Hashes detect content changes, not independent authenticity, licensing rights or original-time attestation.",
+    "No raw vectors, images, raw answers, tenant requests, credentials or private conversations are exported.",
+    "Compute database inventory, when available, is separate from the user-reported Sep26 servingDB snapshot; these numbers are not combined.",
+    "One actual local compute inventory and five fixed cached lookups; 0 failures, 1 cache misses, 2 unsafe associations omitted; at most 75 unique mapping records.",
+    "Preparation uses existing cached-vector neighbor retrieval; catalogue search uses exact lexical tokens only, not vectors or machine learning. No new embeddings generated.",
+    "Lookups and inventory use separate repeatable-read read-only transactions; this is a bounded export, not a single atomic database snapshot or full clone.",
+    "Duplicate mapping IDs across lookups are merged with query hashes; distinct source mapping IDs remain separate historical associations, not impression counts."
+  ],
+  "inventory": {
+    "schemaVersion": "cached-corpus-inventory.v1",
+    "provenance": {
+      "database": "ads",
+      "readOnly": true,
+      "model": "BAAI/bge-base-en-v1.5",
+      "dimension": 768,
+      "revision": "unrecorded",
+      "category": "travel-hospitality",
+      "embeddingCalls": 0
+    },
+    "vectors": {
+      "prompt": 146438,
+      "ad": 45315,
+      "hint": 67605
+    },
+    "travel": {
+      "backgroundProbes": 200,
+      "backgroundMappings": 421,
+      "backgroundCreatives": 288,
+      "hints": 336,
+      "hintVectors": 336
+    }
+  },
+  "records": [
+    {
+      "id": "ads:mapping:4442",
+      "promptId": 10851,
+      "promptText": "how to implement AI for revenue optimization in hotels",
+      "creativeId": 3422,
+      "mappingId": 4442,
+      "advertiser": "Software Connect",
+      "creativeText": "Software Connect Best ERP systems: 2026 benchmarks AI won't spot dying ERP systems. Get a free shortlist from real experts.",
+      "hint": {
+        "id": 9295,
+        "text": "Hotel and hospitality leaders evaluating ERP and revenue-management software who are wary of AI-first vendor hype and want expert-built vendor shortlists over algorithm-generated picks.",
+        "tier": "sparse",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 1,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "bc8b1cf8b74b175a96da24ec2a5156b6f29c05a75f791cdd1ba3d2f4290b49c7",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "051977a6ba668790a15d5faf7ba37ad7dc6ab5de1c820fccabbeb528c6b28fea",
+          "7619471952a4c1015e4feeb122cc7a4e68c728113c3ca0ce222ce4e0f327cb59"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:4507",
+      "promptId": 10915,
+      "promptText": "top solutions for customer prediction in hospitality",
+      "creativeId": 3455,
+      "mappingId": 4507,
+      "advertiser": "Klaviyo",
+      "creativeText": "Klaviyo Unified Restaurant Mktg. Turn diners into regulars with Klaviyo B2C CRM.",
+      "hint": {
+        "id": 8141,
+        "text": "Hospitality operators and marketers comparing CRM and customer prediction platforms to turn one-time guests and diners into repeat, high-value customers.",
+        "tier": "sparse",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 1,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "74759872ac2e2277bffe0dbd38665882d84bb6e57953ab5182ee3e9b3eabb383",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "7619471952a4c1015e4feeb122cc7a4e68c728113c3ca0ce222ce4e0f327cb59"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:15718",
+      "promptId": 21835,
+      "promptText": "top solutions for using AI to personalize tourism marketing",
+      "creativeId": 2391,
+      "mappingId": 15718,
+      "advertiser": "Planhat",
+      "creativeText": "Planhat The Agentic Customer Platform Turn customer data into action with Planhat AI agents",
+      "hint": {
+        "id": 4312,
+        "text": "Tourism and hospitality operators, from safari outfitters to visitor attractions, looking to turn guest data into personalized marketing and repeat visits using AI agents.",
+        "tier": "holdout",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 0.9444444,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "c13a92bec25f4677ac76b4cede6dd7d20f4feb5bf8d3410cf7f0f161920d8988",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "051977a6ba668790a15d5faf7ba37ad7dc6ab5de1c820fccabbeb528c6b28fea",
+          "2cd437eac1fa21db4cfb311dbe7a66442b00ef6c79e3691ce63cd9dccc419f1b",
+          "7619471952a4c1015e4feeb122cc7a4e68c728113c3ca0ce222ce4e0f327cb59"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:17050",
+      "promptId": 23153,
+      "promptText": "longitudinal research platform for hospitality insights teams",
+      "creativeId": 61,
+      "mappingId": 17050,
+      "advertiser": "Monday.com",
+      "creativeText": "Monday.com If Dashboards Are A Must See how teams track KPIs and progress with AI dashboards.",
+      "hint": {
+        "id": 45814,
+        "text": "Travel and hospitality operators, from tour companies and attractions to restaurants and short-term rental hosts, evaluating CRMs and operational tools to run marketing, manage customer data, and track business insights.",
+        "tier": "holdout",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 0.90416664,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "fee7eb9d72153c59b4f3be03cb019d0cbc6ee3ea8db5579f46e3dcc749093afb",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "2cd437eac1fa21db4cfb311dbe7a66442b00ef6c79e3691ce63cd9dccc419f1b"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:35570",
+      "promptId": 23153,
+      "promptText": "longitudinal research platform for hospitality insights teams",
+      "creativeId": 2527,
+      "mappingId": 35570,
+      "advertiser": "ZoomInfo Technologies Inc",
+      "creativeText": "ZoomInfo Technologies Inc #1 B2B Data. Use it anywhere. Use the best B2B data how you want, where you want. Pay for what you use.",
+      "hint": {
+        "id": 45972,
+        "text": "Insights, research, and customer experience leaders at travel and hospitality brands evaluating modern research tooling and B2B data to power their insight programs and go-to-market work.",
+        "tier": "holdout",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 0.87142855,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "fee7eb9d72153c59b4f3be03cb019d0cbc6ee3ea8db5579f46e3dcc749093afb",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "2cd437eac1fa21db4cfb311dbe7a66442b00ef6c79e3691ce63cd9dccc419f1b"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:50346",
+      "promptId": 23153,
+      "promptText": "longitudinal research platform for hospitality insights teams",
+      "creativeId": 1585,
+      "mappingId": 50346,
+      "advertiser": "Cisco Systems, Inc.",
+      "creativeText": "Cisco Systems, Inc. The Platform Advantage, Explained Explore Visibility, Segmentation, And Analytics Designed For Lean It Teams. Learn More.",
+      "hint": {
+        "id": 6536,
+        "text": "IT and insights leaders at hospitality and travel companies evaluating a unified platform for longitudinal visibility, segmentation, and analytics that lean IT teams can actually run day to day.",
+        "tier": "loo",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 0.8333333,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "fee7eb9d72153c59b4f3be03cb019d0cbc6ee3ea8db5579f46e3dcc749093afb",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "2cd437eac1fa21db4cfb311dbe7a66442b00ef6c79e3691ce63cd9dccc419f1b"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:52190",
+      "promptId": 57933,
+      "promptText": "AI agent travel booking automation",
+      "creativeId": 25437,
+      "mappingId": 52190,
+      "advertiser": "Enterprise",
+      "creativeText": "Enterprise Smart Booking Book in minutes with easy steps.",
+      "hint": {
+        "id": 7593,
+        "text": "Operations and product teams comparing fast, digital-first booking platforms with automated and AI-agent-friendly flows for travel reservations.",
+        "tier": "sparse",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 1,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "c13a92bec25f4677ac76b4cede6dd7d20f4feb5bf8d3410cf7f0f161920d8988",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "051977a6ba668790a15d5faf7ba37ad7dc6ab5de1c820fccabbeb528c6b28fea",
+          "2cd437eac1fa21db4cfb311dbe7a66442b00ef6c79e3691ce63cd9dccc419f1b",
+          "7619471952a4c1015e4feeb122cc7a4e68c728113c3ca0ce222ce4e0f327cb59"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:53989",
+      "promptId": 57933,
+      "promptText": "AI agent travel booking automation",
+      "creativeId": 26176,
+      "mappingId": 53989,
+      "advertiser": "Navan",
+      "creativeText": "Navan #1 travel Management Software Choose Navan Over legacy. 600+ airlines, 2M+ hotels. Rated #1 on G2 by 9,700+ reviews.",
+      "hint": {
+        "id": 39119,
+        "text": "Finance and operations decision makers at small and mid-size US companies (roughly 20 to 500 employees) without a dedicated travel manager, evaluating an all-in-one corporate travel platform that combines global booking, policy enforcement at checkout, automated expense capture, and AI-powered reporting, and comparing Navan against tools like TravelPerk on per-employee pricing.",
+        "tier": "holdout",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 0.99743587,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "c13a92bec25f4677ac76b4cede6dd7d20f4feb5bf8d3410cf7f0f161920d8988",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "051977a6ba668790a15d5faf7ba37ad7dc6ab5de1c820fccabbeb528c6b28fea",
+          "2cd437eac1fa21db4cfb311dbe7a66442b00ef6c79e3691ce63cd9dccc419f1b",
+          "7619471952a4c1015e4feeb122cc7a4e68c728113c3ca0ce222ce4e0f327cb59"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:55646",
+      "promptId": 55670,
+      "promptText": "AI-powered insights synthesis tool for travel insights teams",
+      "creativeId": 26943,
+      "mappingId": 55646,
+      "advertiser": "NiCE",
+      "creativeText": "NiCE CX Leaders Trust MIT Insights from MIT on AI-driven CX strategies",
+      "hint": {
+        "id": 8475,
+        "text": "Insights and CX leaders at travel and hospitality companies shopping for AI tools that can synthesize customer experience and operational data into actionable strategy. NiCE pairs MIT-validated AI research with an enterprise CX platform built for travel and hospitality operators.",
+        "tier": "sparse",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 1,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "1b1fe0c5a935a28084cae54ef0dac4387cc9422a34f3c5aef9f7a64e2faa0e5e",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "051977a6ba668790a15d5faf7ba37ad7dc6ab5de1c820fccabbeb528c6b28fea",
+          "2cd437eac1fa21db4cfb311dbe7a66442b00ef6c79e3691ce63cd9dccc419f1b"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:58717",
+      "promptId": 64203,
+      "promptText": "top platforms for automated hotel revenue reconciliation",
+      "creativeId": 10590,
+      "mappingId": 58717,
+      "advertiser": "Appfolio",
+      "creativeText": "Appfolio One Platform. Every Workflow. Leasing, maintenance, accounting — all in one place.",
+      "hint": {
+        "id": 6868,
+        "text": "Hotel and lodging operators comparing integrated property management platforms that automate accounting, revenue reconciliation, and day-to-day operational workflows. Targets hospitality decision-makers shortlisting back-office software vendors.",
+        "tier": "sparse",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 1,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "74759872ac2e2277bffe0dbd38665882d84bb6e57953ab5182ee3e9b3eabb383",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "7619471952a4c1015e4feeb122cc7a4e68c728113c3ca0ce222ce4e0f327cb59"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:110136",
+      "promptId": 55670,
+      "promptText": "AI-powered insights synthesis tool for travel insights teams",
+      "creativeId": 7668,
+      "mappingId": 110136,
+      "advertiser": "Auth0",
+      "creativeText": "Auth0 Auth0 for AI Agents Secure humans, agents, and whatever comes next. Start building now.",
+      "hint": {
+        "id": 12362,
+        "text": "Product and engineering teams at travel and hospitality companies building AI-powered agent or insights tools who need secure authentication and identity for both human users and the agents themselves.",
+        "tier": "sparse",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 1,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "1b1fe0c5a935a28084cae54ef0dac4387cc9422a34f3c5aef9f7a64e2faa0e5e",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "051977a6ba668790a15d5faf7ba37ad7dc6ab5de1c820fccabbeb528c6b28fea",
+          "2cd437eac1fa21db4cfb311dbe7a66442b00ef6c79e3691ce63cd9dccc419f1b"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:120901",
+      "promptId": 21835,
+      "promptText": "top solutions for using AI to personalize tourism marketing",
+      "creativeId": 7870,
+      "mappingId": 120901,
+      "advertiser": "Metadata Inc",
+      "creativeText": "Metadata Inc Try the AI Agency Free Chat with 6 AI agents. Build a campaign now.",
+      "hint": {
+        "id": 74803,
+        "text": "Research and consumer insights leaders at travel and hospitality brands comparing AI-powered platforms for consumer research, MROC tooling, or marketing automation.",
+        "tier": "holdout",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 0.96666664,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "c13a92bec25f4677ac76b4cede6dd7d20f4feb5bf8d3410cf7f0f161920d8988",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "051977a6ba668790a15d5faf7ba37ad7dc6ab5de1c820fccabbeb528c6b28fea",
+          "2cd437eac1fa21db4cfb311dbe7a66442b00ef6c79e3691ce63cd9dccc419f1b",
+          "7619471952a4c1015e4feeb122cc7a4e68c728113c3ca0ce222ce4e0f327cb59"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:189867",
+      "promptId": 571,
+      "promptText": "best way to manage corporate travel expenses and reimbursements for a remote team",
+      "creativeId": 104325,
+      "mappingId": 189867,
+      "advertiser": "Navan",
+      "creativeText": "Navan The Business Travel Tool Teams Actually Use Modern booking, automatic expense reports, and policy enforcement &#x2014; all in one platform.",
+      "hint": {
+        "id": 39119,
+        "text": "Finance and operations decision makers at small and mid-size US companies (roughly 20 to 500 employees) without a dedicated travel manager, evaluating an all-in-one corporate travel platform that combines global booking, policy enforcement at checkout, automated expense capture, and AI-powered reporting, and comparing Navan against tools like TravelPerk on per-employee pricing.",
+        "tier": "holdout",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 0.99743587,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "c02ed8bb3c3abd2f9901d9306505004376baf0e98438b7a57c966e8c9f2c83d9",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "179a7a90f320ece27c69bef3d29e48aa92b0b03a8ccc8e1adf246b3bbf90a61d"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:280141",
+      "promptId": 380302,
+      "promptText": "zoominfo vs apollo for finding corporate travel decision makers at mid market companies",
+      "creativeId": 149394,
+      "mappingId": 280141,
+      "advertiser": "Sign In Solutions, Inc.",
+      "creativeText": "Sign In Solutions, Inc. Better Decisions Start With Better Visibility Unify workplace data to support security and compliance",
+      "hint": {
+        "id": 50552,
+        "text": "Operations, guest experience, and venue management leaders at attractions and hospitality groups researching visitor data analytics and guest management tools to improve attendance forecasting and on-site experience.",
+        "tier": "holdout",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 0.9866667,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "fee7eb9d72153c59b4f3be03cb019d0cbc6ee3ea8db5579f46e3dcc749093afb",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "2cd437eac1fa21db4cfb311dbe7a66442b00ef6c79e3691ce63cd9dccc419f1b"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:280148",
+      "promptId": 380309,
+      "promptText": "what is the best all in one software to manage business travel booking and expense reporting",
+      "creativeId": 104325,
+      "mappingId": 280148,
+      "advertiser": "Navan",
+      "creativeText": "Navan The Business Travel Tool Teams Actually Use Modern booking, automatic expense reports, and policy enforcement &#x2014; all in one platform.",
+      "hint": {
+        "id": 39119,
+        "text": "Finance and operations decision makers at small and mid-size US companies (roughly 20 to 500 employees) without a dedicated travel manager, evaluating an all-in-one corporate travel platform that combines global booking, policy enforcement at checkout, automated expense capture, and AI-powered reporting, and comparing Navan against tools like TravelPerk on per-employee pricing.",
+        "tier": "holdout",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 0.99743587,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "c02ed8bb3c3abd2f9901d9306505004376baf0e98438b7a57c966e8c9f2c83d9",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "179a7a90f320ece27c69bef3d29e48aa92b0b03a8ccc8e1adf246b3bbf90a61d"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:688879",
+      "promptId": 1064588,
+      "promptText": "best all in one tool to manage remote team travel bookings",
+      "creativeId": 5441,
+      "mappingId": 688879,
+      "advertiser": "Navan",
+      "creativeText": "Navan The Business Travel Tool Teams Actually Use Modern booking, automatic expense reports, and policy enforcement — all in one platform.",
+      "hint": {
+        "id": 39119,
+        "text": "Finance and operations decision makers at small and mid-size US companies (roughly 20 to 500 employees) without a dedicated travel manager, evaluating an all-in-one corporate travel platform that combines global booking, policy enforcement at checkout, automated expense capture, and AI-powered reporting, and comparing Navan against tools like TravelPerk on per-employee pricing.",
+        "tier": "holdout",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 0.99743587,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "b623fc2f704527e012fe1c86dab8d983e08fa61a89fea4e4a80e6e217d07bffd",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "051977a6ba668790a15d5faf7ba37ad7dc6ab5de1c820fccabbeb528c6b28fea",
+          "179a7a90f320ece27c69bef3d29e48aa92b0b03a8ccc8e1adf246b3bbf90a61d"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:932235",
+      "promptId": 1427823,
+      "promptText": "best apps to coordinate company offsite travel and share itineraries with the team",
+      "creativeId": 5441,
+      "mappingId": 932235,
+      "advertiser": "Navan",
+      "creativeText": "Navan The Business Travel Tool Teams Actually Use Modern booking, automatic expense reports, and policy enforcement — all in one platform.",
+      "hint": {
+        "id": 39119,
+        "text": "Finance and operations decision makers at small and mid-size US companies (roughly 20 to 500 employees) without a dedicated travel manager, evaluating an all-in-one corporate travel platform that combines global booking, policy enforcement at checkout, automated expense capture, and AI-powered reporting, and comparing Navan against tools like TravelPerk on per-employee pricing.",
+        "tier": "holdout",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 0.99743587,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "c02ed8bb3c3abd2f9901d9306505004376baf0e98438b7a57c966e8c9f2c83d9",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "179a7a90f320ece27c69bef3d29e48aa92b0b03a8ccc8e1adf246b3bbf90a61d"
+        ]
+      }
+    },
+    {
+      "id": "ads:mapping:1331270",
+      "promptId": 2020040,
+      "promptText": "best online booking and management software for small tour operators",
+      "creativeId": 793949,
+      "mappingId": 1331270,
+      "advertiser": "O'Rourke Hospitality Marketing",
+      "creativeText": "O'Rourke Hospitality Marketing More Direct Bookings, Fewer OTAs Capture more direct bookings and cut ties with costly OTA commissions on every stay.",
+      "hint": {
+        "id": 84961,
+        "text": "Small independent hospitality operators, from boutique hotels and inns to tour and activity providers, evaluating tools and strategies to win more direct bookings and cut OTA commissions.",
+        "tier": "loo",
+        "modelVersion": "MiniMax-M3@v1",
+        "reconstructionAuc": 0.93333334,
+        "semantics": "inferred_targeting_not_advertiser_configuration"
+      },
+      "source": {
+        "database": "ads",
+        "readOnly": true,
+        "sourceHash": "c02ed8bb3c3abd2f9901d9306505004376baf0e98438b7a57c966e8c9f2c83d9",
+        "category": "travel-hospitality",
+        "revision": "unrecorded",
+        "selectionVersion": "advertiser-travel-bounded-v1",
+        "creativeTextStatus": "historical_observed_copy",
+        "queryTextHashes": [
+          "179a7a90f320ece27c69bef3d29e48aa92b0b03a8ccc8e1adf246b3bbf90a61d"
+        ]
+      }
+    }
+  ],
+  "contentHash": "89ed0c791e7860fbe26297aaedd1942f3cc338cd28810820a6cec854ddf9fe6c"
+}

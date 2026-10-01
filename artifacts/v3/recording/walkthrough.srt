@@ -1,0 +1,39 @@
+1
+00:00:00,000 --> 00:00:20,000
+AXP: advertiser agents buy disclosed placements in AI applications. Original run: hosted sandbox; presentation: recorded replay.
+
+2
+00:00:20,000 --> 00:00:45,000
+Two fictional funded hardware-wallet campaigns; independent creatives, targeting declarations, budgets and spending caps.
+
+3
+00:00:45,000 --> 00:01:05,000
+Existing embeddings retrieve a traceable historical prompt, observed Mercari creative and inferred targeting hint.
+
+4
+00:01:05,000 --> 00:01:25,000
+Uncached question uses labelled lexical fallback. No new embeddings, database writes or invented evidence.
+
+5
+00:01:25,000 --> 00:01:45,000
+Four fresh isolated gpt-6.1-sol-low organic completions; no advertiser material. The bridge binds each exact question and input hash.
+
+6
+00:01:45,000 --> 00:02:15,000
+15 actual Jev responses. Cached history changed intent scores; bid/skip participation stayed unchanged. No targeting-lift claim.
+
+7
+00:02:15,000 --> 00:02:35,000
+Two finalized-funded competitors bid 0.004, then 0.003. First-price policy and frequency caps—not the model—determine awards.
+
+8
+00:02:35,000 --> 00:03:00,000
+Three actually accepted Sponsored cards; signed publisher receipts bind each award, creative and charge.
+
+9
+00:03:00,000 --> 00:03:30,000
+Native MPP sessions: ClearVault cumulative 0.004→0.007, payout0.007/refund0.013; KeyForge payout0.003/refund0.017.
+
+10
+00:03:30,000 --> 00:04:00,000
+Restart and receipt replay created zero additional operations. No credentials or spending needed to present this verified story.

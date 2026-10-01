@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "axp.frontend-fixture.v1",
+  "id": "finalized",
+  "sourceKind": "recorded_run",
+  "financialMode": "sandbox",
+  "description": "Saved finalized sandbox channel and original charge/receipt/hash correlations.",
+  "source": {
+    "runId": "phase4-20261001-acceptance",
+    "sourceArtifactGeneratedAt": "2026-10-01T08:50:22.885Z",
+    "files": {
+      "artifacts/phase4/connected-run.json": "5e71d3786f47ca700c292270da4a2a1a1b1779706ecf20c4472e4409d8873792",
+      "artifacts/phase4/payment-state.json": "471d9c76c86838929ad680bdccbfd89c48e883afe735744cd7ad2ba609d8edc1"
+    }
+  },
+  "response": {
+    "payment": {
+      "channelId": "phase4-channel-tripdesk",
+      "runId": "phase4-20261001-acceptance",
+      "mode": "sandbox",
+      "phase": "finalized",
+      "openStatus": "finalized",
+      "closeStatus": "finalized",
+      "depositBaseUnits": "20000",
+      "authorizedBaseUnits": "6000",
+      "acceptedBaseUnits": "6000",
+      "settledBaseUnits": "6000",
+      "refundBaseUnits": "14000",
+      "protocolChannelId": "7gtxLwQBRuNwug1wWk395goUzmEsbobJcPPp611cLcRR",
+      "termsHash": "c067648d31c7087ce2ef8edb83c8e9e274ee6e289af612252826e6728eb7c425",
+      "network": "solana-payment-sandbox",
+      "rpc": "https://402.surfnet.dev:8899",
+      "genesisHash": "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d",
+      "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+      "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+      "payee": "DB4GyrEU7KPXzC4oYfKPfvct5Ja2pxXa7WZnREk3URsV",
+      "vouchers": [
+        {
+          "chargeId": "charge-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "sequence": "1",
+          "status": "authorized",
+          "incrementBaseUnits": "3000",
+          "cumulativeAmountBaseUnits": "3000",
+          "payloadHash": "8a8c2812049972dce5a72637a94c4f109424d1ad74bbaff295aa81c56b2ff60b",
+          "voucherRecordHash": "15f615cdf6afffa89f88c8ba5d359b01ca3afa7821f55c299b5a3cbf2b7f3c0d",
+          "commitReceipt": {
+            "status": "authorized",
+            "deliveryId": "charge-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+            "incrementBaseUnits": "3000",
+            "cumulativeAmountBaseUnits": "3000",
+            "payloadHash": "8a8c2812049972dce5a72637a94c4f109424d1ad74bbaff295aa81c56b2ff60b"
+          }
+        },
+        {
+          "chargeId": "charge-award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "sequence": "2",
+          "status": "authorized",
+          "incrementBaseUnits": "3000",
+          "cumulativeAmountBaseUnits": "6000",
+          "payloadHash": "a4d543764a46bad22e72c2eda3f280f7bd8071eb8a5fe0216fc9a0cf7fa52d83",
+          "voucherRecordHash": "cee412366a9aa9ed9a0af8772bc0a847d312ba679036f8cf39005ffa37971622",
+          "commitReceipt": {
+            "status": "authorized",
+            "deliveryId": "charge-award-b5f64769-7932-4f28-95c9-731838b8c381",
+            "incrementBaseUnits": "3000",
+            "cumulativeAmountBaseUnits": "6000",
+            "payloadHash": "a4d543764a46bad22e72c2eda3f280f7bd8071eb8a5fe0216fc9a0cf7fa52d83"
+          }
+        }
+      ],
+      "settlementLink": "https://explorer.solana.com/tx/66oQbyfw6x9y4MAARyzJHuRnmxJ2U2vtFND4suBDkrSwnDQt3VccQwaNZxnYYvBvM38Nw44umKfD3idohQ8bQGqo?cluster=custom&customUrl=https%3A%2F%2F402.surfnet.dev%3A8899",
+      "open": {
+        "status": "finalized",
+        "txSignature": "5pvC7TCFRYkyxTAK4TFWVYNqiDs9gdZUr7So3cyTqjXcprNNnny7nDDBvuzh8X1GWCzBKHYnEcNhrn22sSLS8KWe",
+        "finality": "finalized",
+        "protocolChannelId": "7gtxLwQBRuNwug1wWk395goUzmEsbobJcPPp611cLcRR",
+        "depositBaseUnits": "20000"
+      },
+      "close": {
+        "status": "finalized",
+        "txSignature": "66oQbyfw6x9y4MAARyzJHuRnmxJ2U2vtFND4suBDkrSwnDQt3VccQwaNZxnYYvBvM38Nw44umKfD3idohQ8bQGqo",
+        "finality": "finalized",
+        "settledBaseUnits": "6000",
+        "refundBaseUnits": "14000",
+        "publisherDeltaBaseUnits": "6000",
+        "feeAndRentLamports": "2054280"
+      }
+    },
+    "correlations": [
+      {
+        "charge": {
+          "acceptedAt": 1790843279064,
+          "amountBaseUnits": "3000",
+          "awardId": "award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "campaignId": "tripdesk",
+          "campaignVersionId": "tripdesk-v1",
+          "channelId": "phase4-channel-tripdesk",
+          "delivery": {
+            "awardId": "award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+            "id": "delivery-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+            "receiptHash": "ce41a9fb4a58dba611fc44a2843ed1d36e0abce799b44cbc7f7dc002da2218d1",
+            "receivedAt": 1790843279064,
+            "status": "accepted"
+          },
+          "deliveryId": "delivery-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "id": "charge-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "mode": "sandbox",
+          "receiptHash": "ce41a9fb4a58dba611fc44a2843ed1d36e0abce799b44cbc7f7dc002da2218d1",
+          "runId": "phase4-20261001-acceptance",
+          "sequence": 1,
+          "status": "accepted"
+        },
+        "receipt": {
+          "awardId": "award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "creativeHash": "1eb7399788c6acc34399141466ef6a2dd70232ee063ef5a4d03d9c9d14461aaf",
+          "mode": "sandbox",
+          "nonce": "render-award-3f9138e6-1d12-4999-a3f9-0338d6c535c0",
+          "opportunityId": "opp-af378ce623882c1a6f1e1ea4",
+          "publisherId": "owned-travel-app",
+          "publisherKeyId": "local-publisher-v1",
+          "renderAcknowledgementHash": "b8105fa670b9b2d54fbe990d7de327948d0ab967a61d5fafff735a59c4c50ffe",
+          "runId": "phase4-20261001-acceptance",
+          "schemaVersion": "publisher-receipt.v1"
+        },
+        "receiptHash": "ce41a9fb4a58dba611fc44a2843ed1d36e0abce799b44cbc7f7dc002da2218d1",
+        "recordedOnReplay": true,
+        "payloadHash": "8a8c2812049972dce5a72637a94c4f109424d1ad74bbaff295aa81c56b2ff60b",
+        "voucherRecordHash": "15f615cdf6afffa89f88c8ba5d359b01ca3afa7821f55c299b5a3cbf2b7f3c0d"
+      },
+      {
+        "charge": {
+          "acceptedAt": 1790843417250,
+          "amountBaseUnits": "3000",
+          "awardId": "award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "campaignId": "tripdesk",
+          "campaignVersionId": "tripdesk-v1",
+          "channelId": "phase4-channel-tripdesk",
+          "delivery": {
+            "awardId": "award-b5f64769-7932-4f28-95c9-731838b8c381",
+            "id": "delivery-award-b5f64769-7932-4f28-95c9-731838b8c381",
+            "receiptHash": "242c9f09dfce070b47616dd450f264ad32772ca4acfe62114a4240ddc3e2dc59",
+            "receivedAt": 1790843417250,
+            "status": "accepted"
+          },
+          "deliveryId": "delivery-award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "id": "charge-award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "mode": "sandbox",
+          "receiptHash": "242c9f09dfce070b47616dd450f264ad32772ca4acfe62114a4240ddc3e2dc59",
+          "runId": "phase4-20261001-acceptance",
+          "sequence": 2,
+          "status": "accepted"
+        },
+        "receipt": {
+          "awardId": "award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "creativeHash": "1eb7399788c6acc34399141466ef6a2dd70232ee063ef5a4d03d9c9d14461aaf",
+          "mode": "sandbox",
+          "nonce": "render-award-b5f64769-7932-4f28-95c9-731838b8c381",
+          "opportunityId": "opp-09c459b1e38d9d8943e6ca3c",
+          "publisherId": "owned-travel-app",
+          "publisherKeyId": "local-publisher-v1",
+          "renderAcknowledgementHash": "aa5be1e5fbd904350aa79f05e82f97ef8602e27d4da35deba1698de17ce0e302",
+          "runId": "phase4-20261001-acceptance",
+          "schemaVersion": "publisher-receipt.v1"
+        },
+        "receiptHash": "242c9f09dfce070b47616dd450f264ad32772ca4acfe62114a4240ddc3e2dc59",
+        "recordedOnReplay": true,
+        "payloadHash": "a4d543764a46bad22e72c2eda3f280f7bd8071eb8a5fe0216fc9a0cf7fa52d83",
+        "voucherRecordHash": "cee412366a9aa9ed9a0af8772bc0a847d312ba679036f8cf39005ffa37971622"
+      }
+    ]
+  },
+  "limitations": [
+    "Owned-app delivery acknowledgements are not attention, absorption, endorsement or conversions.",
+    "One funded advertiser; no multiple-funded-bidder competition.",
+    "Organic completions are fresh isolated app agents, delivered by an operator-recorded bridge.",
+    "Official hosted Solana sandbox, not Devnet/mainnet.",
+    "Saved awarded response includes current delivered award; it is not a reconstructed reservation-time snapshot.",
+    "Settlement comes from saved hosted sandbox evidence, not fresh RPC or Devnet.",
+    "Charge status remains accepted in the exchange; payment authorization/finality is recorded separately.",
+    "Publisher receipt packets were reconstructed on deterministic operator replay and marked recordedOnReplay, not captured as signed packets at original delivery."
+  ]
+}

@@ -1,0 +1,3873 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AXP local reference runtime and Phase5 replay seam",
+    "version": "axp.frontend.v1",
+    "description": "apps/backend/server.mjs is implemented reference runtime. Replay paths are the approved main-owned seam, not a claim of server integration. No production auth, planned API routes or browser payment SDK. Amount/URL/decision cross-field business validation remains server-side."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8788",
+      "description": "Reference runtime (Phase4 launcher may use 8789); replay port supplied by main launcher."
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "health",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime"
+      }
+    },
+    "/v1/bootstrap": {
+      "get": {
+        "operationId": "bootstrap",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuntimeBootstrap"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime"
+      }
+    },
+    "/v1/state": {
+      "get": {
+        "operationId": "state",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuntimeState"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime",
+        "description": "Runtime GET may synchronize network-channel projections into local state. Unlike replay, this runtime is not globally read-only."
+      }
+    },
+    "/v1/demo/results": {
+      "get": {
+        "operationId": "results",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordedResults"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime"
+      }
+    },
+    "/v1/decisions/cases": {
+      "get": {
+        "operationId": "decisionCases",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cases"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime"
+      }
+    },
+    "/v1/decisions/recorded": {
+      "get": {
+        "operationId": "recordedDecisions",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonObject"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime"
+      }
+    },
+    "/v1/events": {
+      "get": {
+        "operationId": "runtimeEvents",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [
+          {
+            "name": "Last-Event-ID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Nonnegative safe-integer seq; invalid resets to 0. Run change emits reset."
+          }
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string"
+                },
+                "x-event-data-schema": {
+                  "$ref": "#/components/schemas/RuntimeEvent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime",
+        "description": "Live runtime polls every 500ms; Last-Event-ID resumes seq. Reset clears the cursor after run change."
+      }
+    },
+    "/v1/evidence/lookup": {
+      "post": {
+        "operationId": "lookupEvidence",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [],
+        "security": [
+          {
+            "LocalCSRF": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvidenceResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LookupRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/decisions/compare": {
+      "post": {
+        "operationId": "compareDecisions",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [],
+        "security": [
+          {
+            "LocalCSRF": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComparisonResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompareRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/demo/turn": {
+      "post": {
+        "operationId": "turn",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [],
+        "security": [
+          {
+            "LocalCSRF": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TurnResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TurnRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/phase3/recover-organic": {
+      "post": {
+        "operationId": "recoverOrganic",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [],
+        "security": [
+          {
+            "LocalCSRF": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TurnResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecoveryRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/demo/reset": {
+      "post": {
+        "operationId": "reset",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [],
+        "security": [
+          {
+            "LocalCSRF": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/campaigns": {
+      "post": {
+        "operationId": "createCampaign",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [],
+        "security": [
+          {
+            "LocalCSRF": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Campaign"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Campaign"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/campaigns/{id}/pause": {
+      "post": {
+        "operationId": "pauseCampaign",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "LocalCSRF": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Campaign"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/awards/{id}/render": {
+      "post": {
+        "operationId": "acknowledgeRender",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "LocalCSRF": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RenderAcknowledgement"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/awards/{id}/fail": {
+      "post": {
+        "operationId": "failAward",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "LocalCSRF": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Award"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "runtime",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/synthetic-channels/{id}/authorize": {
+      "post": {
+        "operationId": "v1_synthetic-channels_{id}_authorize",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "LocalCSRF": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Channel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": false,
+        "x-surface": "runtime",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/synthetic-channels/{id}/close": {
+      "post": {
+        "operationId": "v1_synthetic-channels_{id}_close",
+        "tags": [
+          "runtime"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "LocalCSRF": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Channel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": false,
+        "x-surface": "runtime",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/replay/bootstrap": {
+      "get": {
+        "operationId": "replayBootstrap",
+        "tags": [
+          "replay"
+        ],
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReplayBootstrap"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "replay"
+      },
+      "post": {
+        "operationId": "replayBootstrapRejectWrite",
+        "summary": "Always refused: replay is read-only",
+        "tags": [
+          "replay"
+        ],
+        "security": [],
+        "responses": {
+          "405": {
+            "description": "recorded_replay_read_only",
+            "headers": {
+              "Allow": {
+                "schema": {
+                  "const": "GET"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": false
+      }
+    },
+    "/v1/replay/run": {
+      "get": {
+        "operationId": "replayRun",
+        "tags": [
+          "replay"
+        ],
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReplayRun"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "replay"
+      },
+      "post": {
+        "operationId": "replayRunRejectWrite",
+        "summary": "Always refused: replay is read-only",
+        "tags": [
+          "replay"
+        ],
+        "security": [],
+        "responses": {
+          "405": {
+            "description": "recorded_replay_read_only",
+            "headers": {
+              "Allow": {
+                "schema": {
+                  "const": "GET"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": false
+      }
+    },
+    "/v1/replay/events": {
+      "get": {
+        "operationId": "replayEvents",
+        "tags": [
+          "replay"
+        ],
+        "parameters": [
+          {
+            "name": "Last-Event-ID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Original replay cursor; main replay server owns cursor validation. Finite chronological stream, no timers."
+          }
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string"
+                },
+                "x-event-data-schema": {
+                  "$ref": "#/components/schemas/ReplayEvent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "replay",
+        "description": "Original exchange events, ascending seq with original timestamps. Invalid or negative Last-Event-ID resets to 0. Finite stream closes after all remaining events; no timers."
+      },
+      "post": {
+        "operationId": "replayEventsRejectWrite",
+        "summary": "Always refused: replay is read-only",
+        "tags": [
+          "replay"
+        ],
+        "security": [],
+        "responses": {
+          "405": {
+            "description": "recorded_replay_read_only",
+            "headers": {
+              "Allow": {
+                "schema": {
+                  "const": "GET"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": false
+      }
+    },
+    "/v1/replay/fixtures": {
+      "get": {
+        "operationId": "replayFixtures",
+        "tags": [
+          "replay"
+        ],
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReplayFixtures"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Runtime-dependent error; body contains error code only.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": true,
+        "x-surface": "replay"
+      },
+      "post": {
+        "operationId": "replayFixturesRejectWrite",
+        "summary": "Always refused: replay is read-only",
+        "tags": [
+          "replay"
+        ],
+        "security": [],
+        "responses": {
+          "405": {
+            "description": "recorded_replay_read_only",
+            "headers": {
+              "Allow": {
+                "schema": {
+                  "const": "GET"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-browser-client": false
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "JsonValue": {
+        "description": "Extensible JSON; no exact shape claimed.",
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonValue"
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            }
+          }
+        ]
+      },
+      "JsonObject": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/JsonValue"
+        }
+      },
+      "FinancialMode": {
+        "type": "string",
+        "enum": [
+          "synthetic",
+          "sandbox",
+          "devnet"
+        ]
+      },
+      "PresentationKind": {
+        "type": "string",
+        "enum": [
+          "recorded_evidence_replay"
+        ]
+      },
+      "SourceKind": {
+        "type": "string",
+        "enum": [
+          "recorded_run",
+          "synthetic_test"
+        ]
+      },
+      "AmountBaseUnits": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]*)$",
+        "description": "Unsigned decimal integer string, u64 maximum 18446744073709551615. Never float arithmetic."
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "Creative": {
+        "type": "object",
+        "properties": {
+          "creativeVersionId": {
+            "type": "string"
+          },
+          "approvedText": {
+            "type": "string"
+          },
+          "destinationURL": {
+            "type": "string"
+          },
+          "fictional": {
+            "type": "boolean"
+          },
+          "softFitTags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidenceFieldIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "creativeVersionId",
+          "approvedText",
+          "destinationURL",
+          "fictional"
+        ],
+        "additionalProperties": false
+      },
+      "Campaign": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "type": "string"
+          },
+          "campaignVersionId": {
+            "type": "string"
+          },
+          "advertiserId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "paused"
+            ]
+          },
+          "allowedIntents": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "destination": {
+            "type": "string"
+          },
+          "declaredConstraints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "creatives": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Creative"
+            }
+          },
+          "softFitTags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "maxBidBaseUnits": {
+            "$ref": "#/components/schemas/AmountBaseUnits"
+          },
+          "budgetCapBaseUnits": {
+            "$ref": "#/components/schemas/AmountBaseUnits"
+          },
+          "channelId": {
+            "type": "string"
+          },
+          "policyVersion": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "campaignId",
+          "campaignVersionId",
+          "advertiserId",
+          "status",
+          "allowedIntents",
+          "destination",
+          "declaredConstraints",
+          "creatives",
+          "maxBidBaseUnits",
+          "budgetCapBaseUnits",
+          "channelId"
+        ],
+        "additionalProperties": false
+      },
+      "Decision": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "string"
+          },
+          "opportunityId": {
+            "type": "string"
+          },
+          "advertiserId": {
+            "type": "string"
+          },
+          "campaignVersionId": {
+            "type": "string"
+          },
+          "agentRunId": {
+            "type": "string"
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "bid",
+              "skip",
+              "abstain"
+            ]
+          },
+          "creativeVersionId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "relevanceLevel": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1,
+                  2,
+                  3
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "commercialIntentLevel": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1,
+                  2,
+                  3
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "relevance": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "commercialIntent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "conversionProbability": {
+            "type": "null"
+          },
+          "evidenceFieldIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reasonCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scoreSemantics": {
+            "type": "string"
+          },
+          "engineProvenance": {
+            "$ref": "#/components/schemas/JsonObject"
+          }
+        },
+        "required": [
+          "opportunityId",
+          "advertiserId",
+          "campaignVersionId",
+          "agentRunId",
+          "decision",
+          "creativeVersionId",
+          "relevanceLevel",
+          "commercialIntentLevel",
+          "conversionProbability",
+          "evidenceFieldIds",
+          "reasonCodes",
+          "engineProvenance"
+        ],
+        "additionalProperties": false
+      },
+      "Bid": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "const": "bid"
+          },
+          "opportunityId": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": "string"
+          },
+          "campaignVersionId": {
+            "type": "string"
+          },
+          "advertiserId": {
+            "type": "string"
+          },
+          "creativeVersionId": {
+            "type": "string"
+          },
+          "agentRunId": {
+            "type": "string"
+          },
+          "amountBaseUnits": {
+            "$ref": "#/components/schemas/AmountBaseUnits"
+          },
+          "bidPolicyVersion": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "opportunityId",
+          "campaignId",
+          "campaignVersionId",
+          "advertiserId",
+          "creativeVersionId",
+          "agentRunId",
+          "amountBaseUnits",
+          "bidPolicyVersion"
+        ],
+        "additionalProperties": false
+      },
+      "Award": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/FinancialMode"
+          },
+          "opportunityId": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": "string"
+          },
+          "campaignVersionId": {
+            "type": "string"
+          },
+          "advertiserId": {
+            "type": "string"
+          },
+          "publisherId": {
+            "type": "string"
+          },
+          "randomSessionId": {
+            "type": "string"
+          },
+          "channelId": {
+            "type": "string"
+          },
+          "creativeVersionId": {
+            "type": "string"
+          },
+          "creativeHash": {
+            "type": "string"
+          },
+          "creative": {
+            "$ref": "#/components/schemas/Creative"
+          },
+          "priceBaseUnits": {
+            "$ref": "#/components/schemas/AmountBaseUnits"
+          },
+          "payee": {
+            "type": "string"
+          },
+          "winningBidId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "reserved",
+              "delivered",
+              "failed",
+              "expired"
+            ]
+          },
+          "expiresAt": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "integer"
+          },
+          "renderTokenHash": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "runId",
+          "mode",
+          "opportunityId",
+          "campaignId",
+          "campaignVersionId",
+          "advertiserId",
+          "publisherId",
+          "randomSessionId",
+          "channelId",
+          "creativeVersionId",
+          "creativeHash",
+          "creative",
+          "priceBaseUnits",
+          "payee",
+          "winningBidId",
+          "status",
+          "expiresAt",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      },
+      "Outcome": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "awarded",
+              "no_fill",
+              "expired"
+            ]
+          },
+          "award": {
+            "$ref": "#/components/schemas/Award"
+          },
+          "bids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Bid"
+            }
+          },
+          "rejections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonObject"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "bids",
+          "rejections"
+        ],
+        "additionalProperties": false
+      },
+      "Receipt": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/FinancialMode"
+          },
+          "publisherId": {
+            "type": "string"
+          },
+          "publisherKeyId": {
+            "type": "string"
+          },
+          "awardId": {
+            "type": "string"
+          },
+          "opportunityId": {
+            "type": "string"
+          },
+          "creativeHash": {
+            "type": "string"
+          },
+          "nonce": {
+            "type": "string"
+          },
+          "renderAcknowledgementHash": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "runId",
+          "mode",
+          "publisherId",
+          "publisherKeyId",
+          "awardId",
+          "opportunityId",
+          "creativeHash",
+          "nonce",
+          "renderAcknowledgementHash"
+        ],
+        "additionalProperties": false
+      },
+      "Delivery": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "awardId": {
+            "type": "string"
+          },
+          "status": {
+            "const": "accepted"
+          },
+          "receivedAt": {
+            "type": "integer"
+          },
+          "receiptHash": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "awardId",
+          "status",
+          "receivedAt",
+          "receiptHash"
+        ],
+        "additionalProperties": false
+      },
+      "Charge": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/FinancialMode"
+          },
+          "awardId": {
+            "type": "string"
+          },
+          "deliveryId": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": "string"
+          },
+          "campaignVersionId": {
+            "type": "string"
+          },
+          "channelId": {
+            "type": "string"
+          },
+          "amountBaseUnits": {
+            "$ref": "#/components/schemas/AmountBaseUnits"
+          },
+          "acceptedAt": {
+            "type": "integer"
+          },
+          "sequence": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "accepted",
+              "authorized",
+              "settled"
+            ]
+          },
+          "receiptHash": {
+            "type": "string"
+          },
+          "delivery": {
+            "$ref": "#/components/schemas/Delivery"
+          }
+        },
+        "required": [
+          "id",
+          "runId",
+          "mode",
+          "awardId",
+          "deliveryId",
+          "campaignId",
+          "campaignVersionId",
+          "channelId",
+          "amountBaseUnits",
+          "acceptedAt",
+          "sequence",
+          "status",
+          "receiptHash",
+          "delivery"
+        ],
+        "additionalProperties": false
+      },
+      "DeliveryResult": {
+        "type": "object",
+        "properties": {
+          "delivery": {
+            "$ref": "#/components/schemas/Delivery"
+          },
+          "charge": {
+            "$ref": "#/components/schemas/Charge"
+          },
+          "replayed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "delivery",
+          "charge",
+          "replayed"
+        ],
+        "additionalProperties": false
+      },
+      "RenderAcknowledgement": {
+        "type": "object",
+        "properties": {
+          "domInserted": {
+            "type": "boolean"
+          },
+          "sponsoredLabelPresent": {
+            "type": "boolean"
+          },
+          "creativeHash": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "domInserted",
+          "sponsoredLabelPresent",
+          "creativeHash"
+        ],
+        "additionalProperties": false
+      },
+      "Channel": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          },
+          "advertiserId": {
+            "type": "string"
+          },
+          "publisherId": {
+            "type": "string"
+          },
+          "payee": {
+            "type": "string"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/FinancialMode"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending_open",
+              "open",
+              "draining",
+              "finalized"
+            ]
+          },
+          "depositBaseUnits": {
+            "$ref": "#/components/schemas/AmountBaseUnits"
+          },
+          "authorizedBaseUnits": {
+            "$ref": "#/components/schemas/AmountBaseUnits"
+          },
+          "settledBaseUnits": {
+            "$ref": "#/components/schemas/AmountBaseUnits"
+          },
+          "refundBaseUnits": {
+            "$ref": "#/components/schemas/AmountBaseUnits"
+          },
+          "txSignature": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "protocolChannelId": {
+            "type": "string"
+          },
+          "termsHash": {
+            "type": "string"
+          },
+          "closeStatus": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "channelId",
+          "advertiserId",
+          "publisherId",
+          "payee",
+          "mode",
+          "status",
+          "depositBaseUnits",
+          "authorizedBaseUnits",
+          "settledBaseUnits",
+          "refundBaseUnits",
+          "txSignature"
+        ],
+        "additionalProperties": false
+      },
+      "RuntimeEvent": {
+        "type": "object",
+        "properties": {
+          "seq": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          },
+          "at": {
+            "type": "integer"
+          },
+          "data": {
+            "$ref": "#/components/schemas/JsonObject"
+          }
+        },
+        "required": [
+          "seq",
+          "type",
+          "at",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "RuntimeState": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "const": "axp.runtime.v1"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/FinancialMode"
+          },
+          "campaigns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Campaign"
+            }
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Channel"
+            }
+          },
+          "opportunities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonObject"
+            }
+          },
+          "awards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Award"
+            }
+          },
+          "charges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Charge"
+            }
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuntimeEvent"
+            }
+          },
+          "payments": {
+            "$ref": "#/components/schemas/JsonValue"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "runId",
+          "mode",
+          "campaigns",
+          "channels",
+          "opportunities",
+          "awards",
+          "charges",
+          "events"
+        ],
+        "additionalProperties": false
+      },
+      "RuntimeBootstrap": {
+        "type": "object",
+        "properties": {
+          "csrf": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/FinancialMode"
+          },
+          "demo": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JsonObject"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evidenceSource": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "database": {
+                "anyOf": [
+                  {
+                    "const": "ads"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "readOnly": {
+                "const": true
+              },
+              "embeddingGeneration": {
+                "const": false
+              }
+            },
+            "required": [
+              "enabled",
+              "database",
+              "readOnly",
+              "embeddingGeneration"
+            ],
+            "additionalProperties": false
+          },
+          "engines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "label"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "csrf",
+          "runId",
+          "mode",
+          "demo",
+          "evidenceSource",
+          "engines",
+          "limitations"
+        ],
+        "additionalProperties": false
+      },
+      "Health": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "const": "ok"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/FinancialMode"
+          },
+          "realPayments": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "status",
+          "mode",
+          "realPayments"
+        ],
+        "additionalProperties": false
+      },
+      "TurnRequest": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string"
+          },
+          "engine": {
+            "type": "string"
+          },
+          "turnId": {
+            "type": "string"
+          },
+          "randomSessionId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "additionalProperties": false
+      },
+      "RecoveryRequest": {
+        "type": "object",
+        "properties": {
+          "turnId": {
+            "type": "string"
+          },
+          "randomSessionId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "turnId",
+          "randomSessionId"
+        ],
+        "additionalProperties": false
+      },
+      "TurnResult": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/FinancialMode"
+          },
+          "engine": {
+            "type": "string"
+          },
+          "opportunityId": {
+            "type": "string"
+          },
+          "organic": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/Outcome"
+          },
+          "attempts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "campaignId": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "completed",
+                    "unavailable"
+                  ]
+                },
+                "decision": {
+                  "$ref": "#/components/schemas/Decision"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "elapsedMs": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "campaignId",
+                "status",
+                "elapsedMs"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "eligibility": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "originalOrganic": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "organicRecovery": {
+            "$ref": "#/components/schemas/JsonObject"
+          }
+        },
+        "required": [
+          "runId",
+          "mode",
+          "engine",
+          "opportunityId",
+          "organic",
+          "outcome",
+          "attempts",
+          "replayed"
+        ],
+        "additionalProperties": false
+      },
+      "RecordedResults": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "mode": {
+            "const": "recorded_results_not_fresh_execution"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TurnResult"
+            }
+          }
+        },
+        "required": [
+          "runId",
+          "mode",
+          "results"
+        ],
+        "additionalProperties": false
+      },
+      "Cases": {
+        "type": "object",
+        "properties": {
+          "manifest": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "cases": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonObject"
+            }
+          },
+          "liveEnabled": {
+            "const": false
+          },
+          "sourceEnabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "manifest",
+          "cases",
+          "liveEnabled",
+          "sourceEnabled"
+        ],
+        "additionalProperties": false
+      },
+      "CompareRequest": {
+        "type": "object",
+        "properties": {
+          "caseId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "caseId"
+        ],
+        "additionalProperties": false
+      },
+      "LookupRequest": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "additionalProperties": false
+      },
+      "EvidenceResult": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "const": "cached-corpus-result.v1"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "query_vector_unavailable",
+              "source_unconfigured"
+            ]
+          },
+          "matches": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonObject"
+            }
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "status",
+          "matches",
+          "limitations"
+        ],
+        "additionalProperties": false
+      },
+      "ComparisonResult": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "const": "phase2-comparison.v1"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "mode": {
+            "const": "nonfinancial_comparison"
+          },
+          "task": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "caseManifest": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "preparationElapsedMs": {
+            "type": "number"
+          },
+          "totalElapsedMs": {
+            "type": "number"
+          },
+          "preparationError": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lookupEvents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonObject"
+            }
+          },
+          "profiles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonObject"
+            }
+          },
+          "attempts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonObject"
+            }
+          },
+          "providerUsage": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "runId",
+          "mode",
+          "task",
+          "caseManifest",
+          "preparationElapsedMs",
+          "totalElapsedMs",
+          "preparationError",
+          "lookupEvents",
+          "profiles",
+          "attempts",
+          "providerUsage",
+          "limitations"
+        ],
+        "additionalProperties": false
+      },
+      "EmptyRequest": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "ResetResult": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string"
+          },
+          "mode": {
+            "const": "synthetic"
+          },
+          "historyPreserved": {
+            "const": true
+          }
+        },
+        "required": [
+          "runId",
+          "mode",
+          "historyPreserved"
+        ],
+        "additionalProperties": false
+      },
+      "ReplayBootstrap": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "const": "axp.replay.v1"
+          },
+          "presentationKind": {
+            "$ref": "#/components/schemas/PresentationKind"
+          },
+          "financialMode": {
+            "const": "sandbox"
+          },
+          "runId": {
+            "type": "string"
+          },
+          "originalRecordedAt": {
+            "type": "string"
+          },
+          "readOnly": {
+            "const": true
+          },
+          "bundleHash": {
+            "type": "string"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "title"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "presentationKind",
+          "financialMode",
+          "runId",
+          "originalRecordedAt",
+          "readOnly",
+          "bundleHash",
+          "steps"
+        ],
+        "additionalProperties": false
+      },
+      "ReplayRun": {
+        "type": "object",
+        "properties": {
+          "campaigns": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "turns": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "evidence": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "decisions": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "deliveries": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "payment": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "chain": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "restart": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "research": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "limitations": {
+            "$ref": "#/components/schemas/JsonValue"
+          }
+        },
+        "required": [
+          "campaigns",
+          "turns",
+          "evidence",
+          "decisions",
+          "deliveries",
+          "payment",
+          "chain",
+          "restart",
+          "research",
+          "limitations"
+        ],
+        "additionalProperties": {
+          "$ref": "#/components/schemas/JsonValue"
+        }
+      },
+      "ReplayEvent": {
+        "$ref": "#/components/schemas/RuntimeEvent"
+      },
+      "ReplayFixtures": {
+        "$ref": "#/components/schemas/JsonValue"
+      },
+      "FrontendFixture": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "const": "axp.frontend-fixture.v1"
+          },
+          "id": {
+            "type": "string"
+          },
+          "sourceKind": {
+            "$ref": "#/components/schemas/SourceKind"
+          },
+          "financialMode": {
+            "$ref": "#/components/schemas/FinancialMode"
+          },
+          "description": {
+            "type": "string"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JsonObject"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "response": {
+            "$ref": "#/components/schemas/JsonValue"
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "id",
+          "sourceKind",
+          "financialMode",
+          "description",
+          "source",
+          "response",
+          "limitations"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "LocalCSRF": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-axp-csrf",
+        "description": "Local operator token from /v1/bootstrap. Loopback Host and same-origin checks; no multi-tenant auth. Not payment authority."
+      }
+    }
+  }
+}

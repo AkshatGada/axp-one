@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "axp.frontend-fixture.v1",
+  "id": "competing_bids",
+  "sourceKind": "synthetic_test",
+  "financialMode": "synthetic",
+  "description": "Hypothetical two-funded-bidder competition: 3000 wins over 2500 under the first-price policy.",
+  "source": null,
+  "response": {
+    "channels": [
+      {
+        "channelId": "fixture-funded-alpha",
+        "advertiserId": "fictional-alpha",
+        "publisherId": "fixture-publisher",
+        "payee": "synthetic:fixture-payee",
+        "mode": "synthetic",
+        "status": "open",
+        "depositBaseUnits": "20000",
+        "authorizedBaseUnits": "0",
+        "settledBaseUnits": "0",
+        "refundBaseUnits": "0",
+        "txSignature": null
+      },
+      {
+        "channelId": "fixture-funded-beta",
+        "advertiserId": "fictional-beta",
+        "publisherId": "fixture-publisher",
+        "payee": "synthetic:fixture-payee",
+        "mode": "synthetic",
+        "status": "open",
+        "depositBaseUnits": "20000",
+        "authorizedBaseUnits": "0",
+        "settledBaseUnits": "0",
+        "refundBaseUnits": "0",
+        "txSignature": null
+      }
+    ],
+    "outcome": {
+      "status": "awarded",
+      "bids": [
+        {
+          "id": "fixture-bid-alpha",
+          "status": "bid",
+          "opportunityId": "fixture-opportunity",
+          "campaignId": "fixture-alpha",
+          "campaignVersionId": "fixture-alpha-v1",
+          "advertiserId": "fictional-alpha",
+          "creativeVersionId": "fixture-alpha-creative",
+          "agentRunId": "fixture-agent-alpha",
+          "amountBaseUnits": "3000",
+          "bidPolicyVersion": "fit_intent_bid_v1"
+        },
+        {
+          "id": "fixture-bid-beta",
+          "status": "bid",
+          "opportunityId": "fixture-opportunity",
+          "campaignId": "fixture-beta",
+          "campaignVersionId": "fixture-beta-v1",
+          "advertiserId": "fictional-beta",
+          "creativeVersionId": "fixture-beta-creative",
+          "agentRunId": "fixture-agent-beta",
+          "amountBaseUnits": "2500",
+          "bidPolicyVersion": "fit_intent_bid_v1"
+        }
+      ],
+      "rejections": [],
+      "award": {
+        "id": "fixture-competing-award",
+        "runId": "frontend-hypothetical",
+        "mode": "synthetic",
+        "opportunityId": "fixture-opportunity",
+        "campaignId": "fixture-alpha",
+        "campaignVersionId": "fixture-alpha-v1",
+        "advertiserId": "fictional-alpha",
+        "publisherId": "fixture-publisher",
+        "randomSessionId": "fixture-session",
+        "channelId": "fixture-funded-alpha",
+        "creativeVersionId": "fixture-alpha-creative",
+        "creativeHash": "fixture-not-network-hash",
+        "creative": {
+          "creativeVersionId": "fixture-alpha-creative",
+          "approvedText": "Fictional frontend offer.",
+          "destinationURL": "https://frontend.example/",
+          "fictional": true
+        },
+        "priceBaseUnits": "3000",
+        "payee": "synthetic:fixture-payee",
+        "winningBidId": "fixture-bid-alpha",
+        "status": "reserved",
+        "expiresAt": 2000,
+        "createdAt": 1000
+      }
+    },
+    "charges": []
+  },
+  "limitations": [
+    "Hypothetical frontend state, not a measured original Phase4 timeline or additional network run.",
+    "No recorded funded competition is claimed. Phase4 funded only TripDesk.",
+    "Both deposits are synthetic fixtures; a reservation is not a charge, settlement or attention."
+  ]
+}

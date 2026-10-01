@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "v2-evidence-manifest.v1",
+  "snapshotId": "v2-wallet:853e3ef3431149b593cf7c08",
+  "capturedAt": "2026-10-01T11:57:12.781Z",
+  "source": {
+    "container": "adsdb",
+    "database": "ads",
+    "readOnly": true,
+    "transaction": "repeatable-read-read-only-rollback",
+    "queryHash": "5226951f880995dec2bf4a55c5be9da555e59413f289c44c3a02d960552c7b13",
+    "embeddingCalls": 0,
+    "observationWindow": null,
+    "embeddingRevision": "unrecorded"
+  },
+  "selection": {
+    "version": "wallet-niche-screened-v2.1",
+    "niche": "crypto-hardware-wallets-self-custody",
+    "limits": {
+      "associations": 1500,
+      "normalizedPrompts": 512,
+      "bytes": 16777216,
+      "neighbors": 5,
+      "examples": 3,
+      "hints": 2,
+      "packetText": 2400
+    },
+    "order": "normalizedHash then mappingId; final mappingId",
+    "normalization": "legacy-python-lower-whitespace-sha256",
+    "rawAssociationsPreserved": true,
+    "classifier": "aws normalized prompt hash + classification text hash + chosen niche + llm; verseodin native niche"
+  },
+  "counts": {
+    "associations": 171,
+    "normalizedPrompts": 139,
+    "probes": 139,
+    "creatives": 92,
+    "hints": 60,
+    "vectors": 139,
+    "queryVectors": 1,
+    "sources": {
+      "aws": 43,
+      "verseodin": 128
+    }
+  },
+  "omissions": {
+    "candidateAssociations": 175,
+    "eligibleAssociations": 171,
+    "eligibleNormalizedPrompts": 139,
+    "failedProbes": 0,
+    "unsupportedSource": 0,
+    "requestAssociated": 0,
+    "customerGenerated": 0,
+    "invalidClassification": 0,
+    "sqlUnsafeText": 4,
+    "selectedAssociations": 171,
+    "creativeCount": 92,
+    "creativesWithoutScreenedHint": 5,
+    "cappedAssociations": 0,
+    "jsUnsafeAssociations": 0,
+    "jsUnsafeHints": 0,
+    "unusableVectors": 0,
+    "promptsWithoutVector": 0,
+    "fixedQuestionsWithoutVector": 1
+  },
+  "files": {
+    "catalogue.json": "3a61e21260133bc20b91ef3a36518688516d64ef7fc8fbf0721800c29bea07ef",
+    "index.backend.json": "355b21f5d2324d130d1ab27093f78e579acef89c8d6465dc13d95a330f6397ee"
+  },
+  "limitations": [
+    "Within the measured prompt panel; not all AI demand or real-world query volume.",
+    "Distinct source mappings remain raw associations, not impressions, conversions or independent fit labels. Retrieval ranks each normalized prompt once.",
+    "Historical brands are references, not enrolled bidders or declarations of fictional campaign capabilities.",
+    "Hints are inferred historical hypotheses, not advertiser configuration; sparse tier is retained.",
+    "No raw probes, answers, HTML, URLs, images, geo, customers, credentials or import-spread timestamps exported.",
+    "Model revision is unrecorded. Only existing matching BGE 768-D prompt vectors; no embedding generation or provider calls.",
+    "Vectors are backend-only. publicCatalogue and retrieval/model packets never return vectors.",
+    "Exact cached text uses vector cosine; authored uncached text uses labelled lexical fallback. No training, targeting accuracy or causal-lift claim."
+  ],
+  "contentHash": "8210c349243f9b11cf2a43d320ed8282419d99cb6195d6b2633267c9109725fe"
+}

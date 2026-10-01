@@ -1,0 +1,575 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AXP V3 implemented functional console API",
+    "version": "3.0.0",
+    "description": "Loopback reference; signing and organic completion are terminal-only. Replay rejects every non-GET request. Financial mode does not imply completed funding or settlement."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8794"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Public JSON; runtime DTOs in packages/v3/client.d.mts",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/bootstrap": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Public JSON; runtime DTOs in packages/v3/client.d.mts",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/state": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Public JSON; runtime DTOs in packages/v3/client.d.mts",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/events": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Public JSON; runtime DTOs in packages/v3/client.d.mts",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/evidence": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Public JSON; runtime DTOs in packages/v3/client.d.mts",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/replay/bootstrap": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Public JSON; runtime DTOs in packages/v3/client.d.mts",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/replay/run": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Public JSON; runtime DTOs in packages/v3/client.d.mts",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/replay/events": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Public JSON; runtime DTOs in packages/v3/client.d.mts",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/retrieval": {
+      "get": {
+        "parameters": [
+          {
+            "name": "question",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "campaignId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bounded source-linked retrieval or null in replay",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v3/campaign": {
+      "post": {
+        "security": [
+          {
+            "LocalOperatorToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Campaign"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved outcome; never automatically retry a failed or uncertain operation"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "403": {
+            "description": "Missing local operator token or model-enable capability"
+          },
+          "404": {
+            "description": "Unavailable operation"
+          },
+          "405": {
+            "description": "Replay is read-only"
+          },
+          "409": {
+            "description": "Waiting, conflict or run-in-progress"
+          }
+        }
+      }
+    },
+    "/v3/preview": {
+      "post": {
+        "security": [
+          {
+            "LocalOperatorToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Turn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved outcome; never automatically retry a failed or uncertain operation"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "403": {
+            "description": "Missing local operator token or model-enable capability"
+          },
+          "404": {
+            "description": "Unavailable operation"
+          },
+          "405": {
+            "description": "Replay is read-only"
+          },
+          "409": {
+            "description": "Waiting, conflict or run-in-progress"
+          }
+        }
+      }
+    },
+    "/v3/turn/request": {
+      "post": {
+        "security": [
+          {
+            "LocalOperatorToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Turn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved outcome; never automatically retry a failed or uncertain operation"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "403": {
+            "description": "Missing local operator token or model-enable capability"
+          },
+          "404": {
+            "description": "Unavailable operation"
+          },
+          "405": {
+            "description": "Replay is read-only"
+          },
+          "409": {
+            "description": "Waiting, conflict or run-in-progress"
+          }
+        }
+      }
+    },
+    "/v3/turn/run": {
+      "post": {
+        "security": [
+          {
+            "LocalOperatorToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Turn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved outcome; never automatically retry a failed or uncertain operation"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "403": {
+            "description": "Missing local operator token or model-enable capability"
+          },
+          "404": {
+            "description": "Unavailable operation"
+          },
+          "405": {
+            "description": "Replay is read-only"
+          },
+          "409": {
+            "description": "Waiting, conflict or run-in-progress"
+          }
+        }
+      }
+    },
+    "/v3/awards/{awardId}/render": {
+      "post": {
+        "security": [
+          {
+            "LocalOperatorToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Render"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved outcome; never automatically retry a failed or uncertain operation"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "403": {
+            "description": "Missing local operator token or model-enable capability"
+          },
+          "404": {
+            "description": "Unavailable operation"
+          },
+          "405": {
+            "description": "Replay is read-only"
+          },
+          "409": {
+            "description": "Waiting, conflict or run-in-progress"
+          }
+        },
+        "parameters": [
+          {
+            "name": "awardId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/v3/awards/{awardId}/fail": {
+      "post": {
+        "security": [
+          {
+            "LocalOperatorToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Fail"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved outcome; never automatically retry a failed or uncertain operation"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "403": {
+            "description": "Missing local operator token or model-enable capability"
+          },
+          "404": {
+            "description": "Unavailable operation"
+          },
+          "405": {
+            "description": "Replay is read-only"
+          },
+          "409": {
+            "description": "Waiting, conflict or run-in-progress"
+          }
+        },
+        "parameters": [
+          {
+            "name": "awardId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Campaign": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "campaignId"
+        ],
+        "properties": {
+          "campaignId": {
+            "type": "string"
+          },
+          "businessName": {
+            "type": "string",
+            "maxLength": 400
+          },
+          "creative": {
+            "type": "string",
+            "maxLength": 800
+          },
+          "contextHints": {
+            "type": "string",
+            "maxLength": 400
+          },
+          "approved": {
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "paused"
+            ]
+          },
+          "maxBidBaseUnits": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$"
+          },
+          "budgetCapBaseUnits": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$"
+          },
+          "declaredConstraints": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "crypto_storage",
+                "hardware_wallet",
+                "offline_key_storage",
+                "ethereum",
+                "solana",
+                "mobile_software_wallet",
+                "physical_wallet",
+                "rfid_blocking"
+              ]
+            }
+          }
+        }
+      },
+      "Turn": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "scenarioId"
+            ],
+            "properties": {
+              "scenarioId": {
+                "enum": [
+                  "cached",
+                  "offline",
+                  "repeat",
+                  "mobile"
+                ]
+              },
+              "financialMode": {
+                "const": "sandbox"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "financialMode",
+              "turnId",
+              "question",
+              "mandatoryCapabilities"
+            ],
+            "properties": {
+              "financialMode": {
+                "const": "synthetic"
+              },
+              "turnId": {
+                "type": "string",
+                "pattern": "^lab-[\\w-]{1,60}$"
+              },
+              "question": {
+                "type": "string",
+                "maxLength": 1200
+              },
+              "mandatoryCapabilities": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Render": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "domInserted",
+          "sponsoredLabelPresent",
+          "creativeHash"
+        ],
+        "properties": {
+          "financialMode": {
+            "enum": [
+              "sandbox",
+              "synthetic"
+            ]
+          },
+          "domInserted": {
+            "type": "boolean"
+          },
+          "sponsoredLabelPresent": {
+            "type": "boolean"
+          },
+          "creativeHash": {
+            "type": "string"
+          }
+        }
+      },
+      "Fail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "financialMode": {
+            "enum": [
+              "sandbox",
+              "synthetic"
+            ]
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "LocalOperatorToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-axp-csrf"
+      }
+    }
+  }
+}

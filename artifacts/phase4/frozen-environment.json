@@ -1,0 +1,27 @@
+{
+  "terms": {
+    "mode": "sandbox",
+    "rpc": "https://402.surfnet.dev:8899",
+    "genesisHash": "5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d",
+    "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+    "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+    "payee": "DB4GyrEU7KPXzC4oYfKPfvct5Ja2pxXa7WZnREk3URsV",
+    "runId": "phase4-20261001-acceptance",
+    "channelId": "phase4-channel-tripdesk",
+    "advertiserId": "fictional-tripdesk",
+    "campaignVersionId": "tripdesk-v1",
+    "network": "solana-payment-sandbox",
+    "depositBaseUnits": "20000",
+    "chargeCapBaseUnits": "8000",
+    "voucherExpiresAt": 1790850238,
+    "applicationDeadlineAt": 1790849938,
+    "settlementMarginSeconds": 60,
+    "compatibilityHash": "18b8710f245b399a7779efc45102e886a0947a0414461514383b616e44befa32",
+    "programAccountHash": "8d139929fe85d2acfbd67de55f6849ec58b2a158f676f199801e97f46dd7b7e0"
+  },
+  "termsHash": "c067648d31c7087ce2ef8edb83c8e9e274ee6e289af612252826e6728eb7c425",
+  "testOnly": true,
+  "operatorBoundary": "same Mac; local test wallets approved by user; not independent production authorization"
+}

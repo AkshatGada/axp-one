@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "axp.frontend-fixture.v1",
+  "id": "pending",
+  "sourceKind": "synthetic_test",
+  "financialMode": "synthetic",
+  "description": "Hypothetical frontend state, not a measured original Phase4 timeline or additional network run.",
+  "source": null,
+  "response": {
+    "channelId": "fixture-channel",
+    "mode": "synthetic",
+    "depositBaseUnits": "20000",
+    "phase": "closing",
+    "acceptedBaseUnits": "3000",
+    "authorizedBaseUnits": "3000",
+    "settledBaseUnits": "0",
+    "refundBaseUnits": "0",
+    "closeStatus": "pending",
+    "txSignature": null
+  },
+  "limitations": [
+    "Hypothetical frontend state, not a measured original Phase4 timeline or additional network run.",
+    "No signed spending material, transaction or original event timestamp is supplied."
+  ]
+}

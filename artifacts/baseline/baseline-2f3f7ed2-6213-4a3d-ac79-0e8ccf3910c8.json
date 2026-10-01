@@ -1,0 +1,1296 @@
+{
+  "schemaVersion": "baseline-evidence.v1",
+  "createdAt": "2026-09-30T14:58:19.763Z",
+  "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+  "mode": "synthetic",
+  "buyer": "rules_v1",
+  "renderEvidence": "CLI fixture acknowledgements; NOT browser DOM",
+  "actualModel": false,
+  "actualPayment": false,
+  "results": [
+    {
+      "result": {
+        "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+        "mode": "synthetic",
+        "engine": "ml-rules",
+        "opportunityId": "opp-d8e1575257d55febf6858445",
+        "organic": {
+          "status": "completed",
+          "source": "deterministic-reference",
+          "text": "Reference response, not an LLM answer: compare cancellation terms, total cost and distance to Marina Bay before booking. These fictional ads do not establish rates or availability."
+        },
+        "eligibility": {
+          "eligible": [
+            "baystay",
+            "marinarooms"
+          ],
+          "excluded": [
+            {
+              "campaignId": "alpinestay",
+              "reason": "policy_excluded"
+            }
+          ]
+        },
+        "attempts": [
+          {
+            "campaignId": "baystay",
+            "status": "completed",
+            "decision": {
+              "schemaVersion": "agent-decision.v1",
+              "opportunityId": "opp-d8e1575257d55febf6858445",
+              "advertiserId": "adv-baystay",
+              "campaignVersionId": "baystay-v1",
+              "agentRunId": "agent:05984cc40eea586578da5ef0",
+              "decision": "bid",
+              "creativeVersionId": "baystay-creative-v1",
+              "relevanceLevel": 3,
+              "commercialIntentLevel": 3,
+              "relevance": 1,
+              "commercialIntent": 1,
+              "conversionProbability": null,
+              "evidenceFieldIds": [
+                "destination",
+                "declaredConstraints"
+              ],
+              "reasonCodes": [
+                "fit_supported"
+              ],
+              "scoreSemantics": "fit-intent-v1",
+              "engineProvenance": {
+                "engine": "rules_v1",
+                "engineVersion": "v1",
+                "engineConfigVersion": "axp-demo-rules-v1",
+                "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+                "model": null,
+                "transportMode": null,
+                "profileHash": null,
+                "snapshotHash": null,
+                "elapsedMs": 0.5564999999999998,
+                "outcome": "valid",
+                "failureReason": null,
+                "fallbackOrigin": null,
+                "candidateLevels": [
+                  {
+                    "creativeVersionId": "baystay-creative-v1",
+                    "relevanceLevel": 3
+                  }
+                ],
+                "usage": null
+              }
+            },
+            "elapsedMs": 2.0172079999999966
+          },
+          {
+            "campaignId": "marinarooms",
+            "status": "completed",
+            "decision": {
+              "schemaVersion": "agent-decision.v1",
+              "opportunityId": "opp-d8e1575257d55febf6858445",
+              "advertiserId": "adv-marinarooms",
+              "campaignVersionId": "marinarooms-v1",
+              "agentRunId": "agent:d629d8e28e37f392f3622330",
+              "decision": "bid",
+              "creativeVersionId": "marinarooms-creative-v1",
+              "relevanceLevel": 2,
+              "commercialIntentLevel": 3,
+              "relevance": 0.6666666666666666,
+              "commercialIntent": 1,
+              "conversionProbability": null,
+              "evidenceFieldIds": [
+                "destination",
+                "declaredConstraints"
+              ],
+              "reasonCodes": [
+                "fit_supported"
+              ],
+              "scoreSemantics": "fit-intent-v1",
+              "engineProvenance": {
+                "engine": "rules_v1",
+                "engineVersion": "v1",
+                "engineConfigVersion": "axp-demo-rules-v1",
+                "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+                "model": null,
+                "transportMode": null,
+                "profileHash": null,
+                "snapshotHash": null,
+                "elapsedMs": 0.31604099999999846,
+                "outcome": "valid",
+                "failureReason": null,
+                "fallbackOrigin": null,
+                "candidateLevels": [
+                  {
+                    "creativeVersionId": "marinarooms-creative-v1",
+                    "relevanceLevel": 2
+                  }
+                ],
+                "usage": null
+              }
+            },
+            "elapsedMs": 0.4514160000000018
+          }
+        ],
+        "outcome": {
+          "status": "awarded",
+          "award": {
+            "id": "award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+            "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+            "mode": "synthetic",
+            "opportunityId": "opp-d8e1575257d55febf6858445",
+            "campaignId": "baystay",
+            "campaignVersionId": "baystay-v1",
+            "advertiserId": "adv-baystay",
+            "publisherId": "owned-travel-app",
+            "randomSessionId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+            "channelId": "channel-baystay",
+            "creativeVersionId": "baystay-creative-v1",
+            "creativeHash": "a9df5719949905fca544937cdbf6cd267bd80a59992d8670fa8c6ccea3e284f9",
+            "creative": {
+              "approvedText": "Singapore stays near Marina Bay for solo visitors, with free cancellation.",
+              "creativeVersionId": "baystay-creative-v1",
+              "destinationURL": "https://baystay.example/",
+              "evidenceFieldIds": [
+                "destination",
+                "declaredConstraints"
+              ],
+              "fictional": true,
+              "softFitTags": [
+                "solo",
+                "marina-bay"
+              ]
+            },
+            "priceBaseUnits": "4000",
+            "payee": "synthetic:owned-travel-publisher",
+            "winningBidId": "bid-5bfeb9c0-e48f-4be8-a20e-039d81a7f93f",
+            "status": "reserved",
+            "expiresAt": 1790780479756,
+            "createdAt": 1790780299759
+          },
+          "bids": [
+            {
+              "status": "bid",
+              "amountBaseUnits": "4000",
+              "bidPolicyVersion": "fit_intent_bid_v1",
+              "id": "bid-5bfeb9c0-e48f-4be8-a20e-039d81a7f93f",
+              "opportunityId": "opp-d8e1575257d55febf6858445",
+              "campaignId": "baystay",
+              "campaignVersionId": "baystay-v1",
+              "advertiserId": "adv-baystay",
+              "creativeVersionId": "baystay-creative-v1",
+              "agentRunId": "agent:05984cc40eea586578da5ef0"
+            },
+            {
+              "status": "bid",
+              "amountBaseUnits": "3750",
+              "bidPolicyVersion": "fit_intent_bid_v1",
+              "id": "bid-6c1b8fb7-903c-4cd8-89b8-42ffe8b4fb4c",
+              "opportunityId": "opp-d8e1575257d55febf6858445",
+              "campaignId": "marinarooms",
+              "campaignVersionId": "marinarooms-v1",
+              "advertiserId": "adv-marinarooms",
+              "creativeVersionId": "marinarooms-creative-v1",
+              "agentRunId": "agent:d629d8e28e37f392f3622330"
+            }
+          ],
+          "rejections": [
+            {
+              "campaignId": "alpinestay",
+              "reason": "policy_excluded"
+            }
+          ]
+        },
+        "replayed": false
+      },
+      "receipt": {
+        "delivery": {
+          "id": "delivery-award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+          "awardId": "award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+          "status": "accepted",
+          "receivedAt": 1790780299760,
+          "receiptHash": "eaffa015ae1841f8ef9d8cd4b416f53f600054d1eda3bad8eb22677f8fb3c817"
+        },
+        "charge": {
+          "id": "charge-award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+          "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+          "mode": "synthetic",
+          "awardId": "award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+          "deliveryId": "delivery-award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+          "campaignId": "baystay",
+          "campaignVersionId": "baystay-v1",
+          "channelId": "channel-baystay",
+          "amountBaseUnits": "4000",
+          "acceptedAt": 1790780299760,
+          "sequence": 1,
+          "status": "accepted",
+          "receiptHash": "eaffa015ae1841f8ef9d8cd4b416f53f600054d1eda3bad8eb22677f8fb3c817",
+          "delivery": {
+            "id": "delivery-award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+            "awardId": "award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+            "status": "accepted",
+            "receivedAt": 1790780299760,
+            "receiptHash": "eaffa015ae1841f8ef9d8cd4b416f53f600054d1eda3bad8eb22677f8fb3c817"
+          }
+        },
+        "replayed": false
+      }
+    },
+    {
+      "result": {
+        "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+        "mode": "synthetic",
+        "engine": "ml-rules",
+        "opportunityId": "opp-75f3685c5c1464207a285d84",
+        "organic": {
+          "status": "completed",
+          "source": "deterministic-reference",
+          "text": "Reference response, not an LLM answer: compare cancellation terms, total cost and distance to Marina Bay before booking. These fictional ads do not establish rates or availability."
+        },
+        "eligibility": {
+          "eligible": [
+            "baystay",
+            "marinarooms"
+          ],
+          "excluded": [
+            {
+              "campaignId": "alpinestay",
+              "reason": "policy_excluded"
+            }
+          ]
+        },
+        "attempts": [
+          {
+            "campaignId": "baystay",
+            "status": "completed",
+            "decision": {
+              "schemaVersion": "agent-decision.v1",
+              "opportunityId": "opp-75f3685c5c1464207a285d84",
+              "advertiserId": "adv-baystay",
+              "campaignVersionId": "baystay-v1",
+              "agentRunId": "agent:8037f0348f84077925336e60",
+              "decision": "bid",
+              "creativeVersionId": "baystay-creative-v1",
+              "relevanceLevel": 3,
+              "commercialIntentLevel": 3,
+              "relevance": 1,
+              "commercialIntent": 1,
+              "conversionProbability": null,
+              "evidenceFieldIds": [
+                "destination",
+                "declaredConstraints"
+              ],
+              "reasonCodes": [
+                "fit_supported"
+              ],
+              "scoreSemantics": "fit-intent-v1",
+              "engineProvenance": {
+                "engine": "rules_v1",
+                "engineVersion": "v1",
+                "engineConfigVersion": "axp-demo-rules-v1",
+                "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+                "model": null,
+                "transportMode": null,
+                "profileHash": null,
+                "snapshotHash": null,
+                "elapsedMs": 0.0762499999999946,
+                "outcome": "valid",
+                "failureReason": null,
+                "fallbackOrigin": null,
+                "candidateLevels": [
+                  {
+                    "creativeVersionId": "baystay-creative-v1",
+                    "relevanceLevel": 3
+                  }
+                ],
+                "usage": null
+              }
+            },
+            "elapsedMs": 0.22691700000000026
+          },
+          {
+            "campaignId": "marinarooms",
+            "status": "completed",
+            "decision": {
+              "schemaVersion": "agent-decision.v1",
+              "opportunityId": "opp-75f3685c5c1464207a285d84",
+              "advertiserId": "adv-marinarooms",
+              "campaignVersionId": "marinarooms-v1",
+              "agentRunId": "agent:4a439ff0f857e31294abe3b1",
+              "decision": "bid",
+              "creativeVersionId": "marinarooms-creative-v1",
+              "relevanceLevel": 2,
+              "commercialIntentLevel": 3,
+              "relevance": 0.6666666666666666,
+              "commercialIntent": 1,
+              "conversionProbability": null,
+              "evidenceFieldIds": [
+                "destination",
+                "declaredConstraints"
+              ],
+              "reasonCodes": [
+                "fit_supported"
+              ],
+              "scoreSemantics": "fit-intent-v1",
+              "engineProvenance": {
+                "engine": "rules_v1",
+                "engineVersion": "v1",
+                "engineConfigVersion": "axp-demo-rules-v1",
+                "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+                "model": null,
+                "transportMode": null,
+                "profileHash": null,
+                "snapshotHash": null,
+                "elapsedMs": 0.045000000000001705,
+                "outcome": "valid",
+                "failureReason": null,
+                "fallbackOrigin": null,
+                "candidateLevels": [
+                  {
+                    "creativeVersionId": "marinarooms-creative-v1",
+                    "relevanceLevel": 2
+                  }
+                ],
+                "usage": null
+              }
+            },
+            "elapsedMs": 0.14333299999999838
+          }
+        ],
+        "outcome": {
+          "status": "awarded",
+          "award": {
+            "id": "award-7811054d-c301-445e-919c-5d5961f72418",
+            "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+            "mode": "synthetic",
+            "opportunityId": "opp-75f3685c5c1464207a285d84",
+            "campaignId": "baystay",
+            "campaignVersionId": "baystay-v1",
+            "advertiserId": "adv-baystay",
+            "publisherId": "owned-travel-app",
+            "randomSessionId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+            "channelId": "channel-baystay",
+            "creativeVersionId": "baystay-creative-v1",
+            "creativeHash": "a9df5719949905fca544937cdbf6cd267bd80a59992d8670fa8c6ccea3e284f9",
+            "creative": {
+              "approvedText": "Singapore stays near Marina Bay for solo visitors, with free cancellation.",
+              "creativeVersionId": "baystay-creative-v1",
+              "destinationURL": "https://baystay.example/",
+              "evidenceFieldIds": [
+                "destination",
+                "declaredConstraints"
+              ],
+              "fictional": true,
+              "softFitTags": [
+                "solo",
+                "marina-bay"
+              ]
+            },
+            "priceBaseUnits": "4000",
+            "payee": "synthetic:owned-travel-publisher",
+            "winningBidId": "bid-c4c3237d-d26a-4a9e-9e07-5ce9ebda60d5",
+            "status": "reserved",
+            "expiresAt": 1790780479760,
+            "createdAt": 1790780299762
+          },
+          "bids": [
+            {
+              "status": "bid",
+              "amountBaseUnits": "4000",
+              "bidPolicyVersion": "fit_intent_bid_v1",
+              "id": "bid-c4c3237d-d26a-4a9e-9e07-5ce9ebda60d5",
+              "opportunityId": "opp-75f3685c5c1464207a285d84",
+              "campaignId": "baystay",
+              "campaignVersionId": "baystay-v1",
+              "advertiserId": "adv-baystay",
+              "creativeVersionId": "baystay-creative-v1",
+              "agentRunId": "agent:8037f0348f84077925336e60"
+            },
+            {
+              "status": "bid",
+              "amountBaseUnits": "3750",
+              "bidPolicyVersion": "fit_intent_bid_v1",
+              "id": "bid-f8a00d0b-10e5-487a-a463-26fdcceb0bad",
+              "opportunityId": "opp-75f3685c5c1464207a285d84",
+              "campaignId": "marinarooms",
+              "campaignVersionId": "marinarooms-v1",
+              "advertiserId": "adv-marinarooms",
+              "creativeVersionId": "marinarooms-creative-v1",
+              "agentRunId": "agent:4a439ff0f857e31294abe3b1"
+            }
+          ],
+          "rejections": [
+            {
+              "campaignId": "alpinestay",
+              "reason": "policy_excluded"
+            }
+          ]
+        },
+        "replayed": false
+      },
+      "receipt": {
+        "delivery": {
+          "id": "delivery-award-7811054d-c301-445e-919c-5d5961f72418",
+          "awardId": "award-7811054d-c301-445e-919c-5d5961f72418",
+          "status": "accepted",
+          "receivedAt": 1790780299762,
+          "receiptHash": "5a0034323aff1fbd07be206733873c08259694a3a0258a7ec121cdc9dabb3bf8"
+        },
+        "charge": {
+          "id": "charge-award-7811054d-c301-445e-919c-5d5961f72418",
+          "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+          "mode": "synthetic",
+          "awardId": "award-7811054d-c301-445e-919c-5d5961f72418",
+          "deliveryId": "delivery-award-7811054d-c301-445e-919c-5d5961f72418",
+          "campaignId": "baystay",
+          "campaignVersionId": "baystay-v1",
+          "channelId": "channel-baystay",
+          "amountBaseUnits": "4000",
+          "acceptedAt": 1790780299762,
+          "sequence": 2,
+          "status": "accepted",
+          "receiptHash": "5a0034323aff1fbd07be206733873c08259694a3a0258a7ec121cdc9dabb3bf8",
+          "delivery": {
+            "id": "delivery-award-7811054d-c301-445e-919c-5d5961f72418",
+            "awardId": "award-7811054d-c301-445e-919c-5d5961f72418",
+            "status": "accepted",
+            "receivedAt": 1790780299762,
+            "receiptHash": "5a0034323aff1fbd07be206733873c08259694a3a0258a7ec121cdc9dabb3bf8"
+          }
+        },
+        "replayed": false
+      }
+    }
+  ],
+  "settlement": {
+    "advertiserId": "adv-baystay",
+    "authorizedBaseUnits": "8000",
+    "channelId": "channel-baystay",
+    "depositBaseUnits": "20000",
+    "mode": "synthetic",
+    "payee": "synthetic:owned-travel-publisher",
+    "publisherId": "owned-travel-app",
+    "refundBaseUnits": "12000",
+    "settledBaseUnits": "8000",
+    "status": "finalized",
+    "txSignature": null
+  },
+  "state": {
+    "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+    "mode": "synthetic",
+    "schemaVersion": "axp.runtime.v1",
+    "campaigns": [
+      {
+        "advertiserId": "adv-alpinestay",
+        "allowedIntents": [
+          "hotel_booking",
+          "hotel_comparison"
+        ],
+        "budgetCapBaseUnits": "45000",
+        "campaignId": "alpinestay",
+        "campaignVersionId": "alpinestay-v1",
+        "channelId": "channel-alpinestay",
+        "creatives": [
+          {
+            "approvedText": "Swiss mountain stays with free cancellation.",
+            "creativeVersionId": "alpinestay-creative-v1",
+            "destinationURL": "https://alpinestay.example/",
+            "evidenceFieldIds": [
+              "destination",
+              "declaredConstraints"
+            ],
+            "fictional": true,
+            "softFitTags": []
+          }
+        ],
+        "declaredConstraints": [
+          "free_cancellation"
+        ],
+        "destination": "Switzerland",
+        "maxBidBaseUnits": "9000",
+        "policyVersion": "fit_intent_bid_v1",
+        "softFitTags": [],
+        "status": "active"
+      },
+      {
+        "advertiserId": "adv-baystay",
+        "allowedIntents": [
+          "hotel_booking",
+          "hotel_comparison"
+        ],
+        "budgetCapBaseUnits": "20000",
+        "campaignId": "baystay",
+        "campaignVersionId": "baystay-v1",
+        "channelId": "channel-baystay",
+        "creatives": [
+          {
+            "approvedText": "Singapore stays near Marina Bay for solo visitors, with free cancellation.",
+            "creativeVersionId": "baystay-creative-v1",
+            "destinationURL": "https://baystay.example/",
+            "evidenceFieldIds": [
+              "destination",
+              "declaredConstraints"
+            ],
+            "fictional": true,
+            "softFitTags": [
+              "solo",
+              "marina-bay"
+            ]
+          }
+        ],
+        "declaredConstraints": [
+          "free_cancellation"
+        ],
+        "destination": "Singapore",
+        "maxBidBaseUnits": "4000",
+        "policyVersion": "fit_intent_bid_v1",
+        "softFitTags": [
+          "solo",
+          "marina-bay"
+        ],
+        "status": "active"
+      },
+      {
+        "advertiserId": "adv-marinarooms",
+        "allowedIntents": [
+          "hotel_booking",
+          "hotel_comparison"
+        ],
+        "budgetCapBaseUnits": "25000",
+        "campaignId": "marinarooms",
+        "campaignVersionId": "marinarooms-v1",
+        "channelId": "channel-marinarooms",
+        "creatives": [
+          {
+            "approvedText": "Singapore rooms with free cancellation.",
+            "creativeVersionId": "marinarooms-creative-v1",
+            "destinationURL": "https://marinarooms.example/",
+            "evidenceFieldIds": [
+              "destination",
+              "declaredConstraints"
+            ],
+            "fictional": true,
+            "softFitTags": []
+          }
+        ],
+        "declaredConstraints": [
+          "free_cancellation"
+        ],
+        "destination": "Singapore",
+        "maxBidBaseUnits": "5000",
+        "policyVersion": "fit_intent_bid_v1",
+        "softFitTags": [],
+        "status": "active"
+      }
+    ],
+    "channels": [
+      {
+        "advertiserId": "adv-alpinestay",
+        "authorizedBaseUnits": "0",
+        "channelId": "channel-alpinestay",
+        "depositBaseUnits": "45000",
+        "mode": "synthetic",
+        "payee": "synthetic:owned-travel-publisher",
+        "publisherId": "owned-travel-app",
+        "refundBaseUnits": "0",
+        "settledBaseUnits": "0",
+        "status": "open",
+        "txSignature": null
+      },
+      {
+        "advertiserId": "adv-baystay",
+        "authorizedBaseUnits": "8000",
+        "channelId": "channel-baystay",
+        "depositBaseUnits": "20000",
+        "mode": "synthetic",
+        "payee": "synthetic:owned-travel-publisher",
+        "publisherId": "owned-travel-app",
+        "refundBaseUnits": "12000",
+        "settledBaseUnits": "8000",
+        "status": "finalized",
+        "txSignature": null
+      },
+      {
+        "advertiserId": "adv-marinarooms",
+        "authorizedBaseUnits": "0",
+        "channelId": "channel-marinarooms",
+        "depositBaseUnits": "25000",
+        "mode": "synthetic",
+        "payee": "synthetic:owned-travel-publisher",
+        "publisherId": "owned-travel-app",
+        "refundBaseUnits": "0",
+        "settledBaseUnits": "0",
+        "status": "open",
+        "txSignature": null
+      }
+    ],
+    "opportunities": [
+      {
+        "bodyHash": "3b29051e10593b1588dec9137872fccdbce0879bb3359ea7f0dd98b9ec324915",
+        "coarseIntent": "hotel_booking",
+        "createdAt": 1790780299761,
+        "destination": "Singapore",
+        "expiresAt": 1790780479760,
+        "floorBaseUnits": "1000",
+        "id": "opp-75f3685c5c1464207a285d84",
+        "mode": "synthetic",
+        "publisherId": "owned-travel-app",
+        "randomSessionId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+        "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+        "slotId": "sponsored-card",
+        "softPreferences": [
+          "solo",
+          "marina-bay"
+        ],
+        "status": "awarded",
+        "taskConstraints": [
+          "free_cancellation"
+        ],
+        "turnId": "placement-two",
+        "outcome": {
+          "award": {
+            "advertiserId": "adv-baystay",
+            "campaignId": "baystay",
+            "campaignVersionId": "baystay-v1",
+            "channelId": "channel-baystay",
+            "createdAt": 1790780299762,
+            "creative": {
+              "approvedText": "Singapore stays near Marina Bay for solo visitors, with free cancellation.",
+              "creativeVersionId": "baystay-creative-v1",
+              "destinationURL": "https://baystay.example/",
+              "evidenceFieldIds": [
+                "destination",
+                "declaredConstraints"
+              ],
+              "fictional": true,
+              "softFitTags": [
+                "solo",
+                "marina-bay"
+              ]
+            },
+            "creativeHash": "a9df5719949905fca544937cdbf6cd267bd80a59992d8670fa8c6ccea3e284f9",
+            "creativeVersionId": "baystay-creative-v1",
+            "expiresAt": 1790780479760,
+            "id": "award-7811054d-c301-445e-919c-5d5961f72418",
+            "mode": "synthetic",
+            "opportunityId": "opp-75f3685c5c1464207a285d84",
+            "payee": "synthetic:owned-travel-publisher",
+            "priceBaseUnits": "4000",
+            "publisherId": "owned-travel-app",
+            "randomSessionId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+            "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+            "status": "delivered",
+            "winningBidId": "bid-c4c3237d-d26a-4a9e-9e07-5ce9ebda60d5"
+          },
+          "bids": [
+            {
+              "advertiserId": "adv-baystay",
+              "agentRunId": "agent:8037f0348f84077925336e60",
+              "amountBaseUnits": "4000",
+              "bidPolicyVersion": "fit_intent_bid_v1",
+              "campaignId": "baystay",
+              "campaignVersionId": "baystay-v1",
+              "creativeVersionId": "baystay-creative-v1",
+              "id": "bid-c4c3237d-d26a-4a9e-9e07-5ce9ebda60d5",
+              "opportunityId": "opp-75f3685c5c1464207a285d84",
+              "status": "bid"
+            },
+            {
+              "advertiserId": "adv-marinarooms",
+              "agentRunId": "agent:4a439ff0f857e31294abe3b1",
+              "amountBaseUnits": "3750",
+              "bidPolicyVersion": "fit_intent_bid_v1",
+              "campaignId": "marinarooms",
+              "campaignVersionId": "marinarooms-v1",
+              "creativeVersionId": "marinarooms-creative-v1",
+              "id": "bid-f8a00d0b-10e5-487a-a463-26fdcceb0bad",
+              "opportunityId": "opp-75f3685c5c1464207a285d84",
+              "status": "bid"
+            }
+          ],
+          "rejections": [
+            {
+              "campaignId": "alpinestay",
+              "reason": "policy_excluded"
+            }
+          ],
+          "status": "awarded"
+        }
+      },
+      {
+        "bodyHash": "45c1c8680108ef8d8a38466a8d6b32a1b58ab991ace627bd5b08739efaa36ab1",
+        "coarseIntent": "hotel_booking",
+        "createdAt": 1790780299756,
+        "destination": "Singapore",
+        "expiresAt": 1790780479756,
+        "floorBaseUnits": "1000",
+        "id": "opp-d8e1575257d55febf6858445",
+        "mode": "synthetic",
+        "publisherId": "owned-travel-app",
+        "randomSessionId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+        "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+        "slotId": "sponsored-card",
+        "softPreferences": [
+          "solo",
+          "marina-bay"
+        ],
+        "status": "awarded",
+        "taskConstraints": [
+          "free_cancellation"
+        ],
+        "turnId": "placement-one",
+        "outcome": {
+          "award": {
+            "advertiserId": "adv-baystay",
+            "campaignId": "baystay",
+            "campaignVersionId": "baystay-v1",
+            "channelId": "channel-baystay",
+            "createdAt": 1790780299759,
+            "creative": {
+              "approvedText": "Singapore stays near Marina Bay for solo visitors, with free cancellation.",
+              "creativeVersionId": "baystay-creative-v1",
+              "destinationURL": "https://baystay.example/",
+              "evidenceFieldIds": [
+                "destination",
+                "declaredConstraints"
+              ],
+              "fictional": true,
+              "softFitTags": [
+                "solo",
+                "marina-bay"
+              ]
+            },
+            "creativeHash": "a9df5719949905fca544937cdbf6cd267bd80a59992d8670fa8c6ccea3e284f9",
+            "creativeVersionId": "baystay-creative-v1",
+            "expiresAt": 1790780479756,
+            "id": "award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+            "mode": "synthetic",
+            "opportunityId": "opp-d8e1575257d55febf6858445",
+            "payee": "synthetic:owned-travel-publisher",
+            "priceBaseUnits": "4000",
+            "publisherId": "owned-travel-app",
+            "randomSessionId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+            "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+            "status": "delivered",
+            "winningBidId": "bid-5bfeb9c0-e48f-4be8-a20e-039d81a7f93f"
+          },
+          "bids": [
+            {
+              "advertiserId": "adv-baystay",
+              "agentRunId": "agent:05984cc40eea586578da5ef0",
+              "amountBaseUnits": "4000",
+              "bidPolicyVersion": "fit_intent_bid_v1",
+              "campaignId": "baystay",
+              "campaignVersionId": "baystay-v1",
+              "creativeVersionId": "baystay-creative-v1",
+              "id": "bid-5bfeb9c0-e48f-4be8-a20e-039d81a7f93f",
+              "opportunityId": "opp-d8e1575257d55febf6858445",
+              "status": "bid"
+            },
+            {
+              "advertiserId": "adv-marinarooms",
+              "agentRunId": "agent:d629d8e28e37f392f3622330",
+              "amountBaseUnits": "3750",
+              "bidPolicyVersion": "fit_intent_bid_v1",
+              "campaignId": "marinarooms",
+              "campaignVersionId": "marinarooms-v1",
+              "creativeVersionId": "marinarooms-creative-v1",
+              "id": "bid-6c1b8fb7-903c-4cd8-89b8-42ffe8b4fb4c",
+              "opportunityId": "opp-d8e1575257d55febf6858445",
+              "status": "bid"
+            }
+          ],
+          "rejections": [
+            {
+              "campaignId": "alpinestay",
+              "reason": "policy_excluded"
+            }
+          ],
+          "status": "awarded"
+        }
+      }
+    ],
+    "awards": [
+      {
+        "advertiserId": "adv-baystay",
+        "campaignId": "baystay",
+        "campaignVersionId": "baystay-v1",
+        "channelId": "channel-baystay",
+        "createdAt": 1790780299762,
+        "creative": {
+          "approvedText": "Singapore stays near Marina Bay for solo visitors, with free cancellation.",
+          "creativeVersionId": "baystay-creative-v1",
+          "destinationURL": "https://baystay.example/",
+          "evidenceFieldIds": [
+            "destination",
+            "declaredConstraints"
+          ],
+          "fictional": true,
+          "softFitTags": [
+            "solo",
+            "marina-bay"
+          ]
+        },
+        "creativeHash": "a9df5719949905fca544937cdbf6cd267bd80a59992d8670fa8c6ccea3e284f9",
+        "creativeVersionId": "baystay-creative-v1",
+        "expiresAt": 1790780479760,
+        "id": "award-7811054d-c301-445e-919c-5d5961f72418",
+        "mode": "synthetic",
+        "opportunityId": "opp-75f3685c5c1464207a285d84",
+        "payee": "synthetic:owned-travel-publisher",
+        "priceBaseUnits": "4000",
+        "publisherId": "owned-travel-app",
+        "randomSessionId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+        "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+        "status": "delivered",
+        "winningBidId": "bid-c4c3237d-d26a-4a9e-9e07-5ce9ebda60d5"
+      },
+      {
+        "advertiserId": "adv-baystay",
+        "campaignId": "baystay",
+        "campaignVersionId": "baystay-v1",
+        "channelId": "channel-baystay",
+        "createdAt": 1790780299759,
+        "creative": {
+          "approvedText": "Singapore stays near Marina Bay for solo visitors, with free cancellation.",
+          "creativeVersionId": "baystay-creative-v1",
+          "destinationURL": "https://baystay.example/",
+          "evidenceFieldIds": [
+            "destination",
+            "declaredConstraints"
+          ],
+          "fictional": true,
+          "softFitTags": [
+            "solo",
+            "marina-bay"
+          ]
+        },
+        "creativeHash": "a9df5719949905fca544937cdbf6cd267bd80a59992d8670fa8c6ccea3e284f9",
+        "creativeVersionId": "baystay-creative-v1",
+        "expiresAt": 1790780479756,
+        "id": "award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+        "mode": "synthetic",
+        "opportunityId": "opp-d8e1575257d55febf6858445",
+        "payee": "synthetic:owned-travel-publisher",
+        "priceBaseUnits": "4000",
+        "publisherId": "owned-travel-app",
+        "randomSessionId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+        "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+        "status": "delivered",
+        "winningBidId": "bid-5bfeb9c0-e48f-4be8-a20e-039d81a7f93f"
+      }
+    ],
+    "charges": [
+      {
+        "acceptedAt": 1790780299762,
+        "amountBaseUnits": "4000",
+        "awardId": "award-7811054d-c301-445e-919c-5d5961f72418",
+        "campaignId": "baystay",
+        "campaignVersionId": "baystay-v1",
+        "channelId": "channel-baystay",
+        "delivery": {
+          "awardId": "award-7811054d-c301-445e-919c-5d5961f72418",
+          "id": "delivery-award-7811054d-c301-445e-919c-5d5961f72418",
+          "receiptHash": "5a0034323aff1fbd07be206733873c08259694a3a0258a7ec121cdc9dabb3bf8",
+          "receivedAt": 1790780299762,
+          "status": "accepted"
+        },
+        "deliveryId": "delivery-award-7811054d-c301-445e-919c-5d5961f72418",
+        "id": "charge-award-7811054d-c301-445e-919c-5d5961f72418",
+        "mode": "synthetic",
+        "receiptHash": "5a0034323aff1fbd07be206733873c08259694a3a0258a7ec121cdc9dabb3bf8",
+        "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+        "sequence": 2,
+        "status": "settled"
+      },
+      {
+        "acceptedAt": 1790780299760,
+        "amountBaseUnits": "4000",
+        "awardId": "award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+        "campaignId": "baystay",
+        "campaignVersionId": "baystay-v1",
+        "channelId": "channel-baystay",
+        "delivery": {
+          "awardId": "award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+          "id": "delivery-award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+          "receiptHash": "eaffa015ae1841f8ef9d8cd4b416f53f600054d1eda3bad8eb22677f8fb3c817",
+          "receivedAt": 1790780299760,
+          "status": "accepted"
+        },
+        "deliveryId": "delivery-award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+        "id": "charge-award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+        "mode": "synthetic",
+        "receiptHash": "eaffa015ae1841f8ef9d8cd4b416f53f600054d1eda3bad8eb22677f8fb3c817",
+        "runId": "baseline-2f3f7ed2-6213-4a3d-ac79-0e8ccf3910c8",
+        "sequence": 1,
+        "status": "settled"
+      }
+    ],
+    "events": [
+      {
+        "seq": 1,
+        "type": "synthetic_channel_opened",
+        "at": 1790780299755,
+        "data": {
+          "channelId": "channel-baystay",
+          "depositBaseUnits": "20000"
+        }
+      },
+      {
+        "seq": 2,
+        "type": "campaign_created",
+        "at": 1790780299755,
+        "data": {
+          "campaignId": "baystay",
+          "campaignVersionId": "baystay-v1"
+        }
+      },
+      {
+        "seq": 3,
+        "type": "synthetic_channel_opened",
+        "at": 1790780299755,
+        "data": {
+          "channelId": "channel-marinarooms",
+          "depositBaseUnits": "25000"
+        }
+      },
+      {
+        "seq": 4,
+        "type": "campaign_created",
+        "at": 1790780299755,
+        "data": {
+          "campaignId": "marinarooms",
+          "campaignVersionId": "marinarooms-v1"
+        }
+      },
+      {
+        "seq": 5,
+        "type": "synthetic_channel_opened",
+        "at": 1790780299755,
+        "data": {
+          "channelId": "channel-alpinestay",
+          "depositBaseUnits": "45000"
+        }
+      },
+      {
+        "seq": 6,
+        "type": "campaign_created",
+        "at": 1790780299756,
+        "data": {
+          "campaignId": "alpinestay",
+          "campaignVersionId": "alpinestay-v1"
+        }
+      },
+      {
+        "seq": 7,
+        "type": "opportunity_created",
+        "at": 1790780299756,
+        "data": {
+          "coarseIntent": "hotel_booking",
+          "opportunityId": "opp-d8e1575257d55febf6858445"
+        }
+      },
+      {
+        "seq": 8,
+        "type": "buyer_decision",
+        "at": 1790780299759,
+        "data": {
+          "decision": {
+            "advertiserId": "adv-baystay",
+            "agentRunId": "agent:05984cc40eea586578da5ef0",
+            "campaignVersionId": "baystay-v1",
+            "commercialIntent": 1,
+            "commercialIntentLevel": 3,
+            "conversionProbability": null,
+            "creativeVersionId": "baystay-creative-v1",
+            "decision": "bid",
+            "engineProvenance": {
+              "candidateLevels": [
+                {
+                  "creativeVersionId": "baystay-creative-v1",
+                  "relevanceLevel": 3
+                }
+              ],
+              "elapsedMs": 0.5564999999999998,
+              "engine": "rules_v1",
+              "engineConfigVersion": "axp-demo-rules-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": null,
+              "outcome": "valid",
+              "profileHash": null,
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": null,
+              "transportMode": null,
+              "usage": null
+            },
+            "evidenceFieldIds": [
+              "destination",
+              "declaredConstraints"
+            ],
+            "opportunityId": "opp-d8e1575257d55febf6858445",
+            "reasonCodes": [
+              "fit_supported"
+            ],
+            "relevance": 1,
+            "relevanceLevel": 3,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "opportunityId": "opp-d8e1575257d55febf6858445"
+        }
+      },
+      {
+        "seq": 9,
+        "type": "buyer_decision",
+        "at": 1790780299759,
+        "data": {
+          "decision": {
+            "advertiserId": "adv-marinarooms",
+            "agentRunId": "agent:d629d8e28e37f392f3622330",
+            "campaignVersionId": "marinarooms-v1",
+            "commercialIntent": 1,
+            "commercialIntentLevel": 3,
+            "conversionProbability": null,
+            "creativeVersionId": "marinarooms-creative-v1",
+            "decision": "bid",
+            "engineProvenance": {
+              "candidateLevels": [
+                {
+                  "creativeVersionId": "marinarooms-creative-v1",
+                  "relevanceLevel": 2
+                }
+              ],
+              "elapsedMs": 0.31604099999999846,
+              "engine": "rules_v1",
+              "engineConfigVersion": "axp-demo-rules-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": null,
+              "outcome": "valid",
+              "profileHash": null,
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": null,
+              "transportMode": null,
+              "usage": null
+            },
+            "evidenceFieldIds": [
+              "destination",
+              "declaredConstraints"
+            ],
+            "opportunityId": "opp-d8e1575257d55febf6858445",
+            "reasonCodes": [
+              "fit_supported"
+            ],
+            "relevance": 0.6666666666666666,
+            "relevanceLevel": 2,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "opportunityId": "opp-d8e1575257d55febf6858445"
+        }
+      },
+      {
+        "seq": 10,
+        "type": "award_reserved",
+        "at": 1790780299759,
+        "data": {
+          "awardId": "award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+          "campaignId": "baystay",
+          "opportunityId": "opp-d8e1575257d55febf6858445",
+          "priceBaseUnits": "4000"
+        }
+      },
+      {
+        "seq": 11,
+        "type": "delivery_accepted",
+        "at": 1790780299760,
+        "data": {
+          "awardId": "award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+          "deliveryId": "delivery-award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38"
+        }
+      },
+      {
+        "seq": 12,
+        "type": "charge_accepted",
+        "at": 1790780299760,
+        "data": {
+          "amountBaseUnits": "4000",
+          "channelId": "channel-baystay",
+          "chargeId": "charge-award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38"
+        }
+      },
+      {
+        "seq": 13,
+        "type": "synthetic_voucher_authorized",
+        "at": 1790780299760,
+        "data": {
+          "channelId": "channel-baystay",
+          "chargeId": "charge-award-e6d1d1fa-d3e5-4cfc-b239-87ba607bfe38",
+          "cumulativeAmountBaseUnits": "4000"
+        }
+      },
+      {
+        "seq": 14,
+        "type": "opportunity_created",
+        "at": 1790780299761,
+        "data": {
+          "coarseIntent": "hotel_booking",
+          "opportunityId": "opp-75f3685c5c1464207a285d84"
+        }
+      },
+      {
+        "seq": 15,
+        "type": "buyer_decision",
+        "at": 1790780299761,
+        "data": {
+          "decision": {
+            "advertiserId": "adv-baystay",
+            "agentRunId": "agent:8037f0348f84077925336e60",
+            "campaignVersionId": "baystay-v1",
+            "commercialIntent": 1,
+            "commercialIntentLevel": 3,
+            "conversionProbability": null,
+            "creativeVersionId": "baystay-creative-v1",
+            "decision": "bid",
+            "engineProvenance": {
+              "candidateLevels": [
+                {
+                  "creativeVersionId": "baystay-creative-v1",
+                  "relevanceLevel": 3
+                }
+              ],
+              "elapsedMs": 0.0762499999999946,
+              "engine": "rules_v1",
+              "engineConfigVersion": "axp-demo-rules-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": null,
+              "outcome": "valid",
+              "profileHash": null,
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": null,
+              "transportMode": null,
+              "usage": null
+            },
+            "evidenceFieldIds": [
+              "destination",
+              "declaredConstraints"
+            ],
+            "opportunityId": "opp-75f3685c5c1464207a285d84",
+            "reasonCodes": [
+              "fit_supported"
+            ],
+            "relevance": 1,
+            "relevanceLevel": 3,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "opportunityId": "opp-75f3685c5c1464207a285d84"
+        }
+      },
+      {
+        "seq": 16,
+        "type": "buyer_decision",
+        "at": 1790780299762,
+        "data": {
+          "decision": {
+            "advertiserId": "adv-marinarooms",
+            "agentRunId": "agent:4a439ff0f857e31294abe3b1",
+            "campaignVersionId": "marinarooms-v1",
+            "commercialIntent": 1,
+            "commercialIntentLevel": 3,
+            "conversionProbability": null,
+            "creativeVersionId": "marinarooms-creative-v1",
+            "decision": "bid",
+            "engineProvenance": {
+              "candidateLevels": [
+                {
+                  "creativeVersionId": "marinarooms-creative-v1",
+                  "relevanceLevel": 2
+                }
+              ],
+              "elapsedMs": 0.045000000000001705,
+              "engine": "rules_v1",
+              "engineConfigVersion": "axp-demo-rules-v1",
+              "engineVersion": "v1",
+              "failureReason": null,
+              "fallbackOrigin": null,
+              "model": null,
+              "outcome": "valid",
+              "profileHash": null,
+              "rubricHash": "d80f27a85dc50d267f7cba38a14dea2e7d97d74dcb621892ed3f11533f112c96",
+              "snapshotHash": null,
+              "transportMode": null,
+              "usage": null
+            },
+            "evidenceFieldIds": [
+              "destination",
+              "declaredConstraints"
+            ],
+            "opportunityId": "opp-75f3685c5c1464207a285d84",
+            "reasonCodes": [
+              "fit_supported"
+            ],
+            "relevance": 0.6666666666666666,
+            "relevanceLevel": 2,
+            "schemaVersion": "agent-decision.v1",
+            "scoreSemantics": "fit-intent-v1"
+          },
+          "opportunityId": "opp-75f3685c5c1464207a285d84"
+        }
+      },
+      {
+        "seq": 17,
+        "type": "award_reserved",
+        "at": 1790780299762,
+        "data": {
+          "awardId": "award-7811054d-c301-445e-919c-5d5961f72418",
+          "campaignId": "baystay",
+          "opportunityId": "opp-75f3685c5c1464207a285d84",
+          "priceBaseUnits": "4000"
+        }
+      },
+      {
+        "seq": 18,
+        "type": "delivery_accepted",
+        "at": 1790780299762,
+        "data": {
+          "awardId": "award-7811054d-c301-445e-919c-5d5961f72418",
+          "deliveryId": "delivery-award-7811054d-c301-445e-919c-5d5961f72418"
+        }
+      },
+      {
+        "seq": 19,
+        "type": "charge_accepted",
+        "at": 1790780299762,
+        "data": {
+          "amountBaseUnits": "4000",
+          "channelId": "channel-baystay",
+          "chargeId": "charge-award-7811054d-c301-445e-919c-5d5961f72418"
+        }
+      },
+      {
+        "seq": 20,
+        "type": "synthetic_voucher_authorized",
+        "at": 1790780299762,
+        "data": {
+          "channelId": "channel-baystay",
+          "chargeId": "charge-award-7811054d-c301-445e-919c-5d5961f72418",
+          "cumulativeAmountBaseUnits": "8000"
+        }
+      },
+      {
+        "seq": 21,
+        "type": "synthetic_settlement",
+        "at": 1790780299763,
+        "data": {
+          "channelId": "channel-baystay",
+          "refundBaseUnits": "12000",
+          "settledBaseUnits": "8000",
+          "txSignature": null
+        }
+      }
+    ]
+  }
+}

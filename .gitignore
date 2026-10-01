@@ -6,6 +6,9 @@ dist/
 coverage/
 local-state/
 artifacts/private/
+**/test-wallets.json
+**/wallet-keys.json
+**/*.pem
 *.sqlite
 *.sqlite-*
 *.db
