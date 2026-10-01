@@ -29,7 +29,7 @@ export default function EvidencePage() {
         meta={<Ld.Tag tone="ch" dot>ContextHint</Ld.Tag>}
         sub={
           <>
-            Agents judged each moment with history from <Term title={GLOSSARY.contexthint.term} def={GLOSSARY.contexthint.def}>ContextHint</Term> (
+            ContextHint is the intelligence platform for ChatGPT ads. Agents judged each moment with history from <Term title={GLOSSARY.contexthint.term} def={GLOSSARY.contexthint.def}>ContextHint</Term> (
             <a className="ld-link" href="https://contexthint.com" target="_blank" rel="noopener noreferrer">
               contexthint.com
             </a>

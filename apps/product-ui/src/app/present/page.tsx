@@ -159,7 +159,7 @@ export default function PresentPage() {
             return (
               <div className="ld-stack">
                 <Ld.Callout tone="ch" title={exact ? "ContextHint had seen this exact question before" : `What ${nameOf(evMain.campaignId)}'s agent was shown`}>
-                  {exact && rec ? `ContextHint is a recorded library of real prompts and the ads seen beside them. This question appeared next to an ad from ${rec.advertiser}; that history goes to the agents as evidence.` : "ContextHint is a recorded library of real prompts and the ads seen beside them. Past prompts close to this one go to the agent as evidence."}
+                  {exact && rec ? `ContextHint is the intelligence platform for ChatGPT ads (contexthint.com). It records real prompts and the ads seen beside them; this question appeared next to an ad from ${rec.advertiser}, and that history goes to the agents as evidence.` : "ContextHint is the intelligence platform for ChatGPT ads (contexthint.com). It records real prompts and the ads seen beside them; past prompts close to this one go to the agent as evidence, with an inferred audience."}
                 </Ld.Callout>
                 {rec ? <Ld.EvidenceCard prompt={rec.promptText} advertiser={rec.advertiser} creative={rec.creativeText} sim={ex!.similarity} method={evMain.retrieval.method} hint={hint ? <span className="ld-stack" style={{ gap: 4 }}><Ld.Pv kind="inferred" label="Inferred hint" /><span className="ld-secondary">{hint.text}</span></span> : undefined} /> : null}
               </div>

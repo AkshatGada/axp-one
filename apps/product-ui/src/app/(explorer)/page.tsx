@@ -49,7 +49,12 @@ export default function Overview() {
           <dt>
             <Term title={GLOSSARY.contexthint.term} def={GLOSSARY.contexthint.def}>ContextHint</Term>
           </dt>
-          <dd>A recorded library of real prompts and the ads seen beside them, given to agents as evidence.</dd>
+          <dd>
+            ContextHint is the intelligence platform for ChatGPT ads. It records real prompts and the ads seen beside them; agents get past examples and an inferred audience as evidence.{" "}
+            <a className="ld-link" href="https://contexthint.com" target="_blank" rel="noopener noreferrer">
+              contexthint.com
+            </a>
+          </dd>
         </div>
         <div>
           <dt>{onDevnet ? <Term title={GLOSSARY.devnet.term} def={GLOSSARY.devnet.def}>Solana Devnet</Term> : <Term title={GLOSSARY.solanaSandbox.term} def={GLOSSARY.solanaSandbox.def}>Hosted Solana sandbox</Term>}</dt>
