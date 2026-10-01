@@ -93,7 +93,7 @@ export default function EvidencePage() {
               <div key={id} id={`evidence-${id}`} className="ld-stack" style={{ gap: 6 }}>
                 <Ld.EvidenceCard prompt={r.promptText} advertiser={r.advertiser} creative={r.creativeText} sim={u.sim} method={u.method} />
                 <span className="ld-caption">
-                  Shown to {[...u.who].map((w) => run.campaigns.find((c) => c.campaignId === w)!.businessName).join(", ")}, in opportunities {[...u.opps].join(", ")}
+                  Shown to {[...u.who].map((w) => run.campaigns.find((c) => c.campaignId === w)!.businessName).join(", ")}, in {u.opps.size === 1 ? "opportunity" : "opportunities"} {[...u.opps].join(", ")}
                 </span>
               </div>
             );

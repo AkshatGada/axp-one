@@ -4,6 +4,7 @@ import { campaign, decisionFor, nameOf, run, usdc } from "@/data/select";
 import { computeBid, reason } from "@/lib/policy.ts";
 import { shortLabel } from "@/components/v2/derive";
 import { TryApp, type TryOpp } from "@/components/v2/TryApp";
+import { numWord } from "@/data/story";
 
 export const metadata: Metadata = { title: "Draft a campaign (synthetic)" };
 
@@ -53,7 +54,7 @@ export default function TryPage() {
       <Ld.PageBar
         title="Draft a campaign"
         meta={<Ld.Pv kind="synthetic" label="Synthetic preview" />}
-        sub="See how the exchange's own rules would treat a campaign you describe, against the four recorded questions. Rules verified against the recorded run when this page was built."
+        sub={`See how the exchange's own rules would treat a campaign you describe, against the ${numWord(run.opportunities.length)} questions of this run. Rules verified against this run when this page was built.`}
         actions={<Ld.Tag tone={p.ok === p.total ? "success" : "danger"} dot>{`Rules verified ${p.ok}/${p.total}`}</Ld.Tag>}
       />
       <Ld.Callout tone="warning" title="Synthetic preview. Runs in your browser only.">

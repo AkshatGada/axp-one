@@ -16,6 +16,10 @@ export default function ExplorerLayout({ children }: { children: ReactNode }) {
       scope={onDevnet ? "Live on Solana Devnet" : hasDevnet ? "Solana sandbox, re-settled on Devnet" : "Hosted Solana sandbox"}
       runNote={`Recorded replay of a run on ${NET.a}, test USDC`}
       otherRuns={process.env.AXP_OTHER_RUN_HREF ? [{ label: process.env.AXP_OTHER_RUN_LABEL ?? "Other run", href: process.env.AXP_OTHER_RUN_HREF, note: process.env.AXP_OTHER_RUN_NOTE }] : []}
+      navFoot={(() => {
+        const first = run.opportunities.slice().sort((a, b) => a.createdAt - b.createdAt)[0];
+        return first && first.n !== 1 ? `Opportunities are in story order. On the exchange clock, the ${shortLabel(first).toLowerCase()} question ran first.` : "Opportunities are in the order they ran.";
+      })()}
       runId={run.source.runId}
       runLabel={process.env.AXP_RUN_LABEL ?? `${onDevnet ? "Live Devnet run" : "Recorded run"}, ${runDate}`}
       opps={opps}

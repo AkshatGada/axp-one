@@ -416,7 +416,7 @@ export function armDiffSentence(o: Opportunity, campaignId: string): { changed: 
       ? `With history, ${name}'s intent score moved ${two(b.scores.intent)} to ${two(h.scores.intent)}, ${crossing(b.scores.intent, h.scores.intent)}: level ${b.commercialIntentLevel} to ${h.commercialIntentLevel}.`
       : `With history, ${name}'s intent score moved ${two(b.scores.intent)} to ${two(h.scores.intent)}; both round to level ${h.commercialIntentLevel}.`,
     relChanged ? `Relevance moved ${two(b.scores.relevance)} to ${two(h.scores.relevance)}: level ${b.relevanceLevel} to ${h.relevanceLevel}.` : `Relevance stayed at level ${h.relevanceLevel}.`,
-    verdictSame ? `The ${h.decision} stayed the same.` : `The answer changed from ${b.decision} to ${h.decision}.`,
+    verdictSame ? `Its answer stayed ${h.decision}.` : `Its answer changed from ${b.decision} to ${h.decision}.`,
     "One observation per arm; not a measured lift.",
   ];
   return { changed: intentChanged || relChanged || !verdictSame, text: parts.join(" ") };

@@ -9,7 +9,7 @@ import type { Decision, Opportunity } from "@/data/types";
 import { armDiffSentence, inspect } from "@/components/opportunity/parts";
 import { bpsFor } from "@/lib/policy.ts";
 import { LiveHashV2, LiveSignatureV2 } from "./live";
-import { auctionKind, auctionSentence, capChip, capEvents, capWords, clockNote, DISCLAIMER, earlierSameQuestion, historyEffect, list, noFillSentence, tableBid, tieFacts, topicWords, winnerCaption } from "@/data/story";
+import { timesWord, auctionKind, auctionSentence, capChip, capEvents, capWords, clockNote, DISCLAIMER, earlierSameQuestion, historyEffect, list, noFillSentence, tableBid, tieFacts, topicWords, winnerCaption } from "@/data/story";
 import { asset } from "@/lib/paths";
 
 const L = Link as unknown as Ld.LinkC;
@@ -134,7 +134,7 @@ export function EligibilityPanel({ o }: { o: Opportunity }) {
             name: c.businessName,
             has: c.declaredConstraints,
             ok: !ex,
-            result: ex ? (ex.reason === "missing_constraint" ? `Missing ${ex.missing.map(plain).join(", ")}` : ex.reason === "frequency_cap" ? "Frequency cap: placed twice this session" : plain(ex.reason)) : "",
+            result: ex ? (ex.reason === "missing_constraint" ? `Missing ${ex.missing.map(plain).join(", ")}` : ex.reason === "frequency_cap" ? `Frequency cap: placed ${timesWord(run.policy.frequencyCap)} this session` : plain(ex.reason)) : "",
           };
         })}
       />

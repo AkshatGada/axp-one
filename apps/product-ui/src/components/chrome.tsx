@@ -11,7 +11,7 @@ export type NavCampaign = { slug: string; name: string; meta: string };
 
 const L = Link as unknown as Ld.LinkC;
 
-export function Chrome({ runId, runLabel, scope, runNote, otherRuns = [], opps, campaigns, verifyMeta, children }: { runId: string; runLabel: string; scope: string; runNote: string; otherRuns?: Array<{ label: string; href: string; note?: string }>; opps: NavOpp[]; campaigns: NavCampaign[]; verifyMeta: string; children: ReactNode }) {
+export function Chrome({ runId, runLabel, scope, runNote, navFoot, otherRuns = [], opps, campaigns, verifyMeta, children }: { runId: string; runLabel: string; scope: string; runNote: string; navFoot: string; otherRuns?: Array<{ label: string; href: string; note?: string }>; opps: NavOpp[]; campaigns: NavCampaign[]; verifyMeta: string; children: ReactNode }) {
   const path = usePathname() ?? "/";
   const is = (p: string) => path === p || path === p.replace(/\/$/, "");
   const starts = (p: string) => path.startsWith(p);
@@ -74,7 +74,7 @@ export function Chrome({ runId, runLabel, scope, runNote, otherRuns = [], opps, 
                 ],
               },
             ]}
-            foot="Opportunities are in story order. On the exchange clock, the mobile question ran first."
+            foot={navFoot}
           />
         }
       >
