@@ -90,7 +90,7 @@ export async function verifyChecks(run: ProductRun, opts: { onCheck?: (c: Check)
   // 2. Packets: sha256(canonical(packet)) for all 15 calls, and the packet carries this opportunity's question.
   for (const [i, o] of opps.entries())
     for (const [j, d] of o.decisions.entries()) {
-      await safe({ id: `packet-${d.slotId}`, group: "packet", label: `${o.n} · ${d.campaignId.replace("v3-", "")} · ${d.arm === "text_only" ? "baseline" : "history"}`, method: "recomputed", path: `opportunities[${i}].decisions[${j}].packet` }, async () => {
+      await safe({ id: `packet-${d.slotId}`, group: "packet", label: `Opportunity ${o.n}, ${d.campaignId === "v3-clearvault" ? "ClearVault" : d.campaignId === "v3-keyforge" ? "KeyForge" : "LeatherGuard"}, ${d.arm === "text_only" ? "baseline" : "with history"}`, method: "recomputed", path: `opportunities[${i}].decisions[${j}].packet` }, async () => {
         const h = await hashCanonical(d.packet);
         const p = d.packet as { state?: { opportunity?: { id?: string; taskText?: string } } };
         const bound = p.state?.opportunity?.id === o.opportunityId && p.state?.opportunity?.taskText === o.question;
@@ -128,8 +128,8 @@ export async function verifyChecks(run: ProductRun, opts: { onCheck?: (c: Check)
     await safe({ id: `signature-${o.n}`, group: "signature", label: `Opportunity ${o.n}: signed by ${run.publisher.publisherKeyId}`, method: "signature", path: `opportunities[${i}].receipt.signature` }, async () => {
       const keyOk = o.receipt!.fields.publisherKeyId === run.publisher.publisherKeyId;
       const r = await verifyEd25519(run.publisher.publicKeyPEM, o.receipt!.signature, `AXP.delivery.v1\n${canonical(o.receipt!.fields)}`);
-      if (!r.supported) return { ok: false, skip: true, expected: "valid", actual: "not checked", note: "This browser cannot verify Ed25519 signatures. The hash checks still ran." };
-      return { ok: r.ok && keyOk, expected: "valid", actual: r.ok ? "valid" : "invalid" };
+      if (!r.supported) return { ok: false, skip: true, expected: "valid", actual: "not checked", note: "This browser cannot verify Ed25519 signatures (checked with a known-good test key). The hash checks still ran." };
+      return { ok: r.ok && keyOk, expected: "valid", actual: r.ok ? "valid" : (r.error ?? "invalid"), note: r.ok ? undefined : r.error };
     });
 
   // 7. Linkage.
@@ -152,7 +152,7 @@ export async function verifyChecks(run: ProductRun, opts: { onCheck?: (c: Check)
   // 8. Cumulative arithmetic per voucher (cumulative = previous cumulative in the channel + increment).
   for (const [ci, ch] of run.channels.entries())
     for (const [vi, v] of ch.vouchers.entries())
-      await safe({ id: `cumulative-${ch.campaignId}-${v.sequence}`, group: "cumulative", label: `${ch.campaignId.replace("v3-", "")} voucher ${v.sequence}`, method: "arithmetic", path: `channels[${ci}].vouchers[${vi}]` }, async () => {
+      await safe({ id: `cumulative-${ch.campaignId}-${v.sequence}`, group: "cumulative", label: `${ch.campaignId === "v3-clearvault" ? "ClearVault" : "KeyForge"} voucher ${v.sequence}`, method: "arithmetic", path: `channels[${ci}].vouchers[${vi}]` }, async () => {
         const prev = vi === 0 ? BigInt(0) : BigInt(ch.vouchers[vi - 1].cumulativeAmountBaseUnits);
         const want = prev + BigInt(v.incrementBaseUnits);
         return { ok: want.toString() === v.cumulativeAmountBaseUnits && v.sequence === vi + 1, expected: `${prev} + ${v.incrementBaseUnits} = ${want}`, actual: v.cumulativeAmountBaseUnits };
@@ -160,7 +160,7 @@ export async function verifyChecks(run: ProductRun, opts: { onCheck?: (c: Check)
 
   // 9. Conservation per channel.
   for (const [ci, ch] of run.channels.entries())
-    await safe({ id: `conservation-${ch.campaignId}`, group: "conservation", label: `${ch.campaignId.replace("v3-", "")} channel`, method: "arithmetic", path: `channels[${ci}]` }, async () => {
+    await safe({ id: `conservation-${ch.campaignId}`, group: "conservation", label: `${ch.campaignId === "v3-clearvault" ? "ClearVault" : "KeyForge"} channel`, method: "arithmetic", path: `channels[${ci}]` }, async () => {
       const dep = BigInt(ch.depositBaseUnits), set = BigInt(ch.settledBaseUnits), ref = BigInt(ch.refundBaseUnits);
       const last = ch.vouchers[ch.vouchers.length - 1];
       const ok =
@@ -175,7 +175,7 @@ export async function verifyChecks(run: ProductRun, opts: { onCheck?: (c: Check)
   // 10. Bids: every recorded bid equals computeBid(levels) at the budget available then.
   for (const [i, o] of opps.entries())
     for (const [j, b] of o.auction.bids.entries())
-      await safe({ id: `bid-${o.n}-${b.campaignId}`, group: "bid", label: `Opportunity ${o.n}: ${b.campaignId.replace("v3-", "")} at levels ${b.levels}`, method: "policy", path: `opportunities[${i}].auction.bids[${j}]` }, async () => {
+      await safe({ id: `bid-${o.n}-${b.campaignId}`, group: "bid", label: `Opportunity ${o.n}: ${b.campaignId === "v3-clearvault" ? "ClearVault" : "KeyForge"} at levels ${b.levels}`, method: "policy", path: `opportunities[${i}].auction.bids[${j}]` }, async () => {
         const d = o.decisions.find((x) => x.campaignId === b.campaignId && x.arm === "history");
         if (!d) return { ok: false, expected: "a history decision", actual: "none" };
         const r = computeBid({ decision: d.decision, relevanceLevel: d.relevanceLevel, commercialIntentLevel: d.commercialIntentLevel }, { maxBidBaseUnits: b.maxBidBaseUnits }, b.availableCampaignBaseUnits, b.availableChannelBaseUnits, o.floorBaseUnits);

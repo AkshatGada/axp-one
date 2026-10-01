@@ -20,16 +20,22 @@ export function OpportunityProvider({ ids, deliveredFrom, children }: { ids: str
       const h = window.location.hash.replace("#", "");
       const i = ids.indexOf(h);
       if (i >= 0) setA(i);
+      else document.documentElement.removeAttribute("data-op-stage");
       if (new URLSearchParams(window.location.search).get("all") === "1") setAllS(true);
     };
     read();
     window.addEventListener("hashchange", read);
-    return () => window.removeEventListener("hashchange", read);
+    return () => {
+      window.removeEventListener("hashchange", read);
+      document.documentElement.removeAttribute("data-op-stage");
+      document.documentElement.classList.remove("op-all");
+    };
   }, [ids]);
   const setActive = useCallback(
     (i: number) => {
       const j = Math.max(0, Math.min(ids.length - 1, i));
       setA(j);
+      document.documentElement.dataset.opStage = ids[j];
       history.replaceState(history.state, "", `${window.location.pathname}${window.location.search}#${ids[j]}`);
       if (all) document.getElementById(`stage-${ids[j]}`)?.scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
     },
@@ -37,6 +43,7 @@ export function OpportunityProvider({ ids, deliveredFrom, children }: { ids: str
   );
   const setAll = useCallback((v: boolean) => {
     setAllS(v);
+    document.documentElement.classList.toggle("op-all", v);
     const u = new URL(window.location.href);
     if (v) u.searchParams.set("all", "1");
     else u.searchParams.delete("all");
@@ -61,14 +68,16 @@ export function OpportunityProvider({ ids, deliveredFrom, children }: { ids: str
 
 export function PipelineBar({ stages }: { stages: Ld.PipeStage[] }) {
   const { active, setActive, all, setAll } = use();
+  // In one-stage view, later stages stay unrevealed until reached.
+  const shown = stages.map((s, i) => (!all && i > active && s.status === "done" ? { ...s, status: "upcoming" as const } : s));
   return (
     <div className="ld-stack" style={{ gap: 10 }}>
-      <Ld.Pipeline stages={stages} active={active} onSelect={setActive} keys={false} />
+      <Ld.Pipeline stages={shown} active={active} onSelect={setActive} keys={false} />
       <div className="ld-between">
         <span className="ld-row" style={{ gap: 6 }}>
           <Ld.Key>J</Ld.Key>
           <Ld.Key>K</Ld.Key>
-          <span className="ld-caption">next and previous stage · stage {active + 1} of {stages.length}</span>
+          <span className="ld-caption op2-keyhint">next and previous stage, stage {active + 1} of {stages.length}</span>
         </span>
         <div className="ld-seg" role="group" aria-label="View">
           <button type="button" aria-pressed={!all} onClick={() => setAll(false)}>
@@ -88,7 +97,7 @@ export function StageView({ panels }: { panels: ReactNode[] }) {
   return (
     <div className="ld-stack" style={{ gap: 16 }}>
       {panels.map((p, i) => (
-        <div key={ids[i]} id={`stage-${ids[i]}`} className="op2-stage" hidden={!all && i !== active} data-active={i === active || undefined}>
+        <div key={ids[i]} id={`stage-${ids[i]}`} data-id={ids[i]} className="op2-stage" hidden={!all && i !== active} data-active={i === active || undefined}>
           <div key={!all && i === active ? `a${active}` : "s"} className={!all && i === active ? "ld-chart-reveal" : undefined}>
             {p}
           </div>
@@ -101,9 +110,21 @@ export function StageView({ panels }: { panels: ReactNode[] }) {
 /** The Sponsored slot in the app: waiting until the delivery stage in one-stage view; the card otherwise. */
 export function SlotV2({ card, awaiting }: { card: ReactNode; awaiting: ReactNode }) {
   const { active, all, deliveredFrom } = use();
-  if (all || active >= deliveredFrom) return <div key="card" className="ld-ad-enter">{card}</div>;
-  return <>{awaiting}</>;
+  const showCard = all || active >= deliveredFrom;
+  return (
+    <>
+      <div data-slot="card" hidden={!showCard} className={showCard ? "ld-ad-enter" : undefined}>
+        {card}
+      </div>
+      <div data-slot="await" hidden={showCard}>
+        {awaiting}
+      </div>
+    </>
+  );
 }
+
+/** Runs before first paint: applies ?all=1 and #stage so the server HTML does not jump on hydration. */
+export const OPP_BOOT = `(function(){try{var d=document.documentElement;if(new URLSearchParams(location.search).get("all")==="1")d.classList.add("op-all");var h=location.hash.slice(1);if(["moment","eligibility","evidence","decisions","auction","award","delivery","receipt","charge","nofill"].indexOf(h)>=0)d.setAttribute("data-op-stage",h);}catch(e){}})();`;
 
 export function StageNav({ total }: { total: number }) {
   const { active, setActive } = use();

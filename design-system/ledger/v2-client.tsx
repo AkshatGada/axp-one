@@ -2,7 +2,7 @@
 // Interactive Ledger v2 controls. Real state, no fake execution.
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
-export type PipeStage = { id: string; label: string; value: ReactNode; status: "done" | "skipped" };
+export type PipeStage = { id: string; label: string; value: ReactNode; status: "done" | "skipped" | "upcoming" };
 /** Pipeline stepper: Moment to Charge. Click or J/K to move; the parent decides what each stage shows. */
 export function Pipeline({ stages, active, onSelect, keys = true }: { stages: PipeStage[]; active?: number; onSelect?: (i: number) => void; keys?: boolean }) {
   const [own, setOwn] = useState(active ?? 0);
@@ -34,7 +34,7 @@ export function Pipeline({ stages, active, onSelect, keys = true }: { stages: Pi
             <span className="ld-pipe-ix">{s.status === "done" && i !== cur ? "✓" : i + 1}</span>
             {s.label}
           </span>
-          <span className="ld-pipe-v">{s.value}</span>
+          <span className="ld-pipe-v">{s.status === "upcoming" ? "Not reached yet" : s.value}</span>
         </button>
       ))}
     </div>

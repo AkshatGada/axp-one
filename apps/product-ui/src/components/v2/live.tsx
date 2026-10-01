@@ -10,12 +10,14 @@ export function LiveHashV2({ value, expected, label }: { value: unknown; expecte
   const [s, setS] = useState<"idle" | "pass" | "fail">("idle");
   useEffect(() => {
     let live = true;
-    hashCanonical(value).then((h) => live && setS(h === expected ? "pass" : "fail"));
+    hashCanonical(value)
+      .then((h) => live && setS(h === expected ? "pass" : "fail"))
+      .catch(() => live && setS("fail"));
     return () => {
       live = false;
     };
   }, [value, expected]);
-  return <Ld.Verified state={s}>{s === "fail" ? `${label}: mismatch` : label}</Ld.Verified>;
+  return <Ld.Verified state={s}>{s === "fail" ? `${label}: mismatch` : s === "idle" ? `${label.replace(/ recomputed here$/, "")}: checking` : label}</Ld.Verified>;
 }
 
 export function LiveSignatureV2({ fields, signature, pem }: { fields: unknown; signature: string; pem: string }) {
@@ -27,7 +29,7 @@ export function LiveSignatureV2({ fields, signature, pem }: { fields: unknown; s
       live = false;
     };
   }, [fields, signature, pem]);
-  return <Ld.Verified state={s}>{s === "recorded" ? "Ed25519 not supported in this browser" : s === "fail" ? "Signature invalid" : "Ed25519 signature verified here"}</Ld.Verified>;
+  return <Ld.Verified state={s}>{s === "recorded" ? "Ed25519 not supported in this browser" : s === "fail" ? "Signature invalid or key unreadable" : s === "idle" ? "Ed25519 signature: checking" : "Ed25519 signature verified here"}</Ld.Verified>;
 }
 
 export function LiveVerifyTile() {
@@ -37,7 +39,8 @@ export function LiveVerifyTile() {
     fetch(asset("/run.public.json"))
       .then((x) => x.json() as Promise<ProductRun>)
       .then((run) => verifyChecks(run))
-      .then((cs) => live && setR({ pass: cs.filter((c) => c.status === "pass").length, total: cs.length, fail: cs.filter((c) => c.status === "fail").length }));
+      .then((cs) => live && setR({ pass: cs.filter((c) => c.status === "pass").length, total: cs.length, fail: cs.filter((c) => c.status !== "pass").length }))
+      .catch(() => live && setR({ pass: 0, total: 0, fail: 1 }));
     return () => {
       live = false;
     };
@@ -46,9 +49,9 @@ export function LiveVerifyTile() {
     <Ld.Kpi
       tone="live"
       label="Verify"
-      value={r ? `${r.pass}/${r.total}` : ""}
-      context={r ? "Recomputed in this browser just now" : "Recomputing hashes and signatures here"}
-      chip={r ? <Ld.Tag tone={r.fail ? "danger" : "success"} dot>{r.fail ? `${r.fail} failed` : "Passing"}</Ld.Tag> : null}
+      value={r ? `${r.pass}/${r.total}` : "48"}
+      context={r ? "Checks run in your browser on the public file" : "Checks not run yet"}
+      chip={r ? <Ld.Tag tone={r.fail ? "danger" : "success"} dot>{r.fail ? `${r.fail} not passing` : "Passing"}</Ld.Tag> : <Ld.Tag dot>Not run yet</Ld.Tag>}
     />
   );
 }

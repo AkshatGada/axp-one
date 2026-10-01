@@ -64,8 +64,13 @@ export function InspectorProvider({ children, verifyHref = "/verify/", initial }
       if ((e.key === "i" || e.key === "I") && !e.metaKey && !e.ctrlKey && !e.altKey) {
         if (current) close();
         else {
-          const first = registry.current.values().next().value as InspectPayload | undefined;
-          if (first) open(first);
+          const visible = (el: Element) => (el as HTMLElement).offsetParent !== null;
+          const primary = Array.from(document.querySelectorAll(".lg-inspect-btn[data-primary]")).find(visible) as HTMLElement | undefined;
+          if (primary) primary.click();
+          else {
+            const first = registry.current.values().next().value as InspectPayload | undefined;
+            if (first) open(first);
+          }
         }
       }
     };
@@ -119,16 +124,12 @@ export function InspectorDrawer({ payload, onClose, verifyHref, staticOpen }: { 
                     <div className="lg-inspector-hash-top">
                       <span className="lg-label">{h.label}</span>
                       {h.recomputable ? (
-                        <a className="lg-check" data-state="pass" href={verifyHref} style={{ textDecoration: "none" }}>
-                          <i className="lg-check-box" aria-hidden>
-                            ✓
-                          </i>
-                          <span>Recomputable, see Verify</span>
+                        <a className="ld-hashtag" data-kind="recomputable" href={verifyHref}>
+                          Recomputable on Verify
                         </a>
                       ) : (
-                        <span className="lg-check" data-state="recorded">
-                          <i className="lg-check-box" aria-hidden />
-                          <span>Recorded hash only</span>
+                        <span className="ld-hashtag" data-kind="recorded">
+                          Recorded hash only, not checked here
                         </span>
                       )}
                     </div>
@@ -150,14 +151,14 @@ export function InspectorDrawer({ payload, onClose, verifyHref, staticOpen }: { 
 }
 
 /** Opens the inspector with a payload; registers the payload for ?inspect= deep links. */
-export function InspectButton({ payload, children = "Inspect", variant }: { payload: InspectPayload; children?: ReactNode; variant?: "text" }) {
+export function InspectButton({ payload, children = "Inspect", variant, primary }: { payload: InspectPayload; children?: ReactNode; variant?: "text"; primary?: boolean }) {
   const ctx = useContext(InspectorCtx);
   useEffect(() => {
     ctx?.register(payload);
   }, [ctx, payload]);
   const active = ctx?.current?.key === payload.key;
   return (
-    <button type="button" className="lg-inspect-btn" data-variant={variant} data-active={active || undefined} onClick={() => ctx?.open(payload)} aria-haspopup="dialog">
+    <button type="button" className="lg-inspect-btn" data-variant={variant} data-primary={primary || undefined} data-active={active || undefined} onClick={() => ctx?.open(payload)} aria-haspopup="dialog">
       {children}
     </button>
   );

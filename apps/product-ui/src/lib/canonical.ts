@@ -53,17 +53,42 @@ export function pemToDer(pem: string): Uint8Array {
 
 export type Ed25519Result = { ok: boolean; supported: boolean; error?: string };
 
-/** Verify an Ed25519 signature over UTF-8 text with an SPKI PEM public key. */
+// A fixed, known-good Ed25519 test vector (generated for this purpose; unrelated to the run). It tells a browser
+// that cannot do Ed25519 apart from a publisher key that is unreadable, which must count as a failure.
+const PROBE = {
+  pem: "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAuZvnB6IA/v+wOOMBmhl+ZRWwrKroKU+EKhP0nxFe1rk=\n-----END PUBLIC KEY-----\n",
+  msg: "axp.one ed25519 support probe",
+  sig: "26FguLL/p0VmV0J/KkA8CEP2do9EShLPvcT9ik3c7a2ovzk+TOH13DdJDT6GeFXoW/SfJfDmEicL7b7QidzWDg==",
+};
+let probeResult: Promise<boolean> | null = null;
+/** True when this browser (or Node) can import an Ed25519 SPKI key and verify a known-good signature. */
+export function ed25519Supported(): Promise<boolean> {
+  if (!probeResult)
+    probeResult = (async () => {
+      try {
+        const key = await subtle().importKey("spki", pemToDer(PROBE.pem) as BufferSource, { name: "Ed25519" }, false, ["verify"]);
+        return await subtle().verify({ name: "Ed25519" }, key, base64ToBytes(PROBE.sig) as BufferSource, new TextEncoder().encode(PROBE.msg) as BufferSource);
+      } catch {
+        return false;
+      }
+    })();
+  return probeResult;
+}
+
+/** Verify an Ed25519 signature over UTF-8 text with an SPKI PEM public key.
+ *  supported:false only when the environment itself cannot do Ed25519; an unreadable key is a failure. */
 export async function verifyEd25519(publicKeyPEM: string, signatureB64: string, message: string): Promise<Ed25519Result> {
+  const supported = await ed25519Supported();
+  if (!supported) return { ok: false, supported: false, error: "Ed25519 unavailable in this environment" };
   let key: CryptoKey;
   try {
     key = await subtle().importKey("spki", pemToDer(publicKeyPEM) as BufferSource, { name: "Ed25519" }, false, ["verify"]);
   } catch (e) {
-    return { ok: false, supported: false, error: e instanceof Error ? e.message : String(e) };
+    return { ok: false, supported: true, error: `publisher key unreadable: ${e instanceof Error ? e.message : String(e)}` };
   }
   try {
     const ok = await subtle().verify({ name: "Ed25519" }, key, base64ToBytes(signatureB64) as BufferSource, new TextEncoder().encode(message) as BufferSource);
-    return { ok, supported: true };
+    return { ok, supported: true, ...(ok ? {} : { error: "signature does not match" }) };
   } catch (e) {
     return { ok: false, supported: true, error: e instanceof Error ? e.message : String(e) };
   }

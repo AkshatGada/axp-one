@@ -27,7 +27,7 @@ export default function CampaignsPage() {
       <Ld.PageBar
         title="Campaigns"
         meta={<Ld.Pv kind="fictional" label="Fictional advertisers" />}
-        sub="Three fictional advertisers joined this run. What they sell are declarations, not verified product facts. Each declared, got one version approved, accepted the limits and, to bid, funded a Solana payment channel. Then the run froze them."
+        sub="Three fictional advertisers joined this run. What they sell are declarations, not verified product facts. Each declared, got one version approved, accepted the limits and, to bid, funded a payment channel on the hosted Solana sandbox. Then the run froze them."
         actions={
           <Ld.Button href="/try/" Link={L}>
             Draft a campaign (synthetic)
@@ -43,7 +43,7 @@ export default function CampaignsPage() {
             { key: "e", head: "Eligible", num: true, cell: (s) => `${s.eligible} of 4` },
             { key: "calls", head: "Agent calls", num: true, cell: (s) => s.calls },
             { key: "w", head: "Wins", num: true, cell: (s) => s.wins },
-            { key: "sp", head: "Spend vs cap", cell: (s) => <Ld.Progress value={s.spend} max={s.cap} label={`${usdc(s.spend)} of ${usdc(s.cap)}`} /> },
+            { key: "sp", head: "Spend vs cap", cell: (s) => <Ld.Progress value={s.spend} max={s.cap} label={`${usdc(s.spend)} of ${usdc(s.cap)} USDC`} /> },
           ]}
           rows={stats}
         />
@@ -68,8 +68,8 @@ export default function CampaignsPage() {
               </Link>,
               <div key={`${c.slug}-1`}>{stage("Declared", true, `${c.declaredConstraints.length} capabilities: ${c.declaredConstraints.map(plain).join(", ")}`)}</div>,
               <div key={`${c.slug}-2`}>{stage("Approved", c.approved, `Version ${c.version}. Editing makes a new version; approved versions never change.`)}</div>,
-              <div key={`${c.slug}-3`}>{stage("Limits set", true, `Max bid ${usdc(c.maxBidBaseUnits)}, cap ${usdc(c.budgetCapBaseUnits)}, twice per session`)}</div>,
-              <div key={`${c.slug}-4`}>{ch ? stage("Funded", true, `${usdc(ch.depositBaseUnits)} test USDC locked in a Solana payment channel`) : stage("Not funded", "pending", "No channel opened, so it could never be charged", <Ld.Tag tone="dashed">Unfunded</Ld.Tag>)}</div>,
+              <div key={`${c.slug}-3`}>{stage("Limits set", true, `Max bid ${usdc(c.maxBidBaseUnits)} USDC, cap ${usdc(c.budgetCapBaseUnits)} USDC, at most twice per session`)}</div>,
+              <div key={`${c.slug}-4`}>{ch ? stage("Funded", true, `${usdc(ch.depositBaseUnits)} USDC (test) locked in a payment channel on the hosted Solana sandbox`) : stage("Not funded", "pending", "No channel opened, so it could never be charged", <Ld.Tag tone="dashed">Unfunded</Ld.Tag>)}</div>,
               <div key={`${c.slug}-5`}>{stage("Frozen", true, "Locked with the other two before the first question")}</div>,
             ];
           })}

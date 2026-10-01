@@ -27,7 +27,7 @@ export default function PublisherPage() {
         <Ld.Kpi label="Opportunities offered" value={run.opportunities.length} context="One Sponsored slot per answer" />
         <Ld.Kpi label="Filled" value={`${filled.length} of ${run.opportunities.length}`} context="1 no fill by rule" />
         <Ld.Kpi label="Signed receipts" value={filled.length} context="Each verified in your browser" />
-        <Ld.Kpi label="Earned" value={usdc(run.totals.paidBaseUnits)} context="Test USDC, paid at channel close" chip={<Ld.Tag tone="brand">Sandbox</Ld.Tag>} />
+        <Ld.Kpi label="Earned" value={usdc(run.totals.paidBaseUnits)} unit="USDC" context="Test USDC, paid at channel close on the hosted Solana sandbox" />
       </div>
       <div className="ov2-grid">
         <Ld.Panel title="Fill by opportunity" flush>
@@ -43,7 +43,7 @@ export default function PublisherPage() {
             rows={run.opportunities}
           />
         </Ld.Panel>
-        <Ld.Panel title="Payout by channel" sub="Solana payment channels, hosted sandbox">
+        <Ld.Panel title="Payout by channel" sub="Payment channels on the hosted Solana sandbox, test USDC">
           <div className="ld-stack">
             {run.channels.map((ch) => (
               <div key={ch.channelId} className="ld-between">

@@ -3,9 +3,10 @@ import type { ReactNode } from "react";
 import "@axp/design-system/steel.css";
 import "@axp/design-system/ledger.css";
 import "./app.css";
+import { polySans, polySansMono, polySansWide } from "./fonts";
 
 export const metadata: Metadata = {
-  title: { default: "axp.one MVP: one recorded run", template: "%s · axp.one MVP" },
+  title: { default: "axp.one MVP: one recorded run", template: "%s, axp.one MVP" },
   description: "Explore one recorded run of an ad exchange inside an AI app: agent decisions, a sealed auction, a disclosed Sponsored card, a signed receipt and test USDC settled on a hosted Solana sandbox.",
   robots: { index: false, follow: false },
 };
@@ -14,7 +15,7 @@ export const viewport: Viewport = { themeColor: "#f5f4f0", width: "device-width"
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning className={`${polySans.variable} ${polySansWide.variable} ${polySansMono.variable}`}>
       <body>{children}</body>
     </html>
   );

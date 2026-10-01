@@ -493,3 +493,18 @@ a.ld-kpi:hover { border-color: var(--ld-border-2); box-shadow: var(--ld-shadow-2
 .ld .lg-check[data-state="pass"] .lg-check-box { background: var(--ld-success); border-color: var(--ld-success); }
 .ld .lg-key { border-radius: var(--ld-r-xs); }
 @media (max-width: 899px) { .ld .lg-inspector { top: auto; left: 8px; right: 8px; width: auto; height: min(78vh, 680px); } }
+
+.ld .ld-kpi-unit { font-size: 13px; font-weight: 500; color: var(--ld-text-2); }
+.ld-pipe-step[data-status="upcoming"] .ld-pipe-ix { background: var(--ld-panel); box-shadow: inset 0 0 0 1px var(--ld-border-2); color: var(--ld-text-3); }
+.ld-pipe-step[data-status="upcoming"] .ld-pipe-top { color: var(--ld-text-3); }
+.ld-pipe-step[data-status="upcoming"] .ld-pipe-v { color: var(--ld-text-3); }
+.ld-chart-cap { stroke: var(--ld-text-2); stroke-width: 1; stroke-dasharray: 4 3; }
+.ld .ld-chart-scroll { overflow-x: auto; }
+.ld .ld-chart-scroll > svg { min-width: 860px; }
+/* Inline glossary (v1 Term) restyled for the product */
+.ld .lg-term { text-decoration: underline dotted var(--ld-text-3); text-underline-offset: 3px; cursor: help; }
+.ld .lg-term-pop { border-radius: var(--ld-r-sm); background: var(--ld-text); box-shadow: var(--ld-shadow-3); font-size: 13px; font-weight: 400; color: #fff; }
+.ld .lg-term-pop strong { color: #fff; }
+.ld .ld-hashtag { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: var(--ld-r-full); font-size: 12px; font-weight: 500; white-space: nowrap; }
+.ld .ld-hashtag[data-kind="recomputable"] { background: var(--ld-accent-wash); color: var(--brand-deep); text-decoration: none; }
+.ld .ld-hashtag[data-kind="recorded"] { background: var(--ld-neutral-wash); color: var(--ld-neutral); }

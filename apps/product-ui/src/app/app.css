@@ -1,3 +1,5 @@
+/* Fonts: next/font faces (preloaded, metric-matched fallback) take over the Steel families in the app. */
+:root { --font-body: var(--nf-body), system-ui, sans-serif; --font-display: var(--nf-display), var(--nf-body), system-ui, sans-serif; --font-mono: var(--nf-mono), ui-monospace, monospace; }
 /* App-level layout for the MVP explorer. Components and tokens live in design-system/ledger. */
 
 /* Opportunity screen */
@@ -244,10 +246,45 @@
 .pr-frame.ld .pr-brand { font-size: 24px; }
 .pr-frame.ld .pr-title { font-family: var(--font-body); font-weight: 500; font-size: 24px; letter-spacing: -.01em; }
 .pr-frame.ld .pr-beatn { color: var(--brand-deep); font-size: 15px; }
-.pr-frame.ld .pr-view { display: grid; align-content: center; padding: 24px 48px 16px; zoom: 1.4; }
+.pr-frame.ld .pr-view { display: grid; align-content: center; padding: 28px 44px 24px; zoom: 1; overflow: hidden; }
+.pr-fit { min-width: 0; }
 .pr2-split { display: grid; gap: 40px; align-items: start; }
 .pr2-lede { display: grid; gap: 14px; align-content: center; min-height: 520px; }
 .pr2-big { margin: 0 0 14px; font-family: var(--font-display); font-weight: 400; font-size: 38px; line-height: 1.15; letter-spacing: -.025em; color: var(--ld-text); max-width: 18ch; }
 .pr-frame.ld .ld-chat-a { -webkit-line-clamp: 6; }
 .pr2-lede .ld-pv { justify-self: start; width: max-content; }
 .ld .ld-callout { align-content: start; }
+
+/* First-paint stage selection (OPP_BOOT) so hydration does not shift the layout */
+html.op-all .op2-stage[hidden] { display: block !important; }
+html.op-all [data-slot="card"][hidden] { display: block !important; }
+html.op-all [data-slot="await"] { display: none !important; }
+html[data-op-stage]:not(.op-all) .op2-stage { display: none !important; }
+html[data-op-stage="moment"]:not(.op-all) .op2-stage[data-id="moment"],
+html[data-op-stage="eligibility"]:not(.op-all) .op2-stage[data-id="eligibility"],
+html[data-op-stage="evidence"]:not(.op-all) .op2-stage[data-id="evidence"],
+html[data-op-stage="decisions"]:not(.op-all) .op2-stage[data-id="decisions"],
+html[data-op-stage="auction"]:not(.op-all) .op2-stage[data-id="auction"],
+html[data-op-stage="award"]:not(.op-all) .op2-stage[data-id="award"],
+html[data-op-stage="delivery"]:not(.op-all) .op2-stage[data-id="delivery"],
+html[data-op-stage="receipt"]:not(.op-all) .op2-stage[data-id="receipt"],
+html[data-op-stage="charge"]:not(.op-all) .op2-stage[data-id="charge"],
+html[data-op-stage="nofill"]:not(.op-all) .op2-stage[data-id="nofill"] { display: block !important; }
+html[data-op-stage="delivery"] [data-slot="card"][hidden],
+html[data-op-stage="receipt"] [data-slot="card"][hidden],
+html[data-op-stage="charge"] [data-slot="card"][hidden] { display: block !important; }
+html[data-op-stage="delivery"] [data-slot="await"],
+html[data-op-stage="receipt"] [data-slot="await"],
+html[data-op-stage="charge"] [data-slot="await"] { display: none !important; }
+@media (hover: none) { .op2-keyhint { display: none; } }
+.vf2-kpis { min-height: 130px; }
+.vf2-tamper[data-tampered] { box-shadow: inset 3px 0 0 var(--ld-danger); }
+.ov2-stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ld-gap); }
+.ov2-channels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 32px; }
+@media (max-width: 900px) { .ov2-channels { grid-template-columns: minmax(0, 1fr); } }
+
+/* Present: absolute centring at any viewport; small screens get a card instead */
+.lg-present > .pr-frame { position: absolute; left: 50%; top: 50%; transform-origin: center center; }
+.pr-small { min-height: 100vh; display: grid; place-items: center; padding: 16px; background: var(--ld-canvas); }
+.vf2 .ld-table { table-layout: fixed; }
+.vf2 .ld-table th:nth-child(2) { width: 42%; }

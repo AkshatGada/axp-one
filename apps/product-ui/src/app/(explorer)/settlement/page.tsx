@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CopyHash, InspectButton, Ld } from "@axp/design-system/ledger";
+import { CopyHash, InspectButton, Ld, Term } from "@axp/design-system/ledger";
+import { GLOSSARY } from "@/data/glossary";
 import { campaign, nameOf, run, usdc } from "@/data/select";
 import { txPayload } from "@/components/money";
 import type { Channel, ChainTx } from "@/data/types";
 
-export const metadata: Metadata = { title: "Solana settlement" };
+export const metadata: Metadata = { title: "Hosted Solana sandbox settlement" };
 const L = Link as unknown as Ld.LinkC;
 const lam = (v: string | number) => Number(v).toLocaleString("en-US");
 
@@ -15,7 +16,7 @@ function TxRow({ ch, t }: { ch: Channel; t: ChainTx }) {
       <td>
         <span className="ld-stack" style={{ gap: 2 }}>
           <span className="ld-strong">{t.kind === "open" ? "Open channel" : "Close channel"}</span>
-          <span className="ld-caption">Solana transaction, slot {t.slot.toLocaleString("en-US")}</span>
+          <span className="ld-caption">Solana sandbox transaction, slot {t.slot.toLocaleString("en-US")}</span>
         </span>
       </td>
       <td>
@@ -41,16 +42,16 @@ export default function SettlementPage() {
   return (
     <>
       <Ld.PageBar
-        title="Solana payment channels"
+        title="Payment channels on a hosted Solana sandbox"
         meta={<Ld.Tag tone="success" dot>Both finalized</Ld.Tag>}
-        sub="Each funded advertiser locked a 0.020 test USDC deposit in its own Solana payment channel on a hosted sandbox. Every accepted delivery advanced an off-chain voucher. One close per channel paid the publisher the last authorized total and refunded the rest. No transfer per ad."
+        sub={<>Each funded advertiser locked a 0.020 USDC (test) deposit in its own <Term title={GLOSSARY.channel.term} def={GLOSSARY.channel.def}>payment channel</Term> on a <Term title={GLOSSARY.solanaSandbox.term} def={GLOSSARY.solanaSandbox.def}>hosted Solana sandbox</Term>. Every accepted delivery advanced an off-chain <Term title={GLOSSARY.voucher.term} def={GLOSSARY.voucher.def}>voucher</Term>. One close per channel paid the publisher the last authorized total and refunded the rest. No transfer per ad.</>}
       />
       <div className="ld-kpis">
-        <Ld.Kpi label="Deposited" value={usdc(run.totals.depositsBaseUnits)} context="Test USDC across 2 channels" />
-        <Ld.Kpi label="Paid to the publisher" value={usdc(run.totals.paidBaseUnits)} context="Equals the 3 accepted charges" />
-        <Ld.Kpi label="Refunded" value={usdc(run.totals.refundedBaseUnits)} context="Returned to the payer at close" />
-        <Ld.Kpi label="Solana transactions" value={run.chainTxs.length} context="2 opens, 2 closes, all finalized" />
-        <Ld.Kpi label="Fees and new rent" value={`${(Number(run.fees.grossFeeAndRentLamports) / 1e6).toFixed(2)}M`} context={`lamports, cap ${(Number(run.fees.capLamports) / 1e6).toFixed(0)}M`} chip={<Ld.Tag tone={capOk ? "success" : "danger"} dot>{capOk ? "Within cap" : "Over cap"}</Ld.Tag>} />
+        <Ld.Kpi label="Deposited" value={usdc(run.totals.depositsBaseUnits)} unit="USDC" context="Test USDC across 2 channels" />
+        <Ld.Kpi label="Paid to the publisher" value={usdc(run.totals.paidBaseUnits)} unit="USDC" context="Equals the 3 accepted charges" />
+        <Ld.Kpi label="Refunded" value={usdc(run.totals.refundedBaseUnits)} unit="USDC" context="Returned to the payer at close" />
+        <Ld.Kpi label="Sandbox transactions" value={run.chainTxs.length} context="2 opens, 2 closes, all finalized" />
+        <Ld.Kpi label="Fees and new rent" value={lam(run.fees.grossFeeAndRentLamports)} unit="lamports" context={`Test SOL, cap ${lam(run.fees.capLamports)}`} chip={<Ld.Tag tone={capOk ? "success" : "danger"} dot>{capOk ? "Within cap" : "Over cap"}</Ld.Tag>} />
       </div>
 
       {run.channels.map((ch) => {
@@ -60,7 +61,7 @@ export default function SettlementPage() {
           <section key={ch.channelId} id={c.slug} className="st2-channel">
             <Ld.Panel
               title={`${c.businessName}`}
-              sub="Solana payment channel · hosted sandbox · test USDC"
+              sub="Payment channel on the hosted Solana sandbox, test USDC"
               actions={
                 <>
                   <Ld.Pv kind="fictional" label="Fictional advertiser" />
@@ -82,9 +83,9 @@ export default function SettlementPage() {
               <div className="st2-cols">
                 <div className="ld-stack" style={{ gap: 14 }}>
                   <div className="ld-cols-3">
-                    <Ld.Stat label="Deposit" value={usdc(ch.depositBaseUnits)} caption="Locked at open" />
-                    <Ld.Stat label="Paid out" value={usdc(ch.settledBaseUnits)} caption="Last voucher total" />
-                    <Ld.Stat label="Refunded" value={usdc(ch.refundBaseUnits)} caption="Back to the payer" />
+                    <Ld.Stat label="Deposit" value={`${usdc(ch.depositBaseUnits)} USDC`} caption="Locked at open" />
+                    <Ld.Stat label="Paid out" value={`${usdc(ch.settledBaseUnits)} USDC`} caption="Last voucher total" />
+                    <Ld.Stat label="Refunded" value={`${usdc(ch.refundBaseUnits)} USDC`} caption="Back to the payer" />
                   </div>
                   <Ld.BalanceBar
                     total={Number(ch.depositBaseUnits)}
@@ -95,21 +96,21 @@ export default function SettlementPage() {
                     ]}
                   />
                   <div className="ld-stack" style={{ gap: 6 }}>
-                    <span className="ld-label">In order, without timestamps</span>
+                    <span className="ld-label">In order (no clock times)</span>
                     <div className="st2-seq">
-                      <span data-chain>Open on Solana · deposit {usdc(ch.depositBaseUnits)}</span>
+                      <span data-chain>Open on the sandbox: {usdc(ch.depositBaseUnits)} USDC locked</span>
                       {ch.vouchers.map((v) => (
                         <span key={v.sequence} id={`voucher-${c.slug}-${v.sequence}`}>
-                          Charge {v.sequence} → voucher {v.sequence}: {usdc(v.cumulativeAmountBaseUnits)} in total
+                          Charge {v.sequence}, voucher {v.sequence}: {usdc(v.cumulativeAmountBaseUnits)} USDC in total
                         </span>
                       ))}
-                      <span data-chain>Close on Solana · {usdc(ch.settledBaseUnits)} paid, {usdc(ch.refundBaseUnits)} back</span>
+                      <span data-chain>Close on the sandbox: {usdc(ch.settledBaseUnits)} paid, {usdc(ch.refundBaseUnits)} back</span>
                     </div>
                   </div>
                 </div>
                 <div className="ld-stack" style={{ gap: 6 }}>
-                  <span className="ld-label">Cumulative authorization, against the {usdc(cap)} cap</span>
-                  <Ld.StepChart max={cap} format={(x) => usdc(x)} points={ch.vouchers.map((v) => ({ key: String(v.sequence), label: `#${v.sequence} · opp ${v.opportunityN}`, value: Number(v.cumulativeAmountBaseUnits) }))} />
+                  <span className="ld-label">Cumulative authorization in USDC, against the {usdc(ch.depositBaseUnits)} deposit (campaign cap {usdc(cap)} as a line)</span>
+                  <Ld.StepChart max={Number(ch.depositBaseUnits)} cap={cap} format={(x) => usdc(x)} points={ch.vouchers.map((v) => ({ key: String(v.sequence), label: `Voucher ${v.sequence}, opp ${v.opportunityN}`, value: Number(v.cumulativeAmountBaseUnits) }))} />
                   {ch.vouchers.length > 1 ? <span className="ld-caption">Voucher 2 replaces voucher 1: {usdc(ch.vouchers[1].cumulativeAmountBaseUnits)} in total, not {usdc(ch.vouchers[0].cumulativeAmountBaseUnits)} plus {usdc(ch.vouchers[1].cumulativeAmountBaseUnits)}.</span> : null}
                 </div>
               </div>
@@ -173,17 +174,21 @@ export default function SettlementPage() {
         </Ld.Panel>
       </div>
 
-      <Ld.Panel title="Solana transactions by slot" sub="Sandbox clock. These block times are not aligned with the exchange clock on the Overview and must not be compared with it.">
+      <Ld.Panel title="Sandbox transactions in order" sub="Ordered by slot on the hosted Solana sandbox. The sandbox keeps its own clock, so no clock times are shown here; they are in each transaction's Inspector record.">
         <Ld.Timeline
-          rows={run.chainTxs.map((t) => ({
+          rows={run.chainTxs.map((t, i) => ({
             key: t.signature,
-            time: `slot ${t.slot.toLocaleString("en-US")}`,
+            time: `${i + 1}`,
             what: `${t.kind === "open" ? "Open" : "Close"} ${nameOf(t.campaignId)}'s channel`,
-            detail: `Solana transaction · ${t.finality} · ${new Date(t.blockTime * 1000).toISOString().slice(11, 19)} sandbox clock`,
+            detail: `Slot ${t.slot.toLocaleString("en-US")}, ${t.finality}`,
             tone: t.kind === "close" ? ("brand" as const) : ("ink" as const),
           }))}
         />
       </Ld.Panel>
+
+      <Ld.Callout title="Why fees are larger than the ad spend here">
+        Fees and <Term title={GLOSSARY.rent.term} def={GLOSSARY.rent.def}>rent</Term> are paid in test SOL, measured in <Term title={GLOSSARY.lamports.term} def={GLOSSARY.lamports.def}>lamports</Term>, and never mixed with USDC. Most rent is reclaimed when a channel closes. One open and one close are shared by every delivery in a channel, which is why channels exist: the per-ad cost is a signed voucher, not a transaction.
+      </Ld.Callout>
 
       <Ld.Callout title="Funding is not settlement">
         An approved one-time sandbox faucet top-up funded the payer. Absolute wallet balances include funds from before this run, so only each transaction's own changes are shown. Hosted Solana sandbox, not devnet or mainnet.

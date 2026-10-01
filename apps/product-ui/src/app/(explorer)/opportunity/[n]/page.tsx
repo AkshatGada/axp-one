@@ -6,7 +6,7 @@ import { nameOf, opportunity, run } from "@/data/select";
 import { inspect } from "@/components/opportunity/parts";
 import { outcomeTag, shortLabel } from "@/components/v2/derive";
 import { STAGES, pipeStages, stagePanels } from "@/components/v2/stages";
-import { OpportunityProvider, PipelineBar, SlotV2, StageNav, StageView } from "@/components/v2/OpportunityStages";
+import { OPP_BOOT, OpportunityProvider, PipelineBar, SlotV2, StageNav, StageView } from "@/components/v2/OpportunityStages";
 
 const L = Link as unknown as Ld.LinkC;
 
@@ -29,7 +29,8 @@ export default async function OpportunityPage({ params }: { params: Promise<{ n:
   const prev = num > 1 ? num - 1 : null;
   const next = num < run.opportunities.length ? num + 1 : null;
   return (
-    <OpportunityProvider ids={STAGES.map((s) => s.id)} deliveredFrom={6}>
+    <OpportunityProvider ids={noFill ? ["moment", "eligibility", "nofill"] : STAGES.map((s) => s.id)} deliveredFrom={6}>
+      <script dangerouslySetInnerHTML={{ __html: OPP_BOOT }} />
       <Ld.PageBar
         crumbs={<Ld.Breadcrumbs Link={L} items={[{ label: "Opportunities", href: "/opportunity/1/" }, { label: `${o.n} of ${run.opportunities.length}` }]} />}
         title={shortLabel(o)}
@@ -97,7 +98,7 @@ export default async function OpportunityPage({ params }: { params: Promise<{ n:
           <StageView panels={stagePanels(o)} />
           <div className="ld-between">
             <span className="ld-caption">Recorded replay. Timings are as recorded; nothing re-executes.</span>
-            <StageNav total={STAGES.length} />
+            <StageNav total={noFill ? 3 : STAGES.length} />
           </div>
         </div>
       </div>

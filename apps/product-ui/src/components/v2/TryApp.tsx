@@ -103,7 +103,7 @@ export function TryApp({ opps, presets }: { opps: TryOpp[]; presets: Preset[] })
       </Ld.Panel>
       <div className="ld-stack" style={{ gap: 12 }}>
         {rows.map(({ o, r, lv, bid, missing }) => (
-          <Ld.Panel key={o.n} title={`${o.n}. ${o.label}`} sub={`Requires ${o.required.map(plain).join(" and ")} · floor ${formatBaseUnits(o.floor)}`} actions={r ? <Ld.Tag tone="dashed">Excluded</Ld.Tag> : <Ld.Tag tone="brand">May compete</Ld.Tag>}>
+          <Ld.Panel key={o.n} title={`${o.n}. ${o.label}`} sub={`Requires ${o.required.map(plain).join(" and ")}; floor ${formatBaseUnits(o.floor)} USDC`} actions={r ? <Ld.Tag tone="dashed">Excluded</Ld.Tag> : <Ld.Tag tone="brand">May compete</Ld.Tag>}>
             {r ? (
               <span className="ld-secondary" style={{ color: "var(--ld-text)" }}>
                 {reasonWords[r] ?? r}
@@ -114,7 +114,7 @@ export function TryApp({ opps, presets }: { opps: TryOpp[]; presets: Preset[] })
                 <div className="ld-row" style={{ gap: 16 }}>
                   {(["r", "i"] as const).map((k) => (
                     <label key={k} className="ld-row" style={{ gap: 8 }}>
-                      <span className="ld-label">{k === "r" ? "Relevance level" : "Intent level"}</span>
+                      <span className="ld-label">{k === "r" ? "Relevance level, of 3" : "Intent level, of 3"}</span>
                       <select className="ld-select" style={{ width: 70, height: 30 }} value={lv[k]} onChange={(e) => setLevels((s) => ({ ...s, [o.n]: { ...s[o.n], [k]: Number(e.target.value), borrowed: false } }))}>
                         {[0, 1, 2, 3].map((x) => (
                           <option key={x} value={x}>
@@ -130,9 +130,9 @@ export function TryApp({ opps, presets }: { opps: TryOpp[]; presets: Preset[] })
                 <div className="ld-between">
                   <span className="ld-secondary" style={{ color: "var(--ld-text)" }}>
                     {bid && bid.status === "bid"
-                      ? `Bid table: ${formatBaseUnits(maxBid)} × ${(bid.bps ?? 0) / 100}% = ${formatBaseUnits(bid.amountBaseUnits)} test USDC`
+                      ? `Bid table: ${formatBaseUnits(maxBid)} USDC × ${(bid.bps ?? 0) / 100}% = ${formatBaseUnits(bid.amountBaseUnits)} USDC (test)`
                       : bid
-                        ? `No bid: ${bid.reason === "agent_skip" ? "levels below 2 mean the agent would skip" : bid.reason.replace(/_/g, " ")}`
+                        ? `No bid: ${bid.reason === "agent_skip" ? "the bid rule needs at least 2 and 2" : bid.reason.replace(/_/g, " ")}`
                         : "No bid"}
                   </span>
                   {o.recordedWinner ? <span className="ld-caption">Recorded winning price here: {o.recordedWinner}</span> : null}
@@ -141,7 +141,7 @@ export function TryApp({ opps, presets }: { opps: TryOpp[]; presets: Preset[] })
             )}
           </Ld.Panel>
         ))}
-        <span className="ld-caption">Not simulated: agent judgment, evidence retrieval, auction against other bids, awards, delivery, receipts, charges and settlement. To run the real stack locally: npm run demo:v3.</span>
+        <span className="ld-caption">Not simulated: agent judgment, evidence retrieval, auction against other bids, awards, delivery, receipts, charges and settlement. The same exchange code runs locally as a synthetic laboratory, with model providers off by default: npm run demo:v3.</span>
       </div>
     </div>
   );

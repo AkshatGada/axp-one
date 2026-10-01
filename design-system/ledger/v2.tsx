@@ -182,7 +182,7 @@ export function Panel({ title, sub, actions, children, flush, foot, raised, id }
   );
 }
 
-export function Kpi({ label, value, context, delta, tone, href, Link = A, chip, spark }: { label: ReactNode; value: ReactNode; context?: ReactNode; delta?: ReactNode; tone?: "live"; href?: string; Link?: LinkC; chip?: ReactNode; spark?: ReactNode }) {
+export function Kpi({ label, value, unit, context, delta, tone, href, Link = A, chip, spark }: { label: ReactNode; value: ReactNode; unit?: ReactNode; context?: ReactNode; delta?: ReactNode; tone?: "live"; href?: string; Link?: LinkC; chip?: ReactNode; spark?: ReactNode }) {
   const body = (
     <>
       <span className="ld-kpi-l">
@@ -191,6 +191,7 @@ export function Kpi({ label, value, context, delta, tone, href, Link = A, chip, 
       </span>
       <span className="ld-row" style={{ alignItems: "baseline", gap: 8 }}>
         <span className="ld-kpi-num">{value}</span>
+        {unit ? <span className="ld-kpi-unit">{unit}</span> : null}
         {delta ? <span className="ld-caption">{delta}</span> : null}
       </span>
       {spark}
@@ -386,11 +387,12 @@ export function BidBars({ rows, max, floor, format, floorLabel, reveal }: { rows
   );
 }
 
-/** Cumulative authorization: each voucher states the total, so the line steps up and never adds a second line. */
-export function StepChart({ points, max, format, width = 480, height = 150 }: { points: Array<{ key: string; label: string; value: number }>; max: number; format: (v: number) => string; width?: number; height?: number }) {
-  const padL = 4, padR = 76, padT = 22, padB = 24;
+/** Cumulative authorization: each voucher states the total, so the line steps up and never adds a second line.
+ *  Scaled to the channel deposit; the campaign cap is drawn as a line. */
+export function StepChart({ points, max, cap, format, width = 480, height = 160, maxLabel = "deposit", capLabel = "cap" }: { points: Array<{ key: string; label: string; value: number }>; max: number; cap?: number; format: (v: number) => string; width?: number; height?: number; maxLabel?: string; capLabel?: string }) {
+  const padL = 4, padR = 96, padT = 22, padB = 24;
   const n = points.length;
-  const x = (i: number) => padL + ((width - padL - padR) * (i + 0.5)) / n;
+  const x = (i: number) => padL + ((width - padL - padR) * (i + 0.5)) / Math.max(n, 2);
   const y = (v: number) => padT + (height - padT - padB) * (1 - v / max);
   let d = `M ${padL} ${y(0)}`;
   points.forEach((p, i) => (d += ` H ${x(i)} V ${y(p.value)}`));
@@ -400,8 +402,16 @@ export function StepChart({ points, max, format, width = 480, height = 150 }: { 
     <svg className="ld-chart-reveal ld-fixed-svg" viewBox={`0 0 ${width} ${height}`} width={width} height={height} role="img" aria-label={points.map((p) => `${p.label}: ${format(p.value)} in total`).join("; ")}>
       <line x1={padL} x2={width - padR} y1={y(max)} y2={y(max)} className="ld-chart-grid" />
       <text x={width - padR + 6} y={y(max) + 4} className="ld-chart-t">
-        {format(max)} cap
+        {format(max)} {maxLabel}
       </text>
+      {cap !== undefined ? (
+        <>
+          <line x1={padL} x2={width - padR} y1={y(cap)} y2={y(cap)} className="ld-chart-cap" />
+          <text x={width - padR + 6} y={y(cap) + 4} className="ld-chart-t">
+            {format(cap)} {capLabel}
+          </text>
+        </>
+      ) : null}
       <line x1={padL} x2={width - padR} y1={y(0)} y2={y(0)} className="ld-chart-axis" />
       <path d={area} className="ld-chart-area" />
       <path d={d} className="ld-chart-line" />
@@ -633,18 +643,18 @@ export function EvidenceCard({ prompt, advertiser, creative, sim, method, hint }
   );
 }
 
-export function ReceiptCard({ title, keyId, rows, checks, caption }: { title: ReactNode; keyId: string; rows: Array<{ k: string; v: ReactNode }>; checks: ReactNode; caption?: ReactNode }) {
+export function ReceiptCard({ title, keyId, rows, checks, caption }: { title: ReactNode; keyId: ReactNode; rows: Array<{ k: string; v: ReactNode; mono?: boolean }>; checks: ReactNode; caption?: ReactNode }) {
   return (
     <div className="ld-receipt">
       <div className="ld-receipt-head">
         <span className="ld-card-title">{title}</span>
-        <span className="ld-mono ld-faint">{keyId}</span>
+        <span className="ld-caption">{keyId}</span>
       </div>
       <div className="ld-receipt-rows">
         {rows.map((r) => (
           <div className="ld-receipt-row" key={r.k}>
             <span className="ld-muted">{r.k}</span>
-            <span className="ld-mono">{r.v}</span>
+            <span className={r.mono ? "ld-mono" : undefined}>{r.v}</span>
           </div>
         ))}
       </div>

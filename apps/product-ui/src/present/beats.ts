@@ -54,7 +54,7 @@ export const BEATS: Beat[] = [
     steps: 1,
     durationMs: 20000,
     exploreHref: "/advertisers/",
-    caption: (r) => `Three fictional advertisers. Two hardware wallets funded ${u(r.channels[0].depositBaseUnits)} each. LeatherGuard sells leather wallets and is unfunded.`,
+    caption: (r) => `Three fictional advertisers. Two hardware wallets funded ${u(r.channels[0].depositBaseUnits)} USDC each. LeatherGuard sells RFID-blocking wallets and is unfunded.`,
   },
   {
     id: "evidence",
@@ -75,7 +75,8 @@ export const BEATS: Beat[] = [
     caption: (r) => {
       const b = hist(r, 1, "v3-clearvault", "text_only");
       const h = hist(r, 1, "v3-clearvault", "history");
-      return `With history, intent edged from ${two(b.scores.intent)} to ${two(h.scores.intent)}, crossing a rounding line: level ${b.commercialIntentLevel} to ${h.commercialIntentLevel}. LeatherGuard's agent said no fit. Evidence can't add a capability.`;
+      const ob = hist(r, 2, "v3-clearvault", "text_only");
+      return `With history, intent edged from ${two(b.scores.intent)} to ${two(h.scores.intent)}, crossing a rounding line: level ${b.commercialIntentLevel} to ${h.commercialIntentLevel}. On the offline question both arms stayed at level ${ob.commercialIntentLevel}: unchanged. LeatherGuard's agent said no fit.`;
     },
   },
   {
@@ -87,7 +88,7 @@ export const BEATS: Beat[] = [
     exploreHref: "/opportunity/1/#auction",
     caption: (r) => {
       const o = r.opportunities[0];
-      return `Code, not the model, sets the bid: 100% of the ${u(r.policy.maxBidBaseUnits)} max at levels 3 and 3. A tie goes to the lower campaign ID. ${o.award ? "ClearVault" : ""} wins.`;
+      return `Code, not the model, sets the bid: 100% of the ${u(r.policy.maxBidBaseUnits)} USDC max at levels 3 and 3. Both wallets got the same ratings, so a published tie rule decides: the lower campaign ID. ${o.award ? "ClearVault" : ""} wins.`;
     },
   },
   {
@@ -97,7 +98,7 @@ export const BEATS: Beat[] = [
     steps: 3,
     durationMs: 25000,
     exploreHref: "/opportunity/1/#receipt",
-    caption: (r) => `An award is not a charge. The app inserts the labelled card, signs a receipt, and only then is ${u(r.opportunities[0].charge!.amountBaseUnits)} charged. These checks just ran in this browser.`,
+    caption: (r) => `An award is not a charge. The app inserts the labelled card, signs a receipt, and only then is ${u(r.opportunities[0].charge!.amountBaseUnits)} USDC charged. These checks run in your browser.`,
   },
   {
     id: "cap",
@@ -107,7 +108,7 @@ export const BEATS: Beat[] = [
     durationMs: 25000,
     exploreHref: "/opportunity/3/",
     caption: (r) =>
-      `Asked again, ClearVault hits its frequency cap: a rule, not the agent. KeyForge wins at ${u(r.opportunities[2].award!.priceBaseUnits)}. A mobile-only request matched no one: zero calls, no ad, the answer still served.`,
+      `Asked again, ClearVault hits its frequency cap: a rule, not the agent. KeyForge wins at ${u(r.opportunities[2].award!.priceBaseUnits)} USDC. A mobile-only request matched no one: zero calls, no ad, the answer still served.`,
   },
   {
     id: "settlement",
@@ -118,7 +119,7 @@ export const BEATS: Beat[] = [
     exploreHref: "/settlement/",
     caption: (r) => {
       const cv = r.channels[0];
-      return `Vouchers accumulate: ${u(cv.vouchers[0].cumulativeAmountBaseUnits)}, then ${u(cv.vouchers[1].cumulativeAmountBaseUnits)} in total. One close each: ${u(r.totals.paidBaseUnits)} to the publisher, ${u(r.totals.refundedBaseUnits)} refunded. Fees in lamports, kept separate.`;
+      return `Vouchers accumulate: ${u(cv.vouchers[0].cumulativeAmountBaseUnits)}, then ${u(cv.vouchers[1].cumulativeAmountBaseUnits)} in total. One close each on the Solana sandbox: ${u(r.totals.paidBaseUnits)} USDC to the publisher, ${u(r.totals.refundedBaseUnits)} refunded. Fees in lamports, kept separate.`;
     },
   },
   {

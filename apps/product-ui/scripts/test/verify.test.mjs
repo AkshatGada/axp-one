@@ -43,3 +43,17 @@ for (const [name, mutate, mustFail] of tamper)
     const checks = await verifyChecks(r);
     for (const id of mustFail) assert.equal(checks.find((c) => c.id === id)?.status, 'fail', id);
   });
+
+for (const [name, mutate] of [
+  ['an empty publisher key', (r) => { r.publisher.publicKeyPEM = ''; }],
+  ['a truncated publisher key', (r) => { r.publisher.publicKeyPEM = r.publisher.publicKeyPEM.slice(0, 40); }],
+])
+  test(`unreadable key is a FAIL, never "unsupported": ${name}`, async () => {
+    const r = load();
+    mutate(r);
+    const checks = await verifyChecks(r);
+    const sig = checks.filter((c) => c.group === 'signature');
+    assert.equal(sig.length, 3);
+    for (const c of sig) assert.equal(c.status, 'fail', c.id);
+    assert.equal(checks.filter((c) => c.status === 'skip').length, 0);
+  });

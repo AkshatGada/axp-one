@@ -2,7 +2,8 @@
 // records in the Inspector. Wording follows the data traps in docs/frontend/MVP_SPEC.md.
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { InspectButton, Ld } from "@axp/design-system/ledger";
+import { InspectButton, Ld, Term } from "@axp/design-system/ledger";
+import { GLOSSARY } from "@/data/glossary";
 import { campaign, decisionFor, evidenceHint, evidenceRecord, flagWords, nameOf, run, usdc } from "@/data/select";
 import type { Decision, Opportunity } from "@/data/types";
 import { armDiffSentence, inspect } from "@/components/opportunity/parts";
@@ -28,31 +29,29 @@ export const STAGES = [
 
 export function pipeStages(o: Opportunity): Ld.PipeStage[] {
   if (o.status === "no_fill")
-    return STAGES.map((s, i) =>
-      i === 0
-        ? { id: s.id, label: s.label, value: `${o.mandatoryCapabilities.length} required`, status: "done" as const }
-        : i === 1
-          ? { id: s.id, label: s.label, value: "0 of 3", status: "done" as const }
-          : { id: s.id, label: s.label, value: "Did not run", status: "skipped" as const },
-    );
+    return [
+      { id: "moment", label: "Moment", value: `${o.mandatoryCapabilities.length} required`, status: "done" as const },
+      { id: "eligibility", label: "Eligibility", value: "0 of 3 may bid", status: "done" as const },
+      { id: "nofill", label: "Steps 3 to 9", value: "Did not run", status: "skipped" as const },
+    ];
   const method = o.decisions.find((d) => d.retrieval)?.retrieval?.method;
   const values = [
-    `Floor ${usdc(o.floorBaseUnits)}`,
-    `${o.eligibility.eligible.length} of 3`,
+    `Floor ${usdc(o.floorBaseUnits)} USDC`,
+    `${o.eligibility.eligible.length} of 3 may bid`,
     method === "vector" ? "Seen before" : "Word overlap",
     `${o.decisions.length} calls`,
-    o.auction.tieBreakApplied ? `Tie ${usdc(o.auction.bids[0].amountBaseUnits)}` : `${o.auction.bids.length} bid${o.auction.bids.length > 1 ? "s" : ""}`,
-    `${usdc(o.award!.priceBaseUnits)} held`,
+    o.auction.tieBreakApplied ? `Tie at ${usdc(o.auction.bids[0].amountBaseUnits)} USDC` : `${o.auction.bids.length} bid${o.auction.bids.length > 1 ? "s" : ""}`,
+    `${usdc(o.award!.priceBaseUnits)} USDC held`,
     `+${(o.delivery!.msAfterAward / 1000).toFixed(1)} s`,
     "Signed",
-    usdc(o.charge!.amountBaseUnits),
+    `${usdc(o.charge!.amountBaseUnits)} USDC`,
   ];
   return STAGES.map((s, i) => ({ id: s.id, label: s.label, value: values[i], status: "done" as const }));
 }
 
 function StagePanel({ n, title, sub, inspectPayload, children }: { n: number; title: string; sub: ReactNode; inspectPayload?: Parameters<typeof InspectButton>[0]["payload"]; children: ReactNode }) {
   return (
-    <Ld.Panel title={`${n}. ${title}`} sub={sub} actions={inspectPayload ? <InspectButton payload={inspectPayload}>Inspect record</InspectButton> : undefined}>
+    <Ld.Panel title={`${n}. ${title}`} sub={sub} actions={inspectPayload ? <InspectButton payload={inspectPayload} primary>Inspect record</InspectButton> : undefined}>
       <div className="ld-stack-lg" style={{ gap: 16 }}>
         {children}
       </div>
@@ -67,7 +66,7 @@ export function MomentPanel({ o }: { o: Opportunity }) {
     <StagePanel n={1} title="The moment" sub="The app offered one Sponsored slot beside its answer. Only these fields reach the exchange." inspectPayload={inspect.opportunity(o)}>
       <div className="ld-cols-3">
         <Ld.Stat label="Topic" value="Crypto wallet tools" caption="Coarse intent only; no user profile" />
-        <Ld.Stat label="Floor price" value={`${usdc(o.floorBaseUnits)} test USDC`} caption="Lowest bid the app accepts" />
+        <Ld.Stat label="Floor price" value={`${usdc(o.floorBaseUnits)} USDC`} caption="Test USDC; the lowest bid the app accepts" />
         <Ld.Stat label="Created" value={utc(o.createdAt)} caption="Exchange clock" />
       </div>
       <div className="ld-cols-2">
@@ -84,12 +83,13 @@ export function MomentPanel({ o }: { o: Opportunity }) {
         <div className="ld-stack" style={{ gap: 6 }}>
           <span className="ld-label">Nice to have</span>
           <span className="ld-row" style={{ gap: 6 }}>
-            {o.softPreferences.map((c) => (
+            {o.softPreferences.filter((c) => !(o.mandatoryCapabilities as string[]).includes(c)).map((c) => (
               <Ld.Tag key={c} tone="outline">
                 {plain(c)}
               </Ld.Tag>
             ))}
           </span>
+          {o.softPreferences.some((c) => (o.mandatoryCapabilities as string[]).includes(c)) ? <span className="ld-caption">{o.softPreferences.filter((c) => (o.mandatoryCapabilities as string[]).includes(c)).map(plain).join(", ")} is also listed as a preference.</span> : null}
         </div>
       </div>
       {o.scenarioId === "repeat" ? (
@@ -105,7 +105,7 @@ export function MomentPanel({ o }: { o: Opportunity }) {
 // 2 ---------------------------------------------------------------
 export function EligibilityPanel({ o }: { o: Opportunity }) {
   return (
-    <StagePanel n={2} title="Who may compete" sub="A rule in code, checked before any agent is asked: a campaign must declare every required capability." inspectPayload={inspect.eligibility(o)}>
+    <StagePanel n={2} title="Who may compete" sub="A rule in code decides who can enter the auction: a campaign must declare every required capability." inspectPayload={inspect.eligibility(o)}>
       <Ld.CapGrid
         caps={o.mandatoryCapabilities}
         rows={run.campaigns.map((c) => {
@@ -119,7 +119,7 @@ export function EligibilityPanel({ o }: { o: Opportunity }) {
           };
         })}
       />
-      <span className="ld-caption">Funding is checked at auction time. Historical evidence never adds a capability.</span>
+      <span className="ld-caption">For the research comparison every agent was asked; an excluded campaign can never bid. Funding is checked at auction time, and history never adds a capability.</span>
     </StagePanel>
   );
 }
@@ -133,6 +133,9 @@ function EvidenceTab({ o, d }: { o: Opportunity; d: Decision }) {
       <div className="ld-between">
         <span className="ld-row" style={{ gap: 8 }}>
           <Ld.Tag tone={rt.method === "vector" ? "brand" : "warning"}>{rt.method === "vector" ? "Vector match: the exact question was stored" : "Lexical fallback: word overlap, not semantic"}</Ld.Tag>
+          <span className="ld-caption">
+            Similarity is <Term title={GLOSSARY.cosine.term} def={GLOSSARY.cosine.def}>cosine</Term> for stored questions, <Term title={GLOSSARY.lexical.term} def={GLOSSARY.lexical.def}>word overlap</Term> otherwise.
+          </span>
         </span>
         <span className="ld-row" style={{ gap: 10 }}>
           <LiveHashV2 value={d.packet} expected={d.packetHash} label="Packet hash recomputed here" />
@@ -150,7 +153,7 @@ function EvidenceTab({ o, d }: { o: Opportunity; d: Decision }) {
             <div key={h} className="ld-evidence" style={{ boxShadow: "inset 3px 0 0 var(--ld-ch)" }}>
               <div className="ld-between">
                 <Ld.Pv kind="inferred" label="Inferred targeting hint" />
-                <Ld.Tag>{hint.tier === "sparse" ? "Sparse: few supporting ads" : `Tier ${hint.tier}`}</Ld.Tag>
+                <Ld.Tag>{hint.tier === "sparse" ? "Sparse: few supporting ads" : hint.tier === "loo" ? "Leave-one-out tested" : "Held-out tested"}</Ld.Tag>
               </div>
               <p className="ld-evidence-q" style={{ fontSize: 13 }}>
                 {hint.text}
@@ -162,13 +165,14 @@ function EvidenceTab({ o, d }: { o: Opportunity; d: Decision }) {
       </div>
       <div className="ld-stack" style={{ gap: 6 }}>
         <span className="ld-label">Nearest prompts in the screened history</span>
+        <span className="ld-caption">Brands in this list are observed historical references, not axp.one advertisers.</span>
         {rt.neighbors.map((n, i) => {
           const r = evidenceRecord(n.associationIds[0]);
           return (
             <div key={i} className="op2-neighbor">
               <Ld.SimBar value={n.similarity} method={rt.method} />
               <span className="ld-secondary" style={{ color: "var(--ld-text)" }}>
-                “{r?.promptText}” <span className="ld-faint">· {r?.advertiser}{r && shown.has(r.id) ? ", shown above" : ""}</span>
+                “{r?.promptText}” <span className="ld-faint">({r?.advertiser}{r && shown.has(r.id) ? ", shown above" : ""})</span>
               </span>
             </div>
           );
@@ -189,7 +193,7 @@ export function EvidencePanel({ o }: { o: Opportunity }) {
   const ex = cv?.retrieval?.examples[0];
   const r = ex ? evidenceRecord(ex.id) : undefined;
   return (
-    <StagePanel n={3} title="What each agent was shown" sub={<>Each agent got its own packet of <a className="ld-link" href="https://contexthint.com" target="_blank" rel="noopener noreferrer">ContextHint</a> history: past prompts, the ads that appeared beside them, and inferred targeting hints.</>}>
+    <StagePanel n={3} title="What each agent was shown" sub={<>Each agent got its own packet of <Term title={GLOSSARY.contexthint.term} def={GLOSSARY.contexthint.def}>ContextHint</Term> history (<a className="ld-link" href="https://contexthint.com" target="_blank" rel="noopener noreferrer">contexthint.com</a>): past prompts, the ads that appeared beside them, and inferred targeting hints.</>}>
       {cv && r && ex ? (
         cv.retrieval!.method === "vector" && ex.similarity === 1 ? (
           <Ld.Callout tone="ch" title="ContextHint had seen this exact question before">
@@ -221,10 +225,10 @@ function ArmRow({ d, o }: { d: Decision; o: Opportunity }) {
         </span>
       </div>
       <span className="ld-secondary">
-        Relevance level <b className="ld-strong" style={{ color: "var(--ld-text)" }}>{d.relevanceLevel}</b> ({two(d.scores.relevance)}) · Intent level <b className="ld-strong" style={{ color: "var(--ld-text)" }}>{d.commercialIntentLevel}</b> ({two(d.scores.intent)})
+        Relevance <b className="ld-strong" style={{ color: "var(--ld-text)" }}>{d.relevanceLevel} of 3</b> (score {two(d.scores.relevance)}), intent <b className="ld-strong" style={{ color: "var(--ld-text)" }}>{d.commercialIntentLevel} of 3</b> (score {two(d.scores.intent)})
       </span>
       <span className="ld-caption">
-        {d.creative.choice === "no_fit" ? "Chose no fitting creative" : "Chose the approved card"} · {Math.round(d.elapsedMs)} ms recorded
+        {d.creative.choice === "no_fit" ? "Chose no fitting creative" : "Chose the approved card"}, {Math.round(d.elapsedMs)} ms recorded
       </span>
       {na && d.arm === "history" ? (
         <Ld.Callout tone="warning" title="Agent said bid. Exchange did not admit it.">
@@ -241,7 +245,7 @@ export function DecisionsPanel({ o }: { o: Opportunity }) {
   const wh = winner ? decisionFor(o, winner, "history") : undefined;
   const amt = (d: Decision) => usdc(((BigInt(run.policy.maxBidBaseUnits) * BigInt(bpsFor(d.relevanceLevel, d.commercialIntentLevel) ?? 0)) / BigInt(10000)).toString());
   return (
-    <StagePanel n={4} title="What each agent decided" sub="Decided with Jev. Each agent answers in levels: relevance (does the approved card fit?) and commercial intent (is the person comparing offers?). A level is the rounded score.">
+    <StagePanel n={4} title="What each agent decided" sub={<>Decided with <Term title={GLOSSARY.jev.term} def={GLOSSARY.jev.def}>Jev</Term>. Each agent answers in levels: relevance (does the approved card fit?) and commercial intent (is the person comparing offers?). A level is the rounded score, from 0 to 3.</>}>
       <div className="ld-cols-3">
         {run.campaigns.map((c) => {
           const b = decisionFor(o, c.campaignId, "text_only");
@@ -255,7 +259,7 @@ export function DecisionsPanel({ o }: { o: Opportunity }) {
                   <span className="ld-card-title">{c.businessName}</span>
                   <span className="ld-caption">Decided with Jev</span>
                 </span>
-                {c.campaignId === "v3-leatherguard" ? <Ld.Tag tone="dashed">Excluded by rule</Ld.Tag> : diff ? <Ld.Tag tone={diff.changed ? "brand" : undefined}>{diff.changed ? "Level changed" : "Unchanged"}</Ld.Tag> : null}
+                {c.campaignId === "v3-leatherguard" ? <Ld.Tag tone="dashed">Excluded by rule</Ld.Tag> : diff ? <Ld.Tag tone="outline">{diff.changed ? "Level changed" : "Unchanged"}</Ld.Tag> : null}
               </div>
               {h && c.campaignId !== "v3-leatherguard" ? <Ld.ScoreRuler min={1.5} max={3} ticks={[2, 3]} width={220} marks={marks} /> : null}
               {b ? <ArmRow d={b} o={o} /> : null}
@@ -282,6 +286,21 @@ export function DecisionsPanel({ o }: { o: Opportunity }) {
 }
 
 // 5 ---------------------------------------------------------------
+/** Why the bids tie, in plain words, and what history changed. Data unchanged. */
+function TieExplainer({ o }: { o: Opportunity }) {
+  const w = o.auction.winnerCampaignId!;
+  const b = decisionFor(o, w, "text_only");
+  const h = decisionFor(o, w, "history")!;
+  const amt = (d: Decision) => usdc(((BigInt(run.policy.maxBidBaseUnits) * BigInt(bpsFor(d.relevanceLevel, d.commercialIntentLevel) ?? 0)) / BigInt(10000)).toString());
+  const changed = b && (b.relevanceLevel !== h.relevanceLevel || b.commercialIntentLevel !== h.commercialIntentLevel);
+  return (
+    <Ld.Callout title="Why the bids are equal">
+      Both wallets declared the same capabilities, offered the same 0.004 USDC max bid, and got the same ratings ({h.relevanceLevel} of 3 and {h.commercialIntentLevel} of 3), so the bid table gave them the same bid. A fixed <Term title={GLOSSARY.tieRule.term} def={GLOSSARY.tieRule.def}>tie rule</Term>, published before the run, decides: the lower campaign ID wins, so {nameOf(w)}.{" "}
+      {b ? (changed ? `History made a real difference to the price: without it ${nameOf(w)}'s ratings gave ${amt(b)} USDC; with it, ${amt(h)} USDC.` : `History made no difference here: both arms gave ${amt(h)} USDC.`) : null} For a rule that changes the winner, see opportunity 3.
+    </Ld.Callout>
+  );
+}
+
 export function AuctionPanel({ o }: { o: Opportunity }) {
   const max = Number(run.policy.maxBidBaseUnits);
   const active = o.auction.bids.map((b) => b.levels);
@@ -317,10 +336,10 @@ export function AuctionPanel({ o }: { o: Opportunity }) {
       />
       <div className="ld-cols-3">
         <Ld.Stat label="Winner" value={nameOf(o.auction.winnerCampaignId)} caption={o.auction.tieBreakApplied ? "Won on the tie-break" : o.auction.bids.length === 1 ? "Only bidder" : "Highest bid"} />
-        <Ld.Stat label="Price" value={`${usdc(o.award!.priceBaseUnits)} test USDC`} caption="First price: the winner pays its own bid" />
-        <Ld.Stat label="Rule" value="Bid table v1" caption="Sealed, first price, floor 0.001" />
+        <Ld.Stat label="Price" value={`${usdc(o.award!.priceBaseUnits)} USDC`} caption="Test USDC; first price, the winner pays its own bid" />
+        <Ld.Stat label="Rule" value="Bid table v1" caption="Sealed, first price, floor 0.001 USDC" />
       </div>
-      {o.auction.tieBreakApplied ? <Ld.Callout title="Tie-break">Equal bids are ordered by campaign ID: v3-clearvault before v3-keyforge.</Ld.Callout> : null}
+      {o.auction.tieBreakApplied ? <TieExplainer o={o} /> : null}
     </StagePanel>
   );
 }
@@ -330,18 +349,18 @@ export function AwardPanel({ o }: { o: Opportunity }) {
   const a = o.award!;
   return (
     <StagePanel n={6} title="Award, not a charge yet" sub="The winner's card is reserved for the slot. Budget is held; nothing is owed until the app proves delivery." inspectPayload={inspect.award(o)}>
-      <div className="ld-flow">
-        <Ld.FlowTile step="Reserved" title={nameOf(a.campaignId)} state={<Ld.Money state="reserved" label="Reserved, not owed" />} value={usdc(a.priceBaseUnits)}>
+      <div className="ld-cols-2">
+        <Ld.FlowTile step="Reserved" title={nameOf(a.campaignId)} state={<Ld.Money state="reserved" label="Reserved, not owed" />} value={`${usdc(a.priceBaseUnits)} USDC`}>
           <span className="ld-caption">Test USDC held against the campaign's cap</span>
-        </Ld.FlowTile>
-        <Ld.FlowTile step="Creative" title="The approved card, unchanged">
-          <Ld.SponsoredCard text={a.creative.approvedText} advertiser={nameOf(a.campaignId)} url={a.creative.destinationURL} />
-          <LiveHashV2 value={a.creative} expected={a.creativeHash} label="Creative hash recomputed here" />
         </Ld.FlowTile>
         <Ld.FlowTile step="Expires" title={utc(a.expiresAt)}>
           <span className="ld-caption">Exchange clock. An undelivered award would expire and release the budget.</span>
         </Ld.FlowTile>
       </div>
+      <Ld.FlowTile step="Creative" title="The approved card, unchanged">
+        <Ld.SponsoredCard text={a.creative.approvedText} advertiser={nameOf(a.campaignId)} url={a.creative.destinationURL} />
+        <LiveHashV2 value={a.creative} expected={a.creativeHash} label="Creative hash recomputed here" />
+      </Ld.FlowTile>
     </StagePanel>
   );
 }
@@ -370,12 +389,14 @@ export function ReceiptPanel({ o }: { o: Opportunity }) {
     <StagePanel n={8} title="Signed receipt" sub="The app signed what it did with its own key. Your browser checks the signature now." inspectPayload={inspect.receipt(o)}>
       <Ld.ReceiptCard
         title="Publisher receipt"
-        keyId={`key ${r.fields.publisherKeyId}`}
+        keyId={<>Signed with key <span className="ld-mono">{r.fields.publisherKeyId}</span></>}
         rows={[
           { k: "Statement", v: "Inserted the awarded card with its Sponsored label" },
           { k: "For", v: `Opportunity ${o.n}, ${nameOf(o.award!.campaignId)}'s card` },
-          { k: "Publisher", v: `${run.publisher.displayName} (ID from an earlier prototype)` },
-          { k: "Mode", v: "Hosted Solana sandbox" },
+          { k: "Publisher", v: run.publisher.displayName },
+          { k: "Mode", v: r.fields.mode, mono: true },
+          { k: "Receipt hash", v: `${r.receiptHash.slice(0, 20)}…`, mono: true },
+          { k: "Signature", v: `${r.signature.slice(0, 20)}…`, mono: true },
         ]}
         checks={
           <>
@@ -396,15 +417,15 @@ export function ChargePanel({ o }: { o: Opportunity }) {
   const ch = run.channels.find((x) => x.channelId === c.channelId)!;
   const cap = Number(campaign(c.campaignId).budgetCapBaseUnits);
   return (
-    <StagePanel n={9} title="Charge and voucher" sub="Only an accepted, signed delivery becomes a charge. The charge advances the advertiser's payment channel off chain." inspectPayload={inspect.charge(o)}>
+    <StagePanel n={9} title="Charge and voucher" sub={<>Only an accepted, signed delivery becomes a charge. The charge advances the advertiser's <Term title={GLOSSARY.channel.term} def={GLOSSARY.channel.def}>payment channel</Term> with an off-chain <Term title={GLOSSARY.voucher.term} def={GLOSSARY.voucher.def}>voucher</Term>.</>} inspectPayload={inspect.charge(o)}>
       <div className="ld-flow">
-        <Ld.FlowTile step="Charge" title={`Charge ${c.sequence} on ${nameOf(c.campaignId)}'s channel`} state={<Ld.Money state="accepted" label="Accepted" />} value={usdc(c.amountBaseUnits)} />
-        <Ld.FlowTile step={`Voucher ${v.sequence}`} title="Cumulative authorization" state={<Ld.Money state="authorized" label="Authorized in total" />} value={usdc(v.cumulativeAmountBaseUnits)}>
+        <Ld.FlowTile step="Charge" title={`Charge ${c.sequence} on ${nameOf(c.campaignId)}'s payment channel`} state={<Ld.Money state="accepted" label="Accepted" />} value={`${usdc(c.amountBaseUnits)} USDC`} />
+        <Ld.FlowTile step={`Voucher ${v.sequence}`} title="Cumulative authorization" state={<Ld.Money state="authorized" label="Authorized in total" />} value={`${usdc(v.cumulativeAmountBaseUnits)} USDC`}>
           {v.sequence > 1 ? <span className="ld-caption">Replaces voucher {v.sequence - 1}: {usdc(v.cumulativeAmountBaseUnits)} in total, not {usdc(v.cumulativeAmountBaseUnits)} more.</span> : <span className="ld-caption">Nothing moves on chain until the channel closes.</span>}
         </Ld.FlowTile>
       </div>
-      <Ld.Panel title={`${nameOf(c.campaignId)} vouchers`} sub="Cumulative authorization against the 0.008 cap, test USDC">
-        <Ld.StepChart max={cap} format={(x) => usdc(x)} points={ch.vouchers.map((x) => ({ key: String(x.sequence), label: `#${x.sequence} · opp ${x.opportunityN}`, value: Number(x.cumulativeAmountBaseUnits) }))} />
+      <Ld.Panel title={`${nameOf(c.campaignId)} vouchers so far`} sub="Cumulative authorization in test USDC, against the channel's deposit, with the campaign cap as a line">
+        <Ld.StepChart max={Number(ch.depositBaseUnits)} cap={cap} format={(x) => usdc(x)} points={ch.vouchers.filter((x) => x.sequence <= v.sequence).map((x) => ({ key: String(x.sequence), label: `Voucher ${x.sequence}`, value: Number(x.cumulativeAmountBaseUnits) }))} />
       </Ld.Panel>
       <span>
         <Ld.Button variant="secondary" href={`/settlement/#${campaign(c.campaignId).slug}`} Link={L}>
@@ -415,18 +436,18 @@ export function ChargePanel({ o }: { o: Opportunity }) {
   );
 }
 
-export function NoFillPanel({ o, n }: { o: Opportunity; n: number }) {
+export function NoFillPanel({ o }: { o: Opportunity }) {
   return (
-    <Ld.Panel title={`${n}. Did not run`} sub="No fill">
-      <Ld.Empty title="Steps 3 to 9 did not run">
-        No agent was called (0 calls). No auction, award, receipt or charge. Every campaign was missing mobile software wallet, so the exchange answered with no fill in code. The app still answered the question in full. On the exchange clock this question ran first, about 70 minutes before the others.
+    <Ld.Panel title="No agent was called" sub="Steps 3 to 9 did not run">
+      <Ld.Empty title="No fill, decided in code">
+        Every campaign was missing mobile software wallet, so no campaign could enter the auction and no agent was asked (0 calls). No auction, award, receipt or charge. The app still answered the question in full. On the exchange clock this question ran first, about 70 minutes before the others.
       </Ld.Empty>
     </Ld.Panel>
   );
 }
 
 export function stagePanels(o: Opportunity): ReactNode[] {
-  if (o.status === "no_fill") return [<MomentPanel key="m" o={o} />, <EligibilityPanel key="e" o={o} />, ...STAGES.slice(2).map((s, i) => <NoFillPanel key={s.id} o={o} n={i + 3} />)];
+  if (o.status === "no_fill") return [<MomentPanel key="m" o={o} />, <EligibilityPanel key="e" o={o} />, <NoFillPanel key="nf" o={o} />];
   return [
     <MomentPanel key="m" o={o} />,
     <EligibilityPanel key="e" o={o} />,

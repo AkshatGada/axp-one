@@ -58,7 +58,7 @@ export function txPayload(ch: Channel, t: ChainTx): InspectPayload {
     title: `${t.kind === "open" ? "Open" : "Close"} transaction, ${nameOf(ch.campaignId)}`,
     sourcePath: `chainEvidence.channels[channelId=${ch.channelId}].originalTransactions[txSignature]`,
     json: { ...rest, logLines: logs.length },
-    note: "Read back from the hosted Solana sandbox after the run. Absolute balances are omitted; only this transaction's deltas are shown.",
+    note: "Read back from the hosted Solana sandbox after the run. blockTime is the sandbox clock, which is not aligned with the exchange clock. Absolute balances are omitted; only this transaction's deltas are shown.",
   };
 }
 

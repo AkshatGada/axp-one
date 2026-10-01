@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Ld } from "@axp/design-system/ledger";
+import { Ld, Term } from "@axp/design-system/ledger";
+import { GLOSSARY } from "@/data/glossary";
 import { run } from "@/data/select";
 
 export const metadata: Metadata = { title: "Evidence" };
@@ -28,11 +29,11 @@ export default function EvidencePage() {
         meta={<Ld.Tag tone="ch" dot>ContextHint</Ld.Tag>}
         sub={
           <>
-            Agents judged each moment with history from{" "}
+            Agents judged each moment with history from <Term title={GLOSSARY.contexthint.term} def={GLOSSARY.contexthint.def}>ContextHint</Term> (
             <a className="ld-link" href="https://contexthint.com" target="_blank" rel="noopener noreferrer">
-              ContextHint
+              contexthint.com
             </a>
-            : real prompts, the ads that appeared beside them, and inferred targeting hints. Brands below are observed historical references, not AXP advertisers.
+            ): prompts from ContextHint&apos;s recorded prompt panel, the ads that appeared beside them, and inferred targeting hints. Brands below are observed historical references, not axp.one advertisers.
           </>
         }
       />
@@ -48,7 +49,7 @@ export default function EvidencePage() {
           <span className="ld-row" style={{ gap: 6 }}>
             {d.selection.niches.map((x) => (
               <Ld.Tag key={x} tone="outline">
-                {x.replace(/-/g, " ")}
+                {({ "crypto-hardware-wallets-self-custody": "Hardware wallets and self-custody", "crypto-investing": "Crypto investing", "web3-infrastructure": "Web3 infrastructure", "crypto-tax-software-defi-accounting": "Crypto tax and DeFi accounting", "privacy-preserving-blockchains-zk-compliance": "Privacy blockchains and compliance" } as Record<string, string>)[x] ?? x.replace(/-/g, " ")}
               </Ld.Tag>
             ))}
           </span>
@@ -57,7 +58,7 @@ export default function EvidencePage() {
           <div className="ld-stack" style={{ gap: 8 }}>
             {tiers.map(([k, v]) => (
               <span key={k} className="ld-stack" style={{ gap: 4 }}>
-                <span className="ld-label">{k === "loo" ? "Leave-one-out" : k === "holdout" ? "Holdout" : "Sparse"}</span>
+                <span className="ld-label">{k === "loo" ? "Leave-one-out tested" : k === "holdout" ? "Held-out tested" : "Sparse (few supporting ads)"}</span>
                 <Ld.Progress value={v} max={tierMax} tone="ink" label={n(v)} />
               </span>
             ))}
@@ -67,7 +68,7 @@ export default function EvidencePage() {
           <div className="ld-stack" style={{ gap: 8 }}>
             {Object.entries(d.counts.sources).map(([k, v]) => (
               <span key={k} className="ld-stack" style={{ gap: 4 }}>
-                <span className="ld-label">Source: {k}</span>
+                <span className="ld-label">{k === "aws" ? "Stored ad library" : k === "verseodin" ? "VerseOdin prompt panel" : k}</span>
                 <Ld.Progress value={v} max={d.counts.associations} tone="ink" label={n(v)} />
               </span>
             ))}
@@ -76,7 +77,7 @@ export default function EvidencePage() {
       </div>
       <Ld.Panel title="How agents got their evidence" sub="Retrieval method, per question">
         <div className="ld-cols-2">
-          <Ld.Callout tone="brand" title="Vector match for stored questions">
+          <Ld.Callout tone="brand" title="Vector match (cosine similarity) for stored questions">
             When the exact question already had a stored embedding (BGE, 768 dimensions), retrieval ranked prompts by cosine similarity. No embeddings were generated during the run, and vectors never leave the backend.
           </Ld.Callout>
           <Ld.Callout tone="warning" title="Lexical fallback for new wording">
@@ -92,7 +93,7 @@ export default function EvidencePage() {
               <div key={id} id={`evidence-${id}`} className="ld-stack" style={{ gap: 6 }}>
                 <Ld.EvidenceCard prompt={r.promptText} advertiser={r.advertiser} creative={r.creativeText} sim={u.sim} method={u.method} />
                 <span className="ld-caption">
-                  Shown to {[...u.who].map((w) => run.campaigns.find((c) => c.campaignId === w)!.businessName).join(", ")} · opportunities {[...u.opps].join(", ")}
+                  Shown to {[...u.who].map((w) => run.campaigns.find((c) => c.campaignId === w)!.businessName).join(", ")}, in opportunities {[...u.opps].join(", ")}
                 </span>
               </div>
             );
@@ -106,7 +107,7 @@ export default function EvidencePage() {
               <div key={h.id} id={`evidence-${h.id}`} className="ld-evidence">
                 <div className="ld-between">
                   <Ld.Pv kind="inferred" label="Inferred hint" />
-                  <Ld.Tag>{h.tier === "sparse" ? "Sparse" : h.tier === "loo" ? "Leave-one-out" : "Holdout"}</Ld.Tag>
+                  <Ld.Tag>{h.tier === "sparse" ? "Sparse" : h.tier === "loo" ? "Leave-one-out tested" : "Held-out tested"}</Ld.Tag>
                 </div>
                 <span className="ld-secondary" style={{ color: "var(--ld-text)" }}>
                   {h.text}
@@ -121,7 +122,7 @@ export default function EvidencePage() {
               <div key={r.id} id={`evidence-${r.id}`} className="ld-stack" style={{ gap: 2, paddingBottom: 8, borderBottom: "1px solid var(--ld-border)" }}>
                 <span className="ld-secondary" style={{ color: "var(--ld-text)" }}>“{r.promptText}”</span>
                 <span className="ld-caption">
-                  <Ld.Pv kind="observed" label={r.advertiser} /> Observed historical reference, not an AXP advertiser
+                  <Ld.Pv kind="observed" label={r.advertiser} /> Observed historical reference, not an axp.one advertiser
                 </span>
               </div>
             ))}

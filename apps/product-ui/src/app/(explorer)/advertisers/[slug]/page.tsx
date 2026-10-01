@@ -62,7 +62,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
         <Ld.Kpi label="Agent calls" value={s.calls} context="Including research-only baseline arms" />
         <Ld.Kpi label="Bids" value={s.bids} context="Admitted to an auction" />
         <Ld.Kpi label="Wins" value={s.wins} context="Delivered, signed, charged" />
-        <Ld.Kpi label="Spend" value={usdc(s.spend)} context={`of the ${usdc(s.cap)} cap`} spark={<Ld.Progress value={s.spend} max={s.cap} />} />
+        <Ld.Kpi label="Spend" value={usdc(s.spend)} unit="USDC" context={`of the ${usdc(s.cap)} USDC cap`} spark={<Ld.Progress value={s.spend} max={s.cap} />} />
       </div>
       <div className="ov2-grid">
         <Ld.Panel title="Decision history" sub="Every opportunity, in story order. Levels are relevance and intent." flush>
@@ -70,11 +70,11 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
             columns={[
               { key: "o", head: "Opportunity", cell: (r: (typeof rows)[number]) => <RowLink href={`/opportunity/${r.o.n}/`}><span className="ld-faint">{r.o.n}</span> <span className="ld-strong">{shortLabel(r.o)}</span></RowLink> },
               { key: "e", head: "Eligible", cell: (r) => (r.ex ? <span className="ld-secondary">{r.ex.reason === "missing_constraint" ? `No: missing ${r.ex.missing.map(plain).join(", ")}` : "No: frequency cap"}</span> : "Yes") },
-              { key: "b", head: "Baseline", cell: (r) => (r.b ? `${r.b.decision === "bid" ? "Bid" : "Skip"} · ${r.b.relevanceLevel}:${r.b.commercialIntentLevel}` : <span className="ld-faint">not asked</span>) },
-              { key: "h", head: "With history", cell: (r) => (r.h ? `${r.h.decision === "bid" ? "Bid" : "Skip"} · ${r.h.relevanceLevel}:${r.h.commercialIntentLevel}` : <span className="ld-faint">not asked</span>) },
-              { key: "bid", head: "Bid", num: true, cell: (r) => (r.bid ? usdc(r.bid.amountBaseUnits) : <span className="ld-faint">none</span>) },
+              { key: "b", head: "Baseline", cell: (r) => (r.b ? `${r.b.decision === "bid" ? "Bid" : "Skip"}, ${r.b.relevanceLevel}:${r.b.commercialIntentLevel}` : <span className="ld-faint">not asked</span>) },
+              { key: "h", head: "With history", cell: (r) => (r.h ? `${r.h.decision === "bid" ? "Bid" : "Skip"}, ${r.h.relevanceLevel}:${r.h.commercialIntentLevel}` : <span className="ld-faint">not asked</span>) },
+              { key: "bid", head: "Bid, USDC", num: true, cell: (r) => (r.bid ? usdc(r.bid.amountBaseUnits) : <span className="ld-faint">none</span>) },
               { key: "out", head: "Outcome", cell: (r) => (r.outcome.label ? <Ld.Tag tone={r.outcome.tone}>{r.outcome.label}</Ld.Tag> : null) },
-              { key: "ch", head: "Charged", num: true, cell: (r) => (r.won && r.o.charge ? <span className="ld-strong">{usdc(r.o.charge.amountBaseUnits)}</span> : <span className="ld-faint">0</span>) },
+              { key: "ch", head: "Charged, USDC", num: true, cell: (r) => (r.won && r.o.charge ? <span className="ld-strong">{usdc(r.o.charge.amountBaseUnits)}</span> : <span className="ld-faint">0</span>) },
             ]}
             rows={rows}
           />
@@ -98,7 +98,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
         </div>
       </div>
       {ch ? (
-        <Ld.Panel title="Solana payment channel" sub="Hosted sandbox · test USDC">
+        <Ld.Panel title="Payment channel on the hosted Solana sandbox" sub="Test USDC; vouchers against the deposit, campaign cap as a line">
           <div className="st2-cols">
             <Ld.BalanceBar
               total={Number(ch.depositBaseUnits)}
@@ -108,7 +108,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
                 { key: "r", value: Number(ch.refundBaseUnits), state: "refunded" as const, label: `Refunded ${usdc(ch.refundBaseUnits)}` },
               ]}
             />
-            <Ld.StepChart max={s.cap} format={(x) => usdc(x)} points={ch.vouchers.map((v) => ({ key: String(v.sequence), label: `#${v.sequence} · opp ${v.opportunityN}`, value: Number(v.cumulativeAmountBaseUnits) }))} />
+            <Ld.StepChart max={Number(ch.depositBaseUnits)} cap={s.cap} format={(x) => usdc(x)} points={ch.vouchers.map((v) => ({ key: String(v.sequence), label: `Voucher ${v.sequence}, opp ${v.opportunityN}`, value: Number(v.cumulativeAmountBaseUnits) }))} />
           </div>
         </Ld.Panel>
       ) : null}

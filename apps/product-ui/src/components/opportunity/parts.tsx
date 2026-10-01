@@ -81,7 +81,7 @@ export const inspect = {
     const { packet, ...rest } = d;
     return {
       key: `decision:${d.slotId}`,
-      title: `${nameOf(d.campaignId)} · ${ARM_LABEL[d.arm]}`,
+      title: `${nameOf(d.campaignId)}, ${ARM_LABEL[d.arm].toLowerCase()}`,
       sourcePath: `state.turns[turnId=${o.turnId}].records[slotId=${d.slotId}]`,
       json: rest,
       hashes: [
@@ -97,6 +97,7 @@ export const inspect = {
       title: `Exact packet sent: ${nameOf(d.campaignId)}, ${ARM_LABEL[d.arm].toLowerCase()}`,
       sourcePath: `state.turns[turnId=${o.turnId}].records[slotId=${d.slotId}].packet`,
       json: d.packet,
+      note: "The intent rubric's level-3 wording (destination, dates or event) is inherited from an earlier prototype and was unchanged in this run.",
       hashes: [
         { label: "Packet hash", value: d.packetHash, recomputable: true },
         ...(d.bindings.retrievalHash ? [{ label: "Retrieval hash", value: d.bindings.retrievalHash, recomputable: false }] : []),

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Ld } from "@axp/design-system/ledger";
+import { Ld, Term } from "@axp/design-system/ledger";
+import { GLOSSARY } from "@/data/glossary";
 import { nameOf, opportunity, run, usdc } from "@/data/select";
 import { activityLanes, activitySegments, auctionRow, campaignStats, hhmm } from "@/components/v2/derive";
 import { LiveVerifyTile } from "@/components/v2/live";
@@ -17,7 +18,7 @@ export default function Overview() {
       <Ld.PageBar
         title="Overview"
         meta={<Ld.Tag tone="brand">Recorded run</Ld.Tag>}
-        sub="One recorded run of an ad exchange inside an AI app: four questions, advertiser agents, sealed auctions, disclosed Sponsored cards and test USDC settlement. Everything is the saved record; nothing re-executes. Built on ContextHint data, Jev decisions and Solana settlement."
+        sub={<>One recorded run of an ad exchange inside an AI app: four questions, advertiser agents, sealed auctions, disclosed Sponsored cards and test USDC settlement. Everything is the saved record; nothing re-executes. Built on <Term title={GLOSSARY.contexthint.term} def={GLOSSARY.contexthint.def}>ContextHint</Term> data, <Term title={GLOSSARY.jev.term} def={GLOSSARY.jev.def}>Jev</Term> decisions and <Term title={GLOSSARY.solanaSandbox.term} def={GLOSSARY.solanaSandbox.def}>hosted Solana sandbox</Term> settlement.</>}
         actions={
           <>
             <Ld.Button variant="secondary" href="/opportunity/1/" Link={L}>
@@ -31,12 +32,16 @@ export default function Overview() {
       />
       <div className="ld-kpis">
         <Ld.Kpi label="Opportunities" value={run.counts.opportunities} context="Questions asked in the app" href="/opportunity/1/" Link={L} />
-        <Ld.Kpi label="Fill" value={`${run.counts.auctions} of ${run.counts.opportunities}`} context="1 no fill by rule, 0 agent calls" />
+        <Ld.Kpi label="Fill" value={`${run.counts.auctions} of ${run.counts.opportunities}`} context="1 no fill by rule, with 0 agent calls" />
         <Ld.Kpi label="Agent decisions" value={run.counts.decisions} context={`${bids} became bids in an auction`} />
-        <Ld.Kpi label="Clearing prices" value={rows[0].price} context={`Then ${rows[1].price} and ${rows[2].price} on opportunities 2 and 3`} />
-        <Ld.Kpi label="Accepted spend" value={usdc(run.totals.chargesBaseUnits)} context={`Test USDC paid out; ${usdc(run.totals.refundedBaseUnits)} refunded`} chip={<Ld.Tag tone="brand">Sandbox</Ld.Tag>} href="/settlement/" Link={L} />
+        <Ld.Kpi label="Clearing prices" value={rows[0].price} unit="USDC" context={`Then ${rows[1].price} and ${rows[2].price} USDC on opportunities 2 and 3`} />
+        <Ld.Kpi label="Accepted spend" value={usdc(run.totals.chargesBaseUnits)} unit="USDC" context={`Test USDC paid out; ${usdc(run.totals.refundedBaseUnits)} USDC refunded`} href="/settlement/" Link={L} />
         <LiveVerifyTile />
       </div>
+
+      <Ld.Callout tone="brand" title="Where a rule changed the winner: opportunity 3">
+        The same question was asked again. ClearVault's agent said bid, but ClearVault had already been placed twice in this session, so the frequency cap kept it out and KeyForge won at 0.003 USDC. In opportunities 1 and 2 the two wallets tied and a published tie rule decided. <a className="ld-link" href="/opportunity/3/#auction">Open opportunity 3</a>
+      </Ld.Callout>
 
       <div className="ov2-grid">
         <Ld.Panel title="Auctions" sub="In story order. Select a row for the full pipeline." flush>
@@ -46,26 +51,28 @@ export default function Overview() {
               { key: "e", head: "Eligible", num: true, cell: (r) => `${r.eligible} of 3` },
               { key: "b", head: "Bids", num: true, cell: (r) => r.bidders },
               { key: "w", head: "Winner", cell: (r) => r.winner ?? <span className="ld-faint">nobody</span> },
-              { key: "p", head: "Price", num: true, cell: (r) => (r.price ? <span className="ld-strong">{r.price}</span> : <span className="ld-faint">none</span>) },
+              { key: "p", head: "Price, USDC", num: true, cell: (r) => (r.price ? <span className="ld-strong">{r.price}</span> : <span className="ld-faint">none</span>) },
               { key: "t", head: "Outcome", cell: (r) => <Ld.Tag tone={r.tag.tone}>{r.tag.label}</Ld.Tag> },
             ]}
             rows={rows}
           />
         </Ld.Panel>
-        <Ld.Panel title="Latest delivery" sub={`Opportunity ${last.n} · ${nameOf(last.award!.campaignId)} · ${usdc(last.charge!.amountBaseUnits)}`} actions={<Ld.Button variant="ghost" size="sm" href={`/opportunity/${last.n}/#charge`} Link={L}>Open</Ld.Button>}>
+        <Ld.Panel title="Latest delivery" sub={`Opportunity ${last.n}, ${nameOf(last.award!.campaignId)}, ${usdc(last.charge!.amountBaseUnits)} USDC`} actions={<Ld.Button variant="ghost" size="sm" href={`/opportunity/${last.n}/#charge`} Link={L}>Open</Ld.Button>}>
           <div className="ld-stack">
             <div className="ld-chat-q" style={{ justifySelf: "start", maxWidth: "100%", borderRadius: "16px 16px 16px 4px" }}>{last.question}</div>
             <Ld.SponsoredCard text={last.award!.creative.approvedText} advertiser={nameOf(last.award!.campaignId)} url={last.award!.creative.destinationURL} />
-            <Ld.Verified state="pass">Signed receipt; checked on Verify</Ld.Verified>
+            <span className="ld-caption">Signed by the publisher. Check the signature on <a className="ld-link" href="/verify/">Verify</a>.</span>
           </div>
         </Ld.Panel>
       </div>
 
       <Ld.Panel title="Run activity" sub="Exchange clock, UTC. The 70-minute idle gap is drawn as a break. Sandbox chain times are on Settlement, never on this axis.">
-        <Ld.ActivityChart lanes={activityLanes()} segments={activitySegments()} fmt={hhmm} gapLabel="70 min" />
+        <div className="ld-chart-scroll">
+          <Ld.ActivityChart lanes={activityLanes()} segments={activitySegments()} fmt={hhmm} gapLabel="70 min" />
+        </div>
       </Ld.Panel>
 
-      <div className="ov2-grid">
+      <div className="ov2-stack">
         <Ld.Panel title="Campaigns" sub="Three fictional advertisers" flush actions={<Ld.Button variant="ghost" size="sm" href="/advertisers/" Link={L}>How they joined</Ld.Button>}>
           <Ld.Table
             columns={[
@@ -74,20 +81,21 @@ export default function Overview() {
               { key: "e", head: "Eligible", num: true, cell: (s) => `${s.eligible} of 4` },
               { key: "b", head: "Bids", num: true, cell: (s) => s.bids },
               { key: "w", head: "Wins", num: true, cell: (s) => s.wins },
-              { key: "sp", head: "Spend vs cap", cell: (s) => <Ld.Progress value={s.spend} max={s.cap} label={`${usdc(s.spend)} of ${usdc(s.cap)}`} /> },
-              { key: "r", head: "Refunded at close", num: true, cell: (s) => (s.funded ? usdc(s.remaining) : <span className="ld-faint">no channel</span>) },
+              { key: "sp", head: "Spend vs cap, USDC", cell: (s) => <Ld.Progress value={s.spend} max={s.cap} label={`${usdc(s.spend)} of ${usdc(s.cap)}`} /> },
+              { key: "r", head: "Refunded at close, USDC", num: true, cell: (s) => (s.funded ? usdc(s.remaining) : <span className="ld-faint">no channel</span>) },
             ]}
             rows={stats}
           />
         </Ld.Panel>
-        <Ld.Panel title="Channels" sub="Deposit, paid and refunded, test USDC" actions={<Ld.Button variant="ghost" size="sm" href="/settlement/" Link={L}>Settlement</Ld.Button>}>
+        <Ld.Panel title="Payment channels" sub="Deposit, paid and refunded, test USDC on the hosted Solana sandbox" actions={<Ld.Button variant="ghost" size="sm" href="/settlement/" Link={L}>Settlement</Ld.Button>}>
           <div className="ld-stack-lg" style={{ gap: 18 }}>
+            <div className="ov2-channels">
             {run.channels.map((ch) => (
               <div key={ch.channelId} className="ld-stack" style={{ gap: 8 }}>
                 <div className="ld-between">
                   <span className="ld-strong">{nameOf(ch.campaignId)}</span>
                   <span className="ld-caption">
-                    {usdc(ch.settledBaseUnits)} paid · {usdc(ch.refundBaseUnits)} back of {usdc(ch.depositBaseUnits)}
+                    {usdc(ch.settledBaseUnits)} paid, {usdc(ch.refundBaseUnits)} back, of {usdc(ch.depositBaseUnits)} USDC
                   </span>
                 </div>
                 <Ld.BalanceBar
@@ -99,6 +107,7 @@ export default function Overview() {
                 />
               </div>
             ))}
+            </div>
             <div className="ld-row" style={{ gap: 14 }}>
               <Ld.Money state="settled" label="Paid to the publisher" />
               <Ld.Money state="refunded" label="Refunded" />

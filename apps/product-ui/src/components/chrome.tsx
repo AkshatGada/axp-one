@@ -21,7 +21,7 @@ export function Chrome({ runId, opps, campaigns, verifyMeta, children }: { runId
         top={
           <Ld.TopBar
             brand={<Ld.Wordmark href={LANDING_URL} Link={L} />}
-            run={<Ld.RunSwitcher runId={runId} note="Recorded replay · hosted Solana sandbox · test USDC" />}
+            run={<Ld.RunSwitcher runId={runId} note="Recorded replay on a hosted Solana sandbox, test USDC" />}
             chips={
               <>
                 <Ld.Pv kind="replay" />

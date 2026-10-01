@@ -1,7 +1,8 @@
 "use client";
 // Present mode: a 1920x1080 stage scaled to the window, one beat at a time, keyboard driven, optional autoplay.
 // Recorded values only; timings here pace the presentation, they are not execution.
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Key, Provenance, Wordmark } from "@axp/design-system/ledger";
 
@@ -22,7 +23,10 @@ export function PresentStage({ beats, views }: { beats: BeatMeta[]; views: React
   const [help, setHelp] = useState(false);
   const [scale, setScale] = useState(0.5);
   const [ready, setReady] = useState(false);
+  const [small, setSmall] = useState(false);
+  const [fitted, setFitted] = useState(false);
   const viewRef = useRef<HTMLDivElement>(null);
+  const fitRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -30,7 +34,10 @@ export function PresentStage({ beats, views }: { beats: BeatMeta[]; views: React
     if (params.get("auto") === "1") setAuto(true);
     if (params.get("captions") === "0") setCaptions(false);
     setReady(true);
-    const fit = () => setScale(Math.min(window.innerWidth / 1920, window.innerHeight / 1080));
+    const fit = () => {
+      setScale(Math.min(window.innerWidth / 1920, window.innerHeight / 1080));
+      setSmall(window.innerWidth < 700);
+    };
     fit();
     window.addEventListener("resize", fit);
     const onHash = () => {
@@ -49,21 +56,48 @@ export function PresentStage({ beats, views }: { beats: BeatMeta[]; views: React
     history.replaceState(history.state, "", `${window.location.pathname}${window.location.search}#${beat + 1}`);
   }, [beat, ready]);
 
-  // Reveal elements marked data-from <= step inside the current view.
-  useEffect(() => {
-    const root = viewRef.current;
-    if (!root) return;
+  const applyStep = useCallback((root: HTMLElement, st: number) => {
     root.querySelectorAll<HTMLElement>("[data-from]").forEach((el) => {
-      const from = Number(el.dataset.from);
-      if (from <= step) el.setAttribute("data-shown", "");
+      if (Number(el.dataset.from) <= st) el.setAttribute("data-shown", "");
       else el.removeAttribute("data-shown");
     });
     root.querySelectorAll<HTMLElement>("[data-show-from]").forEach((el) => {
-      el.hidden = Number(el.dataset.showFrom) > step;
+      el.hidden = Number(el.dataset.showFrom) > st;
     });
     root.querySelectorAll<HTMLElement>("[data-hide-from]").forEach((el) => {
-      el.hidden = Number(el.dataset.hideFrom) <= step;
+      el.hidden = Number(el.dataset.hideFrom) <= st;
     });
+  }, []);
+
+  // Fill the 16:9 frame: lay the beat out in its final state, pick the largest surface scale that fits, then
+  // return to the current step. Surfaces never go below 1.25x of the product size.
+  useLayoutEffect(() => {
+    const root = fitRef.current;
+    const box = viewRef.current;
+    if (!root || !box || small) return;
+    applyStep(root, 99);
+    const cs = getComputedStyle(box);
+    const k = box.getBoundingClientRect().height / box.offsetHeight; // the frame's transform scale
+    const availH = (box.offsetHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)) * k;
+    let z = 1.25;
+    for (let t = 2.3; t >= 1.25; t -= 0.05) {
+      root.style.zoom = String(t);
+      if (root.getBoundingClientRect().height <= availH + 1 && root.scrollWidth <= root.clientWidth + 1) {
+        z = t;
+        break;
+      }
+    }
+    root.style.zoom = String(z);
+    applyStep(root, step);
+    setFitted(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [beat, small, ready]);
+
+  // Reveal elements marked data-from <= step inside the current view.
+  useEffect(() => {
+    const root = fitRef.current;
+    if (!root) return;
+    applyStep(root, step);
   }, [step, beat]);
 
   const goBeat = useCallback((b: number) => {
@@ -120,9 +154,21 @@ export function PresentStage({ beats, views }: { beats: BeatMeta[]; views: React
   const elapsed = useMemo(() => beats.slice(0, beat).reduce((n, x) => n + x.durationMs, 0), [beats, beat]);
   const mmss = (ms: number) => `${Math.floor(ms / 60000)}:${String(Math.floor((ms % 60000) / 1000)).padStart(2, "0")}`;
 
+  if (small)
+    return (
+      <div className="ld pr-small">
+        <div className="ld-panel" style={{ padding: 20, display: "grid", gap: 10, maxWidth: 420 }}>
+          <span className="ld-card-title">Present mode is designed for a laptop or larger screen</span>
+          <span className="ld-secondary">It plays the recorded run as a 16:9 slideshow with captions. On a phone, the explorer pages show the same records.</span>
+          <Link className="ld-btn ld-btn--primary" href="/">
+            Go to the Overview
+          </Link>
+        </div>
+      </div>
+    );
   return (
     <div className="lg-present" data-cursor={auto ? "hidden" : undefined}>
-      <div className="lg-present-frame pr-frame ld" style={{ transform: `scale(${scale})` }} onClick={() => !auto && next()}>
+      <div className="lg-present-frame pr-frame ld" style={{ transform: `translate(-50%, -50%) scale(${scale})`, visibility: ready && fitted ? "visible" : "hidden" }} onClick={() => !auto && next()}>
         <header className="pr-top">
           <span className="pr-brand">
             <Wordmark />
@@ -135,15 +181,17 @@ export function PresentStage({ beats, views }: { beats: BeatMeta[]; views: React
           </span>
           <span className="pr-top-r">
             <Provenance kind="replay" />
-            <span className="pr-scope">Hosted Solana sandbox · Test USDC · Fictional advertisers</span>
+            <span className="pr-scope">Hosted Solana sandbox, test USDC, fictional advertisers</span>
           </span>
         </header>
         <div className="pr-view" ref={viewRef} key={b.id}>
-          {views[beat]}
+          <div className="pr-fit" ref={fitRef}>
+            {views[beat]}
+          </div>
         </div>
         <footer className="lg-present-captions">
           <div className="lg-present-caption" aria-live="polite">
-            {captions ? b.caption : <span style={{ color: "var(--stage-muted)" }}>Captions off · press C</span>}
+            {captions ? b.caption : <span style={{ color: "var(--stage-muted)" }}>Captions off. Press C</span>}
           </div>
           <div className="pr-foot-r">
             <div className="lg-present-ticks" role="tablist" aria-label="Beats">
@@ -162,7 +210,7 @@ export function PresentStage({ beats, views }: { beats: BeatMeta[]; views: React
               ))}
             </div>
             <span className="pr-time">
-              {mmss(elapsed)} · {auto ? "autoplay" : "manual"} · <span className="pr-k">?</span> keys
+              {mmss(elapsed)}, {auto ? "autoplay" : "manual"}, <span className="pr-k">?</span> for keys
             </span>
           </div>
         </footer>

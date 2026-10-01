@@ -25,6 +25,9 @@ export default function PresentPage() {
   const kfB = decisionFor(o1, "v3-keyforge", "text_only")!;
   const kfH = decisionFor(o1, "v3-keyforge", "history")!;
   const lgH = decisionFor(o1, "v3-leatherguard", "history")!;
+  const o2 = opportunity(2);
+  const o2b = decisionFor(o2, "v3-clearvault", "text_only")!;
+  const o2h = decisionFor(o2, "v3-clearvault", "history")!;
   const mercari = evidenceRecord(cvH.retrieval!.examples[0].id)!;
   const hint = evidenceHint(cvH.retrieval!.hintIds[0])!;
   const max = Number(run.policy.maxBidBaseUnits);
@@ -73,7 +76,7 @@ export default function PresentPage() {
           <Ld.Kpi label="Agent decisions" value={run.counts.decisions} context="Decided with Jev" />
           <Ld.Kpi label="Auctions" value={run.counts.auctions} context="Plus 1 no fill" />
           <Ld.Kpi label="Signed deliveries" value={run.counts.receipts} context="Publisher receipts" />
-          <Ld.Kpi label="Settled" value={usdc(run.totals.paidBaseUnits)} context="Test USDC on a hosted Solana sandbox" />
+          <Ld.Kpi label="Settled" value={usdc(run.totals.paidBaseUnits)} unit="USDC" context="Test USDC on a hosted Solana sandbox" />
         </div>
         <Ld.Panel title="The four questions" sub="Story order" flush>
           <Ld.Table
@@ -98,8 +101,8 @@ export default function PresentPage() {
               initial={c.businessName[0]}
               muted={!c.funded}
               name={c.businessName}
-              status={<>{c.funded ? <Ld.Tag tone="success" dot>{`Funded ${usdc(c.depositBaseUnits)}`}</Ld.Tag> : <Ld.Tag tone="dashed">Unfunded</Ld.Tag>}<Ld.Pv kind="fictional" /></>}
-              kpis={<span className="ld-secondary">Declares {c.declaredConstraints.map((x) => x.replace(/_/g, " ")).join(", ")} · max bid {usdc(c.maxBidBaseUnits)} · cap {usdc(s.cap)}</span>}
+              status={<>{c.funded ? <Ld.Tag tone="success" dot>{`Funded ${usdc(c.depositBaseUnits)} USDC`}</Ld.Tag> : <Ld.Tag tone="dashed">Unfunded</Ld.Tag>}<Ld.Pv kind="fictional" /></>}
+              kpis={<span className="ld-secondary">Declares {c.declaredConstraints.map((x) => x.replace(/_/g, " ")).join(", ")}. Max bid {usdc(c.maxBidBaseUnits)} USDC, cap {usdc(s.cap)} USDC.</span>}
             />
           );
         })}
@@ -124,21 +127,27 @@ export default function PresentPage() {
     ),
     decisions: (
       <div className="ld-stack-lg" style={{ gap: 16 }}>
-        <div className="ld-cols-2">
+        <div className="ld-cols-3">
           {([
             [nameOf("v3-clearvault"), cvB, cvH],
             [nameOf("v3-keyforge"), kfB, kfH],
           ] as const).map(([name, b, h]) => (
-            <Ld.Panel key={name} title={`${name} · intent`} sub="Decided with Jev · level = rounded score" actions={<Ld.Tag tone="brand">{`Level ${b.commercialIntentLevel} to ${h.commercialIntentLevel}`}</Ld.Tag>}>
-              <Ld.ScoreRuler min={1.5} max={3} ticks={[2, 3]} width={520} marks={[{ value: b.scores.intent, kind: "baseline", label: "Baseline" }, { value: h.scores.intent, kind: "history", label: "With history" }]} />
+            <Ld.Panel key={name} title={`${name}, opportunity 1`} sub="Intent, decided with Jev" actions={<Ld.Tag tone="outline">{`Level changed, ${b.commercialIntentLevel} to ${h.commercialIntentLevel}`}</Ld.Tag>}>
+              <Ld.ScoreRuler min={1.5} max={3} ticks={[2, 3]} width={360} marks={[{ value: b.scores.intent, kind: "baseline", label: "Baseline" }, { value: h.scores.intent, kind: "history", label: "With history" }]} />
               <p className="ld-secondary" style={{ marginTop: 8 }}>
                 Moved {b.scores.intent.toFixed(2)} to {h.scores.intent.toFixed(2)}, crossing the 2.5 rounding line. One observation per arm; not a measured lift.
               </p>
             </Ld.Panel>
           ))}
+          <Ld.Panel title="ClearVault, opportunity 2" sub="Intent, decided with Jev" actions={<Ld.Tag tone="outline">{`Unchanged, level ${o2b.commercialIntentLevel}`}</Ld.Tag>}>
+            <Ld.ScoreRuler min={1.5} max={3} ticks={[2, 3]} width={360} marks={[{ value: o2b.scores.intent, kind: "baseline", label: "Baseline" }, { value: o2h.scores.intent, kind: "history", label: "With history" }]} />
+            <p className="ld-secondary" style={{ marginTop: 8 }}>
+              On the offline question history moved intent {o2b.scores.intent.toFixed(2)} to {o2h.scores.intent.toFixed(2)}; both round to level {o2h.commercialIntentLevel}. Unchanged.
+            </p>
+          </Ld.Panel>
         </div>
         <F from={2}>
-          <Ld.Panel title="LeatherGuard" sub="Decided with Jev" actions={<Ld.Tag tone="dashed">Skip · no fit</Ld.Tag>}>
+          <Ld.Panel title="LeatherGuard" sub="Decided with Jev" actions={<Ld.Tag tone="dashed">Skip, no fit</Ld.Tag>}>
             <p className="ld-secondary" style={{ color: "var(--ld-text)" }}>
               Relevance level {lgH.relevanceLevel} ({lgH.scores.relevance.toFixed(2)}): its agent chose no fitting creative. It is also excluded by rule for missing crypto storage. Evidence cannot add a capability.
             </p>
@@ -158,20 +167,28 @@ export default function PresentPage() {
           ))}
         </div>
         <F from={2}>
-          <Ld.Panel title="Opportunity 1 · bids" sub="Highest bid wins; equal bids go to the lower campaign ID" actions={<Ld.Tag tone="brand">Tie-break</Ld.Tag>}>
+          <Ld.Panel title="Opportunity 1 bids, USDC" sub="Highest bid wins; the winner pays its own bid" actions={<Ld.Tag tone="brand">Tie rule</Ld.Tag>}>
             <Ld.BidBars reveal max={max} floor={Number(o1.floorBaseUnits)} format={fmt} rows={bars(o1)} />
           </Ld.Panel>
+          <div className="ld-cols-2" style={{ marginTop: 16 }}>
+            <Ld.Callout title="Why the bids are equal">
+              Both wallets declared the same capabilities, offered the same 0.004 USDC max bid and got the same ratings (3 of 3 and 3 of 3). A tie rule published before the run decides: the lower campaign ID, so ClearVault.
+            </Ld.Callout>
+            <Ld.Callout tone="brand" title="What history changed here">
+              Without history, ClearVault&apos;s ratings (3 and 2) would have bid 0.003 USDC. With history, 0.004 USDC. On opportunity 3 a rule, not a tie, decides the winner.
+            </Ld.Callout>
+          </div>
         </F>
       </div>
     ),
     charge: (
       <div className="ld-stack-lg" style={{ gap: 16 }}>
       <div className="ld-flow">
-        <Ld.FlowTile step="1 · Award" title={`${nameOf(o1.award!.campaignId)} won`} state={<Ld.Money state="reserved" label="Reserved, not owed" />} value={usdc(o1.award!.priceBaseUnits)}>
+        <Ld.FlowTile step="1. Award" title={`${nameOf(o1.award!.campaignId)} won`} state={<Ld.Money state="reserved" label="Reserved, not owed" />} value={`${usdc(o1.award!.priceBaseUnits)} USDC`}>
           <LiveHashV2 value={o1.award!.creative} expected={o1.award!.creativeHash} label="Creative hash recomputed here" />
         </Ld.FlowTile>
         <F from={2}>
-          <Ld.FlowTile step="2 · Delivery and signed receipt" title={`Card inserted with its label, +${(o1.delivery!.msAfterAward / 1000).toFixed(1)} s`}>
+          <Ld.FlowTile step="2. Delivery and signed receipt" title={`Card inserted with its label, +${(o1.delivery!.msAfterAward / 1000).toFixed(1)} s`}>
             <LiveHashV2 value={{ awardId: o1.award!.id, creativeHash: o1.award!.creativeHash, domInserted: true, sponsoredLabelPresent: true }} expected={o1.delivery!.renderAcknowledgementHash} label="Acknowledgement hash recomputed here" />
             <LiveHashV2 value={o1.receipt!.fields} expected={o1.receipt!.receiptHash} label="Receipt hash recomputed here" />
             <LiveSignatureV2 fields={o1.receipt!.fields} signature={o1.receipt!.signature} pem={run.publisher.publicKeyPEM} />
@@ -179,7 +196,7 @@ export default function PresentPage() {
           </Ld.FlowTile>
         </F>
         <F from={3}>
-          <Ld.FlowTile step="3 · Charge, then voucher" title="Only now is it owed" state={<Ld.Money state="accepted" label="Accepted charge" />} value={usdc(o1.charge!.amountBaseUnits)}>
+          <Ld.FlowTile step="3. Charge, then voucher" title="Only now is it owed" state={<Ld.Money state="accepted" label="Accepted charge" />} value={`${usdc(o1.charge!.amountBaseUnits)} USDC`}>
             <Ld.Money state="authorized" label={`Voucher ${o1.voucher!.sequence}: ${usdc(o1.voucher!.cumulativeAmountBaseUnits)} authorized in total`} />
           </Ld.FlowTile>
         </F>
@@ -190,7 +207,7 @@ export default function PresentPage() {
           <div className="ld-callout">
             <span className="ld-card-title">What the app signed</span>
             <span className="ld-secondary" style={{ color: "var(--ld-text)" }}>
-              It inserted this exact card, with its Sponsored label, for opportunity 1. The publisher key signed that statement; your browser just checked the signature.
+              It inserted this exact card, with its Sponsored label, for opportunity 1. The publisher key signed that statement; the check above runs in the browser showing this page.
             </span>
           </div>
         </div>
@@ -203,7 +220,7 @@ export default function PresentPage() {
           <Ld.Callout tone="warning" title="Agent said bid. Exchange did not admit it.">
             Opportunity 3: ClearVault was already placed twice in this session (2 of 2). The frequency cap is a rule, not the agent.
           </Ld.Callout>
-          <Ld.Panel title="Opportunity 3 · bids" actions={<Ld.Tag tone="warning">Frequency cap</Ld.Tag>}>
+          <Ld.Panel title="Opportunity 3 bids, USDC" actions={<Ld.Tag tone="warning">Frequency cap</Ld.Tag>}>
             <Ld.BidBars max={max} floor={Number(o3.floorBaseUnits)} format={fmt} rows={bars(o3)} />
           </Ld.Panel>
         </div>
@@ -219,11 +236,11 @@ export default function PresentPage() {
       <div className="ld-stack-lg" style={{ gap: 18 }}>
         <div className="ld-cols-2">
           {run.channels.map((ch) => (
-            <Ld.Panel key={ch.channelId} title={nameOf(ch.campaignId)} sub="Solana payment channel · hosted sandbox · test USDC" actions={<Ld.Tag tone="success" dot>Finalized</Ld.Tag>}>
+            <Ld.Panel key={ch.channelId} title={nameOf(ch.campaignId)} sub="Payment channel on the hosted Solana sandbox, test USDC" actions={<Ld.Tag tone="success" dot>Finalized</Ld.Tag>}>
               <div className="ld-stack">
                 <Ld.BalanceBar total={Number(ch.depositBaseUnits)} legend segments={[...ch.vouchers.map((v) => ({ key: `v${v.sequence}`, value: Number(v.incrementBaseUnits), state: "settled" as const, label: `Paid ${usdc(v.incrementBaseUnits)}` })), { key: "r", value: Number(ch.refundBaseUnits), state: "refunded" as const, label: `Refunded ${usdc(ch.refundBaseUnits)}` }]} />
                 <F from={2}>
-                  <Ld.StepChart max={8000} format={fmt} width={520} height={140} points={ch.vouchers.map((v) => ({ key: String(v.sequence), label: `voucher ${v.sequence}`, value: Number(v.cumulativeAmountBaseUnits) }))} />
+                  <Ld.StepChart max={Number(ch.depositBaseUnits)} cap={8000} format={fmt} width={520} height={150} points={ch.vouchers.map((v) => ({ key: String(v.sequence), label: `Voucher ${v.sequence}`, value: Number(v.cumulativeAmountBaseUnits) }))} />
                 </F>
               </div>
             </Ld.Panel>
@@ -231,9 +248,9 @@ export default function PresentPage() {
         </div>
         <F from={2}>
           <div className="ld-kpis">
-            <Ld.Kpi label="Paid to the publisher" value={usdc(run.totals.paidBaseUnits)} context="Test USDC, one close per channel" />
-            <Ld.Kpi label="Refunded" value={usdc(run.totals.refundedBaseUnits)} context="Back to the payer" />
-            <Ld.Kpi label="Network fees" value={Number(run.fees.networkFeeLamports).toLocaleString("en-US")} context="Lamports, kept apart from USDC" />
+            <Ld.Kpi label="Paid to the publisher" value={usdc(run.totals.paidBaseUnits)} unit="USDC" context="Test USDC, one close per channel" />
+            <Ld.Kpi label="Refunded" value={usdc(run.totals.refundedBaseUnits)} unit="USDC" context="Back to the payer" />
+            <Ld.Kpi label="Network fees" value={Number(run.fees.networkFeeLamports).toLocaleString("en-US")} unit="lamports" context="Test SOL, kept apart from USDC" />
           </div>
         </F>
       </div>
@@ -251,6 +268,14 @@ export default function PresentPage() {
           </div>
         </div>
         <F from={2}>
+          <Ld.Panel title="What your browser checks" sub="On the downloadable public file">
+            <ul className="ev2-list" style={{ fontSize: 15, color: "var(--ld-text)" }}>
+              <li>19 hashes recomputed: the 4 questions, 15 agent packets</li>
+              <li>9 more: 3 creatives, 3 render acknowledgements, 3 receipts</li>
+              <li>3 publisher signatures (Ed25519)</li>
+              <li>17 sums and rules: links, vouchers, conservation, bids, tie rule, fee cap, totals</li>
+            </ul>
+          </Ld.Panel>
           <Ld.Panel title="What this run does not show">
             <ul className="ev2-list" style={{ fontSize: 15, color: "var(--ld-text)" }}>
               {run.limitations.run.map((l) => (
@@ -258,9 +283,7 @@ export default function PresentPage() {
               ))}
             </ul>
           </Ld.Panel>
-          <p className="pr2-big" style={{ fontSize: 30, marginTop: 18 }}>
-            Explore every hash yourself.
-          </p>
+
         </F>
       </div>
     ),
