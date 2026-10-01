@@ -142,7 +142,6 @@ export default function ExchangeWall() {
       const k0 = home.offsetWidth / w;
       const k1 = Math.min(1.12, (vh - 230) / h, (vw * 0.56) / w);
       geo.current = { dx: vw / 2 - hx, dy: vh / 2 + 18 - hy, k0, k1 };
-      p.set(p.get());
     };
     measure();
     window.addEventListener("resize", measure);
@@ -178,15 +177,18 @@ export default function ExchangeWall() {
   const fx = useTransform(m, (t) => geo.current.dx * t);
   const fy = useTransform(m, (t) => geo.current.dy * t);
   const fs = useTransform(m, (t) => lerp(geo.current.k0, geo.current.k1, t));
-  const frX = useTransform([rotX, m] as MotionValue<number>[], ([r, t]: number[]) => r! * (1 - t!));
-  const frY = useTransform([rotY, m] as MotionValue<number>[], ([r, t]: number[]) => r! * (1 - t!));
-  const frZ = useTransform([rotZ, m] as MotionValue<number>[], ([r, t]: number[]) => r! * (1 - t!));
+  // At rest it leans with the wall, a little less (it is lifted towards the viewer).
+  const frX = useTransform([rotX, m] as MotionValue<number>[], ([r, t]: number[]) => r! * 0.45 * (1 - t!));
+  const frY = useTransform([rotY, m] as MotionValue<number>[], ([r, t]: number[]) => r! * 0.45 * (1 - t!));
+  const frZ = useTransform([rotZ, m] as MotionValue<number>[], ([r, t]: number[]) => r! * 0.45 * (1 - t!));
   const frame = useTransform(p, (v) => seg(v, 0.58, 0.7));
   const cap = useTransform(p, (v) => seg(v, 0.64, 0.76));
   const capY = useTransform(p, (v) => 14 * (1 - out(seg(v, 0.64, 0.78))));
 
+  const pinnedRef = useRef(false);
+  pinnedRef.current = pinned;
   useMotionValueEvent(p, "change", (v) => {
-    const h = v > 0.035;
+    const h = pinnedRef.current && v > 0.035;
     if (h !== hold.current) {
       hold.current = h;
       if (wallRef.current) wallRef.current.dataset.hold = h ? "1" : "";
@@ -269,9 +271,8 @@ export default function ExchangeWall() {
           {LAB.wallNote}
         </motion.p>
 
-        {/* The home box marks where the lifted tile rests; the tile itself is drawn at full size and scaled. */}
-        <div ref={homeRef} className={s.home} aria-hidden />
-        <motion.div className={s.focalPos} style={{ x: still(fx, 0), y: still(fy, 0) }}>
+        {/* focalPos is the lifted tile's resting box; the tile is drawn at full size and scaled into it. */}
+        <motion.div ref={homeRef} className={s.focalPos} style={{ x: still(fx, 0), y: still(fy, 0) }}>
           <div className={s.focalPersp}>
             <motion.div
               ref={focalRef}

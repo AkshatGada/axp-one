@@ -65,9 +65,34 @@ Owner of this file: the landing builder agent. Update at every milestone.
   Heights: 1440x900 16,841px = 18.7 screens; 1920 17.0; 1280x800 19.7; 390 25.2. Contrast audit: 0 failures at
   1280/1440/390 (reduced motion, all text). CLS 0. Shots: docs/frontend/reviews/shots/landing-v5-final/ (untracked).
 
+- `axp-landing-v6`: built from reviews/landing-v6-owner.md (highest authority) plus the applicable v5 design-critic
+  items. Hero: v4 card-stack motion restored exactly; the only change is the H1 / "Behind one Sponsored card"
+  hand-off (copy out by 0.10, line in from 0.10), checked frame by frame 0 to 1 in 0.05 steps at 1280/1440/1920
+  (single clean cut, no overlap); at 1600px and up the chat top-aligns with the H1; the status line carries the
+  "Settled on Solana Devnet, view on Explorer" link and clears the 1280x800 fold. New order: hero, three pillars
+  (ContextHint vermillion, Jev ink/ultramarine, Solana purple), the dark stage (the shutter now opens inside the
+  pinned plate and lifts as a wipe, so it costs no extra 100vh; narrower copy column for the board), ContextHint in
+  one section (scale words only, label above the wall, moat line, Visit ContextHint), Jev (one real ClearVault
+  judgment: inputs, Jev's relevance / intent / creative with confidence, the capped 0.004 bid, "Built with Jev by
+  TypeSafe"), Solana payment channels in #9945FF (two lanes, the channel meter completes when its centre reaches 60%
+  of the viewport, static end state below 900px, Devnet block with per-channel Open / Close / Channel explorer
+  buttons and the program link, all URLs read by extract-specimens.mjs with asserts), Inside the MVP (four framed
+  captures in public/tour/, a list beside one large frame on desktop, a swipe row on phones), compact Proof (counts
+  sentence, verify and Devnet links, video, one real / illustrative / not-shown panel), ultramarine closing with
+  "Agents advise. Code decides the money." folded in (phones show only the final chat). Dropped: why-now, rule
+  wall, payments band, next, dot sort, niche dive, country chart, funnel (brand-book copy kept in copy-book.ts).
+  lint-copy fails the built landing on any exact ContextHint count (read from library.ts and the run's screened
+  slice, both formats) and on percentages other than Jev confidences. Approved foundation change: the 8 PolySans
+  @font-face rules moved from steel.css to design-system/foundation/fonts.css (exported as
+  @axp/design-system/fonts.css); product-ui still loads all faces via next/font. Mono figures now PolySans tabular;
+  the wall's "Ad" tag is #5d5d5d (AA). Heights (static build): 1440x900 10,880px = 12.1 screens; 1280x800 12.8;
+  1920x1080 11.2; 390x844 13,678px = 16.2; reduced motion 1440 12.7. Zero console errors, failed or off-origin
+  requests, horizontal overflow or contrast failures (1440 and 390, all text); CLS 0; LCP 60 to 92 ms (H1).
+  Shots: docs/frontend/reviews/shots/landing-v6-final/.
+
 ## Next
-- 1280x800 is still 19.7 screens (pinned scenes scale with vh, content does not); the 8 stale @font-face rules in
-  steel.css need a foundation split (fonts.css) to delete; product-ui has the same export distDir trap.
+- Phones are 16.2 screens; the hero's static plate list and the Jev / Proof blocks are the remaining length.
+- The stale untracked folder docs/frontend/reviews/shots/landing-v5-builder can be deleted by hand.
 
 ## Notes
 - Dev: `pnpm --dir apps/marketing dev` (:3410). Verify in own tab, not tab-1 (the owner views :3410 there).

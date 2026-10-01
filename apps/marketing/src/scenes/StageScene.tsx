@@ -32,7 +32,7 @@ export default function StageScene() {
   // The aperture: the plate opens while the scene rises into view.
   const { scrollYProgress: enter } = useScroll({ target: sceneRef, offset: ["start end", "start start"] });
   const onEnter = (v: number) => {
-    const t = io(seg(v, 0.15, 1));
+    const t = io(seg(v, 0.05, 1));
     setOpen((o) => (Math.abs(o - t) < 0.003 ? o : t));
   };
   useMotionValueEvent(enter, "change", (v) => {
@@ -58,7 +58,7 @@ export default function StageScene() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pinned]);
 
-  const inset = pinned ? (1 - open) * 40 : 0;
+  const inset = pinned ? (1 - open) * 32 : 0;
   return (
     <section id="how" className="px-section on-stage ss-section" data-tone="stage" data-header-tone={!pinned || open > 0.9 ? "stage" : undefined} aria-labelledby="how-q" data-pinned={pinned ? "" : undefined}>
       <div className="px-wrap">
@@ -67,7 +67,7 @@ export default function StageScene() {
         </div>
       </div>
       <div ref={sceneRef} className="ss" data-pinned={pinned ? "" : undefined} style={{ "--scene-h": sceneHeight(N, { hold: HOLD, enter: ENTER, exit: EXIT }) } as CSSProperties}>
-        <div className="ss-pin" style={pinned ? { clipPath: `inset(${inset}% ${inset * 1.1}% ${inset}% ${inset * 1.1}%)` } : undefined}>
+        <div className="ss-pin" style={pinned ? { clipPath: `inset(${inset * 0.4}% ${inset * 1.1}% ${inset * 0.4}% ${inset * 1.1}%)` } : undefined}>
           {pinned ? (
             <div className="ss-curtain" aria-hidden style={{ transform: `translate3d(0, ${-io(1 - curtain) * 100}%, 0)`, visibility: curtain > 0.001 ? "visible" : "hidden" }}>
               <div className="ss-shutter-in" style={{ opacity: seg(open, 0.55, 1) }}>
