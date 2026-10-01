@@ -368,7 +368,7 @@ export function BidBars({ rows, max, floor, format, floorLabel, reveal }: { rows
             {r.sub ? <small>{r.sub}</small> : null}
           </span>
           <span className="ld-bar-track">
-            {r.value !== null ? <i className="ld-bar" data-winner={r.winner || undefined} style={{ width: pct(r.value) }} title={`${format(r.value)} USDC`} /> : <span className="ld-bar-none">{r.note}</span>}
+            {r.value !== null ? <i className="ld-bar" data-winner={r.winner || undefined} style={{ width: pct(r.value) }} title={`${format(r.value)} USDC`} /> : <span className="ld-bar-none" style={floor !== undefined ? { left: `calc(${pct(floor)} + 10px)` } : undefined}>{r.note}</span>}
             {floor !== undefined ? <span className="ld-bar-floor" style={{ left: pct(floor) }} title={`Floor ${format(floor)}`} /> : null}
           </span>
           <span className="ld-bar-v">{r.value !== null ? format(r.value) : ""}</span>

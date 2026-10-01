@@ -14,6 +14,7 @@ Resume notes for the MVP builder. Spec: docs/frontend/MVP_SPEC.md + FRONTEND_PLA
       opportunity pipeline (one stage at a time via J/K/click/hash, "Show all stages" with ?all=1), Campaigns + campaign
       detail, Publisher, Settlement (Solana payment channels, step charts, tx table, chain lane by slot), Evidence
       (ContextHint), Verify, Try (synthetic), Present (rebuilt on v2, 4:00 total). Timeline dropped as a route (owner).
+- [x] MVP v3 (docs/frontend/reviews/mvp-v2-fixes.md A, B, C), tag axp-mvp-v3
 
 ## Checkpoint A (data layer)
 - `scripts/project-run.mjs` -> `src/data/run.public.json` (committed), `public/run.public.json` (generated, gitignored; `predev`/`build` regenerate), `src/data/build-meta.json`.
@@ -51,3 +52,19 @@ Resume notes for the MVP builder. Spec: docs/frontend/MVP_SPEC.md + FRONTEND_PLA
   link to contexthint.com) on evidence; Overview line "Built on ContextHint data, Jev decisions and Solana settlement".
 - Plain language in main views; IDs/hashes in the Inspector. Old v1 components remain only for /design/v1/.
 - Dev cache can break after many file moves ("Cannot find module './707.js'"): stop the preview, rm -rf apps/product-ui/.next, restart.
+
+## MVP v3 notes
+- Present: 1920x1080 frame absolutely centred, scale min(vw/1920, vh/1080); per-beat auto-fit zoom (.pr-fit, 2.3 down to
+  1.25) fills the frame; under 700px a card links to Overview. Checked at 1280x800, 1440x900, 1920x1080, 2560x1440, 390.
+- Verify truth: Ed25519 support decided by a known test vector (canonical.ts PROBE); an unreadable key is a FAIL, not
+  "unsupported". Headline "Passing" only when every check ran and passed. Rows laid out at build time ("Not run yet")
+  so the table does not shift. Tamper demo flips one byte of opportunity 1's receipt nonce in an in-memory copy: receipt
+  hash and signature go red ("Mismatch"), Reset restores green. Subtitle says the checks use the downloadable file.
+- Opportunity: later stages show "Not reached yet" in one-stage mode; first paint follows ?all=1 / #stage via an inline
+  boot script (html has suppressHydrationWarning). Eligibility copy explains research-only calls; nearest-prompt brands
+  are labelled as observed historical references; ties explained in plain words (same capabilities, ratings, max bid;
+  tie rule; history difference); opportunity 3 callout names the frequency cap rule.
+- Settlement: one clock only (order and slot; blockTime only in the Inspector). Charts are deposit-scaled with a dashed
+  cap line. Units everywhere (USDC, lamports), glossary terms for Jev, ContextHint, tie rule, hosted Solana sandbox.
+- CLS: PolySans via next/font/local (src/app/fonts.ts) removes the font-swap shift. Measured load CLS: /verify 0.012 to
+  0.014, every other route 0 to 0.004 (19 routes x 1280/1440/1920/390, zero console errors, no overflow).

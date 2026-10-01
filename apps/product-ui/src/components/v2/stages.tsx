@@ -36,15 +36,15 @@ export function pipeStages(o: Opportunity): Ld.PipeStage[] {
     ];
   const method = o.decisions.find((d) => d.retrieval)?.retrieval?.method;
   const values = [
-    `Floor ${usdc(o.floorBaseUnits)} USDC`,
+    `Floor ${usdc(o.floorBaseUnits)}`,
     `${o.eligibility.eligible.length} of 3 may bid`,
     method === "vector" ? "Seen before" : "Word overlap",
     `${o.decisions.length} calls`,
-    o.auction.tieBreakApplied ? `Tie at ${usdc(o.auction.bids[0].amountBaseUnits)} USDC` : `${o.auction.bids.length} bid${o.auction.bids.length > 1 ? "s" : ""}`,
-    `${usdc(o.award!.priceBaseUnits)} USDC held`,
+    o.auction.tieBreakApplied ? `Tie at ${usdc(o.auction.bids[0].amountBaseUnits)}` : `${o.auction.bids.length} bid${o.auction.bids.length > 1 ? "s" : ""}`,
+    `${usdc(o.award!.priceBaseUnits)} held`,
     `+${(o.delivery!.msAfterAward / 1000).toFixed(1)} s`,
     "Signed",
-    `${usdc(o.charge!.amountBaseUnits)} USDC`,
+    `${usdc(o.charge!.amountBaseUnits)} charged`,
   ];
   return STAGES.map((s, i) => ({ id: s.id, label: s.label, value: values[i], status: "done" as const }));
 }
@@ -340,6 +340,11 @@ export function AuctionPanel({ o }: { o: Opportunity }) {
         <Ld.Stat label="Rule" value="Bid table v1" caption="Sealed, first price, floor 0.001 USDC" />
       </div>
       {o.auction.tieBreakApplied ? <TieExplainer o={o} /> : null}
+      {o.auction.notAdmitted.length ? (
+        <Ld.Callout tone="warning" title="A rule changed the winner. Agent said bid. Exchange did not admit it.">
+          ClearVault had already been placed twice in this session, so the frequency cap kept its bid out of the auction (no bid, no amount). KeyForge, the only admitted bidder, won at {usdc(o.award!.priceBaseUnits)} USDC with ratings {o.auction.bids[0].levels?.replace(":", " and ")}.
+        </Ld.Callout>
+      ) : null}
     </StagePanel>
   );
 }

@@ -162,7 +162,7 @@ function TamperDemo({ run }: { run: ProductRun | null }) {
             { key: "s", head: "", width: "40px", cell: (id: string) => { const c = state?.rows.find((x) => x.id === id); return <Ld.Verified state={!c ? "idle" : c.status === "pass" ? "pass" : "fail"}>{""}</Ld.Verified>; } },
             { key: "l", head: "Check", cell: (id) => (id === "receipt-1" ? "Opportunity 1: receipt hash" : "Opportunity 1: publisher signature (Ed25519)") },
             { key: "e", head: "Recorded in the file", cell: (id) => <span className="ld-mono">{state?.rows.find((x) => x.id === id)?.expected ?? ""}</span> },
-            { key: "a", head: "Computed now", cell: (id) => { const c = state?.rows.find((x) => x.id === id); return <span className="ld-mono" style={c?.status === "fail" ? { color: "var(--ld-danger)", fontWeight: 500 } : undefined}>{c ? (c.status === "pass" ? c.actual : `${c.actual}: mismatch`) : "not run yet"}</span>; } },
+            { key: "a", head: "Computed now", cell: (id) => { const c = state?.rows.find((x) => x.id === id); return c?.status === "fail" ? <span className="ld-row" style={{ gap: 8 }}><span className="ld-mono" style={{ color: "var(--ld-danger)", fontWeight: 500 }}>{c.actual}</span><Ld.Tag tone="danger">Mismatch</Ld.Tag></span> : <span className="ld-mono">{c ? c.actual : "not run yet"}</span>; } },
           ]}
           rows={ids}
         />
