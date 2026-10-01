@@ -636,6 +636,17 @@
       "niches": 5
     }
   },
+  "jev": {
+    "campaign": "v3-clearvault",
+    "decision": "bid",
+    "relevanceLevel": 3,
+    "intentLevel": 3,
+    "relevanceConfidence": 0.89,
+    "intentConfidence": 0.52,
+    "creativeChosen": true,
+    "creativeProbability": 0.79,
+    "underASecond": true
+  },
   "limitations": [
     "Fictional campaigns; product capabilities are advertiser declarations.",
     "Real historical observations/inferred hints are not advertiser enrollment or targeting lift.",

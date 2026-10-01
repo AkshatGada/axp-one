@@ -104,6 +104,7 @@ function verify(d) {
   }
   assert(!/\[(?:-?\d+(?:\.\d+)?,){64,}/.test(text), "no numeric arrays over 64 long");
   assert(!d.video || d.video.chapters.length === 10, "ten video chapters");
+  assert(!d.jev || (d.jev.decision === "bid" && d.jev.relevanceLevel === 3 && d.jev.intentLevel === 3 && d.jev.creativeChosen), "the Jev example is ClearVault's bid at levels 3 and 3 with its creative");
   assert(text.length < 60000, `slice under 60KB (got ${text.length})`);
 }
 
@@ -111,6 +112,46 @@ function verify(d) {
    The full slice (with model versions, policy names, hashes, IDs) stays in run.generated.json for
    the asserts and /design; the landing bundle imports run.landing.json, so none of that ships. */
 const LANDING_OUT = join(app, "src/data/run.landing.json");
+const DEVNET = join(repo, "artifacts/v3-devnet/settlement.json");
+const DEVNET_OUT = join(app, "src/data/devnet.json");
+/** The public re-settlement of the run's three receipts on Solana Devnet (optional evidence).
+ *  Only amounts and explorer links leave this function; no keys, hashes or addresses as text. */
+function devnet(d) {
+  if (!existsSync(DEVNET)) return existsSync(DEVNET_OUT) ? JSON.parse(readFileSync(DEVNET_OUT, "utf8")) : null;
+  const dv = JSON.parse(readFileSync(DEVNET, "utf8"));
+  const ex = (u) => typeof u === "string" && u.startsWith("https://explorer.solana.com/") && u.includes("cluster=devnet");
+  assert(dv.network?.cluster === "devnet", "devnet: cluster is devnet");
+  assert(dv.verification?.allSignaturesFinalized === true, "devnet: every signature finalized");
+  assert(dv.sourceRun?.bundleSha256 === sha256(readFileSync(RUN)), "devnet: settles this exact recorded run");
+  assert(ex(dv.network.programExplorerUrl), "devnet: program explorer link");
+  const channels = dv.channels.map((c) => {
+    const id = c.channelId.replace(/-channel$/, "");
+    const rec = d.channels.find((x) => x.campaign === id);
+    const tx = (role) => dv.transactions.find((t) => t.channelId === c.channelId && t.role === role);
+    const open = tx("open");
+    const close = tx("cooperative_close");
+    assert(rec, `devnet: ${id} is a recorded channel`);
+    assert(rec && String(c.publisherPayoutBaseUnits) === rec.settled && String(c.payerRefundBaseUnits) === rec.refund && String(c.depositBaseUnits) === rec.deposit, `devnet: ${id} amounts match the recorded run`);
+    for (const t of [open, close]) assert(t && t.finality === "finalized" && t.err == null && ex(t.explorerUrl), `devnet: ${id} ${t?.role} finalized with an explorer link`);
+    assert(ex(c.channelExplorerUrl), `devnet: ${id} channel explorer link`);
+    return {
+      campaign: id,
+      name: NAMES[id],
+      deposit: String(c.depositBaseUnits),
+      paid: String(c.publisherPayoutBaseUnits),
+      refunded: String(c.payerRefundBaseUnits),
+      vouchers: c.receiptToVoucher.map((v) => String(v.cumulativeVoucherBaseUnits)),
+      channelUrl: c.channelExplorerUrl,
+      openUrl: open?.explorerUrl,
+      closeUrl: close?.explorerUrl,
+    };
+  });
+  assert(String(dv.totals.publisherPayoutBaseUnits) === d.totals.paid && String(dv.totals.payerRefundBaseUnits) === d.totals.refunded, "devnet: totals match the recorded run");
+  finish("devnet evidence");
+  const out = { cluster: "devnet", programUrl: dv.network.programExplorerUrl, receipts: channels.reduce((n, c) => n + c.vouchers.length, 0), channels };
+  writeFileSync(DEVNET_OUT, `${JSON.stringify(out, null, 2)}\n`);
+  return out;
+}
 const MVP_META = join(repo, "apps/product-ui/src/data/build-meta.json");
 function landing(d) {
   let verifyChecks = null;
@@ -137,14 +178,16 @@ function landing(d) {
     totals: pick(d.totals, ["deposits", "paid", "refunded"]),
     restart: d.restart,
     evidence: { ...pick(d.evidence, ["nicheLabel", "examples", "hints", "observedPrompt", "observedCreative", "hintText", "slice"]) },
+    jev: d.jev,
     video: d.video,
     mvp: { verifyChecks: verifyChecks ?? d.mvp?.verifyChecks ?? null },
+    devnet: devnet(d),
   };
 }
 function writeLanding(d) {
   const l = landing(d);
   const text = JSON.stringify(l);
-  for (const bad of [/jev-\d/i, /gpt-\d/i, /fit_intent/, /[0-9a-f]{40,}/, /v3-wallet-acceptance/, /\.\.\./]) assert(!bad.test(text), `landing slice leaks ${bad}`);
+  for (const bad of [/jev-\d/i, /gpt-\d/i, /fit_intent/, /[0-9a-f]{40,}/, /v3-wallet-acceptance/, /\.\.\./]) assert(!bad.test(text.replace(/https:\/\/explorer\.solana\.com\/[^"]+/g, "")), `landing slice leaks ${bad}`);
   finish("landing slice");
   writeFileSync(LANDING_OUT, `${JSON.stringify(l, null, 2)}\n`);
   console.log(`extract-specimens: wrote ${LANDING_OUT.replace(`${app}/`, "")} (${text.length} bytes).`);
@@ -392,6 +435,24 @@ const out = {
     sameStateHash: run.restart.beforeHash === run.restart.afterHash,
   },
   evidence,
+  jev: (() => {
+    // One real decision for the landing's Jev section: ClearVault, the first question, with history.
+    const c = run.callEvidence.find((x) => x.slotId === "v3-cached:v3-clearvault-33f486d647df:history");
+    const a = c.rawOutput.answers;
+    const dec = c.decision;
+    const creativeProb = a.creative.probabilities[a.creative.choice];
+    return {
+      campaign: "v3-clearvault",
+      decision: dec.decision,
+      relevanceLevel: dec.relevanceLevel,
+      intentLevel: dec.commercialIntentLevel,
+      relevanceConfidence: a.relevance.confidence,
+      intentConfidence: a.intent.confidence,
+      creativeChosen: a.creative.choice === dec.creativeVersionId,
+      creativeProbability: creativeProb,
+      underASecond: c.elapsedMs < 1000,
+    };
+  })(),
   limitations: run.limitations,
   video: existsSync(SRT)
     ? {
