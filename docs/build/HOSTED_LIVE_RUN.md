@@ -1,7 +1,8 @@
 # Hosted live run (axp.one): architecture
 
-Status 2026-10-02: designed; the API runs locally (`node scripts/hosted/dev-server.mjs`).
-Vercel packaging (section 9) is designed but deliberately not built yet (owner: hosting last).
+Status 2026-10-02: the API is implemented (`packages/hosted/`) and ran one real Devnet run
+end to end locally through `scripts/hosted/dev-server.mjs` (section 12). Vercel packaging
+(section 9) is designed but deliberately not built yet (owner: hosting last).
 
 A judge presses "Run it live" in the hosted MVP and gets a real, bounded V3 run on
 Solana Devnet: four DeepSeek `deepseek-flash` organic answers, 15 real Jev decisions,
@@ -199,3 +200,52 @@ so a completed hosted run can be projected with the same code as a committed one
   throwaway hackathon credentials; Devnet tokens have no value; rotate after judging.
 - The run's receipt key and vouchers are in KV, encrypted with `AXP_STATE_KEY`.
 - Delivery acknowledgement proves DOM insertion in the judge's browser, not attention.
+
+## 12. Local end-to-end result (2026-10-02)
+
+`AXP_E2E_LIVE=1 node scripts/hosted/e2e-live.mjs --keep-artifacts artifacts/hosted-live-e2e`:
+local dev server with the file store, headless Chrome on the dev harness
+(`/__live/#auto=1`) starting, driving and acknowledging the run from its DOM.
+Run `v3-devnet-live-h20261001-8897d4114d`, 74 s wall clock, 13 advance steps:
+queued 0.7 s, opening (2 opens + 4 DeepSeek answers 5–30 s each) 33 s, auctions
+(15 Jev calls) 8 s, delivery (3 browser receipts) 2 s, closing 25 s, finalizing 3 s.
+
+| Turn | Bids | Winner | Delivery |
+|---|---|---|---|
+| cached | ClearVault 4000, KeyForge 4000 (tie) | ClearVault 4000 | browser receipt |
+| offline | ClearVault 3000, KeyForge 3000 (tie) | ClearVault 3000 | browser receipt |
+| repeat | KeyForge 4000 (ClearVault frequency-capped) | KeyForge 4000 | browser receipt |
+| mobile | none (policy) | no fill, 0 calls | — |
+
+Settlement: ClearVault payout 7000 / refund 13000, KeyForge 4000 / 16000. Bundle
+`artifacts/hosted-live-e2e/replay` (hash `6622f84f…e8ba84`), validated by
+`loadV3Bundle`; story gates all passed; the MVP projection (`project-run.mjs`'s
+`project()` + structural checks) accepts it unchanged. Jev 15 calls (21346 in / 1655 out
+tokens); DeepSeek 4 calls, no retries.
+
+- Stable wallet funding (one-time, not this run): [2JA6iSFe…](https://explorer.solana.com/tx/2JA6iSFefQmrwffame3B1558tFnDU1oShDfmHvAsuHeMNKNuENMyRD2UJfmikZQNXsM9nbkNsUTXZoL2vpJdfy5w?cluster=devnet)
+  (0.25 SOL + 1 USDC to each payer from the existing disposable Devnet wallet)
+- ClearVault open [gJS9VbEJ…](https://explorer.solana.com/tx/gJS9VbEJNZFEM8bhvrBanseQezyEMzJ52BFfKT8wzrJnwC11Fz85Yquy8aY2zH7cfAh6ivvEDcZba5NhpyCzCKQ?cluster=devnet),
+  close [51nHQC6h…](https://explorer.solana.com/tx/51nHQC6hozJpV8PeFWgbhyy2zKfXVDuHUtHU4Vgczoz5jy8Y6SP2Z351kiHoogtF4HaBKh3sBJe6ikamt9oCrQAg?cluster=devnet),
+  channel [xoKBvHNv…](https://explorer.solana.com/address/xoKBvHNvJ5qTJdV25tu9YTde3SKak2HKeoKYM7Vwfcj?cluster=devnet)
+- KeyForge open [4K6mnDYu…](https://explorer.solana.com/tx/4K6mnDYu4ZB2nvw1kDAcwHVSUAkcmXUdsFhg8iwb422x5qFKd7Xow88Z4pWUNAwtywNeMjTy3xeKkwXgo1nMu3Q5?cluster=devnet),
+  close [3yrexdmM…](https://explorer.solana.com/tx/3yrexdmM7YXTBpkg2rCQJNZvN8jbEzLQS2BLV9mYpDmwMMQiyfusPtrzj6eChTZVL7M7VKtVSSwL3hUFr7z273AM?cluster=devnet),
+  channel [8iLcbovi…](https://explorer.solana.com/address/8iLcboviLAwTvcYuw715HfxPoe1FadurhKMMBipHXnHX?cluster=devnet)
+- Payers: [ClearVault 8JT15Apz…](https://explorer.solana.com/address/8JT15Apzzn8BCj3UGdHp2VsfubgkUytiiLopSvwtyGqt?cluster=devnet),
+  [KeyForge 4Q1hay8S…](https://explorer.solana.com/address/4Q1hay8SSmRanh6dbp3wcSvcyQXBm2Eo32GLf3mqvXeK?cluster=devnet);
+  publisher [Bfra9s9K…](https://explorer.solana.com/address/Bfra9s9Kn4uKpTw7qcT93YTETtb9nFXR34iGCVtTuB78?cluster=devnet)
+
+Notes for the MVP builder: a hosted run's `chain-check.json` has `hosted: true` and its
+`funding` entry is the one-time stable-wallet funding (with a `note`), so a run has 4
+settlement transactions (2 opens, 2 closes), not the rehearsal's 5; the projection treats
+funding as optional. Turns in the live status are listed alphabetically by scenario.
+Not yet exercised against Upstash or on Vercel (deferred), and the crash-between-broadcast
+recovery path is covered by the adapter's own tests, not by a hosted run.
+
+## 13. Files
+
+`packages/hosted/`: `api.mjs` (routes, caps), `runner.mjs` (leased step machine),
+`live-run.mjs` (engine), `kv.mjs` (Upstash REST / local dir), `vault.mjs` (encrypted
+snapshots), `wallets.mjs` (stable Devnet wallets), `client.mjs` + `client.d.mts` (contract).
+`scripts/hosted/`: `dev-server.mjs`, `wallets.mjs` (init/status/fund), `e2e-live.mjs`,
+`harness/` (dev delivery page). Tests: `tests/hosted/hosted.test.mjs` (offline).

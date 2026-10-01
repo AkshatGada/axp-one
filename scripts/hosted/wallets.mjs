@@ -1,21 +1,21 @@
 // Stable Devnet wallets for hosted live runs (two advertiser payers + publisher).
 //   init           generate local-state/secrets/hosted-devnet-wallets.json (0600, never overwrites)
 //   status         public addresses and balances
-//   fund [sol] [usdc]  one Devnet transaction from the existing disposable funder wallet
-//                  (needs AXP_HOSTED_DEVNET_SIGN=1); default 0.25 SOL + 1 test USDC per payer
+//   fund [sol] [usdc]  one Devnet transaction from a disposable funder wallet file
+//                  (AXP_TEST_WALLET_PATH, shape {network:'solana-devnet',sponsor:{address,secret}};
+//                  needs AXP_HOSTED_DEVNET_SIGN=1); default 0.25 SOL + 1 test USDC per payer
 //   env            print the NAME of the env var and where its value comes from (never the value)
 // Devnet only. Never prints secret keys.
 import {existsSync,readFileSync,openSync,fstatSync,closeSync,constants} from 'node:fs';
-import {resolve,join} from 'node:path';
 import {loadNativeSDK} from '../../packages/payments/sdk-loader.mjs';
-import {localConfiguration,repositoryRoot as root} from '../../packages/config/local.mjs';
+import {localConfiguration,testWalletPath,repositoryRoot as root} from '../../packages/config/local.mjs';
 import {generateWallets,loadWallets,saveWallets,walletsPath,publicWallets} from '../../packages/hosted/wallets.mjs';
 import {rpc,payerHealth} from '../../packages/hosted/live-run.mjs';
 import {LIVE_CHANNEL_IDS} from '../../packages/v3/devnet-live.mjs';
 import {DEVNET_NETWORK,explorerTx} from '../../packages/v3/devnet-settlement.mjs';
 
 const config=localConfiguration(),path=walletsPath(config,root);
-const FUNDER_WALLET=join(root,'local-state/secrets/test-wallets.json'),FUNDER='D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST';
+const FUNDER_WALLET=testWalletPath();
 const [command,a1,a2]=process.argv.slice(2);
 const fail=code=>{const e=new Error(code);e.code=code;throw e;};
 const check=(ok,code)=>{if(!ok)fail(code);};
@@ -40,7 +40,7 @@ async function fund() {
   const sol=Number(a1??'0.25'),usdc=Number(a2??'1');check(sol>0&&sol<=1&&usdc>0&&usdc<=5,'amount_out_of_range');
   const lamports=BigInt(Math.round(sol*1e9)),tokens=BigInt(Math.round(usdc*1e6));
   const w=loadWallets(config,{root}),sdk=await loadNativeSDK(),{kit,token}=sdk,f=readFunder();
-  check(f.network==='solana-devnet'&&f.sponsor.address===FUNDER,'funder_identity_mismatch');
+  check(f.network==='solana-devnet'&&typeof f.sponsor?.address==='string','funder_identity_mismatch');const FUNDER=f.sponsor.address;
   check(await rpc('getGenesisHash')===DEVNET_NETWORK.genesisHash,'genesis_mismatch');
   const funder=await kit.createKeyPairSignerFromBytes(Uint8Array.from(f.sponsor.secret));check(funder.address===FUNDER,'funder_identity_mismatch');
   const mint=kit.address(DEVNET_NETWORK.mint),tp=kit.address(DEVNET_NETWORK.tokenProgram);

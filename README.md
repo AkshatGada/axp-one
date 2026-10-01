@@ -4,8 +4,87 @@ Repository: `agentic-dsp`. Product positioning confirmed by the user on 2026-09-
 The DSP is the advertiser buying subsystem; the exchange connects buyer agents
 and AI publishers. The first beachhead is conversational AI sponsored cards.
 
-Status: planning repository. No application, SDK integration, auction run or
-payment has been implemented here. Local Git only; no remote or deployment.
+Status (2026-10-02): V3 runs end to end on **public Solana Devnet** with Devnet test
+USDC: real DeepSeek `deepseek-flash` organic answers, real Jev decisions, deterministic
+first-price auctions, browser-acknowledged publisher receipts, cumulative vouchers and
+per-run channel opens/closes. Judges can trigger such a run from the hosted MVP
+([architecture](docs/build/HOSTED_LIVE_RUN.md)). Recorded runs replay offline with no
+credentials. Fictional advertisers; not mainnet, not real money.
+
+## Quickstart (judges)
+
+Requirements: **Node 25+** (tested on 25.5; it needs built-in `node:sqlite` and
+TypeScript type stripping, so 22.18+ should work but is untested) and **pnpm 10+**
+(tested 11.9; `corepack enable`). Tested on macOS.
+
+```sh
+git clone <this repository> && cd agentic-dsp
+npm test                       # repository suite (no install, no keys, no network)
+```
+
+**1. Replay the recorded runs (no keys, no install).**
+
+```sh
+npm run demo:v3:replay         # http://127.0.0.1:8794 (AXP_V3_PORT to change)
+node scripts/demo/v3-replay-check.mjs artifacts/v3/replay   # read-only bundle check
+```
+
+Bundles: `artifacts/v3/replay` (first recording, hosted sandbox),
+`artifacts/v3-devnet-live-rehearsal/replay` (live Devnet, terminal operator),
+`artifacts/hosted-live-e2e/replay` (live Devnet, through the hosted API).
+
+**2. The two sites (landing + MVP).**
+
+```sh
+pnpm install --frozen-lockfile
+pnpm --filter @axp/marketing dev       # landing  http://localhost:3410
+pnpm --filter @axp/product-ui dev      # MVP      http://localhost:3420
+pnpm --filter @axp/marketing build     # static export -> apps/marketing/out
+NEXT_PUBLIC_BASE_PATH=/mvp pnpm --filter @axp/product-ui build   # -> apps/product-ui/out
+node scripts/hosted/dev-server.mjs     # both + the live API on http://127.0.0.1:3100
+pnpm --filter @axp/product-ui test     # MVP projection tests
+```
+
+**3. A live run of your own on Solana Devnet** (spends your Jev/DeepSeek credits and
+Devnet test tokens only; a run takes about 1–3 minutes).
+
+```sh
+cp .env.example .env.local             # then set JEV_API_KEY and DEEPSEEK_API_KEY
+# Payment SDK, rebuilt from the vendored, hash-pinned source (needs the npm registry once):
+npm ci --ignore-scripts --no-audit --no-fund --prefix tooling/payment-sdk
+node scripts/payment-spike/phase4-sdk.mjs --acquire
+# Stable Devnet wallets: two advertiser payers + one publisher (0600 file, gitignored):
+node scripts/hosted/wallets.mjs init   # prints the public addresses
+```
+
+Fund each **payer** address with at least 0.05 Devnet SOL (https://faucet.solana.com)
+and 0.1 Devnet USDC (https://faucet.circle.com, network Solana Devnet). Or, from a
+funded Devnet wallet file of your own (`AXP_TEST_WALLET_PATH`, shape
+`{"network":"solana-devnet","sponsor":{"address","secret"}}`):
+`AXP_HOSTED_DEVNET_SIGN=1 node scripts/hosted/wallets.mjs fund 0.25 1`.
+Check with `node scripts/hosted/wallets.mjs status`, then:
+
+```sh
+AXP_LIVE_ENABLED=1 node scripts/hosted/dev-server.mjs
+# open http://127.0.0.1:3100/__live/ and press "Start a live run": this page acts as the
+# publisher's app, inserting each Sponsored card into its DOM before acknowledging it.
+# or the same, unattended, through headless Chrome (AXP_CHROME_BIN if Chrome is elsewhere),
+# saving the run's public files under artifacts/my-run/:
+AXP_E2E_LIVE=1 node scripts/hosted/e2e-live.mjs --keep-artifacts artifacts/my-run
+```
+
+A run's files (`/api/runs/<id>/files/replay/run.json`, `.../chain-check.json`, ...) use the
+same schema and layout as `artifacts/v3-devnet-live-rehearsal/`; render one in the MVP with
+`AXP_RUN_DIR=artifacts/my-run/replay pnpm --filter @axp/product-ui build`.
+More setup detail: [standalone setup](docs/STANDALONE_SETUP.md).
+
+**4. Checks before sharing changes.**
+
+```sh
+npm test
+node scripts/setup/check-repository.mjs   # no secrets, machine paths or private files staged
+```
+
 Baseline planning package reviewed 2026-09-30. The later data/ML and delegated
 component-specification expansion is still being reconciled; see planning
 progress. That earlier review does not certify the expanded plan or any build.
@@ -58,6 +137,6 @@ agents represent the advertiser buying those placements. No document quiz or
 report-unlock gate is required. Earlier receipt, restart and budget lessons are
 design inputs, not evidence that this new system already works.
 
-The immediate output is a reviewed plan for the user's approval. The later build
-will include backend plus an intentionally plain functional UI. Final frontend
-visual design belongs to the user's specialist agent.
+The build includes backend plus intentionally plain functional and replay UIs.
+Final frontend visual design belongs to the user's specialist agent. Historical
+planning documents remain as research, with implemented APIs frozen separately.
