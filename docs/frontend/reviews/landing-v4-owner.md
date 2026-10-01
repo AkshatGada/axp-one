@@ -112,3 +112,17 @@ Jev (by TypeSafe) is the decision API behind every advertiser agent's judgment. 
 Not a sponsor. Keep it modest: "Built with Jev" only where it is relevant, no dedicated feature block, no hero mention.
 Places: the "Agents judge the fit" stage beat and the exploded-card Agents plate ("judged with Jev"), plus one line in
 the footer/credits ("Agent decisions built with Jev by TypeSafe", linking https://docs.typesafe.ai). Nothing more.
+
+## Owner: three things to highlight (2026-10-02, Solana track)
+We are entering the Solana track. Highlight three components, as the three pillars of axp.one (no sponsorship wording):
+1. **ContextHint**: the data foundation (the chapter above).
+2. **Solana payment channels**: how money moves. Name Solana clearly wherever payments appear: the payments band
+   becomes "Settled through Solana payment channels": a deposit opens a channel on Solana, each accepted card raises
+   a cumulative off-chain authorization, one close on Solana pays the AI app and refunds the rest. Real facts only:
+   2 channels opened and closed on a hosted Solana sandbox with test USDC, both finalized, 0.010 paid, 0.030 refunded,
+   no Solana transaction per ad. Never claim mainnet. Stage beat 7 and the exploded-card Payment plate say "Solana".
+3. **Jev**: the agent decisions ("judged with Jev"), kept proportionate.
+Add one clean "Built on" trio, placed once near the top (under the hero or right after it), plain text, no logos,
+no icon sets: "Data from ContextHint. Decisions with Jev. Settlement on Solana." Each item one short line with a link
+(contexthint.com, docs.typesafe.ai, solana.com), opening in a new tab. Then each pillar appears again where its part
+of the story happens. This supersedes "Jev only in footer": Jev may sit in the trio too, still modest.
