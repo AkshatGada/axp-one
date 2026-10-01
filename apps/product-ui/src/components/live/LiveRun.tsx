@@ -199,6 +199,7 @@ export function LiveRun() {
   const capped = !!config && config.usedToday >= config.caps.daily;
   const canStart = !!config?.enabled && !busy && !capped && !run;
   const phaseIx = run ? PHASES.findIndex((p) => p.id === run.phase) : -1;
+  const names: Record<string, string> = Object.fromEntries((run?.status?.turns ?? []).flatMap((t) => t.decisions.map((d) => [d.campaignId, d.advertiser])));
   const turns = (run?.status?.turns ?? []).slice().sort((a, b) => ORDER.indexOf(a.scenarioId) - ORDER.indexOf(b.scenarioId));
 
   return (
@@ -273,14 +274,17 @@ export function LiveRun() {
           <Ld.Panel title="Questions, answers and decisions" sub="The app answers first, with no advertiser material; then each advertiser's agent decides with Jev and code runs the auction.">
             <div className="lv-turns">
               {turns.map((t) => (
-                <TurnCard key={t.scenarioId} t={t} />
+                <TurnCard key={t.scenarioId} t={t} names={names} />
               ))}
             </div>
           </Ld.Panel>
           {(run.status.awards ?? []).length ? (
             <Ld.Panel title="Delivery, in this page" sub="Each winning card is inserted here. This page checks the Sponsored label and the exact approved text in its own DOM, then the app signs a receipt. Only then is the charge accepted.">
               <div className="lv-cards">
-                {run.status.awards.map((a) => (
+                {run.status.awards
+                  .slice()
+                  .sort((x, y) => ORDER.indexOf(x.scenarioId ?? "") - ORDER.indexOf(y.scenarioId ?? ""))
+                  .map((a) => (
                   <AwardCard key={a.awardId} a={a} t={turns.find((x) => x.outcome?.awardId === a.awardId)} ack={acks[a.awardId]} charge={run.status!.charges.find((c) => c.awardId === a.awardId)} />
                 ))}
               </div>
@@ -325,7 +329,8 @@ export function LiveRun() {
   );
 }
 
-function TurnCard({ t }: { t: TurnStatus }) {
+const REASON: Record<string, string> = { missing_constraint: "missing a required capability", frequency_cap: "frequency cap", policy_excluded: "intent not allowed", channel_unavailable: "no funded channel" };
+function TurnCard({ t, names }: { t: TurnStatus; names: Record<string, string> }) {
   const hist = t.decisions.filter((d) => d.arm === "history");
   const winner = t.outcome?.awardId ? t.outcome.bids[0] : null;
   return (
@@ -348,7 +353,7 @@ function TurnCard({ t }: { t: TurnStatus }) {
       ) : t.excluded.length && t.status !== "waiting_organic" ? (
         <span className="ld-caption">No agent asked: {t.excluded.length === 3 ? "every campaign was" : `${t.excluded.length} campaigns were`} excluded by rule.</span>
       ) : null}
-      {t.excluded.length && hist.length ? <span className="ld-caption">Excluded by rule: {t.excluded.map((x) => `${x.campaignId.replace(/^v3-/, "")} (${capWords(x.reason)})`).join(", ")}</span> : null}
+      {t.excluded.length && hist.length ? <span className="ld-caption">Excluded by rule: {t.excluded.map((x) => `${names[x.campaignId] ?? x.campaignId.replace(/^v3-/, "")} (${REASON[x.reason] ?? capWords(x.reason)})`).join(", ")}</span> : null}
       {t.outcome ? (
         <span className="ld-secondary" style={{ color: "var(--ld-text)" }}>
           {t.outcome.status === "awarded" && winner
