@@ -121,11 +121,11 @@
 .lg-pagehead .lg-lede { margin-top: 4px; }
 
 /* Key/value */
-.lg-kv { display: grid; grid-template-columns: fit-content(210px) minmax(0, 1fr); margin: 0; }
+.lg-kv { display: grid; grid-template-columns: minmax(104px, 172px) minmax(0, 1fr); margin: 0; }
 .lg-kv > div { display: contents; }
 .lg-kv dt, .lg-kv dd { margin: 0; padding: 9px 0; border-top: var(--lg-rule-soft); }
 .lg-kv > div:first-child dt, .lg-kv > div:first-child dd { border-top: 0; }
-.lg-kv dt { padding-right: 20px; min-width: 104px; overflow-wrap: anywhere; font-size: 13px; font-weight: 500; letter-spacing: .02em; color: var(--steel-dark); }
+.lg-kv dt { padding-right: 16px; overflow-wrap: anywhere; font-size: 13px; font-weight: 500; letter-spacing: .02em; color: var(--steel-dark); }
 .lg-kv dd { min-width: 0; font-size: 15px; color: var(--ink); overflow-wrap: anywhere; }
 .lg-kv[data-dense] dt, .lg-kv[data-dense] dd { padding: 6px 0; }
 .lg-kv dd .pv { margin-left: 8px; }
