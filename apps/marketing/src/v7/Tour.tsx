@@ -37,6 +37,12 @@ export default function Tour() {
               </a>
             </li>
           ))}
+          <li className={s.more} data-reveal="fade" style={{ "--d": "240ms" } as CSSProperties}>
+            <a href={MVP_URL} {...ext}>
+              <span>{MVP_TOUR.action}</span>
+              <Arrow width={26} />
+            </a>
+          </li>
         </ul>
       </div>
     </section>

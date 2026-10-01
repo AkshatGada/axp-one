@@ -6,7 +6,7 @@
 .pin { position: relative; }
 .stage { position: relative; min-height: 100svh; display: grid; align-content: center; padding: calc(var(--px-header-h, 72px) + 28px) 0 48px; }
 @media (min-width: 900px) {
-  :global(html[data-px-motion="on"]) .pin { height: 200vh; }
+  :global(html[data-px-motion="on"]) .pin { height: 160vh; }
   :global(html[data-px-motion="on"]) .stage { position: sticky; top: 0; height: 100svh; min-height: 640px; }
 }
 .in { position: relative; display: grid; gap: clamp(32px, 6vh, 64px); }
@@ -48,7 +48,7 @@
 .stage[data-step="4"] .refund { opacity: 1; }
 
 /* The proof: the live run's transactions on Solana Devnet. */
-.proof { position: relative; display: grid; gap: 26px; padding: clamp(40px, 7vh, 80px) 0 clamp(72px, 11vh, 120px); }
+.proof { position: relative; display: grid; gap: 22px; padding: clamp(24px, 4vh, 48px) 0 clamp(64px, 9vh, 100px); }
 .h3 { margin: 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(32px, 3.4vw, 56px); line-height: 1; letter-spacing: -0.03em; }
 .channels { display: grid; gap: 14px; }
 @media (min-width: 900px) { .channels { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

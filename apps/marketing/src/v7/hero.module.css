@@ -5,7 +5,7 @@
 .hero { position: relative; }
 .stage { position: relative; height: 100svh; min-height: 640px; overflow: hidden; background: var(--paper); }
 @media (min-width: 900px) {
-  :global(html[data-px-motion="on"]) .hero { height: 380vh; }
+  :global(html[data-px-motion="on"]) .hero { height: 310vh; }
   :global(html[data-px-motion="on"]) .stage { position: sticky; top: 0; }
 }
 
@@ -317,5 +317,4 @@
 .focal[data-intro="done"] * { animation: none !important; }
 
 /* The closing's wall: white tiles at low contrast on ultramarine, no auctions. */
-.view[data-tone="brand"] { opacity: 0.22; }
 .view[data-tone="brand"] .tile { background: #fff; border-color: transparent; box-shadow: none; }

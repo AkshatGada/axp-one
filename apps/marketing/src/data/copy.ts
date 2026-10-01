@@ -34,7 +34,7 @@ export const HEADER = { chip: "Hackathon MVP", cta: "See the MVP" };
 export const HERO = {
   h1: "The advertising exchange for the agentic internet.",
   accent: "agentic internet.",
-  lede: "Advertiser agents bid for a disclosed slot beside the answer in AI apps. Code sets the price. Solana pays the app.",
+  lede: "Advertiser agents bid for a disclosed slot beside AI answers. Code sets the price; Solana pays the app.",
   primary: "See the working MVP",
   status: "Run live on public Solana Devnet, test USDC.",
   devnet: "See the settlement on Explorer",
@@ -43,8 +43,8 @@ export const HERO = {
     { k: "Decisions", name: "Jev", href: JEV.url, tone: "jev" },
     { k: "Settlement", name: "Solana", href: SOLANA_URL, tone: "sol" },
   ],
-  wallNote: "Questions observed by ContextHint. Bidding shown is illustrative.",
-  focalNote: "A real question from our live Devnet run. ClearVault is fictional.",
+  wallNote: "Questions observed by ContextHint. Bidding illustrative.",
+  focalNote: "From our live Devnet run. ClearVault is fictional.",
   /** Shown inside the focal tile (the run's own records). */
   appName: "Our demo AI app",
   slotLine: "Answer, then one Sponsored slot",
@@ -55,7 +55,7 @@ export const HERO = {
 /** The exploded card: six plates behind the one Sponsored card. Two to four words each. */
 export const STACK = {
   line: "Behind one Sponsored card, a whole exchange.",
-  note: "Values from our live Devnet run.",
+  note: "From our live Devnet run.",
   plates: {
     answer: { name: "Answer", note: "written without ads" },
     card: { name: "Card", note: "labelled Sponsored" },
@@ -73,12 +73,12 @@ export const HOW = {
   label: "How it works",
   h2: "Agents advise. Code decides the money.",
   stations: [
-    { t: "A question", s: "and what a product must do" },
+    { t: "A question", s: "with its must-haves" },
     { t: "Eligibility", s: "in code; no bid buys past it" },
     { t: "Judgment", s: "each agent, its own evidence" },
-    { t: "Price", s: "set in code, ties by fixed rule" },
+    { t: "Price", s: "in code; ties by fixed rule" },
     { t: "The card", s: "beside the answer, never in it" },
-    { t: "Receipt", s: "signed by the app: the charge" },
+    { t: "Receipt", s: "signed; only then a charge" },
     { t: "Settlement", s: "on Solana, once" },
   ],
   mustStore: "must store crypto",
@@ -102,7 +102,7 @@ export const CONTEXTHINT = {
     { big: "A dozen", small: "countries" },
   ],
   traction: TRACTION.line,
-  use: "Every agent gets one real example and one inferred audience.",
+  use: "Agents get one real example and one inferred audience each.",
   wallLabel: "Real ads observed in ChatGPT. Not axp.one advertisers; no relationship implied.",
   action: "Visit ContextHint",
 };
@@ -132,7 +132,7 @@ export const JEV_SECTION = {
 export const SOLANA = {
   label: "Settlement on Solana",
   h2: "Paid per ad. Settled once.",
-  lede: "Signed vouchers off chain, one close on chain. No transaction per ad, so sub-cent ads work.",
+  lede: "Vouchers off chain, one close on chain: no transaction per ad, so sub-cent ads work.",
   onChain: "On Solana",
   offChain: "Off chain, signed",
   open: "Open",
@@ -154,7 +154,7 @@ export const SOLANA = {
   program: "Program",
   programUrl: DEVNET?.programUrl ?? null,
   live: "Live on Solana Devnet",
-  note: "Every transaction above is from our live run on public Solana Devnet. Test USDC, no real value.", // claim-ok: limit
+  note: "Our live run on public Solana Devnet. Test USDC, no real value.", // claim-ok: limit
   kfPaid: usdc(KF_CHANNEL.settled),
 };
 
@@ -193,13 +193,13 @@ export const PROOF = {
 export const NEXT = {
   h3: "Working now. Building next.",
   now: ["Agent bids", "Eligibility in code", "Signed receipts", "Solana channels"],
-  nextLabel: "Planned",
+  nextLabel: "Planned:",
   next: ["Planning agents", "Publisher SDK", "More categories", "x402 adapter", "Advertiser wallets", "Mainnet, after Devnet", "Network fees", "Measurement"], // claim-ok: planned
 };
 
 export const VIDEO = {
   title: "axp.one recorded run, four minute walkthrough",
-  caption: "Four minutes, captioned: a walkthrough of our earlier recorded run on a hosted sandbox.",
+  caption: "Four minutes, from our earlier sandbox run.",
   chapters: ["What axp.one is", "Fictional advertisers", "Evidence from ContextHint", "A question with no exact match", "Independent answers", "Agent decisions", "Auction and price", "Delivery and receipts", "Settlement", "Restart and limits"],
 };
 
@@ -211,11 +211,11 @@ export const CLOSING = {
 };
 
 export const FOOTER = {
-  scope: ["Hackathon MVP, October 2026.", "Run live on public Solana Devnet with test USDC. Not mainnet.", `${CV.name}, ${KF.name} and ${LG.name} are fictional.`], // claim-ok: limit
+  scope: ["Hackathon MVP.", "Live on Solana Devnet, test USDC. Not mainnet.", `${CV.name}, ${KF.name} and ${LG.name} are fictional.`], // claim-ok: limit
   contexthint: "contexthint.com",
   jev: { text: "Decisions built with", name: JEV.name, url: JEV.url },
   solana: "Settlement on Solana",
-  base: "A live Devnet run, October 2026.",
+  base: "October 2026.",
 };
 
 /** Shown on plates (short, from the run). */

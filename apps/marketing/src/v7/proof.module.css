@@ -1,5 +1,5 @@
 /* v7 proof + now/next: paper 2, big numbers in ultramarine, video frame radius 16, pills full. */
-.proof { position: relative; padding: clamp(88px, 12vh, 140px) 0 clamp(64px, 9vh, 104px); background: var(--paper-2); border-top: 1px solid var(--line); }
+.proof { position: relative; padding: clamp(72px, 10vh, 120px) 0 clamp(56px, 8vh, 88px); background: var(--paper-2); border-top: 1px solid var(--line); }
 .grid { display: grid; gap: 48px; align-items: center; }
 @media (min-width: 1000px) { .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr); gap: clamp(40px, 5vw, 96px); } }
 .left { display: grid; gap: 28px; align-content: start; }
@@ -19,11 +19,11 @@
 .video figcaption { font-size: 14px; line-height: 1.45; color: var(--muted); }
 .video figcaption b { color: var(--ink); font-weight: 500; }
 
-.next { display: grid; gap: 14px; margin-top: clamp(56px, 9vh, 96px); padding-top: 28px; border-top: 1px solid var(--line); }
+.next { display: grid; gap: 12px; margin-top: clamp(40px, 6vh, 72px); padding-top: 28px; border-top: 1px solid var(--line); }
 .h3 { margin: 0 0 6px; font-family: var(--font-display); font-weight: 300; font-size: clamp(28px, 2.6vw, 42px); letter-spacing: -0.025em; }
 .pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .pills li { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: var(--px-r-full); background: var(--ink); color: #fff; font-size: 14.5px; font-weight: 500; }
 .pills[data-planned] li { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--silver); border: 1px dashed transparent; }
 .pills[data-planned] li { box-shadow: none; border: 1.5px dashed var(--steel); }
-.pills li span { font-size: 12px; font-weight: 500; color: var(--steel-dark); }
+.pills li.k { padding: 0 4px 0 0; border: 0; background: none; color: var(--steel-dark); }
 @media (max-width: 640px) { .figs { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 22px; } }

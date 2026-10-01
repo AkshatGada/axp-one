@@ -40,7 +40,7 @@ export default function Proof() {
         {v ? (
           <figure id="video" className={s.video}>
             <div className={s.frame}>
-              <video controls preload="none" playsInline poster={`/${v.poster}`} aria-label={VIDEO.title} style={{ aspectRatio: `${v.width} / ${v.height}` }}>
+              <video controls preload="none" playsInline poster="/video-poster.png" aria-label={VIDEO.title} style={{ aspectRatio: `${v.width} / ${v.height}` }}>
                 <source src={`/${v.file}`} type="video/mp4" />
                 <track kind="captions" src={`/${v.captions}`} srcLang="en" label="English" default />
               </video>
@@ -59,10 +59,9 @@ export default function Proof() {
           ))}
         </ul>
         <ul className={s.pills} data-planned="" aria-label="Planned">
+          <li className={s.k}>{NEXT.nextLabel}</li>
           {NEXT.next.map((x) => (
-            <li key={x}>
-              {x} <span>{NEXT.nextLabel}</span>
-            </li>
+            <li key={x}>{x}</li>
           ))}
         </ul>
       </div>

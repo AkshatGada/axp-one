@@ -59,7 +59,7 @@ export default function Solana() {
               <p className={s.lede}>{SOLANA.lede}</p>
             </div>
 
-            <div className={s.lanes} aria-label={`${CV.name}'s channel: ${SOLANA.deposit}, vouchers ${SOLANA.vouchers.join(" then ")}, ${SOLANA.paid}, ${SOLANA.refund}`}>
+            <div className={s.lanes} data-visual="" aria-label={`${CV.name}'s channel: ${SOLANA.deposit}, vouchers ${SOLANA.vouchers.join(" then ")}, ${SOLANA.paid}, ${SOLANA.refund}`}>
               <div className={s.lane} data-lane="chain">
                 <span className={s.laneK}>{SOLANA.onChain}</span>
                 <div className={s.block} data-b="open">
@@ -125,7 +125,7 @@ export default function Solana() {
           <div className={s.channel} data-total="">
             <div className={s.chTop}>
               <b>{usdc(RUN.totals.paid)} USDC</b>
-              <span>to the AI app, {usdc(RUN.totals.refunded)} back</span>
+              <span>to the app, {usdc(RUN.totals.refunded)} back</span>
             </div>
             <div className={s.btns}>
               <Btn href={SOLANA.programUrl}>{SOLANA.program}</Btn>

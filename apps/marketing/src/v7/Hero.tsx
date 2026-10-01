@@ -402,7 +402,7 @@ export default function Hero() {
 
         {/* The resting box of the lifted tile; the tile is drawn at 1x and scaled into it. */}
         <div ref={homeRef} className={s.home} aria-hidden />
-        <div ref={focalRef} className={s.focal}>
+        <div ref={focalRef} className={s.focal} data-visual="">
           <FocalTile />
         </div>
         <p ref={capRef} className={s.cap}>
@@ -414,7 +414,7 @@ export default function Hero() {
           <h2 className={`px-h1 ${s.lineH}`}>{STACK.line}</h2>
           <p className={s.lineNote}>{STACK.note}</p>
         </div>
-        <div ref={stackRef} className={s.stack} aria-label={PLATE_IDS.map((id) => `${STACK.plates[id].name}, ${STACK.plates[id].note}`).join(". ")}>
+        <div ref={stackRef} className={s.stack} data-visual="" aria-label={PLATE_IDS.map((id) => `${STACK.plates[id].name}, ${STACK.plates[id].note}`).join(". ")}>
           <i ref={routeRef} className={s.route} />
           {PLATE_IDS.map((id, i) => (
             <Plate key={id} id={id} plateRef={(el) => (plateRefs.current[i] = el)} style={{ zIndex: PLATE_IDS.length - i }} />
@@ -429,7 +429,7 @@ export default function Hero() {
             <h2 className="px-h1">{STACK.line}</h2>
             <p className={s.lineNote}>{STACK.note}</p>
           </div>
-          <div ref={stillRef} className={s.afterStack}>
+          <div ref={stillRef} className={s.afterStack} data-visual="">
             <div className={s.onlyWide}>
               <StillStack k={stillK} />
             </div>

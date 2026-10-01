@@ -23,7 +23,7 @@ export default function Jev() {
             <Arrow width={20} />
           </a>
         </div>
-        <div className={s.sheet} data-reveal="sheet">
+        <div className={s.sheet} data-reveal="sheet" data-visual="">
           <div className={s.col}>
             <span className={s.k}>{J.inLabel}</span>
             {J.inputs.map((x, i) => (

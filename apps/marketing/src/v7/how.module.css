@@ -3,7 +3,7 @@
 .how { position: relative; background: var(--stage); color: var(--stage-ink); }
 .stage { position: relative; min-height: 100svh; overflow: hidden; display: grid; align-content: center; padding: calc(var(--px-header-h, 72px) + 24px) 0 56px; }
 @media (min-width: 900px) {
-  :global(html[data-px-motion="on"]) .how { height: 190vh; }
+  :global(html[data-px-motion="on"]) .how { height: 150vh; }
   :global(html[data-px-motion="on"]) .stage { position: sticky; top: 0; height: 100svh; min-height: 640px; }
 }
 .in { position: relative; z-index: 3; display: grid; gap: clamp(40px, 7vh, 80px); }

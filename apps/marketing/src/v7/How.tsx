@@ -161,7 +161,7 @@ export default function How() {
             <ol ref={railRef} className={s.rail}>
               {HOW.stations.map((st, i) => (
                 <li key={st.t} data-st="" data-on={pinned ? (i === 0 ? "1" : "") : "1"} style={{ "--i": i } as CSSProperties}>
-                  <div className={s.spec}>
+                  <div className={s.spec} data-visual="">
                     <Specimen i={i} />
                   </div>
                   <span className={s.node} aria-hidden />
