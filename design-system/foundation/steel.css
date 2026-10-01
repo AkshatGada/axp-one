@@ -1,14 +1,6 @@
-/* STEEL: the shared axp.one foundation (ultramarine identity). Tokens, fonts, base, provenance marks and money states.
-   Both Prospectus (landing) and Ledger (product) import this first. Spec: docs/frontend/DESIGN_SYSTEMS.md */
+/* STEEL: the shared axp.one foundation (ultramarine identity). Tokens, base, provenance marks and money states.
+   Both Prospectus (landing) and Ledger (product) import this first. Fonts: foundation/fonts.css (opt-in). Spec: docs/frontend/DESIGN_SYSTEMS.md */
 
-@font-face { font-family: "PolySans"; src: url("../fonts/PolySans-Neutral.woff2") format("woff2"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "PolySans"; src: url("../fonts/PolySans-Median.woff2") format("woff2"); font-weight: 500; font-display: swap; }
-@font-face { font-family: "PolySans"; src: url("../fonts/PolySans-Bulky.woff2") format("woff2"); font-weight: 700; font-display: swap; }
-@font-face { font-family: "PolySans Wide"; src: url("../fonts/PolySans-SlimWide.woff2") format("woff2"); font-weight: 300; font-display: swap; }
-@font-face { font-family: "PolySans Wide"; src: url("../fonts/PolySans-NeutralWide.woff2") format("woff2"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "PolySans Wide"; src: url("../fonts/PolySans-MedianWide.woff2") format("woff2"); font-weight: 500; font-display: swap; }
-@font-face { font-family: "PolySans Mono"; src: url("../fonts/PolySans-NeutralMono.woff2") format("woff2"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "PolySans Mono"; src: url("../fonts/PolySans-MedianMono.woff2") format("woff2"); font-weight: 500; font-display: swap; }
 
 :root {
   color-scheme: light;
