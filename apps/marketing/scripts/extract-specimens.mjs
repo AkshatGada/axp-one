@@ -103,6 +103,7 @@ function verify(d) {
     assert(!bad.test(text), `forbidden content in slice: ${bad}`);
   }
   assert(!/\[(?:-?\d+(?:\.\d+)?,){64,}/.test(text), "no numeric arrays over 64 long");
+  assert(!d.video || d.video.chapters.length === 10, "ten video chapters");
   assert(text.length < 60000, `slice under 60KB (got ${text.length})`);
 }
 
@@ -348,6 +349,16 @@ const out = {
   },
   evidence,
   limitations: run.limitations,
+  video: existsSync(SRT)
+    ? {
+        file: "media/axp-v3-four-minute-demo.mp4",
+        poster: "media/axp-v3-poster.jpg",
+        captions: "media/walkthrough.vtt",
+        width: 1400,
+        height: 1352,
+        chapters: [...readFileSync(SRT, "utf8").matchAll(/(\d\d):(\d\d):(\d\d),\d\d\d -->/g)].map((m) => Number(m[1]) * 3600 + Number(m[2]) * 60 + Number(m[3])),
+      }
+    : null,
 };
 
 verify(out);

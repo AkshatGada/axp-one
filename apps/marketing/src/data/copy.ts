@@ -25,6 +25,7 @@ export const HEADER = { chip: "Hackathon MVP", cta: "See the MVP" };
 
 export const HERO = {
   h1: "The advertising exchange for the agentic internet.",
+  accent: "agentic internet.",
   lede: "Advertiser agents bid for a disclosed place beside the answer in AI apps. Code decides who wins and what it costs. Publishers are paid in stablecoins for each card they deliver.",
   primary: "See the working MVP",
   video: "Watch the four minute video",
@@ -86,6 +87,8 @@ export const STAGE = {
     { title: "Settled once.", body: `${CV.name}'s voucher rose from ${usdc(cvVouchers[0]!.cumulative)} to ${usdc(cvVouchers[cvVouchers.length - 1]!.cumulative)} over ${lower(cvVouchers.length)} cards. One close paid the publisher ${usdc(CV_CHANNEL.settled)} and returned ${usdc(CV_CHANNEL.refund)}.` },
   ],
   exit: "Agents advise. Code decides the money.",
+  exitBody: `In the run, agents returned levels and a creative. Policy set all ${lower(RUN.counts.auctions)} prices, the tie rule picked the winners, and only signed receipts became charges.`,
+  exitLink: "The rules the money cannot break",
   excludedReason: cvExcl.reason,
 };
 
