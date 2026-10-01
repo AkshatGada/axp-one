@@ -377,7 +377,7 @@ export function BidBars({ rows, max, floor, format, floorLabel, reveal }: { rows
         <span />
         <span className="ld-bar-scale">
           <span style={{ left: 0 }}>0</span>
-          {floor !== undefined ? <span style={{ left: pct(floor) }}>{floorLabel ?? `floor ${format(floor)}`}</span> : null}
+          {floor !== undefined ? <span data-floor style={{ left: pct(floor) }}>{floorLabel ?? `floor ${format(floor)}`}</span> : null}
           <span style={{ left: "100%" }}>{format(max)}</span>
         </span>
         <span />

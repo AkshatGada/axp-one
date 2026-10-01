@@ -331,3 +331,21 @@ html[data-op-stage="charge"] [data-slot="await"] { display: none !important; }
 .dv-chain li > .ld-tag { margin-left: auto; }
 .dv-arrow { color: var(--ld-text-3); }
 .st2-part { display: grid; gap: 4px; padding-top: 4px; }
+
+/* Present v4 */
+.pr2-lede { min-height: 0; }
+.pr2-mid { margin: 0; font-size: 22px; line-height: 1.4; color: var(--ld-text-2); max-width: 30ch; }
+.pr2-claims { display: grid; gap: 14px; }
+.pr2-claim { display: grid; gap: 4px; padding: 16px 18px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); box-shadow: var(--ld-shadow-1); }
+.pr2-claim b { font-family: var(--font-display); font-weight: 400; font-size: 22px; letter-spacing: -.015em; color: var(--ld-text); }
+.pr2-claim span { font-size: 15px; line-height: 1.45; color: var(--ld-text-2); }
+.pr2-claim[data-tone="brand"] { border-color: var(--ld-accent-line); box-shadow: inset 3px 0 0 var(--brand); }
+.pr2-tamper { display: grid; gap: 8px; padding: 14px 16px; }
+.pr2-tamper[data-tampered] { border-color: #efc2bd; box-shadow: inset 3px 0 0 var(--ld-danger); }
+.pr2-tamper-row { padding-top: 8px; border-top: 1px solid var(--ld-border); font-size: 14px; }
+.pr2-end { display: grid; gap: 28px; justify-items: start; }
+.pr2-end-big { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 64px; line-height: 1.05; letter-spacing: -.03em; color: var(--ld-text); }
+.pr2-end-big span { display: block; }
+.pr2-end-big span:nth-child(2) { color: var(--brand-deep); }
+.pr2-end-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; width: 100%; }
+.pr2-why { display: flex; gap: 14px; align-items: baseline; }

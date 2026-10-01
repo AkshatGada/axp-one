@@ -14,7 +14,7 @@ function beatFromHash(count: number): number {
   return Number.isInteger(n) && n >= 1 && n <= count ? n - 1 : 0;
 }
 
-export function PresentStage({ beats, views }: { beats: BeatMeta[]; views: ReactNode[] }) {
+export function PresentStage({ beats, views, scope }: { beats: BeatMeta[]; views: ReactNode[]; scope: string }) {
   const router = useRouter();
   const [beat, setBeat] = useState(0);
   const [step, setStep] = useState(1);
@@ -70,7 +70,8 @@ export function PresentStage({ beats, views }: { beats: BeatMeta[]; views: React
   }, []);
 
   // Fill the 16:9 frame: lay the beat out in its final state, pick the largest surface scale that fits, then
-  // return to the current step. Surfaces never go below 1.25x of the product size.
+  // return to the current step. The scale stays in a narrow band (1.6x to 1.9x) so type size is steady between
+  // beats; sparse beats carry more content rather than bigger type. Below 1.6x only as an overflow guard.
   useLayoutEffect(() => {
     const root = fitRef.current;
     const box = viewRef.current;
@@ -79,8 +80,8 @@ export function PresentStage({ beats, views }: { beats: BeatMeta[]; views: React
     const cs = getComputedStyle(box);
     const k = box.getBoundingClientRect().height / box.offsetHeight; // the frame's transform scale
     const availH = (box.offsetHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)) * k;
-    let z = 1.25;
-    for (let t = 2.3; t >= 1.25; t -= 0.05) {
+    let z = 1.3;
+    for (let t = 1.9; t >= 1.3; t -= 0.05) {
       root.style.zoom = String(t);
       if (root.getBoundingClientRect().height <= availH + 1 && root.scrollWidth <= root.clientWidth + 1) {
         z = t;
@@ -88,6 +89,7 @@ export function PresentStage({ beats, views }: { beats: BeatMeta[]; views: React
       }
     }
     root.style.zoom = String(z);
+    root.dataset.zoom = z.toFixed(2);
     applyStep(root, step);
     setFitted(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -181,7 +183,7 @@ export function PresentStage({ beats, views }: { beats: BeatMeta[]; views: React
           </span>
           <span className="pr-top-r">
             <Provenance kind="replay" />
-            <span className="pr-scope">Hosted Solana sandbox, test USDC, fictional advertisers</span>
+            <span className="pr-scope">{scope}</span>
           </span>
         </header>
         <div className="pr-view" ref={viewRef} key={b.id}>

@@ -118,3 +118,43 @@ export function DrawerDemo() {
     </div>
   );
 }
+
+/** Present: the tamper flow, computed live on a copy of the public file (one changed character in a receipt). */
+export function LiveTamperResult() {
+  const [r, setR] = useState<{ s: CheckSummary; receipt: boolean; signature: boolean } | null>(null);
+  useEffect(() => {
+    let live = true;
+    fetch(asset("/run.public.json"))
+      .then((x) => x.json() as Promise<ProductRun>)
+      .then(async (run) => {
+        const f = run.opportunities[0].receipt!.fields;
+        f.nonce = f.nonce.slice(0, -1) + (f.nonce.endsWith("a") ? "b" : "a");
+        const cs = await verifyChecks(run);
+        const st = (id: string) => cs.find((c) => c.id === id)?.status === "pass";
+        if (live) setR({ s: summarize(cs, meta.verify.ids), receipt: st("receipt-1"), signature: st("signature-1") });
+      })
+      .catch(() => live && setR(null));
+    return () => {
+      live = false;
+    };
+  }, []);
+  const row = (label: string, ok: boolean | undefined) => (
+    <div className="ld-between pr2-tamper-row">
+      <span>{label}</span>
+      {r ? <Ld.Tag tone={ok ? "success" : "danger"}>{ok ? "Matches" : "Mismatch"}</Ld.Tag> : <Ld.Tag>Checking</Ld.Tag>}
+    </div>
+  );
+  return (
+    <div className="ld-panel pr2-tamper" data-tampered={r ? "" : undefined}>
+      <div className="ld-between">
+        <span className="ld-card-title">Change one byte of a receipt</span>
+        <Ld.Tag tone={r ? "danger" : undefined} dot>
+          {r ? `${r.s.pass} of ${EXPECTED_CHECK_COUNT}` : "Checking"}
+        </Ld.Tag>
+      </div>
+      <span className="ld-caption">One character of opportunity 1&apos;s receipt nonce, changed in a copy and re-checked here</span>
+      {row("Receipt hash", r?.receipt)}
+      {row("Publisher signature (Ed25519)", r?.signature)}
+    </div>
+  );
+}

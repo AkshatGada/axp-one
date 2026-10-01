@@ -10,8 +10,10 @@ export type Beat = {
   steps: number;
   durationMs: number;
   exploreHref: string;
-  caption: (run: ProductRun) => string;
+  caption: (run: ProductRun, x?: BeatExtra) => string;
 };
+/** Facts from outside run.public.json, such as whether the Devnet re-settlement file exists. */
+export type BeatExtra = { devnet?: boolean };
 
 const u = (b: string | number) => {
   const s = String(b).padStart(7, "0");
@@ -29,39 +31,39 @@ function hist(run: ProductRun, n: number, campaignId: string, arm: "text_only" |
 
 export const BEATS: Beat[] = [
   {
-    id: "chat",
+    id: "problem",
     n: 1,
+    title: "People ask AI apps what to buy",
+    steps: 2,
+    durationMs: 15000,
+    exploreHref: "/",
+    caption: () => "People ask AI apps what to buy. Advertisers want to be in that moment, but there is no honest, disclosed way to be there. This is one recorded run of an exchange built for it.",
+  },
+  {
+    id: "chat",
+    n: 2,
     title: "A question in an AI app",
     steps: 2,
     durationMs: 15000,
     exploreHref: "/opportunity/1/",
-    caption: () => "Someone asks an AI app for a cheap hardware wallet. The answer is independent. The card below it is paid, and labelled.",
+    caption: () => "A question is asked in an AI app: the cheapest hardware wallet. The answer is the app's own. The card below it is paid, and labelled Sponsored.",
   },
   {
-    id: "numbers",
-    n: 2,
-    title: "One recorded run",
-    steps: 1,
-    durationMs: 20000,
+    id: "run",
+    n: 3,
+    title: "One recorded run, three fictional advertisers",
+    steps: 2,
+    durationMs: 22000,
     exploreHref: "/",
     caption: (r) =>
-      `This is the saved record of one run: ${r.counts.opportunities} questions, ${r.counts.decisions} agent decisions, ${r.counts.auctions} auctions, ${r.counts.noFill} no-fill, ${r.counts.receipts} signed deliveries. Hosted Solana sandbox, test USDC.`,
-  },
-  {
-    id: "advertisers",
-    n: 3,
-    title: "Three fictional advertisers",
-    steps: 1,
-    durationMs: 20000,
-    exploreHref: "/advertisers/",
-    caption: (r) => `Three fictional advertisers. Two hardware wallets funded ${u(r.channels[0].depositBaseUnits)} USDC each. LeatherGuard sells RFID-blocking wallets and is unfunded.`,
+      `The saved record of one run: ${r.counts.opportunities} questions, ${r.counts.decisions} agent decisions, ${r.counts.auctions} auctions, ${r.counts.receipts} signed deliveries. Two fictional hardware wallets funded ${u(r.channels[0].depositBaseUnits)} USDC each; LeatherGuard sells RFID-blocking wallets and is unfunded.`,
   },
   {
     id: "evidence",
     n: 4,
     title: "What the agents were shown",
     steps: 2,
-    durationMs: 25000,
+    durationMs: 22000,
     exploreHref: "/opportunity/1/#evidence",
     caption: () => "ContextHint had seen this exact question before, next to a hardware-wallet listing. Agents get that history as evidence. Real brands are past observations, not bidders.",
   },
@@ -70,13 +72,13 @@ export const BEATS: Beat[] = [
     n: 5,
     title: "What the agents decided",
     steps: 2,
-    durationMs: 30000,
+    durationMs: 25000,
     exploreHref: "/opportunity/1/#decisions",
     caption: (r) => {
       const b = hist(r, 1, "v3-clearvault", "text_only");
       const h = hist(r, 1, "v3-clearvault", "history");
       const ob = hist(r, 2, "v3-clearvault", "text_only");
-      return `With history, intent edged from ${two(b.scores.intent)} to ${two(h.scores.intent)}, crossing a rounding line: level ${b.commercialIntentLevel} to ${h.commercialIntentLevel}. On the offline question both arms stayed at level ${ob.commercialIntentLevel}: unchanged. LeatherGuard's agent said no fit.`;
+      return `Decided with Jev. With history, intent edged from ${two(b.scores.intent)} to ${two(h.scores.intent)}, crossing a rounding line: level ${b.commercialIntentLevel} to ${h.commercialIntentLevel}. On the offline question it stayed at level ${ob.commercialIntentLevel}. LeatherGuard's agent said no fit.`;
     },
   },
   {
@@ -86,10 +88,8 @@ export const BEATS: Beat[] = [
     steps: 2,
     durationMs: 25000,
     exploreHref: "/opportunity/1/#auction",
-    caption: (r) => {
-      const o = r.opportunities[0];
-      return `Code, not the model, sets the bid: 100% of the ${u(r.policy.maxBidBaseUnits)} USDC max at levels 3 and 3. Both wallets got the same ratings, so a published tie rule decides: the lower campaign ID. ${o.award ? "ClearVault" : ""} wins.`;
-    },
+    caption: (r) =>
+      `Code, not the model, sets the bid: 100% of the ${u(r.policy.maxBidBaseUnits)} USDC max at relevance 3 and intent 3. Both wallets got the same ratings, so a tie rule fixed in the exchange code decides: the lower campaign ID. ClearVault wins.`,
   },
   {
     id: "charge",
@@ -98,28 +98,28 @@ export const BEATS: Beat[] = [
     steps: 3,
     durationMs: 25000,
     exploreHref: "/opportunity/1/#receipt",
-    caption: (r) => `An award is not a charge. The app inserts the labelled card, signs a receipt, and only then is ${u(r.opportunities[0].charge!.amountBaseUnits)} USDC charged. These checks run in your browser.`,
+    caption: (r) => `An award is not a charge. The app inserts the labelled card and signs a receipt; only then is ${u(r.opportunities[0].charge!.amountBaseUnits)} USDC charged. These checks run in your browser when you open Verify.`,
   },
   {
     id: "cap",
     n: 8,
     title: "A cap and a no-fill",
     steps: 2,
-    durationMs: 25000,
+    durationMs: 22000,
     exploreHref: "/opportunity/3/",
     caption: (r) =>
-      `Asked again, ClearVault hits its frequency cap: a rule, not the agent. KeyForge wins at ${u(r.opportunities[2].award!.priceBaseUnits)} USDC. A mobile-only request matched no one: zero calls, no ad, the answer still served.`,
+      `Asked again, ClearVault's agent said bid, but the frequency cap kept it out: a rule, not the agent. KeyForge wins at ${u(r.opportunities[2].award!.priceBaseUnits)} USDC. A mobile-only request matched no one: zero calls, no ad, the answer still served.`,
   },
   {
     id: "settlement",
     n: 9,
-    title: "Settled once per channel",
+    title: "Why Solana: paid once per channel",
     steps: 2,
     durationMs: 30000,
     exploreHref: "/settlement/",
-    caption: (r) => {
+    caption: (r, x) => {
       const cv = r.channels[0];
-      return `Vouchers accumulate: ${u(cv.vouchers[0].cumulativeAmountBaseUnits)}, then ${u(cv.vouchers[1].cumulativeAmountBaseUnits)} in total. One close each on the Solana sandbox: ${u(r.totals.paidBaseUnits)} USDC to the publisher, ${u(r.totals.refundedBaseUnits)} refunded. Fees in lamports, kept separate.`;
+      return `A ${u(r.opportunities[1].charge!.amountBaseUnits)} USDC ad only works if each delivery is not its own transaction. Vouchers accumulate off-chain, ${u(cv.vouchers[0].cumulativeAmountBaseUnits)} then ${u(cv.vouchers[1].cumulativeAmountBaseUnits)} in total, and one close per channel pays ${u(r.totals.paidBaseUnits)} USDC in total on a hosted Solana sandbox${x?.devnet ? "; the same receipts were then re-settled on Solana Devnet, linked on Settlement" : ""}.`;
     },
   },
   {
@@ -130,7 +130,16 @@ export const BEATS: Beat[] = [
     durationMs: 25000,
     exploreHref: "/verify/",
     caption: (r) =>
-      `Restarted with models off: ${r.restart.newCalls === 0 ? "zero" : r.restart.newCalls} new calls, charges or signatures. Not mainnet, not attention, not targeting lift. Explore every hash yourself.`, // claim-ok: negation
+      `Verify recomputes 48 checks in your browser; change one byte of a receipt and two of them fail. Restarted with models off: ${r.restart.newCalls === 0 ? "zero" : r.restart.newCalls} new calls, charges or signatures. Not mainnet, not attention, not targeting lift.`, // claim-ok: negation
+  },
+  {
+    id: "claim",
+    n: 11,
+    title: "What the run shows",
+    steps: 1,
+    durationMs: 14000,
+    exploreHref: "/",
+    caption: () => "Disclosed. Decided in code. Paid on delivery.",
   },
 ];
 
