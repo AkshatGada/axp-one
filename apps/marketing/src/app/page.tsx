@@ -8,6 +8,10 @@ import MotionRoot from "@/motion/MotionRoot";
 import FilmMode from "@/motion/FilmMode";
 import { HEADER, MVP_URL, NAV } from "@/data/copy";
 import Hero from "@/v7/Hero";
+import How from "@/v7/How";
+import ContextHint from "@/v7/ContextHint";
+import Jev from "@/v7/Jev";
+import Solana from "@/v7/Solana";
 
 export default function Home() {
   return (
@@ -17,6 +21,10 @@ export default function Home() {
       <SiteHeader links={NAV} cta={{ href: MVP_URL, label: HEADER.cta, external: true }} chip={HEADER.chip} />
       <main id="main" className="pg-main">
         <Hero />
+        <How />
+        <ContextHint />
+        <Jev />
+        <Solana />
         <section style={{ height: "100vh" }} />
       </main>
     </>

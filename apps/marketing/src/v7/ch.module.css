@@ -1,0 +1,54 @@
+/* v7 ContextHint chapter: ContextHint's own vermillion as a full-bleed world. Ink type on vermillion
+   (5.7:1); white only at display size (3.3:1, AA large). Radius: cards 12, button 6, pills full. */
+.ch { --ch: var(--contexthint); position: relative; overflow: clip; background: var(--ch); color: var(--ink); scroll-margin-top: 0; }
+.grid { display: grid; gap: 40px; min-height: 100svh; padding: clamp(88px, 11vh, 120px) 0 clamp(48px, 7vh, 80px); align-items: center; }
+@media (min-width: 1000px) { .grid { grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); gap: clamp(32px, 4vw, 72px); } }
+.left { position: relative; z-index: 2; display: grid; gap: clamp(16px, 2.2vh, 26px); align-content: center; }
+.label { justify-self: start; margin: 0; height: 30px; padding: 0 12px; border-radius: var(--px-r-full); background: var(--ink); color: #fff; font-size: 13.5px; font-weight: 500; line-height: 30px; }
+.moat { margin: 0; max-width: 17ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(34px, 3.5vw, 62px); line-height: 0.98; letter-spacing: -0.035em; text-wrap: balance; }
+.accent { color: #fff; }
+.scale { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 28px; margin: 6px 0 0; padding: 18px 0 0; border-top: 1.5px solid rgba(14, 18, 32, 0.75); list-style: none; }
+.scale li { display: block; }
+.scale b { display: block; font-family: var(--font-display); font-weight: 400; font-size: clamp(21px, 1.8vw, 28px); line-height: 1.08; letter-spacing: -0.02em; }
+.scale span { display: block; margin-top: 2px; font-size: 15px; }
+.traction { margin: 0; max-width: 44ch; font-size: 17px; line-height: 1.45; font-weight: 500; }
+.use { margin: -10px 0 0; max-width: 44ch; font-size: 16px; line-height: 1.45; }
+.action { justify-self: start; display: inline-flex; align-items: center; gap: 36px; min-height: 54px; padding: 0 20px 0 22px; border-radius: var(--px-r-sm); background: var(--ink); color: #fff; font-size: 17px; font-weight: 500; text-decoration: none; transition: transform var(--d-ui) var(--ease), box-shadow var(--d-ui) var(--ease); }
+.action:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -14px rgba(14, 18, 32, 0.8); }
+
+/* The wall of real observed ads: tilted, drifting, bleeding off the right edge. */
+.right { position: relative; display: grid; gap: 12px; align-self: stretch; align-content: center; min-width: 0; }
+.wallLabel { position: relative; z-index: 2; margin: 0; max-width: 46ch; font-size: 14px; line-height: 1.4; font-weight: 500; }
+.wall { position: relative; height: clamp(440px, 64vh, 680px); margin-right: calc(-1 * var(--gutter) - 60px); overflow: hidden; border-radius: var(--px-r-xl) 0 0 var(--px-r-xl); }
+.wall::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, var(--ch) 0%, transparent 16%, transparent 82%, var(--ch) 100%); }
+.plane { position: absolute; inset: -14% -6% -14% 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; transform: perspective(1400px) rotateX(22deg); transform-origin: 50% 40%; }
+.col { min-width: 0; }
+.track { display: grid; gap: 14px; animation: chUp var(--dur, 80s) linear infinite; }
+.col[data-dir="down"] .track { animation-name: chDown; }
+.col:nth-child(2) { margin-top: -60px; }
+.col:nth-child(4) { margin-top: -110px; }
+@keyframes chUp { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, -50%, 0); } }
+@keyframes chDown { from { transform: translate3d(0, -50%, 0); } to { transform: translate3d(0, 0, 0); } }
+:global(html:not([data-px-motion="on"])) .track { animation: none; }
+
+.gpt { display: flex; min-height: 88px; overflow: hidden; border-radius: var(--px-r-lg); background: #fff; color: #0d0d0d; box-shadow: 0 18px 30px -20px rgba(80, 20, 0, 0.55); }
+.creative { width: 88px; height: auto; flex: none; align-self: stretch; object-fit: cover; background: #f4f4f4; }
+.copy { display: flex; min-width: 0; flex: 1; flex-direction: column; justify-content: center; gap: 3px; padding: 9px 12px 10px; }
+.top { display: flex; align-items: center; gap: 6px; min-width: 0; color: #5d5d5d; font-size: 12px; line-height: 1.2; }
+.logo { width: 14px; height: 14px; flex: none; border-radius: 3px; object-fit: contain; }
+.brand { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tag { margin-left: auto; flex: none; padding: 1px 6px; border-radius: var(--px-r-full); background: #f2f2f2; color: #5d5d5d; font-size: 11px; }
+.title { margin: 0; display: -webkit-box; overflow: hidden; font-size: 13.5px; font-weight: 500; line-height: 1.3; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.body { margin: 0; display: -webkit-box; overflow: hidden; color: #5d5d5d; font-size: 12px; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+
+@media (max-width: 999px) {
+  .grid { min-height: 0; }
+  .wall { height: 420px; margin-right: calc(-1 * var(--gutter)); border-radius: var(--px-r-xl) 0 0 var(--px-r-xl); }
+  .plane { grid-template-columns: repeat(3, minmax(0, 1fr)); inset: -10% -40% -10% 0; }
+  .col:nth-child(4) { display: none; }
+}
+@media (max-width: 560px) {
+  .scale { grid-template-columns: 1fr; }
+  .plane { grid-template-columns: repeat(2, minmax(220px, 1fr)); inset: -10% -60% -10% 0; }
+  .col:nth-child(3) { display: none; }
+}

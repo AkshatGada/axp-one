@@ -1,0 +1,71 @@
+/* v7 Solana chapter: Solana purple (#9945ff) as a whole page, white type (5.1:1), Solana green
+   (#14f195) as the accent for money that moved. Radius: blocks and cards 12, lanes 16, buttons 6,
+   pills full. Explorer buttons are white with purple ink (7:1). */
+.sol { --g: var(--sol-green); position: relative; background: var(--sol); color: #fff; overflow: clip; }
+.sol::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(70% 50% at 85% 10%, rgba(20, 241, 149, 0.16), transparent 70%), radial-gradient(70% 60% at 0% 100%, rgba(42, 11, 92, 0.45), transparent 70%); }
+.pin { position: relative; }
+.stage { position: relative; min-height: 100svh; display: grid; align-content: center; padding: calc(var(--px-header-h, 72px) + 28px) 0 48px; }
+@media (min-width: 900px) {
+  :global(html[data-px-motion="on"]) .pin { height: 200vh; }
+  :global(html[data-px-motion="on"]) .stage { position: sticky; top: 0; height: 100svh; min-height: 640px; }
+}
+.in { position: relative; display: grid; gap: clamp(32px, 6vh, 64px); }
+.head { display: grid; gap: 18px; max-width: 900px; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.label, .live { height: 30px; padding: 0 12px; border-radius: var(--px-r-full); font-size: 13.5px; font-weight: 500; line-height: 30px; }
+.label { background: rgba(255, 255, 255, 0.18); }
+.live { background: var(--sol-ink); color: var(--g); }
+.h2 { margin: 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(46px, 5.6vw, 96px); line-height: 0.94; letter-spacing: -0.04em; }
+.lede { margin: 0; max-width: 46ch; font-size: clamp(17px, 1.35vw, 21px); line-height: 1.45; color: rgba(255, 255, 255, 0.92); }
+
+/* Two lanes: on Solana, off chain. */
+.lanes { display: grid; gap: 14px; }
+.lane { position: relative; display: grid; align-items: center; min-height: 112px; padding: 18px 22px 18px 150px; border-radius: var(--px-r-xl); background: rgba(42, 11, 92, 0.28); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16); }
+.lane[data-lane="chain"] { grid-template-columns: 170px minmax(0, 1fr) 210px; gap: 22px; }
+.laneK { position: absolute; left: 22px; top: 50%; translate: 0 -50%; font-size: 14px; font-weight: 500; color: rgba(255, 255, 255, 0.86); }
+.block { display: grid; gap: 2px; padding: 12px 14px; border-radius: var(--px-r-lg); background: #fff; color: var(--sol-ink); font-size: 14px; box-shadow: 0 16px 30px -18px rgba(20, 0, 50, 0.7); transition: opacity 500ms var(--ease-out), transform 600ms var(--ease-out); }
+.block b { font-family: var(--font-display); font-size: 18px; font-weight: 500; }
+.block[data-b="close"] { box-shadow: 0 0 0 2px var(--g), 0 16px 30px -18px rgba(20, 0, 50, 0.7); }
+.dim { opacity: 0.72; }
+.meter { position: relative; display: grid; gap: 8px; }
+.track { position: relative; height: 18px; border-radius: var(--px-r-full); background: rgba(255, 255, 255, 0.14); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35); overflow: hidden; }
+.fill { position: absolute; inset: 0; border-radius: var(--px-r-full); background: var(--g); transform-origin: 0 50%; transition: transform 800ms var(--ease-out); }
+.refund { position: absolute; top: 0; bottom: 0; right: 0; background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0 1.5px, transparent 1.5px 7px); opacity: 0; transition: opacity 600ms var(--ease); }
+.marks { position: relative; height: 18px; font-size: 13px; font-variant-numeric: tabular-nums; color: rgba(255, 255, 255, 0.9); }
+.marks span { position: absolute; top: 0; translate: -50% 0; white-space: nowrap; }
+.marks span:last-child { translate: -100% 0; }
+.vouchers { position: relative; height: 76px; margin-left: calc(170px + 22px); }
+.voucher { position: absolute; left: 0; top: 0; display: grid; gap: 2px; width: 190px; padding: 11px 14px; border-radius: var(--px-r-lg); background: #fff; color: var(--sol-ink); font-size: 13px; box-shadow: 0 16px 30px -18px rgba(20, 0, 50, 0.7); transition: opacity 500ms var(--ease-out), transform 700ms var(--ease-out); }
+.voucher b { font-family: var(--font-display); font-size: 22px; font-weight: 400; font-variant-numeric: tabular-nums; }
+.voucher[data-v="1"] { left: 0; transform: translate(26px, -8px); }
+.voucher[data-v="1"] b::after { content: ""; }
+
+/* Steps (pinned): 1 open, 2 voucher 1, 3 voucher 2 stacks, 4 close. Still: all shown. */
+.stage[data-step="0"] .block[data-b="open"], .stage[data-step="0"] .meter { opacity: 0; transform: translateY(14px); }
+.meter { transition: opacity 500ms var(--ease-out), transform 600ms var(--ease-out); }
+.stage[data-step="0"] .voucher, .stage[data-step="1"] .voucher { opacity: 0; transform: translateY(-30px); }
+.stage[data-step="2"] .voucher[data-v="1"] { opacity: 0; transform: translate(26px, -40px); }
+.stage:not([data-step="4"]) .block[data-b="close"] { opacity: 0; transform: translateY(14px); }
+.stage[data-step="4"] .refund { opacity: 1; }
+
+/* The proof: the live run's transactions on Solana Devnet. */
+.proof { position: relative; display: grid; gap: 26px; padding: clamp(40px, 7vh, 80px) 0 clamp(72px, 11vh, 120px); }
+.h3 { margin: 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(32px, 3.4vw, 56px); line-height: 1; letter-spacing: -0.03em; }
+.channels { display: grid; gap: 14px; }
+@media (min-width: 900px) { .channels { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.channel { display: grid; gap: 16px; align-content: space-between; padding: 18px 20px; border-radius: var(--px-r-lg); background: rgba(42, 11, 92, 0.32); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2); }
+.channel[data-total] { background: var(--sol-ink); }
+.chTop { display: grid; gap: 2px; }
+.chTop b { font-family: var(--font-display); font-size: 22px; font-weight: 400; }
+.chTop span { font-size: 15px; color: rgba(255, 255, 255, 0.86); font-variant-numeric: tabular-nums; }
+.channel[data-total] .chTop b { color: var(--g); }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { display: inline-flex; align-items: center; gap: 12px; height: 38px; padding: 0 12px 0 14px; border-radius: var(--px-r-sm); background: #fff; color: var(--sol-ink); font-size: 14px; font-weight: 500; text-decoration: none; transition: transform var(--d-ui) var(--ease), box-shadow var(--d-ui) var(--ease); }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px -12px rgba(20, 0, 50, 0.8), 0 0 0 2px var(--g); }
+.note { margin: 0; font-size: 14px; color: rgba(255, 255, 255, 0.86); }
+
+@media (max-width: 899px) {
+  .lane, .lane[data-lane="chain"] { grid-template-columns: 1fr; padding: 44px 16px 16px; gap: 14px; }
+  .laneK { top: 16px; left: 16px; translate: none; }
+  .vouchers { margin-left: 0; height: 80px; }
+}
