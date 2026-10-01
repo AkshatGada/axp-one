@@ -54,3 +54,27 @@ coverage visual (e.g. a ranked bar/dot chart or a stylised world strip, calls vs
 the library-by-country breakdown as an honest bar showing US-heavy coverage (this IS the US-heavy note, presented as data,
 not an apology). ContextHint vermillion is this chapter's colour. Then the Library Dive and "Three numbers, kept apart".
 Never call these AXP advertisers, AXP traffic or AXP reach.
+
+## Owner: "This needs to be presented visually and creatively to the judges." (2026-10-02)
+
+The ContextHint chapter is the second signature moment of the page (after the hero). Build it as a pinned,
+scroll-driven scene with its own visual language in ContextHint vermillion on paper. Every number from library.ts.
+Suggested choreography (builder may improve, must stay honest):
+
+1. **"420,540 times an ad was seen."** A dense dot field: one dot = 100 placements (4,205 dots). On scroll the dots
+   sort themselves into country bands sized by real placements: US 3,308 dots, untagged 674, Australia 169,
+   South Korea 54, others a handful. The US-heavy fact becomes the visual itself. Caption with the source.
+2. **"11,730 advertisers. 45,947 ads."** A wall of REAL observed ChatGPT ad cards (reuse the ContextHint craft:
+   /Users/akshat/ch-home-v4/src/components/home/v4/Wall.tsx + its real-ads data in that repo). Copy a small set of
+   ad images into apps/marketing/public (no hot-linking: zero off-origin requests). Label on the wall:
+   "Ads observed by ContextHint inside ChatGPT. Not axp.one advertisers." The numbers sit huge over the wall.
+3. **"983 niches. 7,121 sub-niches."** The existing niche field, with a zoom into one niche splitting into its
+   sub-niche grid (the run's crypto hardware wallet niche), then the existing Library Dive into the one record.
+4. **"Collecting in 12 countries."** A ranked 12-row chart: calls (outline bar) vs calls that returned ads (vermillion
+   fill), hit rate in tabular figures (e.g. US 207 of 311, 67%). Bars fill as you scroll. Small flags are NOT allowed
+   (no icon sets); use country names.
+5. **"Three numbers, kept apart."** Funnel: the library (420,540 placements) -> the screened slice this MVP used
+   (1,178 associations) -> one packet (1 example + 1 hint), narrowing visually, vermillion turning into ultramarine
+   at the packet as it enters the agent.
+6. Close the chapter with the moat line at display size and the vermillion **Visit ContextHint** action.
+Reduced motion and <900px: the same content as static charts. Keep "Planned" and truth labels intact.
