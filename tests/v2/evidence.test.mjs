@@ -189,7 +189,10 @@ test('actual frozen export has reconciled source IDs and exact cached first quer
   const x = r.retrieve(FIXED_QUESTIONS[0],campaign()); assert.equal(x.method,'vector'); assert.equal(x.queryVectorId,127592); validateProfile(x.profile,campaign());
   assert.equal(r.retrieve(FIXED_QUESTIONS[1],campaign()).method,'lexical_fallback');
   assert.ok(['manifest.json','catalogue.json','index.backend.json'].reduce((n,f) => n+statSync(join(DEFAULT_DIRECTORY,f)).size,0) <= LIMITS.bytes);
-  assert.equal(statSync(join(DEFAULT_DIRECTORY,'index.backend.json')).mode & 0o777,0o600);
+  // This screened, committed index is backend-only, not secret material. Git
+  // preserves executable bits, not local owner-only modes; clones use umask.
+  const indexMode = statSync(join(DEFAULT_DIRECTORY,'index.backend.json')).mode;
+  assert.equal(indexMode & 0o400,0o400); assert.equal(indexMode & 0o111,0);
   for (const task of FIXED_QUESTIONS) {
     assert.equal(r.retrieve(task,campaign('mobile')).historyStatus,'unavailable');
     assert.equal(r.retrieve(task,campaign('physical')).historyStatus,'ready');
