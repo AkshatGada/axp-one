@@ -131,3 +131,34 @@ Resume notes for the MVP builder. Spec: docs/frontend/MVP_SPEC.md + FRONTEND_PLA
   `NEXT_PUBLIC_BASE_PATH=/mvp NEXT_PUBLIC_LIVE_API=1 pnpm build`, then `AXP_LIVE_ENABLED=1 node scripts/hosted/dev-server.mjs`.
 - Checked with one real run through the page (61 s, 3 cards acknowledged, 0 console errors), and its finished view
   projected in the browser (48/48 checks).
+
+## MVP v7 (last version), tag axp-mvp-v7 (reviews/final-fixes.md items 9 to 19 + final-design.md)
+- One phrase for what the site shows: the run switcher label is "Replay of a live Solana Devnet run, Oct 1"
+  (`runPhrase` in narrative.ts; the first recording is "First recording, hosted sandbox, Oct 1" via
+  build-all); the Recorded replay + Live chips are gone; Present's header shows the same phrase. The switcher
+  hides the internal run id (Inspector keeps it) and never claims "the only run published here".
+- Jev: Decisions shows each answer in words with Jev's own confidence and a bar sized to it (relevance,
+  buying intent, creative; `confidence.creative` now projected), the same semantics as the landing sheet.
+  Plain labels: "Without history, for comparison only", "With ContextHint history", ruler "level 3 from
+  here", "Fixed bid table", similarity "Match"; disclaimer "One run, not a benchmark."
+- Settlement (both runs, and the first recording's Devnet section): Circle Devnet USDC named with its mint
+  link (when every channel holds mint 4zMMC9...); fees and rent in test SOL (`solText`, exact lamports in
+  tooltips and the Inspector); `rentSolWords` + one plain `RENT_NOTE`; "Closed and final; nothing left to
+  settle"; "Total owed so far"; "No channel was opened (unfunded)".
+- Narrative: "rose" only when levels went up (`historyEffect().rose`); no-fill sentences check actual
+  calls; tie-rule and eligibility glossary entries computed from the run (tied campaigns; paired vs
+  unpaired research asks); opportunity 3 no longer claims a research comparison. Overview lane "Bids
+  admitted". Live page: the browser checks each card; the app signs the receipts.
+- Run it live without the API: links to https://axp.one/mvp/live/ (`NEXT_PUBLIC_HOSTED_LIVE_URL`), hidden when
+  already on that origin, and opens the hosted end-to-end live run: `scripts/project-live-sample.mjs` copies
+  artifacts/hosted-live-e2e into public/live-runs/<runId>/ (gitignored; hash and Devnet asserted) and writes
+  src/data/live-sample.json; /live/run/?id= fetches those bytes and projects and checks them in the browser
+  (48/48). A hosted build with the API flag still probes /api/live (one 404 if the API is missing).
+- Present: a visible cue in manual mode ("Press -> or Space to continue", "for the next part (1 of 2)",
+  last beat "Press R to restart or Esc to leave").
+- Checked: tests 35/35, typecheck, `pnpm build` (both runs), headless sweep of the static export on :3431:
+  15 routes x 2 runs x 1280/1440/1920/390 = 120 pairs, zero console errors, failed requests or overflow, no
+  "rehearsal" in visible text; /verify 47/47 (first recording 48/48), tamper 45/47 and 46/48, reset
+  restores; the finished live run 48/48 Passing. Shots: docs/frontend/reviews/shots/final-fixes/M-*.png.
+- Note for the video: Present's beat 5 caption now ends "One run, not a benchmark." and the header shows the
+  one-phrase label; the recorded video (664b402) predates both.

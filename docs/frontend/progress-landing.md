@@ -111,6 +111,33 @@ Owner of this file: the landing builder agent. Update at every milestone.
   console errors and failed requests; no horizontal overflow; contrast AA at 1440/1280/390 and reduced motion;
   CLS 0 (dev and static export). Shots: docs/frontend/reviews/shots/landing-v7/.
 
+- `axp-landing-v7.1` (patches on v7, from reviews/final-fixes.md items 3 to 8 and the MUST/should items of
+  reviews/final-design.md; item 2, the video and its caption, belongs to the video agent, 664b402):
+  - Truth: the Jev sheet shows Jev's own confidence for all three answers (creative 61%, not the chosen
+    creative's 81% probability; `creativeConfidence` extracted) with one bar per row sized to the number
+    beside it; the MVP's Decisions stage shows the same words and numbers for the same decision. Meta
+    description says live on Solana Devnet. Proof carries "Replay of a live Solana Devnet run, Oct 1."
+    (date from the run). Solana: a "Circle Devnet USDC" Explorer button (mint asserted by
+    extract-specimens.mjs into devnet.json `mintUrl`), lede "so ads costing a fraction of a cent can be paid
+    per delivery", planned list without "Advertiser wallets". Step 3 reads "kept out by a fixed rule".
+  - Motion and seams: the Solana step follows the scroll position from mount (no finished diagram before
+    the pin, no reset). Tone.tsx computes the layer's OKLCH blend itself and sets `--tone-o` per world from
+    the contrast between that world's type and the colour behind it; copy marked `data-tone-text` (section
+    heads, Solana proof, Tour head, Proof column and pills, closing) fades below ~2.3:1, full from 3.5:1.
+    The tagline keeps a stage-colour backing. The token hides over `[data-visual]`/`[data-token-avoid]`.
+    The closing is the last world: its wall fades before its edge, its foot blends into the footer's paper;
+    the footer keeps its own paper outside the tone layer. How's four cards share subgrid rows (equal tops
+    at 4 across). Chapter labels have no numbers. Jev section 82svh (gap to Solana 432 to 333px at 1440),
+    sheet fills about twice as fast. Hero pin 294vh: `warpHero` plays the lone-tile stretch (v 0.27 to
+    0.40) 2.5x faster; every other phase keeps its pace per pixel (frames checked at 1440).
+  - Inside the MVP: the four 2x captures retaken from the MVP v7 static export (scratch script tour.mjs:
+    1440x900 DPR 2, verify after tamper, cwebp -q 82).
+  - Checked (static export on :3411, headless Chrome): 1280/1440/1920/390, motion and reduced motion: zero
+    console errors and failed requests, no overflow, every header/hero CTA and all 29 section links are the
+    top element under their centre (wrapped links: any line box). Heights 12.0/11.9/11.6/13.6 screens
+    (reduced motion 10.3/9.9/9.5). Shots: docs/frontend/reviews/shots/final-fixes/L-*.png.
+  - Not done (nice-to-have): the overlapping voucher cards, the flat "Open the MVP" tour tile.
+
 ## Next
 - Phones are 16.2 screens; the hero's static plate list and the Jev / Proof blocks are the remaining length.
 - The stale untracked folder docs/frontend/reviews/shots/landing-v5-builder can be deleted by hand.
