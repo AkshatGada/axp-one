@@ -1,8 +1,15 @@
 # Contracts and data ownership
 
-Planning contracts v0.1; these are not installed OpenAPI or AdCP schemas. Before
-implementation, encode these shapes in machine-validated schemas and generate
-OpenAPI 3.1/types/fixtures as a single source of truth.
+Historical planning contracts v0.1. **Not the implemented frontend API.**
+Phase5 freezes the actual route registry in `packages/client/schema.mjs` and its
+generated OpenAPI3.1/types. See `docs/frontend/SETUP.md`. The runtime implements
+`/v1/demo/turn`, `/v1/awards/{id}/render`, campaign create/pause and local events;
+it does not implement the inventory/bids/payment-session/versions/activate/report
+routes proposed below. Payment signing remains an operator terminal operation,
+not a browser API. Read-only presentation uses only `/v1/replay/*` GET routes.
+The current runtime uses turn/session identifiers and canonical body checks,
+not an HTTP Idempotency-Key requirement. Future envelopes/permissions below
+remain design proposals and must not be inferred as deployed or callable.
 
 ## Common envelope
 

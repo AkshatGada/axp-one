@@ -1,0 +1,12 @@
+import {open,SHOTS,txt} from './lib.mjs';
+const {b,p,errs}=await open();
+await p.goto('http://localhost:3420/',{waitUntil:'networkidle'});
+await p.getByRole('link',{name:'Settlement',exact:true}).first().click();
+await p.waitForLoadState('networkidle'); await p.waitForTimeout(1200);
+console.log(p.url());
+await p.screenshot({path:`${SHOTS}/15-settlement.png`});
+await p.screenshot({path:`${SHOTS}/16-settlement-full.png`,fullPage:true});
+console.log((await p.innerText('main')).slice(0,6000));
+console.log(await p.$$eval('main a',els=>els.map(e=>`[${e.innerText.trim().slice(0,50)}] ${e.href}`).join('\n')));
+console.log(errs);
+await b.close();

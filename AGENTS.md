@@ -3,7 +3,10 @@
 Read README.md and every normative document linked there before implementation.
 This is a new standalone repository, not an AXP checkout or worktree.
 
-Current authorized stage: implementation approved by user on 2026-09-30.
+Current authorized stage: phase-by-phase implementation restarted by user on
+2026-09-30. Follow docs/MVP_MASTER_PLAN.md, docs/EXECUTION_LOOPS.md and the live
+docs/BUILD_PROGRESS.md checklist. Preserve partial work; integrate small slices.
+Earlier stage: implementation approved by user on 2026-09-30.
 Build the reviewed component plan with bounded tests and integration. No remote,
 push, deployment, global installation/configuration change or token transfer is
 authorized by this build approval. Reuse of the disposable Devnet wallet is

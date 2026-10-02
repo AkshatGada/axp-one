@@ -38,13 +38,23 @@ Never implement financial authority or auction arithmetic in browser code.
 6. Evidence: live/synthetic/sandbox/Devnet/replay badges, receipt correlations,
    explorer only when actual network/signature exist, concise research limitations.
 
-## Contract handoff package required before specialist builds
+## Implemented contract handoff package
 
-OpenAPI/types, example requests/responses for every state, generated client or
-minimal SDK, error/retry semantics, SSE cursor contract, auth roles, setup commands,
-reference component behavior and browser integration tests. These are planned
-deliverables, not files that already exist. No independently invented mock API
-can become the permanent frontend source of truth.
+The specialist can start from `docs/frontend/SETUP.md` and `SCREEN_MAP.md`.
+`packages/client/schema.mjs` is the frozen implemented-route registry;
+`openapi.json` is OpenAPI3.1 and `index.d.mts` contains TypeScript DTOs.
+`index.mjs` is a thin fetch/EventSource client, not another ledger. Nine fixtures
+live in `artifacts/phase5/frontend/fixtures.json`, with recorded versus synthetic
+provenance. Error/retry/SSE/local-CSRF semantics and setup commands are documented.
+Tests cover real temporary reference-runtime responses and main's actual replay
+routes. No independently invented mock API becomes the source of truth.
+
+Read-only replay launcher: `npm run demo:replay` at127.0.0.1:8790. Financial mode
+is sandbox; presentation kind is recorded_evidence_replay. All replay POSTs are
+405, and client writes fail before fetch. Do not use runtime payment or provider
+routes to rehearse. Final website/layout/motion and public release remain separate.
+Older contracts and demo packets are labelled historical planning. They are not
+permission to assume inventory/bids/payment-session routes exist.
 
 Accessibility floor for basic and final UI: visible Sponsored label, keyboard
 operation, associated form labels, readable errors/status text, no reliance on

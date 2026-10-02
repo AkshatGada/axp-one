@@ -1,0 +1,14 @@
+import { chromium } from '/Users/akshat/chatgpt-pixel-helper/analysis/runtime/node_modules/playwright-core/index.mjs';
+const SHOTS='/Users/akshat/agentic-dsp/docs/frontend/reviews/shots/mvp-v3-judge';
+const b = await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless:true});
+const p = await b.newPage({viewport:{width:1440,height:900}});
+const errs=[]; p.on('pageerror',e=>errs.push(e.message)); p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
+await p.goto('http://localhost:3420/',{waitUntil:'networkidle'});
+await p.waitForTimeout(1500);
+await p.screenshot({path:`${SHOTS}/01-landing.png`});
+console.log('URL',p.url(),'TITLE',await p.title());
+console.log((await p.innerText('body')).slice(0,4000));
+const links = await p.$$eval('a,button',els=>els.map(e=>`${e.tagName} [${e.innerText.trim().replace(/\s+/g,' ').slice(0,60)}] ${e.getAttribute('href')||''}`));
+console.log(links.join('\n'));
+console.log('ERRS',errs);
+await b.close();

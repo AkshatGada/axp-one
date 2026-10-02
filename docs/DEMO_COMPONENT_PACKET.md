@@ -1,7 +1,12 @@
 # C07/C08 integrated demo and frontend handoff packet
 
-Status: planning draft; orchestrator-owned. No demo has been executed.
-Depends on C01–C06 accepted component specs and actual integration evidence.
+Historical planning packet; orchestrator-owned. **Superseded for the executed
+demo by build/PHASE4_RESULT.md and build/PHASE5_TASK.md.** The completed story is
+corporate travel, two TripDesk deliveries and native MPP sandbox settlement;
+not the earlier hotel task/campaign-pause story below. The Phase5 presentation
+is recorded evidence replay, not fresh execution. The implemented API is
+`packages/client/openapi.json`, with setup in `docs/frontend/SETUP.md`;
+CONTRACTS.md's inventory/bids/operator HTTP endpoints remain unimplemented plans.
 
 ## Purpose and non-goals
 

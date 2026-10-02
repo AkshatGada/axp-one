@@ -1,0 +1,21 @@
+import { chromium } from '/Users/akshat/chatgpt-pixel-helper/analysis/runtime/node_modules/playwright-core/index.mjs';
+const SHOTS='/Users/akshat/agentic-dsp/docs/frontend/reviews/shots/final-judge';
+const b = await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+const ctx = await b.newContext({viewport:{width:1440,height:900}});
+const p0 = await ctx.newPage();
+await p0.goto('http://localhost:3410/',{waitUntil:'networkidle'}); await p0.waitForTimeout(1000);
+// hero CTA blocked; check viewport hit for chips + explorer
+const blocked = await p0.evaluate(()=>[...document.querySelectorAll('a')].filter(a=>{const r=a.getBoundingClientRect(); return r.top>0&&r.bottom<900&&r.width>0;}).map(a=>{const r=a.getBoundingClientRect(); const t=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2); return a.innerText.trim().replace(/\s+/g,' ').slice(0,40)+': '+(a.contains(t)?'ok':'BLOCKED');}));
+console.log(blocked.join('\n'));
+const t0=Date.now();
+const [p] = await Promise.all([ctx.waitForEvent('page'), p0.mouse.click(1270,35)]);
+await p.waitForLoadState('networkidle'); console.log('nav ms',Date.now()-t0,'url',p.url(),'title',await p.title());
+const errs=[]; p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
+await p.waitForTimeout(1500);
+await p.screenshot({path:`${SHOTS}/14-mvp-overview.png`});
+console.log(await p.evaluate(()=>document.body.innerText));
+console.log('---LINKS---');
+console.log((await p.evaluate(()=>[...document.querySelectorAll('a,button')].map(a=>a.innerText.trim().replace(/\s+/g,' ').slice(0,60)+' -> '+(a.getAttribute('href')||'btn')))).join('\n'));
+console.log('H',await p.evaluate(()=>document.documentElement.scrollHeight));
+console.log('ERRS',errs);
+await b.close();

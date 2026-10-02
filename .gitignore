@@ -14,3 +14,11 @@ artifacts/private/
 *.db
 .DS_Store
 .vercel/
+
+# Intermediate review captures and raw tool output (local only; ~170MB). Final/committed shots stay tracked.
+docs/frontend/reviews/shots/*/
+!docs/frontend/reviews/shots/final-fixes/
+!docs/frontend/reviews/shots/landing-v6-final/
+!docs/frontend/reviews/shots/landing-v7/
+!docs/frontend/reviews/shots/hero-lab/
+docs/frontend/reviews/tools/**/out/

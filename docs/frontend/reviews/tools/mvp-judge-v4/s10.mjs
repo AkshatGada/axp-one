@@ -1,0 +1,10 @@
+import { chromium } from '/Users/akshat/chatgpt-pixel-helper/analysis/runtime/node_modules/playwright-core/index.mjs';
+const SHOTS='/Users/akshat/agentic-dsp/docs/frontend/reviews/shots/mvp-v4-judge';
+const b = await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless:true});
+const p = await b.newPage({viewport:{width:1440,height:900}});
+await p.goto('http://localhost:3420/',{waitUntil:'networkidle'});
+await p.click('text=Step through opportunity 1 >> nth=0'); await p.waitForLoadState('networkidle'); await p.waitForTimeout(1500);
+console.log(p.url());
+await p.screenshot({path:`${SHOTS}/25-opportunity-1.png`});
+console.log((await p.innerText('main').catch(()=>p.innerText('body'))).slice(0,3000));
+await b.close();

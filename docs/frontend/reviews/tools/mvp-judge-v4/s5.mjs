@@ -1,0 +1,12 @@
+import { chromium } from '/Users/akshat/chatgpt-pixel-helper/analysis/runtime/node_modules/playwright-core/index.mjs';
+const SHOTS='/Users/akshat/agentic-dsp/docs/frontend/reviews/shots/mvp-v4-judge';
+const b = await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless:true});
+const p = await b.newPage({viewport:{width:1440,height:900}});
+await p.goto('http://localhost:3420/present/#8',{waitUntil:'networkidle'});
+await p.waitForTimeout(2000);
+const info = await p.evaluate(()=>{const el=[...document.querySelectorAll('*')].find(e=>e.childElementCount===0 && /Compare mobile-only/.test(e.textContent)); if(!el) return 'none'; const r=el.getBoundingClientRect(); let s=getComputedStyle(el); let a=el, chain=[]; while(a){const cs=getComputedStyle(a); if(cs.opacity!=='1'||cs.visibility!=='visible'||cs.display==='none') chain.push(`${a.tagName}.${a.className} op=${cs.opacity} vis=${cs.visibility} disp=${cs.display}`); a=a.parentElement;} return {r:[r.x,r.y,r.width,r.height], chain};});
+console.log(JSON.stringify(info));
+await p.keyboard.press('ArrowRight'); await p.waitForTimeout(2500);
+console.log('after right:', p.url());
+await p.screenshot({path:`${SHOTS}/17-present-s8-step.png`});
+await b.close();

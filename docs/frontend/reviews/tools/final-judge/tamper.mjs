@@ -1,0 +1,16 @@
+import { chromium } from '/Users/akshat/chatgpt-pixel-helper/analysis/runtime/node_modules/playwright-core/index.mjs';
+const SHOTS='/Users/akshat/agentic-dsp/docs/frontend/reviews/shots/final-judge';
+const b = await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+const p = await b.newPage({viewport:{width:1440,height:900}});
+await p.goto('http://localhost:3420/verify/',{waitUntil:'networkidle'}); await p.waitForTimeout(1500);
+const btn = p.getByRole('button',{name:'Tamper with one byte'});
+await btn.scrollIntoViewIfNeeded(); await p.waitForTimeout(500);
+const t0=Date.now(); await btn.click(); await p.waitForTimeout(1500);
+console.log('tamper click->',(Date.now()-t0)/1000);
+await p.screenshot({path:`${SHOTS}/23-verify-tampered.png`});
+const sec = await p.evaluate(()=>{const h=[...document.querySelectorAll('h2,h3')].find(h=>/Tamper with one byte/.test(h.innerText)); let el=h; for(let i=0;i<3;i++) el=el.parentElement; return el.innerText;});
+console.log(sec.slice(0,1500));
+console.log('TOP:', (await p.evaluate(()=>document.querySelector('main').innerText.slice(0,700))));
+await p.getByRole('button',{name:'Reset'}).click(); await p.waitForTimeout(800);
+console.log('AFTER RESET:', (await p.evaluate(()=>{const h=[...document.querySelectorAll('h2,h3')].find(h=>/Tamper with one byte/.test(h.innerText)); let el=h; for(let i=0;i<3;i++) el=el.parentElement; return el.innerText.slice(0,400);})));
+await b.close();

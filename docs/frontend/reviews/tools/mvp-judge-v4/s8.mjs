@@ -1,0 +1,15 @@
+import { chromium } from '/Users/akshat/chatgpt-pixel-helper/analysis/runtime/node_modules/playwright-core/index.mjs';
+const SHOTS='/Users/akshat/agentic-dsp/docs/frontend/reviews/shots/mvp-v4-judge';
+const b = await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless:true});
+const p = await b.newPage({viewport:{width:1440,height:900}});
+const errs=[]; p.on('pageerror',e=>errs.push(e.message)); p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
+await p.goto('http://localhost:3420/',{waitUntil:'networkidle'});
+await p.click('header >> text=Verify').catch(()=>p.goto('http://localhost:3420/verify/'));
+await p.waitForLoadState('networkidle'); await p.waitForTimeout(3000);
+console.log('URL',p.url());
+await p.screenshot({path:`${SHOTS}/22-verify.png`});
+console.log((await p.innerText('main').catch(()=>p.innerText('body'))).slice(0,4000));
+const btns = await p.$$eval('button',els=>els.map(e=>e.innerText.trim().replace(/\s+/g,' ')).filter(Boolean));
+console.log('BUTTONS',btns);
+console.log('ERRS',errs);
+await b.close();

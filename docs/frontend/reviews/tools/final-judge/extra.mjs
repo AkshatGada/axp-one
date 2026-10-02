@@ -1,0 +1,14 @@
+import { chromium } from '/Users/akshat/chatgpt-pixel-helper/analysis/runtime/node_modules/playwright-core/index.mjs';
+const SHOTS='/Users/akshat/agentic-dsp/docs/frontend/reviews/shots/final-judge';
+const b = await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+const p = await b.newPage({viewport:{width:1440,height:900}});
+await p.goto('http://localhost:3420/',{waitUntil:'networkidle'});
+const sel = await p.evaluate(()=>{const s=document.querySelector('header select'); return s? [...s.options].map(o=>o.text).join(' | ') : 'no select: '+ (document.querySelector('header')?.innerHTML.match(/Live Devnet run[^<]*/)||[''])[0];});
+console.log('RUN SELECTOR:', sel);
+await p.goto('http://localhost:3420/evidence/',{waitUntil:'networkidle'}); await p.waitForTimeout(1200);
+await p.screenshot({path:`${SHOTS}/28-evidence.png`});
+console.log((await p.evaluate(()=>document.querySelector('main')?.innerText)).slice(0,2500));
+await p.goto('http://localhost:3410/',{waitUntil:'networkidle'});
+const v = await p.evaluate(async()=>{const v=document.querySelector('video'); if(!v) return 'none'; v.preload='metadata'; if(isNaN(v.duration)){await new Promise(r=>{v.addEventListener('loadedmetadata',r,{once:true}); v.load(); setTimeout(r,5000);});} return {src:v.currentSrc, dur:v.duration, poster:v.poster};});
+console.log('VIDEO', JSON.stringify(v));
+await b.close();

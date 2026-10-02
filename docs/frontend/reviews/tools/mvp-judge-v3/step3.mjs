@@ -1,0 +1,12 @@
+import {open,SHOTS,txt} from './lib.mjs';
+const {b,p,errs}=await open();
+await p.goto('http://localhost:3420/',{waitUntil:'networkidle'});
+await p.getByRole('link',{name:'Step through opportunity 1'}).click();
+await p.waitForLoadState('networkidle'); await p.waitForTimeout(1200);
+console.log('URL',p.url());
+await p.screenshot({path:`${SHOTS}/05-opp1-top.png`});
+await p.screenshot({path:`${SHOTS}/06-opp1-full.png`,fullPage:true});
+console.log(await txt(p,9000));
+console.log(await p.$$eval('main a, main button',els=>els.map(e=>`${e.tagName} [${e.innerText.trim().replace(/\s+/g,' ').slice(0,70)}] ${e.getAttribute('href')||''}`).join('\n')));
+console.log(errs);
+await b.close();

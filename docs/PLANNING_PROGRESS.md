@@ -1,6 +1,8 @@
 # Planning progress
 
-Updated 2026-09-30. Current stage: component research/specification; no build.
+Updated 2026-09-30. Current stage: planning reset after partial implementation.
+MVP_MASTER_PLAN.md is the current review entry point and status snapshot.
+The tables below describe the earlier planning baseline, not current build state.
 
 | Workstream | State | Evidence / next gate |
 |---|---|---|
