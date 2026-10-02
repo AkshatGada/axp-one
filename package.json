@@ -13,6 +13,9 @@
     "demo:v2:replay": "node scripts/demo/v2.mjs --replay",
     "demo:v3": "node scripts/demo/v3.mjs",
     "demo:v3:replay": "node scripts/demo/v3.mjs --replay",
-    "start": "node apps/backend/server.mjs"
+    "start": "node apps/backend/server.mjs",
+    "build:site": "node scripts/build-site.mjs",
+    "serve:site": "node scripts/build-site/serve.mjs",
+    "dev:site": "node scripts/hosted/dev-server.mjs"
   }
 }

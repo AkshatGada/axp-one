@@ -12,17 +12,20 @@ import {createLiveClient} from '../../packages/hosted/client.mjs';
 import {loadV3Bundle} from '../../packages/v3/bundle.mjs';
 
 if(process.env.AXP_E2E_LIVE!=='1'){console.error('Set AXP_E2E_LIVE=1 to spend real model calls and Devnet test tokens.');process.exit(2);}
-const port=Number(process.env.AXP_HOSTED_PORT??3197),base=`http://127.0.0.1:${port}`;
+const port=Number(process.env.AXP_HOSTED_PORT??3197);
 const keepIdx=process.argv.indexOf('--keep-artifacts'),keep=keepIdx>0?process.argv[keepIdx+1]:null;
+// --base <url>: use an already running server (e.g. scripts/build-site/serve.mjs with AXP_SERVE_HARNESS=1).
+const baseIdx=process.argv.indexOf('--base'),external=baseIdx>0?process.argv[baseIdx+1]:null;
 if(keep&&(!/^artifacts\/[\w-]+$/.test(keep)||keep.startsWith('artifacts/v3/')))throw Error('artifact dir must be artifacts/<name>');
 const chromeBin=process.env.AXP_CHROME_BIN??'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const t0=Date.now(),log=(...a)=>console.error(`[${((Date.now()-t0)/1000).toFixed(0)}s]`,...a);
 
-const server=spawn(process.execPath,['--no-warnings','scripts/hosted/dev-server.mjs'],{cwd:root,env:{...process.env,AXP_LIVE_ENABLED:'1',AXP_HOSTED_PORT:String(port)},stdio:['ignore','inherit','pipe']});
-server.stderr.on('data',d=>process.stderr.write(`  server| ${d}`));
+const base=external??`http://127.0.0.1:${port}`;
+const server=external?null:spawn(process.execPath,['--no-warnings','scripts/hosted/dev-server.mjs'],{cwd:root,env:{...process.env,AXP_LIVE_ENABLED:'1',AXP_HOSTED_PORT:String(port)},stdio:['ignore','inherit','pipe']});
+server?.stderr.on('data',d=>process.stderr.write(`  server| ${d}`));
 const profile=mkdtempSync(join(tmpdir(),'axp-chrome-'));let chrome;
-const cleanup=()=>{chrome?.kill('SIGTERM');server.kill('SIGTERM');rmSync(profile,{recursive:true,force:true});};
+const cleanup=()=>{chrome?.kill('SIGTERM');server?.kill('SIGTERM');rmSync(profile,{recursive:true,force:true});};
 process.on('exit',cleanup);
 try {
   const client=createLiveClient({baseURL:base});

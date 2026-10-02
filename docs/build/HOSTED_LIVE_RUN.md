@@ -1,8 +1,8 @@
 # Hosted live run (axp.one): architecture
 
-Status 2026-10-02: the API is implemented (`packages/hosted/`) and ran one real Devnet run
-end to end locally through `scripts/hosted/dev-server.mjs` (section 12). Vercel packaging
-(section 9) is designed but deliberately not built yet (owner: hosting last).
+Status 2026-10-02: the API is implemented (`packages/hosted/`) and ran real Devnet runs end
+to end locally, through the dev server and through the packaged Vercel function (section
+12). The single-site Vercel build is in place (section 9); not deployed by this agent.
 
 A judge presses "Run it live" in the hosted MVP and gets a real, bounded V3 run on
 Solana Devnet: four DeepSeek `deepseek-flash` organic answers, 15 real Jev decisions,
@@ -16,8 +16,8 @@ real Devnet channel opens/closes in test USDC. The result is a bundle in the
 ```
 axp.one/            landing   (apps/marketing static export)
 axp.one/mvp/        MVP       (apps/product-ui static export, NEXT_PUBLIC_BASE_PATH=/mvp)
-axp.one/api/*       one Node function (packages/hosted/api.mjs), Node 22+/24 runtime
-                    state: Upstash Redis (KV) in production, a local directory in dev
+axp.one/api/*       one Node function (packages/hosted), Node 22.x runtime
+                    state: Vercel Blob (private store) in production, a local directory in dev
 ```
 
 One function, not many: the handler routes `/api/*` itself (keeps under Hobby's
@@ -37,24 +37,42 @@ forced: a live run may legitimately differ from the recording.
 
 ## 3. Persistence
 
-**Upstash Redis (Vercel Marketplace, free tier)**, REST API via `fetch` (no SDK).
-Chosen over Blob (no atomic lock/counter) and Neon (SQL schema + driver for what is
-a key/value need). Free tier: 256 MB, 500K commands/month, 10 MB/request: a run's
-encrypted state is about 0.3 MB compressed, its public bundle about 3 MB.
+**Vercel Blob (preferred; owner decision 2026-10-02, no extra signup)**: create a
+**private** Blob store in the project's Storage tab; Vercel injects `BLOB_READ_WRITE_TOKEN`.
+Upstash Redis remains an optional alternative (`AXP_RUN_STORE=upstash` +
+`KV_REST_API_URL`/`KV_REST_API_TOKEN`). Both speak to the same small key/value interface
+(`packages/hosted/kv.mjs`, REST via `fetch`, no SDK); locally it is a directory.
 
 | Key | Value |
 |---|---|
 | `axp:run:<id>` | run record: phase, timestamps, public status (fast GETs) |
-| `axp:run:<id>:state` | AES-256-GCM encrypted, gzipped snapshot of the run's private state dir (SQLite files, publisher receipt key, vouchers) |
+| `axp:run:<id>:state` | AES-256-GCM encrypted, gzipped snapshot of the run's private state dir (SQLite files, publisher receipt key, vouchers, signed wires) |
 | `axp:run:<id>:file:<path>` | public outputs (organic answers, chain-check, restart, replay bundle) |
-| `axp:run:<id>:lease` | step lock (SET NX PX) |
+| `axp:run:<id>:lease` | step lock |
 | `axp:runs` | recent run ids |
 | `axp:day:<date>[:ip:<hmac>]` | daily counters |
 | `axp:idem:<key>` | idempotency key → run id |
 
-Env: `KV_REST_API_URL`, `KV_REST_API_TOKEN` (injected by the integration; the
-`UPSTASH_REDIS_REST_*` names are also accepted), `AXP_STATE_KEY` (32 random bytes,
-base64). Without KV variables the same code uses `local-state/hosted/` (dev).
+How Blob gives safe locks and counters (each key is one private blob):
+- Reads are uncached (`?cache=0` on the private URL), so a step always sees the last write.
+  Public Blob stores are not supported: their CDN may serve a stale snapshot for up to a
+  minute, which could replay a step.
+- Lease / admission lock / idempotency = **create-if-absent** (`allowOverwrite` off). An
+  expired lease is taken over only with an **ETag conditional write** (`ifMatch`), so two
+  takers cannot both win.
+- Counters and the run list = ETag compare-and-swap loops (retry on 412).
+
+Trade-offs: Blob costs one HTTP request per key operation (Upstash: one command) and
+writes count as Blob "advanced operations", which Vercel meters per plan (the Hobby
+allowance is small). Busy polls only read (a lease read precedes any lease write). A run
+writes roughly 40–80 times (about 6 steps × record/state/lease plus public files and 3
+acknowledgements), so check the plan's Blob operation allowance against the expected run
+count; at about 20 runs/day this is fine on Pro, and Upstash's free tier is the fallback.
+
+`AXP_STATE_KEY` (32 random bytes, base64) encrypts every state snapshot. On Vercel with no
+store configured, the API still answers (`/api/live` → `enabled:false` with
+`storeError:"store_unconfigured"`, `/api/runs` → `[]`): the MVP shows live runs as not yet
+available, and the rest of the site is unaffected.
 
 Each step: take the lease, restore the snapshot into `/tmp/<run>`, run one step of
 the existing engine (`packages/v3/service.mjs` + the payment adapter, unchanged),
@@ -148,20 +166,43 @@ the run token. The server signs the publisher receipt with the run's own key
 channel is authorized immediately. `acknowledgeCard()` in the client contract does
 the DOM checks. It proves an owned-app DOM insertion, not human attention.
 
-## 9. Vercel packaging (designed, deferred)
+## 9. Vercel packaging (built)
 
-- `scripts/build-site.mjs`: build marketing → `/`, MVP with `NEXT_PUBLIC_BASE_PATH=/mvp`
-  → `/mvp/`, rebuild the payment SDK (`tooling/payment-sdk` + `phase4-sdk.mjs`) and
-  write `.vercel/output` (Build Output API): `static/`, `functions/api/index.func`
-  (handler + `packages/`, `apps/backend/`, `artifacts/v2/evidence`, the SDK),
-  `config.json` routes `/api/(.*)` → the function.
-- Function: Node 22.x or 24.x, `maxDuration` 300, memory 1024 MB.
-- `vercel.json`: `buildCommand`, headers (no-store on `/api`), cron
-  `/api/cron/sweep` (daily on Hobby, every 2 min on Pro) with `CRON_SECRET`.
-- Env names: `JEV_API_KEY`, `DEEPSEEK_API_KEY`, `AXP_LIVE_ENABLED`,
-  `AXP_LIVE_PASSCODE`, `AXP_LIVE_DAILY_CAP`, `AXP_LIVE_IP_DAILY_CAP`,
-  `AXP_LIVE_MAX_ACTIVE`, `AXP_LIVE_DELIVERY_WINDOW_SECONDS`, `AXP_DEVNET_WALLETS`,
-  `AXP_STATE_KEY`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `CRON_SECRET`.
+`npm run build:site` (`scripts/build-site.mjs`) writes `.vercel/output` (Build Output API v3):
+- `static/`: `apps/marketing/out` at `/`, `apps/product-ui/out` at `/mvp/` (built with
+  `NEXT_PUBLIC_BASE_PATH=/mvp NEXT_PUBLIC_LIVE_API=1`; both runs, the first recording at
+  `/mvp/first-recording/`).
+- `functions/api/index.func`: `packages/hosted/vercel-function.mjs` as `index.mjs`, the
+  backend modules (`packages/` without tests/spikes, `apps/backend/`, `artifacts/v2/evidence`)
+  and the native payment SDK. The SDK is rebuilt from the vendored, hash-pinned source when
+  absent (fresh clone / Vercel) and copied as a symlink-free `node_modules` tree
+  (`scripts/build-site/flatten-sdk.mjs`; every dependency edge re-resolved; the loader's
+  module-hash checks still run). Runtime `nodejs22.x`, `maxDuration` 300, 1024 MB, about 100 MB.
+- `config.json`: security headers, immutable `_next/static`, `/api/*` → the function,
+  `/mvp` → `/mvp/`, directory `index.html` resolution, 404 pages, and a daily cron
+  `0 9 * * *` → `/api/cron/sweep` (Hobby allows daily crons only; on Pro `*/2 * * * *`).
+- Self-checks: required pages exist, no `.env*`/wallet/`.pem`/`.sqlite` in the output, the
+  function contains only the expected top-level entries, and it imports and answers
+  `/api/live` with no environment.
+
+The function entry deliberately lives outside a top-level `api/` directory: a local
+`vercel build` would otherwise also build a zero-config function whose file tracing pulled
+private `local-state/` files into it (seen once locally, deleted, fixed).
+
+`vercel.json`: framework `null`, `installCommand` `pnpm install --frozen-lockfile`,
+`buildCommand` `node scripts/build-site.mjs`, `outputDirectory` `.vercel/output/static`
+(fallback only; the Build Output API output is used). Root `engines` `>=22.18.0` makes
+Vercel build on Node 24.x; the function itself runs on 22.x.
+
+Local checks: `npm run serve:site` serves `.vercel/output` with Vercel's routing phases
+and the packaged function; `vercel build` (no link, no deploy) succeeded locally.
+
+Environment (`node scripts/build-site/write-env-vercel.mjs` writes `.env.vercel`, 0600,
+gitignored, and `.env.vercel.public-names.txt`):
+- secret: `JEV_API_KEY`, `DEEPSEEK_API_KEY`, `AXP_DEVNET_WALLETS`, `AXP_STATE_KEY`,
+  `CRON_SECRET`, `AXP_LIVE_PASSCODE` (empty), `BLOB_READ_WRITE_TOKEN` (injected by Vercel)
+- non-secret: `AXP_LIVE_ENABLED=1`, `AXP_RUN_STORE=blob`, `AXP_LIVE_DAILY_CAP=20`,
+  `AXP_LIVE_IP_DAILY_CAP=3`, `AXP_LIVE_MAX_ACTIVE=1`, `AXP_LIVE_DELIVERY_WINDOW_SECONDS=600`
 
 ## 10. Client contract (for the MVP "Run it live" UI)
 
@@ -235,17 +276,27 @@ tokens); DeepSeek 4 calls, no retries.
   [KeyForge 4Q1hay8S…](https://explorer.solana.com/address/4Q1hay8SSmRanh6dbp3wcSvcyQXBm2Eo32GLf3mqvXeK?cluster=devnet);
   publisher [Bfra9s9K…](https://explorer.solana.com/address/Bfra9s9Kn4uKpTw7qcT93YTETtb9nFXR34iGCVtTuB78?cluster=devnet)
 
+Second run, through the **packaged Vercel function** (`.vercel/output` served by
+`scripts/build-site/serve.mjs`, env from `.env.vercel`, file store): run
+`v3-devnet-live-h20261002-951e952c1c`, completed in 73 s, one DeepSeek answer retried once
+(`organic_pending` path), charges 4000/3000/4000, bundle `90d37641…3a59f` validated, story gates
+passed. ClearVault [open](https://explorer.solana.com/tx/4z4BjLE4DGsrJeUwvw6pDAdL8EdtAsCxvZdFnjjJQpaMFb5o1L6hB6WueDvqPZLtN7Bxa5paFBN3cgr9s1Us9V4j?cluster=devnet)
+/ [close](https://explorer.solana.com/tx/4CVYr9KWpddeK6U3JGQdatGy1Sj4WtPmfSbPCQ8u526LafJTrmGJCWDMXGWrAKZY1vKzyjpyk1wAYf4DkYyCC45H?cluster=devnet),
+KeyForge [open](https://explorer.solana.com/tx/2C6z6YF1kAqZPsLe1gBVUKijPjHUkhm6i2AsyRpwVeKLNYFhU7kmrupB339VhPxmnBBLWcNsREJWwvdkYCmZ4Lr5?cluster=devnet)
+/ [close](https://explorer.solana.com/tx/3GrLWGExm4AxMThFYTGDHd3EphZo4dYoyt3MwCJsmG7PBDNPTyBPZ8FYAkBk8iybyHf64TeSGu7sHYxc2gbK6KA9?cluster=devnet).
+
 Notes for the MVP builder: a hosted run's `chain-check.json` has `hosted: true` and its
 `funding` entry is the one-time stable-wallet funding (with a `note`), so a run has 4
 settlement transactions (2 opens, 2 closes), not the rehearsal's 5; the projection treats
 funding as optional. Turns in the live status are listed alphabetically by scenario.
-Not yet exercised against Upstash or on Vercel (deferred), and the crash-between-broadcast
+Not yet exercised against a real Blob/Upstash store or on Vercel itself (Blob is covered by a
+protocol-level fake of its REST API), and the crash-between-broadcast
 recovery path is covered by the adapter's own tests, not by a hosted run.
 
 ## 13. Files
 
 `packages/hosted/`: `api.mjs` (routes, caps), `runner.mjs` (leased step machine),
-`live-run.mjs` (engine), `kv.mjs` (Upstash REST / local dir), `vault.mjs` (encrypted
+`live-run.mjs` (engine), `kv.mjs` (Vercel Blob / Upstash REST / local dir), `vercel-function.mjs` (function entry), `vault.mjs` (encrypted
 snapshots), `wallets.mjs` (stable Devnet wallets), `client.mjs` + `client.d.mts` (contract).
 `scripts/hosted/`: `dev-server.mjs`, `wallets.mjs` (init/status/fund), `e2e-live.mjs`,
 `harness/` (dev delivery page). Tests: `tests/hosted/hosted.test.mjs` (offline).

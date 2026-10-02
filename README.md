@@ -49,7 +49,12 @@ pnpm --filter @axp/marketing build     # static export -> apps/marketing/out
 NEXT_PUBLIC_BASE_PATH=/mvp pnpm --filter @axp/product-ui build   # -> apps/product-ui/out
 node scripts/hosted/dev-server.mjs     # both + the live API on http://127.0.0.1:3100
 pnpm --filter @axp/product-ui test     # MVP projection tests
+npm run build:site                     # the whole axp.one site as deployed: landing, /mvp/ and the
+npm run serve:site                     #   /api function in .vercel/output; served at http://127.0.0.1:3200
 ```
+
+Hosting (Vercel, framework "Other", settings in `vercel.json`): see
+[hosted live run](docs/build/HOSTED_LIVE_RUN.md) sections 3 and 9.
 
 **3. A live run of your own on Solana Devnet** (spends your Jev/DeepSeek credits and
 Devnet test tokens only; a run takes about 1–3 minutes).

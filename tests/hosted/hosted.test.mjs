@@ -179,3 +179,63 @@ test('runner: repeated open failures abort through closing, never past settlemen
     r=(await runner.advance(record.runId)).record;assert.equal(r.phase,'aborted');
   } finally {cleanup();}
 });
+
+// ---------- Vercel Blob backend against an in-memory fake of the Blob REST API ----------
+import {createBlobKV,createKVFromConfig} from '../../packages/hosted/kv.mjs';
+function fakeBlob() {
+  const blobs=new Map();let n=0;const calls=[];
+  const err=(status,code,message)=>new Response(JSON.stringify({error:{code,message}}),{status});
+  const fetchImpl=async(url,init={})=>{
+    const u=new URL(url),h=init.headers??{};calls.push({method:init.method??'GET',url:u.pathname+u.search,h});
+    if(u.hostname.endsWith('.private.blob.vercel-storage.com')){
+      if(h.authorization!=='Bearer vercel_blob_rw_store1_secret')return new Response('',{status:403});
+      const b=blobs.get(u.pathname.slice(1));if(!b)return new Response('',{status:404});
+      return new Response(b.body,{status:200,headers:{etag:b.etag}});
+    }
+    if(init.method==='PUT'){
+      const pathname=u.searchParams.get('pathname'),cur=blobs.get(pathname);
+      if(h['x-vercel-blob-access']!=='private'||h['x-add-random-suffix']!=='0')return err(400,'bad_request','bad options');
+      if(h['x-if-match']){if(!cur||cur.etag!==h['x-if-match'])return err(412,'precondition_failed','etag');}
+      else if(cur&&h['x-allow-overwrite']!=='1')return err(400,'bad_request','This blob already exists');
+      const etag=`"e${++n}"`;blobs.set(pathname,{body:init.body,etag});return new Response(JSON.stringify({pathname,etag}),{status:200});
+    }
+    if(init.method==='POST'&&u.pathname.endsWith('/delete')){for(const x of JSON.parse(init.body).urls)blobs.delete(new URL(x).pathname.slice(1));return new Response('{}',{status:200});}
+    return err(404,'not_found','');
+  };
+  return {fetchImpl,blobs,calls};
+}
+
+test('Blob KV: create-if-absent leases, expiry takeover, ETag counters, private uncached reads', async () => {
+  const f=fakeBlob(),kv=createBlobKV({token:'vercel_blob_rw_store1_secret',fetchImpl:f.fetchImpl});
+  assert.equal(await kv.set('axp:run:x:lease','a',{nx:true,ttlSeconds:60}),true);
+  assert.equal(await kv.set('axp:run:x:lease','b',{nx:true,ttlSeconds:60}),false);
+  assert.equal(await kv.get('axp:run:x:lease'),'a');
+  await kv.del('axp:run:x:lease');assert.equal(await kv.get('axp:run:x:lease'),null);
+  assert.equal(await kv.set('axp:l','old',{nx:true,ttlSeconds:0.001}),true);await new Promise(r=>setTimeout(r,10));
+  assert.equal(await kv.get('axp:l'),null);assert.equal(await kv.set('axp:l','new',{nx:true,ttlSeconds:60}),true);assert.equal(await kv.get('axp:l'),'new');
+  const counts=await Promise.all(Array.from({length:5},()=>kv.incr('axp:day:d',100)));
+  assert.deepEqual(counts.sort(),[1,2,3,4,5]);assert.equal(await kv.get('axp:day:d'),'5');
+  await kv.lpush('axp:runs','r1',2);await kv.lpush('axp:runs','r2',2);await kv.lpush('axp:runs','r3',2);assert.deepEqual(await kv.lrange('axp:runs',0,-1),['r3','r2']);
+  await kv.set('axp:run:x','record');await kv.set('axp:run:x:state','snapshot');
+  assert.equal(await kv.get('axp:run:x'),'record');assert.equal(await kv.get('axp:run:x:state'),'snapshot');
+  assert.ok(f.blobs.has('axp-hosted/axp/run/x.json')&&f.blobs.has('axp-hosted/axp/run/x/state.json'));
+  assert.ok(f.calls.filter(c=>c.method==='GET').every(c=>c.url.endsWith('?cache=0')),'reads bypass the cache');
+  assert.ok(f.calls.filter(c=>c.method==='PUT').every(c=>c.h['x-vercel-blob-access']==='private'));
+  assert.throws(()=>createBlobKV({token:'nope'}),/blob_config_invalid/);
+});
+
+test('store selection: Blob preferred, Upstash by config, none on Vercel without a store', () => {
+  const blob={BLOB_READ_WRITE_TOKEN:'vercel_blob_rw_store1_secret'},up={KV_REST_API_URL:'https://x.upstash.io',KV_REST_API_TOKEN:'t'};
+  assert.equal(createKVFromConfig({...blob,...up},{root:'/tmp'}).kind,'blob');
+  assert.equal(createKVFromConfig({...blob,...up,AXP_RUN_STORE:'upstash'},{root:'/tmp'}).kind,'upstash');
+  assert.equal(createKVFromConfig(up,{root:'/tmp'}).kind,'upstash');
+  assert.equal(createKVFromConfig({VERCEL:'1'},{root:'/tmp'}),null);
+});
+
+test('API on Vercel without a store: live off, config and run list still answer 200', async () => {
+  const api=createHostedAPI({config:{VERCEL:'1',AXP_LIVE_ENABLED:'1',JEV_API_KEY:'x'.repeat(30),DEEPSEEK_API_KEY:'y'.repeat(30)},root:tmp(),log:()=>{}});
+  const cfg=await api.route('GET','/api/live/config',{body:{},ip:'',headers:{}});
+  assert.equal(cfg.status,200);assert.equal(cfg.body.enabled,false);assert.equal(cfg.body.configured.storeError,'store_unconfigured');
+  assert.deepEqual((await api.route('GET','/api/runs',{body:{},ip:'',headers:{}})).body,{runs:[]});
+  await assert.rejects(api.route('POST','/api/runs',{body:{},ip:'',headers:{}}),e=>e.status===503);
+});

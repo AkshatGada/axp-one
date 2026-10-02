@@ -14,7 +14,7 @@ export function stateKeyFrom(config,{root,allowLocalKey}) {
   if(raw){const key=Buffer.from(raw,'base64');if(key.length!==32)fail('state_key_invalid');return key;}
   if(!allowLocalKey)fail('state_key_required');
   // Development only: a generated key file next to the local store.
-  const path=join(root,config.AXP_HOSTED_DATA_DIR||'local-state/hosted','state.key');
+  const path=join(resolve(root,config.AXP_HOSTED_DATA_DIR||'local-state/hosted'),'state.key');
   if(!existsSync(path)){mkdirSync(dirname(path),{recursive:true,mode:0o700});writeFileSync(path,randomBytes(32).toString('base64'),{mode:0o600,flag:'wx'});}
   const key=Buffer.from(readFileSync(path,'utf8').trim(),'base64');if(key.length!==32)fail('state_key_invalid');return key;
 }

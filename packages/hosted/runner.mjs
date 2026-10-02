@@ -39,7 +39,8 @@ export function createRunner({kv,stateKey,wallets,config,signingEnabled,modelsEn
   /** Run fn with the run's directory restored, under the lease; saves afterwards. */
   async function withRun(runId,fn,{save=true}={}) {
     const owner=randomBytes(8).toString('hex');
-    if(!await kv.set(K.lease(runId),owner,{ttlSeconds:LEASE_SECONDS,nx:true}))return {busy:true};
+    // Cheap read first: a busy poll should not cost a store write.
+    if(await kv.get(K.lease(runId))||!await kv.set(K.lease(runId),owner,{ttlSeconds:LEASE_SECONDS,nx:true}))return {busy:true};
     const work=mkdtempSync(join(tmpdir(),'axp-run-')),liveDir=join(work,'live'),artifactDir=join(work,'public');
     const w=materializeWalletFiles(wallets,runId);
     try {

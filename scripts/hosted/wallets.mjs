@@ -68,7 +68,7 @@ async function fund() {
   return {status:entry.status,signature,explorer:explorerTx(signature)};
 }
 function env() {
-  return {name:'AXP_DEVNET_WALLETS',value:`base64 of ${path.replace(root+'/','')} (do not print; use scripts/hosted/write-env-vercel.mjs when hosting)`};
+  return {name:'AXP_DEVNET_WALLETS',value:`base64 of ${path.replace(root+'/','')} (do not print; use scripts/build-site/write-env-vercel.mjs when hosting)`};
 }
 const commands={init,status,fund,env};
 try{check(commands[command],'command_invalid');console.log(JSON.stringify(await commands[command](),(_,v)=>typeof v==='bigint'?v.toString():v,2));}

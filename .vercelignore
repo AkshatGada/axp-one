@@ -1,0 +1,24 @@
+# A CLI deploy uploads the working tree: never upload private or generated local files.
+# (The build regenerates the payment SDK and both static exports on Vercel.)
+.env*
+!.env.example
+local-state/
+**/*.pem
+**/*.sqlite
+**/*.sqlite-*
+**/test-wallets.json
+**/wallet-keys.json
+**/hosted-devnet-wallets.json
+.vercel/
+node_modules/
+**/node_modules/
+apps/*/out/
+apps/*/.next/
+apps/*/.next-*/
+tooling/payment-sdk/node_modules/
+outputs/
+artifacts/private/
+aws-scrape-db/
+.wrangler/
+__pycache__/
+*.zip

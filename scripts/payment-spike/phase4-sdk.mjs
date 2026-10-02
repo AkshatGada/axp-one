@@ -9,7 +9,8 @@ import {nativeSDKRoot} from '../../packages/config/local.mjs';
 
 const SOURCE=resolve(import.meta.dirname,'../../vendor/pay-kit');
 const ROOT=nativeSDKRoot();
-const LIMIT=100*1024*1024,FLOOR=40*1024**3;
+// FLOOR: free-disk safety margin; build machines (e.g. the hosted-site build) may lower it explicitly.
+const LIMIT=100*1024*1024,FLOOR=Number(process.env.AXP_SDK_DISK_FLOOR_BYTES??40*1024**3);
 const toolRequire=createRequire(new URL('../../tooling/payment-sdk/package.json',import.meta.url));
 const semver=toolRequire('semver'),ts=toolRequire('typescript');
 if(ts.version!=='5.9.3')throw new Error('compiler_pin_mismatch');

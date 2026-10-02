@@ -26,22 +26,25 @@ export function hostedSettings(config) {
 }
 
 export function createHostedAPI({config=localConfiguration(),root=repositoryRoot,kv,now=Date.now,log=(runId,event,detail)=>console.error(JSON.stringify({at:new Date().toISOString(),runId,event,...(detail??{})}))}={}) {
-  kv??=createKVFromConfig(config,{root});
+  // Each prerequisite degrades to "live runs off" instead of failing the whole API.
   const settings=hostedSettings(config);
-  const stateKey=stateKeyFrom(config,{root,allowLocalKey:kv.kind==='file'});
-  let wallets=null,walletError=null;
+  let storeError=null,stateKey=null,wallets=null,walletError=null;
+  try{kv??=createKVFromConfig(config,{root});if(!kv)storeError='store_unconfigured';}catch(e){kv=null;storeError=e.code??'store_invalid';}
+  if(kv){try{stateKey=stateKeyFrom(config,{root,allowLocalKey:kv.kind==='file'});}catch(e){storeError=e.code??'state_key_invalid';}}
   try{wallets=loadWallets(config,{root});}catch(e){walletError=e.code??'wallets_unavailable';}
+  const store=kv&&stateKey?kv:null;
   const modelsConfigured=!!(config.JEV_API_KEY||config.TYPESAFE_API_KEY)&&!!config.DEEPSEEK_API_KEY;
-  const live=settings.enabled&&!!wallets&&modelsConfigured;
-  const runner=wallets?createRunner({kv,stateKey,wallets,config,signingEnabled:live,modelsEnabled:live,deliveryWindowSeconds:settings.deliveryWindowSeconds,log,now}):null;
+  const live=settings.enabled&&!!wallets&&modelsConfigured&&!!store;
+  const runner=wallets&&store?createRunner({kv:store,stateKey,wallets,config,signingEnabled:live,modelsEnabled:live,deliveryWindowSeconds:settings.deliveryWindowSeconds,log,now}):null;
   let health={at:0,value:null};
   async function payers(){if(!wallets)return null;if(now()-health.at<60000)return health.value;try{health={at:now(),value:await payerHealth(wallets)};}catch(e){health={at:now(),value:{error:e.code??'rpc_unavailable'}};}return health.value;}
   const isActive=r=>!TERMINAL.includes(r.phase)&&now()-Date.parse(r.updatedAt)<settings.staleSeconds*1000;
 
   async function liveConfig() {
-    const used=Number(await kv.get(`axp:day:${day(now())}`)??0),recent=runner?await runner.list(20):[];
-    const p=await payers(),payersOk=!!p&&!p.error&&Object.values(p).every(x=>x.ok);
-    return {schemaVersion:'axp.hosted-live-config.v1',network:'solana-devnet',enabled:live&&payersOk,configured:{liveEnabled:settings.enabled,modelKeys:modelsConfigured,wallets:!!wallets,...(walletError?{walletError}:{}),payersFunded:payersOk},
+    let used=0,recent=[],storeReachable=!!store;
+    if(store){try{used=Number(await store.get(`axp:day:${day(now())}`)??0);recent=runner?await runner.list(20):[];}catch(e){storeReachable=false;log(null,'store_error',{code:e.code??'store_error'});}}
+    const p=live?await payers():null,payersOk=!!p&&!p.error&&Object.values(p).every(x=>x.ok);
+    return {schemaVersion:'axp.hosted-live-config.v1',network:'solana-devnet',enabled:live&&storeReachable&&payersOk,configured:{liveEnabled:settings.enabled,store:store?.kind??null,...(storeError?{storeError}:{}),storeReachable,modelKeys:modelsConfigured,wallets:!!wallets,...(walletError?{walletError}:{}),payersFunded:payersOk},
       passcodeRequired:!!settings.passcode,caps:{daily:settings.dailyCap,perIpDaily:settings.ipDailyCap,maxActive:settings.maxActive,deliveryWindowSeconds:settings.deliveryWindowSeconds},
       usedToday:used,activeRuns:recent.filter(isActive).map(r=>r.runId),wallets:wallets?publicWallets(wallets):null,payers:p,
       scenarios:['cached','offline','repeat','mobile'],models:{organic:'deepseek-flash',decisions:'jev-1.13.0'}};
@@ -78,13 +81,14 @@ export function createHostedAPI({config=localConfiguration(),root=repositoryRoot
 
   async function route(method,path,{body,ip,headers}) {
     const parts=path.replace(/^\/api\/?/,'').split('/').filter(Boolean);
-    if(method==='GET'&&parts[0]==='health')return {status:200,body:{status:'ok',live,store:kv.kind}};
-    if(method==='GET'&&parts[0]==='live'&&parts.length===1)return {status:200,body:await liveConfig()};
+    if(method==='GET'&&parts[0]==='health')return {status:200,body:{status:'ok',live,store:store?.kind??null}};
+    if(method==='GET'&&parts[0]==='live'&&(parts.length===1||(parts.length===2&&parts[1]==='config')))return {status:200,body:await liveConfig()};
     if(parts[0]==='cron'&&parts[1]==='sweep'){
       if(!config.CRON_SECRET||!sameSecret(headers.authorization??'',`Bearer ${config.CRON_SECRET}`))fail('forbidden',403);
       return {status:200,body:{swept:await sweep()}};
     }
     if(parts[0]!=='runs')fail('not_found',404);
+    if(!runner&&parts.length===1&&method==='GET')return {status:200,body:{runs:[]}};
     if(!runner)fail('live_runs_unconfigured',503);
     if(parts.length===1&&method==='GET')return {status:200,body:{runs:(await runner.list(25)).map(r=>{const {status,history,...x}=publicRecord(r);return {...x,charges:status?.charges?.length??0};})}};
     if(parts.length===1&&method==='POST')return start(body,{ip,idempotencyKey:headers['idempotency-key']});
