@@ -81,7 +81,8 @@ export interface Decision {
   relevanceLevel: number;
   commercialIntentLevel: number;
   scores: { relevance: number; intent: number };
-  confidence: { relevance: number; intent: number };
+  /** Jev's own confidence in each answer (0 to 1); creative is null in bundles that did not record it. */
+  confidence: { relevance: number; intent: number; creative?: number | null };
   probabilities: { relevance: Levels; intent: Levels };
   legend: { relevance: Record<string, string>; intent: Record<string, string> };
   creative: { choice: string; probability: number | null; noFitProbability: number | null };

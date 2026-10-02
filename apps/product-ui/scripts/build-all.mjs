@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 const app = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const base = (process.env.NEXT_PUBLIC_BASE_PATH ?? '').replace(/\/$/, '');
 const FIRST = { dir: 'artifacts/v3/replay', sub: 'first-recording', label: 'First recording, hosted sandbox, Oct 1' };
-const MAIN_LABEL = 'Live Devnet run, Oct 1';
+const MAIN_LABEL = 'Replay of a live Solana Devnet run, Oct 1';
 
 function sh(cmd, args, env = {}) {
   const r = spawnSync(cmd, args, { cwd: app, stdio: 'inherit', env: { ...process.env, ...env } });
@@ -21,6 +21,7 @@ function sh(cmd, args, env = {}) {
 function build(env) {
   sh('node', ['scripts/project-run.mjs'], env);
   sh('node', ['scripts/project-devnet.mjs'], env);
+  sh('node', ['scripts/project-live-sample.mjs'], env);
   sh('node', ['scripts/beats-to-srt.mjs'], env);
   sh('npx', ['next', 'build'], env);
 }

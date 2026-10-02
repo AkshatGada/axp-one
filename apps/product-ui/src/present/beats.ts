@@ -86,7 +86,7 @@ export const BEATS: Beat[] = [
       const h = s.picks().hist;
       if (!h || !h.e) return "Decided with Jev, a judgment model: each agent rated relevance and intent; the model never names a price.";
       const name = s.nameOf(h.campaignId);
-      if (h.e.changed && h.e.bidChanged) return `Decided with Jev. Without history ${name} would have bid ${s.usdc(h.e.bidB)} USDC; with ContextHint history its ${h.e.which} rose from level ${h.e.lb} to ${h.e.lh}, so it bid ${s.usdc(h.e.bidH)}. ${DISCLAIMER}`;
+      if (h.e.changed && h.e.bidChanged) return `Decided with Jev. Without history ${name} would have bid ${s.usdc(h.e.bidB)} USDC; with ContextHint history its ${h.e.which} ${h.e.rose ? "rose" : "changed"} from level ${h.e.lb} to ${h.e.lh}, so it bid ${s.usdc(h.e.bidH)}. ${DISCLAIMER}`;
       if (h.e.changed) return `Decided with Jev. With ContextHint history ${name}'s ${h.e.which} moved from level ${h.e.lb} to ${h.e.lh}, but its bid stayed ${s.usdc(h.e.bidH)} USDC. ${DISCLAIMER}`;
       return `Decided with Jev. History moved ${name}'s scores but no level changed, so the bid stayed ${s.usdc(h.e.bidH)} USDC. ${DISCLAIMER}`;
     },

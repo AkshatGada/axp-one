@@ -44,6 +44,7 @@ import { ARM_LABEL, campaign, decisionFor, evidenceHint, evidenceRecord, flagWor
 import type { Decision, Opportunity } from "@/data/types";
 import { bpsFor } from "@/lib/policy.ts";
 import { GLOSSARY } from "@/data/glossary";
+import { DISCLAIMER } from "@/lib/narrative.ts";
 
 export const two = (n: number) => n.toFixed(2);
 const opIndex = (o: Opportunity) => run.opportunities.findIndex((x) => x.n === o.n);
@@ -410,14 +411,13 @@ export function armDiffSentence(o: Opportunity, campaignId: string): { changed: 
   const intentChanged = b.commercialIntentLevel !== h.commercialIntentLevel;
   const relChanged = b.relevanceLevel !== h.relevanceLevel;
   const verdictSame = b.decision === h.decision;
-  const crossing = (x: number, y: number) => (Math.min(x, y) < Math.round(Math.min(x, y)) + 0.5 && Math.max(x, y) >= Math.round(Math.min(x, y)) + 0.5 ? `crossing the ${Math.round(Math.min(x, y)) + 0.5} rounding line` : "crossing a rounding line");
   const parts = [
     intentChanged
-      ? `With history, ${name}'s intent score moved ${two(b.scores.intent)} to ${two(h.scores.intent)}, ${crossing(b.scores.intent, h.scores.intent)}: level ${b.commercialIntentLevel} to ${h.commercialIntentLevel}.`
-      : `With history, ${name}'s intent score moved ${two(b.scores.intent)} to ${two(h.scores.intent)}; both round to level ${h.commercialIntentLevel}.`,
+      ? `With history, ${name}'s intent score moved ${two(b.scores.intent)} to ${two(h.scores.intent)}, just enough to ${h.commercialIntentLevel > b.commercialIntentLevel ? "raise" : "change"} its level from ${b.commercialIntentLevel} to ${h.commercialIntentLevel}.`
+      : `With history, ${name}'s intent score moved ${two(b.scores.intent)} to ${two(h.scores.intent)}; both count as level ${h.commercialIntentLevel}.`,
     relChanged ? `Relevance moved ${two(b.scores.relevance)} to ${two(h.scores.relevance)}: level ${b.relevanceLevel} to ${h.relevanceLevel}.` : `Relevance stayed at level ${h.relevanceLevel}.`,
     verdictSame ? `Its answer stayed ${h.decision}.` : `Its answer changed from ${b.decision} to ${h.decision}.`,
-    "One observation per arm; not a measured lift.",
+    DISCLAIMER,
   ];
   return { changed: intentChanged || relChanged || !verdictSame, text: parts.join(" ") };
 }

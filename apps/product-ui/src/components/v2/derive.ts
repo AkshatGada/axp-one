@@ -65,7 +65,7 @@ export function activityLanes() {
   return [
     { key: "organic", label: "Organic answers", marks: pick(["v3_organic_completed"]).map((e) => ({ t: T(e.at), title: title(e) })) },
     { key: "opps", label: "Opportunities", marks: pick(["opportunity_created"]).map((e) => ({ t: e.at, title: title(e), tone: "ink" as const })) },
-    { key: "decisions", label: "Agent decisions", marks: pick(["buyer_decision"]).map((e) => ({ t: e.at, title: title(e), tone: "ink" as const })) },
+    { key: "decisions", label: "Bids admitted", marks: pick(["buyer_decision"]).map((e) => ({ t: e.at, title: title(e), tone: "ink" as const })) },
     { key: "awards", label: "Winners picked", marks: pick(["award_reserved"]).map((e) => ({ t: e.at, title: title(e), tone: "ink" as const })) },
     { key: "charges", label: "Paid deliveries", marks: pick(["charge_accepted"]).map((e) => ({ t: e.at, title: title(e), tone: "brand" as const })) },
   ];

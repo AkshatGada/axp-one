@@ -2,7 +2,7 @@
 // (pure, shared with the Present captions and the SRT script).
 import { run } from "./select";
 import { makeStory } from "@/lib/narrative.ts";
-export { DISCLAIMER, auctionKind, capChip, capWords, levelsText, list, numWord, rentWords, timesWord, usdcText } from "@/lib/narrative.ts";
+export { CIRCLE_DEVNET_USDC, CIRCLE_DEVNET_USDC_URL, DISCLAIMER, confWords, solText, intentWords, relevanceWords, auctionKind, capChip, capWords, levelsText, list, numWord, rentWords, timesWord, usdcText } from "@/lib/narrative.ts";
 
 export const story = makeStory(run);
 export const {
@@ -24,6 +24,7 @@ export const {
   network,
   onDevnet,
   runDate,
+  runPhrase,
   highlight,
   otherAuctionsLine,
   NET,

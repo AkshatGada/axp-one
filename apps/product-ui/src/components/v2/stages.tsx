@@ -9,7 +9,7 @@ import type { Decision, Opportunity } from "@/data/types";
 import { armDiffSentence, inspect } from "@/components/opportunity/parts";
 import { bpsFor } from "@/lib/policy.ts";
 import { LiveHashV2, LiveSignatureV2 } from "./live";
-import { timesWord, auctionKind, auctionSentence, capChip, capEvents, capWords, clockNote, DISCLAIMER, earlierSameQuestion, historyEffect, list, noFillSentence, tableBid, tieFacts, topicWords, winnerCaption } from "@/data/story";
+import { confWords, intentWords, relevanceWords, timesWord, auctionKind, auctionSentence, capChip, capEvents, capWords, clockNote, DISCLAIMER, earlierSameQuestion, historyEffect, list, noFillSentence, tableBid, tieFacts, topicWords, winnerCaption } from "@/data/story";
 import { asset } from "@/lib/paths";
 
 const L = Link as unknown as Ld.LinkC;
@@ -142,7 +142,9 @@ export function EligibilityPanel({ o }: { o: Opportunity }) {
         {o.decisions.length === 0
           ? noFillSentence(o)
           : o.eligibility.excluded.some((x) => x.reason !== "frequency_cap" && o.decisions.some((d) => d.campaignId === x.campaignId))
-            ? "Every agent was asked here, even an excluded one, for the research comparison; an excluded campaign can never bid. Funding is checked at auction time, and history never adds a capability."
+            ? o.decisions.some((d) => d.arm === "text_only")
+              ? "Every agent was asked here, even an excluded one, for the research comparison; an excluded campaign can never bid. Funding is checked at auction time, and history never adds a capability."
+              : "An excluded agent was still asked here; its answer could never count. Funding is checked at auction time, and history never adds a capability."
             : "An excluded campaign can never bid. Funding is checked at auction time, and history never adds a capability."}
       </span>
     </StagePanel>
@@ -236,12 +238,34 @@ export function EvidencePanel({ o }: { o: Opportunity }) {
 }
 
 // 4 ---------------------------------------------------------------
+/** Jev's answer in the same words and semantics as the landing's Jev sheet: each bar is Jev's own confidence. */
+function JevAnswer({ d }: { d: Decision }) {
+  const rows = [
+    { k: "Relevance", v: relevanceWords(d.relevanceLevel), lv: `${d.relevanceLevel} of 3`, c: d.confidence.relevance },
+    { k: "Buying intent", v: intentWords(d.commercialIntentLevel), lv: `${d.commercialIntentLevel} of 3`, c: d.confidence.intent },
+    { k: "Creative", v: d.creative.choice === "no_fit" ? "No fitting card" : "Fits", lv: "", c: d.confidence.creative ?? null },
+  ];
+  return (
+    <div className="op2-jev">
+      {rows.map((r) => (
+        <div key={r.k} className="op2-jev-row">
+          <span className="ld-secondary">
+            {r.k}: <b>{r.v}</b>
+            {r.lv ? <span className="ld-faint"> ({r.lv})</span> : null}
+          </span>
+          {r.c != null ? <Ld.Progress value={Math.round(r.c * 100)} max={100} label={confWords(r.c)} /> : null}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ArmRow({ d, o }: { d: Decision; o: Opportunity }) {
   const na = o.auction.notAdmitted.find((x) => x.campaignId === d.campaignId);
   return (
     <div className="op2-arm" id={`decision-${d.campaignId.replace("v3-", "")}-${d.arm === "history" ? "history" : "baseline"}`}>
       <div className="ld-between">
-        <span className="ld-label">{d.arm === "history" ? "With history" : "Baseline, research only"}</span>
+        <span className="ld-label">{d.arm === "history" ? "With ContextHint history" : "Without history, for comparison only"}</span>
         <span className="ld-row" style={{ gap: 6 }}>
           <Ld.Tag tone={d.decision === "bid" ? "solid" : "outline"}>{d.decision === "bid" ? "Bid" : "Skip"}</Ld.Tag>
           <InspectButton payload={inspect.decision(o, d)} variant="text">
@@ -249,11 +273,9 @@ function ArmRow({ d, o }: { d: Decision; o: Opportunity }) {
           </InspectButton>
         </span>
       </div>
-      <span className="ld-secondary">
-        Relevance <b className="ld-strong" style={{ color: "var(--ld-text)" }}>{d.relevanceLevel} of 3</b> (score {two(d.scores.relevance)}), intent <b className="ld-strong" style={{ color: "var(--ld-text)" }}>{d.commercialIntentLevel} of 3</b> (score {two(d.scores.intent)})
-      </span>
+      <JevAnswer d={d} />
       <span className="ld-caption">
-        {d.creative.choice === "no_fit" ? "Chose no fitting creative" : "Chose the approved card"}, {Math.round(d.elapsedMs)} ms recorded
+        Scores {two(d.scores.relevance)} and {two(d.scores.intent)} out of 3; the level is the score rounded. {Math.round(d.elapsedMs)} ms recorded.
       </span>
       {na && d.arm === "history" ? (
         <Ld.Callout tone="warning" title="Agent said bid. Exchange did not admit it.">
@@ -272,14 +294,14 @@ export function DecisionsPanel({ o }: { o: Opportunity }) {
   const asked = run.campaigns.filter((c) => o.decisions.some((d) => d.campaignId === c.campaignId));
   const noBaseline = o.decisions.length > 0 && !o.decisions.some((d) => d.arm === "text_only");
   return (
-    <StagePanel n={4} title="What each agent decided" inspectPayload={wh ? inspect.decision(o, wh) : undefined} inspectLabel={wh ? `Inspect ${nameOf(winner)}'s decision` : undefined} sub={<>Decided with <Term title={GLOSSARY.jev.term} def={GLOSSARY.jev.def}>Jev</Term>, a judgment model. Each agent answers in levels: relevance (does the approved card fit?) and commercial intent (is the person comparing offers?). A level is the rounded score, from 0 to 3.</>}>
+    <StagePanel n={4} title="What each agent decided" inspectPayload={wh ? inspect.decision(o, wh) : undefined} inspectLabel={wh ? `Inspect ${nameOf(winner)}'s decision` : undefined} sub={<>Decided with <Term title={GLOSSARY.jev.term} def={GLOSSARY.jev.def}>Jev</Term>, a judgment model. Each agent answers relevance (does the approved card fit?), buying intent (is the person ready to choose?) and whether its card fits, each with Jev&apos;s own confidence. Levels run from 0 to 3.</>}>
       <div className={asked.length >= 3 ? "ld-cols-3" : "ld-cols-2"}>
         {asked.map((c) => {
           const b = decisionFor(o, c.campaignId, "text_only");
           const h = decisionFor(o, c.campaignId, "history");
           const diff = armDiffSentence(o, c.campaignId);
           const ex = o.eligibility.excluded.find((x) => x.campaignId === c.campaignId && x.reason !== "frequency_cap");
-          const marks = [...(b ? [{ value: b.scores.intent, kind: "baseline" as const, label: "Baseline" }] : []), ...(h ? [{ value: h.scores.intent, kind: "history" as const, label: "With history" }] : [])];
+          const marks = [...(b ? [{ value: b.scores.intent, kind: "baseline" as const, label: "Without history" }] : []), ...(h ? [{ value: h.scores.intent, kind: "history" as const, label: "With history" }] : [])];
           return (
             <div key={c.campaignId} className="op2-dcard">
               <div className="ld-between">
@@ -287,7 +309,7 @@ export function DecisionsPanel({ o }: { o: Opportunity }) {
                   <span className="ld-card-title">{c.businessName}</span>
                   <span className="ld-caption">Decided with Jev</span>
                 </span>
-                {ex ? <Ld.Tag tone="dashed">Excluded by rule</Ld.Tag> : diff ? <Ld.Tag tone="outline">{diff.changed ? "Level changed" : "Unchanged"}</Ld.Tag> : null}
+                {ex ? <Ld.Tag tone="dashed">Excluded by rule</Ld.Tag> : diff ? <Ld.Tag tone="outline">{diff.changed ? "History changed its answer" : "History changed nothing"}</Ld.Tag> : null}
               </div>
               {h && !ex ? <Ld.ScoreRuler min={Math.min(1.5, ...marks.map((m) => Math.floor(m.value * 2) / 2))} max={3} ticks={[1, 2, 3].filter((t) => t >= Math.min(1.5, ...marks.map((m) => m.value)))} width={220} marks={marks} /> : null}
               {b ? <ArmRow d={b} o={o} /> : null}
@@ -295,7 +317,7 @@ export function DecisionsPanel({ o }: { o: Opportunity }) {
               {diff && !ex ? <p className="ld-secondary">{diff.text}</p> : null}
               {ex && h ? (
                 <p className="ld-secondary">
-                  Excluded by rule ({ex.missing.length ? `missing ${list(ex.missing.map(capWords))}` : capWords(ex.reason)}); its agent was still asked for the research comparison and {h.decision === "bid" ? "said bid, which could never count" : h.creative.choice === "no_fit" ? "chose no fitting creative" : `said ${h.decision}`}. History never adds a capability.
+                  Excluded by rule ({ex.missing.length ? `missing ${list(ex.missing.map(capWords))}` : capWords(ex.reason)}); its agent was still asked{b ? " for the research comparison" : " (its answer could never count)"} and {h.decision === "bid" ? "said bid, which could never count" : h.creative.choice === "no_fit" ? "chose no fitting creative" : `said ${h.decision}`}. History never adds a capability.
                 </p>
               ) : null}
             </div>
@@ -304,7 +326,7 @@ export function DecisionsPanel({ o }: { o: Opportunity }) {
       </div>
       {noBaseline && wh ? (
         <Ld.Callout title="Only the answer with history was asked here">
-          The paired baseline runs only for paired questions. {nameOf(winner)}&apos;s intent score was {two(wh.scores.intent)}, so level {wh.commercialIntentLevel}.
+          Only paired questions also ask without history. {nameOf(winner)}&apos;s intent score was {two(wh.scores.intent)}, so level {wh.commercialIntentLevel}.
         </Ld.Callout>
       ) : wb && wh ? (
         <Ld.Callout tone="brand" title="What the bid table makes of each answer">
@@ -331,7 +353,7 @@ function TieExplainer({ o }: { o: Opportunity }) {
       {names} {same.length ? `${list(same)}, so the bid table gave them the same bid` : "bid the same amount"}. A <Term title={GLOSSARY.tieRule.term} def={GLOSSARY.tieRule.def}>tie rule</Term>, fixed in the exchange code before the run, decides: the lower campaign ID wins, so {nameOf(w)}.{" "}
       {e
         ? e.changed && e.bidChanged
-          ? `With history ${nameOf(w)}'s levels rose from ${e.b.relevanceLevel} and ${e.b.commercialIntentLevel} to ${e.h.relevanceLevel} and ${e.h.commercialIntentLevel}, so the bid table gave ${usdc(e.bidH)} USDC instead of ${usdc(e.bidB)}. ${DISCLAIMER}`
+          ? `With history ${nameOf(w)}'s levels ${e.rose ? "rose" : "changed"} from ${e.b.relevanceLevel} and ${e.b.commercialIntentLevel} to ${e.h.relevanceLevel} and ${e.h.commercialIntentLevel}, so the bid table gave ${usdc(e.bidH)} USDC instead of ${usdc(e.bidB)}. ${DISCLAIMER}`
           : `History made no difference to the bid here: with and without it the bid table gave ${usdc(e.bidH)} USDC.`
         : null}{" "}
       {cap && cap.o.n !== o.n ? (
@@ -470,11 +492,11 @@ export function ChargePanel({ o }: { o: Opportunity }) {
     <StagePanel n={9} title="Charge and voucher" sub={<>Only an accepted, signed delivery becomes a charge. The charge advances the advertiser's <Term title={GLOSSARY.channel.term} def={GLOSSARY.channel.def}>payment channel</Term> with an off-chain <Term title={GLOSSARY.voucher.term} def={GLOSSARY.voucher.def}>voucher</Term>.</>} inspectPayload={inspect.charge(o)}>
       <div className="ld-flow">
         <Ld.FlowTile step="Charge" title={`Charge ${c.sequence} on ${nameOf(c.campaignId)}'s payment channel`} state={<Ld.Money state="accepted" label="Accepted" />} value={`${usdc(c.amountBaseUnits)} USDC`} />
-        <Ld.FlowTile step={`Voucher ${v.sequence}`} title="Cumulative authorization" state={<Ld.Money state="authorized" label="Authorized in total" />} value={`${usdc(v.cumulativeAmountBaseUnits)} USDC`}>
+        <Ld.FlowTile step={`Voucher ${v.sequence}`} title="Total owed so far" state={<Ld.Money state="authorized" label="Authorized in total" />} value={`${usdc(v.cumulativeAmountBaseUnits)} USDC`}>
           {v.sequence > 1 ? <span className="ld-caption">Replaces voucher {v.sequence - 1}: {usdc(v.cumulativeAmountBaseUnits)} in total, not {usdc(v.cumulativeAmountBaseUnits)} more.</span> : <span className="ld-caption">Nothing moves on chain until the channel closes.</span>}
         </Ld.FlowTile>
       </div>
-      <Ld.Panel title={`${nameOf(c.campaignId)} vouchers so far`} sub="Cumulative authorization in test USDC, against the channel's deposit, with the campaign cap as a line">
+      <Ld.Panel title={`${nameOf(c.campaignId)} vouchers so far`} sub="Total owed so far in test USDC, out of the channel's deposit; the line is the campaign cap">
         <Ld.StepChart max={Number(ch.depositBaseUnits)} cap={cap} format={(x) => usdc(x)} points={ch.vouchers.filter((x) => x.sequence <= v.sequence).map((x) => ({ key: String(x.sequence), label: `Voucher ${x.sequence}`, value: Number(x.cumulativeAmountBaseUnits) }))} />
       </Ld.Panel>
       <span>

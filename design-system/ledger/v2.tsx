@@ -51,7 +51,7 @@ export function TopBar({ brand, run, chips, actions, style }: { brand: ReactNode
   );
 }
 
-/** Run switcher. Only one recorded run exists; the menu says so instead of inventing others. */
+/** Run switcher. Lists the other published runs when the build links them; it never claims a run is the only one. */
 export function RunSwitcher({ runId, note, open, label, others = [] }: { runId: string; note: ReactNode; open?: boolean; label?: ReactNode; others?: Array<{ label: ReactNode; href: string; note?: ReactNode }> }) {
   return (
     <details className="ld-switch" open={open}>
@@ -73,7 +73,7 @@ export function RunSwitcher({ runId, note, open, label, others = [] }: { runId: 
             {o.note ? <span className="ld-caption">{o.note}</span> : null}
           </a>
         ))}
-        <div className="ld-menu-note">{others.length ? "Separate runs; their numbers are never merged." : "The only run published here."}</div>
+        {others.length ? <div className="ld-menu-note">Separate runs; their numbers are never merged.</div> : null}
       </div>
     </details>
   );
@@ -579,7 +579,7 @@ export function ScoreRuler({ min, max, keyLine = 2.5, marks, ticks, width = 440 
         ))}
         <line x1={x(keyLine)} x2={x(keyLine)} y1={6} y2={34} className="ld-ruler-key" />
         <text x={x(keyLine) + 5} y={11} className="ld-chart-t" style={{ fill: "var(--brand-deep)" }}>
-          {keyLine.toFixed(1)} rounds up
+          level {Math.ceil(keyLine)} from here
         </text>
         {marks.map((m) =>
           m.kind === "baseline" ? (

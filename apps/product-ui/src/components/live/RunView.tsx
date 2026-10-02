@@ -10,6 +10,10 @@ import { makeStory, usdcText as usdc, auctionKind, list } from "@/lib/narrative.
 import { expectedCheckCount, verifyChecks, summarize } from "@/lib/verify.ts";
 import type { ProductRun } from "@/data/types";
 import { asset } from "@/lib/paths";
+import SAMPLE from "@/data/live-sample.json";
+
+/** The finished live run saved with this site (public/live-runs/), opened the same way as a run from the API. */
+const SAMPLE_ID = (SAMPLE as { runId: string | null }).runId;
 
 type Loaded = { run: ProductRun; failed: string[]; checks: { pass: number; total: number; expected: number; passing: boolean } | null };
 
@@ -18,6 +22,7 @@ export function RunView() {
   const [state, setState] = useState<"loading" | "absent" | "error" | "ready">("loading");
   const [msg, setMsg] = useState("");
   const [data, setData] = useState<Loaded | null>(null);
+  const [fromSite, setFromSite] = useState(false);
 
   useEffect(() => {
     const runId = new URLSearchParams(window.location.search).get("id");
@@ -27,22 +32,24 @@ export function RunView() {
       setMsg("No run id in the address.");
       return;
     }
-    if (process.env.NEXT_PUBLIC_LIVE_API !== "1") {
+    const saved = runId === SAMPLE_ID;
+    if (process.env.NEXT_PUBLIC_LIVE_API !== "1" && !saved) {
       setState("absent");
       return;
     }
-    const c = createLiveClient();
     let live = true;
     (async () => {
       try {
-        const cfg = await c.config().catch(() => null);
-        if (!cfg) {
+        // The saved run is served with this site; any other id needs the live API.
+        const cfg = saved ? null : await createLiveClient().config().catch(() => null);
+        if (!saved && !cfg) {
           if (live) setState("absent");
           return;
         }
-        // The exact bytes the service serves, so the manifest's run.json hash is checked as at build time.
+        setFromSite(saved);
+        // The exact bytes the service (or this site) serves, so the manifest's run.json hash is checked as at build time.
         const raw = async (p: string) => {
-          const res = await fetch(`/api/runs/${encodeURIComponent(runId)}/files/${p}`);
+          const res = await fetch(saved ? asset(`/live-runs/${encodeURIComponent(runId)}/${p}`) : `/api/runs/${encodeURIComponent(runId)}/files/${p}`);
           if (!res.ok) throw new Error(`${p}: HTTP ${res.status}`);
           return new Uint8Array(await res.arrayBuffer());
         };
@@ -72,8 +79,8 @@ export function RunView() {
   if (state === "loading") return <Ld.Panel title="Loading the run">Fetching the bundle and checking it in this browser.</Ld.Panel>;
   if (state === "absent")
     return (
-      <Ld.Callout tone="brand" title="Live runs are available on the hosted site">
-        This copy of the MVP is static, so it cannot load live runs.
+      <Ld.Callout tone="brand" title="This run needs the live-run service">
+        This copy of the MVP is static, so it can only open the finished live run saved with it. <a className="ld-link" href={asset("/live/")}>Back to Run it live</a>
       </Ld.Callout>
     );
   if (state === "error" || !data)
@@ -92,7 +99,7 @@ export function RunView() {
         crumbs={<Ld.Breadcrumbs items={[{ label: "Run it live", href: asset("/live/") }, { label: "Finished run" }]} />}
         title="A live run on Solana Devnet"
         meta={<Ld.Tag tone="brand">Live run</Ld.Tag>}
-        sub={<>Run <span className="ld-mono">{id}</span>, projected and checked in this browser from the bundle the live service serves.</>}
+        sub={<>Run <span className="ld-mono">{id}</span>, projected and checked in this browser from {fromSite ? "its saved bundle: started through the live-run service, with a browser page confirming each card" : "the bundle the live service serves"}.</>}
       />
       <div className="ld-kpis">
         <Ld.Kpi label="Questions" value={r.counts.opportunities} context={`${r.counts.auctions} filled${r.counts.noFill ? `, ${r.counts.noFill} no fill` : ""}`} />

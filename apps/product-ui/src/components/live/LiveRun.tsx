@@ -8,6 +8,57 @@ import { acknowledgeCard, createLiveClient, driveRun, LiveRunError } from "@/lib
 import type { AwardStatus, LiveClient, LiveConfig, PaymentStatus, Phase, RunListItem, RunRecord, TurnStatus } from "@/lib/live-client.mjs";
 import { usdcText as usdc, capWords } from "@/lib/narrative.ts";
 import { asset } from "@/lib/paths";
+import SAMPLE from "@/data/live-sample.json";
+
+/** Where judges can start a real run: the hosted MVP with the live-run API. */
+const HOSTED_LIVE_URL = process.env.NEXT_PUBLIC_HOSTED_LIVE_URL || "https://axp.one/mvp/live/";
+const finishedWords = (iso: string) => `${new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}, ${new Date(iso).toISOString().slice(11, 16)} UTC`;
+
+/** No live API behind this page: never a dead end. Link the hosted site (unless this is it) and a finished live run. */
+function NoLiveService() {
+  const [here, setHere] = useState(false);
+  useEffect(() => {
+    try {
+      setHere(new URL(HOSTED_LIVE_URL).origin === window.location.origin);
+    } catch {
+      setHere(false);
+    }
+  }, []);
+  const sample = SAMPLE as { runId: string | null; finishedAt?: string };
+  return (
+    <div className="ld-stack-lg" style={{ gap: 16 }}>
+      {here ? (
+        <Ld.Callout tone="warning" title="The live service is not answering right now">
+          Starting a run needs the live-run service, and it did not respond. Try again in a few minutes; meanwhile, open the finished live run below.
+        </Ld.Callout>
+      ) : (
+        <Ld.Panel title="Start a live run on axp.one" sub="This copy of the MVP is a static site, so it cannot start a run itself." actions={<Ld.Tag tone="brand">Solana Devnet</Ld.Tag>}>
+          <div className="ld-stack" style={{ gap: 12 }}>
+            <span className="ld-secondary">The hosted MVP runs the whole exchange live: four questions, Jev decisions, auctions, Sponsored cards checked in your browser, and payment channels settled on Solana Devnet. Devnet test USDC; nothing of value moves.</span>
+            <span>
+              <a className="ld-btn ld-btn--primary" href={HOSTED_LIVE_URL} target="_blank" rel="noopener noreferrer">
+                Run it live on axp.one ↗
+              </a>
+            </span>
+          </div>
+        </Ld.Panel>
+      )}
+      {sample.runId ? (
+        <Ld.Panel title="Open a finished live run" sub={`Finished ${sample.finishedAt ? finishedWords(sample.finishedAt) : "on Oct 1"}, on Solana Devnet`}>
+          <div className="ld-stack" style={{ gap: 12 }}>
+            <span className="ld-secondary">A run started through the live-run service in our end-to-end test: a browser page showed each Sponsored card and confirmed it was there, the app signed the receipts, and both channels opened and closed on Devnet. Its saved bundle is projected and checked in your browser, with Explorer links for every transaction.</span>
+            <span>
+              <a className={`ld-btn ${here ? "ld-btn--primary" : "ld-btn--secondary"}`} href={asset(`/live/run/?id=${encodeURIComponent(sample.runId)}`)}>
+                Open the finished live run
+              </a>
+            </span>
+          </div>
+        </Ld.Panel>
+      ) : null}
+      <span className="ld-caption">Everything else here works without the service: the replayed run, Present and Verify.</span>
+    </div>
+  );
+}
 
 const PHASES: Array<{ id: Phase; label: string; value: string }> = [
   { id: "queued", label: "Queued", value: "Run admitted" },
@@ -188,12 +239,7 @@ export function LiveRun() {
         <span className="ld-secondary">Looking for the live-run API behind this page.</span>
       </Ld.Panel>
     );
-  if (avail === "absent")
-    return (
-      <Ld.Callout tone="brand" title="Live runs are available on the hosted site">
-        This copy of the MVP is a static site, so it cannot start a run. Everything else here works: the recorded runs, Present and Verify.
-      </Ld.Callout>
-    );
+  if (avail === "absent") return <NoLiveService />;
 
   const busy = !!config && config.activeRuns.length >= config.caps.maxActive && !(run && config.activeRuns.includes(run.runId));
   const capped = !!config && config.usedToday >= config.caps.daily;

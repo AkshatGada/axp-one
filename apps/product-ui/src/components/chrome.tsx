@@ -11,7 +11,7 @@ export type NavCampaign = { slug: string; name: string; meta: string };
 
 const L = Link as unknown as Ld.LinkC;
 
-export function Chrome({ runId, runLabel, scope, runNote, navFoot, otherRuns = [], opps, campaigns, verifyMeta, children }: { runId: string; runLabel: string; scope: string; runNote: string; navFoot: string; otherRuns?: Array<{ label: string; href: string; note?: string }>; opps: NavOpp[]; campaigns: NavCampaign[]; verifyMeta: string; children: ReactNode }) {
+export function Chrome({ runId, runLabel, runNote, navFoot, otherRuns = [], opps, campaigns, verifyMeta, children }: { runId: string; runLabel: string; runNote: string; navFoot: string; otherRuns?: Array<{ label: string; href: string; note?: string }>; opps: NavOpp[]; campaigns: NavCampaign[]; verifyMeta: string; children: ReactNode }) {
   const path = usePathname() ?? "/";
   const is = (p: string) => path === p || path === p.replace(/\/$/, "");
   const starts = (p: string) => path.startsWith(p);
@@ -24,8 +24,6 @@ export function Chrome({ runId, runLabel, scope, runNote, navFoot, otherRuns = [
             run={<Ld.RunSwitcher runId={runId} label={runLabel} note={runNote} others={otherRuns} />}
             chips={
               <>
-                <Ld.Pv kind="replay" />
-                <Ld.Pv kind="settled" label={scope} />
                 <Ld.Tag>Test USDC</Ld.Tag>
                 <Ld.Pv kind="fictional" label="Fictional advertisers" />
               </>

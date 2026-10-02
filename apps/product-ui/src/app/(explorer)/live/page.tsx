@@ -10,7 +10,7 @@ export default function LivePage() {
       <Ld.PageBar
         title="Run it live"
         meta={<Ld.Tag tone="brand">Solana Devnet</Ld.Tag>}
-        sub="A real run on Solana Devnet: the app answers four questions, advertiser agents decide with Jev, code runs the auctions, your browser shows the Sponsored cards and signs off delivery, and payment channels settle on Devnet. About a minute or two."
+        sub="A real run on Solana Devnet: the app answers four questions, advertiser agents decide with Jev, code runs the auctions, your browser shows the Sponsored cards and checks each one is on the page, the app signs the delivery receipts, and payment channels settle on Devnet. About a minute or two."
       />
       <LiveRun />
     </>

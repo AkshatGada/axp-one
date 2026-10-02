@@ -36,7 +36,17 @@ export const capChip = (c: string) => {
 };
 export const numWord = (n: number) => ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][n] ?? String(n);
 export const timesWord = (n: number) => (n === 1 ? "once" : n === 2 ? "twice" : `${n} times`);
-export const DISCLAIMER = "One observation per arm; not a measured lift.";
+export const DISCLAIMER = "One run, not a benchmark.";
+/** Circle's USDC mint on Solana Devnet. A Devnet run's channels hold this token, so the site names it. */
+export const CIRCLE_DEVNET_USDC = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
+export const CIRCLE_DEVNET_USDC_URL = `https://explorer.solana.com/address/${CIRCLE_DEVNET_USDC}?cluster=devnet`;
+/** Lamports as test SOL with two significant digits ("0.0084"); exact lamports stay in the Inspector. */
+export const solText = (lamports: string | number) => (Number(lamports) / 1e9).toLocaleString("en-US", { maximumSignificantDigits: 2 });
+/** Jev's levels in plain words (the landing's Jev sheet uses the same words). */
+export const relevanceWords = (level: number) => ["Unrelated", "Broad match", "Partial fit", "Direct fit"][level] ?? `Level ${level}`;
+export const intentWords = (level: number) => ["Just learning", "Exploring", "Comparing offers", "Ready to buy"][level] ?? `Level ${level}`;
+/** "87% confident": Jev's own confidence field, never a class probability. */
+export const confWords = (x: number) => `${Math.round(x * 100)}% confident`;
 export const levelsText = (d: Pick<Decision, "relevanceLevel" | "commercialIntentLevel">) => `relevance ${d.relevanceLevel}, intent ${d.commercialIntentLevel}`;
 
 export function auctionKind(o: Opportunity): AuctionKind {
@@ -88,8 +98,11 @@ export function makeStory(run: ProductRun) {
     const missing = Array.from(new Set(o.eligibility.excluded.flatMap((x) => x.missing)));
     const allMissingSame = o.eligibility.excluded.length > 0 && o.eligibility.excluded.every((x) => missing.every((m) => x.missing.includes(m)) || x.missing.some((m) => missing.includes(m)));
     const common = missing.filter((m) => o.eligibility.excluded.every((x) => x.missing.includes(m)));
-    if (o.eligibility.eligible.length === 0 && common.length) return `Every campaign was missing ${list(common.map(capWords))}, so no campaign could enter the auction and no agent was asked.`;
-    if (o.eligibility.eligible.length === 0 && allMissingSame) return "No campaign declared every required capability, so no agent was asked.";
+    // "No agent was asked" only when the record has no calls: research arms can still ask excluded campaigns.
+    const asked = o.decisions.length > 0;
+    const research = " Agents were still asked for research; their answers could never count.";
+    if (o.eligibility.eligible.length === 0 && common.length) return `Every campaign was missing ${list(common.map(capWords))}, so no campaign could enter the auction${asked ? "." + research : " and no agent was asked."}`;
+    if (o.eligibility.eligible.length === 0 && allMissingSame) return `No campaign declared every required capability${asked ? ", so none could enter the auction." + research : ", so no agent was asked."}`;
     return o.decisions.length ? "Agents were asked, but no bid reached the auction." : "No campaign could enter the auction, so no agent was asked.";
   }
 
@@ -106,14 +119,17 @@ export function makeStory(run: ProductRun) {
     const lh = which === "intent" ? h.commercialIntentLevel : h.relevanceLevel;
     const bidB = tableBid(b), bidH = tableBid(h);
     const decisionChanged = b.decision !== h.decision;
-    return { b, h, changed, which, sb, sh, lb, lh, bidB, bidH, bidChanged: bidB !== bidH, decisionChanged };
+    // "rose" only when no level went down and at least one went up; otherwise the copy says "changed".
+    const dr = h.relevanceLevel - b.relevanceLevel, di = h.commercialIntentLevel - b.commercialIntentLevel;
+    const rose = changed && dr >= 0 && di >= 0;
+    return { b, h, changed, rose, which, sb, sh, lb, lh, bidB, bidH, bidChanged: bidB !== bidH, decisionChanged };
   }
 
-  /** "Moved 2.38 to 2.52, crossing the 2.5 rounding line." or "Moved 1.93 to 1.97; both round to level 2." */
+  /** "Moved 2.38 to 2.52, enough to change its level from 2 to 3." or "Moved 1.93 to 1.97; both count as level 2." */
   function moveSentence(e: NonNullable<ReturnType<typeof historyEffect>>): string {
     const two = (n: number) => n.toFixed(2);
-    if (e.changed) return `${e.which === "intent" ? "Intent" : "Relevance"} moved ${two(e.sb)} to ${two(e.sh)}, crossing a rounding line: level ${e.lb} to ${e.lh}.`;
-    return `Intent moved ${two(e.b.scores.intent)} to ${two(e.h.scores.intent)}; both round to level ${e.h.commercialIntentLevel}.`;
+    if (e.changed) return `${e.which === "intent" ? "Intent" : "Relevance"} moved ${two(e.sb)} to ${two(e.sh)}, enough to change its level from ${e.lb} to ${e.lh}.`;
+    return `Intent moved ${two(e.b.scores.intent)} to ${two(e.h.scores.intent)}; both count as level ${e.h.commercialIntentLevel}.`;
   }
 
   /** Frequency-cap exclusions across the run (empty when none happened). */
@@ -168,6 +184,8 @@ export function makeStory(run: ProductRun) {
   const network = run.network;
   const onDevnet = run.network.kind === "devnet";
   const runDate = new Date(run.opportunities[0]?.createdAt ?? Date.parse(run.source.createdAt)).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+  /** The one phrase for what this site shows (header, Present, landing proof): a replay, of a run that was live on Devnet. */
+  const runPhrase = onDevnet ? `Replay of a live Solana Devnet run, ${runDate}` : `Recorded run, hosted sandbox, ${runDate}`;
 
   /** The most instructive moment of the run for a newcomer, in priority order: a cap that kept a bidder out, an auction
    *  won on different bids, a tie, a no-fill. Null when the run had none of these. */
@@ -216,6 +234,6 @@ export function makeStory(run: ProductRun) {
     const evOther = ev ? ev.decisions.find((d) => d.arm === "history" && d.retrieval && d.campaignId !== evMain?.campaignId && ev.eligibility.excluded.some((x) => x.campaignId === d.campaignId)) ?? ev.decisions.find((d) => d.arm === "history" && d.retrieval && d.campaignId !== evMain?.campaignId) ?? null : null;
     return { paid, auction, hist, cap: firstCap(), nofill: firstNoFill(), ev, evMain, evOther };
   };
-  return { picks, usdc, nameOf, tableBid, winnerCaption, auctionSentence, noFillSentence, historyEffect, moveSentence, capEvents, featuredHistory, firstPaid, firstTie, firstNoFill, firstCap, earlierSameQuestion, clockNote, tieFacts, network, onDevnet, runDate, highlight, otherAuctionsLine, NET, onePayer, topicWords };
+  return { picks, usdc, nameOf, tableBid, winnerCaption, auctionSentence, noFillSentence, historyEffect, moveSentence, capEvents, featuredHistory, firstPaid, firstTie, firstNoFill, firstCap, earlierSameQuestion, clockNote, tieFacts, network, onDevnet, runDate, runPhrase, highlight, otherAuctionsLine, NET, onePayer, topicWords };
 }
 export type Story = ReturnType<typeof makeStory>;

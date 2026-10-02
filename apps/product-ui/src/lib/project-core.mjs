@@ -140,7 +140,7 @@ export function project({ runBytes, manifestBytes, chainCheck = null, paths = { 
         relevanceLevel: dec.relevanceLevel,
         commercialIntentLevel: dec.commercialIntentLevel,
         scores: { relevance: ans.relevance.score, intent: ans.intent.score },
-        confidence: { relevance: ans.relevance.confidence, intent: ans.intent.confidence },
+        confidence: { relevance: ans.relevance.confidence, intent: ans.intent.confidence, creative: ans.creative.confidence ?? null },
         probabilities: { relevance: ans.relevance.probabilities, intent: ans.intent.probabilities },
         legend: { relevance: ans.relevance.legend, intent: ans.intent.legend },
         creative: { choice: creativeChoice, probability: ans.creative.probabilities?.[creativeChoice] ?? null, noFitProbability: ans.creative.probabilities?.no_fit ?? null },

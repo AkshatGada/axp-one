@@ -119,6 +119,8 @@
 .pr-limits { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: 16px; line-height: 1.45; color: var(--ink); }
 .pr-foot-r { display: grid; gap: 10px; justify-items: end; }
 .pr-time { font-size: 14px; color: var(--stage-muted); }
+.pr-cue { display: inline-flex; align-items: center; gap: 6px; font-size: 16px; color: var(--stage-ink); white-space: nowrap; }
+.pr-cue kbd, .pr-cue .lg-key { color: var(--stage-ink); border-color: var(--stage-line); background: transparent; }
 .pr-k { display: inline-grid; place-items: center; width: 18px; height: 18px; border: 1px solid var(--stage-line); font-size: 12px; }
 .pr-help { position: absolute; right: 72px; bottom: 140px; display: grid; gap: 10px; padding: 22px 26px; background: var(--stage); color: var(--stage-ink); font-size: 16px; }
 .pr-help .lg-key { background: transparent; color: var(--stage-ink); border-color: var(--stage-line); }
@@ -224,6 +226,10 @@
 .op2-neighbor { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 12px; align-items: center; padding: 6px 0; border-top: 1px solid var(--ld-border); }
 .op2-dcard { display: grid; gap: 12px; align-content: start; padding: 14px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); min-width: 0; }
 .op2-arm { display: grid; gap: 4px; padding-top: 10px; border-top: 1px solid var(--ld-border); }
+/* Jev's answer: the same three rows as the landing's Jev sheet; bars are proportional to Jev's own confidence. */
+.op2-jev { display: grid; gap: 8px; margin: 4px 0 2px; }
+.op2-jev-row { display: grid; gap: 3px; min-width: 0; }
+.op2-jev-row b { font-weight: 500; color: var(--ld-text); }
 .op2-bidtable { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 .op2-bidtable > div { display: grid; gap: 2px; padding: 10px 12px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-sm); background: var(--ld-panel); }
 .op2-bidtable > div[data-active] { border-color: var(--ld-accent); background: var(--ld-accent-wash); }

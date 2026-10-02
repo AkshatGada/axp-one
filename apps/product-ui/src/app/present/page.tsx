@@ -200,7 +200,7 @@ export default function PresentPage() {
                 <span className="ld-card-title">
                   {nameOf(campaignId)}, opportunity {o.n}: decided with Jev
                 </span>
-                <span className="ld-secondary">{e.changed ? `With ContextHint history its ${e.which} score moved ${e.sh > e.sb ? "up" : "down"} across a rounding line.` : "History moved its scores, but no level changed."}</span>
+                <span className="ld-secondary">{e.changed ? `With ContextHint history its ${e.which} score moved ${e.sh > e.sb ? "up" : "down"}, just enough to change its level.` : "History moved its scores, but no level changed."}</span>
               </div>
               <div className="pr2-ba-row">
                 {tile(e.b, "Without history")}
@@ -213,7 +213,7 @@ export default function PresentPage() {
             </div>
             <div className="ld-cols-3">
               <Ld.Panel title={`${nameOf(campaignId)}, intent score`} sub="Secondary detail">
-                <Ld.ScoreRuler min={1.5} max={3} ticks={[2, 3]} width={300} marks={[{ value: e.b.scores.intent, kind: "baseline", label: "Baseline" }, { value: e.h.scores.intent, kind: "history", label: "With history" }]} />
+                <Ld.ScoreRuler min={1.5} max={3} ticks={[2, 3]} width={300} marks={[{ value: e.b.scores.intent, kind: "baseline", label: "Without history" }, { value: e.h.scores.intent, kind: "history", label: "With history" }]} />
               </Ld.Panel>
               {others.slice(0, 2).map((c) => {
                 const h = decisionFor(o, c.campaignId, "history")!;
@@ -261,7 +261,7 @@ export default function PresentPage() {
                 </Ld.Callout>
                 {e ? (
                   <Ld.Callout tone="brand" title="What history changed here">
-                    {e.changed && e.bidChanged ? `With history ${nameOf(o.award!.campaignId)}'s levels rose from ${e.b.relevanceLevel} and ${e.b.commercialIntentLevel} to ${e.h.relevanceLevel} and ${e.h.commercialIntentLevel}, so the bid table gave ${usdc(e.bidH)} USDC instead of ${usdc(e.bidB)}.` : `With and without history the bid table gave ${usdc(e.bidH)} USDC.`} {DISCLAIMER}
+                    {e.changed && e.bidChanged ? `With history ${nameOf(o.award!.campaignId)}'s levels ${e.rose ? "rose" : "changed"} from ${e.b.relevanceLevel} and ${e.b.commercialIntentLevel} to ${e.h.relevanceLevel} and ${e.h.commercialIntentLevel}, so the bid table gave ${usdc(e.bidH)} USDC instead of ${usdc(e.bidB)}.` : `With and without history the bid table gave ${usdc(e.bidH)} USDC.`} {DISCLAIMER}
                     {cap && cap.o.n !== o.n ? ` On opportunity ${cap.o.n} the frequency cap, not a tie, decides who may bid.` : ""}
                   </Ld.Callout>
                 ) : null}
@@ -493,7 +493,7 @@ export default function PresentPage() {
   }));
   return (
     <InspectorProvider scopeClass="ld">
-      <PresentStage beats={metas} views={BEATS.map((b) => views[b.id])} scope={onDevnet ? "Live on Solana Devnet, Devnet test USDC, fictional advertisers" : devnet ? "Solana sandbox, re-settled on Devnet, test USDC, fictional advertisers" : "Hosted Solana sandbox, test USDC, fictional advertisers"} />
+      <PresentStage beats={metas} views={BEATS.map((b) => views[b.id])} phrase={process.env.AXP_RUN_LABEL ?? story.runPhrase} scope={onDevnet ? "Devnet test USDC, fictional advertisers" : devnet ? "Solana sandbox, re-settled on Devnet, test USDC, fictional advertisers" : "Hosted Solana sandbox, test USDC, fictional advertisers"} />
     </InspectorProvider>
   );
 }

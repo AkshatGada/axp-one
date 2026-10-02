@@ -14,7 +14,7 @@ function beatFromHash(count: number): number {
   return Number.isInteger(n) && n >= 1 && n <= count ? n - 1 : 0;
 }
 
-export function PresentStage({ beats, views, scope }: { beats: BeatMeta[]; views: ReactNode[]; scope: string }) {
+export function PresentStage({ beats, views, scope, phrase }: { beats: BeatMeta[]; views: ReactNode[]; scope: string; phrase?: string }) {
   const router = useRouter();
   const [beat, setBeat] = useState(0);
   const [step, setStep] = useState(1);
@@ -200,7 +200,7 @@ export function PresentStage({ beats, views, scope }: { beats: BeatMeta[]; views
             {b.title}
           </span>
           <span className="pr-top-r">
-            <Provenance kind="replay" />
+            <Provenance kind="replay" label={phrase} />
             <span className="pr-scope">{scope}</span>
           </span>
         </header>
@@ -229,6 +229,23 @@ export function PresentStage({ beats, views, scope }: { beats: BeatMeta[]; views
                 />
               ))}
             </div>
+            {!auto ? (
+              <span className="pr-cue" aria-live="polite">
+                {step < b.steps ? (
+                  <>
+                    Press <Key>→</Key> or <Key>Space</Key> for the next part ({step} of {b.steps})
+                  </>
+                ) : beat < beats.length - 1 ? (
+                  <>
+                    Press <Key>→</Key> or <Key>Space</Key> to continue
+                  </>
+                ) : (
+                  <>
+                    The end. Press <Key>R</Key> to restart or <Key>Esc</Key> to leave
+                  </>
+                )}
+              </span>
+            ) : null}
             <span className="pr-time">
               {mmss(elapsed)}, {auto ? "autoplay" : "manual"}, <span className="pr-k">?</span> for keys
             </span>
