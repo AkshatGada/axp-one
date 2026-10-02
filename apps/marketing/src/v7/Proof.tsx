@@ -16,6 +16,7 @@ export default function Proof() {
           <h2 id="proof-title" className="px-h1">
             {PROOF.h2}
           </h2>
+          <p className={s.runline}>{PROOF.run}</p>
           <ul className={s.figs}>
             {PROOF.figures.map((f) => (
               <li key={f.k} data-reveal="fade">

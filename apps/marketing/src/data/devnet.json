@@ -2,6 +2,7 @@
   "cluster": "devnet",
   "live": true,
   "programUrl": "https://explorer.solana.com/address/CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX?cluster=devnet",
+  "mintUrl": "https://explorer.solana.com/address/4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU?cluster=devnet",
   "receipts": 3,
   "channels": [
     {

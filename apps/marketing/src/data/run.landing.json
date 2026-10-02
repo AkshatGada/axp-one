@@ -393,6 +393,7 @@
     "intentLevel": 3,
     "relevanceConfidence": 0.87,
     "intentConfidence": 0.51,
+    "creativeConfidence": 0.61,
     "creativeChosen": true,
     "creativeProbability": 0.81,
     "underASecond": true
@@ -421,10 +422,12 @@
     "verifyChecks": 47
   },
   "financialMode": "devnet",
+  "runDate": "Oct 1",
   "devnet": {
     "cluster": "devnet",
     "live": true,
     "programUrl": "https://explorer.solana.com/address/CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX?cluster=devnet",
+    "mintUrl": "https://explorer.solana.com/address/4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU?cluster=devnet",
     "receipts": 3,
     "channels": [
       {

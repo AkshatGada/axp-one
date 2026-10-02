@@ -4,6 +4,7 @@
 @media (min-width: 1000px) { .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr); gap: clamp(40px, 5vw, 96px); } }
 .left { display: grid; gap: 28px; align-content: start; }
 .label { margin: 0 0 -14px; font-size: 14px; font-weight: 500; color: var(--brand); }
+.runline { margin: -12px 0 0; font-size: 16px; line-height: 1.4; color: var(--muted); }
 .figs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 22px 0 0; border-top: 1px solid var(--ink); list-style: none; }
 .figs li { display: grid; gap: 4px; }
 .figs b { font-family: var(--font-display); font-weight: 300; font-size: clamp(52px, 5.4vw, 96px); line-height: 0.9; letter-spacing: -0.04em; color: var(--brand); font-variant-numeric: tabular-nums; }

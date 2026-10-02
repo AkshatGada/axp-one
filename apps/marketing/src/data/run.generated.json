@@ -643,6 +643,7 @@
     "intentLevel": 3,
     "relevanceConfidence": 0.87,
     "intentConfidence": 0.51,
+    "creativeConfidence": 0.61,
     "creativeChosen": true,
     "creativeProbability": 0.81,
     "underASecond": true

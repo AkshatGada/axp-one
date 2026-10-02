@@ -94,7 +94,9 @@
 .rail li[data-on="1"] .spec { border-color: color-mix(in oklab, var(--stage-brand) 55%, var(--stage-line)); }
 .how[data-pinned] .rail li:not([data-on="1"]) .spec { opacity: 0.16; transform: translateY(14px); }
 .how[data-pinned] .rail li:not([data-on="1"]) .t { opacity: 0.35; }
-.tagline { margin: 0; font-size: 15px; font-weight: 500; color: var(--stage-muted); }
+/* The tagline sits on the stage colour itself (invisible on the stage), so when the page colour blends into
+   the ContextHint vermillion below, the line keeps its dark backing and stays readable. */
+.tagline { justify-self: start; width: fit-content; margin: 0 0 0 -12px; padding: 5px 12px; border-radius: var(--px-r-full); background: var(--stage); font-size: 15px; font-weight: 500; color: var(--stage-ink); }
 
 /* Specimens. */
 .app { font-size: 12px; color: var(--stage-muted); }

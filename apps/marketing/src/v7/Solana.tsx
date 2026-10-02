@@ -132,6 +132,7 @@ export default function Solana() {
             </div>
             <div className={s.btns}>
               <Btn href={SOLANA.programUrl}>{SOLANA.program}</Btn>
+              {SOLANA.tokenUrl ? <Btn href={SOLANA.tokenUrl}>{SOLANA.token}</Btn> : null}
             </div>
           </div>
         </div>

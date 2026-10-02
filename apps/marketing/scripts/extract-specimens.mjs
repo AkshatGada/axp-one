@@ -140,6 +140,10 @@ function devnet(d) {
   const program = ce.channels[0]?.program;
   assert(program && ce.channels.every((c) => c.program === program), "devnet: one channel program");
   const programUrl = `https://explorer.solana.com/address/${program}?cluster=devnet`;
+  // The token: Circle's USDC on Solana Devnet. Explorer only says "tokens", so the page names it and links the mint.
+  const CIRCLE_DEVNET_USDC = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
+  assert(ce.channels.every((c) => c.mint === CIRCLE_DEVNET_USDC), "devnet: every channel holds Circle's Devnet USDC");
+  const mintUrl = `https://explorer.solana.com/address/${CIRCLE_DEVNET_USDC}?cluster=devnet`;
   const channels = ce.channels.map((c) => {
     const id = c.channelId.replace(/-channel$/, "");
     const rec = d.channels.find((x) => x.campaign === id);
@@ -160,11 +164,16 @@ function devnet(d) {
     };
   });
   finish("devnet evidence");
-  const out = { cluster: "devnet", live: true, programUrl, receipts: channels.reduce((n, c) => n + c.vouchers.length, 0), channels };
+  const out = { cluster: "devnet", live: true, programUrl, mintUrl, receipts: channels.reduce((n, c) => n + c.vouchers.length, 0), channels };
   writeFileSync(DEVNET_OUT, `${JSON.stringify(out, null, 2)}\n`);
   return out;
 }
 const MVP_META = join(repo, "apps/product-ui/src/data/build-meta.json");
+function runDate() {
+  const t = run.events.filter((e) => e.type === "opportunity_created" && typeof e.at === "number").map((e) => e.at);
+  assert(t.length > 0, "run date: opportunities have times");
+  return new Date(Math.min(...t)).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+}
 function landing(d) {
   let verifyChecks = null;
   if (existsSync(MVP_META)) {
@@ -194,6 +203,8 @@ function landing(d) {
     video: d.video,
     mvp: { verifyChecks: verifyChecks ?? d.mvp?.verifyChecks ?? null },
     financialMode: d.financialMode,
+    /** The day the run ran (UTC, its first opportunity), for "Replay of a live Solana Devnet run, Oct 1". */
+    runDate: runDate(),
     devnet: devnet(d),
   };
 }
@@ -462,6 +473,8 @@ const out = {
       intentLevel: dec.commercialIntentLevel,
       relevanceConfidence: a.relevance.confidence,
       intentConfidence: a.intent.confidence,
+      // Jev's own confidence in its creative answer (the probability of the chosen creative is a different number).
+      creativeConfidence: a.creative.confidence,
       creativeChosen: a.creative.choice === dec.creativeVersionId,
       creativeProbability: creativeProb,
       underASecond: c.elapsedMs < 1000,

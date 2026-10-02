@@ -119,9 +119,9 @@ export const JEV_SECTION = {
   inputs: ["The question", `${CV.name}'s campaign`, "Its ContextHint evidence"],
   outLabel: "Jev returns",
   outputs: [
-    { k: "Relevance", v: "Direct fit", level: J.relevanceLevel, conf: conf(J.relevanceConfidence) },
-    { k: "Buying intent", v: "Ready to buy", level: J.intentLevel, conf: conf(J.intentConfidence) },
-    { k: "Creative", v: "Fits", level: 3, conf: conf(J.creativeProbability) },
+    { k: "Relevance", v: "Direct fit", level: J.relevanceLevel, value: J.relevanceConfidence, conf: conf(J.relevanceConfidence) },
+    { k: "Buying intent", v: "Ready to buy", level: J.intentLevel, value: J.intentConfidence, conf: conf(J.intentConfidence) },
+    { k: "Creative", v: "Fits", level: 3, value: J.creativeConfidence, conf: conf(J.creativeConfidence) },
   ],
   rule: "Fixed rule: bid",
   codeLabel: "Code sets the amount",
@@ -130,12 +130,11 @@ export const JEV_SECTION = {
   credit: "Built with Jev by TypeSafe",
 };
 
-/** Solana payment channels. The recorded run settled on a hosted Solana sandbox; Devnet is a public
- *  re-settlement of the same signed receipts. */
+/** Solana payment channels. The main run settled live on public Solana Devnet in Circle's Devnet USDC. */
 export const SOLANA = {
   label: "Settlement on Solana",
   h2: "Paid per ad. Settled once.",
-  lede: "Vouchers off chain, one close on chain: no transaction per ad, so sub-cent ads work.",
+  lede: "Vouchers off chain, one close on chain: no transaction per ad, so ads costing a fraction of a cent can be paid per delivery.",
   onChain: "On Solana",
   offChain: "Off chain, signed",
   open: "Open",
@@ -157,6 +156,8 @@ export const SOLANA = {
   program: "Program",
   programUrl: DEVNET?.programUrl ?? null,
   live: "Live on Solana Devnet",
+  token: "Circle Devnet USDC",
+  tokenUrl: DEVNET?.mintUrl ?? null,
   note: "Public Solana Devnet, test USDC, no real value.", // claim-ok: limit
   kfPaid: usdc(KF_CHANNEL.settled),
 };
@@ -184,6 +185,7 @@ export const MVP_TOUR = {
 export const PROOF = {
   label: "Proof",
   h2: "It ran. Check it.",
+  run: `Replay of a live Solana Devnet run, ${RUN.runDate}.`,
   figures: [
     { n: RUN.counts.questions, k: "questions" },
     { n: RUN.counts.decisions, k: "agent decisions" },
@@ -204,7 +206,7 @@ export const NEXT = {
   h3: "Working now. Building next.",
   now: ["Agent bids", "Eligibility in code", "Signed receipts", "Solana channels"],
   nextLabel: "Planned:",
-  next: ["Planning agents", "Publisher SDK", "More categories", "x402 adapter", "Advertiser wallets", "Mainnet, after Devnet", "Network fees", "Measurement"], // claim-ok: planned
+  next: ["Planning agents", "Publisher SDK", "More categories", "x402 adapter", "Mainnet, after Devnet", "Network fees", "Measurement"], // claim-ok: planned
 };
 
 export const VIDEO = {

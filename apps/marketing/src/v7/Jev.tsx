@@ -50,10 +50,9 @@ export default function Jev() {
                   <span>{o.k}</span>
                   <b>{o.v}</b>
                 </div>
-                <div className={s.levels} aria-label={`${o.level} of 3`}>
-                  {[1, 2, 3].map((l) => (
-                    <i key={l} data-on={l <= o.level ? "" : undefined} style={{ "--l": l } as CSSProperties} />
-                  ))}
+                {/* One bar, sized to Jev's own confidence: the number printed beside it. */}
+                <div className={s.levels} role="img" aria-label={o.conf}>
+                  <i data-on="" style={{ "--v": o.value } as CSSProperties} />
                 </div>
                 <span className={s.conf}>{o.conf}</span>
               </div>
