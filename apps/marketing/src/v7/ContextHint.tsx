@@ -44,9 +44,8 @@ export default function ContextHint() {
   return (
     <section ref={ref} id="data" data-world="ch" data-step="ch" className={s.ch} data-header-tone="ch" aria-labelledby="ch-title">
       <div className={`px-wrap ${s.grid}`}>
-        <div className={s.left}>
+        <div className={s.left} data-tone-text="">
           <p className={s.label}>
-            <i>1</i>
             {CONTEXTHINT.label}
           </p>
           <h2 id="ch-title" className={s.moat} data-reveal="fade">
@@ -69,8 +68,8 @@ export default function ContextHint() {
             <Arrow width={22} />
           </a>
         </div>
-        <div className={s.right}>
-          <p className={s.wallLabel}>{CONTEXTHINT.wallLabel}</p>
+        <div className={s.right} data-token-avoid="">
+          <p className={s.wallLabel} data-tone-text="">{CONTEXTHINT.wallLabel}</p>
           <div className={s.wall} aria-hidden>
             <motion.div className={s.plane} style={reduce ? undefined : { rotateX, y, transformPerspective: 1400 }}>
               {columns.map((ads, c) => (

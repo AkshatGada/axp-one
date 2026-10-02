@@ -73,6 +73,11 @@
 .how[data-pinned] .line i { transform: scaleX(0); }
 .rail { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); margin: 0; padding: 0; list-style: none; }
 .rail li { display: grid; grid-template-rows: 36px auto 1fr; gap: 16px; align-content: start; min-width: 0; }
+/* Four across: the steps share row tracks, so the four cards start at one height however the titles wrap. */
+@media (min-width: 1100px) {
+  .rail { grid-template-rows: 36px auto 1fr; row-gap: 16px; }
+  .rail li { grid-row: span 3; grid-template-rows: subgrid; }
+}
 .node { display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--px-r-full); background: var(--stage); box-shadow: inset 0 0 0 2px var(--stage-line); font-size: 15px; font-weight: 500; color: var(--stage-muted); font-variant-numeric: tabular-nums; transition: background 300ms var(--ease), box-shadow 300ms var(--ease), color 300ms var(--ease); }
 .t { margin: 0; max-width: 24ch; font-family: var(--font-display); font-size: clamp(18px, 1.45vw, 23px); font-weight: 400; line-height: 1.2; letter-spacing: -0.01em; color: var(--stage-ink); transition: opacity 400ms var(--ease); }
 .spec {

@@ -21,3 +21,7 @@ html[data-px-film] .nextjs-portal, html[data-px-film] nextjs-portal { display: n
    backgrounds and the single fixed layer carries the colour, blending across every seam. */
 html[data-px-tone="on"] body, html[data-px-tone="on"] [data-world] { background: transparent !important; }
 html[data-px-tone="on"] [data-world] .px-footer { background: transparent; border-top-color: transparent; }
+/* Copy that sits straight on the tone layer fades while the colour behind it cannot carry it
+   (--tone-o is set per world by Tone.tsx from the live contrast), so no headline crosses a seam
+   on the wrong colour. Without JS or the layer, --tone-o is unset and the copy is fully shown. */
+html[data-px-tone="on"] [data-tone-text] { opacity: var(--tone-o, 1); transition: opacity 160ms linear; }

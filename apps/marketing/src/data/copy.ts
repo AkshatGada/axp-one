@@ -84,7 +84,7 @@ export const HOW = {
   withJev: "with Jev",
   bidWord: "bid",
   skipWord: "skip",
-  outLine: "ruled out: no bid buys past this",
+  outLine: "kept out by a fixed rule",
   tie: "ties: a fixed rule",
   beside: "beside the answer, never in it",
   receipt: "signed receipt = the charge",

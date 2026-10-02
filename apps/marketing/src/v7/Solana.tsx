@@ -5,7 +5,7 @@
 // signed voucher off chain (0.004, then 0.007 in total), one close on Solana pays the AI app and
 // refunds the rest. Pinned at >= 900px with motion on, each step arrives as you scroll; still, all
 // four are shown. Then the proof: the live run's own transactions on Solana Devnet, on Explorer.
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { Arrow } from "@axp/design-system/prospectus";
 import { CV, CV_CHANNEL, RUN, usdc } from "@/data/run";
@@ -34,11 +34,17 @@ export default function Solana() {
   pinnedRef.current = pinned;
   const [step, setStep] = useState(4);
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const stepOf = (v: number) => (v < 0.08 ? 0 : v < 0.3 ? 1 : v < 0.5 ? 2 : v < 0.7 ? 3 : 4);
   useMotionValueEvent(p, "change", (v) => {
     if (!pinnedRef.current) return;
-    const st = v < 0.08 ? 0 : v < 0.3 ? 1 : v < 0.5 ? 2 : v < 0.7 ? 3 : 4;
+    const st = stepOf(v);
     setStep((c) => (c === st ? c : st));
   });
+  // The step follows the scroll position from the start: above the pin the progress is 0 and no
+  // "change" fires, so without this the finished diagram showed while scrolling in, then reset.
+  useEffect(() => {
+    if (pinned) setStep(stepOf(p.get()));
+  }, [pinned, p]);
   const shown = pinned ? step : 4;
   const vs = CV_CHANNEL.vouchers;
   const fill = shown >= 3 ? vs[1]?.cumulative ?? vs[0]!.cumulative : shown >= 2 ? vs[0]!.cumulative : "0";
@@ -48,10 +54,9 @@ export default function Solana() {
       <div className={s.pin} ref={ref} data-step="sol" data-pinned={pinned ? "" : undefined}>
         <div className={s.stage} data-step={shown}>
           <div className={`px-wrap ${s.in}`}>
-            <div className={s.head}>
+            <div className={s.head} data-tone-text="">
               <div className={s.pills}>
                 <span className={s.label}>
-                  <i>3</i>
                   {SOLANA.label}
                 </span>
                 <span className={s.live}>{SOLANA.live}</span>
@@ -106,8 +111,8 @@ export default function Solana() {
       </div>
 
       <div className={`px-wrap ${s.proof}`} data-reveal="fade">
-        <h3 className={s.h3}>{SOLANA.devnetH}</h3>
-        <div className={s.channels}>
+        <h3 className={s.h3} data-tone-text="">{SOLANA.devnetH}</h3>
+        <div className={s.channels} data-tone-text="" data-token-avoid="">
           {SOLANA.explorerChannels.map(({ name, ch }) =>
             ch ? (
               <div key={name} className={s.channel}>
@@ -136,7 +141,7 @@ export default function Solana() {
             </div>
           </div>
         </div>
-        <p className={s.note}>{SOLANA.note}</p>
+        <p className={s.note} data-tone-text="">{SOLANA.note}</p>
       </div>
     </section>
   );

@@ -21,9 +21,11 @@ export default function Closing() {
   const rz = useTransform(p, (v) => -3 - 8 * t(v));
   return (
     <section ref={ref} data-world="brand" className={s.close} data-tone="brand" data-header-tone="brand" aria-labelledby="close-title">
-      <Wall lite tone="brand" opacity={0.2} plane={{ x: reduce ? 26 : rx, y: 6, z: reduce ? -11 : rz }} cam={{ z: reduce ? 0 : z, y: 0 }} />
+      <div className={s.wallMask} aria-hidden>
+        <Wall lite tone="brand" opacity={0.2} plane={{ x: reduce ? 26 : rx, y: 6, z: reduce ? -11 : rz }} cam={{ z: reduce ? 0 : z, y: 0 }} />
+      </div>
       <div className={s.fog} aria-hidden />
-      <div className={`px-wrap ${s.in}`}>
+      <div className={`px-wrap ${s.in}`} data-tone-text="">
         <h2 id="close-title" className={s.h2}>
           {CLOSING.h2}
         </h2>

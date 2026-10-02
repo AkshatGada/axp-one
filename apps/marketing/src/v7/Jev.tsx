@@ -13,9 +13,8 @@ export default function Jev() {
   return (
     <section id="jev" data-world="brand" data-step="jev" className={s.jev} data-tone="brand" data-header-tone="brand" aria-labelledby="jev-title">
       <div className={`px-wrap ${s.grid}`}>
-        <div className={s.left}>
+        <div className={s.left} data-tone-text="">
           <p className={s.label}>
-            <i>2</i>
             {J.label}
           </p>
           <h2 id="jev-title" className={s.h2}>

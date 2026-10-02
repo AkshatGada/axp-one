@@ -11,7 +11,7 @@ export default function Tour() {
   return (
     <section id="mvp" data-world="paper" className={s.tour} aria-labelledby="mvp-title">
       <div className="px-wrap">
-        <div className={s.head}>
+        <div className={s.head} data-tone-text="">
           <div>
             <p className={s.label}>{MVP_TOUR.label}</p>
             <h2 id="mvp-title" className="px-h1">

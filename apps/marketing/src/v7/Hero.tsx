@@ -26,6 +26,20 @@ import { IDENTITY, io, lerp, mixM, mul, out, seg, type M2 } from "@/motion/motio
 import { FlatStack, PH, PLATE_IDS, PLATE_M7, PW, Plate, GAP, StillStack, plateCss, plateMatrix, stackSize } from "./Plates";
 import s from "./hero.module.css";
 
+/** Scroll progress over the 294vh pin (194vh of travel) to the timeline v, which was written for a
+ *  310vh pin (210vh of travel). Every phase keeps its original pace per pixel of scroll, except the
+ *  stretch where the landed tile sits alone on paper (v 0.27 to 0.40), which plays 2.5x faster. */
+const WARP = { D: 210, A: 0.27, B: 0.4, k: 2.5, T: 194 };
+function warpHero(u: number) {
+  const { D, A, B, k, T } = WARP;
+  const sv = u * T;
+  const sA = A * D;
+  const sB = sA + ((B - A) * D) / k;
+  if (sv <= sA) return sv / D;
+  if (sv <= sB) return A + ((sv - sA) * k) / D;
+  return Math.min(1, B + (sv - sB) / D);
+}
+
 const COLS = 7;
 const PER = 5;
 const DURS = [96, 118, 88, 124, 104, 112, 92];
@@ -174,7 +188,9 @@ export default function Hero() {
   const reduce = useReduced();
   const pinnedRef = useRef(false);
   pinnedRef.current = pinned;
-  const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const { scrollYProgress: raw } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  // The timeline below is written in v (0 to 1); warpHero maps the 294vh pin onto it.
+  const p = useTransform(raw, warpHero);
 
   // Cursor parallax: a few springy degrees, fading as the plane straightens.
   const mx = useMotionValue(0);

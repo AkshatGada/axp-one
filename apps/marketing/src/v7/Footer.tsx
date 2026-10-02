@@ -7,7 +7,7 @@ const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 
 export default function Footer() {
   return (
-    <div data-world="paper">
+    <div className={s.wrap}>
     <SiteFooter
       scope={FOOTER.scope}
       legend={false}

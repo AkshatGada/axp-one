@@ -138,7 +138,7 @@ export default function How() {
       <div className={s.stage}>
         <Tape />
         <div className={`px-wrap ${s.in}`}>
-          <div className={s.head}>
+          <div className={s.head} data-tone-text="">
             <p className={s.label}>{HOW.label}</p>
             <h2 id="how-title" className={`px-h1 ${s.h2}`}>
               {HOW.h2}

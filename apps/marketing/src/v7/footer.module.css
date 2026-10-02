@@ -1,3 +1,6 @@
+/* The footer keeps its own paper (outside the tone layer); the closing blends into it at its foot. */
+.wrap { position: relative; background: var(--paper); }
+.wrap :global(.px-footer) { background: var(--paper); border-top-color: transparent; }
 .aside { display: grid; gap: 10px; align-content: start; font-size: 15px; line-height: 1.5; color: var(--muted); }
 .aside p { margin: 0; }
 .aside a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--brand); text-underline-offset: 5px; }

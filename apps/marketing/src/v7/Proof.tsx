@@ -11,7 +11,7 @@ export default function Proof() {
   return (
     <section id="proof" data-world="paper2" className={s.proof} aria-labelledby="proof-title">
       <div className={`px-wrap ${s.grid}`}>
-        <div className={s.left}>
+        <div className={s.left} data-tone-text="">
           <p className={s.label}>{PROOF.label}</p>
           <h2 id="proof-title" className="px-h1">
             {PROOF.h2}
@@ -46,13 +46,13 @@ export default function Proof() {
                 <track kind="captions" src={`/${v.captions}`} srcLang="en" label="English" default />
               </video>
             </div>
-            <figcaption>
+            <figcaption data-tone-text="">
               <b>{PROOF.video}</b> {VIDEO.caption}
             </figcaption>
           </figure>
         ) : null}
       </div>
-      <div className={`px-wrap ${s.next}`}>
+      <div className={`px-wrap ${s.next}`} data-tone-text="">
         <h3 className={s.h3}>{NEXT.h3}</h3>
         <ul className={s.pills} aria-label="Working now">
           {NEXT.now.map((x) => (
