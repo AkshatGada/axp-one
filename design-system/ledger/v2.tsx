@@ -64,7 +64,7 @@ export function RunSwitcher({ runId, note, open, label, others = [] }: { runId: 
       <div className="ld-menu">
         <div className="ld-menu-item" aria-current="true">
           <span>{label ?? runId}</span>
-          <span className="ld-mono ld-caption">{runId}</span>
+          {label ? null : <span className="ld-mono ld-caption">{runId}</span>}
           <span className="ld-caption">{note}</span>
         </div>
         {others.map((o) => (
@@ -608,7 +608,7 @@ export function ScoreRuler({ min, max, keyLine = 2.5, marks, ticks, width = 440 
 export function SimBar({ value, method }: { value: number; method: string }) {
   return (
     <span className="ld-sim" title={`${method === "vector" ? "Cosine similarity" : "Word-overlap score"} ${value.toFixed(3)}`}>
-      <span>{method === "vector" ? "Cosine" : "Overlap"}</span>
+      <span>{method === "vector" ? "Match" : "Overlap"}</span>
       <span className="ld-sim-track">
         <i style={{ width: `${Math.max(0, Math.min(1, value)) * 100}%` }} />
       </span>

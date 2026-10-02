@@ -361,7 +361,7 @@ html[data-op-stage="charge"] [data-slot="await"] { display: none !important; }
 
 /* Overview: one plain line per proper noun */
 .ov2-defs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 24px; margin: -4px 0 0; }
-.ov2-defs > div { display: grid; gap: 2px; }
+.ov2-defs > div { display: grid; gap: 2px; align-content: start; }
 .ov2-defs dt { font-size: 13px; font-weight: 500; color: var(--ld-text); }
 .ov2-defs dd { margin: 0; font-size: 12px; line-height: 1.4; color: var(--ld-text-2); }
 @media (max-width: 900px) { .ov2-defs { grid-template-columns: minmax(0, 1fr); } }

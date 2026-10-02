@@ -42,6 +42,14 @@ export const CIRCLE_DEVNET_USDC = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
 export const CIRCLE_DEVNET_USDC_URL = `https://explorer.solana.com/address/${CIRCLE_DEVNET_USDC}?cluster=devnet`;
 /** Lamports as test SOL with two significant digits ("0.0084"); exact lamports stay in the Inspector. */
 export const solText = (lamports: string | number) => (Number(lamports) / 1e9).toLocaleString("en-US", { maximumSignificantDigits: 2 });
+/** Storage rent in plain words and test SOL: "0.0034 locked", "0.0015 returned", "0.0015 locked and returned". */
+export const rentSolWords = (t: { newRentLamports: string; reclaimedRentLamports: string }) => {
+  const n = t.newRentLamports !== "0", r = t.reclaimedRentLamports !== "0";
+  if (n && r && t.newRentLamports === t.reclaimedRentLamports) return `${solText(t.newRentLamports)} locked and returned`;
+  return [n ? `${solText(t.newRentLamports)} locked` : null, r ? `${solText(t.reclaimedRentLamports)} returned` : null].filter(Boolean).join(", ") || "none";
+};
+/** One plain line under every fee and rent table. */
+export const RENT_NOTE = "Storage rent is test SOL held while accounts exist: opening a channel locks it, closing returns most of it, and the channel account keeps a little until its reclaim window passes. Network fees are spent.";
 /** Jev's levels in plain words (the landing's Jev sheet uses the same words). */
 export const relevanceWords = (level: number) => ["Unrelated", "Broad match", "Partial fit", "Direct fit"][level] ?? `Level ${level}`;
 export const intentWords = (level: number) => ["Just learning", "Exploring", "Comparing offers", "Ready to buy"][level] ?? `Level ${level}`;

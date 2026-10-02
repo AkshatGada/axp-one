@@ -6,14 +6,11 @@ import { campaign, nameOf, run, usdc } from "@/data/select";
 import { txPayload } from "@/components/money";
 import type { Channel, ChainTx } from "@/data/types";
 import { DevnetSettlementSection, Ext, hasDevnet } from "@/components/v2/devnet";
-import { CIRCLE_DEVNET_USDC, CIRCLE_DEVNET_USDC_URL, NET, list, onDevnet, onePayer, solText } from "@/data/story";
+import { CIRCLE_DEVNET_USDC, CIRCLE_DEVNET_USDC_URL, NET, RENT_NOTE, list, onDevnet, onePayer, rentSolWords, solText } from "@/data/story";
 
 export const metadata: Metadata = { title: onDevnet ? "Settlement, live on Solana Devnet" : hasDevnet ? "Settlement: hosted Solana sandbox and Solana Devnet" : "Hosted Solana sandbox settlement" };
 const L = Link as unknown as Ld.LinkC;
 const lam = (v: string | number) => Number(v).toLocaleString("en-US");
-/** Rent in plain words and test SOL: "0.0034 locked", "0.002 returned", or both. */
-const rentSol = (t: { newRentLamports: string; reclaimedRentLamports: string }) =>
-  [t.newRentLamports !== "0" ? `${solText(t.newRentLamports)} locked` : null, t.reclaimedRentLamports !== "0" ? `${solText(t.reclaimedRentLamports)} returned` : null].filter(Boolean).join(", ") || "none";
 /** The run's token: Circle's Devnet USDC when every channel holds that mint. */
 const circle = onDevnet && run.channels.length > 0 && run.channels.every((c) => c.mint === CIRCLE_DEVNET_USDC);
 
@@ -42,7 +39,7 @@ function TxRow({ ch, t }: { ch: Channel; t: ChainTx }) {
       <td data-num>{t.tokenDeltas.payer.startsWith("-") ? `−${usdc(t.tokenDeltas.payer.slice(1))}` : `+${usdc(t.tokenDeltas.payer)}`}</td>
       <td data-num>{t.tokenDeltas.publisher === "0" ? <span className="ld-faint">0</span> : `+${usdc(t.tokenDeltas.publisher)}`}</td>
       <td data-num title={`${lam(t.networkFeeLamports)} lamports`}>{solText(t.networkFeeLamports)}</td>
-      <td data-num title={`${lam(t.newRentLamports)} lamports locked, ${lam(t.reclaimedRentLamports)} returned`}>{rentSol(t)}</td>
+      <td data-num title={`${lam(t.newRentLamports)} lamports locked, ${lam(t.reclaimedRentLamports)} returned`}>{rentSolWords(t)}</td>
       <td>
         <InspectButton payload={txPayload(ch, t)} variant="text">
           Inspect
@@ -169,6 +166,7 @@ export default function SettlementPage() {
                   </tbody>
                 </table>
               </div>
+              <p className="ld-caption" style={{ marginTop: 8 }}>{RENT_NOTE}</p>
             </Ld.Panel>
           </section>
         );
@@ -180,7 +178,7 @@ export default function SettlementPage() {
         return (
           <Ld.Panel key={u.channelId} title={nameOf(u.campaignId)} sub="No Solana channel was opened" actions={<Ld.Tag tone="dashed">Unfunded</Ld.Tag>}>
             <p className="ld-secondary">
-              Channel status {u.status.replace(/_/g, " ")}, deposit {usdc(u.depositBaseUnits)}. With no channel it could never be charged.{ex.length ? ` It was excluded by rule in ${ex.length} of ${run.opportunities.length} questions (missing ${list(missing.map((m) => m.replace(/_/g, " ")))}).` : ""}
+              No channel was opened{u.status === "pending_open" ? " (unfunded)" : ""}, so it holds no deposit and could never be charged.{ex.length ? ` It was excluded by rule in ${ex.length} of ${run.opportunities.length} questions (missing ${list(missing.map((m) => m.replace(/_/g, " ")))}).` : ""}
             </p>
           </Ld.Panel>
         );
@@ -213,7 +211,7 @@ export default function SettlementPage() {
       <details className="st2-more">
         <summary>
           <span className="ld-card-title">On-chain costs, totals and transaction order</span>
-          <span className="ld-caption">Fees and storage rent in lamports, and the {NET.short === "Devnet" ? "Devnet" : "sandbox"} transactions by slot</span>
+          <span className="ld-caption">Fees and storage rent in test SOL, and the {NET.short === "Devnet" ? "Devnet" : "sandbox"} transactions by slot</span>
         </summary>
         <div className="ld-stack-lg" style={{ gap: 16 }}>
       <div className="ld-cols-2">
@@ -231,18 +229,18 @@ export default function SettlementPage() {
             ]}
           />
         </Ld.Panel>
-        <Ld.Panel title="Fees and rent in lamports (test SOL)" flush foot={<span>Kept apart from USDC. Reclaimed rent is not subtracted from the cap.</span>}>
+        <Ld.Panel title="Fees and storage rent in test SOL" flush foot={<span>Kept apart from USDC. Returned rent is not subtracted from the limit. Exact lamports are in each transaction&apos;s Inspector record.</span>}>
           <Ld.Table
             columns={[
               { key: "k", head: "", cell: (r: { k: string; v: string }) => r.k },
-              { key: "v", head: "Lamports", num: true, cell: (r) => <span className="ld-strong">{lam(r.v)}</span> },
+              { key: "v", head: "Test SOL", num: true, cell: (r) => <span className="ld-strong" title={`${lam(r.v)} lamports`}>{solText(r.v)}</span> },
             ]}
             rows={[
               { k: `Network fees, ${run.chainTxs.length} transactions`, v: run.fees.networkFeeLamports },
-              { k: "New rent, gross", v: run.fees.newRentLamports },
-              { k: "Reclaimed rent at close", v: run.fees.reclaimedRentLamports },
-              { k: "Fees plus new rent", v: run.fees.grossFeeAndRentLamports },
-              { k: "Run cap", v: run.fees.capLamports },
+              { k: "Storage rent locked", v: run.fees.newRentLamports },
+              { k: "Storage rent returned at close", v: run.fees.reclaimedRentLamports },
+              { k: "Fees plus rent locked", v: run.fees.grossFeeAndRentLamports },
+              { k: "The run's limit", v: run.fees.capLamports },
             ]}
           />
         </Ld.Panel>
@@ -261,7 +259,7 @@ export default function SettlementPage() {
       </Ld.Panel>
 
       <Ld.Callout title="Network fees and rent, paid in test SOL">
-        Fees and <Term title={GLOSSARY.rent.term} def={GLOSSARY.rent.def}>rent</Term> are paid in test SOL, measured in <Term title={GLOSSARY.lamports.term} def={GLOSSARY.lamports.def}>lamports</Term>, and kept apart from the USDC ad spend. Each channel paid {lam(perOpenRent)} lamports of new rent at open; {lam(perReclaim)} of it ({reclaimPct}%) was reclaimed at close, so {lam(run.fees.reclaimedRentLamports)} of {lam(run.fees.newRentLamports)} in total. Network fees were {lam(run.fees.networkFeeLamports)} lamports for the {run.chainTxs.length} transactions. These costs are paid per channel, not per ad: one open and one close are shared by every delivery the channel carries, and each delivery is a signed voucher, not a transaction. Here the channels carried {list(run.channels.map((c) => String(c.vouchers.length)))} deliveries.
+        Fees and <Term title={GLOSSARY.rent.term} def={GLOSSARY.rent.def}>rent</Term> are paid in test SOL, measured in <Term title={GLOSSARY.lamports.term} def={GLOSSARY.lamports.def}>lamports</Term>, and kept apart from the USDC ad spend. Each channel locked {solText(perOpenRent)} test SOL of storage rent at open; {solText(perReclaim)} of it ({reclaimPct}%) was returned at close, so {solText(run.fees.reclaimedRentLamports)} of {solText(run.fees.newRentLamports)} in total. Network fees were {solText(run.fees.networkFeeLamports)} test SOL for the {run.chainTxs.length} transactions. These costs are paid per channel, not per ad: one open and one close are shared by every delivery the channel carries, and each delivery is a signed voucher, not a transaction. Here the channels carried {list(run.channels.map((c) => String(c.vouchers.length)))} deliveries.
       </Ld.Callout>
         </div>
       </details>

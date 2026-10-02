@@ -6,7 +6,7 @@ import { devnet } from "@/data/devnet";
 import type { DevnetChannel, DevnetTxRef } from "@/data/devnet-types";
 import { GLOSSARY } from "@/data/glossary";
 import { nameOf, usdc } from "@/data/select";
-import { rentWords } from "@/data/story";
+import { RENT_NOTE, rentSolWords, solText } from "@/data/story";
 import { asset } from "@/lib/paths";
 
 export const hasDevnet = !!devnet;
@@ -24,7 +24,7 @@ export function Ext({ href, children }: { href: string; children: ReactNode }) {
 }
 
 function TxLine({ label, t }: { label: string; t: DevnetTxRef }) {
-  const rent = rentWords(t);
+  const rent = rentSolWords(t);
   return (
     <tr>
       <td>
@@ -36,7 +36,7 @@ function TxLine({ label, t }: { label: string; t: DevnetTxRef }) {
       <td>
         <span className="ld-mono">{short(t.signature, 8, 6)}</span>
       </td>
-      <td data-num>{lam(t.feeLamports)}</td>
+      <td data-num title={`${lam(t.feeLamports)} lamports`}>{solText(t.feeLamports)}</td>
       <td data-num>{rent}</td>
       <td>
         <Ext href={t.explorerUrl}>Explorer</Ext>
@@ -52,7 +52,7 @@ function ChannelCard({ ch }: { ch: DevnetChannel }) {
       title={nameOf(ch.campaignId)}
       sub="Payment channel on Solana Devnet, Devnet test USDC"
       actions={<Ext href={ch.channelExplorerUrl}>Channel {short(ch.channelAddress)}</Ext>}
-      foot={<span>Status after close: {ch.status ?? "not recorded"}. The channel account keeps {lam(ch.remainingRentLamports ?? "0")} lamports of rent until its reclaim window passes.</span>}
+      foot={<span>Status after close: {ch.status ?? "not recorded"}. The channel account keeps {solText(ch.remainingRentLamports ?? "0")} test SOL of storage rent until its reclaim window passes.</span>}
     >
       <div className="ld-stack" style={{ gap: 16 }}>
         <div className="ld-cols-3">
@@ -92,8 +92,8 @@ function ChannelCard({ ch }: { ch: DevnetChannel }) {
               <tr>
                 <th>Devnet transaction</th>
                 <th>Signature</th>
-                <th data-num>Fee, lamports</th>
-                <th data-num>Rent, lamports</th>
+                <th data-num>Network fee, test SOL</th>
+                <th data-num>Storage rent, test SOL</th>
                 <th />
               </tr>
             </thead>
@@ -150,16 +150,16 @@ export function DevnetSettlementSection() {
             </span>
           </div>
         </Ld.Panel>
-        <Ld.Panel title="Devnet fees and rent in lamports (test SOL)" flush foot={<span>Kept apart from USDC, and apart from the sandbox numbers above. Rent differs by network, so these are not the sandbox figures.</span>}>
+        <Ld.Panel title="Devnet fees and storage rent in test SOL" flush foot={<span>Kept apart from USDC, and apart from the sandbox numbers above. Rent differs by network, so these are not the sandbox figures. {RENT_NOTE}</span>}>
           <Ld.Table
             columns={[
               { key: "k", head: "", cell: (r: { k: string; v: string }) => r.k },
-              { key: "v", head: "Lamports", num: true, cell: (r) => <span className="ld-strong">{lam(r.v)}</span> },
+              { key: "v", head: "Test SOL", num: true, cell: (r) => <span className="ld-strong" title={`${lam(r.v)} lamports`}>{solText(r.v)}</span> },
             ]}
             rows={[
               { k: "Network fees, 2 opens and 2 closes", v: t.settlementNetworkFeeLamports },
-              { k: "New rent, gross", v: t.settlementNewRentLamports },
-              { k: "Rent reclaimed at close", v: t.settlementReclaimedRentLamports },
+              { k: "Storage rent locked", v: t.settlementNewRentLamports },
+              { k: "Storage rent returned at close", v: t.settlementReclaimedRentLamports },
               { k: "Funding fee (paid by the funder)", v: t.fundingNetworkFeeLamports },
               { k: "Funding rent (paid by the funder)", v: t.fundingNewRentLamports },
             ]}
