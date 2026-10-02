@@ -16,7 +16,7 @@ ContextHint had seen this exact question before, next to an ad from Mercari. Age
 
 5
 00:01:29,500 --> 00:01:54,499
-Decided with Jev. Without history ClearVault would have bid 0.003 USDC; with ContextHint history its intent rose from level 2 to 3, so it bid 0.004. One observation per arm; not a measured lift.
+Decided with Jev. Without history ClearVault would have bid 0.003 USDC; with ContextHint history its intent rose from level 2 to 3, so it bid 0.004. One run, not a benchmark.
 
 6
 00:01:54,500 --> 00:02:19,499
