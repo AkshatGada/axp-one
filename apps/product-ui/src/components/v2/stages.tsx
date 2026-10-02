@@ -374,7 +374,7 @@ export function AuctionPanel({ o }: { o: Opportunity }) {
       <div className="ld-cols-3">
         <Ld.Stat label="Winner" value={nameOf(o.auction.winnerCampaignId)} caption={winnerCaption(o)} />
         <Ld.Stat label="Price" value={`${usdc(o.award!.priceBaseUnits)} USDC`} caption="Test USDC; first price, the winner pays its own bid" />
-        <Ld.Stat label="Rule" value="Bid table v1" caption={`Sealed, first price, floor ${usdc(o.floorBaseUnits)} USDC`} />
+        <Ld.Stat label="Rule" value="Fixed bid table" caption={`Sealed bids; the winner pays its own bid; floor ${usdc(o.floorBaseUnits)} USDC`} />
       </div>
       <div className="op2-bidtable">
         {run.policy.bidTable.map((r) => (
