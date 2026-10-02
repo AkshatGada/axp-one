@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Build-time extraction for the AXP landing page.
 // Reads ONLY the landing's main run bundle, run.json + manifest.json (and, for the video, the
-// earlier recorded walkthrough MP4 + walkthrough.srt), and writes src/data/run.generated.json:
+// live Devnet run's recorded demo MP4 + its SRT), and writes src/data/run.generated.json:
 // the small slice of the run the page shows. Every run value on the page comes from this file.
 //
 // Main run (owner, v7): the fully live run on public Solana Devnet,
@@ -29,9 +29,10 @@ const SRC = process.env.AXP_LANDING_RUN ? resolve(repo, process.env.AXP_LANDING_
 const RUN = join(SRC, "run.json");
 const MANIFEST = join(SRC, "manifest.json");
 const RUN_ID = "v3-devnet-live-rehearsal-20261002";
-const VIDEO = join(repo, "artifacts/v3/recording/axp-v3-four-minute-demo.mp4");
-const SRT = join(repo, "artifacts/v3/recording/walkthrough.srt");
-const POSTER = join(repo, "artifacts/v3/recording/03-cached.jpg");
+const REC = join(repo, "artifacts/v3-devnet-live-rehearsal/recording");
+const VIDEO = join(REC, "axp-live-demo.mp4");
+const SRT = join(REC, "axp-live-demo.srt");
+const POSTER = join(REC, "poster.png");
 const OUT = join(app, "src/data/run.generated.json");
 const MEDIA = join(app, "public/media");
 
@@ -117,7 +118,7 @@ function verify(d) {
     assert(!bad.test(text), `forbidden content in slice: ${bad}`);
   }
   assert(!/\[(?:-?\d+(?:\.\d+)?,){64,}/.test(text), "no numeric arrays over 64 long");
-  assert(!d.video || d.video.chapters.length === 10, "ten video chapters");
+  assert(!d.video || d.video.chapters.length === 11, "eleven video chapters");
   assert(!d.jev || (d.jev.decision === "bid" && d.jev.relevanceLevel === 3 && d.jev.intentLevel === 3 && d.jev.creativeChosen), "the Jev example is ClearVault's bid at levels 3 and 3 with its creative");
   assert(text.length < 60000, `slice under 60KB (got ${text.length})`);
 }
@@ -469,11 +470,11 @@ const out = {
   limitations: run.limitations,
   video: existsSync(SRT)
     ? {
-        file: "media/axp-v3-four-minute-demo.mp4",
-        poster: "media/axp-v3-poster.jpg",
+        file: "media/axp-live-demo.mp4",
+        poster: "media/axp-live-poster.png",
         captions: "media/walkthrough.vtt",
-        width: 1400,
-        height: 1352,
+        width: 1920,
+        height: 1080,
         chapters: [...readFileSync(SRT, "utf8").matchAll(/(\d\d):(\d\d):(\d\d),\d\d\d -->/g)].map((m) => Number(m[1]) * 3600 + Number(m[2]) * 60 + Number(m[3])),
       }
     : null,
@@ -489,8 +490,8 @@ writeLanding(out);
 /* ---------------- Video, captions and poster (gitignored public/media) ---------------- */
 if (existsSync(VIDEO) && existsSync(SRT)) {
   mkdirSync(MEDIA, { recursive: true });
-  copyFileSync(VIDEO, join(MEDIA, "axp-v3-four-minute-demo.mp4"));
-  if (existsSync(POSTER)) copyFileSync(POSTER, join(MEDIA, "axp-v3-poster.jpg"));
+  copyFileSync(VIDEO, join(MEDIA, "axp-live-demo.mp4"));
+  if (existsSync(POSTER)) copyFileSync(POSTER, join(MEDIA, "axp-live-poster.png"));
   // Captions are the recorded text; only the dashes are replaced so the page carries none.
   const vtt =
     "WEBVTT\n\n" +

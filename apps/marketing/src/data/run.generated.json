@@ -656,22 +656,23 @@
     "Owned-app delivery acknowledgement is not human attention, ad absorption or endorsement."
   ],
   "video": {
-    "file": "media/axp-v3-four-minute-demo.mp4",
-    "poster": "media/axp-v3-poster.jpg",
+    "file": "media/axp-live-demo.mp4",
+    "poster": "media/axp-live-poster.png",
     "captions": "media/walkthrough.vtt",
-    "width": 1400,
-    "height": 1352,
+    "width": 1920,
+    "height": 1080,
     "chapters": [
-      0,
-      20,
+      15,
+      30,
       45,
-      65,
-      85,
-      105,
-      135,
-      155,
-      180,
-      210
+      67,
+      89,
+      114,
+      139,
+      164,
+      186,
+      216,
+      241
     ]
   }
 }

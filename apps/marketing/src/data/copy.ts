@@ -208,9 +208,9 @@ export const NEXT = {
 };
 
 export const VIDEO = {
-  title: "axp.one recorded run, four minute walkthrough",
-  caption: "From our earlier sandbox run.",
-  chapters: ["What axp.one is", "Fictional advertisers", "Evidence from ContextHint", "A question with no exact match", "Independent answers", "Agent decisions", "Auction and price", "Delivery and receipts", "Settlement", "Restart and limits"],
+  title: "axp.one live Devnet run, four minute walkthrough",
+  caption: "From our live Devnet run.",
+  chapters: ["People ask AI apps what to buy", "A question in an AI app", "One live run, three fictional advertisers", "What the agents were shown", "What the agents decided", "Code sets the price", "Award, receipt, charge", "A cap and a no-fill", "Why Solana: paid once per channel", "Check it yourself", "What the run shows"],
 };
 
 export const CLOSING = {

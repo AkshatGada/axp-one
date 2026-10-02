@@ -1,0 +1,43 @@
+1
+00:00:15,500 --> 00:00:30,499
+People ask AI apps what to buy. Advertisers want to be in that moment, but there is no honest, disclosed way to be there.
+
+2
+00:00:30,500 --> 00:00:45,499
+A question is asked in an AI app. The answer is the app's own. The card below it is labelled Sponsored, and it is paid through a Solana payment channel only after the app signs that it inserted it.
+
+3
+00:00:45,500 --> 00:01:07,499
+The saved record of one run: 4 questions, 15 agent decisions, 3 auctions, 3 signed deliveries. ClearVault and KeyForge funded 0.020 USDC each; LeatherGuard is unfunded.
+
+4
+00:01:07,500 --> 00:01:29,499
+ContextHint had seen this exact question before, next to an ad from Mercari. Agents get that history as evidence. Real brands are past observations, not bidders.
+
+5
+00:01:29,500 --> 00:01:54,499
+Decided with Jev. Without history ClearVault would have bid 0.003 USDC; with ContextHint history its intent rose from level 2 to 3, so it bid 0.004. One observation per arm; not a measured lift.
+
+6
+00:01:54,500 --> 00:02:19,499
+Code, not the model, turns levels into a bid from a fixed table. ClearVault 0.004 and KeyForge 0.003 USDC: the highest bid won, so ClearVault paid 0.004 USDC.
+
+7
+00:02:19,500 --> 00:02:44,499
+An award is not a charge. The app inserts the labelled card and signs a receipt; only then is 0.004 USDC charged. These checks run in your browser when you open Verify.
+
+8
+00:02:44,500 --> 00:03:06,499
+Asked again, ClearVault's agent said bid, but the frequency cap kept it out: a rule, not the agent. KeyForge won at 0.004 USDC. One question matched no campaign: zero agent calls, no ad, and the answer still served.
+
+9
+00:03:06,500 --> 00:03:36,499
+Small ads only work if each delivery is not its own transaction. Vouchers accumulate off-chain, 0.004 then 0.007 in total, and one close per channel pays 0.011 USDC in total on Solana Devnet.
+
+10
+00:03:36,500 --> 00:04:01,499
+Verify recomputes 47 checks in your browser; change one byte of a receipt and two of them fail. Restarted with models off: zero new calls, charges or signatures. Not mainnet, not attention, not targeting lift.
+
+11
+00:04:01,500 --> 00:04:15,500
+Open Verify on this site and check every number yourself.
