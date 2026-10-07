@@ -50,7 +50,7 @@ Aim for two to three minutes, with one continuous story:
 | Advertiser | Create HarborKey with editable suggestions; review, approve and fund its channel | “An advertiser defines its offer, context and limits, then approves the card.” |
 | SDK, briefly | Request → Render → Acknowledge, then Open example chat | “Publishers keep their own answer model. The SDK adds a separate Sponsored card.” |
 | Chat | Submit one question; show the independent answer and separate Sponsored card | “DeepSeek powers this example app's answer. AXP independently evaluates the advertisers.” |
-| Internals | Context → Buyers → Auction → Delivery; expand one actual retrieved evidence example | “Advertiser instructions and ContextHint evidence are separate. Jev judges fit; code applies the bid and budget rules.” |
+| Internals | Context → Buyers → Auction → Delivery; expand one actual retrieved evidence example | “Advertiser instructions and ContextHint evidence are separate. Jev judges fit; the auction engine applies bid and budget rules.” |
 | Payment, last | In the same dialog: funded deposit → cumulative vouchers → Close & settle Test USDC → Finalized → Explorer | “Vouchers accumulate off-chain. One channel close pays the publisher and returns the unused deposit.” |
 
 Show the actual winning advertiser. HarborKey is not guaranteed to win. If there
