@@ -89,7 +89,7 @@ writeFileSync(join(out,'config.json'),JSON.stringify(config,null,2)+'\n');
 // 4. Self-checks of the output.
 const size=d=>readdirSync(d,{withFileTypes:true,recursive:true}).filter(e=>e.isFile()).reduce((n,e)=>n+statSync(join(e.parentPath??e.path,e.name)).size,0);
 const fnBytes=size(fnDir);if(fnBytes>240*1024*1024)throw new Error(`function too large: ${fnBytes}`);
-for(const p of ['index.html','mvp/index.html','mvp/verify/index.html','mvp/first-recording/index.html','advertiser-dashboard/index.html','publisher-demo/index.html','publisher-demo/integration/index.html']) {
+for(const p of ['index.html','demo/index.html','mvp/index.html','mvp/verify/index.html','mvp/first-recording/index.html','advertiser-dashboard/index.html','publisher-demo/index.html','publisher-demo/integration/index.html']) {
   if(!existsSync(join(staticDir,p)))throw new Error(`missing static page ${p}`);
   verifyPageAssets(staticDir,p);
 }

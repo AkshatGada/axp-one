@@ -195,7 +195,7 @@
 .h1 { max-width: 13.2ch; font-size: clamp(50px, 5.5vw, 100px); line-height: 0.94; }
 @media (min-width: 1600px) { .copyIn { max-width: 1000px; } .h1 { max-width: 16ch; font-size: clamp(50px, 5vw, 100px); } }
 .lede { max-width: 35ch; font-size: clamp(18px, 1.45vw, 23px); color: var(--steel-dark); }
-.actions { display: flex; }
+.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 20px 28px; }
 :global(html[data-px-motion="on"]) .h1 :global(.px-wi) { animation: labRise 1.1s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 60ms + 80ms); }
 :global(html[data-px-motion="on"]) .lede { animation: labIn 1s var(--ease-out) 0.42s both; }
 :global(html[data-px-motion="on"]) .actions { animation: labIn 1s var(--ease-out) 0.56s both; }

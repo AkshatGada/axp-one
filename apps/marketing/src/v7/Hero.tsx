@@ -17,7 +17,7 @@
 // wall, the recorded tile, then the six plates flat.
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as RPointerEvent } from "react";
 import { motion, useMotionValue, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
-import { ActionPrimary, Words } from "@axp/design-system/prospectus";
+import { ActionPrimary, ActionText, Words } from "@axp/design-system/prospectus";
 import { CACHED, CV, HELPFUL_EXCERPT } from "@/data/run";
 import { DEVNET_URL, HERO, MVP_URL, STACK } from "@/data/copy";
 import { PROMPTS } from "@/hero-lab/data";
@@ -145,6 +145,7 @@ function Copy() {
         <ActionPrimary href={MVP_URL} external>
           {HERO.primary}
         </ActionPrimary>
+        <ActionText href="/demo/">Watch the product demo</ActionText>
       </div>
       <p className={s.trio}>
         {HERO.trio.map((t) => (
