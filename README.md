@@ -20,7 +20,7 @@ it is not the exchange’s decision engine. Jev is the buying decision layer.
 | Advertiser dashboard | [Create and operate campaigns](https://axp.one/advertiser-dashboard/) |
 | Example publisher chat | [Ask a question, then view internals](https://axp.one/publisher-demo/) |
 | Publisher SDK guide | [Connect your own AI app](https://axp.one/sdk/) |
-| Product walkthrough | [2:42 recording with chapters and captions](https://axp.one/demo/) |
+| Product walkthrough | [1:53 recording with chapters and captions](https://axp.one/demo/) |
 | Original MVP explorer | [Recorded evidence and live-run console](https://axp.one/mvp/) |
 
 The public product requires no local installation. The guide connects to

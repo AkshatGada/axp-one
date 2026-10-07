@@ -24,3 +24,10 @@ The original MVP recording remains available separately. Browser interactions
 were recorded with Playwright at 1920 × 1080, then encoded as H.264 with MP4
 fast-start and an English subtitle track. The website adds chapter navigation
 through the existing design system's `VideoFigure` component.
+
+The current presentation cut runs 1:53 (112.80 seconds). It removes repeated idle
+holds from the original 2:42 capture while keeping the full frame and chronological
+workflow at recorded speed. Channel-opening finality, the independent answer
+loading, receipt-replay response and channel-settlement waits remain intact.
+Captions and chapter positions follow the edited timeline. This edit does not
+change the dated execution, amounts, signatures or timestamps in `acceptance.json`.

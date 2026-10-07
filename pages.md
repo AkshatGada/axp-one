@@ -13,7 +13,7 @@ Localhost URLs are for explicit development and replay instructions only.
 | `/publisher-demo/integration/` | Hosted publisher integration, SDK samples and optional local setup | `apps/product-ui/src/app/publisher-demo/integration/page.tsx` |
 | `/sdk/` | Redirect to the integration guide | `scripts/build-site/site-routes.mjs` |
 | `/demo/` | 1080p product video, captions, chapters, download and both product entry points | `apps/marketing/src/app/demo/` |
-| `/video/product-walkthrough.mp4` | Downloadable 2:42 H.264 video with English subtitle track | `apps/marketing/public/video/` |
+| `/video/product-walkthrough.mp4` | Downloadable edited 1:53 H.264 video with English subtitle track | `apps/marketing/public/video/` |
 | `/video/product-walkthrough.vtt` | Browser captions | `apps/marketing/public/video/` |
 
 The dashboard and chat use the same durable `demo` workspace. The recording was

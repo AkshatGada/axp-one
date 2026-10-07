@@ -18,8 +18,9 @@ as the fourth. Read `/api/product/publisher/config` and `/api/product/bootstrap`
 for current readiness and caps. The initial inventory and budgets can change
 through actual user actions; refresh the dashboard before presenting.
 
-The recording is 2:42 at 1080p and includes finalized 0.003 test-USDC payout and
-0.017 refund. Its separate four-channel recording workspace was fully closed.
+The edited recording is 1:53 at 1080p and includes finalized 0.003 test-USDC payout
+and 0.017 refund. Repeated idle holds were cut; retained interactions and external
+operation waits play at their recorded speed. Its separate four-channel recording workspace was fully closed.
 [Public recording evidence](../../artifacts/product/recorded-walkthrough/acceptance.json)
 is distinct from the live presentation inventory. The original MVP recording and
 its historical provider/payment modes remain available under `/mvp/`.
