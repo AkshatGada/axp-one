@@ -13,6 +13,7 @@ Localhost URLs are for explicit development and replay instructions only.
 | `/publisher-demo/integration/` | Hosted publisher integration, SDK samples and optional local setup | `apps/product-ui/src/app/publisher-demo/integration/page.tsx` |
 | `/sdk/` | Redirect to the integration guide | `scripts/build-site/site-routes.mjs` |
 | `/demo/` | 1080p product video, captions, chapters, download and both product entry points | `apps/marketing/src/app/demo/` |
+| `/network/` | Read-only measured Devnet run, timeline replay, channel proofs and one example turn; empty until an actual run is exported | `apps/marketing/src/app/network/` |
 | `/video/product-walkthrough.mp4` | Downloadable edited 1:53 H.264 video with English subtitle track | `apps/marketing/public/video/` |
 | `/video/product-walkthrough.vtt` | Browser captions | `apps/marketing/public/video/` |
 
@@ -20,6 +21,11 @@ The dashboard and chat use the same durable `demo` workspace. The recording was
 captured against an isolated workspace; it is a replay, not a newly executed chat.
 The three prepared advertiser identities are ClearVault, KeyArc and ColdNest.
 A presenter creates HarborKey as the fourth using editable suggestions.
+
+The network benchmark uses isolated local workers and the same exchange, buying,
+publisher-render and native payment components. Its static page replays exported
+records; it cannot initiate provider calls or sign payments. Approved target counts
+are separate from achieved measurements. See [the run method](docs/product/NETWORK_SCALE.md).
 
 ## Original MVP and recorded evidence
 

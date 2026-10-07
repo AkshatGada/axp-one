@@ -7,6 +7,8 @@ import {createProductDecisions} from './decisions.mjs';
 import {createProductOrganic,PRODUCT_ORGANIC_MODEL} from './organic.mjs';
 import {createProductPayments} from './payments.mjs';
 import {NATIVE_LIMITS} from './native.mjs';
+import {providerExecution} from './provider-provenance.mjs';
+import {isBenchmarkProfile} from '../network-scale/profile.mjs';
 
 export const CAPABILITIES=Object.freeze([
  ['crypto_storage','Crypto custody','Store cryptocurrency and manage private keys.'],
@@ -69,7 +71,7 @@ export function taskContext(question,required=[]){
 
 /** One persisted local demo workspace. Financial authority remains in Exchange.
  * Synthetic by default; opt-in Devnet uses one server-held disposable demo sponsor. */
-export function createProductService({stateDir='local-state/product',runId='product-workspace-v1',now=Date.now,publisherKey,apiKey,transport,retriever,organicApiKey,organicTransport,dailyModelCap=50,demoMode=false,financialMode='synthetic',signingEnabled=false,walletPath,paymentOptions={},checkpoint=null}={}){
+export function createProductService({stateDir='local-state/product',runId='product-workspace-v1',now=Date.now,publisherKey,apiKey,transport,retriever,organicApiKey,organicTransport,dailyModelCap=50,demoMode=false,financialMode='synthetic',signingEnabled=false,walletPath,paymentOptions={},checkpoint=null,benchmarkProfile=null}={}){
  mkdirSync(stateDir,{recursive:true,mode:0o700});
  const secretFile=join(stateDir,'publisher-api-key');
  if(!publisherKey){if(!existsSync(secretFile))writeFileSync(secretFile,randomBytes(32).toString('hex'),{mode:0o600,flag:'wx'});publisherKey=readFileSync(secretFile,'utf8').trim();}
@@ -84,12 +86,13 @@ export function createProductService({stateDir='local-state/product',runId='prod
  const payee=payments?.identities.payee??'synthetic:axp-demo-publisher';
  const limits=financialMode==='devnet'?{...LIMITS,maxBidBaseUnits:NATIVE_LIMITS.maxBidBaseUnits,maxBudgetBaseUnits:NATIVE_LIMITS.maxBudgetBaseUnits,maxDepositBaseUnits:NATIVE_LIMITS.maxDepositBaseUnits}:LIMITS;
  for(const table of ['product_accounts','product_advertisers','product_campaigns','product_requests','product_answers'])exchange.db.exec(`CREATE TABLE IF NOT EXISTS ${table}(run TEXT NOT NULL,id TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(run,id))`);
- const buyers=createProductDecisions({exchange,apiKey,transport,retriever,now,dailyCap:dailyModelCap,checkpoint});
+ const organicDailyCap=isBenchmarkProfile(benchmarkProfile)?64:20;
+ const buyers=createProductDecisions({exchange,apiKey,transport,retriever,now,dailyCap:dailyModelCap,checkpoint,benchmarkProfile});
  const inFlight=new Map(),answerFlight=new Map();
  exchange.registerPublisher({publisherId,publisherKeyId,payee,publicKeyPEM:createPublicKey(receiptKey).export({format:'pem',type:'spki'})});
  const tokenFor=awardId=>createHmac('sha256',publisherKey).update(`${runId}:${awardId}`).digest('hex');
  const stamp=()=>new Date(now()).toISOString();
- const organicStatus=()=>({ready:Boolean(organicApiKey?.trim()||organicTransport),execution:organicTransport?'fixture':organicApiKey?.trim()?'actual-api-model':'unavailable',model:PRODUCT_ORGANIC_MODEL,reason:organicApiKey?.trim()||organicTransport?null:'organic_key_unavailable',dailyCap:20,usedToday:exchange.all('product_answers').filter(r=>r.day===stamp().slice(0,10)).length});
+ const organicStatus=()=>({ready:Boolean(organicApiKey?.trim()||organicTransport),execution:organicTransport?providerExecution(organicTransport):organicApiKey?.trim()?'actual-api-model':'unavailable',model:PRODUCT_ORGANIC_MODEL,reason:organicApiKey?.trim()||organicTransport?null:'organic_key_unavailable',dailyCap:organicDailyCap,usedToday:exchange.all('product_answers').filter(r=>r.day===stamp().slice(0,10)).length});
  const account=()=>exchange.get('product_accounts','workspace');
  const requireCampaign=campaignId=>exchange.require('product_campaigns',id(campaignId));
  function saveAccount(body){strictObject(body,['name','websiteURL'],['name','websiteURL']);const a={id:'workspace',name:text(body.name,120),websiteURL:website(body.websiteURL),mode:financialMode,updatedAt:stamp()};exchange.tx(()=>exchange.put('product_accounts','workspace',a));return {account:a};}
@@ -201,14 +204,14 @@ export function createProductService({stateDir='local-state/product',runId='prod
   const k=hash([body.sessionId??'demo',body.turnId??randomUUID()]),before=exchange.get('product_answers',k);
   if(before){if(before.questionHash!==hash(question))fail('turn_conflict',409);if(before.result)return {...before.result,replayed:true};fail('organic_call_uncertain',409);}
   const row={id:k,questionHash:hash(question),day:stamp().slice(0,10),status:'pending',startedAt:now()};
-  if(exchange.all('product_answers').filter(r=>r.day===row.day).length>=20)fail('organic_daily_cap',429);
+  if(exchange.all('product_answers').filter(r=>r.day===row.day).length>=organicDailyCap)fail('organic_daily_cap',429);
   exchange.tx(()=>exchange.put('product_answers',k,row));
   if(checkpoint)await checkpoint('organic_admitted');
   try {const provider=organicTransport??createProductOrganic({apiKey:organicApiKey,now});
    const suppliedPrompt=`Answer the user's question independently and helpfully in under 300 words. No advertiser material or sponsored recommendations are supplied. Return ONLY a JSON object with one string property named answer; use plain text paragraphs and concise bullet points, without markdown headings. User question: ${JSON.stringify(question)}`;
    const response=await provider({suppliedPrompt});
    if(typeof response.answer!=='string'||!response.answer.trim())fail('organic_response_shape');
-   row.result={answer:response.answer,answerMode:organicTransport?'fixture':'actual-api-model',model:response.model,advertiserMaterialIncluded:false,...(response.elapsedMs!==undefined?{elapsedMs:response.elapsedMs}:{}),...(response.usage?{usage:response.usage}:{}),requestId:k};row.status='completed';
+   row.result={answer:response.answer,answerMode:organicTransport?providerExecution(organicTransport):'actual-api-model',model:response.model,advertiserMaterialIncluded:false,...(response.elapsedMs!==undefined?{elapsedMs:response.elapsedMs}:{}),...(response.usage?{usage:response.usage}:{}),requestId:k};row.status='completed';
    exchange.tx(()=>exchange.put('product_answers',k,row));return row.result;
   }catch(e){row.status='failed';row.reason=e.code??'organic_provider_failed';exchange.tx(()=>exchange.put('product_answers',k,row));throw new ContractError(row.reason,row.reason,502);}
  }

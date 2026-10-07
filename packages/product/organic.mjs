@@ -1,4 +1,5 @@
 import {ContractError} from '../contracts/index.mjs';
+import {officialProvider} from './provider-provenance.mjs';
 
 export const PRODUCT_ORGANIC_MODEL = 'deepseek-flash';
 const fail = code => {throw new ContractError(code);};
@@ -7,7 +8,7 @@ const fail = code => {throw new ContractError(code);};
 // One call, no retries, no ad inputs, no canned fallback and no reasoning text.
 export function createProductOrganic({apiKey, fetchImpl = fetch, now = Date.now} = {}) {
   if (typeof apiKey !== 'string' || apiKey.trim().length < 20) fail('organic_key_unavailable');
-  return async ({suppliedPrompt}) => {
+  const transport=async ({suppliedPrompt}) => {
     const started = now();
     if (typeof suppliedPrompt !== 'string' || !suppliedPrompt.trim() || suppliedPrompt.length > 4000) fail('organic_prompt_invalid');
     let response;
@@ -36,4 +37,5 @@ export function createProductOrganic({apiKey, fetchImpl = fetch, now = Date.now}
     return {answer: result.answer, model: PRODUCT_ORGANIC_MODEL, providerModel: value.model,
       usage: {inputTokens: value.usage.prompt_tokens, outputTokens: value.usage.completion_tokens}, elapsedMs: now() - started};
   };
+  return officialProvider(transport,fetchImpl===fetch);
 }

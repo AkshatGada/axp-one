@@ -38,6 +38,7 @@ The SDK is repository source, not a published npm package.
 - [Advertiser journeys](docs/product/ADVERTISER_JOURNEYS.md) and [publisher journeys](docs/product/PUBLISHER_JOURNEYS.md).
 - [Design system](docs/DESIGN_SYSTEM.md): actual PolySans fonts, Ultramarine, Prospectus and Ledger.
 - [Build and acceptance register](docs/BUILD_PROGRESS.md).
+- [Measured network run](docs/product/NETWORK_SCALE.md): isolated operator harness, spend bounds and exported proof.
 
 ## What the data contributes
 

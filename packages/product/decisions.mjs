@@ -3,6 +3,8 @@ import {hash, ContractError} from '../contracts/index.mjs';
 import {RUBRIC, RUBRIC_HASH} from '../ml/engines/contract.mjs';
 import {validateJevResponse} from '../ml/engines/jev.mjs';
 import {createJevHttpTransport, JEV_MODEL} from '../ml/engines/jev-http.mjs';
+import {providerExecution} from './provider-provenance.mjs';
+import {isBenchmarkProfile} from '../network-scale/profile.mjs';
 
 // A new product adapter keeps the recorded V3 harness and its frozen inputs intact.
 // The existing Jev wire format, rubric, response validator and bid policy are reused.
@@ -40,13 +42,14 @@ export function productDecision(c,o,{decision='abstain',creativeVersionId=null,r
     engineProvenance:{engine:'product-jev-v1',model:JEV_MODEL,execution:'actual-api-model',rubricHash:RUBRIC_HASH,...provenance}};
 }
 
-export function createProductDecisions({exchange,apiKey,transport,retriever,now=Date.now,dailyCap=50,checkpoint=null}) {
-  if(!Number.isInteger(dailyCap)||dailyCap<1||dailyCap>200)throw new ContractError('model_cap_invalid');
+export function createProductDecisions({exchange,apiKey,transport,retriever,now=Date.now,dailyCap=50,checkpoint=null,benchmarkProfile=null}) {
+  if(!Number.isInteger(dailyCap)||dailyCap<1||dailyCap>(isBenchmarkProfile(benchmarkProfile)?512:200))throw new ContractError('model_cap_invalid');
   exchange.db.exec('CREATE TABLE IF NOT EXISTS product_decisions(run TEXT NOT NULL,id TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(run,id))');
   const ready=Boolean(transport||apiKey?.trim());
   const day=()=>new Date(now()).toISOString().slice(0,10);
   const admissions=()=>exchange.all('product_decisions').filter(r=>r.admitted&&r.day===day()).length;
-  const status=()=>({id:JEV_MODEL,ready,execution:transport?'fixture':ready?'actual-api-model':'unavailable',reason:ready?null:'jev_key_unavailable',dailyCap,usedToday:admissions()});
+  const execution=transport?providerExecution(transport):ready?'actual-api-model':'unavailable';
+  const status=()=>({id:JEV_MODEL,ready,execution,reason:ready?null:'jev_key_unavailable',dailyCap,usedToday:admissions()});
   const historyFor=(question,c,draft)=>{
     if(!retriever||!c.declaredConstraints.includes('crypto_storage'))return null;
     try {
@@ -89,7 +92,9 @@ export function createProductDecisions({exchange,apiKey,transport,retriever,now=
     const start=performance.now();let result;
     try {
       const provider=transport??createJevHttpTransport({apiKey,maxCalls:1});
-      const raw=await provider(packet,{signal:AbortSignal.timeout(12000)});
+      // The trusted benchmark wrapper queues admission first; the official HTTP
+      // adapter starts its 12s deadline when the actual request begins.
+      const raw=await provider(packet,isBenchmarkProfile(benchmarkProfile)?{}:{signal:AbortSignal.timeout(12000)});
       if(apiKey&&JSON.stringify(raw).includes(apiKey))throw new ContractError('unsafe_model_response');
       const j=validateJevResponse(raw,packet);
       const decision=!j.sufficient?'abstain':j.creativeVersionId===null?'skip':j.relevanceLevel>=2&&j.commercialIntentLevel>=2?'bid':'skip';
@@ -97,12 +102,12 @@ export function createProductDecisions({exchange,apiKey,transport,retriever,now=
       result=productDecision(c,o,{decision,creativeVersionId:j.sufficient?j.creativeVersionId:null,
         relevanceLevel:j.sufficient?j.relevanceLevel:null,commercialIntentLevel:j.sufficient?j.commercialIntentLevel:null,
         reason:!j.sufficient?'insufficient_declarations':decision==='bid'?'declared_fit_supported':'no_fit',
-        provenance:{outcome:decision==='abstain'?'abstained':'valid',execution:transport?'fixture':'actual-api-model',
+        provenance:{outcome:decision==='abstain'?'abstained':'valid',execution,
           elapsedMs:performance.now()-start,usage:j.usage,packetHash:row.packetHash,retrieval:source}});
       row.rawOutput=raw;row.status='completed';
     } catch(e) {
       const reason=e.code??'jev_transport_unavailable';
-      result=productDecision(c,o,{reason,provenance:{outcome:'failed',execution:transport?'fixture':'actual-api-model',elapsedMs:performance.now()-start,packetHash:row.packetHash,retrieval:source}});
+      result=productDecision(c,o,{reason,provenance:{outcome:'failed',execution,elapsedMs:performance.now()-start,packetHash:row.packetHash,retrieval:source}});
       row.status='failed';
     }
     row.completedAt=now();row.result=result;

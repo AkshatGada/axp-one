@@ -22,19 +22,22 @@ export function retargetDistributeTreasury({instruction,sdkTreasuryAta,treasuryA
   return {...instruction,accounts:instruction.accounts.map((a,i)=>i===DISTRIBUTE_TREASURY_INDEX?{...a,address:treasuryAta}:a)};
 }
 export function assertUnsignedPlanFresh({currentBlockHeight,lastValidBlockHeight,blockhashValid}){if(blockhashValid!==true||!Number.isSafeInteger(currentBlockHeight)||!Number.isSafeInteger(Number(lastValidBlockHeight))||BigInt(currentBlockHeight)+20n>=BigInt(lastValidBlockHeight)){const e=Error('unsigned_plan_expired');e.code='unsigned_plan_expired';throw e;}return true;}
-export async function createNativeTransport({terms,statePath,walletPath=testWalletPath()}) {
+export async function createNativeTransport({terms,statePath,walletPath=testWalletPath(),rpcURL}) {
   const environment=allowed[terms.mode];
   if(!environment||terms.rpc!==environment.rpc||terms.genesisHash!==environment.genesis||terms.mint!==environment.mint||terms.program!==PROGRAM||terms.tokenProgram!==TOKEN)throw new Error('frozen_environment_mismatch');
+  let endpoint=terms.rpc;
+  if(rpcURL!==undefined){const url=new URL(rpcURL);if(terms.mode!=='devnet'||url.username||url.password||url.hash||!(url.protocol==='https:'||(url.protocol==='http:'&&['127.0.0.1','localhost'].includes(url.hostname))))throw new Error('devnet_rpc_url_invalid');endpoint=url.href;}
   const depositBaseUnits=terms.depositBaseUnits??'20000';
   if(!/^[1-9][0-9]*$/.test(depositBaseUnits)||BigInt(depositBaseUnits)>10000000n)throw new Error('deposit_invalid');
   const deposit=BigInt(depositBaseUnits);
   const sdk=await loadNativeSDK(),{kit,token,generated,paymentChannels,sessionClient,sessionServer,onChain,voucher: voucherSDK}=sdk;
   // HTTP 429 (public RPC rate limit) is retried with the IDENTICAL request body; for
   // sendTransaction that is the same signed wire, so no new identity can arise.
-  async function rpc(method,params=[]) {const body=JSON.stringify({jsonrpc:'2.0',id:1,method,params});let response;for(let attempt=0;;attempt++){response=await fetch(terms.rpc,{method:'POST',redirect:'error',headers:{'Content-Type':'application/json'},body,signal:AbortSignal.timeout(15000)});if(response.status!==429||attempt>=4)break;await new Promise(r=>setTimeout(r,1000*(attempt+1)));}if(!response.ok)throw new Error(`rpc_http_${response.status}`);const data=await response.json();if(data.error)throw new Error(`${method}:${JSON.stringify(data.error)}`);return data.result;}
+  async function rpc(method,params=[]) {const body=JSON.stringify({jsonrpc:'2.0',id:1,method,params});let response;for(let attempt=0;;attempt++){response=await fetch(endpoint,{method:'POST',redirect:'error',headers:{'Content-Type':'application/json'},body,signal:AbortSignal.timeout(15000)});if(response.status!==429||attempt>=4)break;await new Promise(r=>setTimeout(r,1000*(attempt+1)));}if(!response.ok)throw new Error(`rpc_http_${response.status}`);const data=await response.json();if(data.error)throw new Error(`${method}:${JSON.stringify(data.error)}`);return data.result;}
   if(await rpc('getGenesisHash')!==terms.genesisHash)throw new Error('genesis_mismatch');
   const program=(await rpc('getAccountInfo',[terms.program,{encoding:'base64',commitment:'finalized'}])).value;
   if(!program?.executable||sha(Buffer.from(program.data[0],'base64'))!==terms.programAccountHash)throw new Error('deployment_changed');
+  if(rpcURL!==undefined){const bytes=Buffer.from(program.data[0],'base64');if(bytes.readUInt32LE(0)!==2)throw new Error('deployment_changed');const address=kit.getAddressDecoder().decode(bytes.subarray(4,36)),pd=(await rpc('getAccountInfo',[address,{encoding:'base64',commitment:'finalized'}])).value;if(!terms.programDataHash||pd?.owner!==program.owner||sha(Buffer.from(pd.data[0],'base64'))!==terms.programDataHash)throw new Error('deployment_changed');}
   // Load the ignored local wallet only at an explicit signing call, never
   // during construction, unsigned preflight, lookup or reconciliation.
   let signerCache;

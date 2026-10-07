@@ -16,6 +16,7 @@ artifacts/private/
 *.db
 .DS_Store
 .vercel/
+outputs/network-scale/
 
 # Intermediate review captures and raw tool output (local only; ~170MB). Final/committed shots stay tracked.
 docs/frontend/reviews/shots/*/

@@ -16,11 +16,19 @@ export function walletIdentities(path){
  for(const k of [w.sponsor,w.publisher]){check(k&&Array.isArray(k.secret)&&k.secret.length===64&&k.secret.every(b=>Number.isInteger(b)&&b>=0&&b<=255),'wallet_invalid');const key=createPrivateKey({key:Buffer.concat([Buffer.from('302e020100300506032b657004220420','hex'),Buffer.from(k.secret.slice(0,32))]),format:'der',type:'pkcs8'}),pub=Buffer.from(createPublicKey(key).export({format:'jwk'}).x,'base64url');check(pub.equals(Buffer.from(k.secret.slice(32)))&&base58(pub)===k.address,'wallet_keypair_mismatch');}
  check(w.sponsor.address!==w.publisher.address,'wallets_not_distinct');return {payer:w.sponsor.address,payee:w.publisher.address};
 }
-export async function nativeRPC(method,params=[]){
- const body=JSON.stringify({jsonrpc:'2.0',id:1,method,params});let r;
- for(let i=0;i<4;i++){r=await fetch(network.rpc,{method:'POST',redirect:'error',headers:{'content-type':'application/json'},body,signal:AbortSignal.timeout(15000)});if(r.status!==429||i===3)break;await new Promise(done=>setTimeout(done,1000*(i+1)));}
- check(r.ok,`devnet_rpc_http_${r.status}`);const j=await r.json();check(!j.error,'devnet_rpc_error');return j.result;
+export function validateDevnetRPCURL(value){
+ let u;try{u=new URL(value);}catch{check(false,'devnet_rpc_url_invalid');}
+ check(u.protocol==='https:'||(u.protocol==='http:'&&['127.0.0.1','localhost'].includes(u.hostname)),'devnet_rpc_url_invalid');
+ check(!u.username&&!u.password&&!u.hash,'devnet_rpc_url_invalid');return u.href;
 }
+export function createProductDevnetRPC(rpcURL=network.rpc){
+ const endpoint=validateDevnetRPCURL(rpcURL);
+ return async function rpc(method,params=[]){
+ const body=JSON.stringify({jsonrpc:'2.0',id:1,method,params});let r;
+ for(let i=0;i<4;i++){r=await fetch(endpoint,{method:'POST',redirect:'error',headers:{'content-type':'application/json'},body,signal:AbortSignal.timeout(15000)});if(r.status!==429||i===3)break;await new Promise(done=>setTimeout(done,1000*(i+1)));}
+ check(r.ok,`devnet_rpc_http_${r.status}`);const j=await r.json();check(!j.error,'devnet_rpc_error');return j.result;
+ };}
+export const nativeRPC=createProductDevnetRPC();
 export async function inspectProductDevnet({payer,payee,depositBaseUnits='20000',expected,simulate=false,rpc=nativeRPC,sdkProvider=loadNativeSDK}={}){
  const sdk=await sdkProvider(),{kit,token,generated,paymentChannels,onChain,manifest}=sdk;
  check(await rpc('getGenesisHash')===network.genesisHash,'devnet_genesis_mismatch');
