@@ -70,3 +70,10 @@
   .voucher { width: 150px; left: 0; translate: none; }
   .voucher[data-v="1"] { left: 118px; }
 }
+
+/* The current run: first, second and final cumulative voucher. */
+.vouchers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; height: auto; min-height: 92px; margin: 0; }
+.voucher { position: relative; left: auto; top: auto; translate: none; width: auto; }
+.voucher[data-v="1"] { top: auto; }
+.stage[data-step="2"] .voucher[data-v="2"] { opacity: 0; transform: translateY(-30px); }
+@media (max-width: 899px) { .voucher, .voucher[data-v="1"] { left: auto; width: auto; } .vouchers { height: auto; gap: 6px; } .voucher { padding: 10px 8px; } .voucher b { font-size: 18px; } }

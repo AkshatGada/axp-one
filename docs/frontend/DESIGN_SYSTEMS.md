@@ -1,6 +1,6 @@
 # axp.one design systems
 
-> **Owner decision, 2026-10-02 (supersedes the colour rules below):** the identity is **ULTRAMARINE**.
+> **Current identity, confirmed 2026-10-07:** the identity is **ULTRAMARINE**.
 > Warm paper `#f4f2ec`, blue-biased ink `#0e1220`, and ONE electric ultramarine `--brand #2b3bff`
 > (deep `#1a26cf`, wash `#e7e9ff`, on-stage `#6573ff`). The dark stage is a deep ultramarine night
 > `#0a0e2a`, not grey. Ultramarine is used the way ContextHint uses its vermillion: bold, big, only where
@@ -14,10 +14,10 @@
 
 Two design systems on one shared foundation, the same pattern ContextHint uses
 (editorial landing system + product system sharing tokens). Owner direction:
-the personal-site typography and spacing taste, warm neutral paper, ink, steel
-as the only accent (fine edges, emphasis, one matte dark stage). No purple, no
-green, no gloss, no chrome surfaces, no icon set, no decorative dots or numbered
-eyebrows. Light paper with one dark stage.
+the personal-site typography and spacing taste, warm paper, blue-biased ink,
+and ultramarine emphasis. ContextHint evidence uses orange. No gloss or chrome
+surfaces, decorative icon sets, or numbered eyebrows. Light paper with one dark stage.
+Solana purple is reserved for Solana-specific presentation slides.
 
 ```
 design-system/
@@ -38,25 +38,29 @@ inside a Prospectus figure frame, because it is showing the product itself.
 
 | Token | Value | Role |
 |---|---|---|
-| `--paper` | #f5f4f0 | page |
-| `--paper-2` | #eeede8 | sunk band, wells |
-| `--white` | #fffefa | raised sheet |
-| `--ink` | #171b1f | primary text, solid buttons, settled money |
-| `--muted` | #444d53 | secondary text (AA on paper) |
-| `--steel` | #626c73 | emphasis colour, labels, focus-adjacent |
-| `--steel-dark` | #37444b | strong steel, active state |
-| `--silver` | #c8ccce | hatch, disabled fill |
-| `--line` | #b9bec0 | hairlines |
-| `--mist` | #e7e9e9 | quiet fills |
-| `--stage` | #1b2226 | the one matte dark stage |
-| `--stage-2` | #232c31 | raised surface on stage |
-| `--stage-line` | #677177 | hairline on stage |
-| `--stage-ink` | #eef0ee | text on stage |
-| `--stage-muted` | #9aa5ab | secondary text on stage |
-| `--focus` | #475962 | focus ring |
+| `--brand` | #2b3bff | primary action and emphasis |
+| `--brand-deep` | #1a26cf | strong brand |
+| `--brand-wash` | #e7e9ff | quiet brand fill |
+| `--contexthint` | #f65a20 | ContextHint evidence |
+| `--paper` | #f4f2ec | page |
+| `--paper-2` | #ecebe4 | sunk band, wells |
+| `--white` | #fbfaf6 | raised sheet |
+| `--ink` | #0e1220 | primary text, solid buttons, settled money |
+| `--muted` | #4c5266 | secondary text (AA on paper) |
+| `--steel` | #5a6178 | neutral labels and secondary data |
+| `--steel-dark` | #2f3550 | strong neutral |
+| `--silver` | #c3c6d2 | hatch, disabled fill |
+| `--line` | #c9cad3 | hairlines |
+| `--mist` | #e9e9ef | quiet fills |
+| `--stage` | #0a0e2a | the one matte dark stage |
+| `--stage-2` | #111743 | raised surface on stage |
+| `--stage-line` | #3a4385 | hairline on stage |
+| `--stage-ink` | #eef0ff | text on stage |
+| `--stage-muted` | #9aa2d9 | secondary text on stage |
+| `--focus` | #2b3bff | focus ring |
 
 Steel is never a background fill larger than a chip, except the stage.
-Emphasis inside prose is a colour shift to steel (`em { font-style: normal; color: var(--steel) }`), never italics.
+Emphasis inside prose uses ultramarine (`em { font-style: normal; color: var(--brand) }`), never italics.
 
 ### Type families (PolySans only, 8 local files, no italics)
 
@@ -92,7 +96,7 @@ video compression and for colour-blind viewers. Colour is ink/steel only.
 | `inferred` | half circle ◐ | Inferred | ContextHint hypothesis (hint), not a fact or setting |
 | `fictional` | open square □ | Fictional | Declared by a fictional advertiser for the demo |
 | `policy` | diamond ◆ | Policy | Deterministic exchange rule (eligibility, cap, tie-break, no-fill) |
-| `settled` | solid ink bar ▬ | Settled | Finalized sandbox settlement fact |
+| `settled` | solid ink bar ▬ | Settled | Finalized settlement on the labelled network |
 | `synthetic` | dashed square ⬚ | Synthetic | Laboratory or layout fixture, never acceptance |
 | `replay` | ring ◎ | Recorded replay | Read-only presentation of the saved run |
 | `illustrative` | open triangle △ | Illustrative | Marketing explanation, not a recorded event |
@@ -101,7 +105,7 @@ video compression and for colour-blind viewers. Colour is ink/steel only.
 ### Money states (Ledger uses these; Prospectus may show them in specimens)
 
 Distinguished by fill pattern + word, never colour alone:
-`deposit` outlined bar, `reserved` dashed fill, `accepted` steel hatch, `authorized` steel solid,
+`deposit` outlined bar, `reserved` dashed fill, `accepted` brand hatch, `authorized` brand solid,
 `settled` ink solid, `refunded` paper with ink outline + return arrow, `pending` / `unknown`
 dotted outline with the word, never shown as settled. Amounts render in mono as test USDC with
 six-decimal base units available on inspect (e.g. `0.004 USDC` / `4000`).

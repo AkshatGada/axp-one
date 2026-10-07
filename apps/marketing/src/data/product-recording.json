@@ -1,0 +1,29 @@
+{
+  "chapters": [
+    {
+      "at": 4.81,
+      "label": "Advertiser setup"
+    },
+    {
+      "at": 47.57,
+      "label": "Publisher chat"
+    },
+    {
+      "at": 65.52,
+      "label": "ContextHint + Jev"
+    },
+    {
+      "at": 73.47,
+      "label": "Auction"
+    },
+    {
+      "at": 77.56,
+      "label": "Delivery"
+    },
+    {
+      "at": 95.96,
+      "label": "Solana settlement"
+    }
+  ],
+  "durationSeconds": 112.8
+}

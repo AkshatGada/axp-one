@@ -1,103 +1,100 @@
-# Architecture
+# Current system architecture
 
-Proposal v0.1. A modular monolith with explicit adapter seams; no microservice
-fleet, Kafka, Kubernetes, CDN or Cloudflare dependency for the local MVP.
+Implemented release, 7 October 2026. The earlier component proposals are preserved
+in [MVP_MASTER_PLAN.md](MVP_MASTER_PLAN.md); this page describes the current product.
 
-```text
-Advertiser operator -> Campaign API -> Immutable campaign/creative versions
-                                         |
-Publisher reference app -> SDK -> Opportunity gate and minimal context
-                                         |
-                                  Exchange coordinator
-                                 /       |       \
-                            Buyer A   Buyer B   Buyer C
-                         (replaceable DecisionEngine)
-                                 \       |       /
-                       Deterministic bid policy + first-price auction
-                                         |
-                            Atomic budget reservation + award
-                                         |
-                          Publisher sponsored-card renderer
-                                         |
-                          Delivery verifier + durable ledger
-                                         |
-                      Bounded signer -> payment-session adapter
-                                         |
-                           Solana channel settlement/refund
+## One user turn
+
+```mermaid
+flowchart LR
+  A[Advertiser dashboard] --> C[Approved campaign + funded channel]
+  Q[Publisher question] --> O[Example chat: DeepSeek]
+  O --> Answer[Independent answer]
+  Q --> S[Publisher SDK / same-origin proxy]
+  C --> E[Campaign eligibility]
+  S --> E
+  H[ContextHint snapshot + embeddings] --> R[Evidence retrieval]
+  R --> J[Jev fit + intent + creative]
+  E --> J
+  J --> B[Deterministic bid policy + first-price auction]
+  B --> W[Budget reservation + award]
+  W --> Card[Exact Sponsored card]
+  Answer --> Card
+  Card --> D[DOM observation via publisher server]
+  D --> Receipt[Signed receipt + one accepted charge]
+  Receipt --> V[Cumulative off-chain authorization]
+  V --> Close[Solana channel close: publisher payout + refund]
 ```
 
-## Proposed stack and layout
+The advertiser's declarations are hard eligibility inputs. Its authored hints
+and retrieved observed/inferred ContextHint evidence are separate Jev inputs.
+Jev does not select amounts, override caps or sign payments. The highest valid
+admitted bid wins the deterministic first-price auction. No-fill leaves the
+independent answer available; an award reserves budget until accepted delivery,
+explicit failure or expiry. Stable turn/award identities prevent duplicate charges.
 
-TypeScript, a supported Node LTS compatible with pinned PayKit, ordinary HTTP,
-SQLite with transactions for the single-host MVP, schema validation and an
-append-only event/outbox ledger. Choose exact package releases in the feasibility
-phase; no unbounded latest dependencies. Amounts are integer base-unit strings.
+DeepSeek is only the example publisher app's organic provider. An integrating
+publisher keeps its own LLM. The answer receives no advertiser material. The ad
+path starts in parallel, but the example displays its Sponsored card after the
+answer. No zero-latency or organic endorsement claim follows from parallelism.
 
-Proposed future folders (not yet implemented):
+## Implementation ownership
 
-```text
-apps/backend/          HTTP API, local authorization, coordinator
-apps/reference-ui/     plain advertiser/publisher/chat/testing UI
-packages/contracts/   JSON Schema/OpenAPI + typed DTOs
-packages/dsp/         context-isolated agent runner and deterministic baseline
-packages/exchange/    eligibility, auction, reservations, ledger
-packages/publisher/   opportunity + render acknowledgement SDK
-packages/payments/    payment adapter, bounded signer, recovery
-packages/adcp/        explicitly scoped standards mapping adapter
-tests/                fixtures, concurrency, fault injection, integration
-docs/                 source of truth
-local-state/           ignored private state
-artifacts/             sanitized correlated evidence
-```
+| Source | Responsibility |
+|---|---|
+| `apps/marketing`, `design-system/prospectus` | Landing and chaptered video |
+| `apps/product-ui`, `design-system/ledger` | Dashboard, chat, internals and SDK guide |
+| `packages/product/service.mjs`, `api.mjs` | Campaign lifecycle and product API |
+| `packages/product/decisions.mjs`, `packages/ml` | Evidence-backed Jev requests and validated decisions |
+| `packages/exchange` | Integer budgets, eligibility, first-price auction, reservations and charges |
+| `packages/publisher-sdk` | Server transport, safe native rendering, observation and receipt forwarding |
+| `packages/product/organic.mjs` | Independent DeepSeek admission and result |
+| `packages/product/payments.mjs`, `native.mjs`, `packages/payments` | Accepted-ledger vouchers, pinned native channel adapter and recovery |
+| `packages/product/hosted.mjs`, `packages/hosted` | Private encrypted Blob snapshots, CAS/leases and Vercel entry point |
+| `scripts/build-site.mjs`, `vercel.json` | One deployment with static clients and Node API |
 
-## Responsibilities
+All clients use one backend authority. No frontend implements another auction,
+ledger or signer. The dependency-free publisher SDK is shipped as source; it is
+not an npm release. The committed screened evidence lives in `artifacts/v2/evidence`.
+The original recorded/live MVP remains in its own `/mvp/` and `/api/runs/*` namespace.
 
-1. Campaign module: operator-controlled policy, approved creative and immutable
-   versions. The model cannot modify its own budget or campaign activation.
-2. Opportunity module: coarse intent, constraints, publisher/slot identity and
-   consent eligibility. Raw chats never go to bidders by default.
-3. DSP runner: each advertiser gets only its campaign, normalized context and its
-   non-financial profile. Budget snapshots stay in deterministic bidder policy.
-   Jev may recommend bid/skip and creative through DecisionEngine;
-   code computes bounded integer bids. No competitors' bids, wallet key or account
-   admin token. Strategic campaign-planning agents stay off this fast path.
-4. Exchange: eligibility and auction rules; revalidates budget atomically at award.
-5. Delivery module: expiring single-use render token and authenticated publisher
-   receipt; accepted delivery consumes the reservation exactly once.
-6. Signer policy: only durable accepted charges within network/recipient/campaign
-   ceilings may advance a voucher. Models cannot directly request arbitrary signing.
-7. Payment adapter: protocol-native messages, status lookup and on-chain reconciliation.
-8. Reporting: distinguish reserved, accrued, authorized, settled and refunded money.
+## Hosted state and external effects
 
-## Durable entities
+Vercel invocations restore SQLite state from two encrypted private Blob snapshots:
+financial state (campaigns, provider admissions, awards, receipts, native sessions)
+and organic state (example answers/admissions). Neither warm memory nor temporary
+disk is authoritative. Read-only GETs project the committed snapshot without a lease.
+Financial mutations use an exact-value CAS record containing the snapshot and its
+lease; strong Blob ETags fence stale workers. Busy writers return retryable 429.
 
-Advertisers, publishers, campaign_versions, creative_versions, slot_policies,
-opportunities, bidder_runs, bids, auctions, awards, reservations, deliveries,
-charges, payment_sessions, voucher_intents, settlement_attempts, outbox, events.
-Every entity includes schema version, run ID, mode, creation time and correlation ID.
-Private auth and signer records stay out of reporting/export projections.
+Durable checkpoints precede paid provider calls and signed transaction broadcast.
+Saved admissions are not automatically rerun after uncertainty. Signed bytes and
+signatures survive cold starts, so recovery looks up the existing native identity.
+Mutation responses are released after the final snapshot is durable. The financial
+and organic records are separate stores, not one distributed atomic transaction.
+See [HOSTING.md](product/HOSTING.md) for operational details and configuration.
 
-Single SQLite writer transaction serializes cap-sensitive updates. Outbox intent
-is committed before any network side effect. No DB lock held during model/RPC
-calls. The asynchronous worker reconciles durable intents after crashes.
+## Solana payment channels
 
-## Standards boundaries
+The current network is public Solana Devnet with Circle test USDC. Each fictional
+advertiser has a separate channel funded by the bounded shared demo sponsor.
+Opening deposits collateral on-chain. Accepted receipts advance signed cumulative
+vouchers off-chain; there is no transaction for each ad. Closing pays the saved
+latest authorized total to the publisher and returns the unused deposit. SOL
+network fees/rent are separate from USDC amounts. A receipt or voucher is not
+proof that a payout finalized; recorded finality and token deltas establish that.
 
-- AdCP: candidate negotiation/inventory/reporting adapter, not a replacement for
-  exchange rules or a payment standard. Pin schemas and capability scope first.
-- OpenRTB: vocabulary and future interoperability reference; CPM/unit conversion
-  is mandatory for an actual adapter. No fake conformance claim.
-- MPP: preferred repeated-payment wire interface, pending feasibility.
-- x402: optional later exact-payment path; HTTP 402 is not a bid solicitation.
-- MCP: optional agent tool transport; tools never elevate budget/signing authority.
-- WebMCP/Cloudflare are not prerequisites for this MVP and are not payment protocols.
+Models and browsers never choose a recipient, mint, key or arbitrary monetary
+payload. Limits, expiry, accepted-charge correspondence and duplicate/restart
+behavior are enforced by the backend. Preserve funded identities during recovery;
+never reset state or create another deposit to repair an uncertain operation.
 
-## Final frontend separation
+## Evidence and scope
 
-The main builder owns stable contracts, mocked response fixtures, reference
-components and integration tests. The specialist owns final layout, visual
-design, animation and polished responsive screens. Both consume the same API;
-no second ledger, auction or signer is implemented in frontend code.
-
-See DECISION_ENGINE.md and JEV_BENCHMARK_PLAN.md: Jev is an approved experimental
-buyer implementation, not a chosen dependency or demonstrated latency advantage.
+[Native acceptance](../artifacts/product/devnet-acceptance.json) and the
+[hosted recording](../artifacts/product/recorded-walkthrough/acceptance.json)
+record actual finalized channels, payout/refund and receipt replay. Offline tests
+use explicit injected fixtures. These demonstrate the bounded product flow, not
+mainnet readiness, independent advertiser wallets, production multi-tenancy,
+conversion lift or fleet throughput. ContextHint embeddings and inferred context
+inform retrieval; no newly trained AXP model or reconstructed ChatGPT auction is claimed.

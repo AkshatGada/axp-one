@@ -13,8 +13,9 @@
 .scale li { display: block; }
 .scale b { display: block; font-family: var(--font-display); font-weight: 400; font-size: clamp(21px, 1.8vw, 28px); line-height: 1.08; letter-spacing: -0.02em; }
 .scale span { display: block; margin-top: 2px; font-size: 15px; }
-.traction { margin: 0; max-width: 44ch; font-size: 17px; line-height: 1.45; font-weight: 500; }
-.use { margin: -10px 0 0; max-width: 44ch; font-size: 16px; line-height: 1.45; }
+.scale .advantageLabel { margin: 0 0 10px; font-size: 13px; font-weight: 500; }
+.scale p { margin: 12px 0 0; max-width: 26ch; font-size: 15px; line-height: 1.4; }
+.use { margin: 0; max-width: 44ch; font-size: 16px; line-height: 1.45; }
 .action { justify-self: start; display: inline-flex; align-items: center; gap: 36px; min-height: 54px; padding: 0 20px 0 22px; border-radius: var(--px-r-sm); background: var(--ink); color: #fff; font-size: 17px; font-weight: 500; text-decoration: none; transition: transform var(--d-ui) var(--ease), box-shadow var(--d-ui) var(--ease); }
 .action:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -14px rgba(14, 18, 32, 0.8); }
 

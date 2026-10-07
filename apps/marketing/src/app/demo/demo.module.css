@@ -1,0 +1,16 @@
+.header { display: flex; align-items: center; gap: 24px; padding: 24px var(--gutter); border-bottom: 1px solid var(--line); background: var(--paper); }
+.wordmark { color: var(--ink); text-decoration: none; font-family: var(--font-display); font-size: 26px; font-weight: 500; letter-spacing: -.03em; }
+.header > span { border-left: 1px solid var(--line); padding-left: 24px; color: var(--muted); font-size: 14px; }
+.header > :last-child { margin-left: auto; }
+.main { max-width: 1480px; margin: auto; padding: clamp(48px,7vw,100px) var(--gutter) 36px; }
+.intro { margin-bottom: 40px; }
+.label { margin: 0 0 16px; color: var(--brand); font-size: 14px; font-weight: 500; }
+.intro h1 { margin: 0; font-family: var(--font-display); font-size: clamp(42px,5.5vw,82px); font-weight: 300; line-height: .98; letter-spacing: -.045em; }
+.intro h1 span { color: var(--brand); }
+.lead { margin: 24px 0 0; font-size: clamp(17px,1.5vw,21px); color: var(--muted); }
+.next { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; margin-top: 72px; padding-top: 36px; border-top: 1px solid var(--line); }
+.next h2 { margin: 0; font-family: var(--font-display); font-size: 40px; line-height: 1.05; font-weight: 300; letter-spacing: -.025em; }
+.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 14px; }
+.footer > a { color: var(--ink); text-underline-offset: 4px; }
+@media(max-width:650px) { .header { gap: 16px; } .header > span { display: none; } .header > :last-child { font-size: 13px; } .main { padding-top: 48px; } .intro { margin-bottom: 28px; } .next { margin-top: 40px; } }

@@ -1,0 +1,262 @@
+// Explicit isolated operator recovery v5. Historical v1 policies remain immutable. No new deposits, charges, or vouchers.
+// Never execute this helper as a check: --check parses it without opening state.
+// Signed replacements require pinned decoded expiry proof; all retries retain identity.
+import assert from 'node:assert/strict';
+import {readFileSync,existsSync} from 'node:fs';
+import {join,resolve} from 'node:path';
+import {parseEnv} from 'node:util';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {DatabaseSync} from 'node:sqlite';
+import {createBenchmarkCoordinator} from '../axp-one/packages/network-scale/coordinator.mjs';
+import {createNativeTransport} from '../axp-one/packages/payments/sdk-transport.mjs';
+import {hashNetworkRecord} from '../axp-one/packages/payments/network-adapter.mjs';
+import {ledgerObligations} from '../axp-one/packages/v3/devnet-live.mjs';
+import {NATIVE_LIMITS} from '../axp-one/packages/product/native.mjs';
+import {BENCHMARK_PROFILE as P} from '../axp-one/packages/network-scale/profile.mjs';
+const root=resolve(import.meta.dirname,'../axp-one'),dir=join(root,'local-state/network-scale-2026-10-07');
+const sha=x=>createHash('sha256').update(x).digest('hex'),hash=x=>sha(JSON.stringify(x));
+const THRESHOLD_POLICY_HASH='1cfdbd062f2e8f83a67e5b866d9b987fdc60c46d6ffd6a8d830cf0406ab9e903';
+const EXPIRY_POLICY_HASH='baf5828318cb7231ca4fefab472cca60bdb01c16aeaec2ec0ad120409657ac22';
+const PRIOR_RECOVERY_POLICY_HASH='87314ae1248caca999687a95cba39e021c14bfe0fb20dda638117999a030704d';
+const V2_RECOVERY_POLICY_HASH='f8e8fa12a62d5cabb036d9fd76d5db030dcbe85ba21472b873e60dc39b787ad6';
+const V3_RECOVERY_POLICY_HASH='6ef67639cf0bbfb6a1d7a1f4310a69ad3c4f059c122a9a0f21392a8d6dc9b0ed';
+const V4_RECOVERY_POLICY_HASH='8617ab8d1082ce1fd305e56ce9999d8a82dd8ae62c6a823a73ebaa4c067bdd84';
+const FIFTH_EXPIRY_POLICY_HASH='ad3f8a9ed98f60b05f2442e83a04796c9ff34687aded131ad952ae03f78218dc';
+const FIFTH_PROOF_FILE_HASH='b84278fa8f4e44109995de761c21e19b664091f2edf798490205be95ee285e73';
+const FOURTH_EXPIRY_POLICY_HASH='8ea713acd2f040498b02fcb98272c1ddeb671b37217b5f3a4087feda0546ebc4';
+const FOURTH_PROOF_FILE_HASH='80ce0f4f4787b7f6231f3d49dbf369da47bd874eec18dab3091f687263de7942';
+const FROZEN_BUILD_POLICY_HASH='4cf4270a4f5af06849fe00b19975c2c209d2183c10a121d410b84c641527c930';
+const THIRD_EXPIRY_POLICY_HASH='609e3ed4180e71fc0d79333d1fb42612a729e669bacf6d384bd75ef2ec368f4a';
+const THIRD_PROOF_FILE_HASH='ae0713ddfc8f1deefd144626d8d48d7db562e7576f561d58131e66f9c1e2244a';
+const SECOND_EXPIRY_POLICY_HASH='cdbc6a2f64ba4a94f747945981e569bfed1f34c4f677f30def80b44a4970c572';
+const HISTORICAL_PROOF_FILE_HASH='03bb784c4d03a49ff394c6407907f8fa14d08e720f1a59e98445ae5fd3ac3857';
+const SECOND_PROOF_FILE_HASH='0b74d6cfa3f5f765ae8e6b3f2b1379f503deabbba737c256bff1b64fc537cdac';
+const policyHash=sha(readFileSync(import.meta.filename));
+const trustedRecoveryPolicy=value=>value===policyHash||value===PRIOR_RECOVERY_POLICY_HASH||value===V2_RECOVERY_POLICY_HASH||value===V3_RECOVERY_POLICY_HASH||value===V4_RECOVERY_POLICY_HASH;
+const money=x=>{assert.match(x,/^(0|[1-9][0-9]*)$/);return BigInt(x);};
+const chargeHash=x=>{const y=structuredClone(x);delete y.status;return hashNetworkRecord(y);};
+function nativeSession(w,s){
+ const db=new DatabaseSync(join(w.stateDir,'native.sqlite'),{readOnly:true});let row;
+ try{row=db.prepare('SELECT body FROM native_sessions WHERE id=?').get(s.protocolChannelId);}finally{db.close();}
+ assert.ok(row);const n=JSON.parse(row.body,(_,v)=>v&&Object.keys(v).length===1&&v.$axpBigInt!==undefined?BigInt(v.$axpBigInt):v);
+ assert.equal(n.sealed,false);assert.equal(n.settledSignature,undefined);assert.equal(n.settledOnChain,0n);
+ assert.equal(n.cumulative,money(s.authorizedBaseUnits));assert.equal(n.pendingDeliveries.length,0);
+ assert.equal(n.committedDeliveries.length,s.intents.length);if(s.intents.length)assert.equal(n.highestVoucherSignature,s.intents.at(-1).voucher.signature);
+ return hash(JSON.parse(row.body));
+}
+function assertLedger(w,s){
+ assert.equal(s.termsHash,hashNetworkRecord(s.terms));assert.equal(s.open.status,'finalized');assert.ok(s.close);
+ assert.equal(s.intents.every(i=>i.status==='authorized'),true);
+ const o=ledgerObligations(w.service.exchange,s.channelId);
+ assert.equal(o.reservedBaseUnits,'0');assert.equal(o.acceptedBaseUnits,s.authorizedBaseUnits);
+ assert.equal(o.charges.length,s.intents.length);assert.equal(s.watermark.cumulativeAmountBaseUnits,s.authorizedBaseUnits);
+ assert.equal(s.watermark.sequence,String(s.intents.length));
+ assert.equal(s.watermark.orderedChargeCommitment,hashNetworkRecord(o.charges.map(chargeHash)));
+ for(let i=0;i<s.intents.length;i++){assert.equal(s.intents[i].chargeHash,chargeHash(o.charges[i]));assert.equal(s.intents[i].voucherRecordHash,hashNetworkRecord(s.intents[i].voucher));}
+ assert.equal(s.watermark.finalVoucherHash,s.intents.at(-1)?.voucherRecordHash??null);
+ assert.equal(s.close.id,`close:${hashNetworkRecord({termsHash:s.termsHash,watermark:s.watermark})}`);
+}
+function frozenObligation(w,s){assertLedger(w,s);assert.equal(s.phase,'closing');nativeSession(w,s);}
+function finalizedObligation(w,s){
+ assertLedger(w,s);assert.equal(s.phase,'finalized');assert.equal(s.close.status,'finalized');assert.equal(s.close.receipt.finality,'finalized');
+ assert.equal(s.close.receipt.txSignature,s.close.signed.txSignature);assert.equal(s.close.signedRecordHash,hashNetworkRecord(s.close.signed));
+ assert.equal(s.close.receipt.settledBaseUnits,s.authorizedBaseUnits);assert.equal(s.close.receipt.publisherDeltaBaseUnits,s.authorizedBaseUnits);
+ assert.equal(money(s.close.receipt.settledBaseUnits)+money(s.close.receipt.refundBaseUnits),money(s.terms.depositBaseUnits));
+}
+function validateExpiryProof(ep,s,op,{fresh=true}={}){
+ assert.equal(ep.schemaVersion,'axp.operator-expired-close-proof.v1');assert.equal(ep.outcome,'operator_proven_expired_unlanded');
+ assert.equal(ep.sameProvider,true);assert.equal(ep.independentProviders,false);assert.equal(ep.signed,false);assert.equal(ep.broadcast,false);
+ assert.equal(ep.channelId,s.channelId);assert.equal(ep.protocolChannelId,s.protocolChannelId);assert.equal(ep.closeId,op.id);
+ assert.equal(op.signedRecordHash,hashNetworkRecord(op.signed));assert.equal(ep.signedRecordHash,op.signedRecordHash);
+ assert.equal(ep.signature,op.signed.txSignature);assert.equal(op.attempt.txSignature,ep.signature);assert.equal(op.attempt.signedRecordHash,ep.signedRecordHash);
+ assert.equal(ep.wireHash,sha(Buffer.from(op.signed.wireBase64,'base64')));assert.equal(ep.observations.length,2);
+ const [a,b]=ep.observations;
+ for(const o of [a,b]){
+  assert.equal(o.signatureAbsent,true);assert.equal(o.transactionAbsent,true);assert.equal(o.blockhashValid,false);
+  assert.equal(o.protocolChannelStatus,'Open');assert.equal(o.unspentDepositBaseUnits,s.terms.depositBaseUnits);assert.equal(o.deploymentVerified,true);
+  assert.equal(String(o.lastValidHeight),String(op.signed.lastValidBlockHeight));assert.ok(BigInt(o.height)>BigInt(op.signed.lastValidBlockHeight));
+  assert.ok(Number.isSafeInteger(o.slot)&&o.slot>0);assert.ok(Number.isSafeInteger(o.escrowSlot)&&o.escrowSlot>=o.slot);
+  assert.match(o.channelAccountHash,/^[a-f0-9]{64}$/);assert.ok(Number.isFinite(Date.parse(o.at)));
+ }
+ assert.ok(Date.parse(b.at)-Date.parse(a.at)>=15000);assert.ok(b.slot>a.slot);assert.ok(b.escrowSlot>a.escrowSlot);assert.ok(b.height>a.height);
+ assert.equal(a.channelAccountHash,b.channelAccountHash);
+ if(fresh){const age=Date.now()-Date.parse(b.at);assert.ok(age>=0&&age<15*60*1000,'refresh readonly original-close proof before first archival');}
+}
+function assertRetainedCaps(c,w,s,estimate){
+ assert.ok(money(s.feeReservedLamports)+estimate<=20000000n,'retained per-channel attempt fees');
+ const reservations=c.journal.all('native');
+ assert.ok(reservations.reduce((n,x)=>n+money(x.feeReserveLamports),0n)<=money(P.aggregateFeeRentLamports),'retained global fee reservation');
+ assert.ok(reservations.filter(x=>x.id.startsWith(`${w.id}:`)).reduce((n,x)=>n+money(x.feeReserveLamports),0n)<=money(NATIVE_LIMITS.aggregateFeeRentLamports),'retained worker fee reservation');
+ const all=c.workers.flatMap(x=>x.service.paymentWorker.store.list());
+ assert.ok(all.reduce((n,x)=>n+money(x.feeReservedLamports??'0'),0n)+estimate<=money(P.aggregateFeeRentLamports));
+ assert.ok(w.service.paymentWorker.store.list().reduce((n,x)=>n+money(x.feeReservedLamports??'0'),0n)+estimate<=money(NATIVE_LIMITS.aggregateFeeRentLamports));
+}
+// The journal marker and conservative reservation commit in ONE transaction.
+// A crash before the separate payment-store flag cannot add this fee twice.
+function reservePlanFee(c,w,s,estimate){
+ const nativeId=`${w.id}:${s.channelId}`,retired=s.retiredCloseAttempts??[];
+ const markerId=hash({runId:s.terms.runId,workerId:w.id,channelId:s.channelId,closeId:s.close.id,termsHash:s.termsHash,watermarkHash:hash(s.watermark),retiredSignatures:retired.map(x=>x.operation.signed.txSignature)});
+ return c.journal.tx(()=>{
+  const reservation=c.journal.get('native',nativeId);assert.ok(reservation);
+  const prior=c.journal.get('operatorFeeAdmission',markerId);
+  if(prior){assert.ok(trustedRecoveryPolicy(prior.policyHash),'fee admission belongs to a pinned recovery policy');assert.equal(prior.nativeId,nativeId);assert.equal(prior.id,markerId);assert.deepEqual(prior.retiredSignatures,retired.map(x=>x.operation.signed.txSignature));}
+  const baseline=money(prior?.baselineReservation??reservation.feeReserveLamports);
+  const additional=retired.length?(estimate>money(prior?.additionalMaximum??'0')?estimate:money(prior?.additionalMaximum??'0')):0n;
+  const ordinary=(money(s.open.signed.estimatedFeeAndRentLamports)>5000000n?money(s.open.signed.estimatedFeeAndRentLamports):5000000n)+(estimate>5000000n?estimate:5000000n);
+  const target=retired.length?baseline+additional:ordinary;
+  const next=target>money(reservation.feeReserveLamports)?target:money(reservation.feeReserveLamports);
+  const others=c.journal.all('native').filter(x=>x.id!==nativeId);
+  assert.ok(others.reduce((n,x)=>n+money(x.feeReserveLamports),0n)+next<=money(P.aggregateFeeRentLamports));
+  assert.ok(others.filter(x=>x.id.startsWith(`${w.id}:`)).reduce((n,x)=>n+money(x.feeReserveLamports),0n)+next<=money(NATIVE_LIMITS.aggregateFeeRentLamports));
+  if(next>money(reservation.feeReserveLamports))c.journal.put('native',nativeId,{...reservation,feeReserveLamports:next.toString()});
+  const row={id:markerId,nativeId,policyHash:prior?.policyHash??policyHash,baselineReservation:baseline.toString(),additionalMaximum:additional.toString(),reservedTotal:next.toString(),retiredSignatures:retired.map(x=>x.operation.signed.txSignature)};
+  if(!prior||hash(prior)!==hash(row)){c.journal.put('operatorFeeAdmission',markerId,row);c.journal.event('operator_close_fee_admitted',{...row,executingPolicyHash:policyHash,channelId:s.channelId,newDeposit:false});}
+  return markerId;
+ });
+}
+function campaignFor(w,s){const campaign=w.service.state().campaigns.find(x=>x.payment?.channelId===s.channelId);assert.ok(campaign);return campaign;}
+async function reconcileSaved(c,w,s){
+ frozenObligation(w,s);assert.ok(s.close.signed,'unknown signing without returned wire remains blocked');
+ assert.equal(s.close.signedRecordHash,hashNetworkRecord(s.close.signed));
+ const signature=s.close.signed.txSignature,wireHash=sha(Buffer.from(s.close.signed.wireBase64,'base64'));
+ const ready=s.close.status==='signed_persisted';
+ if(!ready){assert.ok(s.close.attempt);assert.equal(s.close.attempt.txSignature,signature);assert.equal(s.close.attempt.signedRecordHash,s.close.signedRecordHash);assert.ok(['submitted','submitting','unknown'].includes(s.close.status));}
+ const campaign=campaignFor(w,s);
+ let r=await w.service.campaignAction(campaign.id,ready?'settle':'reconcile');
+ for(let retry=0;r.campaign.payment.closeStatus!=='finalized'&&retry<8;retry++){
+  assert.notEqual(r.campaign.payment.closeStatus,'failed','a failed saved close needs a separate explicit policy');
+  await new Promise(resolve=>setTimeout(resolve,3000));r=await w.service.campaignAction(campaign.id,'reconcile');
+ }
+ const after=w.service.paymentWorker.store.get(s.channelId);
+ assert.equal(after.close.signed.txSignature,signature);assert.equal(sha(Buffer.from(after.close.signed.wireBase64,'base64')),wireHash);
+ assert.equal(after.close.status,'finalized','resolve exact saved identity before any next signer');finalizedObligation(w,after);
+ c.journal.event('operator_saved_close_reconciled',{policyHash,workerId:w.id,channelId:s.channelId,signature});
+}
+function provenFailedOpen(c,s){
+ assert.equal(s.open.status,'failed');assert.equal(s.open.reasonCode,'operator_proven_expired_unfunded');assert.equal(s.intents.length,0);assert.ok(!s.close);
+ const p=s.open.operatorOutcome;assert.equal(p.outcome,'expired_unfunded');assert.equal(p.signature,s.open.signed.txSignature);
+ assert.equal(p.signedRecordHash,s.open.signedRecordHash);assert.equal(s.open.signedRecordHash,hashNetworkRecord(s.open.signed));
+ assert.equal(p.wireHash,sha(Buffer.from(s.open.signed.wireBase64,'base64')));
+ assert.ok((c.journal.get('meta','run').retiredUnfundedOpens??[]).some(x=>x.signature===p.signature&&x.signedRecordHash===p.signedRecordHash&&x.wireHash===p.wireHash),'unfunded opening belongs to recorded retired set');
+}
+async function main(){
+ assert.equal(existsSync(join(dir,'coordinator.lock')),false);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-threshold-settle.mjs'))),THRESHOLD_POLICY_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-expired-close-proof.mjs'))),EXPIRY_POLICY_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-close-recovery.mjs'))),PRIOR_RECOVERY_POLICY_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-close-recovery-v2.mjs'))),V2_RECOVERY_POLICY_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-close-recovery-v3.mjs'))),V3_RECOVERY_POLICY_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-close-recovery-v4.mjs'))),V4_RECOVERY_POLICY_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-fifth-expired-close-proof.mjs'))),FIFTH_EXPIRY_POLICY_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-fifth-expired-close-proof.json'))),FIFTH_PROOF_FILE_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-fourth-expired-close-proof.mjs'))),FOURTH_EXPIRY_POLICY_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-fourth-expired-close-proof.json'))),FOURTH_PROOF_FILE_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-third-expired-close-proof.mjs'))),THIRD_EXPIRY_POLICY_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-third-expired-close-proof.json'))),THIRD_PROOF_FILE_HASH);
+ const frozenBuild=readFileSync(join(import.meta.dirname,'frozen-build-site.mjs'));assert.equal(sha(frozenBuild),FROZEN_BUILD_POLICY_HASH);
+ const deletedBuildRequirement="'network/index.html',";assert.equal(frozenBuild.toString('utf8').split(deletedBuildRequirement).length,2);
+ assert.equal(readFileSync(join(root,'scripts/build-site.mjs'),'utf8'),frozenBuild.toString('utf8').replace(deletedBuildRequirement,''),'only the exact cancelled network/index.html build requirement may differ');
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-second-expired-close-proof.mjs'))),SECOND_EXPIRY_POLICY_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-expired-close-proof.json'))),HISTORICAL_PROOF_FILE_HASH);
+ assert.equal(sha(readFileSync(join(import.meta.dirname,'network-second-expired-close-proof.json'))),SECOND_PROOF_FILE_HASH);
+ const config=parseEnv(readFileSync(join(import.meta.dirname,'network-scale.env'),'utf8'));assert.equal(config.AXP_NETWORK_OPERATOR_AUTHORIZED,'1');
+ const c=createBenchmarkCoordinator({stateDir:dir,sourceCommit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),apiKey:config.JEV_API_KEY,organicApiKey:config.DEEPSEEK_API_KEY,walletPath:join(root,'local-state/product/secrets/devnet-wallet.json'),rpcURL:config.AXP_NETWORK_DEVNET_RPC_URL,signingEnabled:true});
+ const codeHashes=Object.fromEntries(['packages/product/payments.mjs','packages/network-scale/coordinator.mjs','packages/payments/network-adapter.mjs','packages/payments/sdk-transport.mjs'].map(f=>[f,sha(readFileSync(join(root,f)))]));
+ try{
+  const files=execFileSync('git',['ls-files','--','packages','scripts'],{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean).sort(),h=createHash('sha256');for(const f of files)h.update(f).update(f==='scripts/build-site.mjs'?frozenBuild:readFileSync(join(root,f)));assert.equal(h.digest('hex'),c.journal.get('meta','run').executionSourceHash);
+  assert.equal(c.journal.get('meta','run').status,'partial');assert.equal(c.journal.all('attempt').filter(a=>a.status==='pending').length,0);
+  assert.equal(c.journal.all('turn').some(t=>['pending','awaiting_render'].includes(t.status)),false);
+  const events=c.journal.events();assert.ok(c.journal.get('meta','run').completedAt);assert.ok(events.length);assert.ok(events.every((e,i)=>e.seq===i+1),'complete retained contiguous journal');
+  const unsigned=[];
+  for(const w of c.workers)for(const s of w.service.paymentWorker.store.list())if(s.close?.status==='sign_unknown'){
+   frozenObligation(w,s);for(const k of ['signed','signedRecordHash','attempt','receipt'])assert.ok(s.close[k]===null||s.close[k]===undefined);
+   assert.equal(s.feeReservedLamports,s.open.signed.estimatedFeeAndRentLamports);assert.equal(s.retiredCloseAttempts?.length??0,0,'never apply unsigned-original proof to a replacement signer');assert.equal(s.retiredUnsignedClosePreparations?.length??0,0,'never reuse original no-signer proof after a recovery signing attempt');
+   const ends=events.filter(e=>e.type==='native_close'&&e.workerId===w.id&&e.channelId===s.channelId);assert.equal(ends.length,1);assert.equal(ends[0].status,'sign_unknown');
+   const end=ends[0].seq,prior=events.filter(e=>e.seq<end&&e.workerId===w.id&&['native_close','operator_amount_threshold_close'].includes(e.type)).at(-1)?.seq??0;
+   const window=events.filter(e=>e.workerId===w.id&&e.seq>prior&&e.seq<=end);
+   const before=window.filter(e=>e.type==='checkpoint'&&e.typeDetail==='native_before_prepareClose'),after=window.filter(e=>e.type==='checkpoint'&&e.typeDetail==='native_after_prepareClose');
+   assert.equal(before.length,1);assert.equal(after.length,1);assert.ok(before[0].seq<after[0].seq&&after[0].seq<end);
+   assert.equal(window.filter(e=>e.type==='checkpoint'&&/^native_(before|after)_(signClose|submitClose)$/.test(e.typeDetail)).length,0);
+   unsigned.push({w,s,proof:{policyHash,workerId:w.id,channelId:s.channelId,closeId:s.close.id,closeHash:hash(s.close),termsHash:s.termsHash,watermarkHash:hash(s.watermark),nativeSessionHash:nativeSession(w,s),eventWindowHash:hash(window),firstSeq:window[0].seq,lastSeq:end,codeHashes,thresholdPolicyHash:THRESHOLD_POLICY_HASH,outcome:'operator_proven_signer_not_invoked'}});
+  }
+  const proofs=[
+   {file:'network-expired-close-proof.json',producerPolicyHash:EXPIRY_POLICY_HASH,workerId:'worker-02',historicalOnly:true,historicalRecoveryPolicyHash:PRIOR_RECOVERY_POLICY_HASH},
+   {file:'network-second-expired-close-proof.json',producerPolicyHash:SECOND_EXPIRY_POLICY_HASH,workerId:'worker-04',historicalOnly:true,historicalRecoveryPolicyHash:V2_RECOVERY_POLICY_HASH,fullProbe:true},
+   {file:'network-third-expired-close-proof.json',producerPolicyHash:THIRD_EXPIRY_POLICY_HASH,workerId:'worker-06',historicalOnly:true,historicalRecoveryPolicyHash:V3_RECOVERY_POLICY_HASH,fullProbe:true},
+   {file:'network-fourth-expired-close-proof.json',producerPolicyHash:FOURTH_EXPIRY_POLICY_HASH,workerId:'worker-13',historicalOnly:true,historicalRecoveryPolicyHash:V4_RECOVERY_POLICY_HASH,fullProbe:true},
+   {file:'network-fifth-expired-close-proof.json',producerPolicyHash:FIFTH_EXPIRY_POLICY_HASH,workerId:'worker-15',historicalOnly:false,fullProbe:true}
+  ];
+  for(const spec of proofs){
+   const ep=JSON.parse(readFileSync(join(import.meta.dirname,spec.file),'utf8'));assert.equal(ep.workerId,spec.workerId);
+   if(spec.fullProbe){
+    assert.equal(ep.producerPolicyHash,spec.producerPolicyHash);assert.equal(ep.producerPolicyFile,spec.file.replace('.json','.mjs'));
+    assert.equal(Object.values(ep.bindingChecks).length,9);assert.equal(Object.values(ep.bindingChecks).every(x=>x===true),true);
+    for(const o of ep.observations){
+     assert.equal(o.signatureStatus,null);assert.equal(o.transaction,null);assert.equal(o.decodedChannel.status,0);assert.equal(o.decodedChannel.deposit,o.unspentDepositBaseUnits);
+     for(const k of ['settled','payoutWatermark','closureStartedAt','payerWithdrawnAt'])assert.equal(o.decodedChannel[k],'0');
+     assert.equal(o.decodedChannel.accountHash,o.channelAccountHash);assert.equal(o.escrowAmount,o.unspentDepositBaseUnits);
+     assert.ok(Number.isSafeInteger(o.statusSlot)&&o.statusSlot<=o.slot);
+    }
+   }
+   const ew=c.workers.find(w=>w.id===ep.workerId);assert.ok(ew);const es=ew.service.paymentWorker.store.get(ep.channelId);assert.ok(es);
+   const retired=es.retiredCloseAttempts?.find(x=>x.operation.signed?.txSignature===ep.signature);
+   if(retired){
+    assert.equal(retired.proofPolicyHash,spec.producerPolicyHash);assert.ok(trustedRecoveryPolicy(retired.recoveryPolicyHash));
+    if(spec.historicalOnly)assert.equal(retired.recoveryPolicyHash,spec.historicalRecoveryPolicyHash);
+    const saved=c.journal.get('operatorProof',retired.proofHash);assert.ok(saved);assert.equal(hash(saved),retired.proofHash);assert.equal(hash(saved),hash(ep));
+    validateExpiryProof(saved,es,retired.operation,{fresh:false});
+   }else{
+    assert.equal(spec.historicalOnly,false,'historical original archive must already exist under its pinned recovery policy');
+    frozenObligation(ew,es);assert.ok(['submitted','unknown'].includes(es.close.status));validateExpiryProof(ep,es,es.close);
+    c.journal.tx(()=>{c.journal.put('operatorProof',hash(ep),ep);c.journal.event('operator_expired_signed_close_archived',{policyHash,proofPolicyHash:spec.producerPolicyHash,workerId:ew.id,channelId:es.channelId,signature:ep.signature,proofHash:hash(ep),sameProvider:true,newDeposit:false});});
+    ew.service.paymentWorker.store.update(es.channelId,current=>{
+     assert.equal(hash(current),hash(es));const archived={operation:structuredClone(current.close),proofHash:hash(ep),proofPolicyHash:spec.producerPolicyHash,recoveryPolicyHash:policyHash,outcome:ep.outcome,at:c.journal.stamp()};
+     current.retiredCloseAttempts=[...(current.retiredCloseAttempts??[]),archived];
+     current.close={id:current.close.id,status:'prepared',plan:current.close.plan,signed:null,receipt:null,operatorRecovery:{policyHash,proofHash:hash(ep),replacementAdmission:false}};return current;
+    });
+   }
+  }
+  // Restore the complete proven unsigned set before any signer can meet its barrier.
+  for(const {w,s,proof} of unsigned){
+   c.journal.tx(()=>{c.journal.put('operatorProof',hash(proof),proof);c.journal.event('operator_unsigned_close_restored',proof);});
+   w.service.paymentWorker.store.update(s.channelId,current=>{assert.equal(hash(current),hash(s));current.retiredUnsignedClosePreparations=[...(current.retiredUnsignedClosePreparations??[]),{operation:structuredClone(current.close),proofHash:hash(proof)}];current.close.status='prepared';current.close.reasonCode=null;return current;});
+  }
+  // Reruns first resolve every previously saved replacement wire, never replace it.
+  for(const w of c.workers)for(const s of w.service.paymentWorker.store.list()){
+   if(s.open.status!=='finalized'){provenFailedOpen(c,s);continue;}
+   if(s.close?.status==='finalized'){finalizedObligation(w,s);continue;}
+   if(s.close?.signed)await reconcileSaved(c,w,s);
+   else{frozenObligation(w,s);assert.equal(s.close.status,'prepared');assert.ok(!s.close.attempt);}
+  }
+  let closed=0;
+  for(const w of c.workers)for(const original of w.service.paymentWorker.store.list()){
+   let s=w.service.paymentWorker.store.get(original.channelId);if(s.open.status!=='finalized'||s.close?.status==='finalized')continue;
+   frozenObligation(w,s);assert.equal(s.close.status,'prepared');assert.ok(!s.close.signed&&!s.close.attempt);
+   const native=await createNativeTransport({terms:s.terms,statePath:join(w.stateDir,'native.sqlite'),walletPath:join(root,'local-state/product/secrets/devnet-wallet.json'),rpcURL:config.AXP_NETWORK_DEVNET_RPC_URL});
+   let plan;try{plan=await native.prepareClose({channel:{protocolChannelId:s.protocolChannelId,channelId:s.channelId},...(s.intents.length?{finalVoucher:s.intents.at(-1).voucher}:{}),watermark:s.watermark});await native.assertPlanFresh({plan});}finally{native.close();}
+   assert.equal(plan.protocolChannelId,s.protocolChannelId);assert.equal(hash(plan.watermark),hash(s.watermark));
+   assert.equal(hash(plan.finalVoucher??null),hash(s.intents.at(-1)?.voucher??null));
+   const estimate=money(plan.estimatedFeeAndRentLamports);assertRetainedCaps(c,w,s,estimate);
+   const admissionMarker=reservePlanFee(c,w,s,estimate);assertRetainedCaps(c,w,s,estimate);
+   w.service.paymentWorker.store.update(s.channelId,current=>{assert.equal(hash(current),hash(s));current.retiredUnsignedPlans=[...(current.retiredUnsignedPlans??[]),{plan:current.close.plan,planHash:hash(current.close.plan),policyHash}];current.close.plan=plan;if(current.close.operatorRecovery){current.close.operatorRecovery.replacementAdmission=true;current.close.operatorRecovery.feeAdmissionId=admissionMarker;}return current;});
+   c.journal.event('operator_same_obligation_unsigned_plan_refreshed',{policyHash,channelId:s.channelId,closeId:s.close.id,watermarkHash:hash(s.watermark),feeAdmissionId:admissionMarker,replacementSignedAttempt:Boolean(s.retiredCloseAttempts?.length),newDeposit:false});
+   const campaign=campaignFor(w,s);let r=await w.service.campaignAction(campaign.id,'settle');
+   for(let retry=0;r.campaign.payment.closeStatus!=='finalized'&&retry<8;retry++){assert.notEqual(r.campaign.payment.closeStatus,'failed');await new Promise(resolve=>setTimeout(resolve,3000));r=await w.service.campaignAction(campaign.id,'reconcile');}
+   assert.equal(r.campaign.payment.closeStatus,'finalized','resolve this exact saved identity before next signer');
+   const finalized=w.service.paymentWorker.store.get(s.channelId);finalizedObligation(w,finalized);
+   closed++;c.journal.event('operator_recovered_close_finalized',{policyHash,workerId:w.id,channelId:s.channelId,settledBaseUnits:finalized.close.receipt.settledBaseUnits,refundBaseUnits:finalized.close.receipt.refundBaseUnits,signature:finalized.close.signed.txSignature});
+   console.log(JSON.stringify({workerId:w.id,channelId:s.channelId,status:'finalized',recoveredClosed:closed}));
+  }
+  const entries=c.workers.flatMap(w=>w.service.paymentWorker.store.list().map(s=>({w,s}))),reservations=c.journal.all('native');
+  assert.deepEqual(entries.map(({w,s})=>`${w.id}:${s.channelId}`).sort(),reservations.map(x=>x.id).sort(),'every original native admission remains represented');
+  let funded=0,unfunded=0;
+  for(const {w,s} of entries){if(s.open.status==='finalized'){finalizedObligation(w,s);funded++;}else{provenFailedOpen(c,s);const totals=w.service.exchange.totals({channelId:s.channelId});assert.equal(totals.accepted,0n);assert.equal(totals.reserved,0n);unfunded++;}}
+  assert.ok(funded>0);assert.equal(funded+unfunded,entries.length);
+  assert.ok(reservations.reduce((n,x)=>n+money(x.feeReserveLamports),0n)<=money(P.aggregateFeeRentLamports));
+  for(const w of c.workers)assert.ok(reservations.filter(x=>x.id.startsWith(`${w.id}:`)).reduce((n,x)=>n+money(x.feeReserveLamports),0n)<=money(NATIVE_LIMITS.aggregateFeeRentLamports));
+  c.journal.update({status:'partial',settlementBlocked:unfunded,completedAt:c.journal.stamp()});
+  console.log(JSON.stringify({status:'financial_cleanup_complete',additionalClosed:closed,fundedFinalizedChannels:funded,unfundedExpiredOpenings:unfunded,originalBenchmarkComplete:false}));
+ }finally{c.close();}
+}
+await main();

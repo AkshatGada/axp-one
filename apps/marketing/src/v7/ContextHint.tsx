@@ -1,8 +1,8 @@
 "use client";
 
-// v7 ContextHint chapter: a full-bleed vermillion world. The moat line at display size, ContextHint's
-// scale in words (never the exact counts: those live on contexthint.com), its traction (ContextHint's,
-// not axp.one's), how agents use it, and a tilted, drifting wall of real ads observed inside ChatGPT,
+// v7 ContextHint chapter: a full-bleed vermillion world. ContextHint's existing marketer audience
+// and accumulated context evidence are distinct advantages. Its usage is not AXP adoption.
+// A tilted, drifting wall of real ads observed inside ChatGPT is
 // labelled before the wall. The wall straightens a little as the chapter scrolls through.
 import { useRef, type CSSProperties } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
@@ -55,13 +55,14 @@ export default function ContextHint() {
             {CONTEXTHINT.what}
           </a>
           <ul className={s.scale}>
-            {CONTEXTHINT.scale.map((x, i) => (
-              <li key={x.small} data-reveal="fade" style={{ "--d": `${120 + i * 90}ms` } as CSSProperties}>
+            {CONTEXTHINT.advantages.map((x, i) => (
+              <li key={x.label} data-reveal="fade" style={{ "--d": `${120 + i * 90}ms` } as CSSProperties}>
+                <span className={s.advantageLabel}>{x.label}</span>
                 <b>{x.big}</b> <span>{x.small}</span>
+                <p>{x.detail}</p>
               </li>
             ))}
           </ul>
-          <p className={s.traction}>{CONTEXTHINT.traction}</p>
           <p className={s.use}>{CONTEXTHINT.use}</p>
           <a className={s.action} href={CH_URL} {...ext}>
             <span>{CONTEXTHINT.action}</span>

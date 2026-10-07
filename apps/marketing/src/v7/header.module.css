@@ -1,0 +1,2 @@
+/* The landing header uses the shared navigation without a release-mode badge. */
+.header :global(.px-header .px-chip){display:none}
