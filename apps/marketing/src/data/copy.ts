@@ -6,6 +6,7 @@
 // usage distinguished from AXP adoption; no partnership, enrollment, lift, attention, conversion,
 // mainnet or x402 claims (a planned item or a stated limit carries a claim-ok comment).
 // Run numbers come from run.ts (written by scripts/extract-specimens.mjs with asserts).
+import latestSettlement from "./settlement.latest.json";
 import { JEV, LIBRARY } from "./library";
 import { CACHED, CV, CV_CHANNEL, DEVNET, JEV_EXAMPLE, KF, KF_CHANNEL, LG, RUN, policyBid, usdc } from "./run";
 
@@ -16,8 +17,8 @@ export const MVP_VERIFY_URL = mvp("/verify/");
 export const CH_URL = LIBRARY.url;
 export const JEV_URL = JEV.url;
 export const SOLANA_URL = "https://solana.com";
-/** The ClearVault channel's close on Solana Devnet: the transaction that paid the AI app. */
-export const DEVNET_URL = DEVNET?.channels[0]?.closeUrl ?? null;
+/** A verified 7 October channel close that paid the example publisher. */
+export const DEVNET_URL = latestSettlement.channels[0]?.closeUrl ?? null;
 export const VIDEO_ANCHOR = "#video";
 export const PUBLISHER_URL = "/publisher-demo/";
 export const ADVERTISER_URL = "/advertiser-dashboard/";
@@ -38,25 +39,25 @@ export const HERO = {
   lede: "Advertisers reach relevant AI conversations. Publishers earn through Solana payment channels.",
   primary: "Try the live chat",
   status: "Live on public Solana Devnet, test USDC.",
-  devnet: "Recorded payment proof",
+  devnet: "Today’s payment proof",
   trio: [
     { k: "", name: "ContextHint", rest: ", the intelligence platform for ChatGPT ads", href: LIBRARY.url, tone: "ch" },
     { k: "Decisions", name: "Jev", rest: "", href: JEV.url, tone: "jev" },
     { k: "Settlement", name: "Solana", rest: "", href: SOLANA_URL, tone: "sol" },
   ],
   wallNote: "Questions observed by ContextHint. Bidding illustrative.",
-  focalNote: "Recorded Devnet example. ClearVault is fictional.",
+  focalNote: "Product flow illustration.",
   /** Shown inside the focal tile (the run's own records). */
-  appName: "Our demo AI app",
+  appName: "Example chat",
   slotLine: "Answer, then one Sponsored slot",
-  answerLabel: "Answer, excerpt",
+  answerLabel: "Answer",
   gap: "Separate from the answer",
 };
 
 /** The exploded card: six plates behind the one Sponsored card. Two to four words each. */
 export const STACK = {
   line: "Behind one Sponsored card, a whole exchange.",
-  note: "Recorded Devnet example.",
+  note: "Inside the exchange.",
   plates: {
     answer: { name: "Answer", note: "written without ads" },
     card: { name: "Card", note: "labelled Sponsored" },
@@ -138,26 +139,23 @@ export const SOLANA = {
   onChain: "On Solana",
   offChain: "Off chain, signed",
   open: "Open",
-  deposit: `${usdc(CV_CHANNEL.deposit)} deposit`,
+  deposit: `${usdc(latestSettlement.channels[0]!.deposit)} deposit`,
   voucher: "Voucher",
   total: "total",
   close: "Close",
-  paid: `${usdc(CV_CHANNEL.settled)} to the app`,
-  refund: `${usdc(CV_CHANNEL.refund)} refunded`,
-  vouchers: CV_CHANNEL.vouchers.map((v) => usdc(v.cumulative)),
-  devnetH: "Recorded settlement. Check it yourself.",
-  explorerChannels: [
-    { name: CV.name, ch: DEVNET?.channels.find((c) => c.campaign === "v3-clearvault") ?? null },
-    { name: KF.name, ch: DEVNET?.channels.find((c) => c.campaign === "v3-keyforge") ?? null },
-  ],
+  paid: `${usdc(latestSettlement.channels[0]!.paid)} to the app`,
+  refund: `${usdc(latestSettlement.channels[0]!.refunded)} refunded`,
+  vouchers: latestSettlement.channels[0]!.vouchers.map((v) => usdc(v.cumulative)),
+  devnetH: "Finalized today. Follow the money.",
+  explorerChannels: latestSettlement.channels.map((ch) => ({ name: ch.name, ch })),
   openTx: "Open",
   closeTx: "Close",
   channel: "Channel",
   program: "Program",
-  programUrl: DEVNET?.programUrl ?? null,
+  programUrl: latestSettlement.programUrl,
   live: "Recorded Devnet example",
   token: "Circle Devnet USDC",
-  tokenUrl: DEVNET?.mintUrl ?? null,
+  tokenUrl: latestSettlement.mintUrl,
   note: "Public Solana Devnet, test USDC, no real value.", // claim-ok: limit
   kfPaid: usdc(KF_CHANNEL.settled),
 };
@@ -235,11 +233,11 @@ export const LEDGER_BENCHMARK = {
   href: "https://github.com/Gaganub/axp-one/blob/main/BENCHMARK.md",
   native: {
     label: "Solana Devnet",
-    h3: "26 channels",
-    mode: "Finalized payout and refund.",
-    updates: "26 vouchers",
-    close: "1 finalized close",
-    note: "1.014 test USDC paid · 0.286 refunded.",
+    h3: "125 channels settled",
+    mode: "824 cumulative voucher updates.",
+    updates: "Signed vouchers",
+    close: "1 close per channel",
+    note: "1.236 test USDC paid · 5.014 refunded.",
   },
 };
 

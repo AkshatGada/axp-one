@@ -6,46 +6,64 @@ page or endpoint.
 
 **The million-update local fixture test is complete.** Its 1,052,672 updates are
 synthetic state-machine operations, with no provider calls or native transactions.
-**The paid Devnet run remains partial.** A 26-channel threshold-selected subset
-has independently verified opening and closing transactions. Full funded-channel
-cleanup is still in progress. Approved workload ceilings remain distinct from
-achieved results.
+**All 125 funded Devnet channels are financially complete.** Independent read-only
+RPC verification passed all 250 finalized opening and closing transactions.
+**The original paid load stage remains partial:** its 128-advertiser and 1,024-turn
+targets were not achieved. Approved ceilings remain distinct from measured results.
 
-## Current paid-run checkpoint
+## Final paid-run result
 
-The load phase stopped with **125 funded advertisers, 825 started/completed
-publisher turns and 824 accepted deliveries**. Three original signed openings
-expired without landing. They remain failed/unfunded with their original signed
-identities and reservations; no replacement deposits were created. Workers 11,
-14 and 15 each have seven active campaigns and are excluded by the allocator's
-eight-active-campaign requirement. The original 128-advertiser stage did not pass.
+The load phase stopped with **125 funded advertisers, 825 started publisher turns,
+824 completed answers and 824 accepted deliveries/off-chain voucher updates**.
+Three original signed openings expired without landing. They remain failed/unfunded
+with their original signed identities and reservations; no replacement deposits
+were created. Workers 11, 14 and 15 each had seven active campaigns and were excluded
+by the allocator's eight-active-campaign requirement. The original 128-advertiser
+stage did not pass.
 
-Nine terminal provider attempts have unknown usage; their full conservative
-liabilities remain reserved. One DeepSeek transport failure produced no answer.
-Two allocated turns were cancelled before starting and are not fresh calls.
-These outcomes remain in the journal. The run is partial, not a successful
-1,024-turn workload.
+Nine terminal provider attempts have unknown usage (**eight Jev, one DeepSeek**);
+their full conservative liabilities remain reserved. One DeepSeek transport failure
+produced no answer. Two allocated turns were cancelled before starting and are not
+fresh calls. These outcomes remain in the journal. Financial completion does not
+make this a successful 1,024-turn workload or resolve unknown API usage.
+
+The [funded acceptance record](artifacts/network-scale/devnet-funded-acceptance.json)
+and [independent verification report](artifacts/network-scale/devnet-funded-verification.json)
+cover every funded channel. **125 finalized openings and 125 finalized closes**
+deposited **6.25 test USDC**, paid **1.236 test USDC** to the publisher and returned
+**5.014 test USDC** to the sponsor. All **250 transactions** passed independent
+read-only RPC checks of finality and slots, native program/mint binding, token
+balance deltas, network fees and deposit conservation. The acceptance builder
+also cryptographically verified all 824 cumulative vouchers offline. The separate
+verifier used one configured RPC provider; this is not independent-provider
+consensus. Its [builder](artifacts/network-scale/operator/build-full-native-acceptance.mjs.txt)
+and [verifier](artifacts/network-scale/operator/verify-full-native-acceptance.mjs.txt)
+are retained with source hashes in the proof.
 
 The predeclared 30,000-base-unit policy selected **26 channels**, each with
-26 cumulative vouchers authorizing 39,000 base units. The subset has **676 accepted
-deliveries/off-chain voucher updates**, 26 finalized deposits and 26 finalized
-closes. Independent read-only RPC verification passed all **52 transactions**:
-finalized signatures and slots, native program/mint binding, token balance deltas,
-network fees and deposit conservation. Its 1.3 test USDC deposit paid **1.014 test
-USDC** to the publisher and returned **0.286 test USDC**. See the
-[acceptance record](artifacts/network-scale/devnet-threshold-acceptance.json) and
-[verification report](artifacts/network-scale/devnet-threshold-verification.json).
-This proves the subset, not financial completion of all 125 funded channels.
+26 cumulative vouchers authorizing 39,000 base units. This unchanged subset has
+**676 accepted deliveries/off-chain voucher updates**, 26 finalized deposits and
+26 finalized closes. Its independently verified **52 transactions** deposited
+1.3 test USDC, paid **1.014 test USDC** and returned **0.286 test USDC**. See the
+[threshold acceptance record](artifacts/network-scale/devnet-threshold-acceptance.json)
+and [threshold verification report](artifacts/network-scale/devnet-threshold-verification.json).
+These transactions and updates are included in the full funded result; do not add
+the subset to the full totals.
 
-At the current cleanup checkpoint, 61 funded channels are closed and 64 remain.
-These changing cleanup counts are separate from the independently verified
-26-channel proof above. Ordinary final closure encountered expired signed
-closes and pre-signer checkpoint blockers; remaining financial cleanup continues.
-A separate reviewed operator policy preserves every expired signed identity and
-all fee reservations, proves the original channels still Open with full escrow,
-and refreshes only a close of the same cumulative obligation. No new deposit,
-charge, voucher or model call is admitted by cleanup. Record its final proof and
-hash after verification; no completed financial outcome is claimed here yet.
+End-run cleanup closed every remaining funded channel to pay the latest authorized
+cumulative obligation and return unused collateral. It added no deposit, accepted
+charge, voucher or model call. This isolated benchmark workspace is separate from
+the live presentation's three prepared advertiser channels.
+
+Ordinary closure encountered expired signed closes and pre-signer checkpoint
+blockers. Five expired signed close attempts remain retained with their original
+identities and fee reservations; they are not counted as finalized transactions.
+The separately pinned operator recovery versions v1–v5 preserve the original
+failed/unknown API rows and full liabilities. Two decoded observations from the
+same provider prove each refreshed channel Open with full escrow before refreshing
+only the same close obligation; these are not independent-provider observations. The sanitized acceptance and [operator sources](artifacts/network-scale/operator/)
+retain the recovery provenance. All funded obligations are now verified closed;
+the three failed/unfunded openings and partial load-stage status remain visible.
 
 ## Approved actual workload
 
@@ -90,8 +108,8 @@ the load phase and drain. A channel qualifies only when its latest authorized
 cumulative amount meets or exceeds the threshold, it has at least two authorized
 vouchers, accepted equals authorized, no amount remains reserved, and all native
 operation outcomes are known. Drain releases undelivered reservations. The operator
-closed the qualifying channels first and is closing the remaining channels at
-end of run. The 26-channel threshold subset is verified; the full paid run remains
+closed the qualifying channels first and the remaining channels at end of run.
+All 125 funded channels are verified closed; the original load stage remains
 partial. Do not open extra channels or make extra model calls to manufacture proof.
 
 Record the eligibility values, trigger and finalized close proof. The current

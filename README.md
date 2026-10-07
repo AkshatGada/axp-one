@@ -22,6 +22,10 @@ it is not the exchange’s decision engine. Jev is the buying decision layer.
 | Publisher SDK guide | [Connect your own AI app](https://axp.one/sdk/) |
 | Product walkthrough | [1:53 recording with chapters and captions](https://axp.one/demo/) |
 
+The landing story runs **Hero → ContextHint → whole product flow → Jev → Solana →
+compact benchmark → Closing**. Its payment links show the finalized 7 October
+benchmark proof; the original MVP stays secondary historical evidence.
+
 The main walkthrough is **landing → advertiser dashboard → SDK → chat → View
 internals → payment proof**. The SDK guide leads with Request → Render →
 Acknowledge; full setup stays in disclosures. Internals shows Context, Buyers,
@@ -75,11 +79,20 @@ The compact landing summary keeps two different measurements separate:
   p95; whole-run throughput is 216.25586 fixture updates/second. Every saved
   channel snapshot was verified; cold replay sampled 192 channels. Provider/RPC
   calls, signatures, native broadcasts and real payouts were zero.
-- **Actual Devnet subset:** [26 channels and 52 verified transactions](artifacts/network-scale/devnet-threshold-verification.json),
-  with 676 accepted deliveries/off-chain updates. Finalized closes paid 1.014 test
-  USDC and refunded 0.286 from 1.3 deposited. This is subset proof of a partial
-  125-funded-advertiser, 825-started-turn, 824-accepted-delivery run; full financial
-  cleanup is still in progress.
+- **Actual Solana Devnet:** [125 funded channels and 250 verified transactions](artifacts/network-scale/devnet-funded-verification.json),
+  with 824 accepted deliveries/off-chain voucher updates. All funded channels
+  closed: 6.25 test USDC deposited, 1.236 paid and 5.014 refunded. The
+  [acceptance record](artifacts/network-scale/devnet-funded-acceptance.json) retains
+  original failed openings, expired close attempts and recovery provenance. The
+  original load stage remains partial: 825 started turns, 824 completed answers,
+  three failed/unfunded openings and nine unknown-usage provider attempts still
+  fully reserved. The 128-advertiser/1,024-turn targets were not achieved. The
+  [26-channel threshold subset](artifacts/network-scale/devnet-threshold-verification.json)
+  remains unchanged and is included in these totals.
+
+Benchmark closure settles the recorded cumulative obligations and refunds unused
+collateral. Its isolated workspace is separate from the live demo's three prepared
+presentation channels.
 
 [BENCHMARK.md](BENCHMARK.md) explains sources, storage, thresholds, verification
 and limitations. The million test measures local fixture accounting, not Solana

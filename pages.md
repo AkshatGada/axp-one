@@ -7,7 +7,7 @@ Localhost URLs are for explicit development and replay instructions only.
 
 | Route | What to show | Source |
 |---|---|---|
-| `/` | Exchange story, ContextHint distribution/data, Jev, Solana, compact offline/Devnet proof and product actions | `apps/marketing/src/v7/` |
+| `/` | Hero → ContextHint → whole product flow → Jev → Solana → compact benchmark → Closing | `apps/marketing/src/v7/` |
 | `/advertiser-dashboard/` | Campaign editor, context hints, approval, funding, reporting and close/refund | `apps/product-ui/src/components/advertiser-dashboard/` |
 | `/publisher-demo/` | Independent answer, Sponsored card, five-stage View internals, same-modal close/refund and finalized proof | `apps/product-ui/src/components/publisher-demo/` |
 | `/publisher-demo/integration/` | Request → Render → Acknowledge; example-chat action; complete setup in disclosures | `apps/product-ui/src/app/publisher-demo/integration/page.tsx` |
@@ -27,12 +27,20 @@ Payment can close the exact winning campaign's whole channel, then show finalize
 publisher payout, unused-deposit refund and Explorer proof without leaving chat.
 Closing ends new placements for that campaign; perform it last in a take.
 
-The landing page ends with compact result evidence: 1,052,672 local synthetic
-voucher updates and an independently verified 26-channel Solana Devnet subset.
-Methodology and proof live in `BENCHMARK.md` and `artifacts/network-scale/`.
-There is no `/network/` page or benchmark API. The million fixture counts and
-actual 676 voucher updates/52 native transactions remain separate. Full paid-run
-financial cleanup is still incomplete.
+The landing page links finalized 7 October proof and ends with compact result
+evidence: 1,052,672 local synthetic voucher updates and **125 funded Solana Devnet
+channels / 250 independently verified transactions**. Actual paid-run counts are
+824 accepted deliveries/off-chain vouchers, 6.25 test USDC deposited, 1.236 paid
+and 5.014 refunded. Every funded channel is closed. The original load stage remains
+partial: 825 started turns, 824 completed answers, three failed/unfunded openings
+and nine unknown-usage provider attempts still fully reserved. These benchmark
+channels are separate from the live demo's three prepared presentation channels.
+
+The header has no network badge; payment proof still identifies Solana Devnet and
+test USDC. Methodology and sanitized proof live in `BENCHMARK.md` and
+`artifacts/network-scale/`, including the unchanged 26-channel threshold subset.
+The million fixture counts and actual API/Devnet evidence remain separate. There
+is no `/network/` page or benchmark API.
 
 ## Original MVP and recorded evidence
 

@@ -1,12 +1,11 @@
 // axp.one: the landing page, v7. Visual first; words are captions. The exchange story:
-// the Exchange Wall, how it works, ContextHint's audience and evidence, Jev, Solana,
+// the Exchange Wall, ContextHint's audience and evidence, the complete flow, Jev, Solana,
 // then direct product entry points. Every word is
 // server-rendered and visible without JS; motion layers on top. Copy: src/data/copy.ts; run
 // values: src/data/run.ts (the slim slice written by scripts/extract-specimens.mjs).
-import { SiteHeader } from "@axp/design-system/prospectus";
+import Header from "@/v7/Header";
 import MotionRoot from "@/motion/MotionRoot";
 import FilmMode from "@/motion/FilmMode";
-import { HEADER, NAV, PRODUCT_VIDEO_URL } from "@/data/copy";
 import Hero from "@/v7/Hero";
 import How from "@/v7/How";
 import ContextHint from "@/v7/ContextHint";
@@ -23,11 +22,11 @@ export default function Home() {
       <MotionRoot />
       <Tone />
       <FilmMode />
-      <SiteHeader links={NAV} cta={{ href: PRODUCT_VIDEO_URL, label: HEADER.cta }} chip={HEADER.chip} />
+      <Header />
       <main id="main" className="pg-main">
         <Hero />
-        <How />
         <ContextHint />
+        <How />
         <Jev />
         <Solana />
         <LedgerBenchmark />

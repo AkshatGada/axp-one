@@ -1,69 +1,75 @@
-// v7 Jev chapter: an ultramarine world. One real judgment from the live run, as a sheet that plays
-// when it scrolls in: the evidence goes in, Jev returns relevance, buying intent and creative fit
-// with its confidence, and code turns that into the capped bid. Modest credit: built with Jev.
+// Jev evaluates the ad path. The publisher's answer follows its own provider path.
 import type { CSSProperties } from "react";
 import { Arrow } from "@axp/design-system/prospectus";
-import { CACHED } from "@/data/run";
-import { JEV_SECTION as J, JEV_URL } from "@/data/copy";
+import { JEV_URL } from "@/data/copy";
 import s from "./jev.module.css";
 
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
+const inputs = [
+  { label: "Conversation", detail: "Question + task context", kind: "conversation" },
+  { label: "Advertiser", detail: "Approved creative + authored hints", kind: "advertiser" },
+  { label: "ContextHint", detail: "Embeddings → retrieved evidence", kind: "evidence" },
+] as const;
+const judgments = ["Relevance", "Buying intent", "Creative fit"] as const;
 
 export default function Jev() {
   return (
     <section id="jev" data-world="brand" data-step="jev" className={s.jev} data-tone="brand" data-header-tone="brand" aria-labelledby="jev-title">
       <div className={`px-wrap ${s.grid}`}>
         <div className={s.left} data-tone-text="">
-          <p className={s.label}>
-            {J.label}
-          </p>
-          <h2 id="jev-title" className={s.h2}>
-            {J.h2}
-          </h2>
-          <p className={s.note}>{J.note}</p>
+          <p className={s.label}>Decisions with Jev</p>
+          <h2 id="jev-title" className={s.h2}>Jev judges the fit.</h2>
+          <p className={s.note}>A relevant ad. An independent answer.</p>
           <a className={s.credit} href={JEV_URL} {...ext}>
-            <span>{J.credit}</span>
+            <span>Built with Jev by TypeSafe</span>
             <Arrow width={20} />
           </a>
         </div>
         <div className={s.sheet} data-reveal="sheet" data-visual="">
+          <div className={s.answer}>
+            <span className={s.answerK}>Example chat</span>
+            <b>DeepSeek</b>
+            <i aria-hidden="true" />
+            <span className={s.answerResult}>Independent answer</span>
+          </div>
           <div className={s.col}>
-            <span className={s.k}>{J.inLabel}</span>
-            {J.inputs.map((x, i) => (
-              <div key={x} className={s.input} style={{ "--i": i } as CSSProperties}>
-                <span>{x}</span>
-                {i === 0 ? <q className={s.q}>{CACHED.question}</q> : null}
+            <span className={s.k}>Ad context</span>
+            {inputs.map((input, i) => (
+              <div key={input.kind} className={s.input} data-kind={input.kind} style={{ "--i": i } as CSSProperties}>
+                <span className={s.inputGlyph} aria-hidden="true"><i /><i /><i /></span>
+                <div>
+                  <b>{input.label}</b>
+                  <span>{input.detail}</span>
+                </div>
               </div>
             ))}
           </div>
-          <div className={s.flow} aria-hidden>
+          <div className={s.flow} aria-hidden="true">
             <i style={{ "--i": 0 } as CSSProperties} />
             <i style={{ "--i": 1 } as CSSProperties} />
             <i style={{ "--i": 2 } as CSSProperties} />
             <span className={s.engine}>Jev</span>
           </div>
-          <div className={s.col}>
-            <span className={s.k}>{J.outLabel}</span>
-            {J.outputs.map((o, i) => (
-              <div key={o.k} className={s.out} style={{ "--i": i } as CSSProperties}>
-                <div className={s.outTop}>
-                  <span>{o.k}</span>
-                  <b>{o.v}</b>
-                </div>
-                {/* One bar, sized to Jev's own confidence: the number printed beside it. */}
-                <div className={s.levels} role="img" aria-label={o.conf}>
-                  <i data-on="" style={{ "--v": o.value } as CSSProperties} />
-                </div>
-                <span className={s.conf}>{o.conf}</span>
+          <div className={`${s.col} ${s.judgments}`}>
+            <span className={s.k}>Fit judgments</span>
+            {judgments.map((judgment, i) => (
+              <div key={judgment} className={s.out} style={{ "--i": i } as CSSProperties}>
+                <span className={s.outGlyph} aria-hidden="true"><i /><i /><i /></span>
+                <span>{judgment}</span>
               </div>
             ))}
           </div>
           <div className={s.code}>
-            <span className={s.rule}>{J.rule}</span>
-            <span className={s.k}>{J.codeLabel}</span>
-            <p className={s.bid}>
-              <b>{J.bid}</b> USDC <span>{J.cap}</span>
-            </p>
+            <div className={s.policy}>
+              <span className={s.k}>Deterministic auction</span>
+              <p>Rules set the bid.</p>
+            </div>
+            <div className={s.limits}>
+              <span>Eligibility</span>
+              <span>Budgets</span>
+              <span>Caps</span>
+            </div>
+            <span className={s.winner}>Highest valid bid wins</span>
           </div>
         </div>
       </div>

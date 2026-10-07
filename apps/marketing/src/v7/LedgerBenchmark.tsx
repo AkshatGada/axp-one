@@ -22,7 +22,7 @@ export default function LedgerBenchmark() {
           <p className={s.label}>{B.native.label}</p>
           <h2 id="native-benchmark-title" className={s.h2}>{B.native.h3}</h2>
           <p className={s.mode}>{B.native.mode}</p>
-          <div className={s.flow} aria-label="26 signed vouchers followed by one finalized Solana Devnet close per channel">
+          <div className={s.flow} aria-label="824 signed voucher updates across 125 channels, with one finalized Solana Devnet close per channel">
             <span>{B.native.updates}</span>
             <Arrow width={24} />
             <span className={s.close}>{B.native.close}</span>

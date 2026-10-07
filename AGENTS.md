@@ -1,8 +1,10 @@
 # AXP operating boundaries
 
-Current release: ContextHint-led landing story, user-operated advertiser dashboard,
-three-step publisher SDK guide, example chat and five-stage View internals with
-in-dialog native Solana Devnet settlement. Existing chaptered recording remains
+Current release: Hero → ContextHint → whole product flow → Jev → Solana → compact
+benchmark → Closing landing story, user-operated advertiser dashboard, three-step
+publisher SDK guide, example chat and five-stage View internals with in-dialog
+native Solana Devnet settlement. The header has no network badge; payment evidence
+remains explicitly Solana Devnet with test USDC. Existing chaptered recording remains
 recorded evidence at axp.one. Main recording flow: landing → dashboard → SDK →
 chat → Context, Buyers, Auction, Delivery, Payment → finalized Explorer proof.
 Keep the original MVP available as secondary historical evidence.
@@ -77,19 +79,27 @@ failed/unknown API rows and full reservations, preserve the original global caps
 and halt expansion on a new unknown outcome. Do not mark results complete before
 the settled export is verified.
 
-Current paid-run deviation: three original signed openings are operator-proven
-expired/unfunded with zero intents. Preserve identities and reservations; do not
-replace deposits. Load stopped at 125 funded advertisers, 825 started turns and
-824 accepted deliveries, with nine unknown-usage provider attempts still fully
-reserved. The original 128 stage did not pass. Twenty-six threshold-selected
-channels have independently verified 52 finalized transactions: 676 voucher
-updates, 1.3 test USDC deposited, 1.014 paid and 0.286 refunded. This is subset
-proof. At the current cleanup checkpoint, 61 funded channels are closed and 64
-remain; overall funded cleanup is in progress through a separately reviewed
-operator policy. Expired signed closes retain their complete original
-identities; decoded Open/full-escrow proof is required before a replacement close
-of the same obligation. Keep three failed/unfunded openings visible and retain
-partial overall status. Do not claim financial completion before verification.
+Current paid-run result: all 125 funded channels are financially closed. Independent
+read-only RPC verification passed all 250 finalized transactions (125 openings and
+125 closes): 6.25 test USDC deposited, 1.236 paid to the publisher and 5.014 refunded.
+All 824 accepted deliveries advanced off-chain cumulative vouchers. The original
+load stage remains partial: 825 started turns, 824 completed answers, three original
+signed openings expired/unfunded with zero intents, and nine unknown-usage provider
+attempts (eight Jev, one DeepSeek) still fully reserved. The 128-advertiser and
+1,024-turn targets did not pass. Preserve those original identities and liabilities.
+See the [funded acceptance](artifacts/network-scale/devnet-funded-acceptance.json)
+and [independent verification](artifacts/network-scale/devnet-funded-verification.json).
+
+The 26 threshold-selected channels remain separately verified subset proof:
+52 finalized transactions, 676 voucher updates, 1.3 test USDC deposited, 1.014 paid
+and 0.286 refunded. Five expired signed close attempts retain their original
+identities and fee reservations. Separately pinned recovery versions v1–v5 retain
+decoded Open/full-escrow proof from two observations of the same provider before
+refreshing only the same close obligation. This is not independent-provider proof. Recovery added no deposits, charges, vouchers or model calls.
+Financial cleanup completion does not complete the original load stage, clear
+unknown API usage or authorize another run. Benchmark closure pays the recorded
+obligations and returns unused collateral; it is separate from the live demo's
+three prepared presentation channels.
 
 Keep benchmark methodology and sanitized proof in the repository. The user approved
 a compact landing-page result summary but cancelled the separate benchmark website

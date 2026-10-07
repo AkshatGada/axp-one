@@ -1,20 +1,19 @@
 "use client";
 
-// v7 Solana chapter: a whole page in Solana purple. The payment channel told in four steps on two
-// lanes (on Solana / off chain, signed): a deposit opens the channel, each accepted delivery adds a
-// signed voucher off chain (0.004, then 0.007 in total), one close on Solana pays the AI app and
-// refunds the rest. Pinned at >= 900px with motion on, each step arrives as you scroll; still, all
-// four are shown. Then the proof: the live run's own transactions on Solana Devnet, on Explorer.
+// Verified 7 October payment-channel evidence: cumulative vouchers, one close.
+// Values and Explorer links come from the sanitized, independently checked native record.
 import { useEffect, useRef, useState } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { Arrow } from "@axp/design-system/prospectus";
-import { CV, CV_CHANNEL, RUN, usdc } from "@/data/run";
+import { usdc } from "@/data/run";
+import proof from "@/data/settlement.latest.json";
 import { SOLANA } from "@/data/copy";
 import { usePinned } from "@/motion/useReduced";
 import s from "./sol.module.css";
 
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
-const dep = Number(CV_CHANNEL.deposit);
+const sample = proof.channels[0]!;
+const dep = Number(sample.deposit);
 const pct = (v: string | number) => `${(Number(v) / dep) * 100}%`;
 
 function Btn({ href, children }: { href: string | null | undefined; children: string }) {
@@ -46,8 +45,8 @@ export default function Solana() {
     if (pinned) setStep(stepOf(p.get()));
   }, [pinned, p]);
   const shown = pinned ? step : 4;
-  const vs = CV_CHANNEL.vouchers;
-  const fill = shown >= 3 ? vs[1]?.cumulative ?? vs[0]!.cumulative : shown >= 2 ? vs[0]!.cumulative : "0";
+  const vs = [sample.vouchers[0]!, sample.vouchers[1]!, sample.vouchers.at(-1)!];
+  const fill = shown >= 3 ? vs.at(-1)!.cumulative : shown >= 2 ? vs[0]!.cumulative : "0";
 
   return (
     <section id="solana" data-world="sol" className={s.sol} data-header-tone="sol" aria-labelledby="sol-title">
@@ -59,36 +58,35 @@ export default function Solana() {
                 <span className={s.label}>
                   {SOLANA.label}
                 </span>
-                <span className={s.live}>{SOLANA.live}</span>
+                <span className={s.live}>{sample.voucherCount} vouchers → one settlement</span>
               </div>
               <h2 id="sol-title" className={s.h2}>
                 {SOLANA.h2}
               </h2>
-              <p className={s.lede}>{SOLANA.lede}</p>
+              <p className={s.lede}>Each delivery updates a signed voucher. One settlement pays the publisher and returns the rest.</p>
             </div>
 
-            <div className={s.lanes} data-visual="" aria-label={`${CV.name}'s channel: ${SOLANA.deposit}, vouchers ${SOLANA.vouchers.join(" then ")}, ${SOLANA.paid}, ${SOLANA.refund}`}>
+            <div className={s.lanes} data-visual="" aria-label={`A verified channel: ${sample.voucherCount} cumulative vouchers, ${usdc(sample.paid)} paid, ${usdc(sample.refunded)} refunded`}>
               <div className={s.lane} data-lane="chain">
                 <span className={s.laneK}>{SOLANA.onChain}</span>
                 <div className={s.block} data-b="open">
                   <b>{SOLANA.open}</b>
-                  <span>{SOLANA.deposit}</span>
+                  <span>{usdc(sample.deposit)} test USDC</span>
                 </div>
                 <div className={s.meter}>
                   <div className={s.track}>
                     <i className={s.fill} style={{ transform: `scaleX(${Number(fill) / dep})` }} />
-                    <i className={s.refund} style={{ left: pct(CV_CHANNEL.settled) }} />
+                    <i className={s.refund} style={{ left: pct(sample.paid) }} />
                   </div>
                   <div className={s.marks}>
-                    <span style={{ left: pct(vs[0]!.cumulative) }}>{usdc(vs[0]!.cumulative)}</span>
-                    {vs[1] ? <span style={{ left: pct(vs[1].cumulative) }}>{usdc(vs[1].cumulative)}</span> : null}
-                    <span style={{ left: "100%" }}>{usdc(CV_CHANNEL.deposit)}</span>
+                    <span style={{ left: pct(sample.paid) }}>{usdc(sample.paid)}</span>
+                    <span style={{ left: "100%" }}>{usdc(sample.deposit)}</span>
                   </div>
                 </div>
                 <div className={s.block} data-b="close">
                   <b>{SOLANA.close}</b>
-                  <span>{SOLANA.paid}</span>
-                  <span className={s.dim}>{SOLANA.refund}</span>
+                  <span>{usdc(sample.paid)} paid</span>
+                  <span className={s.dim}>{usdc(sample.refunded)} refunded</span>
                 </div>
               </div>
               <div className={s.lane} data-lane="off">
@@ -97,7 +95,7 @@ export default function Solana() {
                   {vs.map((v, i) => (
                     <div key={v.sequence} className={s.voucher} data-v={i} style={{ "--x": pct(v.cumulative) } as React.CSSProperties}>
                       <span>
-                        {SOLANA.voucher} {v.sequence}
+                        {i === 2 ? "… Voucher" : "Voucher"} {v.sequence}
                       </span>
                       <b>{usdc(v.cumulative)}</b>
                       {i > 0 ? <span className={s.dim}>{SOLANA.total}</span> : null}
@@ -111,13 +109,13 @@ export default function Solana() {
       </div>
 
       <div className={`px-wrap ${s.proof}`} data-reveal="fade">
-        <h3 className={s.h3} data-tone-text="">{SOLANA.devnetH}</h3>
+        <h3 className={s.h3} data-tone-text="">Finalized today. Follow the money.</h3>
         <div className={s.channels} data-tone-text="" data-token-avoid="">
-          {SOLANA.explorerChannels.map(({ name, ch }) =>
+          {proof.channels.map((ch) =>
             ch ? (
-              <div key={name} className={s.channel}>
+              <div key={ch.id} className={s.channel}>
                 <div className={s.chTop}>
-                  <b>{name}</b>
+                  <b>{ch.name}</b>
                   <span>
                     {usdc(ch.paid)} paid, {usdc(ch.refunded)} back
                   </span>
@@ -132,16 +130,16 @@ export default function Solana() {
           )}
           <div className={s.channel} data-total="">
             <div className={s.chTop}>
-              <b>{usdc(RUN.totals.paid)} USDC</b>
-              <span>to the app, {usdc(RUN.totals.refunded)} back</span>
+              <b>{usdc(proof.totals.settledBaseUnits)} USDC</b>
+              <span>to the app, {usdc(proof.totals.refundBaseUnits)} back</span>
             </div>
             <div className={s.btns}>
-              <Btn href={SOLANA.programUrl}>{SOLANA.program}</Btn>
-              {SOLANA.tokenUrl ? <Btn href={SOLANA.tokenUrl}>{SOLANA.token}</Btn> : null}
+              <Btn href={proof.programUrl}>{SOLANA.program}</Btn>
+              {proof.mintUrl ? <Btn href={proof.mintUrl}>{SOLANA.token}</Btn> : null}
             </div>
           </div>
         </div>
-        <p className={s.note} data-tone-text="">{SOLANA.note}</p>
+        <p className={s.note} data-tone-text="">{proof.date} · Solana Devnet · test USDC</p>
       </div>
     </section>
   );

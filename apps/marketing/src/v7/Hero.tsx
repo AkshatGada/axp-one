@@ -18,7 +18,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as RPointerEvent } from "react";
 import { motion, useMotionValue, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
 import { ActionPrimary, ActionText, Words } from "@axp/design-system/prospectus";
-import { CACHED, CV, HELPFUL_EXCERPT } from "@/data/run";
+import { PRODUCT_STORY as story } from "@/data/product.story";
 import { DEVNET_URL, HERO, PUBLISHER_URL, PRODUCT_VIDEO_URL, STACK } from "@/data/copy";
 import { PROMPTS } from "@/hero-lab/data";
 import useReduced, { usePinned } from "@/motion/useReduced";
@@ -108,10 +108,10 @@ function FocalTile() {
         <span className={s.chatSlot}>{HERO.slotLine}</span>
       </div>
       <div className={s.chatBody}>
-        <p className={s.chatQ}>{CACHED.question}</p>
+        <p className={s.chatQ}>{story.question}</p>
         <div className={s.chatA}>
           <span className={s.chatWho}>{HERO.answerLabel}</span>
-          <p className={s.chatText}>{HELPFUL_EXCERPT}</p>
+          <p className={s.chatText}>{story.answer}</p>
         </div>
         <span className={s.chatGap}>{HERO.gap}</span>
         <div className={s.fSlot}>
@@ -119,10 +119,10 @@ function FocalTile() {
           <div className={s.card}>
             <div className={s.cardHead}>
               <span className={s.cardLabel}>Sponsored</span>
-              <span className={s.cardName}>{CV.name}</span>
+              <span className={s.cardName}>{story.advertiser}</span>
             </div>
-            <p className={s.cardText}>{(CV.approvedText ?? "").split(". ")[0]}.</p>
-            <span className={s.cardFoot}>{(CV.destination ?? "").replace(/^https?:\/\//, "").replace(/\/$/, "")}</span>
+            <p className={s.cardText}>{story.creative}</p>
+            <span className={s.cardFoot}>{story.destination}</span>
           </div>
           <i className={`${s.fPulse} ${s.fpl}`} />
           <i className={`${s.fPulse} ${s.fpr}`} />

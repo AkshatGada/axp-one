@@ -9,8 +9,6 @@
 // run's question, as a small token at the top right, whose state and tint change as it crosses
 // each world: ContextHint finds its evidence, Jev judges it, Solana settles it.
 import { useEffect, useRef, useState } from "react";
-import { CACHED } from "@/data/run";
-import { SPINE } from "@/data/copy";
 import s from "./tone.module.css";
 
 const WORLDS: Record<string, [number, number, number]> = {
@@ -146,17 +144,10 @@ export default function Tone() {
       delete html.dataset.pxTone;
     };
   }, []);
-  const st = step ? SPINE[step] : null;
   return (
     <>
       <div ref={layer} className={s.layer} aria-hidden />
-      <div ref={token} className={s.token} data-step={step ?? undefined} aria-hidden>
-        <span className={s.q}>{CACHED.question}</span>
-        <span className={s.state}>
-          <i>{st?.n ?? ""}</i>
-          {st?.state ?? ""}
-        </span>
-      </div>
+
     </>
   );
 }
