@@ -7,13 +7,12 @@ Localhost URLs are for explicit development and replay instructions only.
 
 | Route | What to show | Source |
 |---|---|---|
-| `/` | Exchange story, ContextHint, Jev, Solana, product-video entry | `apps/marketing/src/v7/` |
+| `/` | Exchange story, ContextHint distribution/data, Jev, Solana, compact offline/Devnet proof and product actions | `apps/marketing/src/v7/` |
 | `/advertiser-dashboard/` | Campaign editor, context hints, approval, funding, reporting and close/refund | `apps/product-ui/src/components/advertiser-dashboard/` |
-| `/publisher-demo/` | Independent DeepSeek answer, Sponsored card, View internals | `apps/product-ui/src/components/publisher-demo/` |
-| `/publisher-demo/integration/` | Hosted publisher integration, SDK samples and optional local setup | `apps/product-ui/src/app/publisher-demo/integration/page.tsx` |
+| `/publisher-demo/` | Independent answer, Sponsored card, five-stage View internals, same-modal close/refund and finalized proof | `apps/product-ui/src/components/publisher-demo/` |
+| `/publisher-demo/integration/` | Request → Render → Acknowledge; example-chat action; complete setup in disclosures | `apps/product-ui/src/app/publisher-demo/integration/page.tsx` |
 | `/sdk/` | Redirect to the integration guide | `scripts/build-site/site-routes.mjs` |
 | `/demo/` | 1080p product video, captions, chapters, download and both product entry points | `apps/marketing/src/app/demo/` |
-| `/network/` | Read-only measured Devnet run, timeline replay, channel proofs and one example turn; empty until an actual run is exported | `apps/marketing/src/app/network/` |
 | `/video/product-walkthrough.mp4` | Downloadable edited 1:53 H.264 video with English subtitle track | `apps/marketing/public/video/` |
 | `/video/product-walkthrough.vtt` | Browser captions | `apps/marketing/public/video/` |
 
@@ -22,15 +21,24 @@ captured against an isolated workspace; it is a replay, not a newly executed cha
 The three prepared advertiser identities are ClearVault, KeyArc and ColdNest.
 A presenter creates HarborKey as the fourth using editable suggestions.
 
-The network benchmark uses isolated local workers and the same exchange, buying,
-publisher-render and native payment components. Its static page replays exported
-records; it cannot initiate provider calls or sign payments. Approved target counts
-are separate from achieved measurements. See [the run method](docs/product/NETWORK_SCALE.md).
+The recording flow is landing → advertiser dashboard → SDK guide → example chat →
+View internals. The same dialog shows Context, Buyers, Auction, Delivery and Payment.
+Payment can close the exact winning campaign's whole channel, then show finalized
+publisher payout, unused-deposit refund and Explorer proof without leaving chat.
+Closing ends new placements for that campaign; perform it last in a take.
+
+The landing page ends with compact result evidence: 1,052,672 local synthetic
+voucher updates and an independently verified 26-channel Solana Devnet subset.
+Methodology and proof live in `BENCHMARK.md` and `artifacts/network-scale/`.
+There is no `/network/` page or benchmark API. The million fixture counts and
+actual 676 voucher updates/52 native transactions remain separate. Full paid-run
+financial cleanup is still incomplete.
 
 ## Original MVP and recorded evidence
 
 All these routes are under `/mvp/`, served by the recorded explorer in
-`apps/product-ui/src/app/(explorer)/`. They remain separate from the live product.
+`apps/product-ui/src/app/(explorer)/`. They remain separate from the live product and are secondary historical evidence,
+not the landing page's main tour or a required stop in the current recording.
 
 | Route | Purpose |
 |---|---|

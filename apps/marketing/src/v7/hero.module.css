@@ -306,6 +306,7 @@
   .q { font-size: 12.5px; }
   .fog { display: none; }
   .copy { position: static; order: 1; padding: 0; }
+  .trio a[data-tone="ch"] { display: block; height: auto; min-height: 34px; padding: 6px 14px; }
   .h1 { font-size: clamp(40px, 10vw, 64px); }
   .note { position: static; order: 3; padding: 0; background: none; }
   .home { display: none; }

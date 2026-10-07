@@ -8,9 +8,11 @@ from the new product workspace; their campaigns and money are never merged.
 
 ## Hosted presentation (no local server)
 
-Open [the dashboard](https://axp.one/advertiser-dashboard/),
-[the chat](https://axp.one/publisher-demo/), [the SDK guide](https://axp.one/sdk/)
-and [the recorded product walkthrough](https://axp.one/demo/).
+Start at [the landing page](https://axp.one/), then open
+[the dashboard](https://axp.one/advertiser-dashboard/),
+[the SDK guide](https://axp.one/sdk/) and [the chat](https://axp.one/publisher-demo/).
+The existing [recorded product walkthrough](https://axp.one/demo/) remains separate
+recorded evidence; its prior UI does not replace the fresh recording below.
 Use the keyboard judge flow below against this hosted workspace. Do not start
 another local signing authority or seed/reset the already-funded hosted channels.
 The three prepared advertisers are ClearVault, KeyArc and ColdNest; create HarborKey
@@ -30,6 +32,46 @@ fixed at 24 hours from preparation, with an earlier signing deadline. Never rese
 funded state to extend it; reconcile and close existing identities through the
 coordinated payment workflow. Local commands below are for explicit development
 or an operator-managed separate workspace, not required to use axp.one.
+
+## Manual screen recording
+
+For a human-operated walkthrough, use the landing page, dashboard, SDK guide and
+chat in prepared browser tabs. On macOS press **Command + Shift + 5**, choose **Record Selected Portion**,
+and frame the browser content. Enable your microphone under Options if narrating.
+Keep the cursor visible, move deliberately and finish each action before switching
+tabs. Record the real waits; trim long idle holds afterwards without changing the
+order or representing a replay as a fresh run.
+
+Aim for two to three minutes, with one continuous story:
+
+| Moment | Show | Say |
+|---|---|---|
+| Landing | Hero through ContextHint, Jev and Solana | “We built ContextHint, already used by marketers working with ChatGPT ads. That gives AXP a distribution starting point and accumulated advertising-context evidence.” |
+| Advertiser | Create HarborKey with editable suggestions; review, approve and fund its channel | “An advertiser defines its offer, context and limits, then approves the card.” |
+| SDK, briefly | Request → Render → Acknowledge, then Open example chat | “Publishers keep their own answer model. The SDK adds a separate Sponsored card.” |
+| Chat | Submit one question; show the independent answer and separate Sponsored card | “DeepSeek powers this example app's answer. AXP independently evaluates the advertisers.” |
+| Internals | Context → Buyers → Auction → Delivery; expand one actual retrieved evidence example | “Advertiser instructions and ContextHint evidence are separate. Jev judges fit; code applies the bid and budget rules.” |
+| Payment, last | In the same dialog: funded deposit → cumulative vouchers → Close & settle Test USDC → Finalized → Explorer | “Vouchers accumulate off-chain. One channel close pays the publisher and returns the unused deposit.” |
+
+Show the actual winning advertiser. HarborKey is not guaranteed to win. If there
+is no fill or a provider error, retain the outcome rather than hiding or forcing it.
+For payment, stay in **View internals → Payment** and use the coordinated
+**Close & settle Test USDC** action when enabled. The diagram and totals cover the
+winning campaign's whole channel, including earlier accepted turns; they are not
+this turn's charge alone. Before closure, show **Authorized · not yet paid**.
+Wait for **Finalized**, publisher payout, unused-deposit refund and Explorer proof
+before describing money as paid. Expand fees/token balances only if useful.
+
+Settle **last**: closing permanently ends new placements for the winning campaign.
+Another take requires other active inventory or an explicitly created, approved
+and newly funded campaign within the existing bounds. Do not reset a closed or
+funded channel or repeat paid requests just to rehearse. Recording changes the
+shared inventory; refresh it before the live presentation. If an operation becomes
+uncertain, inspect/reconcile its saved identity instead of submitting a replacement.
+
+Stop recording with the menu-bar stop control. Preserve the original MOV and use
+a separately named edited MP4 for website publication. This manual recording is
+distinct from the existing automated 1:53 walkthrough.
 
 ## Execution and payment modes
 
@@ -115,6 +157,13 @@ changes frequency scope, not campaign spend or daily provider caps.
 
 ## Keyboard judge flow
 
+First show the landing story through Solana: what AXP does, ContextHint's existing
+marketer audience/data and the roles of Jev and payment channels. The compact
+result footer is optional: 1,052,672 local synthetic updates are distinct from the
+verified 26-channel Devnet subset. Neither count is production capacity or proof
+that all funded paid-run channels are settled. The original MVP is optional
+historical evidence for Q&A, not a stop in this flow.
+
 1. Open the dashboard and show the three actual active advertisers: ClearVault,
    KeyArc and ColdNest. The **Demo autofill** switch is enabled by the presentation
    server's explicit demo flag and remains visible and editable. Select **Create
@@ -145,7 +194,8 @@ changes frequency scope, not campaign spend or daily provider caps.
    campaign version. In Devnet, **Fund channel & launch** opens the approved
    channel and activates the campaign only after deposit finality. The active-advertiser count now comes from four persisted
    advertiser identities, rather than a UI fixture.
-7. Open Publisher chat. With its explicit demo autofill enabled, **Tab** in the
+7. Show the SDK guide's Request → Render → Acknowledge overview for about 15
+   seconds; use **Open example chat**. With explicit demo autofill enabled, **Tab** in the
    empty composer fills a hardware-wallet comparison question; **Enter** submits a
    fresh turn. The independent DeepSeek answer and complete Jev buying/auction/
    delivery path execute separately. Show the actual `deepseek-flash` answer when
@@ -154,10 +204,18 @@ changes frequency scope, not campaign spend or daily provider caps.
    retrieved evidence or its unavailability, Jev decisions, bid policy, auction,
    award reservation, exact insertion acknowledgement and accepted receipt/charge.
    The question and suggested bids do not force HarborKey to win. If there is
-   no-fill, present its recorded reason. Return to the dashboard to show real
-   accepted spend, reservation, authorization and mode-specific settlement states.
+   no-fill, present its recorded reason. Select the five stages in sequence;
+   expand one buyer's actual **Buyer context and evidence** to show advertiser hints
+   separately from ContextHint retrieval, and inspect its reported method.
+9. Stay in the same modal's **Payment** stage. Show the actual funded deposit,
+   cumulative authorization and voucher count. Select **Close & settle Test USDC**
+   last, when enabled; wait for **Finalized** and inspect payout/refund and the
+   Explorer link. The action closes the bound winning campaign's whole channel.
+   **Refresh payment records** is read-only. If shown, use **Reconcile saved
+   payment** for an uncertain saved operation or **Authorize accepted deliveries**
+   for the existing accepted ledger; neither requires another question or deposit.
 
-Optional inspection after the core story: replay an accepted receipt to show its
+Optional inspection before final settlement: replay an accepted receipt to show its
 unchanged charge ID; ask a fresh turn to demonstrate the per-conversation frequency
 cap; pause an advertiser's campaign and inspect its exclusion. A new conversation
 never resets campaign spend. Synthetic closing remains a test ledger operation. Native closing must show
@@ -329,12 +387,14 @@ are for unfunded synthetic rehearsals.
    spend. Acceptance creates the charge; authorization does not charge it again.
 3. Inspect Devnet opening transaction, confirmed deposit and cumulative voucher
    sequence. Pause/resume uses this same channel.
-4. Select **Close & settle Test USDC** when the backend enables it. Wait through
-   draining/settlement pending, then show finalized publisher payout and unused
-   deposit return, transaction signatures, finality and token deltas. Inspect SOL
-   fee/rent evidence separately from Test USDC charges. In the chat, select
-   **Refresh payment records** in the Payment stage to read the newly finalized payout/refund
-   without another question, model request or signing operation.
+4. In the chat's **View internals → Payment**, select **Close & settle Test USDC**
+   when enabled. Wait through draining/settlement pending, then show finalized
+   publisher payout, unused-deposit return and Explorer proof in the same modal.
+   The coordinated dashboard action remains available, but is not required for
+   the recording. Inspect SOL fees/rent separately from test-USDC charges.
+   **Refresh payment records** reads saved evidence without a question, model
+   request or signing operation. Closing ends new placements for that campaign;
+   perform it last.
 5. An unsigned opening blocker can expose **Retry saved channel opening**. It
    refetches current state and reuses the same campaign; it never retries signed
    or uncertain identities.

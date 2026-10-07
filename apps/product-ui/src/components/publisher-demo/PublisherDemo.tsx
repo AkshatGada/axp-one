@@ -5,10 +5,11 @@ import {Ld} from '@axp/design-system/ledger';
 import {productRequest} from './api.mjs';
 import {createRenderAcknowledger, createSponsoredCard, inspectPlacement} from '../../../../../packages/publisher-sdk/browser.mjs';
 import type {Award, OpportunityInput, OpportunityResult, ReceiptResult, RenderObservation} from '../../../../../packages/publisher-sdk/index.mjs';
+import {boundPaymentIdentity, paymentState} from './payment-state.mjs';
 import {PeekInside} from './PeekInside';
 import {ChatDialog} from './ChatDialog';
 import {AnswerText} from './AnswerText';
-import {financialModeOf, type Config, type Answer, type Turn, type WorkspaceState} from './model';
+import {financialModeOf, type Config, type Answer, type Turn, type WorkspaceState, type PaymentAction, type BudgetCampaign} from './model';
 import './publisher-demo.css';
 
 const err = (error: unknown) => error instanceof Error ? error.message : 'request_failed';
@@ -80,6 +81,36 @@ export function PublisherDemo() {
     catch (error) {patch(turnId, {budgetError: err(error)});}
     finally {patch(turnId, {budgetLoading: false});}
   }
+  const paymentLock = useRef(false);
+  async function paymentAction(turn: Turn, action: PaymentAction) {
+    if (paymentLock.current || pending || turn.budgetLoading) return;
+    const identity = boundPaymentIdentity(turn);
+    if (!identity.campaignId || !identity.channelId || !turn.receipt) return;
+    paymentLock.current = true;
+    patch(turn.input.turnId, {paymentOperation: {action, pending: true, uncertain: turn.paymentOperation?.uncertain}});
+    let submitted = false;
+    try {
+      // Refresh before any financial mutation; a historical turn cannot select a new channel.
+      const latest = await productRequest<WorkspaceState>('/state');
+      patch(turn.input.turnId, {budgetAfterDelivery: latest, budgetFetchedAt: Date.now(), budgetError: undefined});
+      const campaign = latest.campaigns.find(c => c.id === identity.campaignId);
+      const controls = paymentState(campaign, {...identity, uncertain: turn.paymentOperation?.uncertain});
+      if (latest.financialMode !== 'devnet' || !controls[action]) throw new Error('Payment state changed. Inspect the refreshed records before continuing.');
+      submitted = true;
+      const result = await productRequest<{campaign: BudgetCampaign; paymentOperation?: {status?: string; reason?: string; reasonCode?: string}}>(`/campaigns/${encodeURIComponent(identity.campaignId)}/${action}`, {body: {}, csrf: csrf.current, timeoutMs: 60000});
+      if (result.campaign?.id !== identity.campaignId || result.campaign.payment?.channelId !== identity.channelId) throw new Error('payment_identity_mismatch');
+      const saved = {...latest, campaigns: latest.campaigns.map(c => c.id === identity.campaignId ? result.campaign : c)};
+      const next = paymentState(result.campaign, identity);
+      const blocked = result.paymentOperation?.status === 'blocked';
+      const blockedReason = (result.paymentOperation?.reason ?? result.paymentOperation?.reasonCode ?? 'Payment checks blocked this action.').replaceAll('_', ' ');
+      patch(turn.input.turnId, {budgetAfterDelivery: saved, budgetFetchedAt: Date.now(), paymentOperation: {action, pending: false, uncertain: next.needsReconcile, message: blocked ? `Payment action blocked: ${blockedReason}. Inspect the saved records.` : next.finalized ? 'Finalized on Solana Devnet. Publisher payout and refund are recorded below.' : action === 'reconcile' ? 'Saved payment identity checked. Inspect its current status.' : action === 'authorize' ? 'Accepted deliveries processed. Inspect the cumulative authorization.' : 'Close requested. Inspect status and refresh for finality.'}});
+      // Refresh is read-only. Preserve the action response if this lookup is unavailable.
+      await snapshot(turn.input.turnId, 'budgetAfterDelivery');
+    } catch (error) {
+      patch(turn.input.turnId, {paymentOperation: {action, pending: false, uncertain: submitted || turn.paymentOperation?.uncertain, error: submitted ? `Operation acknowledgement unavailable: ${err(error)}. Reconcile the saved identity before another payment action.` : err(error)}});
+      if (submitted) await snapshot(turn.input.turnId, 'budgetAfterDelivery');
+    } finally {paymentLock.current = false;}
+  }
   // A failed organic call cannot turn a held award into a billable card.
   useEffect(() => {
     for (const turn of turns) {
@@ -128,14 +159,14 @@ export function PublisherDemo() {
     try {const receipt = await productRequest<ReceiptResult>(`/demo/awards/${encodeURIComponent(ad.award.id)}/render`, {body: observation, csrf: csrf.current, deliveryToken: ad.deliveryToken, timeoutMs: 45000}); patch(turn.input.turnId, {receipt, renderState: 'accepted', receiptReceivedAt: Date.now()}); void snapshot(turn.input.turnId, 'budgetAfterDelivery');}
     catch (error) {patch(turn.input.turnId, {renderState: 'error', renderError: err(error)});}
   }
-  const pending = busy || turns.some(t => t.renderState === 'pending' || t.awardRelease === 'pending');
+  const pending = busy || turns.some(t => t.renderState === 'pending' || t.awardRelease === 'pending' || t.paymentOperation?.pending);
   const organicReady = config?.organic?.ready === true && config.organic.execution === 'actual-api-model';
   const financialMode = financialModeOf(config);
   const inspected = turns.find(t => t.input.turnId === selected);
   function fresh() {if (pending) return; const value = uid('session'); setSessionId(value); storeSession(value); setTurns([]); setSelected(undefined);}
   function choosePrompt(value: string) {setQuestion(value); composer.current?.focus();}
   function intent() {return scrollIntent.current ?? (scrollIntent.current = {away: false, pointer: false, lastTop: conversation.current?.scrollTop ?? 0});}
-  function peek(turnId: string) {setSelected(turnId);}
+  function peek(turnId: string) {setSelected(turnId); void snapshot(turnId, 'budgetAfterDelivery');}
 
   return <div className="ld pub-demo pub-chat-app">
     <aside className="pub-sidebar" aria-label="Chat navigation">
@@ -168,7 +199,7 @@ export function PublisherDemo() {
       </div>
       <div className="pub-composer-wrap"><form className="pub-composer" onSubmit={event => void submit(event)}><label htmlFor="publisher-question" className="pub-sr-only">Your question</label><textarea ref={composer} id="publisher-question" value={question} onChange={e => setQuestion(e.target.value)} onKeyDown={event => {if (event.nativeEvent.isComposing) return; if (event.key === 'Tab' && !event.shiftKey && !question.trim()) {event.preventDefault(); setQuestion(config?.sampleQuestions?.find(q => /hardware wallets?/i.test(q)) ?? 'Compare hardware wallets for Ethereum and Solana with offline key storage.');} else if (event.key === 'Enter' && !event.shiftKey) {event.preventDefault(); event.currentTarget.form?.requestSubmit();}}} placeholder="Ask anything" rows={2} maxLength={1200} required aria-describedby="publisher-send-hint" /><div className="pub-composer-foot"><span id="publisher-send-hint">{pending ? 'Request in progress' : <><kbd>Tab</kbd> suggested prompt</>}</span><button className="pub-send" type="submit" aria-label="Send question" disabled={pending || !organicReady || !config || !sessionId || !question.trim() || !!connectionError}>→</button></div></form><p className="pub-chat-disclosure">AI answers may be inaccurate. Sponsored suggestions are labelled.</p></div>
     </main>
-    {inspected ? <ChatDialog title="Inside this turn" subtitle={`Turn ${turns.indexOf(inspected) + 1} · recorded results`} onClose={() => setSelected(undefined)}><PeekInside turn={inspected} financialMode={financialMode} onRefreshBudget={() => void snapshot(inspected.input.turnId, inspected.receipt || inspected.awardRelease ? 'budgetAfterDelivery' : 'budgetAfterAward')} onRetryAd={() => void retryAd(inspected)} onRetryRender={() => void retryRender(inspected)} pending={pending} /></ChatDialog> : null}
+    {inspected ? <ChatDialog title="Inside this turn" subtitle={`Turn ${turns.indexOf(inspected) + 1} · live request records`} onClose={() => setSelected(undefined)}><PeekInside turn={inspected} financialMode={financialMode} onRefreshBudget={() => void snapshot(inspected.input.turnId, inspected.receipt || inspected.awardRelease ? 'budgetAfterDelivery' : 'budgetAfterAward')} onPaymentAction={action => void paymentAction(inspected, action)} onRetryAd={() => void retryAd(inspected)} onRetryRender={() => void retryRender(inspected)} pending={pending} /></ChatDialog> : null}
     {selected === 'settings' ? <ChatDialog title="Chat settings" compact onClose={() => setSelected(undefined)}><div className="pub-stack"><label className="pub-check"><input type="checkbox" checked={adsEnabled} onChange={e => setAdsEnabled(e.target.checked)} disabled={pending} /> Enable sponsored suggestions</label><Ld.Field label="Required capability" hint="Optional. Campaigns must declare this capability."><select className="ld-select" value={requirement} onChange={e => setRequirement(e.target.value)} disabled={pending}><option value="">Infer from the question</option>{config?.capabilities?.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}</select></Ld.Field><Ld.Field label="Excluded category"><select className="ld-select" value={excluded} onChange={e => setExcluded(e.target.value)} disabled={pending}><option value="">No extra exclusion</option>{config?.capabilities?.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}</select></Ld.Field><div className="pub-between"><span className="ld-caption">Exchange mode</span><Ld.Tag tone="outline">{financialMode === 'devnet' ? 'Devnet · test USDC' : financialMode === 'synthetic' ? 'Synthetic test credits' : 'Connecting'}</Ld.Tag></div><details className="pub-details"><summary>Session and providers</summary><dl><dt>Session</dt><dd className="ld-mono">{sessionId}</dd><dt>Placement</dt><dd className="ld-mono">{config?.placementId}</dd><dt>Buyer</dt><dd>{config?.engine?.id} · {config?.engine?.ready ? 'Ready' : config?.engine?.reason || 'Unavailable'}</dd></dl><p className="ld-caption">A new chat changes the session. Campaign spend persists.</p><Link href="/publisher-demo/integration">SDK integration →</Link></details></div></ChatDialog> : null}
   </div>;
 }

@@ -1,54 +1,38 @@
-# Measured network run
+# Network benchmark operator guide
 
-The read-only surface is https://axp.one/network/. It shows exported records of
-an actual execution, or a clearly empty state until that execution is available.
-Replay does not call Jev, DeepSeek or Solana. Targets are never measured results.
+The benchmark's methodology, approved ceilings and evidence are in
+[BENCHMARK.md](../../BENCHMARK.md). A compact landing-page summary links local
+fixture scale and actual Devnet proof; there is no separate benchmark page or
+endpoint. The harness uses isolated product workers and does not widen deployed
+product admission limits.
 
-## Method
+## Recorded verification status
 
-One local coordinator operates 16 isolated ProductService workers, each with eight
-fictional hardware-wallet advertisers and up to 64 distinct publisher questions.
-The workers reuse the product eligibility, retrieval, Jev inference, deterministic
-first-price auction, accepted-charge ledger and native Solana channel implementation.
-This measures the bounded coordinator and local workers; it does not measure the
-single hosted demo workspace or establish production fleet capacity.
+The paid run remains partial: 125 funded advertisers, 825 started publisher turns
+and 824 accepted deliveries. A threshold-selected subset of 26 channels has 676
+off-chain voucher updates and **52 independently verified finalized transactions**.
+It deposited 1.3 test USDC, paid 1.014 and refunded 0.286. See its
+[acceptance record](../../artifacts/network-scale/devnet-threshold-acceptance.json)
+and [verification](../../artifacts/network-scale/devnet-threshold-verification.json).
+The verifier reads genesis, signatures, slots, program/mint binding, token deltas,
+fees and conservation without loading a wallet, calling a model, signing or
+broadcasting. The current broader cleanup checkpoint is 61 closed channels and
+64 remaining; it does not expand the verified subset or establish full completion.
 
-DeepSeek creates the example app's independent answer for each admitted fresh turn.
-It receives no advertiser material. Jev evaluates buying fit using advertiser hints
-and screened ContextHint evidence. Retrieval method and provider execution are
-recorded; lexical fallback is not described as fresh embedding inference.
+The separate [million-update result](../../artifacts/network-scale/offline-million.json)
+completed with 1,052,672 synthetic updates, 16,448 mock closes and four successful
+workers. Raw latency verification reproduces 10.924833 ms p50 / 21.922792 ms p95;
+whole-run throughput is 216.25586 local fixture updates/second. Persisted-state
+verification covers every saved snapshot; cold replay samples 192 channels.
+Provider/RPC calls, wallet access, signatures, native broadcasts and real payouts
+are zero. These results do not enlarge the paid run's authorization or prove
+production throughput.
 
-The private browser driver inserts the actual approved card with the publisher SDK
-and observes connected DOM insertion, exact copy, destination and Sponsored label.
-It forwards that observation before a charge is accepted. An insertion receipt is
-distinct from human attention or conversion. Stable identities prevent replay from
-creating another provider attempt or charge.
-
-Each campaign's channel is funded on Devnet. Accepted charges advance cumulative
-signed vouchers off-chain. Finalized close transactions establish publisher payout
-and unused collateral refund. Deposits, accepted charges, authorized totals and
-settlements remain separate in the exported accounting.
-
-## Approved limits
-
-| Boundary | Maximum |
-|---|---:|
-| Funded fictional advertisers | 128 |
-| Fresh publisher turns | 1,024 |
-| Jev evaluations | 8,192 |
-| API spend | $3 total: $1 Jev, $2 DeepSeek |
-| New deposits | 6.4 test USDC |
-| Accepted delivery charges | 2.048 test USDC |
-| SOL fee/rent reservation | 1.6 Devnet SOL |
-| Publisher concurrency ramp | 1, 4, 8, 16 |
-
-A private SQLite journal reserves API liability before sending a request. Unknown
-usage retains the conservative reservation. Exported DeepSeek usage costs use
-peak cache-miss rates as a conservative upper bound, rather than verified billing.
-Native admissions, estimated fees and
-accepted-charge liability also have global durable limits. One exclusive coordinator
-and serial native queue use the existing demo wallet, with separate channel state.
-Production demo caps and funded presentation channels remain unchanged.
+The [public operator sources](../../artifacts/network-scale/operator/) are saved
+as `.mjs.txt` evidence, not a deployed execution surface. Original scripts use the
+retained operator workspace layout and private RPC configuration. Full SQLite and
+raw latency records stay local, bound by recorded hashes. Do not recreate a paid
+run to verify the proof.
 
 ## Operator execution
 
@@ -82,7 +66,14 @@ deposit or replacement transaction. Resolve any pending state before declaring t
 run settled. `replay` checks the saved identities without new calls or charges.
 
 Export with `node scripts/network-scale/cli.mjs export`; the sanitized default is
-`artifacts/network-scale/run.json`. Copy it to
-`apps/marketing/src/data/network-scale.json` before `npm run build:site`.
-Review measurements, finality, accounting and partial/complete status before
-publishing. The public page has no wallet, provider credentials or signing controls.
+`artifacts/network-scale/run.json`. Keep this recorded proof in the repository,
+with the run source commit and profile hash. Review measurements, finality,
+accounting and partial/complete status before updating BENCHMARK.md or committing
+the artifact. Never copy private execution state into the proof directory.
+
+The completed million-update local ledger experiment is a separate synthetic
+workload. Its compact result, raw latency hash/percentile verification, persisted
+snapshot verification, specimen and sampled cold replay are in
+`artifacts/network-scale/offline-million*.json`. Never add these fixture counts to
+actual provider or Devnet totals. Closure thresholds are external experiment
+policy; no automatic production threshold watcher is implemented.

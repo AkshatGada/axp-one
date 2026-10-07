@@ -19,7 +19,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type 
 import { motion, useMotionValue, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
 import { ActionPrimary, ActionText, Words } from "@axp/design-system/prospectus";
 import { CACHED, CV, HELPFUL_EXCERPT } from "@/data/run";
-import { DEVNET_URL, HERO, MVP_URL, STACK } from "@/data/copy";
+import { DEVNET_URL, HERO, PUBLISHER_URL, PRODUCT_VIDEO_URL, STACK } from "@/data/copy";
 import { PROMPTS } from "@/hero-lab/data";
 import useReduced, { usePinned } from "@/motion/useReduced";
 import { IDENTITY, io, lerp, mixM, mul, out, seg, type M2 } from "@/motion/motion";
@@ -142,10 +142,10 @@ function Copy() {
       </h1>
       <p className={`px-lead ${s.lede}`}>{HERO.lede}</p>
       <div className={s.actions}>
-        <ActionPrimary href={MVP_URL} external>
+        <ActionPrimary href={PUBLISHER_URL}>
           {HERO.primary}
         </ActionPrimary>
-        <ActionText href="/demo/">Watch the product demo</ActionText>
+        <ActionText href={PRODUCT_VIDEO_URL}>Watch the demo</ActionText>
       </div>
       <p className={s.trio}>
         {HERO.trio.map((t) => (

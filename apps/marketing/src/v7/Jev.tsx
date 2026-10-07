@@ -20,6 +20,7 @@ export default function Jev() {
           <h2 id="jev-title" className={s.h2}>
             {J.h2}
           </h2>
+          <p className={s.note}>{J.note}</p>
           <a className={s.credit} href={JEV_URL} {...ext}>
             <span>{J.credit}</span>
             <Arrow width={20} />

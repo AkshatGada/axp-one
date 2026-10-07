@@ -21,7 +21,17 @@ it is not the exchange’s decision engine. Jev is the buying decision layer.
 | Example publisher chat | [Ask a question, then view internals](https://axp.one/publisher-demo/) |
 | Publisher SDK guide | [Connect your own AI app](https://axp.one/sdk/) |
 | Product walkthrough | [1:53 recording with chapters and captions](https://axp.one/demo/) |
-| Original MVP explorer | [Recorded evidence and live-run console](https://axp.one/mvp/) |
+
+The main walkthrough is **landing → advertiser dashboard → SDK → chat → View
+internals → payment proof**. The SDK guide leads with Request → Render →
+Acknowledge; full setup stays in disclosures. Internals shows Context, Buyers,
+Auction, Delivery and Payment in one dialog. Payment can close the exact winning
+campaign's whole channel, pay its cumulative authorized total and return unused
+collateral, then show finalized Devnet Explorer proof. Closing ends that campaign's
+new placements, so settle last when recording.
+
+The [original MVP explorer](https://axp.one/mvp/) remains secondary historical
+evidence. Its recorded run is not a required part of the current demonstration.
 
 The public product requires no local installation. The guide connects to
 `https://axp.one/api/product`; external SDK integrations need a publisher key
@@ -38,7 +48,7 @@ The SDK is repository source, not a published npm package.
 - [Advertiser journeys](docs/product/ADVERTISER_JOURNEYS.md) and [publisher journeys](docs/product/PUBLISHER_JOURNEYS.md).
 - [Design system](docs/DESIGN_SYSTEM.md): actual PolySans fonts, Ultramarine, Prospectus and Ledger.
 - [Build and acceptance register](docs/BUILD_PROGRESS.md).
-- [Measured network run](docs/product/NETWORK_SCALE.md): isolated operator harness, spend bounds and exported proof.
+- [Benchmark methodology and evidence](BENCHMARK.md): approved ceilings, execution status and recorded proof.
 
 ## What the data contributes
 
@@ -51,7 +61,29 @@ examples for advertiser buying decisions. The committed screened crypto-storage
 snapshot is bounded and versioned; AXP does not collect new ChatGPT ads at runtime.
 We do not claim a newly trained AXP model, ChatGPT ranking access or measured
 conversion lift. Advertiser-authored hints and retrieved ContextHint evidence
-remain separate inputs to Jev.
+remain separate inputs to Jev. ContextHint's existing audience is the distribution
+starting point for recruiting AXP advertisers; ContextHint users are not counted
+as existing AXP customers.
+
+## Measured results
+
+The compact landing summary keeps two different measurements separate:
+
+- **Local fixture scale:** [1,052,672 cumulative voucher updates](artifacts/network-scale/offline-million.json)
+  across 16,448 simulated channels, 64 updates per mock close. All four local
+  workers completed. Exact authorization latency is 10.924833 ms p50 / 21.922792 ms
+  p95; whole-run throughput is 216.25586 fixture updates/second. Every saved
+  channel snapshot was verified; cold replay sampled 192 channels. Provider/RPC
+  calls, signatures, native broadcasts and real payouts were zero.
+- **Actual Devnet subset:** [26 channels and 52 verified transactions](artifacts/network-scale/devnet-threshold-verification.json),
+  with 676 accepted deliveries/off-chain updates. Finalized closes paid 1.014 test
+  USDC and refunded 0.286 from 1.3 deposited. This is subset proof of a partial
+  125-funded-advertiser, 825-started-turn, 824-accepted-delivery run; full financial
+  cleanup is still in progress.
+
+[BENCHMARK.md](BENCHMARK.md) explains sources, storage, thresholds, verification
+and limitations. The million test measures local fixture accounting, not Solana
+or production capacity. There is no separate benchmark website route or endpoint.
 
 ## Reproduce locally
 

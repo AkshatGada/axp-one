@@ -2,11 +2,11 @@
 // v7 rule: visual first, words are captions. One display line per section, at most one short
 // sentence, then the visual. Whole page under 450 words.
 // Standing rules: no em or en dashes; no internal details (IDs, hashes, policy names, model
-// versions, level shorthands, base units); scale words for ContextHint's library (exact figures
-// live on contexthint.com and in the MVP); no partnership, enrollment, lift, attention, conversion,
+// versions, level shorthands, base units); scale words for ContextHint's library, founder-reported
+// usage distinguished from AXP adoption; no partnership, enrollment, lift, attention, conversion,
 // mainnet or x402 claims (a planned item or a stated limit carries a claim-ok comment).
 // Run numbers come from run.ts (written by scripts/extract-specimens.mjs with asserts).
-import { JEV, LIBRARY, TRACTION } from "./library";
+import { JEV, LIBRARY } from "./library";
 import { CACHED, CV, CV_CHANNEL, DEVNET, JEV_EXAMPLE, KF, KF_CHANNEL, LG, RUN, policyBid, usdc } from "./run";
 
 /** The MVP: the product-ui dev server in development, /mvp/ in the merged static build. */
@@ -19,6 +19,9 @@ export const SOLANA_URL = "https://solana.com";
 /** The ClearVault channel's close on Solana Devnet: the transaction that paid the AI app. */
 export const DEVNET_URL = DEVNET?.channels[0]?.closeUrl ?? null;
 export const VIDEO_ANCHOR = "#video";
+export const PUBLISHER_URL = "/publisher-demo/";
+export const ADVERTISER_URL = "/advertiser-dashboard/";
+export const PRODUCT_VIDEO_URL = "/demo/";
 
 const bid = usdc(CACHED.bids[0]!.amount);
 
@@ -27,22 +30,22 @@ export const NAV = [
   { href: "/publisher-demo/", label: "Publisher chat" },
   { href: "/sdk/", label: "SDK" },
 ];
-export const HEADER = { chip: "Hackathon MVP", cta: "See the MVP" };
+export const HEADER = { chip: "Solana Devnet", cta: "Watch the demo" };
 
 export const HERO = {
   h1: "The advertising exchange for the agentic internet.",
   accent: "agentic internet.",
-  lede: "Advertiser agents bid for a disclosed slot beside AI answers. Code sets the price; Solana pays the app.",
-  primary: "See the MVP",
+  lede: "Advertisers reach relevant AI conversations. Publishers earn through Solana payment channels.",
+  primary: "Try the live chat",
   status: "Live on public Solana Devnet, test USDC.",
-  devnet: "View on Explorer",
+  devnet: "Recorded payment proof",
   trio: [
     { k: "", name: "ContextHint", rest: ", the intelligence platform for ChatGPT ads", href: LIBRARY.url, tone: "ch" },
     { k: "Decisions", name: "Jev", rest: "", href: JEV.url, tone: "jev" },
     { k: "Settlement", name: "Solana", rest: "", href: SOLANA_URL, tone: "sol" },
   ],
   wallNote: "Questions observed by ContextHint. Bidding illustrative.",
-  focalNote: "From our live Devnet run. ClearVault is fictional.",
+  focalNote: "Recorded Devnet example. ClearVault is fictional.",
   /** Shown inside the focal tile (the run's own records). */
   appName: "Our demo AI app",
   slotLine: "Answer, then one Sponsored slot",
@@ -53,16 +56,16 @@ export const HERO = {
 /** The exploded card: six plates behind the one Sponsored card. Two to four words each. */
 export const STACK = {
   line: "Behind one Sponsored card, a whole exchange.",
-  note: "From our live Devnet run.",
+  note: "Recorded Devnet example.",
   plates: {
     answer: { name: "Answer", note: "written without ads" },
     card: { name: "Card", note: "labelled Sponsored" },
-    auction: { name: "Auction", note: "decided in code" },
+    auction: { name: "Auction", note: "fixed auction rules" },
     agents: { name: "Agents", note: "judged with Jev" },
     evidence: { name: "Evidence", note: "from ContextHint" },
     payment: { name: "Payment", note: "settled on Solana" },
   },
-  price: "Highest bid wins; price set in code",
+  price: "Highest valid bid wins; winner pays its bid",
   ruledOut: "ruled out",
 };
 
@@ -73,10 +76,10 @@ export const HOW = {
   steps: [
     "Someone asks an AI app a buying question.",
     "Jev judges if the moment fits each advertiser; a fixed rule makes it bid or skip.",
-    "Code sets the price, checks the rules, picks the winner.",
-    "One Sponsored card beside the answer, paid only after delivery, settled on Solana.",
+    "The auction engine checks budgets and picks the highest valid bid.",
+    "A Sponsored card earns one charge after accepted delivery; the channel settles on Solana.",
   ],
-  tagline: "Agents advise. Code decides the money.",
+  tagline: "Agents judge fit. Fixed auction rules control money. Recorded example shown.",
   mustStore: "must store crypto",
   evidence: "ContextHint evidence",
   withJev: "with Jev",
@@ -85,25 +88,23 @@ export const HOW = {
   outLine: "kept out by a fixed rule",
   tie: "ties: a fixed rule",
   beside: "beside the answer, never in it",
-  receipt: "signed receipt = the charge",
+  receipt: "accepted receipt = one charge",
   oneClose: "one close on Solana",
 };
 
-/** ContextHint: the data chapter. Scale words only. */
+/** ContextHint: existing audience and accumulated evidence, never AXP adoption. */
 export const CONTEXTHINT = {
-  label: "Data from ContextHint",
-  what: "ContextHint is the intelligence platform for ChatGPT ads.",
-  moat: "An auction is code. Evidence must be collected;",
-  moatAccent: "ContextHint collects it.",
-  scale: [
-    { big: "Thousands", small: "of advertisers" },
-    { big: "Tens of thousands", small: "of ads" },
-    { big: "Hundreds of thousands", small: "of placements" },
-    { big: "A dozen", small: "countries" },
+  label: "Our starting advantage",
+  what: "We founded ContextHint, the ChatGPT ad intelligence platform.",
+  moat: "Real ad data.",
+  moatAccent: "Existing distribution.",
+  advantages: [
+    { label: "Distribution", big: "1,000+", small: "marketers use ContextHint daily", detail: "An existing audience for AXP." },
+    { label: "Data", big: "Tens of thousands", small: "of observed ChatGPT ads", detail: "Hundreds of thousands of placements." },
   ],
-  traction: TRACTION.line,
-  use: "Agents get a few real past examples and an inferred audience.",
-  wallLabel: "Real ads observed in ChatGPT. Not axp.one advertisers; no relationship implied.",
+  use: "AXP uses embeddings from ContextHint data to retrieve relevant ad context.",
+  provenance: "ContextHint usage is founder-reported. Its users are not AXP customers.",
+  wallLabel: "ChatGPT ads observed by ContextHint.",
   action: "Visit ContextHint",
 };
 
@@ -112,7 +113,8 @@ const conf = (x: number) => `${Math.round(x * 100)}% confident`;
 /** Jev: one real judgment from the run (ClearVault, the cached question). */
 export const JEV_SECTION = {
   label: "Decisions with Jev",
-  h2: "One real judgment.",
+  h2: "Evidence in. Buying judgment out.",
+  note: "Recorded Jev judgment from our Devnet example.",
   inLabel: "In",
   inputs: ["The question", `${CV.name}'s campaign`, "Its ContextHint evidence"],
   outLabel: "Jev returns",
@@ -122,7 +124,7 @@ export const JEV_SECTION = {
     { k: "Creative", v: "Fits", level: 3, value: J.creativeConfidence, conf: conf(J.creativeConfidence) },
   ],
   rule: "Fixed rule: bid",
-  codeLabel: "Code sets the amount",
+  codeLabel: "Auction engine sets the amount",
   bid: usdc(policyBid(J.relevanceLevel, J.intentLevel, CV.maxBid)),
   cap: "the cap",
   credit: "Built with Jev by TypeSafe",
@@ -143,7 +145,7 @@ export const SOLANA = {
   paid: `${usdc(CV_CHANNEL.settled)} to the app`,
   refund: `${usdc(CV_CHANNEL.refund)} refunded`,
   vouchers: CV_CHANNEL.vouchers.map((v) => usdc(v.cumulative)),
-  devnetH: "Settled on Solana. Check it yourself.",
+  devnetH: "Recorded settlement. Check it yourself.",
   explorerChannels: [
     { name: CV.name, ch: DEVNET?.channels.find((c) => c.campaign === "v3-clearvault") ?? null },
     { name: KF.name, ch: DEVNET?.channels.find((c) => c.campaign === "v3-keyforge") ?? null },
@@ -153,7 +155,7 @@ export const SOLANA = {
   channel: "Channel",
   program: "Program",
   programUrl: DEVNET?.programUrl ?? null,
-  live: "Live on Solana Devnet",
+  live: "Recorded Devnet example",
   token: "Circle Devnet USDC",
   tokenUrl: DEVNET?.mintUrl ?? null,
   note: "Public Solana Devnet, test USDC, no real value.", // claim-ok: limit
@@ -214,14 +216,36 @@ export const VIDEO = {
 };
 
 export const CLOSING = {
-  h2: "Disclosed. Decided in code. Paid on delivery.",
-  primary: "See the working MVP",
-  video: "Watch the video",
-  contexthint: "Explore ContextHint",
+  h2: "See the exchange in action.",
+  primary: "Open advertiser dashboard",
+  chat: "Try the live chat",
+  video: "Watch the demo",
+};
+
+/** Verified local fixture workload, separate from the recorded Devnet execution. */
+export const LEDGER_BENCHMARK = {
+  label: "Local ledger benchmark",
+  h2: "1M+ voucher updates",
+  mode: "Offline fixtures. Simulated settlement.",
+  channels: "16,448 simulated channels",
+  updates: "64 updates",
+  close: "1 close",
+  note: "Per channel, a threshold close follows cumulative updates. No native transactions or provider calls.",
+  action: "Read the methodology",
+  href: "https://github.com/Gaganub/axp-one/blob/main/BENCHMARK.md",
+  native: {
+    label: "Solana Devnet",
+    h3: "26 channels",
+    mode: "Finalized payout and refund.",
+    updates: "26 vouchers",
+    close: "1 finalized close",
+    note: "1.014 test USDC paid · 0.286 refunded.",
+  },
 };
 
 export const FOOTER = {
-  scope: ["Live on Solana Devnet, test USDC. Not mainnet.", `${CV.name}, ${KF.name} and ${LG.name} are fictional.`], // claim-ok: limit
+  scope: ["Solana Devnet, test USDC. Not mainnet.", "Fictional advertisers. One shared demo workspace."], // claim-ok: limit
+  historical: "Original MVP: recorded technical evidence",
   contexthint: "contexthint.com",
   jev: { text: "Built with", name: JEV.name, url: JEV.url },
   solana: "Settled on Solana",

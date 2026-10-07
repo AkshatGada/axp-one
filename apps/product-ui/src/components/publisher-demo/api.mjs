@@ -7,7 +7,7 @@ export async function productRequest(path, {body, csrf, deliveryToken, timeoutMs
       new Promise((_, reject) => { timeout = setTimeout(() => {controller.abort(); reject(new Error('request_timeout'));}, timeoutMs); }),
       (async () => {
         const response = await fetchImpl(`/api/product${path}`, {
-          method: body === undefined ? 'GET' : 'POST', signal: controller.signal, credentials: 'same-origin', redirect: 'error',
+          method: body === undefined ? 'GET' : 'POST', signal: controller.signal, credentials: 'same-origin', redirect: 'error', cache: 'no-store',
           headers: {'content-type': 'application/json', ...(csrf ? {'x-axp-csrf': csrf} : {}), ...(deliveryToken ? {'x-axp-delivery-token': deliveryToken} : {})},
           ...(body === undefined ? {} : {body: JSON.stringify(body)}),
         });
