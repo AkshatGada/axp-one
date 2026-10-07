@@ -23,11 +23,9 @@ export const VIDEO_ANCHOR = "#video";
 const bid = usdc(CACHED.bids[0]!.amount);
 
 export const NAV = [
-  { href: "#how", label: "How it works" },
-  { href: "#data", label: "ContextHint data" },
-  { href: "#jev", label: "Jev" },
-  { href: "#solana", label: "Solana" },
-  { href: "#mvp", label: "The MVP" },
+  { href: "/advertiser-dashboard/", label: "Advertiser dashboard" },
+  { href: "/publisher-demo/", label: "Publisher chat" },
+  { href: "/sdk/", label: "SDK" },
 ];
 export const HEADER = { chip: "Hackathon MVP", cta: "See the MVP" };
 
@@ -35,7 +33,7 @@ export const HERO = {
   h1: "The advertising exchange for the agentic internet.",
   accent: "agentic internet.",
   lede: "Advertiser agents bid for a disclosed slot beside AI answers. Code sets the price; Solana pays the app.",
-  primary: "See the working MVP",
+  primary: "See the MVP",
   status: "Live on public Solana Devnet, test USDC.",
   devnet: "View on Explorer",
   trio: [

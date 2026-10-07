@@ -1,6 +1,6 @@
 "use client";
 
-// The page header: wordmark, the Hackathon MVP chip, section anchors and the one ink action.
+// The page header: wordmark, the Hackathon MVP chip, product links and the one ink action.
 // It hides while you scroll down, returns when you scroll up, and flips to the stage colours
 // while a [data-header-tone] section (stage, brand, ch, sol) sits under it.
 import { useEffect, useRef, useState } from "react";
@@ -15,6 +15,25 @@ export function SiteHeader({ links, cta, chip = "Hackathon MVP" }: { links: NavL
   const [hidden, setHidden] = useState(false);
   const [tone, setTone] = useState<Tone>("paper");
   const last = useRef(0);
+  const menu = useRef<HTMLDetailsElement>(null);
+
+  useEffect(() => {
+    const closeOutside = (event: PointerEvent) => {
+      if (menu.current && !menu.current.contains(event.target as Node)) menu.current.open = false;
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && menu.current?.open) {
+        menu.current.open = false;
+        menu.current.querySelector("summary")?.focus();
+      }
+    };
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOutside);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, []);
 
   useEffect(() => {
     let raf = 0;
@@ -55,13 +74,23 @@ export function SiteHeader({ links, cta, chip = "Hackathon MVP" }: { links: NavL
           <Wordmark />
         </a>
         <span className="px-chip">{chip}</span>
-        <nav className="px-nav" aria-label="Sections">
+        <nav className="px-nav" aria-label="Product">
           {links.map((l) => (
             <a key={l.href} href={l.href}>
               {l.label}
             </a>
           ))}
         </nav>
+        <details className="px-mobile-menu" ref={menu}>
+          <summary>Menu</summary>
+          <nav className="px-mobile-nav" aria-label="Product">
+            {links.map((l) => (
+              <a key={l.href} href={l.href} onClick={() => { if (menu.current) menu.current.open = false; }}>
+                {l.label}
+              </a>
+            ))}
+          </nav>
+        </details>
         <div className="px-header-cta">
           <ActionPrimary href={cta.href} size="s" external={cta.external}>
             {cta.label}
