@@ -1,5 +1,15 @@
 # User-operated products on the existing Vercel project
 
+Production origin: https://axp.one. Updated 7 October 2026 (Singapore).
+All product, SDK, recorded MVP and video routes are listed in [pages.md](../../pages.md).
+The live guide uses `https://axp.one/api/product`; localhost is an explicit developer override.
+
+The existing `demo` workspace is shared intentionally by the reviewed hosting preview
+and production. Its three prepared native campaigns were migrated without replacing
+channel identities. The recording used a distinct workspace and closed all four of
+its channels. Keep `AXP_STATE_KEY`, workspace ID and wallet identities stable across
+releases. Provider/wallet credentials remain server-side. Never copy them into Git.
+
 The landing page and recorded `/mvp/` remain static. The additive root
 `/advertiser-dashboard/` and `/publisher-demo/` share `/api/product/*`.
 `packages/product/hosted.mjs` adapts the existing product service; it does not
@@ -152,3 +162,26 @@ failure, migration refusals, Blob/Upstash CAS, native signed-byte persistence,
 receipt/voucher replay, exact close/refund accounting and uncertain-open lookup.
 Deployment verification must additionally exercise the **actual** private Blob
 conditional-write protocol and Vercel runtime before enabling judge traffic.
+
+## Release checks
+
+Build from committed source with `pnpm install --frozen-lockfile` and
+`npm run build:site`; run repository tests and staged hygiene checks. Preview the
+exact reviewed code before production. Use the existing Vercel project and its
+production environment, not a new Blob store or replacement wallet. After a deploy:
+
+1. Open `/`, `/advertiser-dashboard/`, `/publisher-demo/`, `/sdk/`, `/demo/`,
+   `/mvp/` and `/mvp/first-recording/` without a deployment-protection token.
+2. Verify referenced CSS/JS/fonts, video/captions and a video byte-range request.
+3. Check `/api/product/health`, `/publisher/config`, `/bootstrap` and `/state`.
+   Confirm configured providers, Devnet mode, expected payer/publisher, existing
+   channel identities, expiry/readiness, spend/reservations and finalized deposits.
+4. Inspect browser empty/loading/error states and intended guide URLs. Do not
+   spend a fresh model call, deposit or close merely to test static documentation.
+5. Keep the connected Git branch aligned with the deployed source. A direct CLI
+   deployment does not merge an open source PR. Domain readiness and PR merge are
+   separate facts; record both rather than claiming an unmerged branch is main.
+
+Health proves configuration/store reachability, not a new provider call or network
+outcome. Acceptance artifacts retain their recorded dates. Mutable live inventory
+must be read from the API rather than copied from a screenshot or yesterday's total.

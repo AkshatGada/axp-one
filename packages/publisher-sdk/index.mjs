@@ -54,7 +54,7 @@ function validateOpportunityResult(value) {
 
 export class AXPPublisher {
   #key; #baseURL; #fetch; #timeout; #receiptTimeout;
-  constructor({apiKey, baseURL = 'http://127.0.0.1:3430/api/product', timeoutMs = 15000, receiptTimeoutMs = 45000, fetch: fetchImpl = globalThis.fetch} = {}) {
+  constructor({apiKey, baseURL = 'https://axp.one/api/product', timeoutMs = 15000, receiptTimeoutMs = 45000, fetch: fetchImpl = globalThis.fetch} = {}) {
     if (typeof window !== 'undefined') throw new PublisherSDKError('server_only');
     requireString(apiKey, 'publisher_key_required');
     if (/[\r\n]/.test(apiKey)) throw new PublisherSDKError('invalid_publisher_key');

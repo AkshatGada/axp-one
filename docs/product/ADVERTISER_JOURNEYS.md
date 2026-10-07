@@ -1,7 +1,8 @@
 # Advertiser dashboard journeys
 
 This surface creates and operates new persisted campaigns. The public entry is
-`/advertiser-dashboard`. Ledger v2 supplies the visual language and components.
+[https://axp.one/advertiser-dashboard/](https://axp.one/advertiser-dashboard/). Updated
+7 October 2026. Ledger v2 supplies the visual language and components.
 The backend declares either synthetic test credits or native Solana Devnet payments.
 Synthetic workspaces have no wallet transfer. Native workspaces use Test USDC
 from a shared server-held demo sponsor, with separate advertiser channel identities.

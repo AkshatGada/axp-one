@@ -10,6 +10,17 @@ const receipt = {status: 'accepted', charge: {id: 'charge-award-1', amountBaseUn
 const sdk = fetch => new AXPPublisher({apiKey: 'server-secret', baseURL: 'http://127.0.0.1:3430/api/product/', fetch});
 const response = body => ({ok: true, json: async () => body});
 
+test('default exchange uses hosted HTTPS with server-key authentication', async () => {
+  const calls = [];
+  const client = new AXPPublisher({apiKey: 'server-secret', fetch: async (url, options) => {
+    calls.push({url, options}); return response({status: 'no_fill', opportunityId: 'opp-1'});
+  }});
+  assert.equal((await client.requestAd(input)).status, 'no_fill');
+  assert.equal(calls[0].url, 'https://axp.one/api/product/opportunities');
+  assert.equal(calls[0].options.headers['x-axp-publisher-key'], 'server-secret');
+  assert.equal(calls[0].options.redirect, 'error');
+});
+
 test('server request sends minimal context and authenticates without modifying approved creative', async () => {
   const calls = [];
   const client = sdk(async (url, options) => {calls.push({url, options}); return response(awarded);});

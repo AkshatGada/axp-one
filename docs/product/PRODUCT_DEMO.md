@@ -1,9 +1,34 @@
 # User-operated product demo
 
-The new advertiser dashboard and publisher chat use a persisted local workspace.
+The advertiser dashboard and publisher chat are live at https://axp.one and use
+a durable encrypted private Blob workspace. Local development uses separate SQLite state.
 They are additive to the existing MVP explorer, saved V3 runs, verification pages,
 presentation and recorded Devnet evidence. Those original artifacts remain separate
 from the new product workspace; their campaigns and money are never merged.
+
+## Hosted presentation (no local server)
+
+Open [the dashboard](https://axp.one/advertiser-dashboard/),
+[the chat](https://axp.one/publisher-demo/), [the SDK guide](https://axp.one/sdk/)
+and [the recorded product walkthrough](https://axp.one/demo/).
+Use the keyboard judge flow below against this hosted workspace. Do not start
+another local signing authority or seed/reset the already-funded hosted channels.
+The three prepared advertisers are ClearVault, KeyArc and ColdNest; create HarborKey
+as the fourth. Read `/api/product/publisher/config` and `/api/product/bootstrap`
+for current readiness and caps. The initial inventory and budgets can change
+through actual user actions; refresh the dashboard before presenting.
+
+The recording is 2:42 at 1080p and includes finalized 0.003 test-USDC payout and
+0.017 refund. Its separate four-channel recording workspace was fully closed.
+[Public recording evidence](../../artifacts/product/recorded-walkthrough/acceptance.json)
+is distinct from the live presentation inventory. The original MVP recording and
+its historical provider/payment modes remain available under `/mvp/`.
+
+Before presenting, inspect channel expiry and readiness. Native voucher expiry is
+fixed at 24 hours from preparation, with an earlier signing deadline. Never reset
+funded state to extend it; reconcile and close existing identities through the
+coordinated payment workflow. Local commands below are for explicit development
+or an operator-managed separate workspace, not required to use axp.one.
 
 ## Execution and payment modes
 
@@ -140,7 +165,11 @@ recorded MVP Devnet channels remain separate.
 
 ## Technical review: publisher SDK
 
-The SDK is outside the judge presentation flow. For a separate technical review,
+The hosted [SDK guide](https://axp.one/sdk/) and
+[SDK README](../../packages/publisher-sdk/README.md) are the technical-review entry
+points. Use `AXP_EXCHANGE_URL=https://axp.one/api/product` with a server-only key
+provisioned for that hosted workspace. Do not use an unrelated locally generated
+key. The public config endpoint never issues credentials. For local development,
 start its example in a second terminal after the product server has created its
 ignored publisher key:
 

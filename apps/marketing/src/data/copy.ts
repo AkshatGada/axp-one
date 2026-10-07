@@ -204,9 +204,9 @@ export const PROOF = {
 /** Working now vs building next. Planned items are marked, never claimed. */
 export const NEXT = {
   h3: "Working now. Building next.",
-  now: ["Agent bids", "Eligibility in code", "Signed receipts", "Solana channels"],
+  now: ["Advertiser dashboard", "Publisher SDK", "Agent bids", "Eligibility in code", "Signed receipts", "Solana channels"],
   nextLabel: "Planned:",
-  next: ["Planning agents", "Publisher SDK", "More categories", "x402 adapter", "Mainnet, after Devnet", "Network fees", "Measurement"], // claim-ok: planned
+  next: ["Planning agents", "More categories", "x402 adapter", "Mainnet, after Devnet", "Network fees", "Measurement"], // claim-ok: planned
 };
 
 export const VIDEO = {

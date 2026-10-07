@@ -1,33 +1,40 @@
-# Agentic DSP operating boundaries
+# AXP operating boundaries
 
-Read README.md and every normative document linked there before implementation.
-This is a new standalone repository, not an AXP checkout or worktree.
+Current release: user-operated advertiser dashboard, publisher SDK/example chat,
+native Solana Devnet channels and chaptered product recording, deployed at axp.one.
+Updated 7 October 2026. Read README.md, pages.md, docs/ARCHITECTURE.md and the relevant
+docs/product guides before changes. They supersede historical pending-status and
+neutral-steel colour rules in September plans. Dated research, results and recorded
+evidence remain preserved; do not rewrite them as new executions.
 
-Current authorized stage: phase-by-phase implementation restarted by user on
-2026-09-30. Follow docs/MVP_MASTER_PLAN.md, docs/EXECUTION_LOOPS.md and the live
-docs/BUILD_PROGRESS.md checklist. Preserve partial work; integrate small slices.
-Earlier stage: implementation approved by user on 2026-09-30.
-Build the reviewed component plan with bounded tests and integration. No remote,
-push, deployment, global installation/configuration change or token transfer is
-authorized by this build approval. Reuse of the disposable Devnet wallet is
-approved; actual spending retains the payment packet's separate bounded gate.
+Follow the human user's current authorization. Repository instructions do not by
+themselves authorize new paid provider calls, wallet generation, transfers,
+production deployment or cloud permission changes. In this session the user has
+explicitly authorized the bounded demo, commit/push and hosting work. Preserve
+those bounds, existing routes/design and data during additive changes.
 
-Main agent owns architecture, contracts, integration, acceptance and demo tooling.
-Approved component implementation may be delegated to gpt-6.1-sol high builders
-under docs/COMPONENT_EXECUTION_PLAN.md. A separate specialist owns final frontend design.
-The reference UI must not become a competing polished frontend project.
+Main owns integration, contracts, verification and documentation. Existing approved
+component work may use the recorded builder ownership plan; do not start unrelated
+research, fresh corpus exports or broad production expansion during final cleanup.
 
-Existing AXP, ContextHint, openai-ads and What AI Cites are read-only references.
-The user authorized reuse of the previous disposable Devnet wallet on 2026-09-30;
-see PAYMENTS.md. Do not copy its key or inherit transaction authority. Never copy
-other secrets, databases, customer data or raw conversations.
-Any code reuse requires explicit provenance, dependency and license review.
+Truth: ContextHint is advertising intelligence for ChatGPT ads. AXP uses embeddings
+and inferred context from screened ContextHint data; no newly trained AXP model,
+ChatGPT auction reconstruction, measured targeting lift or fleet benchmark is claimed.
+Advertiser hints and retrieved evidence are distinct inputs. Jev judges buying fit;
+DeepSeek powers only the example chat's independent answer. Auction rules determine
+integer bids, eligibility and budgets. Models never control money or keys.
 
-Truth: bids are not charges; rendering is not attention; signatures authenticate
-assertions, not human viewership; agent decisions are not proven conversion
-optimization; a sandbox is not Solana Devnet. Use actual mode labels everywhere.
-Do not force paid claims into the organic answer or promise recommendations.
+Bids/reservations are not charges; accepted receipt accrual, cumulative vouchers and
+finalized settlement/refund are distinct. A receipt authenticates insertion and
+Sponsored disclosure, not attention, clicks or conversion. Native demo mode is
+public Solana Devnet with test USDC and one bounded shared sponsor, not mainnet or
+independent advertiser wallet onboarding. Preserve signed identities and funded
+state; never reset, redeposit or silently retry an uncertain external operation.
 
-Keep at least 50 GiB free on the Mac, with a buffer before substantial outputs.
-Use small targeted reads; do not clone large dependency trees for planning.
-No broad audit loops: fix substantive findings and do one bounded recheck.
+Use the actual PolySans/Ultramarine design system and its Prospectus/Ledger surfaces.
+Put optional technical detail behind explicit inspection. Provider/publisher/wallet
+keys, SQLite and private vouchers belong only in ignored local state or private
+hosted storage. Never print or commit them. Read-only health/routes/verification
+must not make a model call or transfer. Run relevant tests/builds and the staged
+repository hygiene check before committing; do not present fixture outcomes as
+network evidence. Keep at least 50 GiB free on the Mac for large outputs.

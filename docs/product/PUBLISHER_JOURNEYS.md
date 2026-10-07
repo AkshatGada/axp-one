@@ -1,14 +1,16 @@
 # Publisher journeys
 
-Written before implementation for the first user-operated AXP publisher integration.
+Implemented publisher journey, updated 7 October 2026. Public chat:
+https://axp.one/publisher-demo/. Integration guide: https://axp.one/sdk/.
 The publisher is the AI app operator. Advertisers create campaigns in the new
-dashboard; this chat requests the same live local inventory. Saved V3 recordings
+dashboard; this chat requests the same durable hosted inventory. Saved V3 recordings
 remain separate read-only evidence.
 
 ## Developer: connect an AI app
 
 1. Read publisher configuration: publisher ID, financial mode, buyer-engine
-   readiness, supported placement and capabilities. Obtain a publisher key from the local server setup and put it
+   readiness, supported placement and capabilities. Use `https://axp.one/api/product` and have the workspace operator provision
+   a publisher key for that workspace; put it
    in a server environment variable. No key enters the browser or model context.
 2. Import the dependency-free Node SDK. Keep one random session ID per conversation
    and one stable turn ID per user submission. Declare required capabilities and
@@ -101,7 +103,9 @@ deltas, network fees and conserved deposits. It uses no wallet, signing or model
 requests. The record also reports receipt identity preserved and no additional
 payments after service restart; its model assertions describe the connected run.
 
-For the clean presentation, start the explicitly configured Devnet product server
+The public presentation uses the existing hosted workspace; no local server or
+additional seed command is required. Do not initialize another signing authority
+for its existing channels. For a separate local presentation, start the explicitly configured Devnet product server
 with `AXP_PRODUCT_STATE_DIR=local-state/product-devnet-presentation`,
 `AXP_PRODUCT_FINANCIAL_MODE=devnet`, `AXP_PRODUCT_DEVNET_SIGN=1` and
 `AXP_PRODUCT_DEMO_MODE=1`, then run `npm run demo:prepare-devnet`. Preparation

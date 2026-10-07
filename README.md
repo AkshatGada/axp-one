@@ -1,137 +1,133 @@
-# AXP.one — The advertising exchange for the agentic internet
+# axp.one — The advertising exchange for the agentic internet
 
-Repository: `agentic-dsp`. Product positioning confirmed by the user on 2026-09-30.
-The DSP is the advertiser buying subsystem; the exchange connects buyer agents
-and AI publishers. The first beachhead is conversational AI sponsored cards.
+Live product: **[axp.one](https://axp.one)**. Updated 7 October 2026 (Singapore).
 
-Status (2026-10-02): V3 runs end to end on **public Solana Devnet** with Devnet test
-USDC: real DeepSeek `deepseek-flash` organic answers, real Jev decisions, deterministic
-first-price auctions, browser-acknowledged publisher receipts, cumulative vouchers and
-per-run channel opens/closes. Judges can trigger such a run from the hosted MVP
-([architecture](docs/build/HOSTED_LIVE_RUN.md)). Recorded runs replay offline with no
-credentials. Fictional advertisers; not mainnet, not real money.
+Advertisers create a campaign, supply context hints, approve a Sponsored card and
+fund a Solana Devnet payment channel. A publisher requests an ad alongside its
+independent answer. ContextHint evidence informs Jev’s fit and intent judgments;
+the eligibility and first-price auction engines control bids and reservations.
+An accepted delivery receipt creates one charge and cumulative off-chain
+authorization. Channel closure pays the publisher and refunds the unused deposit.
 
-## Quickstart (judges)
+This release uses **Solana Devnet and test USDC**, fictional demo advertisers and
+one bounded shared sponsor/workspace. DeepSeek powers the **example chat only**;
+it is not the exchange’s decision engine. Jev is the buying decision layer.
 
-Requirements: **Node 22.18+** (the `engines` field in `package.json`; it needs built-in
-`node:sqlite` and TypeScript type stripping; tested on 25.5, 22.x untested) and
-**pnpm 10+** (tested 11.9; `corepack enable`). Tested on macOS.
+## Open the product
+
+| Surface | Link |
+|---|---|
+| Advertiser dashboard | [Create and operate campaigns](https://axp.one/advertiser-dashboard/) |
+| Example publisher chat | [Ask a question, then view internals](https://axp.one/publisher-demo/) |
+| Publisher SDK guide | [Connect your own AI app](https://axp.one/sdk/) |
+| Product walkthrough | [2:42 recording with chapters and captions](https://axp.one/demo/) |
+| Original MVP explorer | [Recorded evidence and live-run console](https://axp.one/mvp/) |
+
+The public product requires no local installation. The guide connects to
+`https://axp.one/api/product`; external SDK integrations need a publisher key
+provisioned by the workspace operator. Configuration endpoints do not issue keys.
+The SDK is repository source, not a published npm package.
+
+## Documentation
+
+- [Page and API map](pages.md): public routes, source owners and recorded/live boundaries.
+- [Current architecture](docs/ARCHITECTURE.md): request flow, data, decisions and channels.
+- [Demo runbook](docs/product/PRODUCT_DEMO.md): Tab/Enter presentation and payment recovery.
+- [Hosted operation](docs/product/HOSTING.md): private Blob persistence and server configuration.
+- [Publisher SDK](packages/publisher-sdk/README.md): hosted integration and local development.
+- [Advertiser journeys](docs/product/ADVERTISER_JOURNEYS.md) and [publisher journeys](docs/product/PUBLISHER_JOURNEYS.md).
+- [Design system](docs/DESIGN_SYSTEM.md): actual PolySans fonts, Ultramarine, Prospectus and Ledger.
+- [Build and acceptance register](docs/BUILD_PROGRESS.md).
+
+## What the data contributes
+
+We are the founders of [ContextHint](https://contexthint.com), an advertising
+intelligence platform specifically for **ChatGPT ads**. More than 1,000 marketers
+use ContextHint daily (founder-reported usage of ContextHint, not AXP adoption).
+It collects observed ChatGPT ad placements and derives context intelligence.
+AXP uses embeddings and inferred context from that data to retrieve relevant
+examples for advertiser buying decisions. The committed screened crypto-storage
+snapshot is bounded and versioned; AXP does not collect new ChatGPT ads at runtime.
+We do not claim a newly trained AXP model, ChatGPT ranking access or measured
+conversion lift. Advertiser-authored hints and retrieved ContextHint evidence
+remain separate inputs to Jev.
+
+## Reproduce locally
+
+Use **Node 22.18+** and **pnpm 10+**. This release was built and tested with Node
+24.19 and pnpm 10.12.4 on macOS. No runtime imports another project checkout.
 
 ```sh
-git clone <this repository> agentic-dsp && cd agentic-dsp
-npm test                       # repository suite (no install, no keys, no network)
+git clone https://github.com/Gaganub/axp-one.git
+cd axp-one
+npm test
+node scripts/setup/check-repository.mjs
 ```
 
-**1. Replay the recorded runs (no keys, no install).**
+Replay the original saved run without provider keys, npm installation or payments:
 
 ```sh
-npm run demo:v3:replay         # http://127.0.0.1:8794 (AXP_V3_PORT to change)
-node scripts/demo/v3-replay-check.mjs artifacts/v3/replay   # read-only bundle check
+npm run demo:v3:replay  # http://127.0.0.1:8794
+node scripts/demo/v3-replay-check.mjs artifacts/v3/replay
 ```
 
-If a port is already taken (`EADDRINUSE`), pick another one for that command:
-`AXP_V3_PORT=8795 npm run demo:v3:replay`, `AXP_HOSTED_PORT=3101 node scripts/hosted/dev-server.mjs`.
-The replay check covers the original sandbox recording (`artifacts/v3/replay`). The live
-Devnet runs are verified by the MVP build instead (`apps/product-ui/scripts/project-run.mjs`
-fails the build if any check fails) and by the MVP's Verify page (`/verify`).
-
-Bundles: `artifacts/v3/replay` (first recording, hosted sandbox),
-`artifacts/v3-devnet-live-rehearsal/replay` (live Devnet, terminal operator),
-`artifacts/hosted-live-e2e/replay` (live Devnet, through the hosted API).
-
-**2. The two sites (landing + MVP).**
+For development, install workspace dependencies and configure your own server
+credentials using the blank `.env.example` template:
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm --filter @axp/marketing dev       # landing  http://localhost:3410
-pnpm --filter @axp/product-ui dev      # MVP      http://localhost:3420
-pnpm --filter @axp/marketing build     # static export -> apps/marketing/out
-NEXT_PUBLIC_BASE_PATH=/mvp pnpm --filter @axp/product-ui build   # -> apps/product-ui/out
-node scripts/hosted/dev-server.mjs     # both + the live API on http://127.0.0.1:3100
-pnpm --filter @axp/product-ui test     # MVP projection tests
-npm run build:site                     # the whole axp.one site as deployed: landing, /mvp/ and the
-npm run serve:site                     #   /api function in .vercel/output; served at http://127.0.0.1:3200
+cp .env.example .env.local
+npm run demo:product   # http://127.0.0.1:3430
 ```
 
-Hosting (Vercel, framework "Other", settings in `vercel.json`): see
-[hosted live run](docs/build/HOSTED_LIVE_RUN.md) sections 3 and 9.
+Local development defaults to synthetic test credits. Configure DeepSeek and Jev
+for actual provider calls. See the demo runbook before enabling native signing;
+use separate local state and never reset a funded workspace or run a second
+signing authority against its channels. Secrets, wallets and SQLite state are
+ignored; they are not available from a public clone.
 
-**3. A live run of your own on Solana Devnet** (spends your Jev/DeepSeek credits and
-Devnet test tokens only; a run takes about 1–3 minutes).
+Build the complete deployed site, including product routes and the original MVP:
 
 ```sh
-cp .env.example .env.local             # then set JEV_API_KEY and DEEPSEEK_API_KEY
-# Payment SDK, rebuilt from the vendored, hash-pinned source (needs the npm registry once):
-npm ci --ignore-scripts --no-audit --no-fund --prefix tooling/payment-sdk
-node scripts/payment-spike/phase4-sdk.mjs --acquire
-# Stable Devnet wallets: two advertiser payers + one publisher (0600 file, gitignored):
-node scripts/hosted/wallets.mjs init   # prints the public addresses
+npm run build:site
+npm run serve:site     # http://127.0.0.1:3200
 ```
 
-Fund each **payer** address with at least 0.05 Devnet SOL (https://faucet.solana.com)
-and 0.1 Devnet USDC (https://faucet.circle.com, network Solana Devnet). Or, from a
-funded Devnet wallet file of your own (`AXP_TEST_WALLET_PATH`, shape
-`{"network":"solana-devnet","sponsor":{"address","secret"}}`):
-`AXP_HOSTED_DEVNET_SIGN=1 node scripts/hosted/wallets.mjs fund 0.25 1`.
-Check with `node scripts/hosted/wallets.mjs status`, then:
+The initial native SDK build downloads hash-pinned dependencies from npm. Vercel
+uses `vercel.json` and Build Output API v3. Runtime secrets belong in the project's
+server environment; committed static output contains no wallet or publisher keys.
+Detailed fresh-clone setup is in [STANDALONE_SETUP.md](docs/STANDALONE_SETUP.md).
 
-```sh
-AXP_LIVE_ENABLED=1 node scripts/hosted/dev-server.mjs
-# open http://127.0.0.1:3100/__live/ and press "Start a live run": this page acts as the
-# publisher's app, inserting each Sponsored card into its DOM before acknowledging it.
-# or the same, unattended, through headless Chrome (AXP_CHROME_BIN if Chrome is elsewhere),
-# saving the run's public files under artifacts/my-run/:
-AXP_E2E_LIVE=1 node scripts/hosted/e2e-live.mjs --keep-artifacts artifacts/my-run
-```
+## Recorded proof and operating limits
 
-A run's files (`/api/runs/<id>/files/replay/run.json`, `.../chain-check.json`, ...) use the
-same schema and layout as `artifacts/v3-devnet-live-rehearsal/`; render one in the MVP with
-`AXP_RUN_DIR=artifacts/my-run/replay pnpm --filter @axp/product-ui build`.
-More setup detail: [standalone setup](docs/STANDALONE_SETUP.md).
+The [product recording evidence](artifacts/product/recorded-walkthrough/README.md)
+records a real hosted flow: HarborKey creation, fresh DeepSeek/Jev execution,
+accepted Sponsored insertion, receipt replay without another charge, and finalized
+channel closure paying 0.003 test USDC and refunding 0.017. All four recording-only
+channels were closed. This separate recording workspace does not alter the live
+presentation's three prepared advertisers.
 
-**User-operated advertiser and publisher products (additive first version).**
+The [earlier native acceptance](artifacts/product/devnet-acceptance.json) also
+covers a zero-delivery full refund. `node scripts/product/verify-devnet.mjs`
+rechecks its public chain evidence without a wallet, model call or transaction.
+Original MVP bundles preserve their original dates, providers and financial modes;
+they are recorded evidence, not current workspace state.
 
-```sh
-npm run demo:product
-# http://127.0.0.1:3430/advertiser-dashboard/
-# http://127.0.0.1:3430/publisher-demo/
-```
+The hosted product allows at most eight channels, 2 test USDC aggregate deposits,
+a 0.1 Devnet SOL fee/rent reserve, 20 organic admissions per UTC day and the
+configured Jev admission cap (50 by default). One campaign is bounded to a
+0.2 deposit, 0.1 spending cap and 0.004 maximum bid. See HOSTING.md and the native
+backend for enforcement. No independent advertiser wallet onboarding, multi-tenant
+authentication, mainnet payments, impression/click/conversion billing or fleet-scale
+benchmark is claimed. A receipt authenticates insertion and disclosure, not attention.
 
-Create an advertiser account, supply context hints and exact Sponsored copy, set
-limits, approve and launch. The publisher chat accepts editable suggested prompts
-and arbitrary questions, generates a fresh independent DeepSeek answer, and runs
-the Jev buying path in parallel. Its Peek inside view shows eligibility, evidence,
-decisions, bids, winner, DOM acknowledgement, signed receipt and budget states.
-Configure both server-side model keys in `.env.local`; this chat has no canned
-answer fallback. The workspace defaults to **synthetic test credits**. Explicit
-server configuration enables **native Solana Devnet test USDC** with approved
-deposits, receipt-controlled cumulative vouchers, publisher payout and unused
-deposit refunds. Wallet keys remain server-side; the native demo uses a shared
-disposable sponsor and local SQLite persistence. The recorded MVP remains separate
-and unchanged. See the [verified native acceptance record](artifacts/product/devnet-acceptance.json);
-`node scripts/product/verify-devnet.mjs` rechecks its four finalized transactions
-and token deltas without signing or transferring tokens.
-See [product demo runbook](docs/product/PRODUCT_DEMO.md),
-[advertiser journeys](docs/product/ADVERTISER_JOURNEYS.md) and
-[publisher SDK](packages/publisher-sdk/README.md).
+## Historical planning and research
 
-**4. Checks before sharing changes.**
+The documents below preserve the September planning record and later experiments.
+Their dated proposals, pending gates, old ports and earlier test totals are historical;
+current product operation is defined by the documentation above and executable
+contracts. Recorded evidence is never rewritten to resemble a newer run.
 
-```sh
-npm test
-node scripts/setup/check-repository.mjs   # no secrets, machine paths or private files staged
-```
-
-Baseline planning package reviewed 2026-09-30. The later data/ML and delegated
-component-specification expansion is still being reconciled; see planning
-progress. That earlier review does not certify the expanded plan or any build.
-
-Advertiser agents buy disclosed placements inside participating conversational
-AI applications, subject to campaign rules and authorized spending ceilings.
-An off-chain exchange correlates accepted delivery events with accumulated
-stablecoin settlement. It does not sell organic recommendations or agent attention.
-
-## Review order
 
 1. [North Star and MVP boundary](docs/NORTH_STAR.md)
 2. [Research and open-source reference register](docs/research/REFERENCES.md)
@@ -161,19 +157,3 @@ stablecoin settlement. It does not sell organic recommendations or agent attenti
 26. [C01/C02 data and targeting component packet](docs/DATA_TARGETING_COMPONENT_PACKET.md)
 27. [C03/C04/C05 agent, auction and delivery component packet](docs/EXCHANGE_COMPONENT_PACKET.md)
 28. [C06 payment component packet](docs/PAYMENT_COMPONENT_PACKET.md)
-
-The ContextHint research supplement is a later read-only addition to the reviewed
-baseline; data integration and its ablation tests are not implemented or covered
-by the earlier spec recheck.
-
-## What is new versus AXP
-
-AXP demonstrated sponsor-funded access to an owned paid report. This repository
-is an advertising marketplace: AI apps sell separate sponsored-card placements;
-agents represent the advertiser buying those placements. No document quiz or
-report-unlock gate is required. Earlier receipt, restart and budget lessons are
-design inputs, not evidence that this new system already works.
-
-The build includes backend plus intentionally plain functional and replay UIs.
-Final frontend visual design belongs to the user's specialist agent. Historical
-planning documents remain as research, with implemented APIs frozen separately.

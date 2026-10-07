@@ -5,11 +5,43 @@ for a user turn and forwards the app's DOM observation to the exchange. It works
 with the user-created campaigns in the additive product workspace. Saved MVP/V3
 runs, their contracts and recorded payment artifacts are unchanged.
 
-This is local source, not a published npm release. Node 22.18+ and built-in `fetch`
+This is repository-distributed source, not a published npm release. Node 22.18+ and built-in `fetch`
 are sufficient. The server and browser modules have no runtime dependencies.
 The optional React source adapter uses the app's existing React and TSX bundler.
 
-## Try the complete local app
+## Connect to the hosted exchange
+
+Canonical API: `https://axp.one/api/product`. The SDK defaults to this HTTPS origin;
+set `baseURL` explicitly for a local or different exchange. Importing/constructing
+it does not submit an opportunity or call a provider.
+
+1. Read [publisher configuration](https://axp.one/api/product/publisher/config).
+2. Have the workspace operator provision a server-only publisher key for that
+   hosted workspace. Public configuration does not issue a key; there is no
+   self-service publisher signup or browser key-download route in this release.
+3. Copy this SDK directory into your project or add a local package dependency.
+4. Store `AXP_PUBLISHER_API_KEY` and `AXP_EXCHANGE_URL=https://axp.one/api/product`
+   in your server environment. Use your own existing LLM for the independent answer.
+
+Try [the live publisher chat](https://axp.one/publisher-demo/) and
+[the integration guide](https://axp.one/sdk/) without a local server. DeepSeek powers
+that example app only. Jev judges ad fit. The hosted shared demo uses Devnet test
+USDC; authenticated ad requests compete against its actual campaign inventory.
+
+To run the developer app locally while connecting to the hosted exchange, provide
+the correct hosted key in its server environment, then:
+
+```sh
+AXP_EXCHANGE_URL=https://axp.one/api/product \
+  node packages/publisher-sdk/examples/server.mjs
+# Open the local example UI at http://127.0.0.1:3433.
+```
+
+Only the example UI runs locally; its exchange and example-answer requests use
+axp.one. Sending a question consumes the shared provider allowance. Its demonstration
+answer endpoint is not a requirement for integrations using their own LLM.
+
+## Develop against a local exchange
 
 From the repository root:
 
@@ -62,7 +94,7 @@ import { AXPPublisher } from './packages/publisher-sdk/index.mjs';
 
 const axp = new AXPPublisher({
   apiKey: process.env.AXP_PUBLISHER_API_KEY,
-  baseURL: process.env.AXP_EXCHANGE_URL,
+  baseURL: process.env.AXP_EXCHANGE_URL || 'https://axp.one/api/product',
   timeoutMs: 15000,
   receiptTimeoutMs: 45000,
 });
