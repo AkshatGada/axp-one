@@ -1,5 +1,5 @@
 # A CLI deploy uploads the working tree: never upload private or generated local files.
-# (The build regenerates the payment SDK and both static exports on Vercel.)
+# (The build regenerates the payment SDK and static exports on Vercel.)
 .env*
 !.env.example
 local-state/

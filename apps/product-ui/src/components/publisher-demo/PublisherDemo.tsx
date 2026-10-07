@@ -139,7 +139,7 @@ export function PublisherDemo() {
 
   return <div className="ld pub-demo pub-chat-app">
     <aside className="pub-sidebar" aria-label="Chat navigation">
-      <Ld.Wordmark href="/" Link={Link} />
+      <Ld.Wordmark href="/" />
       <Ld.Button variant="secondary" onClick={fresh} disabled={pending || !sessionId}>New chat</Ld.Button>
       <div className="pub-chat-history">{turns.length ? <><span className="ld-label">This conversation</span>{turns.map((turn, i) => <a key={turn.input.turnId} href={`#chat-turn-${i + 1}`}>{turn.input.question}</a>)}</> : null}</div>
       <nav className="pub-sidebar-bottom" aria-label="Product"><button type="button" onClick={() => setSelected('settings')}>Chat settings</button><Link href="/advertiser-dashboard">Advertiser dashboard →</Link><Link href="/publisher-demo/integration">SDK integration →</Link><span className="ld-caption">axp.one publisher demo</span></nav>

@@ -2,8 +2,8 @@ import {randomBytes} from 'node:crypto';
 import {ContractError} from '../contracts/index.mjs';
 import {CAPABILITIES,PRESETS,LIMITS,secretMatches} from './service.mjs';
 
-export function createProductAPI({service}) {
-  const csrf=randomBytes(32).toString('hex');
+export function createProductAPI({service,csrf:providedCSRF}) {
+  const csrf=providedCSRF??randomBytes(32).toString('hex');
   const send=(res,status,value)=>{res.writeHead(status,{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'});res.end(JSON.stringify(value));};
   async function read(req) {
     if(!req.headers['content-type']?.startsWith('application/json'))throw new ContractError('json_required',undefined,415);

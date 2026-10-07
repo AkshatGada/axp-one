@@ -69,7 +69,7 @@ export function taskContext(question,required=[]){
 
 /** One persisted local demo workspace. Financial authority remains in Exchange.
  * Synthetic by default; opt-in Devnet uses one server-held disposable demo sponsor. */
-export function createProductService({stateDir='local-state/product',runId='product-workspace-v1',now=Date.now,publisherKey,apiKey,transport,retriever,organicApiKey,organicTransport,dailyModelCap=50,demoMode=false,financialMode='synthetic',signingEnabled=false,walletPath,paymentOptions={}}={}){
+export function createProductService({stateDir='local-state/product',runId='product-workspace-v1',now=Date.now,publisherKey,apiKey,transport,retriever,organicApiKey,organicTransport,dailyModelCap=50,demoMode=false,financialMode='synthetic',signingEnabled=false,walletPath,paymentOptions={},checkpoint=null}={}){
  mkdirSync(stateDir,{recursive:true,mode:0o700});
  const secretFile=join(stateDir,'publisher-api-key');
  if(!publisherKey){if(!existsSync(secretFile))writeFileSync(secretFile,randomBytes(32).toString('hex'),{mode:0o600,flag:'wx'});publisherKey=readFileSync(secretFile,'utf8').trim();}
@@ -80,11 +80,11 @@ export function createProductService({stateDir='local-state/product',runId='prod
  if(!['synthetic','devnet'].includes(financialMode))fail('financial_mode_invalid');
  let payments;
  const exchange=new Exchange({dbPath:join(stateDir,'exchange.sqlite'),runId,mode:financialMode,now,...(financialMode==='devnet'?{networkState:id=>payments?.projection(id)??null}:{})});
- if(financialMode==='devnet')payments=createProductPayments({exchange,stateDir,walletPath,signingEnabled,now,...paymentOptions});
+ if(financialMode==='devnet')payments=createProductPayments({exchange,stateDir,walletPath,signingEnabled,now,...(checkpoint?{checkpoint}:{}),...paymentOptions});
  const payee=payments?.identities.payee??'synthetic:axp-demo-publisher';
  const limits=financialMode==='devnet'?{...LIMITS,maxBidBaseUnits:NATIVE_LIMITS.maxBidBaseUnits,maxBudgetBaseUnits:NATIVE_LIMITS.maxBudgetBaseUnits,maxDepositBaseUnits:NATIVE_LIMITS.maxDepositBaseUnits}:LIMITS;
  for(const table of ['product_accounts','product_advertisers','product_campaigns','product_requests','product_answers'])exchange.db.exec(`CREATE TABLE IF NOT EXISTS ${table}(run TEXT NOT NULL,id TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(run,id))`);
- const buyers=createProductDecisions({exchange,apiKey,transport,retriever,now,dailyCap:dailyModelCap});
+ const buyers=createProductDecisions({exchange,apiKey,transport,retriever,now,dailyCap:dailyModelCap,checkpoint});
  const inFlight=new Map(),answerFlight=new Map();
  exchange.registerPublisher({publisherId,publisherKeyId,payee,publicKeyPEM:createPublicKey(receiptKey).export({format:'pem',type:'spki'})});
  const tokenFor=awardId=>createHmac('sha256',publisherKey).update(`${runId}:${awardId}`).digest('hex');
@@ -203,6 +203,7 @@ export function createProductService({stateDir='local-state/product',runId='prod
   const row={id:k,questionHash:hash(question),day:stamp().slice(0,10),status:'pending',startedAt:now()};
   if(exchange.all('product_answers').filter(r=>r.day===row.day).length>=20)fail('organic_daily_cap',429);
   exchange.tx(()=>exchange.put('product_answers',k,row));
+  if(checkpoint)await checkpoint('organic_admitted');
   try {const provider=organicTransport??createProductOrganic({apiKey:organicApiKey,now});
    const suppliedPrompt=`Answer the user's question independently and helpfully in under 300 words. No advertiser material or sponsored recommendations are supplied. Return ONLY a JSON object with one string property named answer; use plain text paragraphs and concise bullet points, without markdown headings. User question: ${JSON.stringify(question)}`;
    const response=await provider({suppliedPrompt});

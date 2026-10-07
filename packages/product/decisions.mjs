@@ -40,7 +40,7 @@ export function productDecision(c,o,{decision='abstain',creativeVersionId=null,r
     engineProvenance:{engine:'product-jev-v1',model:JEV_MODEL,execution:'actual-api-model',rubricHash:RUBRIC_HASH,...provenance}};
 }
 
-export function createProductDecisions({exchange,apiKey,transport,retriever,now=Date.now,dailyCap=50}) {
+export function createProductDecisions({exchange,apiKey,transport,retriever,now=Date.now,dailyCap=50,checkpoint=null}) {
   if(!Number.isInteger(dailyCap)||dailyCap<1||dailyCap>200)throw new ContractError('model_cap_invalid');
   exchange.db.exec('CREATE TABLE IF NOT EXISTS product_decisions(run TEXT NOT NULL,id TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(run,id))');
   const ready=Boolean(transport||apiKey?.trim());
@@ -85,6 +85,7 @@ export function createProductDecisions({exchange,apiKey,transport,retriever,now=
       if(admissions()>=dailyCap)throw new ContractError('jev_daily_cap',undefined,429);
       exchange.put('product_decisions',callId,row);
     });
+    if(checkpoint)await checkpoint('jev_admitted');
     const start=performance.now();let result;
     try {
       const provider=transport??createJevHttpTransport({apiKey,maxCalls:1});

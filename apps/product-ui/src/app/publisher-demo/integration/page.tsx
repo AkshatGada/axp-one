@@ -50,7 +50,7 @@ const receipt = await axp.acknowledgeRender({
 // receipt.status === 'accepted': inspect charge.id and receiptHash.
 // Retry this same award/token to reconcile uncertainty. Never buy again.`;
 export default function PublisherIntegrationPage() {
-  return <div className="ld pub-demo"><header className="pub-header"><Ld.Wordmark href="/" Link={Link} /><nav aria-label="Product"><Link href="/publisher-demo">Open publisher chat</Link><Link href="/advertiser-dashboard">Advertiser dashboard →</Link></nav></header><main className="pub-main pub-guide" id="main">
+  return <div className="ld pub-demo"><header className="pub-header"><Ld.Wordmark href="/" /><nav aria-label="Product"><Link href="/publisher-demo">Open publisher chat</Link><Link href="/advertiser-dashboard">Advertiser dashboard →</Link></nav></header><main className="pub-main pub-guide" id="main">
     <Ld.PageBar title="Connect your AI app" sub="A server request, a native Sponsored card, and one observable delivery receipt." meta={<Ld.Tag tone="brand">Publisher SDK · local source</Ld.Tag>} />
     <div className="pub-guide-grid">
       <Ld.Panel title="1. Configure your server"><p>Start the local product workspace with <code>npm run demo:product</code>. Read <code>GET /api/product/publisher/config</code> for the publisher ID, placement and Jev readiness. Obtain the local publisher key through the server setup, then keep it in your server environment.</p><pre className="pub-code">{`AXP_EXCHANGE_URL=http://127.0.0.1:3430/api/product
