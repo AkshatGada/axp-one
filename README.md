@@ -89,6 +89,32 @@ same schema and layout as `artifacts/v3-devnet-live-rehearsal/`; render one in t
 `AXP_RUN_DIR=artifacts/my-run/replay pnpm --filter @axp/product-ui build`.
 More setup detail: [standalone setup](docs/STANDALONE_SETUP.md).
 
+**User-operated advertiser and publisher products (additive first version).**
+
+```sh
+npm run demo:product
+# http://127.0.0.1:3430/advertiser-dashboard/
+# http://127.0.0.1:3430/publisher-demo/
+```
+
+Create an advertiser account, supply context hints and exact Sponsored copy, set
+limits, approve and launch. The publisher chat accepts editable suggested prompts
+and arbitrary questions, generates a fresh independent DeepSeek answer, and runs
+the Jev buying path in parallel. Its Peek inside view shows eligibility, evidence,
+decisions, bids, winner, DOM acknowledgement, signed receipt and budget states.
+Configure both server-side model keys in `.env.local`; this chat has no canned
+answer fallback. The workspace defaults to **synthetic test credits**. Explicit
+server configuration enables **native Solana Devnet test USDC** with approved
+deposits, receipt-controlled cumulative vouchers, publisher payout and unused
+deposit refunds. Wallet keys remain server-side; the native demo uses a shared
+disposable sponsor and local SQLite persistence. The recorded MVP remains separate
+and unchanged. See the [verified native acceptance record](artifacts/product/devnet-acceptance.json);
+`node scripts/product/verify-devnet.mjs` rechecks its four finalized transactions
+and token deltas without signing or transferring tokens.
+See [product demo runbook](docs/product/PRODUCT_DEMO.md),
+[advertiser journeys](docs/product/ADVERTISER_JOURNEYS.md) and
+[publisher SDK](packages/publisher-sdk/README.md).
+
 **4. Checks before sharing changes.**
 
 ```sh

@@ -1,0 +1,32 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtempSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {prepareDemo} from '../../scripts/product/prepare-demo.mjs';
+import {createProductService,DEMO_ADVERTISER} from '../../packages/product/service.mjs';
+
+test('presentation seeds three distinct advertisers without providers; presenter creates a fourth through the normal flow',t=>{
+  const stateDir=mkdtempSync(join(tmpdir(),'axp-presentation-'));
+  t.after(()=>rmSync(stateDir,{recursive:true,force:true}));
+  const first=prepareDemo({stateDir}),second=prepareDemo({stateDir});
+  assert.equal(first.advertisers.length,3);
+  assert.equal(new Set(first.advertisers.map(a=>a.advertiserId)).size,3);
+  assert.deepEqual(second.advertisers,first.advertisers);
+  const service=createProductService({stateDir,demoMode:true});t.after(()=>service.close());
+  assert.equal(service.state().advertisers.length,3);
+  assert.equal(service.state().summary.deliveryCount,0);
+  assert.equal(service.state().summary.spendBaseUnits,'0');
+  assert.equal(service.engine().usedToday,0);
+  assert.equal(service.organic().usedToday,0);
+  assert.equal(service.demo().seededAdvertiserCount,3);
+  const draft=service.saveCampaign(DEMO_ADVERTISER).campaign;
+  assert.equal(service.state().advertisers.length,3);
+  assert.throws(()=>service.launch(draft.id),e=>e.code==='campaign_approval_required');
+  service.approve(draft.id);service.launch(draft.id);
+  const state=service.state();
+  assert.equal(state.advertisers.length,4);
+  assert.equal(state.summary.activeCount,4);
+  assert.equal(new Set(service.exchange.all('campaigns').map(c=>c.advertiserId)).size,4);
+  for(const c of service.exchange.all('campaigns'))assert.equal(service.exchange.require('channels',c.channelId).advertiserId,c.advertiserId);
+});
