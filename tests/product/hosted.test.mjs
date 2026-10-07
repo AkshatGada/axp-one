@@ -71,7 +71,8 @@ test('DeepSeek and Jev admissions checkpoint before providers; answer shard proc
  },organicTransport:async()=>{const {dir}=await inspectSnapshot(t,f.kv,f.key,'organic');const rows=dbRow(join(dir,'exchange.sqlite'),'product_answers');assert.equal(rows[0].status,'pending');return {answer:'Independent fixture while auction waits',model:'fixture'};}}});
  await f.launch();const input={question:f.question,sessionId:'fixture',turnId:'parallel'};
  const auction=f.post('/demo/chat',input);await ready;
- const busy=await request(f.api,'/state');assert.equal(busy.status,429);assert.equal(busy.body.error,'product_busy_retry');
+ const state=await request(f.api,'/state');assert.equal(state.status,200);assert.equal(state.body.campaigns.length,1);
+ const busy=await f.post('/account',{name:'blocked write',websiteURL:'https://fixture.example/'});assert.equal(busy.status,429);assert.equal(busy.body.error,'product_busy_retry');
  const answer=await f.post('/demo/answer',input);assert.equal(answer.status,200);assert.equal(answer.body.answer,'Independent fixture while auction waits');
  release();assert.equal((await auction).body.status,'awarded');assert.equal(observed,1);
 });
@@ -112,10 +113,14 @@ test('migration imports persisted identity/economics once and refuses an active 
  await w.withState(({dir})=>{assert.equal(existsSync(join(dir,'operator-secret')),false);const restored=createProductService({stateDir:dir});assert.equal(restored.state().account.name,'migration fixture');restored.close();});
 });
 
-function fakeBlob() {
+function fakeBlob({compressLarge=false,forceWeak=false}={}) {
  const blobs=new Map();let n=0;const calls=[];const err=(status,code)=>new Response(JSON.stringify({error:{code,message:code}}),{status});
  return {calls,fetchImpl:async(url,init={})=>{const u=new URL(url),h=init.headers??{};calls.push({url,init});const path=u.hostname.endsWith('.private.blob.vercel-storage.com')?u.pathname.slice(1):u.searchParams.get('pathname'),cur=blobs.get(path);
-  if(init.method!=='PUT')return cur?new Response(cur.body,{headers:{etag:cur.etag}}):new Response('',{status:404});
+  if(init.method!=='PUT'){
+   if(!cur)return new Response('',{status:404});
+   const compressed=forceWeak||(compressLarge&&cur.body.length>1000&&h['accept-encoding']!=='identity');
+   return new Response(cur.body,{headers:{etag:compressed?`W/${cur.etag}`:cur.etag,...(compressed?{'content-encoding':'br'}:{})}});
+  }
   if(h['x-if-match']&&cur?.etag!==h['x-if-match'])return err(412,'precondition_failed');if(!h['x-if-match']&&cur&&h['x-allow-overwrite']!=='1')return err(409,'precondition_failed');
   blobs.set(path,{body:init.body,etag:`"e${++n}"`});return new Response('{}');}};
 }
@@ -123,6 +128,21 @@ test('Blob and file exact-value CAS admit one contender and keep stale writers o
  const f=fakeBlob(),blob=createBlobKV({token:'vercel_blob_rw_store1_fixture',fetchImpl:f.fetchImpl}),file=createFileKV({dir:temp(t)});
  for(const kv of [blob,file]){assert.equal(await kv.compareAndSet('state',null,'one'),true);assert.equal(await kv.compareAndSet('state',null,'wrong'),false);const writes=await Promise.all([kv.compareAndSet('state','one','two'),kv.compareAndSet('state','one','three')]);assert.equal(writes.filter(Boolean).length,1);assert.equal(await kv.compareAndSet('state','one','stale'),false);assert.notEqual(await kv.get('state'),'stale');}
  assert.ok(f.calls.filter(x=>x.init.method==='PUT').slice(1).every(x=>x.init.headers['x-if-match']));
+});
+test('Blob CAS requests identity bytes for large snapshots and rejects weak validators without a write',async()=>{
+ const f=fakeBlob({compressLarge:true}),kv=createBlobKV({token:'vercel_blob_rw_store1_fixture',fetchImpl:f.fetchImpl}),snapshot='x'.repeat(68000);
+ assert.equal(await kv.compareAndSet('financial',null,snapshot),true);
+ assert.equal(await kv.compareAndSet('financial',snapshot,snapshot+'next'),true);
+ assert.ok(f.calls.filter(c=>c.init.method!=='PUT').every(c=>c.init.headers['accept-encoding']==='identity'));
+ const broken=fakeBlob({forceWeak:true}),strict=createBlobKV({token:'vercel_blob_rw_store1_fixture',fetchImpl:broken.fetchImpl});
+ await strict.set('state','old');await strict.set('counter','1');await strict.set('expired','old',{ttlSeconds:-1});
+ const putsBefore=broken.calls.filter(c=>c.init.method==='PUT').length;
+ await assert.rejects(strict.compareAndSet('state','old','unsafe'),code('blob_etag_not_strong'));
+ await assert.rejects(strict.incr('counter'),code('blob_etag_not_strong'));
+ await assert.rejects(strict.set('expired','unsafe',{nx:true}),code('blob_etag_not_strong'));
+ // The failed NX creation is permitted; no conditional overwrite may follow it.
+ const puts=broken.calls.filter(c=>c.init.method==='PUT').slice(putsBefore);assert.equal(puts.length,1);assert.equal(puts[0].init.headers['x-allow-overwrite'],'0');
+ assert.equal(await strict.get('state'),'old');assert.equal(await strict.get('counter'),'1');
 });
 test('Upstash exact-value CAS uses one atomic EVAL, never a separate GET/SET',async()=>{
  const calls=[];const kv=createUpstashKV({url:'https://fixture.upstash.io',token:'fixture',fetchImpl:async(url,init)=>{calls.push(JSON.parse(init.body));return new Response('{"result":1}');}});
@@ -182,4 +202,17 @@ test('organic migration preserves paid-call counters and completed answer identi
  await service.answer(body);service.close();
  const kv=memoryKV(),key=randomBytes(32),w=createHostedProductWorkspace({kv,stateKey:key,kind:'organic'});await w.importDirectory(source);
  await w.withState(async({dir})=>{const restored=createProductService({stateDir:dir,runId:'product-organic-v1',organicTransport:async()=>{calls++;return {answer:'must not happen',model:'fixture'};}});try{assert.equal(restored.organic().usedToday,1);const replay=await restored.answer(body);assert.equal(replay.answer,'Migrated old answer');assert.equal(replay.replayed,true);assert.equal(calls,1);}finally{restored.close();}});
+});
+
+test('parallel bootstrap/state/publisher-config GETs read committed snapshots without lease contention or a durable write',async t=>{
+ const f=await apiFixture(t);await f.launch();
+ const before=await f.kv.get(productStateKey('demo'));
+ const responses=await Promise.all(['/bootstrap','/state','/publisher/config','/state'].map(path=>request(f.api,path)));
+ assert.deepEqual(responses.map(r=>r.status),[200,200,200,200]);assert.equal(await f.kv.get(productStateKey('demo')),before);
+ await f.api.financialWorkspace.withState(async()=>{
+  const held=await f.kv.get(productStateKey('demo'));assert.ok(JSON.parse(held).lease);
+  const reports=await Promise.all(['/bootstrap','/state','/publisher/config'].map(path=>request(f.api,path)));
+  assert.deepEqual(reports.map(r=>r.status),[200,200,200]);assert.equal(await f.kv.get(productStateKey('demo')),held);
+ });
+ assert.equal(f.modelCalls(),0);assert.equal(f.answerCalls(),0);
 });

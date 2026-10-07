@@ -65,6 +65,15 @@ export function createHostedProductWorkspace({kv,stateKey,id='demo',kind='financ
       rmSync(dir,{recursive:true,force:true});
     }
   }
+  // Reports read an immutable committed snapshot even while another invocation
+  // owns the mutation lease. Their scratch-only projections never save, renew or
+  // release the lease and cannot perform provider/signing operations.
+  async function withSnapshot(fn) {
+    const row=parse(await kv.get(key));if(!row.snapshot)fail('product_not_initialized',409);
+    const dir=mkdtempSync(join(tempRoot,'axp-product-read-'));
+    try{unpackDirectory(row.snapshot,dir,stateKey,{aad});return await fn({dir,revision:row.revision,checkpoint:async()=>fail('product_read_only')});}
+    finally{rmSync(dir,{recursive:true,force:true});}
+  }
   async function importDirectory(source) {
     // Operator-only migration; refuse a running local payment worker and refuse
     // replacement of any hosted state, including an empty initialized workspace.
@@ -88,7 +97,7 @@ export function createHostedProductWorkspace({kv,stateKey,id='demo',kind='financ
       return {imported:true,workspaceId:id,kind,revision:1};
     } finally {rmSync(dir,{recursive:true,force:true});}
   }
-  return {withState,importDirectory,key,inspect:async()=>{const row=parse(await kv.get(key));return {initialized:!!row.snapshot,revision:row.revision,busy:!!row.lease&&row.lease.until>now()};}};
+  return {withState,withSnapshot,importDirectory,key,inspect:async()=>{const row=parse(await kv.get(key));return {initialized:!!row.snapshot,revision:row.revision,busy:!!row.lease&&row.lease.until>now()};}};
 }
 
 function productWallet(config,root) {
@@ -152,18 +161,23 @@ export async function createHostedProductAPI({config=process.env,root=repository
         if(config.AXP_PRODUCT_PASSCODE&&!secretMatches(req.headers['x-axp-product-passcode'],config.AXP_PRODUCT_PASSCODE))fail('passcode_invalid',403);
       }
       const request=await bufferedRequest(req),answer=path==='/api/product/demo/answer',workspace=answer?organic:financial;
-      const buffered=await workspace.withState(async({dir,checkpoint})=>{
+      const operate=async({dir,checkpoint})=>{
         let wallet=null,service;
         try {
           if(!answer&&mode==='devnet'&&!serviceOptions.paymentOptions?.identities)wallet=productWallet(config,root);
           service=createProductService({...serviceOptions,stateDir:dir,runId:answer?'product-organic-v1':mode==='devnet'?'product-devnet-v1':'product-workspace-v1',now,publisherKey:config.AXP_PUBLISHER_API_KEY??serviceOptions.publisherKey,apiKey:config.JEV_API_KEY||config.TYPESAFE_API_KEY,organicApiKey:config.DEEPSEEK_API_KEY,retriever,dailyModelCap:Number(config.AXP_PRODUCT_JEV_DAILY_CAP??50),demoMode:config.AXP_PRODUCT_DEMO_MODE==='1',financialMode:answer?'synthetic':mode,signingEnabled:!answer&&sign,walletPath:wallet?.path,paymentOptions:{...serviceOptions.paymentOptions,lock:false,minimumDiskBytes:32*1024**2},checkpoint});
           // Persist generated receipt identity / keys before they can be observed.
-          await checkpoint('initialized');
+          if(req.method!=='GET'||!existsSync(join(dir,'exchange.sqlite')))await checkpoint('initialized');
           const buffer=responseBuffer();await createProductAPI({service,csrf}).handler(request,buffer);
           // Quiesce and close SQLite (including WAL) before the final response save.
           service.close();service=null;return buffer;
         } finally {service?.close();wallet?.dispose();}
-      });
+      };
+      let buffered;
+      if(req.method==='GET') {
+        try{buffered=await workspace.withSnapshot(operate);}
+        catch(e){if(e.code!=='product_not_initialized')throw e;buffered=await workspace.withState(operate);}
+      } else buffered=await workspace.withState(operate);
       // createProductAPI may prepare success/error output, but neither reaches
       // the browser until withState has saved and fenced the complete result.
       if(res.destroyed||res.writableEnded)return;

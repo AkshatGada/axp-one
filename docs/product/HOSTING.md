@@ -51,14 +51,19 @@ There are two distinct encrypted snapshot records under `axp:product:<id>:`:
 
 Separating answers permits DeepSeek and Jev/auction to run concurrently. Each
 request restores its relevant snapshot into a fresh private temporary directory,
-uses the existing SQLite service, then deletes scratch data. Concurrent financial
-requests receive `429 product_busy_retry` with `Retry-After: 2`; they never mutate
-another invocation's in-memory ledger. The JSON response is buffered until the
-complete final snapshot has been saved. Client disconnection does not authorize
-cancelling a halfway durable financial operation.
+uses the existing SQLite service, then deletes scratch data. Read-only dashboard
+and publisher configuration GETs read the latest committed snapshot without a
+lease; parallel page loads do not contend with one another or with a mutation.
+They never save their scratch projections. Concurrent financial mutations
+receive `429 product_busy_retry` with `Retry-After: 2`; they never mutate another
+invocation's in-memory ledger. Mutation responses are buffered until the complete
+final snapshot has been saved. Client disconnection does not authorize cancelling
+a halfway durable financial operation.
 
 A snapshot and its lease occupy **one** exact-value compare-and-swap record.
-Blob's private uncached GET provides an ETag; conditional PUT fences every update.
+Blob's private uncached GET requests `Accept-Encoding: identity` to retain the
+object's strong ETag; conditional PUT fences every update. A missing or weak
+validator fails closed instead of being normalized or used for an overwrite.
 An expired worker cannot overwrite a successor's snapshot or delete its lease.
 Lease renewal happens at durable checkpoints; loss/expiry fails closed.
 
