@@ -58,3 +58,22 @@ test('turn rail remains bound after the publisher changes chat settings', () => 
   const turn = {input:{settlementNetwork:'tempo-testnet'},ad:{status:'awarded',award:{campaignId:identity.campaignId}},receipt:{payment:{channelId:identity.channelId}}};
   assert.deepEqual(boundPaymentIdentity(turn),tempoIdentity);
 });
+
+test('a safely retryable failed Tempo close obeys the backend capability and all identity guards', () => {
+  const failed = {...tempoCampaign,status:'settling',payment:{...tempoCampaign.payment,phase:'draining',closeStatus:'failed',canClose:true}};
+  assert.equal(paymentState(failed,tempoIdentity).close,true);
+  assert.equal(paymentState(failed,tempoIdentity).payout,false);
+  assert.equal(paymentState({...failed,payment:{...failed.payment,canClose:false}},tempoIdentity).close,false);
+  assert.equal(paymentState({...failed,payment:{...failed.payment,reconciliationRequired:true}},tempoIdentity).close,false);
+  assert.equal(paymentState({...failed,reservedBaseUnits:'1000'},tempoIdentity).close,false);
+  assert.equal(paymentState({...failed,authorizedBaseUnits:'2000'},tempoIdentity).close,false);
+  assert.equal(paymentState(failed,identity).close,false);
+  assert.equal(paymentState({...campaign,payment:{...campaign.payment,closeStatus:'failed'}},identity).settle,false);
+});
+
+import {syntheticSettlementFinalized} from './payment-state.mjs';
+test('synthetic payment display only reports settlement after the ledger campaign is closed', () => {
+  for (const status of ['active','paused','settling']) assert.equal(syntheticSettlementFinalized({status,settledBaseUnits:'0'}),false);
+  assert.equal(syntheticSettlementFinalized(undefined),false);
+  assert.equal(syntheticSettlementFinalized({status:'settled',settledBaseUnits:'3000'}),true);
+});

@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { Ld } from '@axp/design-system/ledger';
-import { canRetryOpening, currencyUnit, financialModeLabel, launchNotice, nativePayments, nativeSettlementLabel, networkOf, networkLabel, networkTotals } from './payment';
+import { canRetryOpening, currencyUnit, financialModeLabel, launchNotice, nativePayments, nativeSettlementLabel, networkOf, networkLabel, networkTotals, paymentOperationProblem, type PaymentOperationResult } from './payment';
 import { PaymentPanel } from './PaymentPanel';
 import { CampaignEditor } from './CampaignEditor';
 import { amount, api, campaignRows, count, date, decimal, type Bootstrap, type Campaign, type ProductState } from './model';
@@ -50,9 +50,10 @@ export function AdvertiserDashboard() {
     setBusy(true); setError(''); setMessage(''); setPaymentOperation(['settle', 'payout', 'close', 'reconcile', 'authorize', 'launch'].includes(verb) ? verb : '');
     try {
       if (verb === 'launch') { const fresh = await refresh(); const saved = campaignRows(fresh).find(row => row.id === c.id); if (!saved || !canRetryOpening(saved)) throw new Error('This opening can no longer be retried. Inspect its updated status and reconcile the saved operation if required.'); }
-      const result = await api<{ campaign: Campaign }>(`/campaigns/${encodeURIComponent(c.id)}/${verb}`, bootstrap?.csrf, {}); await refresh();
+      const result = await api<{ campaign: Campaign; paymentOperation?: PaymentOperationResult }>(`/campaigns/${encodeURIComponent(c.id)}/${verb}`, bootstrap?.csrf, {}); await refresh();
+      const paymentProblem = paymentOperationProblem(result.paymentOperation); if (paymentProblem) { setError(paymentProblem); return; }
       if (verb === 'duplicate') { setEditing(result.campaign); setView('editor'); }
-      else setMessage(verb === 'launch' ? launchNotice(result.campaign, native) : verb === 'authorize' ? 'Accepted-delivery authorization processed. Inspect the saved cumulative voucher status below.' : verb === 'reconcile' ? 'Payment status refreshed from the saved operation.' : verb === 'payout' ? 'Payout processed. Inspect the transaction status; the campaign remains open.' : verb === 'settle' || verb === 'close' ? nativePayments(bootstrap, state) ? result.campaign.status === 'settled' ? 'Channel closure confirmed. Inspect the publisher payout and unused-deposit refund below.' : 'Settlement requested. Inspect the channel status and transaction evidence below.' : 'Synthetic settlement recorded. Campaign is closed.' : verb === 'pause' ? 'Campaign paused. New opportunities will exclude it.' : 'Campaign resumed. It can compete again.');
+      else setMessage(verb === 'launch' ? launchNotice(result.campaign, native) : verb === 'authorize' ? 'Accepted-delivery authorization processed. Inspect the saved cumulative voucher status below.' : verb === 'reconcile' ? 'Payment status refreshed from the saved operation.' : verb === 'payout' ? result.paymentOperation?.status === 'finalized' ? 'Publisher payout confirmed. The campaign remains open.' : 'Payout requested. Inspect the saved transaction status; the campaign remains open.' : verb === 'settle' || verb === 'close' ? nativePayments(bootstrap, state) ? result.campaign.status === 'settled' ? 'Channel closure confirmed. Inspect the publisher payout and unused-deposit refund below.' : 'Settlement requested. Inspect the channel status and transaction evidence below.' : 'Synthetic settlement recorded. Campaign is closed.' : verb === 'pause' ? 'Campaign paused. New opportunities will exclude it.' : 'Campaign resumed. It can compete again.');
     } catch (e) { await refresh().catch(() => {}); setError(e instanceof Error ? e.message : 'The action could not be completed.'); }
     finally { setBusy(false); setPaymentOperation(''); }
   }

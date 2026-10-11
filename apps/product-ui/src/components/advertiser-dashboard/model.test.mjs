@@ -182,3 +182,11 @@ test('Tempo publisher payout is shown before final close only with finalized evi
   assert.equal(nativeSettlementLabel({...c,payment:{...c.payment,transactions:[{...c.payment.transactions[0],status:'submitted'}]}},'settledBaseUnits'),'Not settled');
   assert.equal(nativeSettlementLabel({...c,payment:{...c.payment,transactions:[{...c.payment.transactions[0],chainId:1}]}},'settledBaseUnits'),'Not settled');
 });
+
+import {paymentOperationProblem} from './payment.ts';
+test('payment API outcomes cannot produce success copy for blocked, failed or uncertain operations', () => {
+  assert.match(paymentOperationProblem({status:'blocked',reason:'outstanding_deliveries'}), /blocked.*outstanding deliveries/);
+  assert.match(paymentOperationProblem({status:'failed',reasonCode:'tempo_transaction_reverted'}), /failed.*tempo transaction reverted/);
+  assert.match(paymentOperationProblem({status:'unknown'}), /uncertain.*Reconcile/);
+  for (const operation of [undefined, {status:'finalized'}, {status:'authorized'}, {status:'reconciled'}, {status:'submitted'}]) assert.equal(paymentOperationProblem(operation), undefined);
+});

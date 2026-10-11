@@ -12,17 +12,22 @@ export function paymentState(campaign, {campaignId, channelId, settlementNetwork
   const authorized = campaign?.authorizedBaseUnits ?? payment?.authorizedBaseUnits;
   const validAmounts = /^\d+$/.test(accepted ?? '') && /^\d+$/.test(authorized ?? '');
   const settled = campaign?.settledBaseUnits ?? payment?.settledBaseUnits ?? '0';
-  const safe = bound && !closed && !pending && !needsReconcile && payment.openStatus === 'finalized' && !payment.closeStatus && ['open', 'draining'].includes(payment.phase) && validAmounts && accepted === authorized && campaign.reservedBaseUnits === '0';
+  const closeRetryAllowed = payment?.network === 'tempo-testnet' && payment.closeStatus === 'failed' && payment.canClose === true;
+  const safe = bound && !closed && !pending && !needsReconcile && payment.openStatus === 'finalized' && (!payment.closeStatus || closeRetryAllowed) && ['open', 'draining'].includes(payment.phase) && validAmounts && accepted === authorized && campaign.reservedBaseUnits === '0';
   const gap = validAmounts && BigInt(accepted) > BigInt(authorized);
   return {
     bound, finalized, closed, pending, needsReconcile,
     settle: safe && payment.canSettle === true,
-    payout: safe && payment.network === 'tempo-testnet' && payment.canPayout === true && /^\d+$/.test(settled) && BigInt(authorized) > BigInt(settled),
+    payout: safe && payment.network === 'tempo-testnet' && payment.phase === 'open' && !payment.closeStatus && payment.canPayout === true && /^\d+$/.test(settled) && BigInt(authorized) > BigInt(settled),
     close: safe && payment.network === 'tempo-testnet' && payment.canClose === true,
     authorize: bound && !closed && !pending && !needsReconcile && ['open', 'draining'].includes(payment.phase) && gap,
     // A lost HTTP acknowledgement may leave a known operation on the server. Lookup reuses it.
     reconcile: bound && !finalized && (payment.canReconcile === true || uncertain),
   };
+}
+
+export function syntheticSettlementFinalized(campaign) {
+  return campaign?.status === 'settled';
 }
 
 export function boundPaymentIdentity(turn) {

@@ -1,7 +1,7 @@
 "use client";
 import {Ld} from '@axp/design-system/ledger';
 import {nativeTransactionURL, isFinalizedNativeTransaction, moneyUnit, type NativePayment} from '../../../../../packages/publisher-sdk/financial.mjs';
-import {boundPaymentIdentity, paymentState} from './payment-state.mjs';
+import {boundPaymentIdentity, paymentState, syntheticSettlementFinalized} from './payment-state.mjs';
 import {money, type BudgetCampaign, type PaymentAction, type Turn} from './model';
 import {NativePaymentEvidence} from './NativePaymentEvidence';
 
@@ -18,10 +18,11 @@ export function PaymentFlow({turn, campaign, payment, mode, pending, onAction, o
   const unit = moneyUnit(mode, payment ?? {settlementNetwork: turn.input.settlementNetwork});
   const deposit = native ? payment?.confirmedDepositBaseUnits : campaign?.depositBaseUnits;
   const cumulative = payment?.authorizedBaseUnits ?? campaign?.authorizedBaseUnits;
-  const paid = !native || controls.finalized || (tempo && finalizedTransactions?.some(tx => tx.operation === 'payout'));
+  const finalized = native ? controls.finalized : syntheticSettlementFinalized(campaign);
+  const paid = finalized || (tempo && finalizedTransactions?.some(tx => tx.operation === 'payout'));
   const busy = pending || turn.budgetLoading || turn.paymentOperation?.pending;
   return <div className="pub-payment-story" data-native={native || undefined} data-network={payment?.network}>
-    <div className="pub-stage-heading"><h3>{controls.finalized ? 'Publisher paid. Unused funds returned.' : native ? `Off-chain vouchers. ${tempo ? 'Tempo' : 'Solana'} settlement.` : 'Synthetic payment ledger'}</h3><Ld.Tag tone={controls.finalized ? 'success' : controls.needsReconcile ? 'warning' : 'outline'}>{controls.finalized ? 'Finalized' : controls.needsReconcile ? 'Reconcile status' : controls.pending ? 'Operation pending' : paid ? 'Paid · channel open' : authorized.length ? 'Authorized' : 'Payment records'}</Ld.Tag></div>
+    <div className="pub-stage-heading"><h3>{finalized ? native ? 'Publisher paid. Unused funds returned.' : 'Synthetic settlement recorded.' : native ? `Off-chain vouchers. ${tempo ? 'Tempo' : 'Solana'} settlement.` : 'Synthetic payment ledger'}</h3><Ld.Tag tone={finalized ? 'success' : controls.needsReconcile ? 'warning' : 'outline'}>{finalized ? native ? 'Finalized' : 'Recorded' : controls.needsReconcile ? 'Reconcile status' : controls.pending ? 'Operation pending' : paid ? 'Paid · channel open' : authorized.length ? 'Authorized' : 'Payment records'}</Ld.Tag></div>
     {campaign ? <>
       <p className="pub-payment-scope">{campaign.brandName || campaign.name} · whole channel</p>
       <div className="pub-payment-flow" aria-label="Channel funding, vouchers, publisher payout and refund">
@@ -29,9 +30,9 @@ export function PaymentFlow({turn, campaign, payment, mode, pending, onAction, o
         <span className="pub-payment-arrow" aria-hidden>→</span>
         <div className="pub-payment-node pub-payment-node-vouchers"><span className="ld-label">02 · Vouchers</span><h4>Cumulative total</h4><b>{money(cumulative)} <small>{unit}</small></b><span>{native ? `${authorized.length} authorized voucher${authorized.length === 1 ? '' : 's'}` : 'Synthetic ledger'}</span><div className="pub-voucher-marks" aria-label={`${authorized.length} authorized vouchers`}>{authorized.slice(0, 12).map(v => <i key={v.chargeId} title={`Voucher ${v.sequence}: ${money(v.cumulativeAmountBaseUnits)} ${unit}`} />)}{authorized.length > 12 ? <span>+{authorized.length - 12}</span> : null}</div></div>
         <span className="pub-payment-arrow" aria-hidden>→</span>
-        <div className="pub-payment-node"><span className="ld-label">03 · Payout</span><h4>Publisher paid</h4><b>{paid ? money(payment?.settledBaseUnits ?? campaign.settledBaseUnits) : '—'} <small>{unit}</small></b><span>{controls.finalized ? 'Final payout confirmed' : paid ? 'Campaign stays open' : tempo ? 'Pay out while open' : 'Paid at channel close'}</span></div>
+        <div className="pub-payment-node"><span className="ld-label">03 · Payout</span><h4>Publisher paid</h4><b>{paid ? money(payment?.settledBaseUnits ?? campaign.settledBaseUnits) : '—'} <small>{unit}</small></b><span>{finalized ? native ? 'Final payout confirmed' : 'Synthetic ledger settled' : paid ? 'Campaign stays open' : tempo ? 'Pay out while open' : 'Paid at channel close'}</span></div>
         <span className="pub-payment-arrow" aria-hidden>→</span>
-        <div className="pub-payment-node"><span className="ld-label">04 · Refund</span><h4>Unused deposit</h4><b>{!native || controls.finalized ? money(payment?.refundBaseUnits ?? campaign.refundBaseUnits) : '—'} <small>{unit}</small></b><span>{controls.finalized ? 'Returned at close' : 'Returned after final close'}</span></div>
+        <div className="pub-payment-node"><span className="ld-label">04 · Refund</span><h4>Unused deposit</h4><b>{finalized ? money(payment?.refundBaseUnits ?? campaign.refundBaseUnits) : '—'} <small>{unit}</small></b><span>{finalized ? 'Returned at close' : 'Returned after final close'}</span></div>
       </div>
       <p className="ld-caption">{native ? tempo ? 'Many deliveries, cumulative vouchers, periodic payouts. The spending cap stays fixed.' : 'Vouchers accumulate off-chain. Closing pays the total and returns unused funds.' : 'Synthetic credits do not make a blockchain payment.'}</p>
       {explorer ? <a className="pub-finalized-proof" href={explorer} target="_blank" rel="noopener noreferrer"><span><b>Finalized {tempo ? 'Tempo Testnet' : 'Solana Devnet'} proof</b><span>{latestPayout?.operation === 'close' ? 'Final payout and refund' : 'Publisher payout · channel stays open'}</span></span><span aria-hidden>Explorer ↗</span></a> : null}

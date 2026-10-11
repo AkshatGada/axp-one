@@ -39,6 +39,13 @@ export function launchNotice(campaign: Campaign, native: boolean): string {
   if (campaign.status === 'active' && paymentPhase(campaign) === 'open') return `Channel funded on ${networkLabel(networkOf(campaign))}. Your campaign is ready to compete.`;
   return `Campaign saved. ${phaseLabel(paymentPhase(campaign))}. Check payment status before testing a conversation.`;
 }
+export type PaymentOperationResult = {status?: string; reason?: string | null; reasonCode?: string | null};
+export function paymentOperationProblem(operation?: PaymentOperationResult): string | undefined {
+  const reason = (operation?.reason ?? operation?.reasonCode)?.replaceAll('_', ' ');
+  if (operation?.status === 'unknown') return `Payment outcome is uncertain. Reconcile the saved operation before continuing.${reason ? ` ${reason}` : ''}`;
+  if (operation?.status === 'blocked' || operation?.status === 'failed') return `Payment ${operation.status}.${reason ? ` ${reason}` : ' Inspect the channel status before retrying.'}`;
+  return undefined;
+}
 /** Construct a pinned Devnet explorer URL rather than trusting arbitrary response URLs. */
 export function transactionURL(signature?: string, network: SettlementNetwork = 'solana-devnet'): string | null {
   if (network === 'tempo-testnet') return signature && /^0x[0-9a-fA-F]{64}$/.test(signature) ? `https://explore.testnet.tempo.xyz/tx/${signature}` : null;
