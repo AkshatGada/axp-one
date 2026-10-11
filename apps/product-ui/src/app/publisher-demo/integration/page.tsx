@@ -32,7 +32,8 @@ const axp = new AXPPublisher({
 
 // Start both before awaiting either. The answer receives no sponsor material.
 const adTask = axp.requestAd({ question, sessionId, turnId,
-  placementId: 'chat-sponsored-card' });
+  placementId: 'chat-sponsored-card',
+  settlementNetwork: 'solana-devnet' });
 const answerTask = yourExistingLLM({ question });
 
 sendAnswer(await answerTask); // stream independently if your app streams
@@ -131,13 +132,14 @@ export default function PublisherIntegrationPage() {
             <pre className="sdk-code"><code>{`AXP_EXCHANGE_URL=https://axp.one/api/product
 AXP_PUBLISHER_API_KEY=<operator-provisioned server-only key>`}</code></pre>
             <p>Copy the SDK source into your project or use a local package dependency. Node 22.18+ and built-in fetch are sufficient. The server and browser modules have no runtime dependencies; this release is repository source, not a published npm package.</p>
-            <p>The hosted shared demo uses Solana Devnet test USDC. Your existing answer model stays independent; DeepSeek powers only the example chat.</p>
+            <p>Choose Solana Devnet test USDC or Tempo Testnet PathUSD in the campaign and publisher configuration. Your existing answer model stays independent; DeepSeek powers only the example chat.</p>
           </div>
         </details>
 
         <details className="sdk-details">
           <summary><span>02</span> Request alongside your answer</summary>
           <div className="sdk-detail-body">
+            <Ld.Callout title="Choose a settlement network">Set <code>settlementNetwork</code> to <code>solana-devnet</code> or <code>tempo-testnet</code>. Only campaigns on that rail compete. Start a new session when switching rails.</Ld.Callout>
             <p>Use a random session ID for each conversation and a stable turn ID for each submission. Send one sanitized question, at most 1,200 characters, with optional required capabilities or category exclusions. Session and turn IDs use letters, digits, underscores or hyphens, up to 120 characters. Keep private data and raw history out of the ad request.</p>
             <pre className="sdk-code"><code>{server}</code></pre>
             <p><code>yourExistingLLM</code>, <code>sendAnswer</code> and <code>sendSponsoredAward</code> are your app’s functions. Your answer path receives no advertiser creative, hints or buying evidence. Ad errors return <code>{`{ status: 'error', error: { code } }`}</code>; no fill returns <code>{`{ status: 'no_fill' }`}</code> with its opportunity and trace.</p>
@@ -160,7 +162,7 @@ AXP_PUBLISHER_API_KEY=<operator-provisioned server-only key>`}</code></pre>
           <div className="sdk-detail-body">
             <pre className="sdk-code"><code>{receipt}</code></pre>
             <p>An award reserves budget. An accepted receipt creates one charge. The browser cannot choose an amount, recipient or signing key. Receipt signatures authenticate insertion and disclosure asserted by the app; they do not prove human attention or conversion.</p>
-            <p>The server reports financial mode: synthetic uses local test credits, while Devnet uses test USDC. Accepted spend and a cumulative off-chain voucher are separate from a finalized payout, channel close or refund. The example chat’s Payment stage shows those states and their recorded network evidence separately.</p>
+            <p>The server reports financial mode: synthetic uses local test credits, while native payments use the campaign’s selected network and test token. An accepted delivery advances its cumulative voucher. Tempo supports payouts while the channel stays open; final closure returns unused funds on either rail. The example chat’s Payment stage shows those states and their recorded network evidence separately.</p>
           </div>
         </details>
 
@@ -173,7 +175,7 @@ AXP_PUBLISHER_API_KEY=<operator-provisioned server-only key>`}</code></pre>
   deliveryToken: ad.deliveryToken,
   reason: 'render_failed',
 });`}</code></pre>
-            <p>Otherwise the reservation expires. An accepted charge cannot be erased by failing its award. There are no automatic ad purchase retries. An explicit request retry must preserve the same question, placement, restrictions, session and turn IDs.</p>
+            <p>Otherwise the reservation expires. An accepted charge cannot be erased by failing its award. There are no automatic ad purchase retries. An explicit request retry must preserve the same question, placement, restrictions, settlement network, session and turn IDs.</p>
             <p>Reconcile an uncertain receipt with its original award, observation and delivery token. An accepted receipt replay returns the existing charge; it does not buy another placement. The browser acknowledger deduplicates concurrent and successful posts, and permits explicit retry after a failed post.</p>
           </div>
         </details>

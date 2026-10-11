@@ -77,11 +77,11 @@ export function createHostedProductWorkspace({kv,stateKey,id='demo',kind='financ
   async function importDirectory(source) {
     // Operator-only migration; refuse a running local payment worker and refuse
     // replacement of any hosted state, including an empty initialized workspace.
-    if(existsSync(join(source,'payment-worker.lock')))fail('product_local_worker_running');
+    if(['payment-worker.lock','tempo-payment-worker.lock'].some(name=>existsSync(join(source,name))))fail('product_local_worker_running');
     if(await kv.get(key)!==null)fail('product_workspace_already_exists',409);
     const dir=mkdtempSync(join(tempRoot,'axp-product-import-'));
     try {
-      const allowed=new Set(['exchange.sqlite','exchange.sqlite-wal','exchange.sqlite-shm','payments.sqlite','payments.sqlite-wal','payments.sqlite-shm','native.sqlite','native.sqlite-wal','native.sqlite-shm','publisher-api-key','publisher-receipt.pem']);
+      const allowed=new Set(['exchange.sqlite','exchange.sqlite-wal','exchange.sqlite-shm','payments.sqlite','payments.sqlite-wal','payments.sqlite-shm','native.sqlite','native.sqlite-wal','native.sqlite-shm','tempo-payments.sqlite','tempo-payments.sqlite-wal','tempo-payments.sqlite-shm','publisher-api-key','publisher-receipt.pem']);
       // Never import the wallet/secrets subdirectory or arbitrary operator files.
       for(const name of readdirSync(source))if(allowed.has(name))copyFileSync(join(source,name),join(dir,name));
       if(!existsSync(join(dir,'exchange.sqlite'))||!existsSync(join(dir,'publisher-receipt.pem'))||!existsSync(join(dir,'publisher-api-key')))fail('product_import_incomplete');
@@ -114,6 +114,18 @@ function productWallet(config,root) {
   try{writeFileSync(path,text,{mode:0o600,flag:'wx'});return {path,identities:walletIdentities(path),dispose:()=>rmSync(dir,{recursive:true,force:true})};}
   catch(e){rmSync(dir,{recursive:true,force:true});throw e;}
 }
+/** Keys are materialized outside financial snapshots and disposed per invocation. */
+async function productTempoWallet(config,root) {
+  const {tempoWalletIdentities}=await import('../payments/tempo-wallet.mjs');let text;
+  if(config.AXP_PRODUCT_TEMPO_WALLET){
+    if(typeof config.AXP_PRODUCT_TEMPO_WALLET!=='string'||config.AXP_PRODUCT_TEMPO_WALLET.length>100000)fail('tempo_wallet_invalid');
+    try{text=Buffer.from(config.AXP_PRODUCT_TEMPO_WALLET,'base64').toString('utf8');JSON.parse(text);}catch{fail('tempo_wallet_invalid');}
+  } else if(!config.VERCEL){const path=resolve(root,config.AXP_PRODUCT_TEMPO_WALLET_PATH??'local-state/product/secrets/tempo-wallet.json');tempoWalletIdentities(path);text=readFileSync(path,'utf8');}
+  else fail('tempo_wallet_required');
+  const dir=mkdtempSync(join(tmpdir(),'axp-product-tempo-wallet-')),path=join(dir,'wallet.json');
+  try{writeFileSync(path,text,{mode:0o600,flag:'wx'});return {path,identities:tempoWalletIdentities(path),dispose:()=>rmSync(dir,{recursive:true,force:true})};}
+  catch(e){rmSync(dir,{recursive:true,force:true});throw e;}
+}
 const send=(res,status,value)=>{res.writeHead(status,{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff',...(status===429?{'retry-after':'2'}:{})});res.end(JSON.stringify(value));};
 async function bufferedRequest(req) {
   if(req.method!=='POST')return req;
@@ -131,6 +143,10 @@ const responseBuffer=()=>({status:200,headers:{},body:null,writeHead(status,head
 export async function createHostedProductAPI({config=process.env,root=repositoryRoot,kv,now=Date.now,serviceOptions={},retriever,workspaceFactory=createHostedProductWorkspace}={}) {
   const enabled=config.AXP_PRODUCT_ENABLED==='1',id=safeId(config.AXP_PRODUCT_WORKSPACE_ID??'demo'),mode=config.AXP_PRODUCT_FINANCIAL_MODE??'synthetic';
   const configured={enabled,financialMode:mode,store:null,modelKeys:{jev:!!(config.JEV_API_KEY||config.TYPESAFE_API_KEY||serviceOptions.transport),organic:!!(config.DEEPSEEK_API_KEY||serviceOptions.organicTransport)},wallet:false};
+  const tempoEnabled=mode==='devnet'&&config.AXP_PRODUCT_TEMPO_ENABLED==='1',tempoSign=enabled&&tempoEnabled&&config.AXP_PRODUCT_TEMPO_SIGN==='1';
+  let tempoInitError=null;configured.tempo={enabled:tempoEnabled,signingEnabled:tempoSign,wallet:false,reason:tempoEnabled?null:'tempo_disabled'};
+  if(tempoEnabled)try{if(!serviceOptions.tempoOptions?.identities){const w=await productTempoWallet(config,root);w.dispose();}configured.tempo.wallet=true;}catch(e){tempoInitError=errorCode(e);configured.tempo.reason=tempoInitError;}
+  configured.tempo.configurationReady=tempoEnabled&&!tempoInitError&&configured.tempo.wallet;
   let initError=null,financial,organic,stateKey;
   try {
     if(!['synthetic','devnet'].includes(mode))fail('financial_mode_invalid');
@@ -162,16 +178,17 @@ export async function createHostedProductAPI({config=process.env,root=repository
       }
       const request=await bufferedRequest(req),answer=path==='/api/product/demo/answer',workspace=answer?organic:financial;
       const operate=async({dir,checkpoint})=>{
-        let wallet=null,service;
+        let wallet=null,tempoWallet=null,service;
         try {
           if(!answer&&mode==='devnet'&&!serviceOptions.paymentOptions?.identities)wallet=productWallet(config,root);
-          service=createProductService({...serviceOptions,stateDir:dir,runId:answer?'product-organic-v1':mode==='devnet'?'product-devnet-v1':'product-workspace-v1',now,publisherKey:config.AXP_PUBLISHER_API_KEY??serviceOptions.publisherKey,apiKey:config.JEV_API_KEY||config.TYPESAFE_API_KEY,organicApiKey:config.DEEPSEEK_API_KEY,retriever,dailyModelCap:Number(config.AXP_PRODUCT_JEV_DAILY_CAP??50),demoMode:config.AXP_PRODUCT_DEMO_MODE==='1',financialMode:answer?'synthetic':mode,signingEnabled:!answer&&sign,walletPath:wallet?.path,paymentOptions:{...serviceOptions.paymentOptions,lock:false,minimumDiskBytes:32*1024**2},checkpoint});
+          if(!answer&&tempoEnabled&&!tempoInitError&&!serviceOptions.tempoOptions?.identities)tempoWallet=await productTempoWallet(config,root);
+          service=createProductService({...serviceOptions,stateDir:dir,runId:answer?'product-organic-v1':mode==='devnet'?'product-devnet-v1':'product-workspace-v1',now,publisherKey:config.AXP_PUBLISHER_API_KEY??serviceOptions.publisherKey,apiKey:config.JEV_API_KEY||config.TYPESAFE_API_KEY,organicApiKey:config.DEEPSEEK_API_KEY,retriever,dailyModelCap:Number(config.AXP_PRODUCT_JEV_DAILY_CAP??50),demoMode:config.AXP_PRODUCT_DEMO_MODE==='1',financialMode:answer?'synthetic':mode,signingEnabled:!answer&&sign,walletPath:wallet?.path,tempoEnabled:!answer&&tempoEnabled,tempoSigningEnabled:!answer&&tempoSign,tempoWalletPath:tempoWallet?.path,tempoOptions:{...serviceOptions.tempoOptions,...(tempoInitError?{configurationError:tempoInitError}:{}),rpcURL:config.AXP_TEMPO_RPC_URL??serviceOptions.tempoOptions?.rpcURL},paymentOptions:{...serviceOptions.paymentOptions,lock:false,minimumDiskBytes:32*1024**2},checkpoint});
           // Persist generated receipt identity / keys before they can be observed.
           if(req.method!=='GET'||!existsSync(join(dir,'exchange.sqlite')))await checkpoint('initialized');
           const buffer=responseBuffer();await createProductAPI({service,csrf}).handler(request,buffer);
           // Quiesce and close SQLite (including WAL) before the final response save.
           service.close();service=null;return buffer;
-        } finally {service?.close();wallet?.dispose();}
+        } finally {service?.close();wallet?.dispose();tempoWallet?.dispose();}
       };
       let buffered;
       if(req.method==='GET') {

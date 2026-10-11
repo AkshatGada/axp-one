@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "axp.tempo-release-validation.v1",
+  "observedAt": "2026-10-11T15:40:29.939Z",
+  "branch": "codex/tempo-settlement",
+  "baselineCommit": "8053135cac52d5baa4466f8bd78300655cef6805",
+  "baseline": {
+    "tests": 488,
+    "passed": 477,
+    "skipped": 11,
+    "failed": 0
+  },
+  "repositoryTests": {
+    "command": "node scripts/test.mjs",
+    "tests": 552,
+    "passed": 541,
+    "failed": 0,
+    "skipped": 11
+  },
+  "focusedUI": {
+    "dashboardTests": 21,
+    "passed": 21,
+    "failed": 0,
+    "mixedRailCountRegression": true
+  },
+  "typechecks": {
+    "productUI": "passed",
+    "marketing": "passed"
+  },
+  "siteBuild": {
+    "status": "passed",
+    "command": "AXP_PAYMENT_SDK_ROOT=<existing pinned Solana SDK> node scripts/build-site.mjs --skip-sdk-build",
+    "staticMB": 55.9,
+    "functionMB": 164,
+    "tempoFlattenedPackages": 20,
+    "solanaFlattenedPackages": 73,
+    "readOnlyProbes": "passed"
+  },
+  "reviews": {
+    "paymentCorrectness": "passed; independent offline code and artifact review",
+    "previewIsolation": "passed; independent review and no-side-effect fixtures",
+    "productUX": "passed; final hosted count correction verified separately"
+  },
+  "nativeEvidence": {
+    "tempo": "testnet-independent-verification.json",
+    "solana": "solana-regression-verification.json"
+  },
+  "productionChanged": false,
+  "hostedUX": {
+    "acceptedDeliveryCount": 7,
+    "separateCurrencySummaries": true,
+    "threeStepSDKGuide": true,
+    "tempoFinalPaymentFlowInspected": true,
+    "solanaFinalPaymentFlowInspected": true
+  },
+  "repositoryHygiene": {
+    "status": "passed",
+    "runtimeFiles": 309,
+    "vendorFiles": 71,
+    "stagedFiles": 16,
+    "findings": []
+  },
+  "diffCheck": "passed"
+}

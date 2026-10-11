@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "axp.tempo-no-fill-observation.v1",
+  "environment": "isolated local",
+  "source": "persisted original product request results",
+  "results": [
+    {
+      "status": "no_fill",
+      "opportunityId": "opp-d8893d13baba50628408fd26",
+      "settlementNetwork": "tempo-testnet",
+      "candidates": [
+        {
+          "campaignId": "campaign-67a6261a-4e72-4f7f-bd97-b7da0fd2a2e1",
+          "eligible": false,
+          "reason": "frequency_cap"
+        },
+        {
+          "campaignId": "campaign-e43d1588-3c74-4e44-9b58-496d9bbffb0d",
+          "eligible": false,
+          "reason": "campaign_paused"
+        }
+      ],
+      "decisionCount": 0
+    }
+  ]
+}

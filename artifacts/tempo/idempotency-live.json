@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "axp.tempo-live-idempotency.v1",
+  "environment": "isolated local before Preview migration",
+  "receiptReplay": true,
+  "chargeId": "charge-award-7f6c3cd6-6113-41c7-af2b-6e468d490399",
+  "acceptedBefore": "9000",
+  "acceptedAfter": "9000",
+  "voucherCountBefore": 3,
+  "voucherCountAfter": 3,
+  "transactionsBefore": 2,
+  "transactionsAfter": 2,
+  "repeatedPayoutHash": "0x3ed8149c0f2058cf656201ccf9e6327464eda18b24d2be3a91ef07e9a2ae1563",
+  "campaignStatus": "active"
+}

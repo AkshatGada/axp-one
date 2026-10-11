@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "axp.product-native-acceptance.v1",
+  "mode": "devnet",
+  "network": "solana-devnet",
+  "genesisHash": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+  "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+  "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+  "payerOwner": "FvZ2jvMmVveZYNvsQEQbpkPnHtUuBWburtHAYAWW4SLg",
+  "publisherOwner": "2thyaZ4skNqYyMdR4HSkkQ1VPUCnzi884AahjmXy6fXu",
+  "campaigns": [
+    {
+      "id": "campaign-37eeb731-59b5-4755-b7fd-00e01ee548e2",
+      "deliveryCount": 1,
+      "payment": {
+        "tokenSymbol": "USDC",
+        "decimals": 6,
+        "canPayout": false,
+        "canClose": false,
+        "mode": "devnet",
+        "network": "solana-devnet",
+        "channelId": "campaign-37eeb731-59b5-4755-b7fd-00e01ee548e2-channel",
+        "protocolChannelId": "HVrpiikncTwfqBbUcdw5qaqvUcyUx51xn5pHy1C4ist5",
+        "address": "HVrpiikncTwfqBbUcdw5qaqvUcyUx51xn5pHy1C4ist5",
+        "payer": "FvZ2jvMmVveZYNvsQEQbpkPnHtUuBWburtHAYAWW4SLg",
+        "payee": "2thyaZ4skNqYyMdR4HSkkQ1VPUCnzi884AahjmXy6fXu",
+        "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+        "phase": "finalized",
+        "openStatus": "finalized",
+        "closeStatus": "finalized",
+        "depositBaseUnits": "20000",
+        "confirmedDepositBaseUnits": "20000",
+        "acceptedBaseUnits": "3000",
+        "authorizedBaseUnits": "3000",
+        "settledBaseUnits": "3000",
+        "refundBaseUnits": "17000",
+        "reconciliationRequired": false,
+        "canReconcile": false,
+        "canRetryOpen": false,
+        "canSettle": false,
+        "reason": null,
+        "expiresAt": 1791818699,
+        "transactions": [
+          {
+            "operation": "open",
+            "status": "finalized",
+            "signature": "Li3QSnMvKxVAorMp2v9W2JDDBF9NwofuucUHPPKaDHKbNU5mrxFededTuSvcXfcaQ2aAuxVxPn57KdRP7Afy4Za",
+            "explorerURL": "https://explorer.solana.com/tx/Li3QSnMvKxVAorMp2v9W2JDDBF9NwofuucUHPPKaDHKbNU5mrxFededTuSvcXfcaQ2aAuxVxPn57KdRP7Afy4Za?cluster=devnet",
+            "finality": "finalized",
+            "slot": 509946571,
+            "blockTime": 1791732302,
+            "networkFeeLamports": "5000",
+            "newRentLamports": "3439160",
+            "reclaimedRentLamports": "0",
+            "tokenDeltas": {
+              "payer": "-20000",
+              "publisher": "0",
+              "treasury": "0"
+            },
+            "reason": null
+          },
+          {
+            "operation": "close",
+            "status": "finalized",
+            "signature": "5aQUwrv5ftubAuYBm9yueLYwtSUUkA5QBa2ExLimwZeLzw3BxYR1iMSRVLroUGNKYEdi298QBWWgZv8yfto4Wua7",
+            "explorerURL": "https://explorer.solana.com/tx/5aQUwrv5ftubAuYBm9yueLYwtSUUkA5QBa2ExLimwZeLzw3BxYR1iMSRVLroUGNKYEdi298QBWWgZv8yfto4Wua7?cluster=devnet",
+            "finality": "finalized",
+            "slot": 509947571,
+            "blockTime": 1791732539,
+            "networkFeeLamports": "15000",
+            "newRentLamports": "0",
+            "reclaimedRentLamports": "1488440",
+            "tokenDeltas": {
+              "payer": "17000",
+              "publisher": "3000",
+              "treasury": "0"
+            },
+            "reason": null
+          }
+        ],
+        "vouchers": [
+          {
+            "chargeId": "charge-award-ed358b43-103a-445a-8f6d-3226d1d78f93",
+            "status": "authorized",
+            "sequence": "1",
+            "incrementBaseUnits": "3000",
+            "cumulativeAmountBaseUnits": "3000",
+            "payloadHash": "2ff1b437786304d237bd7eff3174c1ae13bda3fdf1c42b1aa74b46f66032727a"
+          }
+        ]
+      }
+    }
+  ]
+}
