@@ -20,6 +20,7 @@ import { motion, useMotionValue, useMotionValueEvent, useScroll, useSpring, useT
 import { ActionPrimary, ActionText, Words } from "@axp/design-system/prospectus";
 import { PRODUCT_STORY as story } from "@/data/product.story";
 import { ADVERTISER_URL, HERO, PUBLISHER_URL, STACK } from "@/data/copy";
+import { HERO_V2 } from "@/v8/copy";
 import { PROMPTS } from "@/hero-lab/data";
 import useReduced, { usePinned } from "@/motion/useReduced";
 import { IDENTITY, io, lerp, mixM, mul, out, seg, type M2 } from "@/motion/motion";
@@ -133,7 +134,7 @@ function FocalTile() {
   );
 }
 
-function Copy() {
+function Copy({ v2 }: { v2?: boolean }) {
   return (
     <div className={s.copyIn}>
       <h1 id="hero-title" className={`px-dxl ${s.h1}`}>
@@ -141,12 +142,12 @@ function Copy() {
       </h1>
       <p className={`px-lead ${s.lede}`}>{HERO.lede}</p>
       <div className={s.actions}>
-        <ActionPrimary href={PUBLISHER_URL}>
-          {HERO.primary}
+        <ActionPrimary href={v2 ? ADVERTISER_URL : PUBLISHER_URL}>
+          {v2 ? HERO_V2.primary : HERO.primary}
         </ActionPrimary>
-        <ActionText href={ADVERTISER_URL}>{HERO.secondary}</ActionText>
+        <ActionText href={v2 ? PUBLISHER_URL : ADVERTISER_URL}>{v2 ? HERO_V2.secondary : HERO.secondary}</ActionText>
       </div>
-      <p className={s.status}>{HERO.status}</p>
+      {v2 ? null : <p className={s.status}>{HERO.status}</p>}
     </div>
   );
 }
@@ -155,7 +156,8 @@ type Geo = { ox: number; oy: number; vw: number; vh: number; w: number; h: numbe
 
 const r = (n: number) => Math.round(n);
 
-export default function Hero() {
+/** `v2`: the V2 landing's buttons and no status line; the visual is the same. */
+export default function Hero({ v2 }: { v2?: boolean } = {}) {
   const ref = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const wallRef = useRef<HTMLDivElement>(null);
@@ -403,7 +405,7 @@ export default function Hero() {
         <motion.div className={s.fog} style={{ opacity: still(fogO, 1) }} aria-hidden />
 
         <motion.div className={s.copy} style={{ y: still(copyY, 0), opacity: still(copyO, 1) }}>
-          <Copy />
+          <Copy v2={v2} />
         </motion.div>
         <motion.p className={s.note} style={{ opacity: still(noteO, 1) }}>
           {HERO.wallNote}

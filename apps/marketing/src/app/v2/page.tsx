@@ -5,19 +5,26 @@ import "@/v8/v8.css";
 import Header from "@/v7/Header";
 import MotionRoot from "@/motion/MotionRoot";
 import Hero from "@/v7/Hero";
-import Footer from "@/v7/Footer";
+import Footer from "@/v8/shell/Footer";
 import Moment from "@/v8/moment";
 import Advertiser from "@/v8/advertiser";
 import Publisher from "@/v8/publisher";
 import Meet from "@/v8/meet";
+import { ADVERTISER_URL } from "@/data/copy";
+
+const NAV_V2 = [
+  { href: "#advertisers", label: "For advertisers" },
+  { href: "#publishers", label: "For AI apps" },
+  { href: "#network", label: "One network" },
+];
 
 export default function HomeV2() {
   return (
     <>
       <MotionRoot />
-      <Header />
+      <Header nav={NAV_V2} cta={{ href: ADVERTISER_URL, label: "Open the dashboard" }} />
       <main id="main" className="pg-main v8">
-        <Hero />
+        <Hero v2 />
         <Moment />
         <Advertiser />
         <Publisher />

@@ -10,7 +10,7 @@ import s from "./header.module.css";
 
 type Tone = "paper" | "stage" | "brand";
 
-export default function Header() {
+export default function Header({ nav = NAV, cta = { href: PUBLISHER_URL, label: HEADER.cta } }: { nav?: { href: string; label: string }[]; cta?: { href: string; label: string } } = {}) {
   const [hidden, setHidden] = useState(false);
   const [tone, setTone] = useState<Tone>("paper");
   const last = useRef(0);
@@ -79,7 +79,7 @@ export default function Header() {
           <Wordmark />
         </a>
         <nav className="px-nav" aria-label="Sections">
-          {NAV.map((l) => (
+          {nav.map((l) => (
             <a key={l.href} href={l.href}>
               {l.label}
             </a>
@@ -99,7 +99,7 @@ export default function Header() {
         <details className="px-mobile-menu" ref={menu}>
           <summary>Menu</summary>
           <nav className="px-mobile-nav" aria-label="Sections">
-            {NAV.map((l) => (
+            {nav.map((l) => (
               <a key={l.href} href={l.href} onClick={() => { if (menu.current) menu.current.open = false; }}>
                 {l.label}
               </a>
@@ -111,8 +111,8 @@ export default function Header() {
           </nav>
         </details>
         <div className="px-header-cta">
-          <ActionPrimary href={PUBLISHER_URL} size="s">
-            {HEADER.cta}
+          <ActionPrimary href={cta.href} size="s">
+            {cta.label}
           </ActionPrimary>
         </div>
       </div>

@@ -17,7 +17,7 @@ export const HERO_V2 = {
 export const MOMENT = {
   who: "The moment",
   question: "When does an ad belong in an answer?",
-  lede: "Not whenever the topic comes up. Only when someone is choosing, and what they need is what you offer.",
+  lede: "Only when someone is choosing, and needs what you offer.",
   hint: "Pick a question",
   noAd: "No ad. The answer stands alone.",
 };
@@ -26,7 +26,7 @@ export const MOMENT = {
 export const ADVERTISER_SIDE = {
   who: "For advertisers",
   question: "How do I trust an agent to buy for me?",
-  lede: "You say where you belong and what may be said. It decides moment by moment, and tells you why.",
+  lede: "You set the terms. It decides moment by moment, and shows you why.",
   beats: [
     { k: "Say where you belong", v: "Your offer, what it can do, and the conversations you want, in your own words." },
     { k: "See every decision", v: "Each question it joined, and each one it left alone, with the reason." },
@@ -40,7 +40,7 @@ export const ADVERTISER_SIDE = {
 export const PUBLISHER_SIDE = {
   who: "For AI apps",
   question: "Can my app earn without the ad touching my answer?",
-  lede: "Your model writes the answer. The ad arrives beside it, labelled, in a slot you control.",
+  lede: "Your model writes the answer. The ad sits beside it, in a slot you control.",
   bridge: "The same placement, from the app's side.",
   points: [
     { k: "Your answer path", v: "In our integration, no advertiser material reaches it." },

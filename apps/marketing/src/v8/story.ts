@@ -113,6 +113,6 @@ export const RECEIPT = {
   confirms: "The labelled card was inserted beside the answer.",
   advertiser: { label: "Advertiser", state: "Charge accepted", note: "Counts toward your budget." },
   app: { label: "AI app", state: "Earnings accrued", note: "Paid out when the campaign settles." },
-  later: "Accepted charges add up. Settlement happens later, when the campaign closes: the app is paid and unused budget returns.",
+  later: "Charges add up. Settlement comes later, when the campaign closes.",
   limit: "A receipt confirms insertion. It does not measure attention or conversions.", // claim-ok: limit
 } as const;
