@@ -32,3 +32,29 @@ test('bound identity remains that of the turn receipt, not a later workspace pro
   assert.deepEqual(boundPaymentIdentity(turn), identity);
   assert.deepEqual(boundPaymentIdentity({ad: {status: 'no_fill'}}), {});
 });
+
+const tempoIdentity = {...identity, settlementNetwork:'tempo-testnet'};
+const tempoCampaign = {...campaign, settlementNetwork:'tempo-testnet', settledBaseUnits:'1000', payment:{...campaign.payment,network:'tempo-testnet',canPayout:true,canClose:true}};
+test('Tempo payment actions bind the turn rail and payout without closing', () => {
+  const state = paymentState(tempoCampaign,tempoIdentity);
+  assert.equal(state.bound,true); assert.equal(state.payout,true); assert.equal(state.close,true); assert.equal(state.closed,false);
+  assert.equal(paymentState(tempoCampaign, identity).bound,false);
+  assert.equal(paymentState(campaign,tempoIdentity).bound,false);
+  assert.equal(paymentState({...tempoCampaign,settledBaseUnits:'3000'},tempoIdentity).payout,false);
+  assert.equal(paymentState({...tempoCampaign,reservedBaseUnits:'1'},tempoIdentity).payout,false);
+  assert.equal(paymentState({...tempoCampaign,authorizedBaseUnits:'2999'},tempoIdentity).payout,false);
+  assert.equal(paymentState(tempoCampaign,{...tempoIdentity,uncertain:true}).payout,false);
+  assert.equal(paymentState({...tempoCampaign,payment:{...tempoCampaign.payment,phase:'paying_out'}},tempoIdentity).close,false);
+});
+test('Tempo close proof requires its finalized hash and never a Solana signature', () => {
+  const closed = {...tempoCampaign,status:'settled',payment:{...tempoCampaign.payment,phase:'finalized',closeStatus:'finalized'}};
+  assert.equal(paymentState(closed,tempoIdentity).finalized,false);
+  const tx = {operation:'close',status:'finalized',finality:'finalized',transactionHash:'0x'+'a'.repeat(64)};
+  assert.equal(paymentState({...closed,payment:{...closed.payment,transactions:[tx]}},tempoIdentity).finalized,true);
+  assert.equal(paymentState({...closed,payment:{...closed.payment,transactions:[{...tx,transactionHash:undefined,signature:'1'.repeat(88)}]}},tempoIdentity).finalized,false);
+  assert.equal(paymentState({...closed,payment:{...closed.payment,transactions:[{...tx,chainId:1}]}},tempoIdentity).finalized,false);
+});
+test('turn rail remains bound after the publisher changes chat settings', () => {
+  const turn = {input:{settlementNetwork:'tempo-testnet'},ad:{status:'awarded',award:{campaignId:identity.campaignId}},receipt:{payment:{channelId:identity.channelId}}};
+  assert.deepEqual(boundPaymentIdentity(turn),tempoIdentity);
+});

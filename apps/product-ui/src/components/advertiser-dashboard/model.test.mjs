@@ -76,7 +76,7 @@ test('opening or uncertain launch never claims a funded active campaign', () => 
 
 test('native recovery actions use accepted ledger gaps and block advancement until uncertainty resolves', () => {
   const campaign = {...blankDraft(), id:'c', status:'active', acceptedBaseUnits:'3000', authorizedBaseUnits:'2000', payment:{phase:'open', canSettle:true, canReconcile:true}};
-  assert.deepEqual(paymentActions(campaign), {closed:false, pending:false, uncertain:false, authorize:true, settle:true, reconcile:true});
+  assert.deepEqual(paymentActions(campaign), {closed:false, pending:false, uncertain:false, authorize:true, settle:true, payout:false, close:false, reconcile:true});
   for (const phase of ['pending_open','closing','finalized','unknown']) {
     const actions = paymentActions({...campaign, payment:{...campaign.payment, phase}});
     assert.equal(actions.authorize, false);
@@ -130,4 +130,52 @@ test('native payout and refund remain unsettled until close finality is confirme
   assert.equal(nativeSettlementLabel(finalized, 'settledBaseUnits'), '0.003 Test USDC');
   assert.equal(nativeSettlementLabel(finalized, 'refundBaseUnits'), '0.017 Test USDC');
   assert.equal(nativeSettlementLabel({...finalized,payment:{...finalized.payment,settledBaseUnits:'0'}}, 'settledBaseUnits'), '0 Test USDC');
+});
+
+import { networkOf, networkTotals, networkLabel, paymentReadiness } from './payment.ts';
+
+test('campaign network survives draft saves and legacy drafts stay Solana', () => {
+  assert.equal(draftFields({...blankDraft(), settlementNetwork:'tempo-testnet'}).settlementNetwork, 'tempo-testnet');
+  assert.equal(draftFields({...blankDraft(), settlementNetwork:undefined}).settlementNetwork, 'solana-devnet');
+  assert.equal(networkOf({payment:{network:'tempo-testnet'}}), 'tempo-testnet');
+  assert.equal(networkLabel('tempo-testnet'), 'Tempo Testnet');
+  assert.equal(currencyUnit(true, 'tempo-testnet'), 'test PathUSD');
+  const bootstrap = {payments:{ready:true, networks:{'tempo-testnet':{ready:false, reason:'disabled'}}}};
+  assert.equal(paymentReadiness(bootstrap, 'tempo-testnet').ready, false);
+  assert.equal(paymentReadiness({payments:{ready:true}}, 'tempo-testnet'), undefined);
+  assert.equal(paymentReadiness({payments:{ready:true}}, 'solana-devnet').ready, true);
+});
+
+test('workspace money never aggregates Solana USDC with Tempo PathUSD', () => {
+  const rows = [{...blankDraft(), id:'s', status:'active', spendBaseUnits:'9000', settledBaseUnits:'4000'}, {...blankDraft(), id:'t', status:'active', settlementNetwork:'tempo-testnet', spendBaseUnits:'3000', settledBaseUnits:'2000'}];
+  assert.deepEqual(networkTotals(rows), [{network:'solana-devnet', campaigns:1, spendBaseUnits:'9000', settledBaseUnits:'4000'}, {network:'tempo-testnet', campaigns:1, spendBaseUnits:'3000', settledBaseUnits:'2000'}]);
+  assert.match(launchNotice({...rows[1],payment:{network:'tempo-testnet',phase:'open'}},true), /Tempo Testnet/);
+});
+
+test('Tempo payout can keep a channel open; uncertainty and authorizations still gate actions', () => {
+  const c = {...blankDraft(), id:'t', settlementNetwork:'tempo-testnet', status:'active', reservedBaseUnits:'0', acceptedBaseUnits:'4000', authorizedBaseUnits:'4000', payment:{phase:'open',canPayout:true,canClose:true}};
+  const controls = paymentActions(c);
+  assert.equal(controls.payout,true); assert.equal(controls.close,true); assert.equal(controls.closed,false);
+  assert.equal(paymentActions({...c, authorizedBaseUnits:'3000'}).payout,false);
+  assert.equal(paymentActions({...c, reservedBaseUnits:'1000'}).payout,false);
+  for (const phase of ['paying_out','closing','uncertain']) {
+    assert.equal(paymentActions({...c,payment:{...c.payment,phase}}).payout,false);
+    assert.equal(paymentActions({...c,payment:{...c.payment,phase}}).close,false);
+  }
+  assert.equal(paymentActions({...c,payment:{...c.payment,reconciliationRequired:true}}).payout,false);
+});
+
+test('Tempo Explorer links require transaction hashes and never accept a Solana signature', () => {
+  const hash = '0x'+'a'.repeat(64);
+  assert.equal(transactionURL(hash, 'tempo-testnet'), `https://explore.tempo.xyz/tx/${hash}`);
+  assert.equal(transactionURL('5'.repeat(88), 'tempo-testnet'), null);
+  assert.equal(transactionURL(hash, 'solana-devnet'), null);
+  for (const hash of ['https://example.com', 'javascript:alert(1)', '0x123']) assert.equal(transactionURL(hash,'tempo-testnet'),null);
+});
+
+test('Tempo publisher payout is shown before final close only with finalized evidence', () => {
+  const c = {...blankDraft(), id:'t', status:'active', settlementNetwork:'tempo-testnet', payment:{network:'tempo-testnet',phase:'open',settledBaseUnits:'3000',transactions:[{operation:'payout',status:'finalized',finality:'finalized',transactionHash:'0x'+'b'.repeat(64)}]}};
+  assert.equal(nativeSettlementLabel(c,'settledBaseUnits'),'0.003 test PathUSD');
+  assert.equal(nativeSettlementLabel(c,'refundBaseUnits'),'Not settled');
+  assert.equal(nativeSettlementLabel({...c,payment:{...c.payment,transactions:[{...c.payment.transactions[0],status:'submitted'}]}},'settledBaseUnits'),'Not settled');
 });
