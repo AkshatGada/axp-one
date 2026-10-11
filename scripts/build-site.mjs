@@ -15,6 +15,7 @@ import {existsSync,rmSync,mkdirSync,cpSync,writeFileSync,readFileSync,statSync,r
 import {join,resolve,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {flattenSDK} from './build-site/flatten-sdk.mjs';
+import {flattenTempoSDK} from './build-site/flatten-tempo-sdk.mjs';
 import {publishProductStatic,verifyPageAssets} from './build-site/product-static.mjs';
 import {siteRoutes} from './build-site/site-routes.mjs';
 
@@ -58,6 +59,10 @@ if(!sdkReady()) {
 }
 
 // 3. Assemble .vercel/output.
+const tempoRoot=join(root,'tooling/tempo-sdk');
+if(!existsSync(join(tempoRoot,'node_modules/mppx/package.json'))) {
+  sh('pnpm',['--dir','tooling/tempo-sdk','install','--frozen-lockfile','--ignore-workspace','--ignore-scripts','--config.auto-install-peers=false']);
+}
 rmSync(out,{recursive:true,force:true});
 const staticDir=join(out,'static');
 cpSync(marketingOut,staticDir,{recursive:true});
@@ -75,6 +80,8 @@ copy('artifacts/v2/evidence');
 writeFileSync(join(fnDir,'package.json'),JSON.stringify({name:'axp-api',private:true,type:'module'},null,2)+'\n');
 const sdk=flattenSDK(sdkRoot,join(fnDir,'local-state/phase4-sdk'));
 log(`function: payment SDK flattened (${sdk.packages} packages, nested: ${sdk.nested.join(', ')||'none'})`);
+const tempo=flattenTempoSDK(tempoRoot,join(fnDir,'local-state/tempo-sdk'));
+log(`function: Tempo SDK flattened (${tempo.packages} packages)`);
 writeFileSync(join(fnDir,'.vc-config.json'),JSON.stringify({runtime:RUNTIME,handler:'index.mjs',launcherType:'Nodejs',shouldAddHelpers:false,
   supportsResponseStreaming:false,maxDuration:300,memory:1024,environment:{NODE_OPTIONS:'--no-warnings=ExperimentalWarning'}},null,2)+'\n');
 
@@ -95,13 +102,15 @@ for(const p of ['index.html','demo/index.html','mvp/index.html','mvp/verify/inde
 }
 const leaked=readdirSync(out,{recursive:true}).map(String).filter(p=>/(^|\/)(\.env[^/]*|test-wallets\.json|hosted-devnet-wallets\.json|[^/]*\.pem|[^/]*\.sqlite)$/.test(p));
 if(leaked.length)throw new Error(`private files in output: ${leaked.join(', ')}`);
-const fnTop=readdirSync(fnDir).sort().join(),fnLocal=readdirSync(join(fnDir,'local-state')).join(),fnArtifacts=readdirSync(join(fnDir,'artifacts')).join();
-if(fnTop!=='.vc-config.json,apps,artifacts,index.mjs,local-state,package.json,packages'||fnLocal!=='phase4-sdk'||fnArtifacts!=='v2')throw new Error(`unexpected function contents: ${fnTop} | ${fnLocal} | ${fnArtifacts}`);
+const fnTop=readdirSync(fnDir).sort().join(),fnLocal=readdirSync(join(fnDir,'local-state')).sort().join(),fnArtifacts=readdirSync(join(fnDir,'artifacts')).join();
+if(fnTop!=='.vc-config.json,apps,artifacts,index.mjs,local-state,package.json,packages'||fnLocal!=='phase4-sdk,tempo-sdk'||fnArtifacts!=='v2')throw new Error(`unexpected function contents: ${fnTop} | ${fnLocal} | ${fnArtifacts}`);
 // The function must import and answer with live runs off, with no environment.
 const probe=spawnSync(process.execPath,['--input-type=module','-e',`
   const {default:h}=await import(${JSON.stringify(join(fnDir,'index.mjs'))});
   const {loadNativeSDK}=await import(${JSON.stringify(join(fnDir,'packages/payments/sdk-loader.mjs'))});
   await loadNativeSDK(${JSON.stringify(join(fnDir,'local-state/phase4-sdk'))});
+  const {loadTempoSDK}=await import(${JSON.stringify(join(fnDir,'packages/payments/tempo-sdk.mjs'))});
+  await loadTempoSDK(${JSON.stringify(join(fnDir,'local-state/tempo-sdk'))});
   const res={writeHead(s){this.s=s;},end(b){this.b=b;}};await h({url:'/api/live',method:'GET',headers:{}},res);
   const b=JSON.parse(res.b);if(res.s!==200||b.enabled!==false)throw new Error('probe '+res.s+' '+res.b);console.log('probe ok',res.s,JSON.stringify(b.configured));
   const product={writeHead(s){this.s=s;},end(b){this.b=b;}};await h({url:'/api/product/health',method:'GET',headers:{}},product);

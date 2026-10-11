@@ -1,0 +1,284 @@
+{
+  "version": "axp.tempo-preview-verification.v1",
+  "workspace": "tempo-integration-20261011",
+  "packageFingerprint": "a839faf75018b74322a584baea55dcda5bc5293c7ca1443910f0621cf94ce6ad",
+  "campaignIds": [
+    "campaign-37eeb731-59b5-4755-b7fd-00e01ee548e2",
+    "campaign-67a6261a-4e72-4f7f-bd97-b7da0fd2a2e1",
+    "campaign-e43d1588-3c74-4e44-9b58-496d9bbffb0d"
+  ],
+  "budget": {
+    "maxUSD": 1,
+    "maxJev": 40,
+    "maxAnswers": 12,
+    "reservedMicroUSD": 345000,
+    "counts": {
+      "jev": 7,
+      "answer": 8,
+      "completed": 15,
+      "admitted": 0,
+      "unknown": 0
+    },
+    "attempts": [
+      {
+        "kind": "answer",
+        "status": "completed",
+        "reservedMicroUSD": 30000,
+        "at": "2026-10-11T15:05:50.984Z",
+        "usage": {
+          "inputTokens": 74,
+          "outputTokens": 176
+        }
+      },
+      {
+        "kind": "jev",
+        "status": "completed",
+        "reservedMicroUSD": 15000,
+        "at": "2026-10-11T15:05:51.008Z",
+        "usage": {
+          "input_tokens": 1518,
+          "output_tokens": 156
+        }
+      },
+      {
+        "kind": "answer",
+        "status": "completed",
+        "reservedMicroUSD": 30000,
+        "at": "2026-10-11T15:07:49.311Z",
+        "usage": {
+          "inputTokens": 72,
+          "outputTokens": 296
+        }
+      },
+      {
+        "kind": "jev",
+        "status": "completed",
+        "reservedMicroUSD": 15000,
+        "at": "2026-10-11T15:07:49.317Z",
+        "usage": {
+          "input_tokens": 1727,
+          "output_tokens": 156
+        }
+      },
+      {
+        "kind": "answer",
+        "status": "completed",
+        "reservedMicroUSD": 30000,
+        "at": "2026-10-11T15:08:46.895Z",
+        "usage": {
+          "inputTokens": 82,
+          "outputTokens": 303
+        }
+      },
+      {
+        "kind": "answer",
+        "status": "completed",
+        "reservedMicroUSD": 30000,
+        "at": "2026-10-11T15:10:15.710Z",
+        "usage": {
+          "inputTokens": 74,
+          "outputTokens": 278
+        }
+      },
+      {
+        "kind": "jev",
+        "status": "completed",
+        "reservedMicroUSD": 15000,
+        "at": "2026-10-11T15:10:15.716Z",
+        "usage": {
+          "input_tokens": 1516,
+          "output_tokens": 156
+        }
+      },
+      {
+        "kind": "jev",
+        "status": "completed",
+        "reservedMicroUSD": 15000,
+        "at": "2026-10-11T15:25:30.878Z",
+        "completedAt": "2026-10-11T15:25:31.193Z",
+        "usage": {
+          "input_tokens": 1518,
+          "output_tokens": 156
+        }
+      },
+      {
+        "kind": "answer",
+        "status": "completed",
+        "reservedMicroUSD": 30000,
+        "at": "2026-10-11T15:25:31.879Z",
+        "completedAt": "2026-10-11T15:25:34.653Z",
+        "usage": {
+          "inputTokens": 74,
+          "outputTokens": 261
+        }
+      },
+      {
+        "kind": "answer",
+        "status": "completed",
+        "reservedMicroUSD": 30000,
+        "at": "2026-10-11T15:26:09.312Z",
+        "completedAt": "2026-10-11T15:26:12.551Z",
+        "usage": {
+          "inputTokens": 72,
+          "outputTokens": 291
+        }
+      },
+      {
+        "kind": "jev",
+        "status": "completed",
+        "reservedMicroUSD": 15000,
+        "at": "2026-10-11T15:26:09.571Z",
+        "completedAt": "2026-10-11T15:26:09.921Z",
+        "usage": {
+          "input_tokens": 1727,
+          "output_tokens": 156
+        }
+      },
+      {
+        "kind": "answer",
+        "status": "completed",
+        "reservedMicroUSD": 30000,
+        "at": "2026-10-11T15:26:31.524Z",
+        "completedAt": "2026-10-11T15:26:34.679Z",
+        "usage": {
+          "inputTokens": 74,
+          "outputTokens": 314
+        }
+      },
+      {
+        "kind": "jev",
+        "status": "completed",
+        "reservedMicroUSD": 15000,
+        "at": "2026-10-11T15:26:31.703Z",
+        "completedAt": "2026-10-11T15:26:31.987Z",
+        "usage": {
+          "input_tokens": 1518,
+          "output_tokens": 156
+        }
+      },
+      {
+        "kind": "jev",
+        "status": "completed",
+        "reservedMicroUSD": 15000,
+        "at": "2026-10-11T15:28:15.555Z",
+        "completedAt": "2026-10-11T15:28:15.874Z",
+        "usage": {
+          "input_tokens": 1520,
+          "output_tokens": 156
+        }
+      },
+      {
+        "kind": "answer",
+        "status": "completed",
+        "reservedMicroUSD": 30000,
+        "at": "2026-10-11T15:28:15.738Z",
+        "completedAt": "2026-10-11T15:28:18.502Z",
+        "usage": {
+          "inputTokens": 74,
+          "outputTokens": 221
+        }
+      }
+    ]
+  },
+  "verificationBounds": {
+    "tempo": {
+      "maxChannels": 2,
+      "maxDepositBaseUnits": "50000",
+      "aggregateDepositBaseUnits": "100000",
+      "aggregateFeeAttoUSD": "1000000000000000000"
+    },
+    "solana": {
+      "importedCampaigns": 1,
+      "maxDepositBaseUnits": "20000"
+    },
+    "providers": {
+      "maxJev": 40,
+      "maxAnswers": 12,
+      "maxUSD": 1,
+      "jevReservationMicroUSD": 15000,
+      "answerReservationMicroUSD": 30000
+    }
+  },
+  "shards": {
+    "financial": {
+      "initialized": true,
+      "revision": 66,
+      "busy": false
+    },
+    "organic": {
+      "initialized": true,
+      "revision": 13,
+      "busy": false
+    }
+  },
+  "previewURL": "https://axp-p2qmbchjj-lucario004.vercel.app",
+  "verifiedAt": "2026-10-11T15:41:28.204Z",
+  "readOnlyProof": {
+    "unchangedBudgetAndShardRevisions": true,
+    "routes": [
+      "health",
+      "bootstrap",
+      "publisher/config",
+      "state",
+      "verification"
+    ],
+    "dashboardAndSDKReadsUnchanged": true
+  },
+  "campaigns": [
+    {
+      "id": "campaign-37eeb731-59b5-4755-b7fd-00e01ee548e2",
+      "network": "solana-devnet",
+      "status": "settled",
+      "deliveryCount": 1,
+      "depositBaseUnits": "20000",
+      "acceptedBaseUnits": "3000",
+      "authorizedBaseUnits": "3000",
+      "settledBaseUnits": "3000",
+      "refundBaseUnits": "17000",
+      "protocolChannelId": "HVrpiikncTwfqBbUcdw5qaqvUcyUx51xn5pHy1C4ist5"
+    },
+    {
+      "id": "campaign-67a6261a-4e72-4f7f-bd97-b7da0fd2a2e1",
+      "network": "tempo-testnet",
+      "status": "settled",
+      "deliveryCount": 6,
+      "depositBaseUnits": "50000",
+      "acceptedBaseUnits": "18000",
+      "authorizedBaseUnits": "18000",
+      "settledBaseUnits": "18000",
+      "refundBaseUnits": "32000",
+      "protocolChannelId": "0x5834a0e19c35689402b9ffe3a908695fa056cf00885999681803db5c29f0b79c"
+    },
+    {
+      "id": "campaign-e43d1588-3c74-4e44-9b58-496d9bbffb0d",
+      "network": "tempo-testnet",
+      "status": "settled",
+      "deliveryCount": 0,
+      "depositBaseUnits": "50000",
+      "acceptedBaseUnits": "0",
+      "authorizedBaseUnits": "0",
+      "settledBaseUnits": "0",
+      "refundBaseUnits": "50000",
+      "protocolChannelId": "0x7bb83c22c275ed5a873f18bbf784df382df154fbbdf49ae0c0988da26df74a2f"
+    }
+  ],
+  "coldStartProof": {
+    "deployment": "dpl_EZJ3YLWKibXmY21fUK4eRpjTJfFn",
+    "samePackageFingerprint": true,
+    "progressedStatePreserved": true,
+    "previousPreviewURL": "https://axp-qgetfl61d-lucario004.vercel.app",
+    "sameBudgetAndRevisions": true
+  },
+  "hostedUX": {
+    "acceptedDeliveryCount": 7,
+    "separateCurrencySummaries": true,
+    "threeStepSDKGuide": true,
+    "tempoFinalPaymentFlowInspected": true,
+    "solanaFinalPaymentFlowInspected": true
+  },
+  "futureBranchDeployments": {
+    "tempoSigningEnabled": false,
+    "solanaSigningEnabled": false,
+    "productionChanged": false
+  }
+}

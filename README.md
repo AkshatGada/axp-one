@@ -1,6 +1,6 @@
 # axp.one — The advertising exchange for the agentic internet
 
-Live product: **[axp.one](https://axp.one)**. Updated 7 October 2026 (Singapore).
+Live product: **[axp.one](https://axp.one)**. Tempo branch documentation updated 11 October 2026.
 
 Advertisers create a campaign, supply context hints, approve a Sponsored card and
 fund a Solana Devnet payment channel. A publisher requests an ad alongside its
@@ -9,9 +9,20 @@ the eligibility and first-price auction engines control bids and reservations.
 An accepted delivery receipt creates one charge and cumulative off-chain
 authorization. Channel closure pays the publisher and refunds the unused deposit.
 
-This release uses **Solana Devnet and test USDC**, fictional demo advertisers and
+Production uses **Solana Devnet and test USDC**, fictional demo advertisers and
 one bounded shared sponsor/workspace. DeepSeek powers the **example chat only**;
 it is not the exchange’s decision engine. Jev is the buying decision layer.
+
+The `codex/tempo-settlement` release adds an optional **Tempo Testnet / PathUSD**
+rail alongside Solana. Each campaign selects its settlement network; publishers
+request an auction on the same rail. Tempo uses canonical Sessions v2 cumulative
+vouchers and supports payout while the channel stays open, followed by final
+closure and refund. Solana keeps its existing final settlement behavior.
+See the [Tempo operator guide](docs/product/TEMPO.md),
+[completed lifecycle proof](docs/product/TEMPO_VERIFICATION.md),
+[SDK integration guide](docs/product/SDK.md) and
+[shared interface](docs/product/TEMPO_INTERFACE.md). This branch does not activate
+Tempo on production; Preview secrets and verification state are separate.
 
 ## Open the product
 
@@ -81,6 +92,15 @@ starting point for recruiting AXP advertisers; ContextHint users are not counted
 as existing AXP customers.
 
 ## Measured results
+
+The additive Tempo release passed isolated native acceptance on 11 October:
+two channels, five finalized transactions, six accepted deliveries and cumulative
+vouchers. Of 0.10 test PathUSD deposited, 0.018 was paid and 0.082 refunded;
+0.000499 test PathUSD in transaction fees is separate. The delivery channel paid
+out while open, accepted three further deliveries, then closed. The fresh Solana
+regression deposited 0.02 test USDC, paid 0.003 and refunded 0.017. Both rails were
+checked in a dedicated hosted Preview; production was not activated.
+See [independently checked evidence](docs/product/TEMPO_VERIFICATION.md).
 
 The compact landing summary keeps two different measurements separate:
 

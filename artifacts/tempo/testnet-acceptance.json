@@ -1,0 +1,192 @@
+{
+  "schemaVersion": "axp.tempo-native-acceptance.v1",
+  "network": "tempo-testnet",
+  "channels": [
+    {
+      "channelId": "campaign-67a6261a-4e72-4f7f-bd97-b7da0fd2a2e1-channel",
+      "protocolChannelId": "0x5834a0e19c35689402b9ffe3a908695fa056cf00885999681803db5c29f0b79c",
+      "payer": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+      "payee": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+      "depositBaseUnits": "50000",
+      "acceptedBaseUnits": "18000",
+      "authorizedBaseUnits": "18000",
+      "settledBaseUnits": "18000",
+      "refundBaseUnits": "32000",
+      "transactions": [
+        {
+          "operation": "open",
+          "transactionHash": "0x95991a0999669cdf02fbf672a90eeab72421d7b503309aebd2ae4ba35bf36a6c"
+        },
+        {
+          "operation": "payout",
+          "transactionHash": "0x3ed8149c0f2058cf656201ccf9e6327464eda18b24d2be3a91ef07e9a2ae1563"
+        },
+        {
+          "operation": "close",
+          "transactionHash": "0xee64435daa0c7f579228607c7b1ae5ad1258e7e6bc74f23b7c4e5f7208ea4617"
+        }
+      ],
+      "vouchers": [
+        {
+          "chargeId": "charge-award-7f6c3cd6-6113-41c7-af2b-6e468d490399",
+          "status": "authorized",
+          "sequence": "1",
+          "incrementBaseUnits": "3000",
+          "cumulativeAmountBaseUnits": "3000",
+          "payloadHash": "22168c28f738fc27dd03f93f395b5e298e5c3423a310557e77afb86a18b8106f"
+        },
+        {
+          "chargeId": "charge-award-1932f758-9446-4d02-ba00-6c91a2025dcc",
+          "status": "authorized",
+          "sequence": "2",
+          "incrementBaseUnits": "3000",
+          "cumulativeAmountBaseUnits": "6000",
+          "payloadHash": "2f7f6dca2f891da1f8c5bbc2179dabd1ae4afbb934d45c88f7a66c696e9e1ac8"
+        },
+        {
+          "chargeId": "charge-award-8f452419-d9f8-4c39-9ef5-73c4f104fd80",
+          "status": "authorized",
+          "sequence": "3",
+          "incrementBaseUnits": "3000",
+          "cumulativeAmountBaseUnits": "9000",
+          "payloadHash": "6b2a7b00d840dd46ff8956e0937b750d2f42ef2573188a3ac03f6948b4712d1b"
+        },
+        {
+          "chargeId": "charge-award-52de4c7a-90ac-48b9-8d7a-2add7ff3a0a5",
+          "status": "authorized",
+          "sequence": "4",
+          "incrementBaseUnits": "3000",
+          "cumulativeAmountBaseUnits": "12000",
+          "payloadHash": "cfee846a79083f9be03b3cb8ff46400fe1343256ed2e7d83935936df895fcaec"
+        },
+        {
+          "chargeId": "charge-award-08384056-f3bb-4bba-a93a-78a74aa16b08",
+          "status": "authorized",
+          "sequence": "5",
+          "incrementBaseUnits": "3000",
+          "cumulativeAmountBaseUnits": "15000",
+          "payloadHash": "1aded80f5d7e02c8b92a543de89eb70e7842f54153ab67159acb8467745ceaaf"
+        },
+        {
+          "chargeId": "charge-award-c9a2a6ba-dbf9-4099-aaad-c57c745aee79",
+          "status": "authorized",
+          "sequence": "6",
+          "incrementBaseUnits": "3000",
+          "cumulativeAmountBaseUnits": "18000",
+          "payloadHash": "49d44f8042bbb3cc3605e6b3d24f000eaac8f35215f3ae690cdfd0c2b994c60c"
+        }
+      ],
+      "acceptedDeliveries": [
+        {
+          "chargeId": "charge-award-08384056-f3bb-4bba-a93a-78a74aa16b08",
+          "awardId": "award-08384056-f3bb-4bba-a93a-78a74aa16b08",
+          "acceptedAt": "2026-10-11T15:26:13.582Z",
+          "amountBaseUnits": "3000",
+          "receiptHash": "72137741f32d8d60b66ec7730e4868199cc87480d95f73166dc114dda7f6b7bf",
+          "settlementNetwork": "tempo-testnet",
+          "authorizationStatus": "settled"
+        },
+        {
+          "chargeId": "charge-award-1932f758-9446-4d02-ba00-6c91a2025dcc",
+          "awardId": "award-1932f758-9446-4d02-ba00-6c91a2025dcc",
+          "acceptedAt": "2026-10-11T15:07:52.195Z",
+          "amountBaseUnits": "3000",
+          "receiptHash": "d258a27cda0f4d6d07a604e933ae41fc0ff27d58d16572726777267fb0a026e5",
+          "settlementNetwork": "tempo-testnet",
+          "authorizationStatus": "settled"
+        },
+        {
+          "chargeId": "charge-award-52de4c7a-90ac-48b9-8d7a-2add7ff3a0a5",
+          "awardId": "award-52de4c7a-90ac-48b9-8d7a-2add7ff3a0a5",
+          "acceptedAt": "2026-10-11T15:25:35.863Z",
+          "amountBaseUnits": "3000",
+          "receiptHash": "7b03f5785c656afb194df0d14bea11f829fd95a0f59ce3803f9a46440d6c5c50",
+          "settlementNetwork": "tempo-testnet",
+          "authorizationStatus": "settled"
+        },
+        {
+          "chargeId": "charge-award-7f6c3cd6-6113-41c7-af2b-6e468d490399",
+          "awardId": "award-7f6c3cd6-6113-41c7-af2b-6e468d490399",
+          "acceptedAt": "2026-10-11T15:05:53.050Z",
+          "amountBaseUnits": "3000",
+          "receiptHash": "27fd5802aad36a04230b2e9e0eed00abf3178c06058e8df36a796ee308db864e",
+          "settlementNetwork": "tempo-testnet",
+          "authorizationStatus": "settled"
+        },
+        {
+          "chargeId": "charge-award-8f452419-d9f8-4c39-9ef5-73c4f104fd80",
+          "awardId": "award-8f452419-d9f8-4c39-9ef5-73c4f104fd80",
+          "acceptedAt": "2026-10-11T15:10:18.243Z",
+          "amountBaseUnits": "3000",
+          "receiptHash": "b5034672694a8d58c57f8859ec460b986913458904859532b558fe3be5ffe557",
+          "settlementNetwork": "tempo-testnet",
+          "authorizationStatus": "settled"
+        },
+        {
+          "chargeId": "charge-award-c9a2a6ba-dbf9-4099-aaad-c57c745aee79",
+          "awardId": "award-c9a2a6ba-dbf9-4099-aaad-c57c745aee79",
+          "acceptedAt": "2026-10-11T15:26:35.626Z",
+          "amountBaseUnits": "3000",
+          "receiptHash": "7f919028fb6fd4a76ffae919ef89aa7a1527ad14178106f9bcb029f94c65b87d",
+          "settlementNetwork": "tempo-testnet",
+          "authorizationStatus": "settled"
+        }
+      ],
+      "lifecycleCheckpoints": [
+        {
+          "stage": "firstPayoutFinalized",
+          "environment": "local",
+          "voucherCount": 3,
+          "acceptedBaseUnits": "9000",
+          "authorizedBaseUnits": "9000",
+          "settledBaseUnits": "9000",
+          "channelPhase": "open",
+          "transactionHash": "0x3ed8149c0f2058cf656201ccf9e6327464eda18b24d2be3a91ef07e9a2ae1563"
+        },
+        {
+          "stage": "continuedDelivery",
+          "environment": "preview",
+          "voucherCount": 6,
+          "acceptedBaseUnits": "18000",
+          "authorizedBaseUnits": "18000",
+          "settledBaseUnits": "9000",
+          "channelPhase": "open"
+        },
+        {
+          "stage": "finalClose",
+          "environment": "preview",
+          "voucherCount": 6,
+          "acceptedBaseUnits": "18000",
+          "authorizedBaseUnits": "18000",
+          "settledBaseUnits": "18000",
+          "refundBaseUnits": "32000",
+          "channelPhase": "finalized",
+          "transactionHash": "0xee64435daa0c7f579228607c7b1ae5ad1258e7e6bc74f23b7c4e5f7208ea4617"
+        }
+      ]
+    },
+    {
+      "channelId": "campaign-e43d1588-3c74-4e44-9b58-496d9bbffb0d-channel",
+      "protocolChannelId": "0x7bb83c22c275ed5a873f18bbf784df382df154fbbdf49ae0c0988da26df74a2f",
+      "payer": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+      "payee": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+      "depositBaseUnits": "50000",
+      "acceptedBaseUnits": "0",
+      "authorizedBaseUnits": "0",
+      "settledBaseUnits": "0",
+      "refundBaseUnits": "50000",
+      "transactions": [
+        {
+          "operation": "open",
+          "transactionHash": "0x91017150dc6fb3b85613115ac8d7c906cd2cb1c52a370092d7540df3c6e916c2"
+        },
+        {
+          "operation": "close",
+          "transactionHash": "0xbd9227d9c6dbf86741cc64bc30f42e79a97530301a9901305b9739c35d8ea891"
+        }
+      ],
+      "vouchers": [],
+      "acceptedDeliveries": []
+    }
+  ]
+}

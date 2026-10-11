@@ -36,9 +36,9 @@ export function PeekInside({turn, financialMode, onRefreshBudget, onRetryAd, onR
   const award = turn.ad?.status === 'awarded' ? turn.ad.award : undefined;
   const budget = turn.budgetAfterDelivery ?? turn.budgetAfterAward;
   const mode = financialModeOf(turn.receipt, turn.ad, budget, {financialMode});
-  const unit = moneyUnit(mode);
   const winnerBudget = award ? budget?.campaigns.find(c => c.id === award.campaignId) : undefined;
   const payment = (turn.budgetAfterDelivery ? winnerBudget?.payment : undefined) ?? turn.receipt?.payment ?? winnerBudget?.payment ?? trace?.payment;
+  const unit = moneyUnit(mode, payment ?? {settlementNetwork: turn.input.settlementNetwork});
   const finalizedClose = paymentState(winnerBudget, boundPaymentIdentity(turn)).finalized;
   const label = (id?: string) => {const c = candidates.find(c => c.campaignId === id); return c?.brandName || c?.name || budget?.campaigns.find(c => c.id === id)?.brandName || id || 'Campaign';};
   const eligible = candidates.filter(c => c.eligible).length;
@@ -59,7 +59,7 @@ export function PeekInside({turn, financialMode, onRefreshBudget, onRetryAd, onR
       <div className="pub-flow-source"><span className="ld-label">Question</span><p>{turn.input.question}</p></div><span className="pub-flow-branch" aria-hidden />
       <div className="pub-flow-lanes"><div className="pub-flow-lane"><div><b>DeepSeek</b><span>Organic answer only</span></div><span aria-hidden>→</span><div><b>Answer</b><span>{turn.answer ? 'Generated' : turn.answerError ? 'Failed' : 'Pending'}</span></div></div><div className="pub-flow-lane pub-flow-lane-ad"><div><b>AXP exchange</b><span>{skipped ? 'Not requested' : trace?.engine || 'Jev buying agents'}</span></div><span aria-hidden>→</span><div><b>Sponsored</b><span>{sponsoredState}</span></div></div></div>
     </section>
-    <div className="pub-between pub-inspector-label"><span className="ld-label">Sponsored lane</span><Ld.Tag tone="outline">{mode === 'devnet' ? 'Solana Devnet · test USDC' : mode === 'synthetic' ? 'Synthetic test credits' : mode || 'Mode unavailable'}</Ld.Tag></div>
+    <div className="pub-between pub-inspector-label"><span className="ld-label">Sponsored lane</span><Ld.Tag tone="outline">{mode === 'devnet' ? `${payment?.network === 'tempo-testnet' || turn.input.settlementNetwork === 'tempo-testnet' ? 'Tempo Testnet' : 'Solana Devnet'} · ${unit}` : mode === 'synthetic' ? 'Synthetic test credits' : mode || 'Mode unavailable'}</Ld.Tag></div>
     <div className="ld-pipe" role="tablist" aria-label="Sponsored flow" style={{gridTemplateColumns: 'repeat(5, minmax(0, 1fr))'}} onKeyDown={event => {
       if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
       event.preventDefault();

@@ -1,6 +1,7 @@
 # Current system architecture
 
-Implemented release, 7 October 2026. The earlier component proposals are preserved
+Tempo branch implementation, 11 October 2026; production activation follows review.
+The earlier component proposals are preserved
 in [MVP_MASTER_PLAN.md](MVP_MASTER_PLAN.md); this page describes the current product.
 
 ## One user turn
@@ -11,8 +12,9 @@ flowchart LR
   Q[Publisher question] --> O[Example chat: DeepSeek]
   O --> Answer[Independent answer]
   Q --> S[Publisher SDK / same-origin proxy]
-  C --> E[Campaign eligibility]
-  S --> E
+  C --> Rail[Match campaign and publisher settlement rail]
+  S --> Rail
+  Rail --> E[Campaign eligibility]
   H[ContextHint snapshot + embeddings] --> R[Evidence retrieval]
   R --> J[Jev fit + intent + creative]
   E --> J
@@ -23,7 +25,10 @@ flowchart LR
   Card --> D[DOM observation via publisher server]
   D --> Receipt[Signed receipt + one accepted charge]
   Receipt --> V[Cumulative off-chain authorization]
-  V --> Close[Solana channel close: publisher payout + refund]
+  V --> Sol[Solana: final payout + refund]
+  V --> Tempo[Tempo: pay earned delta while open]
+  Tempo --> Continue[Further accepted deliveries and vouchers]
+  Continue --> Final[Tempo: final payout delta + unused deposit refund]
 ```
 
 The advertiser's declarations are hard eligibility inputs. Its authored hints
@@ -49,7 +54,9 @@ answer. No zero-latency or organic endorsement claim follows from parallelism.
 | `packages/exchange` | Integer budgets, eligibility, first-price auction, reservations and charges |
 | `packages/publisher-sdk` | Server transport, safe native rendering, observation and receipt forwarding |
 | `packages/product/organic.mjs` | Independent DeepSeek admission and result |
-| `packages/product/payments.mjs`, `native.mjs`, `packages/payments` | Accepted-ledger vouchers, pinned native channel adapter and recovery |
+| `packages/product/payment-facade.mjs` | Trusted campaign-to-rail routing; separate keys, transports and currencies |
+| `packages/product/payments.mjs`, `native.mjs` | Existing Solana channel implementation and recovery |
+| `packages/product/tempo-payments.mjs`, `packages/payments/tempo-*` | Sessions v2 channels, cumulative vouchers, periodic payout, close and recovery |
 | `packages/product/hosted.mjs`, `packages/hosted` | Private encrypted Blob snapshots, CAS/leases and Vercel entry point |
 | `scripts/build-site.mjs`, `vercel.json` | One deployment with static clients and Node API |
 
@@ -88,6 +95,28 @@ Models and browsers never choose a recipient, mint, key or arbitrary monetary
 payload. Limits, expiry, accepted-charge correspondence and duplicate/restart
 behavior are enforced by the backend. Preserve funded identities during recovery;
 never reset state or create another deposit to repair an uncertain operation.
+
+## Tempo payment channels
+
+Campaigns may select Moderato Testnet (42431), six-decimal test PathUSD and the
+canonical TIP-1034 Sessions v2 escrow. Server configuration fixes those terms;
+browser requests choose only the supported network enum. Legacy records retain
+Solana defaults. A publisher selects its auction rail, and mismatching campaigns
+are removed before Jev. Approval binds the network; funded campaigns cannot switch.
+
+Accepted delivery precedes the cumulative voucher. A Tempo payout transfers only
+the newly earned delta and leaves the same channel open. It never replenishes the
+campaign cap. Final closure drains outstanding deliveries, pays the remaining
+delta and returns unused collateral. Separate payer/publisher keys and Tempo
+SQLite state coexist with the unchanged Solana implementation. Both databases
+are included in the encrypted financial snapshot; keys remain outside it.
+
+Transactions persist exact signed bytes/hash before broadcast. A fresh lease
+checkpoint after simulation fences the send. Confirmation polls the original
+hash; uncertainty prevents new spending and requires explicit reconciliation.
+Payout and closure are durable operator actions, not a Vercel background timer.
+See [Tempo operation](product/TEMPO.md) and the
+[shared interfaces](product/TEMPO_INTERFACE.md).
 
 ## Evidence and scope
 

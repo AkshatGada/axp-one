@@ -1,0 +1,11 @@
+{
+  "status": "verified",
+  "network": "solana-devnet",
+  "transactions": 2,
+  "channels": 1,
+  "verification": "finalized signatures, native program, token deltas, network fees and conserved deposits",
+  "signed": false,
+  "broadcast": false,
+  "verifiedAt": "2026-10-11T15:29:59.436Z",
+  "providerHostname": "devnet.helius-rpc.com"
+}

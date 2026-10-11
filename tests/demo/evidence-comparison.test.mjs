@@ -119,10 +119,20 @@ test('hypothetical depleted capacity and above-max floor cannot be raised by his
   for (const arm of [result.baseline, result.history]) assert.equal(arm.bid.status, 'no_bid');
 });
 
-test('stored packet reconciles hashes, all tasks, counts, inspectable selected rows and current engine outputs', () => {
+test('historical packet retains original provenance and reproduces current decision behavior', () => {
   const saved = JSON.parse(readFileSync(OUTPUT_PATH, 'utf8'));
   assert.equal(saved.contentHash, hash(deterministicPacket(saved)));
-  assert.deepEqual(deterministicPacket(saved), deterministicPacket(buildComparison()));
+  const current = deterministicPacket(buildComparison());
+  // The dated artifact is immutable. Optional settlementNetwork validation added
+  // to contracts changes its source hash, not this offline decision experiment.
+  // Permit only this explicitly identified provenance difference; every task,
+  // decision, other source hash and measurement remains independently checked.
+  const historical = deterministicPacket(saved);
+  const oldContracts = historical.provenance.inputModuleHashes.find(r => r.path === 'packages/contracts/index.mjs');
+  assert.equal(oldContracts.sha256, 'b34b1dded34a5431fc7c1cfe362e42a13fcbecc6a46f4402d057c8d7e00cbc11');
+  current.provenance.inputModuleHashes = current.provenance.inputModuleHashes.map(r =>
+    r.path === oldContracts.path ? oldContracts : r);
+  assert.deepEqual(historical, current);
   assert.deepEqual(saved.summary, summarize(saved.cases));
   assert.equal(saved.measurement.pairedCalls, 12);
   assert.equal(saved.measurement.samples.length, 12);

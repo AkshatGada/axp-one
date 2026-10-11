@@ -429,8 +429,12 @@ real funds or blockchain activity. A Devnet label requires actual corresponding
 backend evidence. Jev model execution does not change that financial mode.
 
 Prefer the API's explicit `financialMode` when present, including on an accepted
-receipt. `financialMode: 'devnet'` uses six-decimal **test USDC** amounts on Solana
-Devnet; `financialMode: 'synthetic'` uses local **test credits**. The public
+receipt. `financialMode: 'devnet'` denotes native test-network execution.
+`settlementNetwork: 'solana-devnet'` (also the legacy default) uses six-decimal
+**test USDC**; `'tempo-testnet'` uses six-decimal **test PathUSD** on Moderato.
+`financialMode: 'synthetic'` uses local **test credits**. Keep monetary totals
+separate by network. See [the dual-rail SDK guide](../../docs/product/SDK.md).
+The public
 `@axp/publisher-sdk/financial` helpers resolve this metadata and its denomination
 without supplying payment credentials. An accepted delivery receipt is accrued
 spend; it does not itself prove a finalized payout, channel closure or refund.
@@ -445,7 +449,7 @@ it does not create another charge. The payment backend owns reconciliation and
 settlement. Authorization is an off-chain, receipt-controlled cumulative voucher,
 not an on-chain payout.
 
-The chat's budget stage shows the channel, payer, publisher payee, test-USDC mint,
+For Solana, the chat's payment stage shows the channel, payer, publisher payee, test-USDC mint,
 voucher sequence and amounts, plus recorded open/close transactions. A transaction
 counts as finalized evidence only when both `status` and `finality` are
 `'finalized'` and a valid-shaped signature is present. The UI derives fixed Solana
@@ -454,6 +458,12 @@ URL. Its “Refresh payment records” button reads the workspace without submit
 payments or model requests. After the dashboard closes a channel, use it to inspect
 finalized token balance deltas, network fees, reclaimed rent and refunded collateral.
 Synthetic workspaces remain supported and have no native transaction proof.
+
+Tempo evidence uses a verified chain ID, token, escrow and transaction hash.
+Its payment stage shows funding, cumulative vouchers, payout while open and final
+closure/refund; Explorer links are derived from the supported network and hash.
+An interim payout does not replenish the campaign budget. Network configuration
+belongs on the server; the request selects only the supported network enum.
 
 Ad requests default to a 15-second deadline; delivery acknowledgements use a
 separate 45-second deadline. Configure `timeoutMs` and `receiptTimeoutMs` independently.
