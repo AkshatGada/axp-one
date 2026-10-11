@@ -22,7 +22,7 @@ export default function HomeV3() {
   return (
     <>
       <MotionRoot />
-      <Header nav={NAV_V2} cta={{ href: ADVERTISER_URL, label: "Open the dashboard" }} />
+      <Header nav={NAV_V2} cta={{ href: ADVERTISER_URL, label: "Advertiser dashboard" }} />
       <main id="main" className="pg-main v8 v9">
         <Hero />
         <Rise><Moment /></Rise>

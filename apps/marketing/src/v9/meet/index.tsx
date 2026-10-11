@@ -7,7 +7,6 @@ import { MEET } from "../copy";
 import { Scene } from "../kit";
 import Agreement from "./Agreement";
 import Doors from "./Doors";
-import Part from "../shell/Part";
 import s from "./meet.module.css";
 
 /** "Agents judge fit." and "Fixed rules decide money.", kept as the frozen sentence, split so
@@ -17,27 +16,32 @@ const [judge, ...fixed] = MEET.rule.split(/(?<=\.)\s+/);
 export default function Meet() {
   return (
     <>
-      <Scene id="network" who={MEET.who} question={MEET.question} lede={MEET.lede} center>
+      <Scene id="network" tight labelledBy="network-q" className={s.net}>
+        <header className={s.opener}>
+          <div className={s.openerQ}>
+            <p className="v8-who">{MEET.who}</p>
+            <h2 id="network-q" className={`v8-q ${s.q}`}>{MEET.question}</h2>
+          </div>
+          <p className={`v8-lede ${s.lede}`}>{MEET.lede}</p>
+        </header>
         <Agreement
           judge={<><i aria-hidden />{judge}</>}
           fixed={<><i aria-hidden />{fixed.join(" ")}</>}
-          notes={
+          foot={
             <>
-              <p className={s.later}>{RECEIPT.later}</p>
-              <p className={s.limit}>{RECEIPT.limit}</p>
+              <p className={s.small}>{RECEIPT.later} {RECEIPT.limit}</p>
               {DEVNET_URL ? (
-                <p className={s.proof}>
-                  <a href={DEVNET_URL} target="_blank" rel="noopener noreferrer">
-                    <span>{MEET.proof}</span> <Arrow width={18} />
-                  </a>
-                  <span className={s.proofLabel}>{MEET.proofLabel}</span>
-                </p>
+                <a className={s.proof} href={DEVNET_URL} target="_blank" rel="noopener noreferrer">
+                  <span className={s.proofText}>
+                    <b>{MEET.proof}</b> <span className={s.proofLabel}>{MEET.proofLabel}</span>
+                  </span>
+                  <Arrow width={18} />
+                </a>
               ) : null}
             </>
           }
         />
       </Scene>
-      <Part />
       <Doors />
     </>
   );

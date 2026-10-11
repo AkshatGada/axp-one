@@ -1,65 +1,75 @@
-# B. The advertiser's side: notes (V3)
+# B. The advertiser's side: notes (V3.1)
 
 ## The idea
-The question and one picture. Left: HarborKey's brief, its declared capabilities as a column of
-chips on the card's edge. Centre: four conversation tiles (the hero wall's atoms), each slot
-holding its verdict. Right: the approved Sponsored card with a seal on its corner, the two limits
-drawn as bounds ending in a wall, the pause switch. Lines run from each capability to every
-question that asks for it, and from the approved card to the slot it fills.
+The question and one picture. Left: HarborKey's brief, its listed capabilities as a column of
+chips on the card's edge. Centre: four conversation tiles, each led by its verdict. Right: the
+approved Sponsored card with a seal on its corner, two labelled limits, the pause switch.
 
-It plays. Entering the view it performs once, in story order (about 3.3 s): the brief and its
-declarations land; the tiles arrive with empty slots; the lines reach out, a pulse along each;
-the verdicts land; the seal is stamped on the card; a pulse runs from the card to the joined tile
-and the card arrives there; the bounds are drawn and the wall closes. After a beat it demonstrates
-the one move that proves the idea: the Bitcoin chip is pressed for the reader, its line turns
-solid, a pulse travels, the tile turns to "May join" (and a dotted line from the approved card
-reaches it), it holds, then Bitcoin is taken back and the tile returns. Then the Bitcoin chip
-gives three soft rings and the reader has control. Any pointer press or key press on the scene
-ends the demonstration for good. With motion off there is no performance: it rests complete.
+The connection has its own lane. Every chip has a short stub into one trunk beside the chips. One
+branch leaves the trunk for each question that depends on what is listed, and enters that tile on
+its left edge at mid height: solid when everything it needs is listed, dotted when something is
+missing, and ending on the tile's edge in a stop mark where the question rules a listed capability
+out. An unlisted chip's stub is dotted and stops short of the trunk. A second line runs from the
+approved card to the slot it fills. The far column of tiles is dropped by half a tile, so each far
+tile's mid height is a clear lane between (or below) the near tiles: one line per lane, nothing
+bundled.
 
-## What changed from V2, and why
-- The scene performs and demonstrates itself; in V2 the reader had to find the Bitcoin chip.
-- A tile now turns when its pulse arrives (the tiles follow a short delayed copy of the state).
-  In V2 the slot blanked the moment the chip was pressed.
-- Lines have craft: 2px round strokes on half pixels, the bundle through the gap opens out so each
-  line has its own socket on the tile's edge, sockets are drawn over the cards so lines plug in,
-  undeclared lines are dotted with a hollow socket, a ruled-out line ends in a stop bar short of
-  the tile, the pulse is a soft tail with a bright head. Pointing at or focusing a chip or a tile
-  thickens the related lines, runs a light along them, fades the rest and outlines the other end.
-- Approval is an object: a seal sits on the card's corner and lifts off the moment a word changes
-  (the card turns to a dashed draft, an ink pulse runs to the tile, the small card withdraws);
-  approving stamps it back and the card returns to the tile.
-- Spend: the budget bound ends in a wall; pause drains colour from the brief, the chips, the
-  field, the card and every line, so the whole picture visibly stops.
-- The opener is composed with the picture (question left, the one line right) and the section is
-  about one laptop screen instead of 1.2 to 1.4.
-- Phones have a real form of the picture: the chips stand in a column beside a single column of
-  tiles, so the lines are drawn there too and a tap and the tile it turns share a view. The joined
-  tile sits last, directly over the approved card, joined by a short riser.
-- Fewer words: no actor labels, no "wants" bubbles, no hint line, shorter questions, "Approved"
-  and "Edit" (its accessible name is "Change a word").
+It plays. Scrolled into view, it performs once, left to right, in about 2.9 s: the brief; the chips one by one; the
+tiles; stubs, trunk and branches drawing out; the three "Left alone" verdicts one after another;
+the approved card and its seal; a pulse from the card and the card arriving in its tile with
+"Appears here"; the limits and the wall. After a beat it lists Bitcoin for the reader (the pulse
+travels chip, trunk, branch, tile; the tile turns to "Would appear"), holds, takes it back, and
+gives the Bitcoin chip three soft rings. A pointer press, a key press or focus inside the scene
+ends this for good. With motion off nothing plays and the scene rests complete.
+
+## When the entry starts (fix after the integrated pass)
+Nothing waits invisibly. The staged entry starts once a quarter of the specimen (or two fifths of
+the screen) has scrolled into view. If the specimen is first seen already well inside the screen
+(a jump, a flick, an anchor link, coming back up from below), or a second passes with any of it on
+screen and the entry not started, the complete resting state is shown at once with no animation.
+The demonstration keeps its own stricter condition (72 percent of the tile field in view, 92 on a
+phone) and simply does not play if that is never met. In the lab route the scene is in view on
+load, so it shows the resting state at once and then the demonstration; the staged entry is seen
+by scrolling to it.
+
+## V3.1 changes (from the two reviews)
+1. Wires: stubs, one trunk, one branch per tile entering at mid height; a lane of 60px or more
+   between brief and field (the chips overhang 14px into the 72 to 100px column gap); the blocked
+   line ends on the tile's edge with its stop mark; orthogonal runs with rounded corners, on half
+   pixels. The same construction on phones, in a 44px lane between a chip column and a tile column.
+2. Entry is staged left to right over about 2.9 s (it was about 15 things in 750ms) and waits
+   until the specimen is well into view.
+3. Verdicts are the largest type on a tile (16.5px display, coloured by outcome); the question is
+   a small quiet bubble. Words: "Appears here", "Left alone", "Would appear", "Held". Reasons:
+   "No device wanted", "Learning, not choosing", "Bitcoin not listed", "Paused",
+   "Awaiting approval". "Declared" is gone from the visible and spoken copy ("listed").
+4. Edge states: with more than one thing missing the reason is "Not what you offer"; single
+   reasons use short names ("Device not listed", "Offline keys not listed"); slots never grow.
+5. Money: no currency and no figures. Two labelled limits, "Most per placement" and "Total
+   budget", drawn as a short span between two walls inside a long span that ends in a heavy wall.
+6. Pause uses the page's rule switch (`.v8-sw` with `data-on`) on my `button[role=switch]`.
+7. The heading uses the shared `v8-q` size.
+8. Phones: chips are small outlined pills (not filled slabs); the performance and the
+   demonstration wait until nearly the whole field is in view, so the Bitcoin chip and its tile
+   share the view.
 
 ## Numbers
-- Section height: 882px at 1440x900 (0.98 screens), 842px at 1280x800 (1.05), 864px at 1366x768
-  (1.13), 1519px at 390x844 (1.80). Two-zone layout from 760 to 1239: 1034 to 1122px.
-- Visible words at rest on desktop: about 124 in the scene; about 99 in the specimen, of which
-  the approved ad is 18 and the action link 4.
+See the report for measured heights and words (they are re-measured each round).
 
 ## Decisions
-- `<Scene id="advertisers" tight>` with my own header (v8 type classes). `tight` is my choice to
-  reach the height target; the integrator may prefer to control the seam.
-- The conversations HarborKey wants (`ADVERTISER.contexts`) are no longer shown: they were the only
-  part of the brief that connected to nothing. Easy to restore inside the brief card.
-- Captions are the four frozen beat titles, small and quiet; the beat bodies are not shown.
-- Short questions and reasons are local (local.ts).
+- `<Scene id="advertisers" tight>` with my own header (v8 type classes).
+- `ADVERTISER.contexts` and `ADVERTISER.limits` are not shown (the limits by instruction).
+- Short questions, verdict words and reasons are local (local.ts).
 - Geometry is measured after hydration (wires.ts) and re-measured on resize. Without JS there are
-  no lines, but every tile, verdict, word and setting is in the server HTML.
-- The demonstration changes real local state silently (no live region announcement, no focus
-  move). If the reader interrupts while Bitcoin is declared, it stays declared and Reset appears.
-- Keyboard: chips are `button[aria-pressed]`, pause is `button[role=switch]`, Edit becomes Approve
-  in place; after Reset focus returns to the first chip. One hidden `role="status"` announces each
-  change made by the reader.
-- Nothing pins or sticks. No numbers except the two settings.
+  no lines, but every tile, verdict, word and setting label is in the server HTML.
+- The tiles follow a copy of the state that updates when a pulse arrives (about 0.6 s), so cause
+  and effect read as one event. Pause, resume and reset are immediate.
+- The demonstration changes local state silently (no live region announcement, no focus move). If
+  interrupted while Bitcoin is listed, it stays listed and Reset appears.
+- Keyboard: chips are `button[aria-pressed]`, pause is `button[role=switch]`, Edit (accessible name
+  "Change a word") becomes Approve in place; after Reset focus returns to the first chip. One
+  hidden `role="status"` announces each change made by the reader.
+- Nothing pins or sticks.
 
 ## Files
 `index.tsx` (scene wrapper and opener, server), `Surface.tsx` (the specimen, client), `wires.ts`
@@ -68,20 +78,17 @@ file.
 
 ## Copy proposals (not applied; shared files untouched)
 - `ADVERTISER_SIDE.beats[].v` are unused here.
-- If "Approved" should read "Approved, word for word" again it fits on the row at 1440 only.
+- story.ts reasons say "declared"; this scene now says "listed". If the page should use one word,
+  pick it in story.ts.
 
 ## Kit requests
-None needed. Optional: a mini `SponsoredCard` (tag, name, one line) since the one in the tile is
-local.
+None needed. Optional: a mini `SponsoredCard` (tag, name, one line).
 
 ## Known issues and not checked
-- Checked in the lab route only (/v3/lab/advertiser/), not inside the full /v3/ page; the
-  performance starts when 22 percent of the viewport height is past the scene's top edge.
-- At 1440x900 in the lab the whole section is under one screen, so the performance runs with the
-  scene fully in view; in the full page its start depends on scroll position.
+- Checked in the lab route only (/v3/lab/advertiser/), not inside the full /v3/ page.
+- The learning tile has no branch (it is not about the offer), so it is the one tile no line
+  reaches; its reason says why.
 - On phones the mini card in the joined tile shows the Sponsored tag and a line, not the name.
-- Reasons reachable only by removing two capabilities wrap to two lines in the slot.
 - The seal overhangs the wrap's right edge by 13px on desktop (no page overflow).
-- The bounds drawing hard codes the 1 to 5 ratio of the two settings.
 - Not checked: a real screen reader, Safari and Firefox, real touch devices, the production
   build, the copy lint script (a manual grep for dashes and its terms is clean).

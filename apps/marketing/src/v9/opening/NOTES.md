@@ -1,6 +1,6 @@
 # The opening (hero and the opened card): builder notes
 
-Status: V3 level-up done, three capture rounds. Files: `Hero.tsx`, `hero.module.css`, `Plates.tsx`,
+Status: V3 level-up done, then the V3.1 review fixes (see the section at the end). Files: `Hero.tsx`, `hero.module.css`, `Plates.tsx`,
 `plates.module.css`, `index.tsx` (unchanged), this file. Concepts kept: the wall with one tile
 lifted off it, then the dive into that tile and the stack of six plates on a dashed route.
 
@@ -63,32 +63,56 @@ Phones and motion off
 - Frame times while resting and while wheel scrolling through the pin at 1440: no frame over 20ms
   in headless Chrome. Not measured on a real laptop GPU.
 
-## Local wording (proposals; all in `Plates.tsx` `W`, none in the frozen copy)
-"Fits", "Passes", "Placed", "its ceiling", "Advertiser", "AI app", "Running total",
-"Settles when the campaign closes".
+## Local wording (all in `Plates.tsx` `W`, none in the frozen copy)
+"Fits", "Sits out", "Placed", "its limit", "Advertiser", "AI app", "Running total".
+
+## V3.1 fixes (one pass, from the two reviews)
+1. Beams never cross words. Wall bids are now two short vertical lines that run in the gutters
+   beside a tile and meet at its slot; the old horizontal and long vertical beams are gone. The
+   floating tile's bids run inside its own side padding (clipped to the tile), so nothing leaves
+   it. The clearing also keeps 130px away from the copy block. A paper field sits exactly behind
+   the copy block (`.copyIn::before`), so the headline, lede and buttons are clean at every size.
+2. The wall note has a paper backing with a soft edge.
+3. Plate words: "Sits out", "its limit". Plate names 23px (were 19), notes 16.5px, body labels
+   15.5 to 17.5px. Cut: the two blocked categories on the Context plate, "Settles when the
+   campaign closes" on the money plate. The money plate follows the new copy ("Charge"); its
+   picture is accepted deliveries adding to one bar labelled "Running total". The words payment
+   and paid appear nowhere (only the frozen copy key `payment` in code).
+4. The kit's `<Illustration still />` sits once under the line in the pinned version and once
+   under the heading in the still and phone versions. `STACK.note` renders nothing when empty.
+5. The deck: it gathers during the first 44% of the exit and has faded out completely by 62%,
+   which is before the next scene's specimen is in view at 1440, 1366 and 1280. No sliver.
+6. Phones: the plates are compact and tucked one under the other (answer lines, inner card
+   shadow, the route and spare padding removed). They start as one closed deck and open downward
+   when they enter the view. Six plates: 895px (the review measured about 1,500). The whole
+   opening at 390: 2311px (was 2795). Space after the last plate inside this scene: 20px. The
+   rest of the gap before "The moment" is that scene's own top padding (integrator).
+7. The dive is one move: the tile comes down from the top right to where the stack will sit
+   (66% across), the wall is gone by 0.33 and the line arrives from 0.31, as the tile lands.
+8. Pre-filled wall tiles no longer carry "Delivered"; on a live clearing the mark shows for
+   about 1.5s (was about 3.5s). The floating tile keeps its own.
+9. "Separate from the answer" is dropped; a plain hairline divides the answer from the slot.
+   `HERO.gap` is now unused.
+
+Pinned length is unchanged at 240vh.
 
 ## Copy proposals for `v9/copy.ts` (not edited)
-- `HERO.focalNote` and `HERO.slotLine`: the first is no longer used; the second ("Answer, then one
+- `HERO.focalNote` and `HERO.gap` are no longer used. `HERO.slotLine` ("Answer, then one
   Sponsored slot") is still in the tile's bar on wide screens and could go too.
 - `HERO.appName` is "Example chat". The story's app is "Tidewater"; using it in the tile's bar
-  would tie the hero to the app chapter. Left as is because the copy file is frozen.
-- `STACK.note` ("What sits behind a placement.") repeats the line above it. Could be dropped.
+  would tie the hero to the app chapter.
 - Plate note for Agents could be just "judge fit" (the picture shows fit only).
 
 ## Requests to the integrator (seams)
-- The deck ends at about 66% of the width, above the next scene's reply tile. If the Moment's
-  specimen column moves, `sx` in `Hero.tsx` (`vw * 0.66`) is the one number to change.
-- `Rise` on the Moment lifts it 56px while the deck is still gathering; it reads well. If the
-  Moment's top padding is reduced, check the deck does not touch its "The moment" label
-  (clear in my captures at 1440 and 1280; the gap was not measured).
-- The header is not mine; it hides on the way down, which keeps the pinned scene clear.
+- The stack and the landing tile sit at 66% of the width: `cx` and `sx` in `Hero.tsx`.
+- On phones the gap before "The moment" is now that scene's top padding plus 20px of mine.
 
 ## Known issues and things not done
-- The dashed route is mostly hidden behind the plates on wide screens (they nearly touch at
-  laptop heights), as before. It shows in the gaps only.
-- The story data says nothing about which other advertisers fit the "compare" question. The
-  Agents and Auction plates show HarborKey and KeyArc fitting and ClearVault and ColdNest passing;
-  that is my illustration, consistent with the story's other moments but not stated in it.
-- While the tile lies down its text is squashed for a moment (as before); it is crisp but not
-  pretty. It lasts about 13% of the travel.
-- Safari and Firefox not checked. Touch devices checked only as an emulated 390 and 820 viewport.
+- The dashed route is mostly hidden behind the plates on wide screens, as before.
+- Which other advertisers fit the "compare" question is my illustration, not in the story data.
+- While the tile lies down its text is squashed for a moment (as before).
+- At 390 Chrome reports the lede paragraph as the LCP element, not the H1.
+- Around u 0.25 to 0.31 the wall is nearly gone and the line has not started, so the tile is
+  briefly on faint paper. Short, but not zero.
+- Safari and Firefox not checked. Touch devices checked only as emulated 390 and 820 viewports.
+- The phone deck's opening animation was not captured frame by frame.

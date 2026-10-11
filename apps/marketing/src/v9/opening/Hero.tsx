@@ -8,13 +8,15 @@
 //
 // Pinned scroll (>= 900px, motion on), 240vh in all. Progress u over the 140vh of travel:
 //   0.00 to 0.10  the headline lifts away;
-//   0.02 to 0.40  the camera dollies into the wall (it dims from 0.20); the tile flattens, travels
-//                 to the centre and lands at exactly 1x, on whole pixels, as a 2D, unpromoted layer;
-//   0.43 to 0.56  the tile lies down as a plate; the line arrives;
+//   0.02 to 0.40  the camera dollies into the wall (it dims from 0.12 and is gone by 0.33); the tile flattens and comes
+//                 down one arc to where the stack will sit, landing at exactly 1x, on whole pixels,
+//                 as a 2D, unpromoted layer; the line arrives beside it as it lands (0.31 to 0.42);
+//   0.43 to 0.56  the tile lies down as a plate;
 //   0.535 to 0.57 hand-over to the collapsed stack of six plates (same place, same size);
 //   0.56 to 0.86  the stack opens along the route, plate after plate; a short hold.
 // Then, with no pin (exit progress e, the stage scrolling away): the plates gather back into one
-// deck that rides down to the edge of the next scene, so the reader arrives there with one card.
+// deck (one card again) and the deck fades out completely before the next scene's specimen is in
+// view, so nothing of it is left at the top of the screen.
 //
 // Crispness: the plates and the landed tile are never promoted (no will-change, no 3D at rest),
 // sit on whole pixels and never scale above 1, so their text is painted live at screen resolution.
@@ -29,7 +31,7 @@ import useReduced, { usePinned } from "@/motion/useReduced";
 import { IDENTITY, io, lerp, mixM, mul, out, seg } from "@/motion/motion";
 import { HERO, STACK } from "../copy";
 import { ADVERTISER, PLACEMENT } from "../story";
-import { useInView } from "../kit/useInView";
+import { Illustration, useInView } from "../kit";
 import { FlatStack, PH, PLATE_IDS, PLATE_M7, PW, Plate, StillStack, plateCss, plateMatrix, plateY, stackSize } from "./Plates";
 import s from "./hero.module.css";
 
@@ -37,7 +39,7 @@ import s from "./hero.module.css";
 const T = {
   dive: [0.02, 0.4],
   lie: [0.43, 0.56],
-  line: [0.44, 0.54],
+  line: [0.31, 0.42],
   swap: [0.535, 0.57],
   open: [0.56, 0.86],
 } as const;
@@ -71,7 +73,6 @@ function Tile({ q, filled, n }: { q: string; filled: boolean; n: number }) {
         </div>
         <i className={`${s.pulse} ${s.pl}`} />
         <i className={`${s.pulse} ${s.pr}`} />
-        <i className={`${s.pulse} ${s.pb}`} />
         <span className={s.settle}>{HERO.delivered}</span>
       </div>
     </div>
@@ -116,7 +117,7 @@ function FocalTile() {
           <span className={s.chatWho}>{HERO.answerLabel}</span>
           <p className={s.chatText}>{PLACEMENT.answer}</p>
         </div>
-        <span className={s.chatGap}>{HERO.gap}</span>
+        <i className={s.chatGap} />
         <div className={s.fSlot}>
           <div className={s.fWait}>Sponsored</div>
           <div className={s.card}>
@@ -126,9 +127,8 @@ function FocalTile() {
             </div>
             <p className={s.cardText}>{ADVERTISER.creative}</p>
           </div>
-          <i className={`${s.fPulse} ${s.fpl}`} />
-          <i className={`${s.fPulse} ${s.fpr}`} />
-          <i className={`${s.fPulse} ${s.fpb}`} />
+          <i className={`${s.fPulse} ${s.fpa}`} />
+          <i className={`${s.fPulse} ${s.fpz}`} />
           <span className={s.fSettle}>{HERO.delivered}</span>
         </div>
       </div>
@@ -181,7 +181,7 @@ export default function Hero() {
   const rotZ = useTransform(flat, (f) => -11 * (1 - f));
   const camZ = useTransform(p, (v) => 900 * io(seg(v, T.dive[0], 0.43)));
   const camY = useTransform(p, (v) => -80 * out(seg(v, 0, 0.38)));
-  const wallO = useTransform(p, (v) => 1 - io(seg(v, 0.2, 0.44)));
+  const wallO = useTransform(p, (v) => 1 - io(seg(v, 0.12, 0.33)));
   const copyY = useTransform(p, (v) => -120 * out(seg(v, 0, 0.14)));
   const copyO = useTransform(p, (v) => 1 - seg(v, 0.01, 0.09));
   const fogO = useTransform(p, (v) => 1 - 0.92 * seg(v, 0.03, 0.18));
@@ -228,7 +228,7 @@ export default function Hero() {
         hy: home.offsetTop + (h * k0) / 2,
         k0,
         k1: Math.min(1, (vh - 120) / h),
-        cx: r(vw / 2),
+        cx: r(vw * 0.66),
         cy: r(vh / 2),
         sx: r(vw * 0.66),
         sy: r(vh / 2 + 6),
@@ -257,7 +257,8 @@ export default function Hero() {
         // In flight: a real 3D pose (composited while moving, no will-change, so it re-rasters).
         const k = lerp(g.k0, g.k1, m);
         const tilt = 0.45 * (1 - m);
-        const fx = lerp(g.hx, g.cx, m);
+        // One arc: it drops first and drifts across late, so it never doubles back.
+        const fx = lerp(g.hx, g.cx, io(seg(v, T.dive[0] + 0.08, T.dive[1])));
         const fy = lerp(g.hy, g.cy, m) + bob.current * (1 - seg(v, 0, 0.06));
         t = `translate(${(fx - g.w / 2 - g.ox).toFixed(2)}px, ${(fy - g.h / 2 - g.oy).toFixed(2)}px) perspective(1400px) rotateX(${(rotX.get() * tilt).toFixed(3)}deg) rotateY(${(rotY.get() * tilt).toFixed(3)}deg) rotateZ(${(rotZ.get() * tilt).toFixed(3)}deg) scale(${k.toFixed(4)})`;
       } else {
@@ -280,12 +281,13 @@ export default function Hero() {
     // 2. The stack: takes over at the same place and size, opens plate after plate, and on the
     //    way out gathers back into one deck.
     const open = seg(v, T.open[0], T.open[1]);
-    const close = io(seg(e, 0.03, 0.6));
+    const close = io(seg(e, 0.02, 0.44));
+    const gone = seg(e, 0.4, 0.62);
     const stack = stackRef.current;
     if (stack) {
       const so = seg(v, T.swap[0], T.swap[0] + 0.022);
-      stack.style.opacity = String(so);
-      stack.style.visibility = so > 0 ? "" : "hidden";
+      stack.style.opacity = String(so * (1 - gone));
+      stack.style.visibility = so > 0 && gone < 1 ? "" : "hidden";
     }
     let y0 = 0;
     let y1 = 0;
@@ -311,7 +313,7 @@ export default function Hero() {
     const line = lineRef.current;
     if (line) {
       const lt = seg(v, T.line[0], T.line[1]);
-      line.style.opacity = String(lt);
+      line.style.opacity = String(lt * (1 - seg(e, 0.3, 0.6)));
       line.style.transform = lt >= 1 ? "none" : `translate(0, ${r(28 * (1 - out(lt)))}px)`;
     }
   }
@@ -323,7 +325,7 @@ export default function Hero() {
       if (wallRef.current) wallRef.current.dataset.hold = h ? "1" : "";
     }
     // Once the wall has faded out it stops being drawn at all.
-    if (wallRef.current && pinnedRef.current) wallRef.current.style.visibility = v > 0.45 ? "hidden" : "";
+    if (wallRef.current && pinnedRef.current) wallRef.current.style.visibility = v > 0.34 ? "hidden" : "";
     apply();
   });
   useMotionValueEvent(exit, "change", apply);
@@ -392,7 +394,7 @@ export default function Hero() {
         const cy = b.top + b.height / 2;
         if (cx < Math.max(vw * 0.05, view.left) || cx > Math.min(vw * 0.96, view.right)) continue;
         if (cy < Math.max(wide ? 120 : 0, view.top + 30) || cy > Math.min(vh * 0.93, view.bottom - 30)) continue;
-        if (pad(copy, cx, cy, 70) || pad(home, cx, cy, 50)) continue;
+        if (pad(copy, cx, cy, 130) || pad(home, cx, cy, 60)) continue;
         picks.push(t);
       }
       const t = picks[Math.floor(Math.random() * picks.length)];
@@ -463,7 +465,8 @@ export default function Hero() {
         {/* Pinned only: the line and the opening stack (painted plates, no layers). */}
         <div ref={lineRef} className={s.line}>
           <h2 className={`px-h1 ${s.lineH}`}>{STACK.line}</h2>
-          <p className={s.lineNote}>{STACK.note}</p>
+          {STACK.note ? <p className={s.lineNote}>{STACK.note}</p> : null}
+          <Illustration still className={s.illus} />
         </div>
         <div ref={stackRef} className={s.stack} data-visual="" aria-label={PLATE_IDS.map((id) => `${STACK.plates[id].name}, ${STACK.plates[id].note}`).join(". ")}>
           <i ref={routeRef} className={s.route} />
@@ -478,7 +481,8 @@ export default function Hero() {
         <div className={`px-wrap ${s.afterIn}`}>
           <div className={s.afterCopy}>
             <h2 className="px-h1">{STACK.line}</h2>
-            <p className={s.lineNote}>{STACK.note}</p>
+            {STACK.note ? <p className={s.lineNote}>{STACK.note}</p> : null}
+            <Illustration still className={s.illus} />
           </div>
           <div ref={stillRef} className={s.afterStack} data-visual="">
             <div className={s.onlyWide}>

@@ -13,6 +13,8 @@ export default function Footer() {
   return (
     <footer className={s.footer}>
       <div className={`px-wrap ${s.in}`}>
+        <div className={s.top}>
+        <p className={s.line}>The advertising network for the agentic internet</p>
         <nav className={s.cols} aria-label="Footer">
           {COLS.map((c) => (
             <div key={c.head} className={s.col}>
@@ -23,7 +25,7 @@ export default function Footer() {
             </div>
           ))}
         </nav>
-        <p className={s.line}>The advertising network for the agentic internet</p>
+        </div>
         <p className={s.mark} aria-label="axp.one">
           <span aria-hidden>axp</span><i aria-hidden /><span aria-hidden>one</span>
         </p>

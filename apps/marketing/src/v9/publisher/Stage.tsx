@@ -4,8 +4,7 @@
 // it: the person's question, the app's own answer, and the Sponsored slot as a separate object.
 //
 // It plays once when it enters view: the question lands, the answer writes itself in, the card
-// arrives separately while it writes and the accrual note lands; after a beat the network returns
-// nothing, the slot empties and the answer is held exactly where it is; then the card returns and
+// arrives separately while it writes and the accrual note lands; after a beat no ad fits, the slot empties and the answer is held exactly where it is; then the card returns and
 // the controls are handed to the reader. Any interaction stops the performance for good.
 //
 // The write-in is presentation only: every word of the answer is in the markup from the first
@@ -18,21 +17,6 @@ import { PUBLISHER_SIDE } from "../copy";
 import { ADVERTISER, PLACEMENT, RECEIPT } from "../story";
 import { CARD_CATEGORY, WORDS } from "./words";
 import s from "./publisher.module.css";
-
-/** A conversation tile in miniature: the same atom as the wall. `lit` says which part this view
- *  is about. */
-function Glyph({ lit }: { lit: "card" | "answer" }) {
-  return (
-    <svg className={s.glyph} data-lit={lit} width="30" height="22" viewBox="0 0 46 34" fill="none" aria-hidden>
-      <rect className={s.gTile} x=".75" y=".75" width="44.5" height="32.5" rx="6.25" />
-      <rect className={s.gQ} x="25" y="5.5" width="15" height="5" rx="2.5" />
-      <rect className={s.gBar} x="6" y="15" width="17" height="2.6" rx="1.3" />
-      <rect className={s.gBar} x="6" y="20" width="14" height="2.6" rx="1.3" />
-      <rect className={s.gBar} x="6" y="25" width="10" height="2.6" rx="1.3" />
-      <rect className={s.gCard} x="27.75" y="14.75" width="12.5" height="13.5" rx="2.75" />
-    </svg>
-  );
-}
 
 function Check() {
   return (
@@ -79,8 +63,8 @@ const BEATS = { ask: 420, write: 1150, card: 2050, empty: 4500, back: 6150, hand
 type Play = "pre" | "run" | "done";
 
 export default function Stage() {
-  const [qualifies, setQualifies] = useState(true);
-  const [carried, setCarried] = useState<Record<string, boolean>>({ [CARD_CATEGORY]: true });
+  const [fits, setFits] = useState(true);
+  const [allowed, setAllowed] = useState(true);
   const [changes, setChanges] = useState(0);
   const [play, setPlay] = useState<Play>("pre");
   const [step, setStep] = useState(0);
@@ -114,11 +98,11 @@ export default function Stage() {
     });
     at(BEATS.card, () => setStep(4));
     at(BEATS.empty, () => {
-      setQualifies(false);
+      setFits(false);
       setChanges((n) => n + 1);
     });
     at(BEATS.back, () => {
-      setQualifies(true);
+      setFits(true);
       setChanges((n) => n + 1);
     });
     at(BEATS.hand, () => {
@@ -130,8 +114,8 @@ export default function Stage() {
   }, [seen]);
 
   // The app's rule comes first: a blocked category is never shown, whatever the network has.
-  const blocked = !carried[CARD_CATEGORY];
-  const state = blocked ? "blocked" : qualifies ? "shown" : "none";
+  const blocked = !allowed;
+  const state = blocked ? "blocked" : fits ? "shown" : "none";
   const shown = state === "shown";
   const running = play === "run";
   const qOn = !running || step >= 2;
@@ -139,7 +123,6 @@ export default function Stage() {
   const cardOn = shown && (!running || step >= 4);
   const why = blocked ? WORDS.blocked : PUBLISHER_SIDE.empty;
   const answerPath = PUBLISHER_SIDE.points[0]!;
-  const categories = [CARD_CATEGORY, ...PLACEMENT.appRules.blocked];
   const act = (fn: () => void) => {
     stop();
     fn();
@@ -148,28 +131,19 @@ export default function Stage() {
 
   return (
     <div className={s.stage} data-play={play} data-written={written} data-state={state}>
-      {/* The heading and the app are one composition. The bridge leads, compact. */}
+      {/* The opener, as every scene has it: who and the question left, the lede right. */}
       <header className={s.head}>
-        <div className={s.kick}>
+        <div className={s.headQ}>
           <p className="v8-who">{PUBLISHER_SIDE.who}</p>
-          <p className={s.bridge}>
-            <span className={s.pair}>
-              <a href="#advertisers" aria-label={WORDS.views.advertiser}>
-                <Glyph lit="card" />
-              </a>
-              <i aria-hidden />
-              <span role="img" aria-label={WORDS.views.app} data-current="">
-                <Glyph lit="answer" />
-              </span>
-            </span>
-            {PUBLISHER_SIDE.bridge}
-          </p>
+          <h2 id="publishers-q" className={`v8-q ${s.h}`}>
+            {PUBLISHER_SIDE.question}
+          </h2>
         </div>
-        <h2 id="publishers-q" className={`v8-q ${s.h}`}>
-          {PUBLISHER_SIDE.question}
-        </h2>
         <p className={`v8-lede ${s.lede}`}>{PUBLISHER_SIDE.lede}</p>
       </header>
+
+      {/* The bridge, quietly, on the app it describes. */}
+      <p className={s.bridge}>{PUBLISHER_SIDE.bridge}</p>
 
       {/* One object: the product, with its controls on the frame. */}
       <div ref={ref} className={s.unit} onPointerDownCapture={stop} onKeyDownCapture={stop} onFocusCapture={stop}>
@@ -262,6 +236,11 @@ export default function Stage() {
                   visible only when one is shown. The outline is a passing trace, not app UI. */}
               <div className={s.bay} data-on={cardOn ? "1" : "0"} data-why={state} data-left={!running || step >= 4 ? "" : undefined}>
                 <i className={s.trace} aria-hidden />
+                {/* Why nothing is shown, in the empty place itself. Ours, not the app's. */}
+                <p className={s.why} role="status" data-on={shown ? "0" : "1"}>
+                  <span aria-hidden={shown}>{why}</span>
+                  <span className={s.sr}>{shown ? (changes ? `${WORDS.shown} ${WORDS.unchanged}` : "") : ` ${WORDS.unchanged}`}</span>
+                </p>
                 <div className={s.slot}>
                   <SponsoredCard className={s.card} name={ADVERTISER.name} text={ADVERTISER.creative} domain={ADVERTISER.domain} />
                   <span className={s.accrued}>
@@ -287,30 +266,26 @@ export default function Stage() {
           </div>
         </figure>
 
-        {/* The controls, on the frame: one kind of switch for everything. Local state only. */}
+        {/* The controls, on the frame. Each one changes the slot. Local state only. */}
         <div className={s.tray} data-wake={play === "done" ? "" : undefined}>
-          <p className={s.why} role="status" data-on={shown ? "0" : "1"}>
-            <span aria-hidden={shown}>{why}</span>
-            <span className={s.sr}>{shown ? (changes ? `${WORDS.shown} ${WORDS.unchanged}` : "") : ` ${WORDS.unchanged}`}</span>
-          </p>
-          <fieldset className={s.group}>
-            <legend>{WORDS.network}</legend>
-            <label className={s.sw}>
-              <input type="checkbox" role="switch" name="pub-qualifies" checked={qualifies} onChange={(e) => { const on = e.currentTarget.checked; act(() => setQualifies(on)); }} />
-              <i aria-hidden />
-              <span>{WORDS.qualifies}</span>
-            </label>
-          </fieldset>
-          <fieldset className={s.group}>
-            <legend>{WORDS.rules}</legend>
-            {categories.map((name) => (
-              <label key={name} className={s.sw}>
-                <input type="checkbox" role="switch" name="pub-carry" value={name} checked={!!carried[name]} onChange={(e) => { const on = e.currentTarget.checked; act(() => setCarried((c) => ({ ...c, [name]: on }))); }} />
-                <i aria-hidden />
-                <span>{name}</span>
+          <fieldset className={s.choice}>
+            <legend className={s.sr}>{WORDS.fitLegend}</legend>
+            {[
+              { on: true, label: WORDS.fits },
+              { on: false, label: WORDS.noFit },
+            ].map((o) => (
+              <label key={o.label} className={s.opt}>
+                <input type="radio" name="pub-fits" value={o.on ? "yes" : "no"} checked={fits === o.on} onChange={() => act(() => setFits(o.on))} />
+                <span>{o.label}</span>
               </label>
             ))}
           </fieldset>
+          <label className={s.rule}>
+            <span className={s.ruleK}>{WORDS.rules}</span>
+            <input type="checkbox" role="switch" name="pub-allow" checked={allowed} onChange={(e) => { const on = e.currentTarget.checked; act(() => setAllowed(on)); }} />
+            <i className="v8-sw" data-on={allowed ? "" : undefined} aria-hidden />
+            <span className={s.ruleV}>{CARD_CATEGORY}</span>
+          </label>
           <Illustration className={s.illus} />
         </div>
       </div>

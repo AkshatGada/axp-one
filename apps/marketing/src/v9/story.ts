@@ -1,7 +1,8 @@
 // FROZEN SHARED STORY DATA for the V3 landing (owner: the integrator). Builders import from here
 // and never edit it; propose changes in your folder's NOTES.md.
 //
-// One placement, seen from several sides. Everything here is an illustration with fictional
+// One placement, seen from several sides. The Sponsored card always sits BELOW the app's answer
+// (after it, in the same column), never beside it and never inside it. Everything here is an illustration with fictional
 // advertisers. Rules the data obeys (and every scene must keep):
 //   1. Relevance and commercial intent are different things. A question can be on topic and not
 //      be a buying moment; a buying question can ask for something the advertiser does not offer.
@@ -54,7 +55,7 @@ export const MOMENTS: Moment[] = [
     requires: "A hardware wallet, offline keys, Ethereum and Solana",
     buying: true,
     outcome: "placed",
-    reason: "Choosing a hardware wallet, and it asks for what you declared.",
+    reason: "Choosing a hardware wallet, and it asks for what you listed.",
     placed: "HarborKey",
   },
   {
@@ -81,7 +82,7 @@ export const MOMENTS: Moment[] = [
     requires: "A hardware wallet for Bitcoin",
     buying: true,
     outcome: "skipped",
-    reason: "You did not declare Bitcoin. The network will not assume it for you.",
+    reason: "You did not list Bitcoin. The network will not assume it for you.",
     placed: "ColdNest",
   },
   {
@@ -100,7 +101,7 @@ export const PLACEMENT = {
   moment: MOMENTS[0]!,
   /** The app's own answer. It is the same text whether or not an ad is shown. */
   answer:
-    "Start with the networks you hold: not every hardware wallet supports both Ethereum and Solana. Then compare how each one signs offline, how you recover a lost device, and whether the companion app works on your phone. Buy from the maker directly.",
+    "Start with the networks you hold: not every hardware wallet supports both Ethereum and Solana. Then compare how each one signs offline, how you recover a lost device, and whether the companion app works on your phone. Check what each one supports before you buy.",
   /** An illustrative AI app: a fictional assistant, not a real product. */
   app: { name: "Tidewater", kind: "A fictional AI assistant" },
   /** The app's own placement rules. */
@@ -110,7 +111,7 @@ export const PLACEMENT = {
 /** Wording for the receipt, kept exact so no scene drifts into payout language. */
 export const RECEIPT = {
   title: "Receipt",
-  confirms: "The labelled card was inserted beside the answer.",
+  confirms: "The labelled card was inserted below the answer.",
   advertiser: { label: "Advertiser", state: "Charge accepted", note: "Counts toward your budget." },
   app: { label: "AI app", state: "Earnings accrued", note: "Paid out when the campaign settles." },
   later: "Charges add up. Settlement comes later, when the campaign closes.",

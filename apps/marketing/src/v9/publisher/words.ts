@@ -6,15 +6,15 @@
 export const CARD_CATEGORY = "Hardware wallets";
 
 export const WORDS = {
-  /** Spoken names for the two glyphs of the bridge marker (not printed). */
-  views: { advertiser: "The advertiser's side", app: "The app's side, shown here" },
-  network: "Network",
-  qualifies: "Qualifying ad",
-  rules: "You carry",
+  /** The two-way choice: does a suitable ad exist for this answer. */
+  fitLegend: "For this answer",
+  fits: "An ad fits",
+  noFit: "No ad fits",
+  rules: "You allow",
   /** Why nothing is shown. The no-ad sentence is PUBLISHER_SIDE.empty. */
-  blocked: "You block this category. Nothing is shown.",
+  blocked: "You do not allow this category. Nothing is shown.",
   /** Read out only (never printed): the state after a change. */
-  shown: "A labelled card sits by the answer.",
+  shown: "A labelled card sits below the answer.",
   unchanged: "The answer has not changed.",
   /** The fictional app's own chrome. */
   chat: {

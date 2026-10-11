@@ -30,17 +30,26 @@ export const SHOWN = ["compare", "mobile", "learn", "bitcoin"] as const;
 
 export type Gate = "running" | "paused" | "pending";
 export type Verdict = "joined" | "may" | "left" | "held";
-/** A line from a declared (or missing) capability to a question that asks for it or rules it out. */
-export type Link = { cap: CapId; met: boolean; clash: boolean };
-export type Decision = { id: string; question: string; full: string; verdict: Verdict; reason: string; links: Link[]; eligible: boolean };
+export type Decision = {
+  id: string;
+  question: string;
+  full: string;
+  verdict: Verdict;
+  reason: string;
+  /** The capabilities this question depends on (asks for, or rules out). */
+  caps: CapId[];
+  /** Its branch off the trunk: live, missing something, stopped, or none (not about the offer). */
+  branch: "on" | "off" | "clash" | null;
+  eligible: boolean;
+};
 
-export const VERDICT: Record<Verdict, string> = { joined: "Joined", may: "May join", left: "Left alone", held: "Held" };
+export const VERDICT: Record<Verdict, string> = { joined: "Appears here", may: "Would appear", left: "Left alone", held: "Held" };
 
 export const L = {
   actorYou: "You",
   actorAgent: "The agent",
-  declared: "declared",
-  notDeclared: "not declared",
+  declared: "listed",
+  notDeclared: "not listed",
   reset: "Reset",
   approved: "Approved",
   pendingState: "Not approved",
@@ -49,8 +58,8 @@ export const L = {
   editLabel: "Change a word",
   approve: "Approve",
   undo: "Undo",
-  ceiling: "per placement",
-  budget: "budget",
+  ceiling: "Most per placement",
+  budget: "Total budget",
   running: "Running",
   paused: "Paused",
   switchLabel: "Run this campaign",
@@ -69,24 +78,29 @@ export const WORDS = {
   changed: { a: "Keep", b: "Take" },
 } as const;
 
-const label = (id: CapId) => CAPS.find((c) => c.id === id)!.label;
+/** Short names for a reason that must fit one line of a slot. */
+const SHORT: Record<CapId, string> = { device: "Device", offline: "Offline keys", eth: "Ethereum", sol: "Solana", btc: "Bitcoin" };
+const label = (id: CapId) => SHORT[id];
 
-/** Reasons are two or three words in the slot they explain (the story's sentences are their source). */
+/** Reasons are two or three words in the slot they explain (the story's sentences are their
+ *  source), in a marketer's words. With more than one thing missing the reason stays one line. */
 function decide(m: Moment, has: Set<CapId>, gate: Gate): Decision {
   const ask = ASKS[m.id]!;
-  const links: Link[] = ask.needs.map((cap) => ({ cap, met: has.has(cap), clash: false }));
-  if (ask.rulesOut && has.has(ask.rulesOut)) links.push({ cap: ask.rulesOut, met: true, clash: true });
-  const base = { id: m.id, question: ask.short, full: m.question, links, eligible: false };
-  // Learning, not choosing: no ad belongs, whatever is declared.
-  if (ask.learning) return { ...base, verdict: "left", reason: "Learning, not choosing" };
-  // Asks for something that was never declared (a mobile app), and rules out a device.
-  if (ask.other) return { ...base, verdict: "left", reason: ask.rulesOut && has.has(ask.rulesOut) ? "Device ruled out" : `No ${ask.other}` };
+  const caps = ask.rulesOut ? [...ask.needs, ask.rulesOut] : ask.needs;
+  const base = { id: m.id, question: ask.short, full: m.question, caps, eligible: false };
+  // Learning, not choosing: no ad belongs, whatever is listed. It has no branch at all.
+  if (ask.learning) return { ...base, branch: null, verdict: "left", reason: "Learning, not choosing" };
+  // Asks for something that was never listed (a mobile app), and rules out a device.
+  if (ask.other) {
+    const clash = !!ask.rulesOut && has.has(ask.rulesOut);
+    return { ...base, branch: clash ? "clash" : "off", verdict: "left", reason: clash ? "No device wanted" : `No ${ask.other}` };
+  }
   const missing = ask.needs.filter((id) => !has.has(id)).map(label);
-  if (missing.length) return { ...base, verdict: "left", reason: `${missing.join(", ")} not declared` };
-  if (gate !== "running") return { ...base, eligible: true, verdict: "held", reason: gate === "paused" ? L.heldPaused : L.heldPending };
-  if (m.outcome === "placed") return { ...base, eligible: true, verdict: "joined", reason: "" };
-  // A question the story left alone only because of a missing declaration, now declared.
-  return { ...base, eligible: true, verdict: "may", reason: "" };
+  if (missing.length) return { ...base, branch: "off", verdict: "left", reason: missing.length > 1 ? "Not what you offer" : `${missing[0]} not listed` };
+  if (gate !== "running") return { ...base, branch: "on", eligible: true, verdict: "held", reason: gate === "paused" ? L.heldPaused : L.heldPending };
+  if (m.outcome === "placed") return { ...base, branch: "on", eligible: true, verdict: "joined", reason: "" };
+  // A question the story left alone only because something was not listed, now listed.
+  return { ...base, branch: "on", eligible: true, verdict: "may", reason: "" };
 }
 
 export function decideAll(has: Set<CapId>, gate: Gate): Decision[] {

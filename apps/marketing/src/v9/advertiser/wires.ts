@@ -1,24 +1,20 @@
 // Geometry for the drawn connections. Positions are measured in the stage's own coordinates from
 // layout offsets (not client rects), so entry transforms never skew them. Coordinates are snapped
 // to half pixels so 2px strokes sit crisp at 1x and 2x.
+//
+// The picture: every capability chip has a short stub into one trunk that runs down a clear lane
+// beside the chips. From the trunk one branch runs to each question that depends on what is
+// listed, entering the tile on its left edge at mid height. A stub is dotted while its capability
+// is not listed; a branch is dotted while something the question needs is missing, and ends in a
+// stop mark on the tile's edge where the question rules a listed capability out.
 import type { CapId, Decision, Gate } from "./local";
 
 export type Box = { x: number; y: number; w: number; h: number };
 export type Geo = { chips: Partial<Record<CapId, Box>>; tiles: Record<string, Box>; card: Box | null };
-export type Pt = { x: number; y: number };
-export type Wire = {
-  id: string;
-  d: string;
-  /** Drawn at rest (there is room for a line), or only used as the path of a travelling pulse. */
-  drawn: boolean;
-  state: "on" | "off" | "clash" | "soft";
-  cap?: CapId;
-  tile: string;
-  start: Pt;
-  end: Pt;
-  /** Direction the line arrives from, for the socket and the stop bar. */
-  dir: "h" | "v";
-};
+export type LineState = "on" | "off" | "clash" | "soft";
+export type Seg = { id: string; d: string; state: LineState; part: "stub" | "trunk" | "branch" | "words"; cap?: CapId; tile?: string };
+export type Route = { id: string; d: string; cap: CapId; tile: string; drawn: boolean };
+export type Plug = { id: string; x: number; y: number; state: LineState; tile: string };
 
 export function boxOf(el: HTMLElement, stage: HTMLElement): Box {
   let x = 0;
@@ -33,92 +29,122 @@ export function boxOf(el: HTMLElement, stage: HTMLElement): Box {
 }
 
 const r = (n: number) => Math.round(n * 2) / 2;
-const ROOM = 26; // least room for a drawn line
-const STOP = 9; // a blocked line ends this far short of the tile
+const LANE = 40; // least width of the lane for the trunk to be drawn
+const R = 9; // corner radius
 
-/** Lines from capability chips to the questions that ask for them (or rule them out). */
-export function capWires(geo: Geo, decisions: Decision[]): Wire[] {
-  const boxes = Object.values(geo.tiles);
-  if (!boxes.length) return [];
-  const left = Math.min(...boxes.map((b) => b.x));
-  const near = boxes.filter((b) => b.x < left + 8).sort((a, b) => a.y - b.y); // the column beside the chips
-  const out: Wire[] = [];
-  for (const dec of decisions) {
-    const t = geo.tiles[dec.id];
-    if (!t) continue;
-    dec.links.forEach((ln, k) => {
-      const c = geo.chips[ln.cap];
-      if (!c) return;
-      const id = `${ln.cap}-${dec.id}`;
-      const state = ln.clash ? "clash" : ln.met ? "on" : "off";
-      const sx = r(c.x + c.w);
-      const sy = r(c.y + c.h / 2);
-      const base = { id, state, cap: ln.cap, tile: dec.id } as const;
-      if (t.x - sx < ROOM) {
-        const ex = r(t.x + t.w / 2);
-        const ey = r(t.y + 6);
-        out.push({ ...base, d: `M${r(c.x + c.w / 2)} ${r(c.y + c.h)} L${ex} ${ey}`, drawn: false, start: { x: sx, y: sy }, end: { x: ex, y: ey }, dir: "v" });
-        return;
-      }
-      const n = dec.links.length;
-      const tx = r(t.x - (ln.clash ? STOP : 0));
-      if (t.x < left + 8) {
-        // Spread arrivals down the tile's edge, a little inside its corners.
-        const pad = Math.min(22, t.h / 4);
-        const ey = r(n === 1 ? t.y + t.h / 2 : t.y + pad + ((t.h - 2 * pad) * k) / (n - 1));
-        const dx = Math.max(14, (tx - sx) * 0.52);
-        out.push({ ...base, d: `M${sx} ${sy} C${r(sx + dx)} ${sy} ${r(tx - dx)} ${ey} ${tx} ${ey}`, drawn: true, start: { x: sx, y: sy }, end: { x: tx, y: ey }, dir: "h" });
-        return;
-      }
-      // A tile in the far column: run through the lane between (or below) the near column's tiles.
-      const lanes: number[] = [];
-      near.forEach((b, i) => {
-        const next = near[i + 1];
-        lanes.push(next ? (b.y + b.h + next.y) / 2 : b.y + b.h + 11);
-      });
-      const mid = t.y + t.h / 2;
-      const lane = lanes.reduce((best, y) => (Math.abs(y - mid) < Math.abs(best - mid) ? y : best), lanes[0] ?? mid);
-      const ly = r(lane + (k - (n - 1) / 2) * 4);
-      // Past the near column the bundle opens out, so each line plugs into its own socket.
-      const ey = r(Math.min(t.y + t.h - 16, Math.max(t.y + 16, lane + (k - (n - 1) / 2) * 12)));
-      const ax = r(left - 6);
-      const bx = r(Math.max(...near.map((b) => b.x + b.w)) + 1);
-      const dx = (ax - sx) * 0.6;
-      const fx = (tx - bx) * 0.5;
-      out.push({ ...base, d: `M${sx} ${sy} C${r(sx + dx)} ${sy} ${r(ax - dx)} ${ly} ${ax} ${ly} L${bx} ${ly} C${r(bx + fx)} ${ly} ${r(tx - fx)} ${ey} ${tx} ${ey}`, drawn: true, start: { x: sx, y: sy }, end: { x: tx, y: ey }, dir: "h" });
-    });
+/** An orthogonal path through the given points, with rounded corners. */
+function ortho(pts: [number, number][]): string {
+  let d = `M${r(pts[0]![0])} ${r(pts[0]![1])}`;
+  for (let i = 1; i < pts.length; i++) {
+    const [x, y] = pts[i]!;
+    const next = pts[i + 1];
+    if (!next) {
+      d += ` L${r(x)} ${r(y)}`;
+      break;
+    }
+    const [px, py] = pts[i - 1]!;
+    const inLen = Math.hypot(x - px, y - py);
+    const outLen = Math.hypot(next[0] - x, next[1] - y);
+    const k = Math.min(R, inLen / 2, outLen / 2);
+    if (k < 1) continue;
+    const ax = x - ((x - px) / inLen) * k;
+    const ay = y - ((y - py) / inLen) * k;
+    const bx = x + ((next[0] - x) / outLen) * k;
+    const by = y + ((next[1] - y) / outLen) * k;
+    d += ` L${r(ax)} ${r(ay)} Q${r(x)} ${r(y)} ${r(bx)} ${r(by)}`;
   }
-  return out;
+  return d;
 }
 
-/** Lines from the approved card to the slots where it may appear. */
-export function wordWires(geo: Geo, decisions: Decision[], gate: Gate): Wire[] {
+/** Stubs, trunk and branches, the routes a pulse can take, and where lines meet the tiles. */
+export function capNet(geo: Geo, decisions: Decision[], has: Set<CapId>): { segs: Seg[]; routes: Route[]; plugs: Plug[] } {
+  const chips = Object.entries(geo.chips) as [CapId, Box][];
+  const tiles = decisions.map((dec) => ({ dec, t: geo.tiles[dec.id] })).filter((x): x is { dec: Decision; t: Box } => !!x.t);
+  if (!chips.length || !tiles.length) return { segs: [], routes: [], plugs: [] };
+  const right = Math.max(...chips.map(([, c]) => c.x + c.w));
+  const left = Math.min(...tiles.map(({ t }) => t.x));
+  const lane = left - right;
+  const drawn = lane >= LANE;
+  const bus = r(right + Math.min(34, Math.max(18, lane * 0.4)));
+  const segs: Seg[] = [];
+  const routes: Route[] = [];
+  const plugs: Plug[] = [];
+  const mid = (b: Box) => r(b.y + b.h / 2);
+  const branches = tiles.filter(({ dec }) => dec.branch);
+
+  if (drawn) {
+    const ys = [...chips.filter(([id]) => has.has(id)).map(([, c]) => mid(c)), ...branches.map(({ t }) => mid(t))];
+    const top = Math.min(...ys);
+    const bot = Math.max(...ys);
+    // The trunk, with its two ends turned into whatever joins it there.
+    segs.push({ id: "trunk", part: "trunk", state: "on", d: `M${bus} ${r(top + R)} L${bus} ${r(bot - R)}` });
+    const turn = (y: number) => (y === top ? r(y + R) : y === bot ? r(y - R) : y);
+    for (const [id, c] of chips) {
+      const y = mid(c);
+      const sx = r(c.x + c.w);
+      const on = has.has(id);
+      const end = on && (y === top || y === bot);
+      segs.push({ id: `stub-${id}`, part: "stub", cap: id, state: on ? "on" : "off", d: end ? `M${sx} ${y} L${r(bus - R)} ${y} Q${bus} ${y} ${bus} ${turn(y)}` : `M${sx} ${y} L${r(bus - (on ? 0 : 5))} ${y}` });
+    }
+    for (const { dec, t } of branches) {
+      const y = mid(t);
+      const tx = r(t.x);
+      const end = y === top || y === bot;
+      segs.push({ id: `branch-${dec.id}`, part: "branch", tile: dec.id, state: dec.branch!, d: end ? `M${bus} ${turn(y)} Q${bus} ${y} ${r(bus + R)} ${y} L${tx} ${y}` : `M${bus} ${y} L${tx} ${y}` });
+      plugs.push({ id: `plug-${dec.id}`, x: tx, y, state: dec.branch!, tile: dec.id });
+    }
+  }
+  for (const { dec, t } of branches) {
+    for (const cap of dec.caps) {
+      const c = geo.chips[cap];
+      if (!c) continue;
+      const d = drawn
+        ? ortho([[c.x + c.w, mid(c)], [bus, mid(c)], [bus, mid(t)], [t.x, mid(t)]])
+        : `M${r(c.x + c.w / 2)} ${r(c.y + c.h)} L${r(t.x + t.w / 2)} ${r(t.y + 6)}`;
+      routes.push({ id: `${cap}-${dec.id}`, cap, tile: dec.id, d, drawn });
+    }
+  }
+  return { segs, routes, plugs };
+}
+
+/** Lines from the approved card to the slots where it appears (or would). */
+export function wordNet(geo: Geo, decisions: Decision[], gate: Gate): { segs: Seg[]; plugs: Plug[]; paths: string[] } {
   const card = geo.card;
-  if (!card) return [];
+  const segs: Seg[] = [];
+  const plugs: Plug[] = [];
+  const paths: string[] = [];
+  if (!card) return { segs, plugs, paths };
   const targets = decisions.filter((d) => d.eligible);
-  return targets.flatMap((dec, i) => {
+  targets.forEach((dec, i) => {
     const t = geo.tiles[dec.id];
-    if (!t) return [];
-    const base = { id: `words-${dec.id}`, state: gate !== "running" ? "off" : dec.verdict === "joined" ? "on" : "soft", tile: dec.id } as const;
+    if (!t) return;
+    const state: LineState = gate !== "running" ? "off" : dec.verdict === "joined" ? "on" : "soft";
     const ex = r(t.x + t.w);
-    const ey = r(t.y + t.h - 33); // the slot's centre line
-    if (card.x - ex >= ROOM) {
+    const ey = r(t.y + t.h - 31); // the slot's centre line
+    const id = `words-${dec.id}`;
+    if (card.x - ex >= LANE) {
       const cx = r(card.x);
-      const sy = r(Math.min(card.y + card.h - 18, Math.max(card.y + 18, card.y + card.h / 2 + (i - (targets.length - 1) / 2) * 20)));
-      const dx = (cx - ex) * 0.5;
-      return [{ ...base, d: `M${cx} ${sy} C${r(cx - dx)} ${sy} ${r(ex + dx)} ${ey} ${ex} ${ey}`, drawn: true, start: { x: cx, y: sy }, end: { x: ex, y: ey }, dir: "h" } as Wire];
+      const sy = r(Math.min(card.y + card.h - 20, Math.max(card.y + 20, card.y + card.h / 2 + (i - (targets.length - 1) / 2) * 22)));
+      const mx = r((cx + ex) / 2 + (i - (targets.length - 1) / 2) * 10);
+      const d = ortho([[cx, sy], [mx, sy], [mx, ey], [ex, ey]]);
+      segs.push({ id, part: "words", tile: dec.id, state, d });
+      plugs.push({ id: `plug-${id}`, x: ex, y: ey, state, tile: dec.id });
+      paths.push(d);
+      return;
     }
     // Stacked: the card sits under the field. A short riser from the card's top edge to the tile
-    // above it, when the tile is over the card and close; otherwise only a pulse travels.
+    // directly above it; otherwise only a pulse travels.
     const below = card.y >= t.y + t.h;
-    const vx = r(t.x + t.w * (0.62 + 0.2 * i));
-    const over = vx > card.x + 12 && vx < card.x + card.w - 12;
+    const vx = r(t.x + t.w * (0.66 + 0.18 * i));
     const by = r(t.y + t.h);
-    if (below && over && card.y - by < 260) {
-      const cy = r(card.y);
-      return [{ ...base, d: `M${vx} ${cy} L${vx} ${by}`, drawn: true, start: { x: vx, y: cy }, end: { x: vx, y: by }, dir: "v" } as Wire];
+    if (below && vx > card.x + 12 && vx < card.x + card.w - 12 && card.y - by < 260) {
+      const d = `M${vx} ${r(card.y)} L${vx} ${by}`;
+      segs.push({ id, part: "words", tile: dec.id, state, d });
+      plugs.push({ id: `plug-${id}`, x: vx, y: by, state, tile: dec.id });
+      paths.push(d);
+      return;
     }
-    const sx = r(card.x + card.w / 2);
-    return [{ ...base, d: `M${sx} ${r(below ? card.y : card.y + card.h)} L${r(t.x + t.w / 2)} ${r(below ? t.y + t.h - 6 : t.y + 6)}`, drawn: false, start: { x: sx, y: card.y }, end: { x: ex, y: ey }, dir: "v" } as Wire];
+    paths.push(`M${r(card.x + card.w / 2)} ${r(below ? card.y : card.y + card.h)} L${r(t.x + t.w / 2)} ${r(below ? t.y + t.h - 6 : t.y + 6)}`);
   });
+  return { segs, plugs, paths };
 }

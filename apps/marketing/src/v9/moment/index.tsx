@@ -24,17 +24,23 @@ const ITEMS = IDS.map((id) => MOMENTS.find((m) => m.id === id)!);
  *  words. The frozen question and reason are what a screen reader hears. */
 const LOCAL: Record<Id, { q: string; lit: { t: string; ok: boolean }[]; why: string }> = {
   compare: { q: "Compare hardware wallets for Ethereum and Solana.", lit: [{ t: "hardware wallets", ok: true }, { t: "Ethereum and Solana", ok: true }], why: "Fits what you offer" },
-  mobile: { q: "Best mobile-only wallet for Solana?", lit: [{ t: "mobile-only", ok: false }, { t: "Solana", ok: true }], why: "Rules out a device" },
+  mobile: { q: "Best mobile-only wallet for Solana?", lit: [{ t: "mobile-only", ok: false }, { t: "Solana", ok: true }], why: "They ruled out a device" },
   learn: { q: "How does offline key storage work?", lit: [{ t: "How does", ok: false }, { t: "work", ok: false }], why: "Learning, not choosing" },
-  bitcoin: { q: "Cheapest hardware wallet for Bitcoin?", lit: [{ t: "hardware wallet", ok: true }, { t: "Bitcoin", ok: false }], why: "Bitcoin not declared" },
+  bitcoin: { q: "Cheapest hardware wallet for Bitcoin?", lit: [{ t: "hardware wallet", ok: true }, { t: "Bitcoin", ok: false }], why: "Bitcoin not listed" },
 };
-const BESIDE = "Beside the answer";
+const BESIDE = "Below the answer";
+/** Whose judgment the tag is: the advertiser's own agent. */
+const AGENT = `${ADVERTISER.name}'s agent`;
 
 /** The performance: after the entry, each question holds, then the next. Ends on the default. */
 const TOUR: Id[] = ["mobile", "learn", "bitcoin", "compare"];
 const ENTRY_MS = 1700;
-const FIRST_MS = 3200;
-const STEP_MS = 2700;
+const FIRST_MS = 2400;
+const STEP_MS = 1700;
+/** The performance only runs while at least this much of the specimen is on screen. */
+const IN_VIEW = 0.6;
+/** Left alone out of view for this long mid-performance, it settles on the first question. */
+const AWAY_MS = 3500;
 
 type Kind = "own" | "other" | "none";
 const kindOf = (m: Moment): Kind => (m.placed === ADVERTISER.name ? "own" : m.placed ? "other" : "none");
@@ -58,37 +64,69 @@ export default function TheMoment() {
   const [touched, setTouched] = useState(false);
   const [done, setDone] = useState(false);
   const [auto, setAuto] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [ref, seen] = useInView<HTMLDivElement>();
   const stopped = useRef(false);
-  const timers = useRef<number[]>([]);
   const current = ITEMS.find((m) => m.id === value)!;
   const kind = kindOf(current);
 
   useEffect(() => {
     if (!seen || document.documentElement.dataset.pxMotion !== "on") return;
     const doneId = window.setTimeout(() => setDone(true), ENTRY_MS);
-    if (!stopped.current) {
-      setAuto(true);
-      timers.current = TOUR.map((id, i) =>
-        window.setTimeout(() => {
-          if (stopped.current) return;
-          setValue(id);
-          if (i === TOUR.length - 1) setAuto(false);
-        }, FIRST_MS + i * STEP_MS),
-      );
-    }
+    const el = ref.current;
+    if (stopped.current || !el) return () => window.clearTimeout(doneId);
+
+    // The performance runs on its own clock, which only advances while most of the specimen is
+    // on screen and the tab is visible. It always ends at rest on the first question.
+    let visible = false;
+    let elapsed = 0;
+    let away = 0;
+    let step = 0;
+    let last = performance.now();
+    let tick = 0;
+    const io = new IntersectionObserver(([e]) => { visible = (e?.intersectionRatio ?? 0) >= IN_VIEW; }, { threshold: [0, 0.2, 0.4, IN_VIEW, 0.8, 1] });
+    io.observe(el);
+    const end = () => {
+      window.clearInterval(tick);
+      io.disconnect();
+      setAuto(false);
+      setPaused(false);
+    };
+    setAuto(true);
+    tick = window.setInterval(() => {
+      const now = performance.now();
+      const dt = Math.min(250, now - last);
+      last = now;
+      if (stopped.current) return end();
+      const active = visible && !document.hidden;
+      setPaused(!active);
+      if (!active) {
+        away += dt;
+        if (step > 0 && away > AWAY_MS) {
+          setValue("compare");
+          end();
+        }
+        return;
+      }
+      away = 0;
+      elapsed += dt;
+      while (step < TOUR.length && elapsed >= FIRST_MS + step * STEP_MS) setValue(TOUR[step++]!);
+      if (step >= TOUR.length) end();
+    }, 100);
     return () => {
       window.clearTimeout(doneId);
-      timers.current.forEach((t) => window.clearTimeout(t));
+      window.clearInterval(tick);
+      io.disconnect();
     };
-  }, [seen]);
+  }, [seen, ref]);
 
-  /** Any interaction ends the performance for good. */
+  /** A choice, a key press or keyboard focus ends the performance for good. Touching the
+   *  specimen to scroll does not. */
   function stop() {
     if (stopped.current) return;
     stopped.current = true;
-    timers.current.forEach((t) => window.clearTimeout(t));
     setAuto(false);
+    setPaused(false);
   }
 
   return (
@@ -105,8 +143,8 @@ export default function TheMoment() {
           className={s.root}
           data-in={seen ? (done ? "done" : "") : undefined}
           data-auto={auto ? "" : undefined}
+          data-paused={auto && paused ? "" : undefined}
           style={{ "--hold": `${value === "compare" ? FIRST_MS : STEP_MS}ms` } as CSSProperties}
-          onPointerDown={stop}
           onKeyDown={stop}
           onFocus={stop}
         >
@@ -155,8 +193,15 @@ export default function TheMoment() {
                 ))}
                 <p className={s.empty} data-on={kind === "none" ? "" : undefined} aria-hidden={kind === "none" ? undefined : true}>{MOMENT.noAd}</p>
                 <div className={s.mine} data-seated={kind === "own" ? "" : undefined}>
-                  <SponsoredCard name={ADVERTISER.name} text={ADVERTISER.creative} />
-                  <span key={value} className={s.why}>{LOCAL[value].why}</span>
+                  <SponsoredCard className={s.card} name={ADVERTISER.name} text={ADVERTISER.creative} />
+                  {/* The judgment, and whose it is. It travels with the card. */}
+                  <span className={s.tag}>
+                    <i className="v8-sw" data-kind="judgment" data-on={kind === "own" ? "" : undefined} aria-hidden />
+                    <span className={s.tagText}>
+                      <span className={s.agent}>{AGENT}</span>
+                      <span key={value} className={s.why}>{LOCAL[value].why}</span>
+                    </span>
+                  </span>
                 </div>
               </div>
             </div>

@@ -12,10 +12,10 @@ export const ILLUSTRATION_STILL = "Illustration";
 export const HERO = {
   h1: "The advertising network for the agentic internet.",
   accent: "agentic internet.",
-  lede: "Reach people when they ask a question your product can help answer. AI apps earn from clearly labelled ads beside their own answers.",
+  lede: "Reach people when they ask a question your product can help answer. AI apps earn from clearly labelled ads below their own answers.",
   primary: "Open the advertiser dashboard",
   secondary: "Try the example chat",
-  wallNote: "Illustrative questions and bidding.",
+  wallNote: "Illustrative questions, brands and bidding.",
   focalNote: "Product flow illustration.",
   appName: "Example chat",
   slotLine: "Answer, then one Sponsored slot",
@@ -27,14 +27,14 @@ export const HERO = {
 /** 2. The exploded card: what sits behind one placement. Two to four words per plate. */
 export const STACK = {
   line: "One labelled card. A whole network behind it.",
-  note: "What sits behind a placement.",
+  note: "",
   plates: {
     answer: { name: "Answer", note: "the app's own" },
     card: { name: "Card", note: "labelled Sponsored" },
     auction: { name: "Auction", note: "fixed rules set the price" },
     agents: { name: "Agents", note: "judge fit and intent" },
     evidence: { name: "Context", note: "what each side declared" },
-    payment: { name: "Payment", note: "per accepted delivery" },
+    payment: { name: "Charge", note: "per accepted delivery" },
   },
 };
 
@@ -65,14 +65,14 @@ export const ADVERTISER_SIDE = {
 export const PUBLISHER_SIDE = {
   who: "For AI apps",
   question: "Can my app earn without the ad touching my answer?",
-  lede: "Your model writes the answer. The ad sits beside it, in a slot you control.",
+  lede: "Your model writes the answer. The ad sits below it, in a slot you control.",
   bridge: "The same placement, from the app's side.",
   points: [
     { k: "Your answer path", v: "In our integration, no advertiser material reaches it." },
     { k: "Your rules", v: "Choose the categories you carry and where the slot sits." },
     { k: "Your earnings", v: "Each confirmed card accrues to your app." },
   ],
-  empty: "No qualifying ad. Nothing is shown.",
+  empty: "No ad fits. Nothing is shown.",
   action: { label: "Read the integration guide", href: "/sdk/" },
   code: "Three calls: request, render, confirm.",
 };
@@ -97,7 +97,7 @@ export const DOORS = {
   h2: "Start from your side.",
   doors: [
     { who: "Advertisers", line: "Describe your offer and approve your ad.", action: "Open the advertiser dashboard", href: ADVERTISER_URL },
-    { who: "AI apps", line: "Add a Sponsored slot beside your answer.", action: "Read the integration guide", href: "/sdk/" },
+    { who: "AI apps", line: "Add a Sponsored slot below your answer.", action: "Read the integration guide", href: "/sdk/" },
   ],
   also: [
     { label: "Try the example chat", href: PUBLISHER_URL },

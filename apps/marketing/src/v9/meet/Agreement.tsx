@@ -28,7 +28,7 @@ const NONE: Flags = { adv: false, app: false, fit: false };
 const DEMO: Key = "adv";
 const useIso = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
-export default function Agreement({ judge, fixed, notes }: { judge: ReactNode; fixed: ReactNode; notes: ReactNode }) {
+export default function Agreement({ judge, fixed, foot }: { judge: ReactNode; fixed: ReactNode; foot: ReactNode }) {
   const [on, setOn] = useState<Flags>(ALL);
   const [here, setHere] = useState<Flags>(ALL);
   const [stage, setStage] = useState<Stage>("yours");
@@ -109,7 +109,7 @@ export default function Agreement({ judge, fixed, notes }: { judge: ReactNode; f
                   setOn((p) => ({ ...p, [k]: e.target.checked }));
                 }}
               />
-              <span className={s.sw} aria-hidden />
+              <span className={`v8-sw ${s.sw}`} data-kind={KIND[k] === "judgment" ? "judgment" : undefined} data-on={yes(on[k])} aria-hidden />
               <span className={s.st}>{LOCAL.state[k][on[k] ? 0 : 1]}</span>
             </span>
           </label>
@@ -154,6 +154,7 @@ export default function Agreement({ judge, fixed, notes }: { judge: ReactNode; f
               </div>
             ))}
           </dl>
+          <div className={s.foot}>{foot}</div>
         </div>
         <p className={s.void} aria-hidden={card}>{LOCAL.noReceipt}</p>
       </div>
@@ -164,7 +165,6 @@ export default function Agreement({ judge, fixed, notes }: { judge: ReactNode; f
 
       <p className={s.say} data-k="judge">{judge}</p>
       <p className={s.say} data-k="fixed">{fixed}</p>
-      <div className={s.notes}>{notes}</div>
     </div>
   );
 }

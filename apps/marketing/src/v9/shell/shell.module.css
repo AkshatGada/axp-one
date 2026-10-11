@@ -5,15 +5,9 @@
 .base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
 .base a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--brand); text-underline-offset: 5px; }
 
-/* Seam: the joined tile travels from the advertiser's field into the app. */
-.carry { position: relative; display: grid; justify-items: center; height: clamp(250px, 36vh, 340px); margin-top: calc(var(--v8-pad) * -0.3); margin-bottom: calc(var(--v8-pad) * -0.1); pointer-events: none; }
-.carryLine { position: absolute; top: 0; left: 50%; width: 0; height: 32px; border-left: 2px solid var(--brand); transform-origin: 50% 0; }
-.carryTile { position: relative; align-self: start; margin-top: 40px; width: min(250px, 70vw); transform-origin: 50% 0; }
-/* Seam: the receipt's two sides part toward the two doors. */
-.part { position: relative; display: flex; justify-content: center; height: clamp(120px, 20vh, 200px); margin-top: calc(var(--v8-pad) * -0.5); margin-bottom: clamp(8px, 2vw, 32px); pointer-events: none; }
-.half { display: grid; gap: 2px; align-content: center; width: min(210px, 42vw); height: 76px; padding: 0 18px; border: 1px solid var(--v8-hair); background: var(--white); box-shadow: var(--v8-shadow-1); }
-.half[data-side="l"] { border-radius: 12px 0 0 12px; border-right-style: dashed; }
-.half[data-side="r"] { border-radius: 0 12px 12px 0; border-left: 0; }
-.half span { font-size: 12.5px; font-weight: 500; color: var(--steel); }
-.half b { font-family: var(--font-display); font-size: 15px; font-weight: 500; letter-spacing: -.01em; }
-@media (max-width: 699px) { .carry { height: 400px; margin-bottom: 8px; } .carryTile { width: 224px; margin-top: 44px; } .carryLine { height: 36px; } .part { height: 130px; } }
+/* Seam (wide screens only): the joined tile steps out below the advertiser's field. It stays
+   inside this band, so it can never cross the next scene's heading. */
+.carry { position: relative; display: none; justify-items: center; align-content: start; height: 268px; margin-top: calc(var(--v8-pad) * -0.35); pointer-events: none; }
+.carryLine { position: absolute; top: 0; left: 50%; width: 0; height: 28px; border-left: 2px solid var(--brand); transform-origin: 50% 0; }
+.carryTile { position: relative; margin-top: 36px; width: 232px; transform-origin: 50% 0; }
+@media (min-width: 900px) { .carry { display: grid; } }

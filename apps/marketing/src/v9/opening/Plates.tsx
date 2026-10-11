@@ -25,22 +25,21 @@ export const PLATE_M7: M2 = mul(rotate(-3), mul(skewX(-26), scale(1, 0.6)));
 /** Local wording for the plate pictures (proposals; listed in NOTES.md). */
 const W = {
   fits: "Fits",
-  passes: "Passes",
+  out: "Sits out",
   placed: "Placed",
-  ceiling: "its ceiling",
+  limit: "its limit",
   advertiser: "Advertiser",
   app: "AI app",
   total: "Running total",
-  later: "Settles when the campaign closes",
 };
-/** Who judged what, in words. HarborKey and KeyArc fit this question; the others pass. */
+/** Who judged what, in words. HarborKey and KeyArc fit this question; the others sit out. */
 const JUDGED: { name: string; fits: boolean }[] = [
   { name: ADVERTISER.name, fits: true },
   { name: "KeyArc", fits: true },
   { name: "ClearVault", fits: false },
   { name: "ColdNest", fits: false },
 ];
-/** The two that fit, each bidding inside its own ceiling. Lengths are a drawing, not amounts. */
+/** The two that fit, each bidding inside its own limit. Lengths are a drawing, not amounts. */
 const BIDS: { name: string; bid: number; cap: number; win?: boolean }[] = [
   { name: ADVERTISER.name, bid: 68, cap: 82, win: true },
   { name: "KeyArc", bid: 46, cap: 58 },
@@ -80,7 +79,7 @@ function Body({ id }: { id: PlateId }) {
               <span className={s.track} style={{ "--bid": `${b.bid}%`, "--cap": `${b.cap}%` } as CSSProperties}>
                 <i className={s.fill} />
                 <i className={s.cap} />
-                {b.win ? <em className={s.capWord}>{W.ceiling}</em> : null}
+                {b.win ? <em className={s.capWord}>{W.limit}</em> : null}
               </span>
               <span className={s.laneEnd}>{b.win ? <span className={s.pill}>{W.placed}</span> : null}</span>
             </div>
@@ -94,7 +93,7 @@ function Body({ id }: { id: PlateId }) {
             <div key={a.name} className={s.agent} data-fits={a.fits ? "" : undefined}>
               <span className={s.mark}>{a.fits ? <Tick /> : <i className={s.dash} />}</span>
               <b>{a.name}</b>
-              <span className={s.verdict}>{a.fits ? W.fits : W.passes}</span>
+              <span className={s.verdict}>{a.fits ? W.fits : W.out}</span>
             </div>
           ))}
         </div>
@@ -112,7 +111,6 @@ function Body({ id }: { id: PlateId }) {
             <span className={s.sideK}>{W.app}</span>
             <div className={s.chips}>
               <span className={s.chip}>{PLACEMENT.appRules.slots}</span>
-              {PLACEMENT.appRules.blocked.map((c) => <span key={c} className={s.chip} data-tone="off">{c}</span>)}
             </div>
           </div>
         </div>
@@ -126,10 +124,7 @@ function Body({ id }: { id: PlateId }) {
             ))}
           </div>
           <div className={s.sum} aria-hidden><i /></div>
-          <div className={s.payRow}>
-            <span>{W.total}</span>
-            <span className={s.dim}>{W.later}</span>
-          </div>
+          <span className={s.payRow}>{W.total}</span>
         </div>
       );
   }
@@ -194,7 +189,8 @@ export function StillStack({ k = 0.9, label }: { k?: number; label?: ReactNode }
   );
 }
 
-/** Phones: the same six plates, upright, one under the other along the same dashed route. */
+/** Phones: the same six plates, upright and compact, tucked one under the other. They start as
+ *  one closed deck and open downward when they enter the view. */
 export function FlatStack({ seen = true }: { seen?: boolean }) {
   return (
     <div className={s.flat} data-in={seen ? "" : undefined}>

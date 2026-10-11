@@ -93,3 +93,32 @@ illustrative wall questions (dimmed, `aria-hidden`).
 - At 390 wide the specimen is 949px tall: taller than one phone screen by about 100px.
 - Not checked: the integrated /v3/ page, `pnpm build`, built-output copy lint, Safari, Firefox,
   a real screen reader, real touch devices.
+
+## V3.1 (review fixes)
+- Opener now matches the other scenes: "who", the question at the shared `v8-q` size on the left
+  margin, the one-line lede on the right (`Scene tight labelledBy`, my own header). The diagram
+  sits on the page grid at full width: the two rule plates are on the outer margins, the bolts are
+  long, the label is top left and "Agents judge fit." top right.
+- One view: heading, diagram and receipt fit together at 1440x900, 1366x768 and 1280x800. Section
+  heights (motion off): 871 / 800 / 802; opener plus specimen 722 / 682 / 690. Phone: 1188.
+- The receipt carries its own caveats. Headline: `RECEIPT.confirms` in display type. Two sides.
+  Foot: `RECEIPT.later` and `RECEIPT.limit` as one line of small print, and the proof link, whose
+  text and accessible name include "Solana Devnet, test USDC, 7 October 2026". The separate grey
+  column is gone. When a switch is off the receipt (and so its link) is not there.
+- Phones: a released rule now shows only its broken dashed track (the withdrawn rod is hidden, no
+  stub). The gap before the doors is the scene's own bottom padding (about 48px on a phone).
+- Desktop seam: the scene's bottom padding is reduced to clamp(48px, 5.4vw, 84px).
+- Switches use the shared `.v8-sw` (+ `data-kind="judgment"`, `data-on`).
+- `Part` is gone; the "For the integrator" notes about it above no longer apply.
+
+### Shared switch style: what I would change in v9.css
+- `.v8-sw[data-kind="judgment"]::after` settles with `var(--v8-ease-out)`. I override it locally
+  with `cubic-bezier(.34, 1.56, .64, 1)` (a slight overshoot) so the judgment feels alive; adopt
+  that in the shared style if every scene should match.
+- I add `box-shadow` to the `.v8-sw` transition list locally for the autoplay cue ring; harmless
+  to add to the shared rule.
+- The shared reduced-motion rule is media-query only; scenes viewed with `?still` (motion off by
+  attribute) keep the switch transition unless the scene disables it, as mine does.
+
+Visible words at rest: meet 107 by the script. That count is unchanged from V3 because the same
+frozen lines moved into the receipt; what changed is that they are one object now.
