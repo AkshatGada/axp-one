@@ -1,0 +1,44 @@
+/* The V4 kit (frozen; owner: the orchestrator). */
+.chapter { position: relative; }
+.mark { display: flex; align-items: baseline; gap: 14px; padding-top: 14px; border-top: 1px solid var(--x-ink); }
+.markNo { font-family: var(--font-body); font-weight: 700; font-size: 15px; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.markTitle { font-size: 13.5px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
+.markNote { margin-left: auto; font-size: 13.5px; color: var(--x-quiet); }
+
+/* A stage: a tall block whose inner frame sticks while the reader's scroll drives it. */
+.stage { position: relative; }
+.stick { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: clip; }
+
+/* Figure furniture. */
+.fig { margin: 0; }
+.figCap { display: flex; align-items: baseline; gap: 10px; margin-top: 14px; font-size: 13.5px; line-height: 1.4; color: var(--x-quiet); }
+.figNo { font-weight: 500; color: var(--x-ink); }
+
+/* The one Sponsored card. A blue tab names it; the body is the advertiser's approved words. */
+.ad { position: relative; display: grid; gap: 10px; padding: 18px 20px 20px; border: 2px solid var(--x-blue); border-radius: var(--x-r-m); background: var(--x-sheet); text-align: left; }
+.adHead { display: flex; align-items: center; gap: 12px; }
+.adTag { height: 22px; padding: 0 9px; border-radius: 5px; background: var(--x-blue); color: #fff; font-size: 12.5px; font-weight: 500; line-height: 22px; letter-spacing: .02em; }
+.adName { font-family: var(--font-display); font-weight: 500; font-size: 18px; letter-spacing: -.015em; }
+.adText { margin: 0; font-size: 17px; line-height: 1.42; color: var(--x-ink); }
+.adFoot { font-size: 13px; color: var(--x-quiet); }
+.ad[data-size="s"] { gap: 6px; padding: 11px 13px 12px; border-width: 1.5px; border-radius: 10px; }
+.ad[data-size="s"] .adTag { height: 18px; padding: 0 6px; font-size: 10.5px; line-height: 18px; }
+.ad[data-size="s"] .adName { font-size: 14px; }
+.ad[data-size="s"] .adText { font-size: 13px; line-height: 1.4; }
+.ad[data-size="l"] { gap: 14px; padding: 26px 28px 28px; border-width: 2.5px; border-radius: var(--x-r-l); }
+.ad[data-size="l"] .adTag { height: 26px; padding: 0 11px; font-size: 14px; line-height: 26px; }
+.ad[data-size="l"] .adName { font-size: 24px; }
+.ad[data-size="l"] .adText { font-size: clamp(19px, 1.7vw, 24px); line-height: 1.36; }
+
+/* Actions. */
+.action { display: inline-flex; align-items: center; gap: 18px; min-height: 58px; padding: 0 22px 0 26px; border: 1.5px solid var(--x-blue); border-radius: 999px; background: var(--x-blue); color: #fff; font-size: 17px; font-weight: 500; letter-spacing: -.005em; text-decoration: none; transition: background var(--x-d1) var(--x-ease), border-color var(--x-d1) var(--x-ease), transform var(--x-d1) var(--x-ease), box-shadow var(--x-d1) var(--x-ease); }
+.action:hover { background: var(--x-blue-deep); border-color: var(--x-blue-deep); transform: translateY(-1px); box-shadow: var(--x-shadow-blue); }
+.action:active { transform: translateY(0); box-shadow: none; }
+.action[data-tone="ink"] { background: var(--x-ink); border-color: var(--x-ink); }
+.action[data-tone="white"] { background: #fff; border-color: #fff; color: var(--x-blue-deep); }
+.action[data-size="s"] { min-height: 42px; gap: 12px; padding: 0 16px 0 18px; font-size: 15px; }
+.action svg, .link svg { flex: none; transition: transform var(--x-d2) var(--x-out); }
+.action:hover svg, .link:hover svg { transform: translateX(5px); }
+.link { display: inline-flex; align-items: center; gap: 12px; padding: 6px 0; color: inherit; font-size: 17px; font-weight: 500; text-decoration: underline; text-decoration-color: var(--x-blue); text-decoration-thickness: 1.5px; text-underline-offset: 6px; }
+.link:hover { text-decoration-thickness: 2.5px; }
+@media (prefers-reduced-motion: reduce) { .action, .action svg, .link svg { transition: none; } .action:hover { transform: none; } }
