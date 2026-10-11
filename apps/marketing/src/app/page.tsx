@@ -1,35 +1,33 @@
-// axp.one: the landing page, v7. Visual first; words are captions. The exchange story:
-// the Exchange Wall, ContextHint's audience and evidence, the complete flow, Jev, Solana,
-// then direct product entry points. Every word is
-// server-rendered and visible without JS; motion layers on top. Copy: src/data/copy.ts; run
-// values: src/data/run.ts (the slim slice written by scripts/extract-specimens.mjs).
+// axp.one: the product landing page. One story on one paper ground: the Exchange Wall, the
+// exploded Sponsored card, the five stages, then what each side gets (advertisers, AI apps),
+// trust and billing, where it stands, and a door per audience. Every word is server-rendered and
+// visible without JS; motion layers on top. Copy: src/data/copy.ts. Technical evidence (the
+// original MVP, benchmark, payment proof) is linked from the footer, not told here.
 import Header from "@/v7/Header";
 import MotionRoot from "@/motion/MotionRoot";
 import FilmMode from "@/motion/FilmMode";
 import Hero from "@/v7/Hero";
 import How from "@/v7/How";
-import ContextHint from "@/v7/ContextHint";
-import Jev from "@/v7/Jev";
-import Solana from "@/v7/Solana";
-import LedgerBenchmark from "@/v7/LedgerBenchmark";
+import Advertisers from "@/v7/Advertisers";
+import Publishers from "@/v7/Publishers";
+import Billing from "@/v7/Billing";
+import Status from "@/v7/Status";
 import Closing from "@/v7/Closing";
 import Footer from "@/v7/Footer";
-import Tone from "@/v7/Tone";
 
 export default function Home() {
   return (
     <>
       <MotionRoot />
-      <Tone />
       <FilmMode />
       <Header />
       <main id="main" className="pg-main">
         <Hero />
-        <ContextHint />
         <How />
-        <Jev />
-        <Solana />
-        <LedgerBenchmark />
+        <Advertisers />
+        <Publishers />
+        <Billing />
+        <Status />
         <Closing />
       </main>
       <Footer />

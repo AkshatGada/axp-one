@@ -29,9 +29,9 @@ function Body({ id }: { id: PlateId }) {
     case "answer": return <><p className={s.q}>{story.question}</p><p className={s.lines}>{cut(story.answer, 118)}</p></>;
     case "card": return <div className={s.card}><div className={s.cardHead}><span className={s.sponsored}>Sponsored</span><b>{story.advertiser}</b></div><p>{cut(story.creative, 92)}</p></div>;
     case "auction": return <div className={s.rows}><div className={s.row}><span>Eligible campaigns</span><span>Funded + active</span></div><div className={s.row}><span>Bid policy</span><span>Fit + campaign ceiling</span></div><div className={s.row} data-win=""><span>Winning ad</span><span>Highest valid bid</span></div></div>;
-    case "agents": return <div className={s.agents}>{story.buyers.map(name => <div key={name} className={s.agent}><b>{name}</b><span className={s.pill}>Jev judges fit</span></div>)}</div>;
-    case "evidence": return <div className={s.evi}><div><span className={s.eviK}>ContextHint</span><span>Embeddings from ChatGPT ad data</span></div><div><span className={s.eviK}>Advertiser</span><span>Capabilities + targeting hints</span></div></div>;
-    case "payment": return <div className={s.pay}><div className={s.payTrack}><i style={{ left: 0, width: `${Number(channel.paid) / Number(channel.deposit) * 100}%` } as CSSProperties} /></div><div className={s.payRow}><span>{channel.voucherCount} vouchers → one close</span><span className={s.dim}>{usdc(channel.paid)} paid</span></div><span className={s.dim}>Verified 7 October · test USDC</span></div>;
+    case "agents": return <div className={s.agents}>{story.buyers.map(name => <div key={name} className={s.agent}><b>{name}</b><span className={s.pill}>Judges fit</span></div>)}</div>;
+    case "evidence": return <div className={s.evi}><div><span className={s.eviK}>Advertiser</span><span>Offer, capabilities, intended conversations</span></div><div><span className={s.eviK}>AI app</span><span>The question and its placement rules</span></div></div>;
+    case "payment": return <div className={s.pay}><div className={s.payTrack}><i style={{ left: 0, width: `${Number(channel.paid) / Number(channel.deposit) * 100}%` } as CSSProperties} /></div><div className={s.payRow}><span>{channel.voucherCount} deliveries, one settlement</span><span className={s.dim}>{usdc(channel.paid)} paid</span></div><span className={s.dim}>Recorded test settlement · test USDC</span></div>;
   }
 }
 

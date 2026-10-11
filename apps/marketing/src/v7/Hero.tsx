@@ -1,9 +1,9 @@
 "use client";
 
 // v7 hero: the Exchange Wall, then the camera dives into one tile and lands in the exploded card.
-// A tilted wall of AI app conversation tiles (real questions observed by ContextHint) drifts; about
+// A tilted wall of AI app conversation tiles (illustrative questions) drifts; about
 // once a second an auction clears somewhere on it (ultramarine bid pulses, a neutral Sponsored
-// fill, a Solana purple settle tick). One tile, the run's recorded question with ClearVault's card,
+// fill, an ink delivered tick). One tile, the run's recorded question with ClearVault's card,
 // is lifted off the wall. Pinned scroll (>= 900px, motion on), progress p:
 //   0.00 to 0.08  the headline lifts away;
 //   0.03 to 0.30  the camera dollies into the wall (it dims from 0.14); the tile flattens, travels
@@ -19,7 +19,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type 
 import { motion, useMotionValue, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
 import { ActionPrimary, ActionText, Words } from "@axp/design-system/prospectus";
 import { PRODUCT_STORY as story } from "@/data/product.story";
-import { DEVNET_URL, HERO, PUBLISHER_URL, PRODUCT_VIDEO_URL, STACK } from "@/data/copy";
+import { ADVERTISER_URL, HERO, PUBLISHER_URL, STACK } from "@/data/copy";
 import { PROMPTS } from "@/hero-lab/data";
 import useReduced, { usePinned } from "@/motion/useReduced";
 import { IDENTITY, io, lerp, mixM, mul, out, seg, type M2 } from "@/motion/motion";
@@ -47,7 +47,6 @@ const DEPTH = [-110, 30, -40, 70, -80, 10, -60];
 const LIFT = [-6, 4, -10, 1, -7, 6, -3];
 const PREFILLED = new Set(["0-3", "1-1", "2-4", "3-0", "4-2", "5-3", "2-1", "6-0", "6-3"]);
 const cols = Array.from({ length: COLS }, (_, c) => Array.from({ length: PER }, (_, r) => PROMPTS[(c * PER + r * 7 + c) % PROMPTS.length]!));
-const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 const useIso = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 function Tile({ q, filled, n }: { q: string; filled: boolean; n: number }) {
@@ -70,7 +69,7 @@ function Tile({ q, filled, n }: { q: string; filled: boolean; n: number }) {
         <i className={`${s.pulse} ${s.pl}`} />
         <i className={`${s.pulse} ${s.pr}`} />
         <i className={`${s.pulse} ${s.pb}`} />
-        <span className={s.settle}>Settled</span>
+        <span className={s.settle}>{HERO.delivered}</span>
       </div>
     </div>
   );
@@ -127,7 +126,7 @@ function FocalTile() {
           <i className={`${s.fPulse} ${s.fpl}`} />
           <i className={`${s.fPulse} ${s.fpr}`} />
           <i className={`${s.fPulse} ${s.fpb}`} />
-          <span className={s.fSettle}>Settled</span>
+          <span className={s.fSettle}>{HERO.delivered}</span>
         </div>
       </div>
     </div>
@@ -145,25 +144,9 @@ function Copy() {
         <ActionPrimary href={PUBLISHER_URL}>
           {HERO.primary}
         </ActionPrimary>
-        <ActionText href={PRODUCT_VIDEO_URL}>Watch the demo</ActionText>
+        <ActionText href={ADVERTISER_URL}>{HERO.secondary}</ActionText>
       </div>
-      <p className={s.trio}>
-        {HERO.trio.map((t) => (
-          <a key={t.name} href={t.href} {...ext} data-tone={t.tone}>
-            {t.k ? <span>{t.k}</span> : null}
-            <b>{t.name}</b>
-            {t.rest}
-          </a>
-        ))}
-      </p>
-      <p className={s.status}>
-        <span>{HERO.status}</span>{" "}
-        {DEVNET_URL ? (
-          <a href={DEVNET_URL} {...ext}>
-            {HERO.devnet}
-          </a>
-        ) : null}
-      </p>
+      <p className={s.status}>{HERO.status}</p>
     </div>
   );
 }
@@ -414,7 +397,7 @@ export default function Hero() {
   const still = (v: MotionValue<number>, rest: number) => (pinned ? v : rest);
 
   return (
-    <section ref={ref} id="top" data-world="paper" className={s.hero} aria-labelledby="hero-title" data-pinned={pinned ? "" : undefined}>
+    <section ref={ref} id="top" className={s.hero} aria-labelledby="hero-title" data-pinned={pinned ? "" : undefined}>
       <div ref={stageRef} className={s.stage} onPointerMove={onMove}>
         <Wall wallRef={wallRef} plane={{ x: reduce ? 26 : rotX, y: reduce ? 7 : rotY, z: still(rotZ, -11) }} cam={{ z: still(camZ, 0), y: still(camY, 0) }} opacity={still(wallO, 1)} />
         <motion.div className={s.fog} style={{ opacity: still(fogO, 1) }} aria-hidden />

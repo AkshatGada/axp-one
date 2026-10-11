@@ -26,48 +26,142 @@ export const PRODUCT_VIDEO_URL = "/demo/";
 
 const bid = usdc(CACHED.bids[0]!.amount);
 
+/** Header: the two audiences, the flow and billing; ContextHint is a link out, nothing more. */
 export const NAV = [
-  { href: "/advertiser-dashboard/", label: "Advertiser dashboard" },
-  { href: "/publisher-demo/", label: "Publisher chat" },
-  { href: "/sdk/", label: "SDK" },
+  { href: "#advertisers", label: "For advertisers" },
+  { href: "#publishers", label: "For AI apps" },
+  { href: "#how", label: "How it works" },
+  { href: "#billing", label: "Billing" },
 ];
-export const HEADER = { chip: "Solana Devnet", cta: "Watch the demo" };
+export const HEADER = { chip: "", cta: "Try the test demo" };
+/** The only ContextHint mention on the homepage: a header link with this description. */
+export const CONTEXTHINT_LINK = { href: LIBRARY.url, label: "ContextHint", description: "The intelligence platform for running ChatGPT ads." };
 
 export const HERO = {
-  h1: "The advertising exchange for the agentic internet.",
+  h1: "The advertising network for the agentic internet.",
   accent: "agentic internet.",
-  lede: "Advertisers reach relevant AI conversations. Publishers earn through Solana payment channels.",
-  primary: "Try the live chat",
-  status: "Live on public Solana Devnet, test USDC.",
-  devnet: "Today’s payment proof",
-  trio: [
-    { k: "", name: "ContextHint", rest: ", the intelligence platform for ChatGPT ads", href: LIBRARY.url, tone: "ch" },
-    { k: "Decisions", name: "Jev", rest: "", href: JEV.url, tone: "jev" },
-    { k: "Settlement", name: "Solana", rest: "", href: SOLANA_URL, tone: "sol" },
-  ],
-  wallNote: "Questions observed by ContextHint. Bidding illustrative.",
+  lede: "Reach people when they ask a question your product can help answer. AI apps earn from clearly labelled ads beside their own answers.",
+  primary: "Try the test demo",
+  secondary: "Open the advertiser dashboard",
+  status: "A test workspace today: fictional advertisers, test USDC.",
+  wallNote: "Illustrative questions and bidding.",
   focalNote: "Product flow illustration.",
-  /** Shown inside the focal tile (the run's own records). */
+  /** Shown inside the focal tile. */
   appName: "Example chat",
   slotLine: "Answer, then one Sponsored slot",
   answerLabel: "Answer",
   gap: "Separate from the answer",
+  delivered: "Delivered",
 };
 
 /** The exploded card: six plates behind the one Sponsored card. Two to four words each. */
 export const STACK = {
-  line: "Behind one Sponsored card, a whole exchange.",
-  note: "Inside the exchange.",
+  line: "One labelled card. A whole network behind it.",
+  note: "What sits behind a placement.",
   plates: {
-    answer: { name: "Answer", note: "written without ads" },
+    answer: { name: "Answer", note: "the app's own" },
     card: { name: "Card", note: "labelled Sponsored" },
-    auction: { name: "Auction", note: "fixed auction rules" },
-    agents: { name: "Agents", note: "judged with Jev" },
-    evidence: { name: "Evidence", note: "from ContextHint" },
-    payment: { name: "Payment", note: "settled on Solana" },
+    auction: { name: "Auction", note: "fixed rules set the price" },
+    agents: { name: "Agents", note: "judge fit and intent" },
+    evidence: { name: "Context", note: "what each side declared" },
+    payment: { name: "Payment", note: "per accepted delivery" },
   },
   price: "Highest valid bid wins; winner pays its bid",
   ruledOut: "ruled out",
+};
+
+/** For advertisers: problem, product action, outcome. The specimen values are an illustration. */
+export const ADVERTISERS = {
+  label: "For advertisers",
+  h2: "Be there when the question is yours.",
+  problem: "People now ask an AI what to buy. There is no keyword list to bid on.",
+  points: [
+    { k: "Describe", v: "Your offer and the conversations you want to appear beside, in your own words." },
+    { k: "Approve", v: "The exact Sponsored text. Nothing runs until you approve it; an edit withdraws the approval." },
+    { k: "Limit", v: "A maximum bid and a total budget. Pause the campaign whenever you want." },
+    { k: "Inspect", v: "Every bid, skip and placement, each with its reason." },
+  ],
+  outcome: "An agent judges each question for fit and intent. Your limits decide what it may spend.",
+  action: "Open the advertiser dashboard",
+  sheet: {
+    title: "Campaign",
+    offerK: "Offer",
+    offer: "Hardware wallet for Ethereum and Solana self-custody",
+    wantK: "Conversations you want",
+    wants: ["Comparing hardware wallets", "Offline key storage"],
+    adK: "Sponsored text",
+    approved: "Approved by you",
+    limitsK: "Limits",
+    limits: [{ k: "Maximum bid", v: "0.004" }, { k: "Total budget", v: "0.020" }],
+    unit: "test USDC",
+    pause: "Pause",
+    running: "Running",
+  },
+  log: {
+    title: "What happened",
+    rows: [
+      { q: "Compare hardware wallets with offline key storage", state: "Placed", why: "Highest valid bid" },
+      { q: "Cheapest hardware wallet for Ethereum", state: "Bid", why: "Another advertiser bid higher" },
+      { q: "Best mobile-only wallet app", state: "Skipped", why: "Not a fit for the offer" },
+    ],
+  },
+  note: "Illustration with a fictional advertiser.",
+};
+
+/** For AI apps. The answer-independence line is scoped to our own integration. */
+export const PUBLISHERS = {
+  label: "For AI apps",
+  h2: "Earn beside the answer, not inside it.",
+  problem: "Answers cost money to serve. Ads written into the answer cost you trust.",
+  points: [
+    { k: "Keep your model", v: "Your app writes the answer. The ad request runs alongside it, on a separate path." },
+    { k: "Request and render", v: "Ask for an ad, then render one separate card with the Sponsored label." },
+    { k: "Restrict", v: "Declare what a placement requires and the categories you will not carry." },
+    { k: "Confirm", v: "Report that the labelled card was inserted. No qualifying bid means no ad." },
+  ],
+  outcome: "In our integration, the answer path receives no advertiser material.",
+  action: "Read the integration guide",
+  chat: "Try the example chat",
+  steps: [
+    { n: "1", k: "Request", code: "const ad = await axp.requestAd({ question, sessionId, turnId })" },
+    { n: "2", k: "Render", code: "const card = createSponsoredCard({ document, award: ad.award })" },
+    { n: "3", k: "Acknowledge", code: "await acknowledge({ node: card, award, deliveryToken })" },
+  ],
+  sdkNote: "Source SDK in the repository. Publisher keys are issued by the workspace operator.",
+  filled: "A qualifying bid",
+  empty: "No qualifying bid",
+  emptyLine: "No ad. The answer is unaffected.",
+};
+
+/** Trust and billing: what the product enforces, and what a receipt does and does not show. */
+export const BILLING = {
+  label: "Trust and billing",
+  h2: "Pay for delivered cards. See every charge.",
+  rules: [
+    { k: "Labelled", v: "Every placement carries the word Sponsored, in a card separate from the answer." },
+    { k: "Bounded", v: "A bid reserves budget. Only an accepted delivery becomes a charge." },
+    { k: "Returned", v: "When a campaign closes, the app is paid and the unused deposit comes back." },
+  ],
+  receipt: "A receipt confirms an accepted, labelled insertion. It does not measure human attention.", // claim-ok: limit
+  statement: {
+    title: "Campaign statement",
+    deposit: "Deposit",
+    delivered: "Accepted deliveries",
+    paid: "Paid to the app",
+    refunded: "Returned to you",
+    source: "A recorded test settlement, 7 October. Test USDC on Solana Devnet, no real value.", // claim-ok: limit
+  },
+  settle: "Charges add to one running total and settle in stablecoin when the campaign closes.",
+};
+
+/** What works in the test workspace, and directions that are not offered yet. */
+export const STATUS = {
+  label: "Where it stands",
+  h2: "Working today, in a test workspace.",
+  nowLabel: "Today",
+  now: ["Advertiser dashboard", "Integration guide and source SDK", "Example chat with a separate Sponsored card", "Per delivery accounting and test settlement"],
+  nextLabel: "Directions, not offered yet",
+  next: ["Accounts for real advertisers and apps", "More categories", "A packaged SDK", "Sponsored access and inference funding", "Discovery for agents"], // claim-ok: planned
 };
 
 /** How it works: one rail, seven stations, the exchange's rules as captions. */
@@ -214,10 +308,14 @@ export const VIDEO = {
 };
 
 export const CLOSING = {
-  h2: "See the exchange in action.",
-  primary: "Open advertiser dashboard",
-  chat: "Try the live chat",
-  video: "Watch the demo",
+  h2: "Start from your side.",
+  paths: [
+    { who: "Advertisers", line: "Create a campaign in the test workspace.", action: "Open the advertiser dashboard", href: ADVERTISER_URL },
+    { who: "AI apps", line: "Three steps: request, render, acknowledge.", action: "Read the integration guide", href: "/sdk/" },
+    { who: "Everyone", line: "Ask a question and inspect the placement.", action: "Try the example chat", href: PUBLISHER_URL },
+  ],
+  video: "Watch the walkthrough",
+  note: "The demo is a shared test workspace with fictional advertisers and test USDC.",
 };
 
 /** Verified local fixture workload, separate from the recorded Devnet execution. */
@@ -242,11 +340,13 @@ export const LEDGER_BENCHMARK = {
 };
 
 export const FOOTER = {
-  scope: ["Solana Devnet, test USDC. Not mainnet.", "Fictional advertisers. One shared demo workspace."], // claim-ok: limit
-  historical: "Original MVP: recorded technical evidence",
-  contexthint: "contexthint.com",
-  jev: { text: "Built with", name: JEV.name, url: JEV.url },
-  solana: "Settled on Solana",
+  scope: ["A shared test workspace. Fictional advertisers.", "Test USDC on Solana Devnet. Not mainnet."], // claim-ok: limit
+  evidenceLabel: "Technical evidence",
+  evidence: [
+    { label: "Original MVP and recorded runs", href: MVP_URL },
+    { label: "Benchmark methodology", href: "https://github.com/AkshatGada/axp-one/blob/main/BENCHMARK.md", external: true },
+  ],
+  proof: "A finalized test settlement",
   base: "axp.one",
 };
 

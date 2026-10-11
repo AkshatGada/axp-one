@@ -1,2 +1,33 @@
-/* The landing header uses the shared navigation without a release-mode badge. */
-.header :global(.px-header .px-chip){display:none}
+/* The landing header. The ContextHint link carries a short description, shown on hover and on
+   keyboard focus (and linked with aria-describedby); Escape dismisses it. */
+.ch { position: relative; display: inline-flex; }
+.out { margin-left: 4px; font-size: 12px; }
+.tip {
+  position: absolute;
+  z-index: 60;
+  top: calc(100% + 14px);
+  right: 0;
+  width: max-content;
+  max-width: min(320px, 70vw);
+  padding: 10px 14px;
+  border-radius: var(--px-r-md);
+  background: var(--ink);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  white-space: normal;
+  box-shadow: var(--px-shadow-3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 160ms var(--ease), transform 160ms var(--ease), visibility 0s linear 160ms;
+  pointer-events: none;
+}
+.tip::before { content: ""; position: absolute; right: 22px; top: -5px; width: 10px; height: 10px; background: var(--ink); transform: rotate(45deg); }
+.ch:hover .tip, .ch:focus-within .tip { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.ch[data-dismissed] .tip { opacity: 0; visibility: hidden; }
+.header[data-tone] .tip, .header[data-tone] .tip::before { background: #fff; color: var(--ink); }
+.mch { display: grid !important; gap: 2px; }
+.mch small { font-size: 13px; font-weight: 400; line-height: 1.35; opacity: 0.75; }
+@media (prefers-reduced-motion: reduce) { .tip { transition: none; transform: none; } }

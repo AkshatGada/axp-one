@@ -10,13 +10,13 @@ import { MOTION_SCRIPT } from "@/motion/MotionRoot";
 export const metadata: Metadata = {
   metadataBase: new URL("https://axp.one"),
   applicationName: "axp.one",
-  title: "axp.one: the advertising exchange for the agentic internet",
+  title: "axp.one: the advertising network for the agentic internet",
   description:
-    "The advertising exchange for the agentic internet. ContextHint data, Jev decisions and Solana payment channels connect advertisers with AI publishers.",
+    "The advertising network for the agentic internet. Advertisers reach people when they ask; AI apps earn from clearly labelled ads beside their own answers.",
   robots: { index: false, follow: false },
   openGraph: {
-    title: "axp.one: the advertising exchange for the agentic internet",
-    description: "ContextHint data. Jev decisions. Solana payment channels. Explore the advertiser dashboard, publisher SDK and live example chat.",
+    title: "axp.one: the advertising network for the agentic internet",
+    description: "Reach people when they ask. AI apps earn from clearly labelled ads. Explore the advertiser dashboard, integration guide and example chat in a test workspace.",
     images: [{ url: "/og.png", width: 1200, height: 630 }],
     type: "website",
   },
