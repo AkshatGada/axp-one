@@ -13,7 +13,8 @@ import {jevResponse} from '../ml/fixtures.mjs';
 const TOKEN='0x20c0000000000000000000000000000000000000';
 function fixture(t,options={}){
  const stateDir=mkdtempSync(join(tmpdir(),'axp-tempo-routing-')),calls=[],models=[],faults={};let service;
- const factory=network=>({exchange,signingEnabled})=>{
+ const factory=network=>({exchange,signingEnabled,...config})=>{
+  if(network==='tempo-testnet')options.onTempoConfig?.({exchange,signingEnabled,...config});
   exchange.db.exec('CREATE TABLE IF NOT EXISTS product_tempo_fixture(run TEXT NOT NULL,id TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(run,id))');
   const ids={payer:`offline-${network}-payer`,payee:`offline-${network}-payee`};
   const get=id=>exchange.get('product_tempo_fixture',id),put=p=>exchange.put('product_tempo_fixture',p.channelId,p);
@@ -28,7 +29,7 @@ function fixture(t,options={}){
    async reconcile(id){sync(id);return {status:'reconciled'};},projection:id=>{if(network==='tempo-testnet'&&faults.projection)throw Object.assign(Error('fixture projection unavailable'),{code:'tempo_projection_unavailable'});return get(id);},evidence:id=>{if(network==='tempo-testnet'&&faults.evidence)throw Object.assign(Error('fixture evidence unavailable'),{code:'tempo_evidence_unavailable'});const p=get(id);return p?{...p,canPayout:p.phase==='open',canClose:p.phase==='open',canSettle:p.phase==='open'}:null;},sync,dispose(){},
   };
  };
- const start=extra=>service=createProductService({stateDir,financialMode:'devnet',signingEnabled:true,publisherKey:'offline-publisher',tempoEnabled:true,tempoSigningEnabled:true,transport:async packet=>{models.push(packet.state.campaign.campaignId);return jevResponse(packet,3,3);},paymentOptions:{solanaFactory:factory('solana-devnet')},tempoFactory:factory('tempo-testnet'),...options,...extra});
+ const start=extra=>service=createProductService({stateDir,financialMode:'devnet',signingEnabled:true,publisherKey:'offline-publisher',tempoEnabled:true,tempoSigningEnabled:true,transport:async packet=>{models.push(packet.state.campaign.campaignId);return jevResponse(packet,3,3);},paymentOptions:{solanaFactory:factory('solana-devnet'),...options.solanaOptions},tempoFactory:factory('tempo-testnet'),...options,...extra});
  start();service.saveAccount({name:'Offline mixed-rail workspace',websiteURL:'https://example.test/'});
  t.after(()=>{service.close();rmSync(stateDir,{recursive:true,force:true});});
  return {get service(){return service;},calls,models,faults,stateDir,start(extra){service.close();return start(extra);},async campaign(network){const {id,label,exampleQuestion,...draft}=PRESETS[0];if(network)draft.settlementNetwork=network;const c=service.saveCampaign(draft).campaign;service.approve(c.id);return (await service.launch(c.id)).campaign;},ad(network,turn='one'){return service.opportunity({question:PRESETS[0].exampleQuestion,sessionId:'offline',turnId:turn,...(network?{settlementNetwork:network}:{})});},render(ad){return service.render(ad.award.id,{creativeHash:ad.award.creativeHash,domInserted:true,sponsoredLabelPresent:true},ad.deliveryToken);}};
@@ -39,6 +40,12 @@ test('mixed campaigns filter settlement rails before Jev and preserve legacy pub
  const ad=await f.ad('tempo-testnet');assert.equal(ad.award.campaignId,tempo.id);assert.equal(ad.award.payee,'offline-tempo-testnet-payee');assert.equal(ad.award.token,TOKEN);assert.equal(ad.award.settlementNetwork,'tempo-testnet');assert.deepEqual(f.models,[tempo.id]);assert.equal(ad.trace.candidates.find(c=>c.campaignId===sol.id).reason,'settlement_network_mismatch');
  const second=await f.ad(undefined,'two');assert.equal(second.award.campaignId,sol.id);assert.deepEqual(f.models,[tempo.id,sol.id]);assert.deepEqual(f.service.exchange.require('publishers','axp-demo-publisher'),publisher);
  assert.equal(f.service.exchange.all('publisher_settlement_routes').length,2);
+});
+
+test('Solana transport, preflight, identities and store never leak into the Tempo worker',async t=>{
+ let constructed=0,solanaCalls=0;
+ const f=fixture(t,{solanaOptions:{transportFactory:async()=>{solanaCalls++;throw Error('Solana transport must never handle Tempo');},preflight:async()=>{solanaCalls++;throw Error('Solana preflight must never handle Tempo');},identities:{payer:'dedicated-sol-payer',payee:'dedicated-sol-payee'},store:{rail:'solana-only'},lock:false},onTempoConfig:input=>{constructed++;for(const key of ['transportFactory','preflight','identities','store','minimumDiskBytes'])assert.equal(Object.hasOwn(input,key),false,`${key} belongs to Solana`);assert.equal(input.lock,false);assert.equal(typeof input.stateDir,'string');}});
+ const campaign=await f.campaign('tempo-testnet'),ad=await f.ad('tempo-testnet'),accepted=await f.render(ad);assert.equal(constructed,1);assert.equal(ad.award.campaignId,campaign.id);assert.equal(accepted.authorization.status,'authorized');assert.equal(accepted.charge.settlementNetwork,'tempo-testnet');assert.equal(f.calls.filter(c=>c==='tempo-testnet:voucher').length,1);assert.equal(solanaCalls,0);
 });
 
 test('Tempo receipts deduplicate vouchers, periodic payout stays active, close refunds only unused deposit',async t=>{
