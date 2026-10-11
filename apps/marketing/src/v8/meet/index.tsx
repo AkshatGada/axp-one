@@ -7,6 +7,7 @@ import { MEET } from "../copy";
 import { Scene } from "../kit";
 import Agreement from "./Agreement";
 import Doors from "./Doors";
+import Part from "../shell/Part";
 import s from "./meet.module.css";
 
 /** "Agents judge fit." and "Fixed rules decide money.", kept as the frozen sentence, split so
@@ -40,6 +41,7 @@ export default function Meet() {
           }
         />
       </Scene>
+      <Part />
       <Doors />
     </>
   );

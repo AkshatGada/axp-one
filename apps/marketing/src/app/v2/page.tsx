@@ -10,6 +10,8 @@ import Moment from "@/v8/moment";
 import Advertiser from "@/v8/advertiser";
 import Publisher from "@/v8/publisher";
 import Meet from "@/v8/meet";
+import Rise from "@/v8/shell/Rise";
+import Carry from "@/v8/shell/Carry";
 import { ADVERTISER_URL } from "@/data/copy";
 
 const NAV_V2 = [
@@ -25,9 +27,10 @@ export default function HomeV2() {
       <Header nav={NAV_V2} cta={{ href: ADVERTISER_URL, label: "Open the dashboard" }} />
       <main id="main" className="pg-main v8">
         <Hero v2 />
-        <Moment />
-        <Advertiser />
-        <Publisher />
+        <Rise><Moment /></Rise>
+        <Rise><Advertiser /></Rise>
+        <Carry />
+        <Rise lift={24}><Publisher /></Rise>
         <Meet />
       </main>
       <Footer />
