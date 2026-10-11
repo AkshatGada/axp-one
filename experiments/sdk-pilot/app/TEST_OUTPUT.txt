@@ -1,0 +1,72 @@
+Captured execution output, 2026-10-11, Node v25.5.0.
+Only terminal output from this integrator's completed runs is included below.
+Main's later combined run is separately attributed in INTEGRATION_REPORT.md.
+
+$ npm test
+> conversation-fixture-chat@1.0.0 test
+> node --test test/server.test.js test/browser.test.js
+
+✔ DOM adapter: native card retains exact copy, literal disclosure and approved destination (1.607084ms)
+✔ DOM adapter: rejects detached without posting (0.267541ms)
+✔ DOM adapter: rejects hidden card without posting (0.068084ms)
+✔ DOM adapter: rejects CSS-hidden card without posting (0.078375ms)
+✔ DOM adapter: rejects transparent card without posting (0.427042ms)
+✔ DOM adapter: rejects hidden label without posting (0.116333ms)
+✔ DOM adapter: rejects wrong disclosure without posting (0.079958ms)
+✔ DOM adapter: rejects rewritten copy without posting (0.074375ms)
+✔ DOM adapter: rejects wrong destination without posting (0.094208ms)
+✔ DOM adapter: rejects wrong award without posting (0.133875ms)
+✔ DOM adapter: rejects hidden ancestor without posting (0.110334ms)
+✔ DOM adapter: malformed fulfilled HTTP200 receipt is not cached; explicit retry succeeds once (0.193083ms)
+✔ DOM adapter: rejects wrong receipt award binding (0.101291ms)
+✔ DOM adapter: rejects wrong receipt creative binding (0.062542ms)
+✔ DOM adapter: rejects wrong receipt price binding (0.068584ms)
+✔ DOM adapter: rejects wrong receipt mode binding (0.043625ms)
+(node:36198) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ fixture source remains byte-for-byte baseline; provider contract is unchanged (3.05325ms)
+✔ sharing off and overlong consented question make zero ad requests; organic history server-owned (18.112875ms)
+✔ answer completes while ad remains blocked; no ad data enters subsequent organic input (6.169542ms)
+✔ same app request is admitted once; conflicting retry cannot mint another turn (6.191166ms)
+✔ no-fill and unavailable SDK transport fail open with independent answers (4.766166ms)
+✔ unknown/not-found/pending lookups stay explicit; recovery never requests another ad (7.483083ms)
+✔ session ownership, CSRF and bound render token reject unauthenticated/cross-turn observations (4.325458ms)
+✔ accepted receipt durable in app; repeated observation uses same charge; history award has no token (3.121167ms)
+✔ lost/malformed render response stays unknown; blind retry blocked until read-only lookup (3.476375ms)
+✔ recovery never renders terminal expired award (1.884166ms)
+✔ recovery never renders terminal failed award (2.154083ms)
+✔ known financial mode, creative and price are checked on recovery AND direct receipt (12.418667ms)
+✔ input/provider errors are safe; explicit asset allowlist excludes server, secrets and DB (8.050458ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 169.738625
+
+$ npm run test:http
+> conversation-fixture-chat@1.0.0 test:http
+> PILOT_HTTP_TEST=1 node --test --test-concurrency=1 test/http.test.js
+
+(node:36807) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual HTTP: lost opportunity response, APP process restart, original read-only lookup (no new purchase/decision/charge) (264.983417ms)
+ℹ {"scenario":"lost-opportunity + restart + lookup","before":{"opportunities":2,"decisions":1,"fixtureCalls":1,"awards":1,"charges":1,"receipts":1,"spendBaseUnits":"3000","paidProviderCalls":0,"networkPayments":0},"after":{"opportunities":3,"decisions":2,"fixtureCalls":2,"awards":2,"charges":1,"receipts":1,"spendBaseUnits":"3000","paidProviderCalls":0,"networkPayments":0},"turnId":"e0067760-30d7-46f6-9be2-221bfd1aef5e","awardId":"award-17b7796a-89f5-4f5d-a1ab-a39f24e0fbf3"}
+✔ actual HTTP: lost-receipt after accepted exchange response, APP process restart, original charge recovered (264.094833ms)
+ℹ {"scenario":"lost-receipt + restart + lookup","before":{"opportunities":3,"decisions":2,"fixtureCalls":2,"awards":2,"charges":1,"receipts":1,"spendBaseUnits":"3000","paidProviderCalls":0,"networkPayments":0},"after":{"opportunities":4,"decisions":3,"fixtureCalls":3,"awards":3,"charges":2,"receipts":2,"spendBaseUnits":"6000","paidProviderCalls":0,"networkPayments":0},"turnId":"d2e7559f-4b6a-4219-a3d9-65870b5c4831","awardId":"award-f008b572-9a20-4639-980f-1bf340be32f4","chargeId":"charge-award-f008b572-9a20-4639-980f-1bf340be32f4"}
+✔ actual HTTP: malformed-receipt after accepted exchange response, APP process restart, original charge recovered (275.7125ms)
+ℹ {"scenario":"malformed-receipt + restart + lookup","before":{"opportunities":4,"decisions":3,"fixtureCalls":3,"awards":3,"charges":2,"receipts":2,"spendBaseUnits":"6000","paidProviderCalls":0,"networkPayments":0},"after":{"opportunities":5,"decisions":4,"fixtureCalls":4,"awards":4,"charges":3,"receipts":3,"spendBaseUnits":"9000","paidProviderCalls":0,"networkPayments":0},"turnId":"aa8a3121-33d9-458b-a56d-6bdf60cd4847","awardId":"award-59bc69e2-820d-40c8-aab7-728a8a1299ce","chargeId":"charge-award-59bc69e2-820d-40c8-aab7-728a8a1299ce"}
+✔ actual HTTP: browser malformed HTTP200 response permits explicit retry of saved receipt, no extra charge (171.05825ms)
+ℹ {"scenario":"malformed browser HTTP200 + explicit same-receipt retry","before":{"opportunities":5,"decisions":4,"fixtureCalls":4,"awards":4,"charges":3,"receipts":3,"spendBaseUnits":"9000","paidProviderCalls":0,"networkPayments":0},"after":{"opportunities":6,"decisions":5,"fixtureCalls":5,"awards":5,"charges":4,"receipts":4,"spendBaseUnits":"12000","paidProviderCalls":0,"networkPayments":0},"chargeId":"charge-award-3d1a0e84-950e-4d8b-a1c5-5b1d105feb0e"}
+✔ actual HTTP: unrelated question no-fill, private routes/assets, no key or buyer context in public assets (165.026584ms)
+ℹ {"scenario":"sharing-off + no-fill + private assets","before":{"opportunities":6,"decisions":5,"fixtureCalls":5,"awards":5,"charges":4,"receipts":4,"spendBaseUnits":"12000","paidProviderCalls":0,"networkPayments":0},"after":{"opportunities":7,"decisions":5,"fixtureCalls":5,"awards":5,"charges":4,"receipts":4,"spendBaseUnits":"12000","paidProviderCalls":0,"networkPayments":0}}
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1227.113708

@@ -1,0 +1,34 @@
+{
+  "algorithm": "sha256",
+  "files": [
+    {
+      "path": "app-baseline-recheck.json",
+      "sha256": "3c5b93004b970baffa9303947db260040e8ac52b4cc31f4b4ea51bbf79d2786b"
+    },
+    {
+      "path": "app-baseline.json",
+      "sha256": "3c5b93004b970baffa9303947db260040e8ac52b4cc31f4b4ea51bbf79d2786b"
+    },
+    {
+      "path": "app-integrated.json",
+      "sha256": "6b84cbfc4f3fbc817b182b592f3d2ae49ab3a553af970ac2a7ab53e4bd7f6200"
+    },
+    {
+      "path": "browser-accepted.jpg",
+      "sha256": "6a9496f23d27f12905aeea8beae9996d31dcbe6ebc466913610b9c5728182dbd"
+    },
+    {
+      "path": "connected-evidence.json",
+      "sha256": "ffa98eb74737596ac5e681d35e8bb213c3f7fc4ebe27090efd1eefbc2a01489b"
+    },
+    {
+      "path": "roles.json",
+      "sha256": "16033484f62357d67d73b6ae7aac5784568c0ae1f8aa8005a10b0b0894bbb52f"
+    },
+    {
+      "path": "sdk-before.json",
+      "sha256": "0343724408029e509c60c0f3f62f89600d5b8c483cd05731bea1f4050ae94d6c"
+    }
+  ],
+  "treeHash": "cf72a3dce255484111827e4fc12c22f69b61594e37ef9e12476b99ad1eacd33b"
+}

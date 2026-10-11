@@ -1,0 +1,42 @@
+{
+  "algorithm": "sha256",
+  "files": [
+    {
+      "path": "answer-provider.js",
+      "sha256": "6cb835baead1b52b8534cac34ad36977cf7e9386e8d23eb0c5e32b87353ad73c"
+    },
+    {
+      "path": "package.json",
+      "sha256": "f1fa63ea553057fbd2620117dc0ad339a18c8ff809f171450e21f734bca9a606"
+    },
+    {
+      "path": "preview.png",
+      "sha256": "f2ff3f920ed177e7a6094867262a42a3b2fa1150fca3d9c9f94e435ae29db4cf"
+    },
+    {
+      "path": "public/app.js",
+      "sha256": "3dd23b2ce8555966fef82a80d6a76f1092b0029b92fa3f926532d48570a1464e"
+    },
+    {
+      "path": "public/index.html",
+      "sha256": "2ec063e6080d7456397af76f19c7f11fde9883723f812a19fe85e2fdf853018b"
+    },
+    {
+      "path": "public/style.css",
+      "sha256": "d0ce7a2ac69ee638967471f49393b86a94f6ad964f6e1b41b6b5522e5c946e36"
+    },
+    {
+      "path": "README.md",
+      "sha256": "46a254795b8794b27ae58c54d04b7efba1e6f320423bdcb7565e813ed859cfd8"
+    },
+    {
+      "path": "server.js",
+      "sha256": "8adaf42f7b54d4bf909f6a21c31f134665e2ecb4a6eb6e590947b79b2b2041d2"
+    },
+    {
+      "path": "test/server.test.js",
+      "sha256": "2cced6d60aa6a7eb21a1b4982a154e3df167ccdec9845aebdece58959d27e4aa"
+    }
+  ],
+  "treeHash": "c6ec20d35debdc331c9e427132fce156989489f968f2338041cfe380d7fc861a"
+}

@@ -89,7 +89,7 @@ test('render observation cannot supply price, recipient or arbitrary payload fie
 });
 test('explicit failure releases only the bound award; receipt errors are never reported as accepted', async () => {
   const calls = [];
-  const client = sdk(async (url, options) => {calls.push({url, options}); return response({status: 'failed'});});
+  const client = sdk(async (url, options) => {calls.push({url, options}); return response({status: 'failed', award: {id: award.id}});});
   await client.failRender({awardId: award.id, deliveryToken: 'token'});
   assert.equal(calls[0].url.endsWith('/awards/award-1/fail'), true);
   assert.deepEqual(JSON.parse(calls[0].options.body), {reason: 'render_failed'});

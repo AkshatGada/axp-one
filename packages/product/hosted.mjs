@@ -168,7 +168,7 @@ export async function createHostedProductAPI({config=process.env,root=repository
           service=createProductService({...serviceOptions,stateDir:dir,runId:answer?'product-organic-v1':mode==='devnet'?'product-devnet-v1':'product-workspace-v1',now,publisherKey:config.AXP_PUBLISHER_API_KEY??serviceOptions.publisherKey,apiKey:config.JEV_API_KEY||config.TYPESAFE_API_KEY,organicApiKey:config.DEEPSEEK_API_KEY,retriever,dailyModelCap:Number(config.AXP_PRODUCT_JEV_DAILY_CAP??50),demoMode:config.AXP_PRODUCT_DEMO_MODE==='1',financialMode:answer?'synthetic':mode,signingEnabled:!answer&&sign,walletPath:wallet?.path,paymentOptions:{...serviceOptions.paymentOptions,lock:false,minimumDiskBytes:32*1024**2},checkpoint});
           // Persist generated receipt identity / keys before they can be observed.
           if(req.method!=='GET'||!existsSync(join(dir,'exchange.sqlite')))await checkpoint('initialized');
-          const buffer=responseBuffer();await createProductAPI({service,csrf}).handler(request,buffer);
+          const buffer=responseBuffer();await createProductAPI({service,csrf,publisherOnly:config.AXP_PRODUCT_PUBLISHER_ONLY==='1'}).handler(request,buffer);
           // Quiesce and close SQLite (including WAL) before the final response save.
           service.close();service=null;return buffer;
         } finally {service?.close();wallet?.dispose();}

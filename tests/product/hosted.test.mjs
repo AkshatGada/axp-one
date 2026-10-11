@@ -82,8 +82,8 @@ test('cold retry of a lease-expired admitted model call never pays the provider 
  const f=await apiFixture(t,{now:()=>clock,serviceOptions:{transport:async packet=>{calls++;entered();await held;return jevResponse(packet,3,3);}}});
  await f.launch();const input={question:f.question,sessionId:'fixture',turnId:'uncertain'};
  const old=f.post('/demo/chat',input);await ready;clock+=240001;await f.restart();
- const retry=await f.post('/demo/chat',input);assert.equal(retry.status,200);assert.equal(retry.body.status,'no_fill');assert.equal(retry.body.trace.decisions[0].reasonCodes[0],'call_uncertain');assert.equal(calls,1);
- release();assert.equal((await old).status,503);assert.equal((await f.post('/demo/chat',input)).body.status,'no_fill');assert.equal(calls,1);
+ const retry=await f.post('/demo/chat',input);assert.equal(retry.status,409);assert.equal(retry.body.error,'opportunity_outcome_unknown');assert.equal(calls,1);
+ release();assert.equal((await old).status,503);assert.equal((await f.post('/demo/chat',input)).body.error,'opportunity_outcome_unknown');assert.equal(calls,1);
 });
 
 test('failed snapshot persistence prevents model calls and successful API output',async t=>{
@@ -193,6 +193,20 @@ test('unknown hosted native open survives cold start and only looks up persisted
  const f=await hostedNative(t,{loseOpenAck:true}),c=await f.launch();assert.equal(c.status,'opening');assert.equal(c.payment.reconciliationRequired,true);
  await f.restart();const recovered=await f.post(`/campaigns/${c.id}/reconcile`,{});assert.equal(recovered.body.campaign.status,'active');
  assert.equal(f.calls.filter(x=>x==='signOpen').length,1);assert.equal(f.calls.filter(x=>x==='submitOpen').length,1);assert.equal(f.calls.filter(x=>x==='lookupOpen').length,1);
+});
+
+test('authenticated hosted recovery reads saved native receipt across cold start without another authorization or snapshot write',async t=>{
+ const f=await hostedNative(t);await f.launch();
+ const input={question:f.question,sessionId:'lookup-native',turnId:'one'},ad=(await f.post('/demo/chat',input)).body;
+ const ack={creativeHash:ad.award.creativeHash,domInserted:true,sponsoredLabelPresent:true};
+ const accepted=(await f.post(`/demo/awards/${ad.award.id}/render`,ack,{'x-axp-delivery-token':ad.deliveryToken})).body;
+ const {dir}=await inspectSnapshot(t,f.kv,f.key),key=readFileSync(join(dir,'publisher-api-key'),'utf8').trim();
+ await f.restart();const writes=await f.kv.get(productStateKey('demo')),calls=[...f.calls];
+ const headers={'x-axp-publisher-key':key,'x-axp-delivery-token':ad.deliveryToken};
+ const recovered=await request(f.api,`/publisher/opportunities?sessionId=${input.sessionId}&turnId=${input.turnId}`,{headers});assert.equal(recovered.body.status,'resolved');assert.equal(recovered.body.result.award.id,ad.award.id);
+ const status=await request(f.api,`/awards/${ad.award.id}/status`,{headers});assert.equal(status.body.status,'accepted');assert.equal(status.body.result.charge.id,accepted.charge.id);
+ assert.deepEqual(f.calls,calls);assert.equal(await f.kv.get(productStateKey('demo')),writes);
+ assert.equal((await request(f.api,`/awards/${ad.award.id}/status`)).status,401);
 });
 
 test('organic migration preserves paid-call counters and completed answer identity from financial local run',async t=>{

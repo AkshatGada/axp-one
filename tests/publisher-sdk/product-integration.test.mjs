@@ -65,7 +65,7 @@ test('SDK talks to actual product API handler: new campaign → award → exact 
   const retried = await f.sdk.requestAd(input);
   assert.equal(retried.award.id, ad.award.id); assert.equal(retried.replayed, true); assert.equal(f.calls(), 1);
   const conflict = await f.sdk.requestAd({...input, question: 'A different user question'});
-  assert.deepEqual(conflict, {status: 'error', error: {code: 'http_error', status: 409}});
+  assert.deepEqual(conflict, {status: 'error', error: {code: 'turn_conflict', status: 409}});
 });
 test('connected SDK preserves campaign frequency, publisher restrictions, explicit render failure and expiry', async t => {
   const f = await fixture(t);

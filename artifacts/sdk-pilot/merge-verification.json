@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "sdk-merge-verification.v1",
+  "date": "2026-10-11",
+  "destinationBranch": "frontend",
+  "destinationBeforeMerge": "30999399907a96b992b0753188601685e35104f4",
+  "sdkSourceCommit": "e644640540a979e219fbe5442c6402068e884d85",
+  "marketingTree": "110c7e0da5b32aaa77f3bf31be16f53710e5910f",
+  "financialMode": "synthetic",
+  "execution": "fixture",
+  "paidProviderCalls": 0,
+  "walletOperations": 0,
+  "fixtureAdvertiserCalls": 1,
+  "organicFixtureCalls": 2,
+  "acceptedDeliveryCount": 1,
+  "chargeCount": 1,
+  "spendBaseUnits": "3000",
+  "authorizedBaseUnits": "3000",
+  "reservedBaseUnits": "0",
+  "settledBaseUnits": "0",
+  "remainingActiveCampaignBaseUnits": "5000",
+  "chargeId": "charge-award-34b0bff1-921a-448c-9453-a6636af2fbd2",
+  "browserChecks": {
+    "campaignPauseResume": true,
+    "duplicateAndSaveDraft": true,
+    "separateSponsoredCard": true,
+    "acceptedReceipt": true,
+    "receiptReplayNoAdditionalCharge": true,
+    "noFillAnswerPreserved": true,
+    "noFillNoAdditionalCharge": true,
+    "dashboardAccountingMatches": true,
+    "organicInputExcludesAdvertiserMaterial": true,
+    "finalConsoleWarningsAndErrors": 0
+  },
+  "tests": {
+    "repository": {"total": 513, "passed": 507, "skipped": 6, "failed": 0},
+    "productUI": {"total": 35, "passed": 35, "failed": 0},
+    "productOptimizedBuild": "passed"
+  },
+  "pushed": false,
+  "deployed": false
+}

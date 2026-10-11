@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "sdk-pilot-verification.v1",
+  "observedAt": "2026-10-11T15:47:22.431Z",
+  "financialMode": "synthetic",
+  "providerExecution": "fixture",
+  "paidProviderCalls": 0,
+  "walletOperations": 0,
+  "package": {
+    "path": "artifacts/sdk-pilot/axp-publisher-sdk-0.2.0.tgz",
+    "sha256": "31d8bcfa13ae12b316f847687b3fa0a3ebe05d6ccddfb5ced759e824efdae83b"
+  },
+  "groups": [
+    {
+      "name": "repository",
+      "exitCode": 0,
+      "tests": 513,
+      "passed": 502,
+      "failed": 0,
+      "skipped": 11
+    },
+    {
+      "name": "historical-cleanroom",
+      "exitCode": 0,
+      "tests": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "fresh-integration",
+      "exitCode": 0,
+      "tests": 34,
+      "passed": 34,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "freshAgentIntegrationPresent": true,
+  "httpEnabled": true,
+  "limitations": [
+    "No live-model or native-payment execution in this SDK exercise.",
+    "Insertion assertion is not viewability or human attention.",
+    "Fresh session is same model family, not unbiased external certification."
+  ]
+}

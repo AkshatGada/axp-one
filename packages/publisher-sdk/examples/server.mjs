@@ -25,6 +25,8 @@ const staticFiles = new Map([
   ['/app.mjs', ['text/javascript; charset=utf-8', new URL('./app.mjs', import.meta.url)]],
   ['/sdk/financial.mjs', ['text/javascript; charset=utf-8', new URL('../financial.mjs', import.meta.url)]],
   ['/sdk/browser.mjs', ['text/javascript; charset=utf-8', new URL('../browser.mjs', import.meta.url)]],
+  ['/sdk/receipt.mjs', ['text/javascript; charset=utf-8', new URL('../receipt.mjs', import.meta.url)]],
+  ['/sdk/errors.mjs', ['text/javascript; charset=utf-8', new URL('../errors.mjs', import.meta.url)]],
 ]);
 function json(res, status, body) {res.writeHead(status, {'content-type': 'application/json', 'cache-control': 'no-store', 'x-content-type-options': 'nosniff'}); res.end(JSON.stringify(body));}
 async function body(req) {

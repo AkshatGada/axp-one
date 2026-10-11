@@ -1,0 +1,39 @@
+:root {
+  color-scheme: light;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #202c36;
+  background: #f3f5f6;
+  line-height: 1.5;
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding: 24px; }
+.chat { max-width: 800px; margin: 0 auto; padding: 28px; background: #fff; border: 1px solid #d7dfe3; border-radius: 16px; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+h1 { font-size: 1.7rem; margin: 0 0 8px; }
+.badge { display: inline-block; margin: 0; padding: 4px 10px; border-radius: 6px; background: #f7edcf; color: #604911; font-size: .85rem; }
+.intro, #hint { color: #53616b; }
+#messages { height: min(45vh, 440px); min-height: 200px; overflow-y: auto; padding: 16px 6px; border-block: 1px solid #e1e6e9; overscroll-behavior: contain; }
+#empty { color: #53616b; text-align: center; padding-top: 40px; }
+.message { max-width: 90%; margin: 0 0 16px; padding: 12px 16px; border-radius: 12px; background: #eef2f4; overflow-wrap: anywhere; }
+.message.user { margin-left: auto; background: #e3f0fa; }
+.message h2 { font-size: .8rem; margin: 0 0 6px; color: #405260; }
+.message p { margin: 0; white-space: pre-wrap; }
+#status { min-height: 1.5em; margin: 10px 0; color: #53616b; }
+#error { color: #8a2020; background: #fff0f0; border: 1px solid #e7b3b3; border-radius: 6px; padding: 10px; }
+label { display: block; margin-bottom: 6px; font-weight: 600; }
+textarea { display: block; width: 100%; resize: vertical; min-height: 90px; max-height: 280px; padding: 12px; border: 1px solid #8b9aa5; border-radius: 8px; font: inherit; background: #fff; color: inherit; }
+.compose-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; }
+#hint { font-size: .8rem; }
+button { font: inherit; cursor: pointer; border: 1px solid #8b9aa5; border-radius: 8px; background: #fff; color: #202c36; padding: 9px 14px; flex-shrink: 0; }
+#send { color: #fff; background: #185b89; border-color: #185b89; }
+button:hover:not(:disabled) { filter: brightness(.92); }
+button:disabled { opacity: .6; cursor: not-allowed; }
+:focus-visible { outline: 3px solid #0878c4; outline-offset: 3px; }
+@media (max-width: 540px) {
+  body { padding: 10px; }
+  .chat { padding: 16px; }
+  header { align-items: flex-start; }
+  .compose-footer { align-items: flex-start; flex-direction: column; }
+  #send { width: 100%; }
+  .message { max-width: 96%; }
+}
