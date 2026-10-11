@@ -41,7 +41,7 @@ export function launchNotice(campaign: Campaign, native: boolean): string {
 }
 /** Construct a pinned Devnet explorer URL rather than trusting arbitrary response URLs. */
 export function transactionURL(signature?: string, network: SettlementNetwork = 'solana-devnet'): string | null {
-  if (network === 'tempo-testnet') return signature && /^0x[0-9a-fA-F]{64}$/.test(signature) ? `https://explore.tempo.xyz/tx/${signature}` : null;
+  if (network === 'tempo-testnet') return signature && /^0x[0-9a-fA-F]{64}$/.test(signature) ? `https://explore.testnet.tempo.xyz/tx/${signature}` : null;
   return signature && /^[1-9A-HJ-NP-Za-km-z]{64,88}$/.test(signature) ? `https://explorer.solana.com/tx/${signature}?cluster=devnet` : null;
 }
 export function paymentActions(campaign: Campaign): { closed: boolean; pending: boolean; uncertain: boolean; authorize: boolean; settle: boolean; payout: boolean; close: boolean; reconcile: boolean } {

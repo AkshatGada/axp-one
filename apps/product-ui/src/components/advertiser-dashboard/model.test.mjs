@@ -169,7 +169,7 @@ test('Tempo payout can keep a channel open; uncertainty and authorizations still
 
 test('Tempo Explorer links require transaction hashes and never accept a Solana signature', () => {
   const hash = '0x'+'a'.repeat(64);
-  assert.equal(transactionURL(hash, 'tempo-testnet'), `https://explore.tempo.xyz/tx/${hash}`);
+  assert.equal(transactionURL(hash, 'tempo-testnet'), `https://explore.testnet.tempo.xyz/tx/${hash}`);
   assert.equal(transactionURL('5'.repeat(88), 'tempo-testnet'), null);
   assert.equal(transactionURL(hash, 'solana-devnet'), null);
   for (const hash of ['https://example.com', 'javascript:alert(1)', '0x123']) assert.equal(transactionURL(hash,'tempo-testnet'),null);

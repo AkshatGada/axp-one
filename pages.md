@@ -3,6 +3,20 @@
 Canonical origin: **https://axp.one**. Updated 7 October 2026 (Singapore).
 Localhost URLs are for explicit development and replay instructions only.
 
+## Tempo release additions
+
+The optional Tempo rail reuses the existing dashboard, chat and SDK routes.
+Campaign review binds `settlementNetwork`; chat settings choose the publisher's
+auction rail and start a fresh session when changed. Currency summaries remain
+separate. Payment inspection shows Fund → Vouchers → Payout → Refund.
+`POST /api/product/campaigns/:id/payout` pays Tempo's earned delta while open;
+`POST /api/product/campaigns/:id/close` performs final payout/refund. Existing
+`/settle` retains final closure semantics. These actions preserve existing CSRF
+and publisher receipt authority. No read-only route funds or settles a channel.
+See [Tempo operation](docs/product/TEMPO.md) and [SDK setup](docs/product/SDK.md).
+Production continues on its configured rail until the release is merged and
+explicitly enabled; this branch uses an isolated hosted verification workspace.
+
 ## Live product
 
 | Route | What to show | Source |

@@ -12,7 +12,9 @@ function harness(options={}){
  const dir=mkdtempSync(join(tmpdir(),'axp-tempo-adapter-test-')),counts={signed:0,broadcast:0,vouchers:0,lookups:0},chain=new Map();let worker;
  const exchange=new Exchange({dbPath:join(dir,'exchange.sqlite'),runId:'tempo-test',mode:'devnet',networkState:id=>worker?.projection(id)});
  const key=generateKeyPairSync('ed25519');exchange.registerPublisher({publisherId:'publisher',publisherKeyId:'key',payee:ids.payee,publicKeyPEM:key.publicKey.export({format:'pem',type:'spki'})});
+ exchange.registerPublisherSettlementRoute({publisherId:'publisher',settlementNetwork:'tempo-testnet',payee:ids.payee,token:TEMPO_NETWORK.token,decimals:6,chainId:42431});
  const campaign={campaignId:'campaign',campaignVersionId:'campaign-v1',advertiserId:'advertiser',status:'active',allowedIntents:['product_tools'],destination:'global',declaredConstraints:['hardware_wallet'],creatives:[{creativeVersionId:'creative',approvedText:'A hardware wallet.',destinationURL:'https://example.com',fictional:true}],maxBidBaseUnits:'4000',budgetCapBaseUnits:'10000',channelId:'channel'};
+ campaign.settlementNetwork='tempo-testnet';
  exchange.createChannel({channelId:'channel',advertiserId:'advertiser',publisherId:'publisher',payee:ids.payee,depositBaseUnits:'50000',mode:'devnet',settlementNetwork:'tempo-testnet',token:TEMPO_NETWORK.token});exchange.createCampaign(campaign);
  const native={
   inspect:async()=>({compatible:true,chainId:42431,token:TEMPO_NETWORK.token,decimals:6}),

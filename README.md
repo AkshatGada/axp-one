@@ -13,6 +13,16 @@ This release uses **Solana Devnet and test USDC**, fictional demo advertisers an
 one bounded shared sponsor/workspace. DeepSeek powers the **example chat only**;
 it is not the exchange’s decision engine. Jev is the buying decision layer.
 
+The `codex/tempo-settlement` release adds an optional **Tempo Testnet / PathUSD**
+rail alongside Solana. Each campaign selects its settlement network; publishers
+request an auction on the same rail. Tempo uses canonical Sessions v2 cumulative
+vouchers and supports payout while the channel stays open, followed by final
+closure and refund. Solana keeps its existing final settlement behavior.
+See the [Tempo operator guide](docs/product/TEMPO.md),
+[SDK integration guide](docs/product/SDK.md) and
+[shared interface](docs/product/TEMPO_INTERFACE.md). This branch does not activate
+Tempo on production; Preview secrets and verification state are separate.
+
 ## Open the product
 
 | Surface | Link |

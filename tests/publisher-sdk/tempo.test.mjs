@@ -16,7 +16,7 @@ test('SDK forwards explicit rail without adding it to legacy requests or admitti
 test('financial presentation isolates currencies and validates reported chain evidence',()=>{
  const transaction={operation:'payout',status:'finalized',finality:'finalized',network:'tempo-testnet',chainId:42431,transactionHash:'0x'+'ab'.repeat(32)};
  assert.equal(moneyUnit('devnet'),'test USDC');assert.equal(moneyUnit('devnet',transaction),'test PathUSD');
- assert.match(nativeTransactionURL(transaction),/^https:\/\/explore\.tempo\.xyz\/tx\/0x/);
+ assert.match(nativeTransactionURL(transaction),/^https:\/\/explore\.testnet\.tempo\.xyz\/tx\/0x/);
  assert.equal(isFinalizedNativeTransaction(transaction),true);
  assert.equal(nativeTransactionURL(transaction,'solana-devnet'),undefined);
  assert.equal(nativeTransactionURL({...transaction,chainId:1}),undefined);
