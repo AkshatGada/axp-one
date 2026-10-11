@@ -32,6 +32,13 @@ export function amount(c: Campaign, kind: 'spend' | 'settled' | 'remaining'): st
 }
 export function count(c: Campaign, deliveries: Delivery[]): number { return Number(c.deliveryCount ?? c.metrics?.deliveryCount ?? deliveries.filter(d => d.campaignId === c.id).length); }
 export function campaignRows(state: ProductState): Campaign[] { return [...state.campaigns, ...(state.drafts ?? []).filter(d => !state.campaigns.some(c => c.id === d.id))]; }
+/** Legacy summary fields may cover only Solana; activity spans all settlement rails. */
+export function workspaceDeliveryCount(state: ProductState): number {
+  const summaries = state.summary?.bySettlementNetwork;
+  const counts = (['solana-devnet', 'tempo-testnet'] as const).map(network => summaries?.[network]?.deliveryCount);
+  if (counts.every(value => typeof value === 'number' && Number.isSafeInteger(value) && value >= 0)) return counts.reduce<number>((total, value) => total + value!, 0);
+  return campaignRows(state).reduce((total, campaign) => total + count(campaign, state.deliveries), 0);
+}
 export function date(value?: string): string { return value ? new Date(value).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Saved'; }
 export async function api<T>(path: string, csrf?: string, body?: unknown): Promise<T> {
   const response = await fetch(`/api/product${path}`, { method: body === undefined ? 'GET' : 'POST', credentials: 'same-origin', cache: 'no-store', headers: body === undefined ? undefined : { 'content-type': 'application/json', 'x-axp-csrf': csrf ?? '' }, body: body === undefined ? undefined : JSON.stringify(body) });

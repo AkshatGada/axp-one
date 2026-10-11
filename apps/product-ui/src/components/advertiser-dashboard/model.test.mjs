@@ -190,3 +190,19 @@ test('payment API outcomes cannot produce success copy for blocked, failed or un
   assert.match(paymentOperationProblem({status:'unknown'}), /uncertain.*Reconcile/);
   for (const operation of [undefined, {status:'finalized'}, {status:'authorized'}, {status:'reconciled'}, {status:'submitted'}]) assert.equal(paymentOperationProblem(operation), undefined);
 });
+
+import {workspaceDeliveryCount} from './model.ts';
+test('workspace accepted deliveries span both rails while legacy summary and currency totals stay separate', () => {
+  const solana = {...blankDraft(),id:'solana',status:'active',deliveryCount:1,spendBaseUnits:'1000',settledBaseUnits:'0'};
+  const tempo = {...blankDraft(),id:'tempo',status:'active',settlementNetwork:'tempo-testnet',deliveryCount:6,spendBaseUnits:'6000',settledBaseUnits:'3000'};
+  const draft = {...blankDraft(),id:'draft',status:'draft',deliveryCount:0};
+  const state = {campaigns:[solana,tempo,draft],drafts:[draft],deliveries:[],summary:{deliveryCount:1,spendBaseUnits:'1000',bySettlementNetwork:{'solana-devnet':{deliveryCount:1},'tempo-testnet':{deliveryCount:6}}}};
+  assert.equal(workspaceDeliveryCount(state),7);
+  assert.equal(state.summary.deliveryCount,1);
+  assert.deepEqual(networkTotals(campaignRows(state)).map(({network,spendBaseUnits,settledBaseUnits}) => ({network,spendBaseUnits,settledBaseUnits})), [
+    {network:'solana-devnet',spendBaseUnits:'1000',settledBaseUnits:'0'},
+    {network:'tempo-testnet',spendBaseUnits:'6000',settledBaseUnits:'3000'},
+  ]);
+  assert.equal(workspaceDeliveryCount({...state,summary:{deliveryCount:1}}),7);
+  assert.equal(workspaceDeliveryCount({...state,summary:{bySettlementNetwork:{'solana-devnet':{deliveryCount:1}}}}),7);
+});
