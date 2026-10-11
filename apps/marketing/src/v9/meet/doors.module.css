@@ -1,53 +1,83 @@
-/* Two doors. One ultramarine object on the paper: the wall returns in its head, a perforation
-   crosses it, and its two sides are the two doors. The same anatomy as the receipt above. */
+/* Two doors, V3. One ultramarine object on the paper: the wall returns, alive, in its head; a
+   perforation crosses it; its two sides are doors that open. The same anatomy as the receipt. */
 
 .close { position: relative; padding: 0 0 clamp(24px, 3vw, 48px); scroll-margin-top: 16px; }
-.panel { position: relative; overflow: hidden; border-radius: var(--v8-r-xl); background: var(--brand); color: #fff; box-shadow: var(--v8-shadow-brand); }
+.panel { --padx: clamp(28px, 4.4vw, 68px); position: relative; border-radius: var(--v8-r-xl); background: var(--brand); color: #fff; box-shadow: var(--v8-shadow-brand); isolation: isolate; }
 
 /* ---------- The head: the wall, and the line ---------- */
-.top { position: relative; display: grid; align-items: end; min-height: clamp(320px, 30vw, 440px); padding: clamp(28px, 4.4vw, 68px); }
-.h2 { position: relative; margin: 0; max-width: 8ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(52px, 8vw, 128px); line-height: .9; letter-spacing: -.04em; text-wrap: balance; }
+.top { position: relative; display: grid; align-items: end; min-height: clamp(320px, 31vw, 460px); padding: var(--padx); padding-bottom: clamp(44px, 4.6vw, 72px); border-radius: var(--v8-r-xl) var(--v8-r-xl) 0 0; overflow: hidden; }
+.h2 { position: relative; margin: 0; max-width: 8ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(54px, 8.8vw, 140px); line-height: .88; letter-spacing: -.042em; text-wrap: balance; }
 
 .wall {
   position: absolute; inset: 0; overflow: hidden; pointer-events: none; perspective: 1500px; perspective-origin: 62% 26%;
-  -webkit-mask-image: linear-gradient(96deg, transparent 22%, #000 55%), linear-gradient(180deg, #000 70%, transparent 100%);
-  mask-image: linear-gradient(96deg, transparent 22%, #000 55%), linear-gradient(180deg, #000 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(96deg, transparent 24%, #000 57%), linear-gradient(180deg, #000 70%, transparent 100%);
+  mask-image: linear-gradient(96deg, transparent 24%, #000 57%), linear-gradient(180deg, #000 70%, transparent 100%);
   -webkit-mask-composite: source-in; mask-composite: intersect;
 }
-.plane { position: absolute; left: 70%; top: calc(50% + 76px); display: flex; gap: 20px; width: max-content; transform: translate(-50%, -50%) rotateX(26deg) rotateY(7deg) rotateZ(-11deg) scale(.86); transform-origin: center; }
-.col { flex: none; display: grid; align-content: start; gap: 20px; width: 264px; }
-.col:nth-child(1) { transform: translateY(-64px); }
-.col:nth-child(2) { transform: translateY(38px); }
-.col:nth-child(3) { transform: translateY(-22px); }
-.col:nth-child(4) { transform: translateY(54px); }
-.col:nth-child(5) { transform: translateY(-40px); }
-.wall .dim { border-color: transparent; background: #fff; box-shadow: none; opacity: .2; }
-.wall .col:nth-child(even) .dim { opacity: .14; }
+.plane { position: absolute; left: 71%; top: calc(50% + 76px); display: flex; gap: 20px; width: max-content; transform: translate(-50%, -50%) rotateX(26deg) rotateY(7deg) rotateZ(-11deg) scale(.86); transform-origin: center; }
+.col { flex: none; display: grid; align-content: start; gap: 20px; width: 264px; transform: translateY(var(--y, 0px)); }
+.dimWrap { opacity: .2; transition: opacity 900ms var(--v8-ease); }
+.col:nth-child(even) .dimWrap { opacity: .14; }
+.wall .dim { border-color: transparent; background: #fff; box-shadow: none; }
 .wall .lit { border-color: transparent; background: #fff; box-shadow: 10px 10px 0 rgba(11, 20, 112, .42); color: var(--ink); }
+/* A tile resolving: it brightens and its slot fills. */
+.sl { position: relative; display: grid; }
+.fill { position: absolute; inset: 0; display: grid; align-content: center; justify-items: start; gap: 6px; padding: 0 12px; border: 1.5px solid var(--brand); border-radius: 10px; background: #fff; opacity: 0; transform: scale(.96); transition: opacity 500ms var(--v8-ease), transform 500ms var(--v8-ease-out); }
+.fill b { display: block; width: 58px; height: 13px; border-radius: 3px; background: var(--brand); }
+.fill em { display: block; width: 78%; height: 6px; border-radius: 3px; background: color-mix(in oklab, var(--ink) 62%, transparent); }
+.fill em + em { width: 52%; background: var(--silver); }
+.wall .dimWrap[data-res] { opacity: .78; transition-duration: 700ms; }
+.dimWrap[data-res] .fill { opacity: 1; transform: none; transition-delay: 420ms; }
 
 /* ---------- The perforation ---------- */
-.perf { position: relative; display: block; height: 0; border-top: 2px dashed rgba(255, 255, 255, .5); }
+.perf { position: relative; z-index: 2; display: block; height: 0; border-top: 2px dashed rgba(255, 255, 255, .5); }
 .perf::before, .perf::after { content: ""; position: absolute; top: -17px; width: 32px; height: 32px; border-radius: 50%; background: var(--paper); }
-.perf::before { left: -17px; }
-.perf::after { right: -17px; }
+.perf::before { left: -17px; clip-path: inset(0 0 0 50%); }
+.perf::after { right: -17px; clip-path: inset(0 50% 0 0); }
 
-/* ---------- The two sides ---------- */
+/* ---------- The two sides: doors that open ---------- */
 .doors { list-style: none; display: grid; grid-template-columns: 1fr 1fr; margin: 0; padding: 0; }
-.doors li { display: grid; }
-.doors li + li { border-left: 1px solid rgba(255, 255, 255, .34); }
-.door { display: grid; grid-template-rows: auto 1fr auto; gap: 14px; min-height: clamp(200px, 18vw, 260px); padding: clamp(26px, 3.2vw, 48px) clamp(28px, 4.4vw, 68px) clamp(28px, 3.4vw, 52px); color: #fff; text-decoration: none; transition: background var(--v8-d-1) var(--v8-ease), color var(--v8-d-1) var(--v8-ease); }
-.who { font-size: 15px; font-weight: 500; line-height: 1.3; letter-spacing: .01em; opacity: .86; }
-.line { max-width: 15ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(27px, 3vw, 46px); line-height: 1.04; letter-spacing: -.03em; text-wrap: balance; }
-.go { display: inline-flex; align-items: center; gap: 14px; align-self: end; margin-top: clamp(14px, 2vw, 30px); font-size: 17px; font-weight: 500; line-height: 1.3; }
-.go svg { transition: transform var(--v8-d-1) var(--v8-ease-out); }
-.door:hover, .panel .door:focus-visible { background: #fff; color: var(--brand-ink); }
-.door:hover .go svg, .door:focus-visible .go svg { transform: translateX(6px); }
-.panel .door:focus-visible { outline: 3px solid var(--ink); outline-offset: -9px; border-radius: 0; }
+.doors li { position: relative; display: grid; }
+.doors li + li::before { content: ""; position: absolute; z-index: 3; left: -.5px; top: 0; bottom: 0; width: 1px; background: rgba(255, 255, 255, .34); pointer-events: none; }
+.door { position: relative; display: grid; grid-template-rows: 1fr auto; gap: clamp(20px, 2.6vw, 40px); min-height: clamp(210px, 19vw, 280px); padding: clamp(46px, 4.4vw, 68px) var(--padx) clamp(28px, 3.2vw, 48px); color: #fff; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: color 160ms var(--v8-ease) 40ms; }
+/* The frame is what is behind the door; the leaf is the door. Hinges on the outer edges. */
+.frame { position: absolute; inset: 0; overflow: hidden; perspective: 1100px; perspective-origin: 0% 50%; background: transparent; transition: background 0s 560ms; }
+.leaf { position: absolute; inset: 0; background: var(--brand); transform-origin: left center; transition: transform 520ms var(--v8-ease); backface-visibility: hidden; }
+.leaf::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, var(--brand-ink)); opacity: 0; transition: opacity 520ms var(--v8-ease); }
+.doors li + li .leaf { transform-origin: right center; }
+.doors li + li .frame { perspective-origin: 100% 50%; }
+.doors li + li .leaf::after { background: linear-gradient(270deg, transparent, var(--brand-ink)); }
+.who, .line, .go { position: relative; }
+/* The label: a receipt half that has landed on the perforation. */
+.who { position: absolute; z-index: 4; left: var(--padx); top: -15px; height: 30px; padding: 0 12px; border-radius: 8px; background: var(--white); color: var(--ink); font-size: 13.5px; font-weight: 500; line-height: 30px; letter-spacing: .01em; box-shadow: 4px 4px 0 rgba(11, 20, 112, .38); transition: background 200ms var(--v8-ease), color 200ms var(--v8-ease), transform 320ms var(--v8-ease-out), box-shadow 200ms var(--v8-ease); }
+.line { align-self: start; max-width: 15ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(28px, 3.25vw, 50px); line-height: 1.02; letter-spacing: -.032em; text-wrap: balance; }
+.go { display: inline-flex; align-items: center; gap: 16px; justify-self: start; font-size: 17px; font-weight: 500; line-height: 1.3; }
+.go > span { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat; padding-bottom: 4px; transition: background-size 420ms var(--v8-ease-out); }
+.go svg { transition: transform 420ms var(--v8-ease-out); }
 
-.also { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; margin: 0; padding: 18px clamp(28px, 4.4vw, 68px) 20px; border-top: 1px solid rgba(255, 255, 255, .34); font-size: 15px; line-height: 1.4; color: rgba(255, 255, 255, .86); }
-.also a { color: #fff; font-weight: 500; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .6); text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
-.also a:hover { text-decoration-color: #fff; }
-.panel .also a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; border-radius: 4px; }
+/* Open: hover and keyboard focus. The leaf swings inward and light comes through. */
+.door:hover, .panel .door:focus-visible { color: var(--brand-ink); }
+.door:hover .frame, .door:focus-visible .frame { background: var(--white); transition-delay: 0s; }
+.door:hover .leaf, .door:focus-visible .leaf { transform: rotateY(83deg); transition: transform 680ms var(--v8-ease-out); }
+.doors li + li .door:hover .leaf, .doors li + li .door:focus-visible .leaf { transform: rotateY(-83deg); }
+.door:hover .leaf::after, .door:focus-visible .leaf::after { opacity: .5; }
+.door:hover .who, .door:focus-visible .who { background: var(--brand); color: #fff; transform: translateY(-2px); box-shadow: 4px 6px 0 rgba(11, 20, 112, .2); }
+.door:hover .go > span, .door:focus-visible .go > span { background-size: 100% 1.5px; }
+.door:hover .go svg, .door:focus-visible .go svg { transform: translateX(8px); }
+/* Pressed: pushed fully open. */
+.door:active .leaf { transform: rotateY(88deg); transition-duration: 120ms; }
+.doors li + li .door:active .leaf { transform: rotateY(-88deg); }
+.door:active .line, .door:active .go { transform: translateY(1px); }
+.door:active .who { transform: none; box-shadow: 2px 2px 0 rgba(11, 20, 112, .2); }
+/* The focus ring is drawn above the frame, in ink on the opened white. */
+.panel .door:focus-visible { outline: none; }
+.door:focus-visible::after { content: ""; position: absolute; z-index: 5; inset: 9px; border: 3px solid var(--ink); border-radius: 6px; pointer-events: none; }
+
+.also { position: relative; z-index: 3; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 26px; margin: 0; padding: 17px var(--padx) 19px; border-top: 1px solid rgba(255, 255, 255, .34); font-size: 15px; line-height: 1.4; }
+.also a { color: #fff; font-weight: 500; text-decoration: none; background: linear-gradient(rgba(255, 255, 255, .6), rgba(255, 255, 255, .6)) 0 100% / 100% 1.5px no-repeat; padding-bottom: 3px; transition: background-size 320ms var(--v8-ease-out), opacity 160ms var(--v8-ease); }
+.also a:hover { background-image: linear-gradient(#fff, #fff); background-size: 100% 3px; }
+.also a:active { opacity: .78; }
+.panel .also a:focus-visible { outline: 2px solid #fff; outline-offset: 5px; border-radius: 3px; }
 
 @media (max-width: 899px) {
   .top { min-height: 400px; }
@@ -55,24 +85,36 @@
   .plane { left: 60%; top: calc(26% + 104px); gap: 14px; transform: translate(-50%, -50%) rotateX(26deg) rotateY(7deg) rotateZ(-11deg) scale(.78); }
   .col { gap: 14px; }
   .doors { grid-template-columns: 1fr; }
-  .doors li + li { border-left: 0; border-top: 1px solid rgba(255, 255, 255, .34); }
-  .door { min-height: 0; gap: 12px; }
+  .doors li + li::before { left: 0; right: 0; top: -.5px; bottom: auto; width: auto; height: 1px; }
+  .doors li + li .leaf { transform-origin: left center; }
+  .doors li + li .frame { perspective-origin: 0% 50%; }
+  .doors li + li .leaf::after { background: linear-gradient(90deg, transparent, var(--brand-ink)); }
+  .doors li + li .door:hover .leaf, .doors li + li .door:focus-visible .leaf { transform: rotateY(83deg); }
+  .doors li + li .door:active .leaf { transform: rotateY(88deg); }
+  .door { min-height: 0; gap: 22px; padding-top: 44px; padding-bottom: 40px; }
   .line { max-width: 18ch; }
-  .go { margin-top: 12px; }
   .perf::before, .perf::after { top: -13px; width: 24px; height: 24px; }
   .perf::before { left: -13px; }
   .perf::after { right: -13px; }
 }
 
-/* ---------- Entrance: the wall settles back into place, then our tile comes up in it ---------- */
+/* ---------- Motion that is only motion (armed pages only) ---------- */
+/* Entrance, once: the wall settles into place, our tile comes up in it, the two labels land. */
 :global(html[data-px-motion="on"]) .panel:not([data-seen]) .plane { opacity: 0; }
 :global(html[data-px-motion="on"]) .panel:not([data-seen]) .lit { opacity: .15; box-shadow: none; }
-:global(html[data-px-motion="on"]) .panel[data-seen] .plane { animation: doorsWall 1100ms var(--v8-ease-out) both; }
+:global(html[data-px-motion="on"]) .panel:not([data-seen]) .who { opacity: 0; }
+:global(html[data-px-motion="on"]) .panel[data-seen] .plane { animation: doorsWall 1200ms var(--v8-ease-out) both; }
 :global(html[data-px-motion="on"]) .panel .lit { transition: opacity 600ms var(--v8-ease) 700ms, box-shadow 600ms var(--v8-ease) 700ms; }
+:global(html[data-px-motion="on"]) .panel[data-seen] .who { animation: doorsLand 620ms cubic-bezier(.3, 1.35, .5, 1) 260ms both; }
+:global(html[data-px-motion="on"]) .panel[data-seen] li + li .who { animation-delay: 400ms; }
+/* The wall sways, very slowly, while it is in view. */
+:global(html[data-px-motion="on"]) .col { animation: doorsSway var(--dur, 22s) ease-in-out infinite alternate; animation-play-state: paused; }
+:global(html[data-px-motion="on"]) .wall[data-live] .col { animation-play-state: running; }
 @keyframes doorsWall { from { opacity: 0; translate: 0 46px; } to { opacity: 1; translate: 0 0; } }
+@keyframes doorsLand { from { opacity: 0; translate: 0 -40px; } to { opacity: 1; translate: 0 0; } }
+@keyframes doorsSway { from { transform: translateY(var(--y, 0px)); } to { transform: translateY(calc(var(--y, 0px) + var(--amp, 24px))); } }
 
+:global(html:not([data-px-motion="on"])) .panel, :global(html:not([data-px-motion="on"])) .panel *, :global(html:not([data-px-motion="on"])) .panel *::before, :global(html:not([data-px-motion="on"])) .panel *::after { transition: none !important; animation: none !important; }
 @media (prefers-reduced-motion: reduce) {
-  .door, .go svg { transition: none; }
-  .panel .plane { animation: none !important; opacity: 1 !important; }
-  .panel .lit { transition: none !important; opacity: 1 !important; }
+  .panel, .panel *, .panel *::before, .panel *::after { transition: none !important; animation: none !important; }
 }

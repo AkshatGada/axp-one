@@ -1,39 +1,14 @@
-// Two doors. The page ends where it began: the wall of conversations returns, now quiet on the
-// page's one field of ultramarine, with the placement we followed back in its place among the
-// others. The panel repeats the receipt's anatomy at the largest scale on the page: a head, a
-// perforation, two sides. Existing routes only.
+// Two doors. The page ends where it began: the wall of conversations returns, alive but quiet, on
+// the page's one field of ultramarine, with the placement we followed back in its place. The panel
+// repeats the receipt's anatomy at the largest scale on the page: a head, a perforation, two
+// sides. The receipt's two halves, parted by the transition above, land as the two labels on the
+// perforation. Each side is a door that opens (a leaf swinging inward on its outer hinge) when it
+// is hovered, focused or pressed. Existing routes only.
 import { Arrow } from "@axp/design-system/prospectus";
-import { ADVERTISER, PLACEMENT } from "../story";
 import { DOORS } from "../copy";
-import { EmptySlot, SponsoredCard, Tile } from "../kit";
-import { WALL_QUESTIONS } from "./local";
 import Seen from "./Seen";
+import Wall from "./Wall";
 import s from "./doors.module.css";
-
-const COLS = 5;
-const PER = 4;
-/** Where the page's own placement sits in the wall: [column, row]. */
-const LIT: [number, number] = [2, 1];
-
-function Wall() {
-  return (
-    <div className={s.wall} aria-hidden>
-      <div className={s.plane}>
-        {Array.from({ length: COLS }, (_, c) => (
-          <div key={c} className={s.col}>
-            {Array.from({ length: PER }, (_, r) =>
-              c === LIT[0] && r === LIT[1] ? (
-                <Tile key={r} className={s.lit} question={PLACEMENT.moment.question} slot={<SponsoredCard size="s" name={ADVERTISER.name} text={ADVERTISER.creative} />} />
-              ) : (
-                <Tile key={r} className={s.dim} question={WALL_QUESTIONS[(c * PER + r) % WALL_QUESTIONS.length]!} slot={<EmptySlot />} />
-              ),
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 export default function Doors() {
   return (
@@ -49,10 +24,11 @@ export default function Doors() {
             {DOORS.doors.map((d) => (
               <li key={d.who}>
                 <a href={d.href} className={s.door}>
+                  <span className={s.frame} aria-hidden><i className={s.leaf} /></span>
                   <span className={s.who}>{d.who}</span>
                   <span className={s.line}>{d.line}</span>
                   <span className={s.go}>
-                    {d.action} <Arrow width={24} />
+                    <span>{d.action}</span> <Arrow width={26} />
                   </span>
                 </a>
               </li>

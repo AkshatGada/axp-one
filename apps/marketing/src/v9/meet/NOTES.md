@@ -1,98 +1,95 @@
-# D. Where they meet, and the doors: notes
+# D. Where they meet, and the doors: notes (V3)
+
+V2 lives untouched in `v8/meet/`. This folder is the V3 level-up.
 
 ## The idea
-Three things, one card, one receipt with two sides, two doors: 3 to 1 to 2.
+Three things, one card, one receipt with two sides, two doors: 3 to 1 to 2. Left is the
+advertiser's side and right is the app's side from the specimen down through the receipt, the
+transition (`Part`, the integrator's) and the doors.
 
-**Where they meet** is drawn as a literal meeting. The advertiser's limits arrive from the left, the
-app's rules from the right, the fit from above, and the Sponsored card sits where the three lines
-join. Left stays the advertiser's side and right the app's side all the way down the page: the
-receipt's left half is the advertiser's, its right half the app's, and the doors below keep the
-same order.
+## Where they meet: a small machine with one living part
+The scene plays before it is touched (motion on only):
 
-The difference between rules and judgment is carried by form, never by a caption:
+1. The advertiser's limits slide in from the left, the app's rules from the right. Each throws a
+   bolt: a solid ink rod with a jaw that lands on the card's edge with a hard stop.
+2. The fit settles in from above, softer and slower, and its dotted line starts to flow.
+3. Only then does the card come into being between the three, the ink line drops, and the receipt
+   is printed out from under the card in steps.
+4. After a beat the scene demonstrates itself once: a cue ring on the first switch, the bolt
+   withdraws, the card falls away, the slip is gone ("No card. The budget is used up." /
+   "No card, no receipt."), a hold, then it all returns.
+5. "Switch one off." appears and the reader has it.
 
-| | Fixed rule (advertiser's limits, app's rules) | Judgment (the fit) |
+Any pointer, key or focus inside the specimen ends the autoplay for good and puts everything in
+place. With motion off (or reduced motion, or no JS) it rests complete and agreed, and nothing
+plays. The live region speaks only after the reader has acted, never during the autoplay.
+
+Rule against judgment, felt and not captioned:
+
+| | Fixed rule | Judgment |
 |---|---|---|
-| Shape | ruled white plate, hard offset shadow | soft ultramarine shape, dotted edge |
-| Switch | square latch, ink | round, ultramarine |
-| Line into the card | solid ink | dotted ultramarine |
-| Word beside the switch | Within limits / Within rules | Judged a fit |
+| Body | white plate, ink border, 6px corners, hard offset shadow, a tick scale | tinted soft shape, dotted edge, breathing |
+| Arrives | 380ms, straight in, exact | 820ms, eased, from above |
+| Switch | square latch, 90ms linear | round, 460ms with a soft overshoot |
+| Line | ink rod with a jaw; thrown in 240ms with a hard stop, withdrawn in 150ms | dots flowing toward the card; fades over 620ms |
+| Pressed | plate drops 2px into its shadow | shape gives slightly |
 
-The line from the card down to the receipt is solid ink: money follows the fixed lines only. The
-frozen sentence `MEET.rule` is then set as the legend of the drawing: "Agents judge fit." under a
-dotted ultramarine stroke, "Fixed rules decide money." under a solid ink stroke.
+The card: appears by scaling up once the last line holds; when any line lets go it tilts and falls
+away. The receipt: printed (translate plus clip, eight steps) and never moved toward anyone.
 
-**The receipt** is a small slip under the card: a head (title and `RECEIPT.confirms`), a
-perforation with a bite out of each edge, then two halves (Advertiser: Charge accepted; AI app:
-Earnings accrued). No amounts, no bars, nothing moves toward anyone. `RECEIPT.later`,
-`RECEIPT.limit` and the proof link sit beside it as three plain lines.
+Words: `MEET.rule` is split and set where it applies. "Agents judge fit." sits beside the
+judgment in ultramarine under a flowing dotted stroke. "Fixed rules decide money." sits beside the
+receipt in ink under a rod with a jaw. The colophon beside the slip is three quiet lines:
+`RECEIPT.later`, `RECEIPT.limit`, and the proof link with its exact label.
 
-**Two doors** is the same anatomy at the largest scale on the page: one ultramarine object on the
-paper with a head, a perforation with bites, and two sides. The head holds the wall again (my own
-quiet echo built from the kit `Tile`, not the hero's `Wall`): white tiles at low contrast, and one
-tile fully lit, which is the page's own placement (the compare question with HarborKey's card),
-back in its place among the others. The two sides are the two doors.
+Narrow: one column, a chain. The rule sentence sits above the chain; each agreement hands its own
+line to the next thing down; the receipt is the last object before the colophon.
 
-## Interaction
-Each of the three agreements is a native checkbox with `role="switch"` (Tab to reach, Space to
-toggle; the whole plate is the label and click target). Releasing any one: its line breaks to a
-grey dash, the card is replaced by a dashed "No card." with a one-sentence reason, and the receipt
-becomes "No card, no receipt. Nothing is charged and nothing accrues." A visually hidden polite
-live region announces the same. Local state only; labelled with the kit `<Illustration />`.
-Server-rendered in the agreed state, so the still and no-JS views are complete.
+## Two doors
+- The wall is alive: each column sways a few tens of pixels over 19 to 27 seconds; the page's own
+  placement stays lit; every 4.4s another tile resolves (brightens, its slot fills, fades back).
+  Sway and resolving stop when the panel leaves the view and never run with motion off.
+- The two labels ("Advertisers", "AI apps") are white slips sitting on the perforation: the
+  receipt halves from the transition above, landed. They drop in when the panel enters.
+- Each side is a door. Hover or keyboard focus swings a leaf inward on its outer hinge (the two
+  open from the middle like double doors); the opening is white, the type turns deep ultramarine,
+  the label inverts, the action underlines and its arrow advances. Pressed pushes the leaf nearly
+  flat. Focus adds a 3px ink ring on the white, drawn above the leaf. The two quiet links take a
+  white ring on the ultramarine.
+- The perforation with a bite out of each edge is kept.
 
-## Motion
-Meet, once on entering: the three lines reach the card, the card lands, the ink line drops, the
-slip follows (about 1.5s in all, CSS animations gated on `html[data-px-motion="on"]`). State
-changes cross-fade. Doors, once on entering: the wall rises 46px into place and the lit tile
-comes up from dim. Nothing pins; with motion off or reduced motion everything is final.
+## Sizes (motion off, lab route)
+| Width | Meet opener plus specimen | Meet section with padding | Panel |
+|---|---|---|---|
+| 1440x900 | 739 | 998 | 783 |
+| 1280x800 | 655 | 885 | 703 |
+| 390x844 | 1159 | 1303 | 873 |
 
-## Decisions
-- Centred opener (`Scene center`): this scene is symmetrical by meaning, and the change from the
-  wide left-aligned chapters before it is the "small, precise" change of scale the plan asks for.
-- Own wall instead of `Wall` from v7/Hero: it lets one tile be the story's placement, renders on
-  the server, is static, and avoids pulling the hero module in again.
-- If `DEVNET_URL` is null the link and its label are both omitted (the label has no referent
-  without the link).
-- The "also" links live in the foot of the panel so the panel is the terminal object.
-- Door focus: the door turns white with a 3px ink ring inset; the two quiet links get a white ring.
-
-## Text density (owner feedback, second pass)
-Words are captions. Each agreement shows its name, a switch and a two or three word state. The
-frozen `MEET.agree[].v` sentences are not shown; they stay in the DOM as the switch's accessible
-description (`aria-describedby`). The receipt shows only its title, `RECEIPT.confirms` and the two
-states; `RECEIPT.advertiser.note` and `RECEIPT.app.note` are not shown (their content is already in
-`RECEIPT.later`). The "Fixed rule" / "A judgment" tags, the second void sentence and the "Or look
-first:" lead-in were removed. Rough words visible at rest on desktop: meet about 117 (opener 15,
-the Sponsored card itself 19, later/limit/proof 40, everything else 43); doors 36.
-
-Release and restore play in order: the line breaks, the card fades out, "No card." fades in, then
-the slip empties (and the reverse). The outgoing and incoming texts never overlap.
-
-Narrow layout: one column as a chain. Each agreement hands its own line (ink or dotted) to the
-next thing down, ending in the card, then the slip.
+Visible words at rest: meet 107 (opener 15, the Sponsored card itself 19, colophon 31, rule 7,
+everything else 35); doors 36.
 
 ## Local microcopy (meet/local.ts)
-"Switch one off." / "Within limits", "Outside limits" / "Within rules", "Outside rules" /
-"Judged a fit", "Judged not a fit" / "No card." / "The budget is used up." /
-"The app has no open slot." / "The moment does not suit the offer." / "No card, no receipt." /
-"All three agree. The card exists." (live region only) / twenty illustrative wall questions
-(dimmed, `aria-hidden`).
+Unchanged from V2: "Switch one off." / state words / three one-sentence reasons / "No card." /
+"No card, no receipt." / "All three agree. The card exists." (live region only) / twenty
+illustrative wall questions (dimmed, `aria-hidden`).
 
 ## Copy proposals
-- `MEET.agree[].v` could be cut to two or three words each if the integrator wants them visible
-  again (for example "Offer, words, budget", "Open slot, right category").
-- `RECEIPT.later` (19 words) is the longest line in the scene; a shorter frozen version would help.
+- None needed. `MEET.agree[].v` stays as each switch's accessible description, not shown.
 
 ## Kit requests
-- None required. A shared visually hidden class would save each builder writing one.
+- None required.
+
+## For the integrator
+- `Part`'s two halves are visible at rest directly under my receipt at 1280x800 and 1440x900, so
+  the two states read twice in one view before any scrolling. My receipt is 420px wide from
+  1273px up, the same as `Part`'s two 210px halves, so they line up; consider starting `Part`
+  invisible until the receipt has left the upper half of the view.
+- The door labels are left aligned in each door, not centred under where `Part`'s halves end.
 
 ## Known issues and things not checked
-- In the lab route the specimen is in view at load, so with motion on it can paint final for an
-  instant before the entrance plays (MotionRoot arms motion after hydration). Not expected on the
-  full page, where this scene is far below the fold; not verified there.
-- The wall's lit tile is tilted text and is decorative (`aria-hidden`); it is legible on desktop
-  but not meant to be read.
-- Not checked: the integrated /v2/ page, `pnpm build`, the full copy lint on built output, Safari
-  and Firefox, a real screen reader, touch hover behaviour on the doors.
-- If `DEVNET_URL` is null the link and its label are both omitted.
+- Lab route: with motion on, parts of the specimen are held invisible until the script arms
+  (to avoid a flash); if a script failed after motion was armed they would stay hidden.
+- On a touch screen the door's open state shows on tap, as hover does.
+- At 390 wide the specimen is 949px tall: taller than one phone screen by about 100px.
+- Not checked: the integrated /v3/ page, `pnpm build`, built-output copy lint, Safari, Firefox,
+  a real screen reader, real touch devices.

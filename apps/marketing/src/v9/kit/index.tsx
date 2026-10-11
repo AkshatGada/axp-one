@@ -7,9 +7,9 @@ export { default as useReduced } from "@/motion/useReduced";
 export { useInView } from "./useInView";
 
 /** A chapter. Opens on the customer's question; the body is the builder's bespoke scene. */
-export function Scene({ id, who, question, lede, center, tight, children, className }: { id: string; who?: string; question?: string; lede?: string; center?: boolean; tight?: boolean; children: ReactNode; className?: string }) {
+export function Scene({ id, who, question, lede, center, tight, children, className, labelledBy }: { id: string; who?: string; question?: string; lede?: string; center?: boolean; tight?: boolean; children: ReactNode; className?: string; /** The id of your own heading, when you compose the opener yourself. */ labelledBy?: string }) {
   return (
-    <section id={id} className={`${s.scene}${className ? ` ${className}` : ""}`} data-tight={tight ? "" : undefined} aria-labelledby={question ? `${id}-q` : undefined}>
+    <section id={id} className={`${s.scene}${className ? ` ${className}` : ""}`} data-tight={tight ? "" : undefined} aria-labelledby={question ? `${id}-q` : labelledBy}>
       <div className="px-wrap">
         {question ? (
           <header className={s.opener} data-center={center ? "" : undefined}>

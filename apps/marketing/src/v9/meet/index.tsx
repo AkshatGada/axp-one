@@ -11,7 +11,7 @@ import Part from "../shell/Part";
 import s from "./meet.module.css";
 
 /** "Agents judge fit." and "Fixed rules decide money.", kept as the frozen sentence, split so
- *  each half can carry the line it is drawn with in the specimen. */
+ *  each half can sit where it applies: one beside the judgment, one beside the money. */
 const [judge, ...fixed] = MEET.rule.split(/(?<=\.)\s+/);
 
 export default function Meet() {
@@ -19,16 +19,12 @@ export default function Meet() {
     <>
       <Scene id="network" who={MEET.who} question={MEET.question} lede={MEET.lede} center>
         <Agreement
-          rule={
-            <p className={s.ruleText}>
-              <span className={s.judge}><i aria-hidden />{judge}</span>{" "}
-              <span className={s.fixed}><i aria-hidden />{fixed.join(" ")}</span>
-            </p>
-          }
+          judge={<><i aria-hidden />{judge}</>}
+          fixed={<><i aria-hidden />{fixed.join(" ")}</>}
           notes={
             <>
               <p className={s.later}>{RECEIPT.later}</p>
-              <p className="v8-cap">{RECEIPT.limit}</p>
+              <p className={s.limit}>{RECEIPT.limit}</p>
               {DEVNET_URL ? (
                 <p className={s.proof}>
                   <a href={DEVNET_URL} target="_blank" rel="noopener noreferrer">

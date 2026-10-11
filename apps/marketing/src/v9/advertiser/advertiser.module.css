@@ -1,64 +1,80 @@
-/* 4. The advertiser's side: one scene on paper. Left, the advertiser's brief with its declared
-   capabilities as chips on the card's edge; centre, a small staggered field of conversation tiles
-   (the hero wall's atoms); right, the approved Sponsored card and the limits. Lines run from each
-   capability to the questions that ask for it and from the approved card to the slot it fills.
-   Ultramarine only, as objects. Nothing is hidden unless motion is armed. */
+/* 4. The advertiser's side (V3): the question and one picture, on paper. Left, the brief with its
+   declared capabilities as chips on the card's edge; centre, a staggered field of four
+   conversation tiles (the hero wall's atoms); right, the approved Sponsored card with its seal,
+   and the limits. Lines run from each capability to the questions that ask for it and from the
+   approved card to the slot it fills. Ultramarine only, as objects. Nothing is hidden unless
+   motion is armed. */
+
+/* The opener: the question and its one line share a row, so the picture starts sooner. */
+.opener { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 18px 56px; margin-bottom: clamp(30px, 3.6vw, 54px); }
+.openerQ { display: grid; gap: 14px; }
+.opener .q { max-width: 15ch; font-size: clamp(34px, 3.8vw, 60px); }
+.opener .lede { max-width: 25ch; padding-bottom: 5px; font-size: clamp(17px, 1.4vw, 21px); }
 
 .root { position: relative; }
-.stage { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.42fr) minmax(0, 1.08fr); column-gap: clamp(48px, 5.6vw, 92px); align-items: start; }
-.colA, .colB, .colC { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; min-width: 0; align-content: start; }
+.stage { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.42fr) minmax(0, 1.08fr); column-gap: clamp(48px, 5.6vw, 92px); align-items: stretch; }
+.colA, .colB, .colC { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; min-width: 0; align-content: start; }
+.colA { grid-template-rows: auto 1fr; align-content: stretch; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-
-/* Captions: who acts, and the beat. One line, no rules. */
-.caption { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; min-height: 24px; }
-.actor { font-size: 13px; font-weight: 500; letter-spacing: .02em; color: var(--steel); }
-.caption[data-agent] .actor { color: var(--brand-deep); }
-.colC .caption + .limits, .colC .words + .caption { margin-top: 0; }
-.colC { gap: 14px; }
-.colC .words + .caption { margin-top: 6px; }
+.caption { margin: 0; font-size: 13.5px; font-weight: 500; line-height: 1.3; letter-spacing: .01em; color: var(--steel); }
+.colC { gap: 12px; }
+.colC .words + .caption { margin-top: 8px; }
 
 /* ---------- The lines ---------- */
-.wires { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
-.wire path { fill: none; stroke: var(--brand); stroke-width: 1.6; stroke-linecap: round; transition: stroke var(--v8-d-2) var(--v8-ease), opacity var(--v8-d-2) var(--v8-ease), stroke-width var(--v8-d-1) var(--v8-ease); }
-.wire circle { fill: var(--brand); transition: fill var(--v8-d-2) var(--v8-ease), opacity var(--v8-d-2) var(--v8-ease); }
-.wire[data-state="off"] path { stroke: var(--steel); stroke-dasharray: 3 5; opacity: .75; }
-.wire[data-state="off"] circle { fill: var(--paper); stroke: var(--steel); stroke-width: 1.5; }
-.wire[data-state="soft"] path { stroke-dasharray: 3 5; }
-.wire[data-state="clash"] path { stroke: var(--ink); }
-.wire .stop { fill: var(--ink); }
-.wire .cross { stroke: #fff; stroke-width: 1.8; }
-.root[data-gate="paused"] .wire .cross { stroke: #fff; }
-.root[data-gate="paused"] .wire path { stroke: var(--silver); }
-.root[data-gate="paused"] .wire circle { fill: var(--silver); }
-.wires[data-hot] .wire:not([data-hot]) { opacity: .22; }
-.wire[data-hot] path { stroke-width: 2.4; }
-.pulse { fill: none; stroke: var(--brand); stroke-width: 5; stroke-linecap: round; stroke-dasharray: .3 1; stroke-dashoffset: .3; opacity: 0; }
-.pulse[data-tone="off"] { stroke: var(--ink); }
+.wires, .wiresTop { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.wires { z-index: 0; }
+.wiresTop { z-index: 3; }
+.line { fill: none; stroke: var(--brand); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 260ms var(--v8-ease), opacity 140ms var(--v8-ease), stroke-width 140ms var(--v8-ease); }
+.wire { transition: opacity 140ms var(--v8-ease); }
+.wire[data-state="off"] .line { stroke: var(--steel); stroke-width: 2.2; stroke-dasharray: .1 6.5; }
+.wire[data-state="soft"] .line { stroke-width: 2.2; stroke-dasharray: .1 6.5; }
+.wire[data-state="clash"] .line { stroke: var(--ink); }
+.wires[data-hot] .wire:not([data-hot]) { opacity: .16; }
+.wire[data-hot] .line { stroke-width: 3; }
+.wire[data-hot][data-state="off"] .line, .wire[data-hot][data-state="soft"] .line { stroke-width: 2.8; }
+.flow { fill: none; stroke: #fff; stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 3 11; opacity: .95; }
+.plug { transition: opacity 140ms var(--v8-ease); }
+.socket { fill: var(--brand); stroke: var(--white); stroke-width: 2; transform-box: fill-box; transform-origin: center; transition: transform 160ms var(--v8-ease-out), fill 260ms var(--v8-ease), stroke 260ms var(--v8-ease); }
+.plug[data-state="off"] .socket { fill: var(--white); stroke: var(--steel); stroke-width: 1.6; }
+.plug[data-state="soft"] .socket { fill: var(--white); stroke: var(--brand); stroke-width: 1.8; }
+.stop { fill: none; stroke: var(--ink); stroke-width: 3.5; stroke-linecap: round; transition: stroke 260ms var(--v8-ease); }
+.wiresTop[data-hot] .plug:not([data-hot]) { opacity: .2; }
+.plug[data-hot] .socket { transform: scale(1.4); }
+.root[data-gate="paused"] .line { stroke: var(--silver); }
+.root[data-gate="paused"] .socket { fill: var(--silver); stroke: var(--white); }
+.root[data-gate="paused"] .stop { stroke: var(--silver); }
+/* A pulse: a soft tail with a bright head, running the line once. */
+.pulse path { fill: none; stroke: var(--brand); stroke-linecap: round; opacity: 0; }
+.pulse[data-tone="off"] path { stroke: var(--ink); }
+.tail { stroke-width: 6; stroke-dasharray: .3 1.4; stroke-dashoffset: .3; }
+.headDot { stroke-width: 8; stroke-dasharray: .0001 2; stroke-dashoffset: 0; }
 
 /* ---------- 1. The brief ---------- */
-.brief { display: grid; gap: 14px; padding: 18px 0 14px 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--white); box-shadow: 7px 7px 0 rgba(14, 18, 32, .07); }
-.brief > :not(.caps) { margin-right: 20px; }
+.briefWrap { display: grid; min-height: 0; }
+.brief, .capsBlock { grid-area: 1 / 1; }
+.brief { display: grid; align-content: start; gap: 14px; padding: 18px 20px 242px; border: 1px solid var(--line); border-radius: 18px; background: var(--white); box-shadow: 7px 7px 0 rgba(14, 18, 32, .07); transition: filter 420ms var(--v8-ease), opacity 420ms var(--v8-ease); }
 .who { display: flex; align-items: center; gap: 10px; font-size: 16px; }
 .who b { font-weight: 500; }
 .badge { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: var(--ink); color: #fff; font-family: var(--font-display); font-size: 15px; font-weight: 500; }
-.offer { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(19px, 1.6vw, 23px); line-height: 1.2; letter-spacing: -.02em; text-wrap: balance; }
-.wantList { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; }
-.wantList li { justify-self: start; padding: 7px 10px; border-radius: 4px 12px 12px 12px; background: var(--mist); font-size: 13px; line-height: 1.3; }
+.offer { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 2vw, 29px); line-height: 1.14; letter-spacing: -.022em; text-wrap: balance; }
 
 /* Capabilities: a column of chips on the card's right edge, each the start of its lines. */
-.caps { display: grid; gap: 5px; justify-items: end; margin-right: -14px; }
-.cap { display: inline-flex; align-items: center; gap: 7px; min-height: 32px; padding: 0 14px 0 11px; border: 1.5px dashed var(--steel); border-radius: 999px; background: var(--white); color: var(--ink); font: inherit; font-size: 14.5px; font-weight: 500; line-height: 1; cursor: pointer; transition: background var(--v8-d-1) var(--v8-ease), color var(--v8-d-1) var(--v8-ease), border-color var(--v8-d-1) var(--v8-ease), box-shadow var(--v8-d-1) var(--v8-ease), transform var(--v8-d-1) var(--v8-ease); }
-.cap:hover { border-color: var(--brand); color: var(--brand-deep); }
-.cap[aria-pressed="true"] { border-style: solid; border-color: var(--brand); background: var(--brand); color: #fff; }
+.capsBlock { position: relative; align-self: end; justify-self: end; display: grid; gap: 6px; justify-items: end; margin: 0 -14px 12px 0; transition: filter 420ms var(--v8-ease), opacity 420ms var(--v8-ease); }
+.caps { display: grid; gap: 6px; justify-items: end; }
+.cap { position: relative; display: inline-flex; align-items: center; gap: 7px; min-height: 32px; padding: 0 14px 0 10px; border: 1.5px dashed var(--steel); border-radius: 999px; background: var(--white); color: var(--ink); font: inherit; font-size: 14.5px; font-weight: 500; line-height: 1; cursor: pointer; transition: background 180ms var(--v8-ease), color 180ms var(--v8-ease), border-color 180ms var(--v8-ease), box-shadow 180ms var(--v8-ease), transform 160ms var(--v8-ease-out); }
+.capIcon { display: grid; place-items: center; width: 14px; height: 14px; }
+.cap:hover { border-color: var(--brand); color: var(--brand-deep); transform: translateX(2px); }
+.cap[aria-pressed="true"] { border-style: solid; border-color: var(--brand); background: var(--brand); color: #fff; box-shadow: 3px 3px 0 var(--brand-wash); }
 .cap[aria-pressed="true"]:hover { border-color: var(--brand-deep); background: var(--brand-deep); color: #fff; }
 .cap[data-hot] { box-shadow: 0 0 0 3px var(--brand-wash), 0 0 0 4.5px var(--brand); }
-.cap:active { transform: scale(.96); }
+.cap:active { transform: scale(.95); }
 .root .cap:focus-visible { border-radius: 999px; }
-.hint { min-height: 20px; margin: -4px 20px 0 0; font-size: 13.5px; line-height: 1.45; color: var(--steel); text-align: right; }
+.cap::after { content: ""; position: absolute; inset: -5px; border: 2px solid var(--brand); border-radius: 999px; opacity: 0; pointer-events: none; }
+.hint { min-height: 20px; margin: 0 14px 0 0; font-size: 13.5px; line-height: 1.45; text-align: right; }
 .reset { padding: 0; border: 0; background: none; color: var(--brand-deep); font: inherit; font-weight: 500; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
 
 /* ---------- 2. The field ---------- */
-.field { --row: 73px; --gap: 16px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(5, var(--row)); gap: var(--gap); margin: 0; padding: 0; list-style: none; }
+.field { --row: 74px; --gap: 16px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(5, var(--row)); gap: var(--gap) 30px; margin: 0; padding: 0; list-style: none; transition: filter 420ms var(--v8-ease), opacity 420ms var(--v8-ease); }
 .item { position: relative; min-width: 0; }
 .item[data-tile="mobile"] { grid-column: 1; grid-row: 1 / span 2; }
 .item[data-tile="learn"] { grid-column: 1; grid-row: 3 / span 2; }
@@ -67,29 +83,32 @@
 .item .tile { height: 100%; grid-template-rows: auto 1fr auto; gap: 10px; padding: 12px 12px 13px; }
 .item .tile > p { max-width: 100%; font-size: 13.5px; }
 .item[data-verdict="held"] .tile { box-shadow: 0 0 0 rgba(14, 18, 32, 0); border-style: dashed; border-color: var(--silver); }
-.item[data-hot] .tile { border-color: var(--brand); }
+.item[data-hot] .tile { border-color: var(--brand); transform: translate(-1px, -1px); }
 .lines { display: grid; gap: 7px; align-content: start; padding-right: 8px; }
 .lines i { display: block; height: 7px; border-radius: 4px; background: var(--paper-2); }
 .lines i:nth-child(1) { width: 90%; }
 .lines i:nth-child(2) { width: 62%; }
 
 /* The slot is the verdict: the Sponsored card when it joined, otherwise a few words. */
-.slot { position: relative; display: grid; place-items: center; height: 40px; border: 1.5px dashed var(--silver); border-radius: 10px; transition: background var(--v8-d-1) var(--v8-ease), border-color var(--v8-d-1) var(--v8-ease); }
+.slot { position: relative; display: grid; place-items: center; height: 40px; border: 1.5px dashed var(--silver); border-radius: 10px; transition: background 200ms var(--v8-ease), border-color 200ms var(--v8-ease); }
 .slotWord { padding: 0 8px; font-size: 13px; font-weight: 500; line-height: 1.2; color: var(--ink); text-align: center; }
 .slot[data-verdict="may"] { border-color: var(--brand); background: var(--brand-wash); }
 .slot[data-verdict="may"] .slotWord { color: var(--brand-deep); }
 .slot[data-verdict="held"] .slotWord { color: var(--steel); }
-.miniCard { position: absolute; inset: -1.5px; display: flex; align-items: center; gap: 9px; padding: 0 11px; border: 1.5px solid var(--brand); border-radius: 10px; background: var(--white); box-shadow: 4px 4px 0 var(--brand-wash); font-size: 13.5px; opacity: 0; transform: translateY(8px) scale(.96); transition: opacity 300ms var(--v8-ease), transform 420ms var(--v8-ease-out); }
+.miniCard { position: absolute; inset: -1.5px; display: flex; align-items: center; gap: 9px; padding: 0 11px; border: 1.5px solid var(--brand); border-radius: 10px; background: var(--white); box-shadow: 4px 4px 0 var(--brand-wash); font-size: 13.5px; opacity: 0; transform: translateX(14px) scale(.96); transition: opacity 280ms var(--v8-ease), transform 460ms var(--v8-ease-out); }
 .miniCard[data-on] { opacity: 1; transform: none; }
-.miniCard b { font-weight: 500; }
-.miniCard i { flex: 1; min-width: 8px; height: 7px; border-radius: 4px; background: var(--paper-2); }
+.miniCard { overflow: hidden; }
+.miniCard b { flex: none; white-space: nowrap; font-weight: 500; }
+.miniCard i { flex: 1 1 0; min-width: 0; height: 7px; border-radius: 4px; background: var(--paper-2); }
 .miniTag { height: 18px; padding: 0 7px; border-radius: 4px; background: var(--brand); color: #fff; font-size: 11px; font-weight: 500; line-height: 18px; letter-spacing: .02em; }
 .flash { position: absolute; inset: -4px; border: 2px solid var(--brand); border-radius: 20px; opacity: 0; pointer-events: none; }
-.illus { justify-self: start; align-self: end; margin-top: calc(-1 * var(--row, 73px) + 6px); }
+.capsBlock .illusM { display: none; }
+.illus { justify-self: start; align-self: end; margin-top: calc(-1 * var(--row, 73px) + 2px); }
 
 /* ---------- 3. Words and limits ---------- */
-.words { display: grid; gap: 12px; }
-.cardWrap { display: grid; }
+.words { display: grid; gap: 10px; }
+.cardWrap { position: relative; display: grid; transition: filter 420ms var(--v8-ease), opacity 420ms var(--v8-ease); }
+.bigCard { box-shadow: 7px 7px 0 var(--brand-wash), var(--v8-shadow-brand); }
 .draft { display: grid; gap: 8px; padding: 14px 16px 15px; border: 2px dashed var(--steel); border-radius: 12px; background: var(--white); }
 .draftHead { display: flex; align-items: center; gap: 10px; }
 .draftTag { height: 20px; padding: 0 8px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px var(--ink); font-size: 12px; font-weight: 500; line-height: 20px; letter-spacing: .02em; }
@@ -97,110 +116,140 @@
 .draftText { margin: 0; font-size: 15px; line-height: 1.45; }
 .draftText del { color: var(--steel); text-decoration-thickness: 1.5px; }
 .draftText ins { padding: 1px 4px; border-radius: 4px; background: var(--brand-wash); color: var(--brand-deep); font-weight: 500; text-decoration: none; }
+/* The seal sits on the card's corner while the words are approved, and lifts off when one changes. */
+.seal { position: absolute; top: -15px; right: -13px; width: 38px; height: 38px; transition: transform 460ms cubic-bezier(.3, 1.55, .5, 1), opacity 180ms var(--v8-ease); }
+.seal:not([data-on]) { opacity: 0; transform: translate(10px, -18px) rotate(26deg) scale(.72); transition: transform 320ms var(--v8-ease), opacity 260ms var(--v8-ease); }
+.sealIn { display: grid; place-items: center; width: 100%; height: 100%; border-radius: 50%; background: var(--brand); color: #fff; box-shadow: 0 0 0 3px var(--paper), 3px 4px 0 3px rgba(14, 18, 32, .1); }
 .sealRow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px; min-height: 32px; }
-.seal { display: flex; align-items: center; gap: 7px; margin: 0; font-size: 13.5px; font-weight: 500; line-height: 1.3; color: var(--brand-deep); }
-.stamp { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--brand); color: #fff; }
-.seal[data-pending] { color: var(--ink); }
+.sealWord { margin: 0; font-size: 13.5px; font-weight: 500; line-height: 1.3; color: var(--brand-deep); }
+.sealWord[data-pending] { color: var(--ink); }
 .btns { display: flex; gap: 6px; }
-.btn { min-height: 32px; padding: 0 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--white); color: var(--ink); font: inherit; font-size: 13.5px; font-weight: 500; cursor: pointer; transition: border-color var(--v8-d-1) var(--v8-ease), background var(--v8-d-1) var(--v8-ease), color var(--v8-d-1) var(--v8-ease); }
-.btn:hover { border-color: var(--ink); }
+.btn { min-height: 32px; padding: 0 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--white); color: var(--ink); font: inherit; font-size: 13.5px; font-weight: 500; cursor: pointer; transition: border-color 180ms var(--v8-ease), background 180ms var(--v8-ease), color 180ms var(--v8-ease), transform 160ms var(--v8-ease-out); }
+.btn:hover { border-color: var(--ink); transform: translateY(-1px); }
+.btn:active { transform: scale(.96); }
 .btn[data-strong] { border-color: var(--ink); background: var(--ink); color: #fff; }
 .root .btn:focus-visible { border-radius: 999px; }
 
 .limits { display: grid; border: 1px solid var(--line); border-radius: 18px; background: var(--white); box-shadow: 7px 7px 0 rgba(14, 18, 32, .07); overflow: hidden; }
-.bounds { display: grid; gap: 3px; margin: 0; padding: 11px 16px 9px; }
+.bounds { display: grid; gap: 4px; margin: 0; padding: 11px 20px 9px 16px; }
 .bound { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; }
 .bound dt { order: 2; font-size: 13.5px; color: var(--steel); }
 .bound dd { order: 1; margin: 0; font-size: 13px; color: var(--steel); white-space: nowrap; }
 .bound dd b { margin-right: 2px; font-family: var(--font-display); font-weight: 400; font-size: 19px; letter-spacing: -.03em; color: var(--ink); font-variant-numeric: tabular-nums; }
-/* A bound: two end walls and the span between them. The ceiling is a fifth of the budget because
-   the story's settings are 0.004 and 0.020. Outlines only; nothing ever fills. */
-.rule { position: relative; flex: none; height: 12px; border-inline: 3px solid currentColor; transform-origin: left center; transition: color var(--v8-d-2) var(--v8-ease); }
+/* A bound: end walls and the span between them. The ceiling is a fifth of the budget because the
+   story's settings are 0.004 and 0.020, and the budget ends in a wall. Outlines only; nothing
+   ever fills. */
+.rule { position: relative; flex: none; height: 12px; border-inline: 3px solid currentColor; transform-origin: left center; transition: color 420ms var(--v8-ease); }
 .rule::before { content: ""; position: absolute; inset: 50% 0 auto; height: 2px; margin-top: -1px; background: currentColor; }
 .bound[data-k="ceiling"] .rule { order: 3; width: 20%; margin: 4px 80% 0 0; color: var(--brand); }
-.bound[data-k="budget"] .rule { order: 0; width: 100%; margin-bottom: 4px; color: var(--ink); }
+.bound[data-k="budget"] .rule { order: 0; width: 100%; margin-bottom: 5px; border-right: 0; color: var(--ink); }
+.wall { position: absolute; top: -6px; bottom: -6px; right: -4px; width: 7px; border-radius: 2px; background: currentColor; }
 .limits[data-paused] .rule { color: var(--silver); }
 .switch { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; min-height: 42px; padding: 0 16px; border: 0; border-top: 1px solid var(--v8-hair-soft); background: transparent; color: var(--ink); font: inherit; font-size: 15px; font-weight: 500; text-align: left; cursor: pointer; }
 .root .switch:focus-visible { outline-offset: -4px; border-radius: 14px; }
-.track { position: relative; flex: none; width: 44px; height: 24px; border-radius: 999px; background: var(--silver); transition: background var(--v8-d-1) var(--v8-ease); }
-.track i { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(14, 18, 32, .25); transition: transform 260ms var(--v8-ease-out); }
+.track { position: relative; flex: none; width: 44px; height: 24px; border-radius: 999px; background: var(--silver); transition: background 220ms var(--v8-ease); }
+.track i { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(14, 18, 32, .25); transition: transform 320ms cubic-bezier(.3, 1.4, .5, 1); }
+.switch:hover .track { box-shadow: 0 0 0 3px var(--brand-wash); }
 .switch[aria-checked="true"] .track { background: var(--brand); }
 .switch[aria-checked="true"] .track i { transform: translateX(20px); }
 .action { display: flex; margin-top: 2px; }
 .action :global(.px-action) { width: 100%; min-width: 0; gap: 12px; padding: 0 16px 0 18px; font-size: 16px; }
 
+/* Pause stills the whole picture: colour drains from everything the campaign touches. */
+.root[data-gate="paused"] :is(.brief, .capsBlock, .field, .cardWrap) { filter: grayscale(1); opacity: .78; }
+
 /* ---------- Motion (armed only) ----------
-   Entry, once, in story order: the brief and its declarations appear; the tiles arrive with empty
-   slots; a pulse runs each line from a declaration to its tile and the verdicts land; the approved
-   words are stamped, a pulse runs to the slot and the card arrives there; the bounds are drawn.
-   Each part waits --d ms. Fill is backwards only, so finished parts return to their own styles
-   and later state changes transition normally. A change made through a line waits for its pulse. */
-:global(html[data-px-motion="on"]) .root:not([data-seen]) :is(.in, .pop, .land, .rule, .wire, .miniCard) { opacity: 0; }
-:global(html[data-px-motion="on"]) .root[data-seen] .in { animation: rise 700ms var(--v8-ease-out) var(--d, 0ms) backwards; }
-:global(html[data-px-motion="on"]) .root[data-seen] .pop { animation: pop 440ms var(--v8-ease-out) var(--d, 0ms) backwards; }
-:global(html[data-px-motion="on"]) .root[data-seen] .land { animation: land 420ms var(--v8-ease-out) var(--d, 0ms) backwards; }
-:global(html[data-px-motion="on"]) .root[data-seen] .rule { animation: draw 620ms var(--v8-ease-out) var(--d, 0ms) backwards; }
-:global(html[data-px-motion="on"]) .root[data-seen] .wire { animation: fade 500ms var(--v8-ease) var(--d, 0ms) backwards; }
-:global(html[data-px-motion="on"]) .root[data-seen] .pulse[data-entry] { animation: travel 620ms var(--v8-ease) var(--d, 0ms) backwards; }
-:global(html[data-px-motion="on"]) .pulse:not([data-entry]) { animation: travel 700ms linear both; }
+   The performance, once, in story order: the brief and its declarations; the tiles with empty
+   slots; the lines, and a pulse along each live one; the verdicts; the seal; a pulse from the
+   approved card and the card arriving in its tile; the bounds and the wall. Each part waits
+   --d ms. Fill is backwards only, so finished parts return to their own styles and later state
+   changes transition normally. A change made through a line waits for its pulse to arrive. */
+:global(html[data-px-motion="on"]) .root:not([data-seen]) :is(.in, .pop, .land, .rule, .wire, .plug, .sealIn, .miniCard) { opacity: 0; }
+:global(html[data-px-motion="on"]) .root[data-seen] .in { animation: rise 760ms var(--v8-ease-out) var(--d, 0ms) backwards; }
+:global(html[data-px-motion="on"]) .root[data-seen] .pop { animation: pop 460ms var(--v8-ease-out) var(--d, 0ms) backwards; }
+:global(html[data-px-motion="on"]) .root[data-seen] .land { animation: land 440ms var(--v8-ease-out) var(--d, 0ms) backwards; }
+:global(html[data-px-motion="on"]) .root[data-seen] .rule { animation: draw 680ms var(--v8-ease-out) var(--d, 0ms) backwards; }
+:global(html[data-px-motion="on"]) .root[data-seen] :is(.wire, .plug) { animation: fade 520ms var(--v8-ease) var(--d, 0ms) backwards; }
+:global(html[data-px-motion="on"]) .root[data-seen] .sealIn { animation: stamp 560ms cubic-bezier(.3, 1.4, .5, 1) var(--d, 0ms) backwards; }
+:global(html[data-px-motion="on"]) .root[data-seen] .pulse[data-entry] .tail { animation: tail 900ms cubic-bezier(.45, 0, .2, 1) var(--d, 0ms) backwards; }
+:global(html[data-px-motion="on"]) .root[data-seen] .pulse[data-entry] .headDot { animation: head 900ms cubic-bezier(.45, 0, .2, 1) var(--d, 0ms) backwards; }
+:global(html[data-px-motion="on"]) .pulse:not([data-entry]) .tail { animation: tail 780ms cubic-bezier(.45, 0, .2, 1) both; }
+:global(html[data-px-motion="on"]) .pulse:not([data-entry]) .headDot { animation: head 780ms cubic-bezier(.45, 0, .2, 1) both; }
+:global(html[data-px-motion="on"]) .flow { animation: flow 700ms linear infinite; }
 /* Until its card lands, the joined tile is an ordinary tile and its slot is empty. */
 :global(html[data-px-motion="on"]) .root:not([data-resolved]) .item .tile { border-color: var(--line); box-shadow: 7px 7px 0 rgba(14, 18, 32, .07); }
-:global(html[data-px-motion="on"]) .root:not([data-resolved]) .miniCard { opacity: 0; transform: translateY(8px) scale(.96); }
-:global(html[data-px-motion="on"]) .root[data-touched] :is(.pop, .land, .wire) { animation-delay: 0ms; }
-:global(html[data-px-motion="on"]) .root[data-touched][data-via="wire"] .slotWord { animation-delay: 580ms; }
-:global(html[data-px-motion="on"]) .root[data-touched][data-via="wire"] :is(.slot, .item .tile) { transition-delay: 540ms; }
-:global(html[data-px-motion="on"]) .root[data-touched][data-via="wire"] .miniCard { transition-delay: 560ms; }
+:global(html[data-px-motion="on"]) .root:not([data-resolved]) .miniCard { opacity: 0; transform: translateX(14px) scale(.96); }
+:global(html[data-px-motion="on"]) .root[data-touched] :is(.pop, .land, .wire, .plug) { animation-delay: 0ms; }
 :global(html[data-px-motion="on"]) .flash { animation: ring 900ms var(--v8-ease) both; }
-:global(html[data-px-motion="on"]) .root[data-via="wire"] .flash { animation-delay: 540ms; }
+/* The demonstration presses the Bitcoin chip for the reader, then invites them to. */
+:global(html[data-px-motion="on"]) .cap[data-demo="press"]::after, :global(html[data-px-motion="on"]) .cap[data-demo="release"]::after { animation: tap 620ms var(--v8-ease-out) both; }
+:global(html[data-px-motion="on"]) .cap[data-demo="press"], :global(html[data-px-motion="on"]) .cap[data-demo="release"] { animation: press 420ms var(--v8-ease-out) both; }
+:global(html[data-px-motion="on"]) .cap[data-demo="invite"]::after { animation: tap 1400ms var(--v8-ease-out) 300ms 3 both; }
 @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 @keyframes pop { from { opacity: 0; transform: scale(.7); } 60% { opacity: 1; transform: scale(1.06); } to { opacity: 1; transform: none; } }
 @keyframes land { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes fade { from { opacity: 0; } }
 @keyframes draw { from { opacity: 1; transform: scaleX(0); } to { opacity: 1; transform: none; } }
-@keyframes travel { 0% { opacity: 1; stroke-dashoffset: .3; } 80% { opacity: 1; } 100% { opacity: 0; stroke-dashoffset: -1; } }
+@keyframes stamp { 0% { opacity: 0; transform: scale(1.9) rotate(-14deg); } 55% { opacity: 1; transform: scale(.92) rotate(0deg); } 100% { opacity: 1; transform: none; } }
+@keyframes tail { 0% { opacity: 0; stroke-dashoffset: .3; } 2% { opacity: .32; } 78% { opacity: .32; } 100% { opacity: 0; stroke-dashoffset: -1; } }
+@keyframes head { 0% { opacity: 0; stroke-dashoffset: 0; } 2% { opacity: 1; } 76% { opacity: 1; } 78% { opacity: 0; } 100% { opacity: 0; stroke-dashoffset: -1.3; } }
+@keyframes flow { to { stroke-dashoffset: -14; } }
 @keyframes ring { 0% { opacity: 0; transform: scale(.985); } 22% { opacity: 1; transform: none; } 100% { opacity: 0; } }
-:global(html:not([data-px-motion="on"])) .root :is(.cap, .slot, .miniCard, .track, .track i, .btn, .rule, .wire path, .wire circle) { transition: none; }
+@keyframes tap { 0% { opacity: .9; transform: scale(.92); } 100% { opacity: 0; transform: scale(1.28); } }
+@keyframes press { 0% { transform: none; } 35% { transform: scale(.93); } 100% { transform: none; } }
+:global(html:not([data-px-motion="on"])) .root :is(.cap, .slot, .miniCard, .seal, .track, .track i, .btn, .rule, .line, .socket, .wire, .plug, .brief, .capsBlock, .field, .cardWrap) { transition: none; }
 @media (prefers-reduced-motion: reduce) {
-  .root :is(.cap, .slot, .miniCard, .track, .track i, .btn, .rule, .wire path, .wire circle) { transition: none; }
+  .root :is(.cap, .slot, .miniCard, .seal, .track, .track i, .btn, .rule, .line, .socket, .wire, .plug, .brief, .capsBlock, .field, .cardWrap) { transition: none; }
 }
 
 /* ---------- Narrower ---------- */
 /* Two zones: the brief wired to the field on top; words, limits and the action in a row below. */
 @media (max-width: 1239px) {
-  .stage { grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); row-gap: 36px; }
-  .colC { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 32px; }
+  .stage { grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); row-gap: 32px; }
+  .colC { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 40px; }
   .colC > .caption:nth-of-type(1), .colC > .words { grid-column: 1; }
   .colC > .caption:nth-of-type(2) { grid-column: 2; grid-row: 1; margin-top: 0; }
   .colC > .limits { grid-column: 2; grid-row: 2; align-self: start; }
   .colC > .action { grid-column: 1 / -1; }
   .action :global(.px-action) { width: auto; gap: 44px; padding: 0 20px 0 24px; font-size: 17px; }
 }
-/* One column. The capabilities sit directly above the field, so a tap and the tile it turns are
-   in the same view; there is no room for lines, so only the pulse travels. */
+/* One column of story, two of picture: the chips stand beside the tiles, so the lines are real on
+   a phone too and a tap and the tile it turns share a view. The joined tile sits last, directly
+   over the approved card, and a short riser joins them. */
 @media (max-width: 759px) {
-  .stage { grid-template-columns: minmax(0, 1fr); row-gap: 22px; }
-  .colC { grid-column: 1; grid-template-columns: minmax(0, 1fr); }
+  .opener { grid-template-columns: minmax(0, 1fr); margin-bottom: 26px; }
+  .opener .lede { max-width: 30ch; padding-bottom: 0; }
+  .stage { grid-template-columns: auto minmax(0, 1fr); column-gap: 36px; row-gap: 12px; align-items: start; }
+  .colA, .briefWrap { display: contents; }
+  .colA > .caption { grid-column: 1 / -1; }
+  .brief { grid-area: auto; grid-column: 1 / -1; padding: 14px 16px 16px; gap: 10px; }
+  .offer { font-size: 19px; }
+  .capsBlock { grid-area: auto; grid-column: 1; grid-row: 3; align-self: stretch; justify-self: stretch; grid-template-rows: auto 1fr auto auto; justify-items: stretch; margin: 0; }
+  .capsBlock .illusM { display: inline-flex; justify-self: start; padding-top: 4px; }
+  .caps { gap: 9px; justify-items: stretch; grid-row: 3; }
+  .cap { min-height: 40px; padding: 0 12px 0 9px; font-size: 13.5px; gap: 5px; }
+  .cap:hover { transform: none; }
+  .hint { margin: 0; text-align: left; grid-row: 4; }
+  .colB { grid-column: 2; grid-row: 3; }
+  .colC { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); margin-top: 14px; }
   .colC > .caption:nth-of-type(2), .colC > .limits { grid-column: 1; grid-row: auto; }
-  .colC > .caption:nth-of-type(2) { margin-top: 10px; }
-  .wires { z-index: 2; }
-  .brief { gap: 12px; padding: 16px; }
-  .brief > :not(.caps) { margin-right: 0; }
-  .wantList { display: flex; flex-wrap: wrap; }
-  .wantList li { font-size: 13px; padding: 6px 10px; }
-  .caps { display: flex; flex-wrap: wrap; justify-items: start; margin-right: 0; }
-  .cap { min-height: 40px; }
-  .caps { gap: 8px; }
-  .hint { margin: -2px 0 0; text-align: left; }
-  .field { grid-template-rows: none; grid-auto-rows: auto; gap: 10px; }
-  .item[data-tile] { grid-column: auto; grid-row: auto; }
-  .item .tile { padding: 10px 10px 11px; gap: 8px; }
-  .item .tile > p { font-size: 13px; }
+  .colC > .caption:nth-of-type(2) { margin-top: 8px; }
+  .field { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-auto-rows: auto; gap: 10px; }
+  .item[data-tile] { grid-column: 1; grid-row: auto; }
+  .item[data-tile="mobile"] { order: 1; }
+  .item[data-tile="learn"] { order: 2; }
+  .item[data-tile="bitcoin"] { order: 3; }
+  .item[data-tile="compare"] { order: 4; }
+  .item .tile { grid-template-rows: auto auto; padding: 10px 10px 11px; gap: 8px; }
+  .item .tile > p { font-size: 13px; padding: 7px 10px; }
   .lines { display: none; }
-  .miniCard { gap: 6px; padding: 0 8px; font-size: 12.5px; }
-  .miniCard i { display: none; }
+  .slot { height: 36px; }
+  .slotWord { font-size: 12.5px; padding: 0 4px; }
+  .miniCard { gap: 5px; padding: 0 7px; font-size: 12px; }
+  .miniCard b { display: none; }
   .miniTag { padding: 0 5px; font-size: 10px; }
-  .item .tile { grid-template-rows: 1fr auto; }
-  .illus { margin-top: 0; }
-  .btn { min-height: 40px; }
+  .colB .illus { display: none; }
+  .seal { top: -14px; right: 10px; }
+  .btn { min-height: 40px; padding: 0 16px; }
   .action :global(.px-action) { width: 100%; gap: 14px; padding: 0 16px 0 18px; }
 }

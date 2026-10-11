@@ -14,10 +14,11 @@ const seg = (v: number, a: number, b: number) => Math.min(1, Math.max(0, (v - a)
 export default function Part() {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReduced();
-  const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start 80%", "end 45%"] });
+  const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start 52%", "end 28%"] });
   const left = useTransform(p, (v) => `${-22 * io(v)}vw`);
   const right = useTransform(p, (v) => `${22 * io(v)}vw`);
-  const opacity = useTransform(p, (v) => seg(v, 0, 0.15) * (1 - seg(v, 0.78, 1)));
+  // Invisible until the receipt above has scrolled up, so its two states are never read twice.
+  const opacity = useTransform(p, (v) => seg(v, 0.04, 0.22) * (1 - seg(v, 0.78, 1)));
   return (
     <div ref={ref} className={s.part} aria-hidden>
       <motion.div className={s.half} data-side="l" style={reduce ? undefined : { x: left, opacity }}>

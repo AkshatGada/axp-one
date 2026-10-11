@@ -1,83 +1,84 @@
-# Scene A, "The moment": builder notes
+# Scene A, "The moment" (V3): builder notes
 
-Status: revision round 1 done (length, mobile cause and effect, alignment, and the owner's
-"visual first, far less text"). Files: `index.tsx`, `moment.module.css`, this file.
+Status: V3 built in `v9/moment/`. Files: `index.tsx`, `moment.module.css`, this file.
+V2 (`v8/moment/`) was not touched.
 
 ## Idea
-Four nearby questions on one topic, and one reply at human size. The picture carries it.
+The scene performs once, then hands over. Four nearby questions sit beside one reply, and
+HarborKey's own card is a single persistent object with two places: seated in the reply's slot,
+or held back outside it (tilted, lifted, hanging off the reply's lower corner).
 
-- Left of the specimen: the four questions as chat bubbles. They are the control (a radio group).
-  Under each: one word for the person (Choosing or Learning) and a small slot glyph with a name
-  (HarborKey, ClearVault, No ad, ColdNest). That row is the whole story as a still.
-- In the chosen bubble the words that decide light up: blue with a blue underline where
-  HarborKey offers it, grey where it does not. "hardware wallet" lights blue and "only needs to
-  hold Bitcoin" grey in the same sentence, which is the point of the scene in one glance.
-- Right: the reply. Neutral answer lines (identical in every state) and one slot. The slot is a
-  dashed outline that is always there; HarborKey's blue card lands on it, or another advertiser's
-  neutral card does, or it stays empty with `MOMENT.noAd`. The tile is blue edged only when the
-  card is HarborKey's. A hairline runs from the chosen bubble to the reply.
-- One line of why under the reply (the story's `reason`). Nothing else is captioned.
+For each question, in order: the bubble is chosen and a hairline runs to the reply; the deciding
+words light (blue and underlined where HarborKey offers it, grey where it does not); the answer
+writes itself as lines; the slot resolves.
+- HarborKey fits: its card drops into the slot with a small overshoot, the reply's edge turns
+  blue and a ring passes once.
+- Another advertiser is placed: a neutral card slides in from the side, flat, while HarborKey's
+  card stays held outside.
+- Learning, not choosing: nothing arrives. The slot stays an empty well with `MOMENT.noAd`.
+A small pill on HarborKey's card says why in a few words, wherever the card is.
 
-## What changed in revision round 1
-- Removed: the premise sentence, the question repeated inside the tile, both margin notes and
-  their labels ("This person is", "The question needs", "Beside the answer" as visible text),
-  the "Answer" label, the card's domain line, "Another advertiser", and the "'s card" suffixes.
-- Length: on a laptop the kit opener sits beside the specimen (question left, picture right) and
-  the section has its own shorter padding. Section height including padding: 637px at 1440x900,
-  641px at 1280x800 (was 1095 and 1052). Heading, lede, questions, reply and reason are all in
-  one view.
-- Mobile: the chosen bubble is the question, the reply sits directly under the four bubbles and
-  the reason under that. From "Pick a question" to the end of the reason is 708px at 390, so a
-  tap and its whole result share one 844px view. Section height at 390: 1080px (was 1579).
-- Alignment: there is no overhanging box any more. Every bubble, chosen or not, has the same
-  box on the same left edge; only its fill and border change.
-- Motion on a change (about 0.6s, measured in frames): the bubble is chosen and the hairline
-  draws, the deciding words light one after another, the old slot content is gone at once, the
-  new card lands on the outline (or the outline stays and the sentence fades in), the reason
-  follows. On entry, once: bubbles rise in a short stagger, the reply follows, then the same
-  sequence plays for the default state (about 1.5s in all).
+## What is better than V2
+- It plays. On entering the view it runs compare, mobile-only, learning, Bitcoin, then rests on
+  compare (about 11 seconds, 2.7s per question). The speaking bubble shows a thin hold bar while
+  it plays. Any pointer press, key press, focus inside the specimen or a choice stops it for
+  good. Hover does not. With motion off it never starts and the scene is a still of the default.
+- "Placed or withheld" is now something that happens to one object the reader can follow,
+  instead of three different pictures swapped in place. The three outcomes move differently.
+- The reply has material: a deeper sheet, a recessed slot well with a dashed rim that is always
+  there, cards that sit on it with a hard shadow, and a lifted soft shadow when the card is held.
+- Fewer words (see below), and the reason is attached to the card, not a sentence under the tile.
+- The heading is composed here (`v8-who`, `v8-q`, `v8-lede`), beside the specimen, so nothing
+  reaches into the kit's markup any more. `Scene` is used only as the wrapper, with its own
+  padding untouched.
+- Bubbles have hover (lighter fill, hairline), pressed (slight scale) and a focus ring that
+  follows the bubble's shape.
+
+## Sizes (section height including the kit's padding)
+1440x900: 634px. 1366x768: 620px. 1280x800: 626px. 820x1000: 750px. 390x844: 970px.
+At 390 the specimen (hint to the end of the reply) is 581px, so a tap and its result share one
+view. The held card overhangs the reply into the scene's bottom padding (56px at 390, about
+68px on a laptop); it stays inside the section and never causes sideways scroll.
+The specimen is the same size in all four states at every width measured.
+
+## Visible words below the heading (default state)
+About 58: lede 9, "Pick a question" 3, "Interactive illustration" 2, four questions 23,
+HarborKey's card 17 (Sponsored, name, approved text), pill 4. V2 was about 100.
+
+## Copy proposals (all local, in `LOCAL` in index.tsx)
+- Shorter visible questions (the frozen ones are 41 words; these are 23):
+  "Compare hardware wallets for Ethereum and Solana." / "Best mobile-only wallet for Solana?" /
+  "How does offline key storage work?" / "Cheapest hardware wallet for Bitcoin?"
+  A screen reader gets the frozen full question and full reason in the live announcement.
+- Reasons as pills: "Fits what you offer", "Rules out a device", "Learning, not choosing",
+  "Bitcoin not declared".
+- Lit words and whether HarborKey declared them (blue or grey) are local annotation derived from
+  `ADVERTISER.capabilities`. In "Best mobile-only wallet for Solana?" "Solana" is blue and
+  "mobile-only" grey; in the Bitcoin question "hardware wallet" is blue and "Bitcoin" grey.
+  These belong in `story.ts` if they stay.
+- The lede could be dropped: the pills and the picture say it. I kept it (9 words).
+- Dropped from V2: the person word under each bubble, the names beside the glyphs (a screen
+  reader still gets "Beside the answer: ..."), the reason sentence.
 
 ## Decisions
-- Moments used: compare, mobile, learn, bitcoin. "staking" (outbid) needs bidding words.
-- `DECIDES` in index.tsx lists the lit phrases (exact substrings of the frozen questions) and
-  whether HarborKey declared each. This is local annotation derived from `ADVERTISER.capabilities`;
-  it belongs in `story.ts` if it stays. Blue or grey is never the only cue: blue also has an
-  underline, and the person word, glyph, slot and reason say the same thing.
-- Every state is rendered and stacked in the same grid cell (slot, reason); only the chosen one is
-  visible, the rest are `visibility: hidden` and `aria-hidden`. The specimen is the same size in
-  all four states at 1440, 1280, 820 and 390 (measured with JS on).
-- Own markup instead of kit `Tile`, `Choices` and `EmptySlot`: the questions are the control, and
-  the slot needs stacked states over a persistent outline. The HarborKey card is the kit
-  `SponsoredCard`, untouched (without `domain`). Look matches the kit tile.
-- Other advertisers' cards stay neutral ink (approved).
-- Radio group is `role="radiogroup"` labelled by the hint, with native radios: Tab in, arrows
-  move and select, wraps. A hidden `aria-live="polite"` line announces person, slot and reason
-  after a change.
-
-## Structural dependency on the kit (please check)
-To put the opener beside the specimen and shorten the padding, the CSS reaches the kit's `Scene`
-markup through the `className` I pass: `section.sec` (padding), `.sec > div` (the wrap becomes a
-two column grid at 1040px and up), `.sec header` and `.sec header + div`. If `Scene` changes
-shape this breaks. A kit prop for "opener beside body" and a "compact" padding would remove it.
-
-## Copy
-- Visible local strings now: "Choosing", "Learning", "No ad". Hidden (screen readers only):
-  "Beside the answer".
-- Word count below the heading went from about 150 to about 100. Of those, 19 are the frozen
-  lede, 41 the four questions and 17 the HarborKey card; my own captions went from about 75
-  words to about 25. To reach a true half, the lede could go (the specimen and the reason line
-  say it), or the reason line could show only for the non placed states. I kept both: the lede is
-  the integrator's, and the reason is the only sentence left.
-- The reasons speak to "you" ("what you declared", "You did not declare Bitcoin"). With the
-  premise gone, "you" is carried only by the lede's "what you offer".
+- "staking" (outbid) is still left out: it needs bidding words.
+- The slot glyph in each bubble is real state (what ends up beside that answer), drawn like the
+  slot: blue, neutral, dashed.
+- Other advertisers' cards stay neutral ink with placeholder lines; no words invented for them.
+- The answer is neutral lines, redrawn for each question.
+- Timings use `--v8-ease` and `--v8-ease-out`; the one exception is the card's landing, a custom
+  overshoot curve (`cubic-bezier(.3, 1.36, .45, 1)`), because none of the tokens overshoots.
+- One sequence drives both the entry and every change; `--t0` delays it for the entry.
 
 ## Known issues and things not checked
-- 700px to 1039px: the opener stacks above the specimen (779px section at 820x1000).
-- In the lab route the scene is at the top of the page, so with motion on the specimen is
-  visible, hidden, then animates in at hydration. On the real page it is below the fold.
-- My frame script reloads and screenshots during hydration; Playwright injects a caret style on
-  inputs for screenshots, which shows up as a Next dev "1 Issue" badge (a hydration attribute
-  mismatch on the radio inputs) in the mobile frame sheets. It does not occur in a normal load
-  (console clean in every state capture run).
-- Not checked: a real screen reader, a browser with JS disabled (only server HTML earlier),
-  Safari and Firefox, the scene inside the integrated `/v2/` page, `pnpm build`.
+- The landing of HarborKey's card finishes at about 0.75s after a change, its pill at about
+  0.85s, and the ring fades out by about 1.15s. Other changes settle in about 0.7s.
+- The held card overhangs into the bottom padding. If the integrator shortens this scene's
+  bottom padding below about 70px it would touch the next scene.
+- In the lab route the scene is at the top, so the specimen is visible, hidden, then animates in
+  at hydration. On the real page it is below the fold. My entry frame sheets start a few hundred
+  milliseconds into the entry for the same reason; the first bubbles rising are not in them.
+- Autoplay does not pause if the reader scrolls away mid performance, or when the tab is hidden.
+- Not checked: the scene inside the full `/v3/` page, a real screen reader, a browser with JS
+  off, Safari and Firefox, `pnpm build`, the copy lint script. `pnpm typecheck` reports errors
+  in other v9 folders (advertiser, meet); none in this folder.

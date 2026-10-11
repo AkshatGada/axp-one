@@ -1,43 +1,48 @@
 "use client";
 
-// Scene A, "The moment". Four nearby questions on one topic, and one reply at human size.
-// The picture carries the idea: in the chosen question the words that decide light up (blue
-// where HarborKey offers it, grey where it does not), and the slot beside the answer resolves
-// to HarborKey's card, another advertiser's card, or stays empty.
-// Every state is rendered and stacked in the same cells (only the chosen one is visible), so the
-// specimen never changes size, the default state is complete without JS, and a change of state is
-// a short cross-fade. See NOTES.md for the idea, the decisions and the copy proposals.
-import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+// Scene A, "The moment" (V3). The scene performs once, then hands over.
+// Four nearby questions on one topic sit beside one reply. HarborKey's own card is a single
+// persistent object: it is either seated in the reply's slot or held back outside it. For each
+// question the deciding words light (blue where HarborKey offers it, grey where it does not),
+// the answer writes itself, and the slot resolves: HarborKey's card drops in, another
+// advertiser's card slides in while HarborKey's stays out, or the slot stays empty.
+// On entering the view it plays through the four questions by itself, rests on the default and
+// leaves the control to the reader; any interaction ends the autoplay for good. With motion off
+// it is a complete still of the default state. See NOTES.md.
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { Illustration, Scene, SponsoredCard, useInView } from "../kit";
 import { MOMENT } from "../copy";
 import { ADVERTISER, MOMENTS, type Moment } from "../story";
 import s from "./moment.module.css";
 
-/** The four moments this scene uses, in reading order. "staking" is left out on purpose (NOTES). */
 const IDS = ["compare", "mobile", "learn", "bitcoin"] as const;
 type Id = (typeof IDS)[number];
 const ITEMS = IDS.map((id) => MOMENTS.find((m) => m.id === id)!);
 
-/** The words in each question that decide, in order of appearance. Each phrase is an exact
- *  substring of the frozen question; `ok` is true where HarborKey declared that capability. */
-const DECIDES: Record<Id, { t: string; ok: boolean }[]> = {
-  compare: [{ t: "hardware wallets", ok: true }, { t: "Ethereum and Solana", ok: true }, { t: "offline key storage", ok: true }],
-  mobile: [{ t: "mobile-only", ok: false }, { t: "don't want to carry a device", ok: false }],
-  learn: [{ t: "How does", ok: false }, { t: "actually work", ok: false }],
-  bitcoin: [{ t: "hardware wallet", ok: true }, { t: "only needs to hold Bitcoin", ok: false }],
+/** Local, shorter visible forms of the frozen questions (copy proposals, see NOTES.md), the words
+ *  in each that decide (`ok` where HarborKey declared that capability), and the reason in a few
+ *  words. The frozen question and reason are what a screen reader hears. */
+const LOCAL: Record<Id, { q: string; lit: { t: string; ok: boolean }[]; why: string }> = {
+  compare: { q: "Compare hardware wallets for Ethereum and Solana.", lit: [{ t: "hardware wallets", ok: true }, { t: "Ethereum and Solana", ok: true }], why: "Fits what you offer" },
+  mobile: { q: "Best mobile-only wallet for Solana?", lit: [{ t: "mobile-only", ok: false }, { t: "Solana", ok: true }], why: "Rules out a device" },
+  learn: { q: "How does offline key storage work?", lit: [{ t: "How does", ok: false }, { t: "work", ok: false }], why: "Learning, not choosing" },
+  bitcoin: { q: "Cheapest hardware wallet for Bitcoin?", lit: [{ t: "hardware wallet", ok: true }, { t: "Bitcoin", ok: false }], why: "Bitcoin not declared" },
 };
+const BESIDE = "Beside the answer";
 
-/** Local wording (proposals, listed in NOTES.md). */
-const LOCAL = { choosing: "Choosing", learning: "Learning", beside: "Beside the answer", noAdShort: "No ad" };
+/** The performance: after the entry, each question holds, then the next. Ends on the default. */
+const TOUR: Id[] = ["mobile", "learn", "bitcoin", "compare"];
+const ENTRY_MS = 1700;
+const FIRST_MS = 3200;
+const STEP_MS = 2700;
 
 type Kind = "own" | "other" | "none";
 const kindOf = (m: Moment): Kind => (m.placed === ADVERTISER.name ? "own" : m.placed ? "other" : "none");
-const personOf = (m: Moment) => (m.buying ? LOCAL.choosing : LOCAL.learning);
 
-function marked(m: Moment): ReactNode[] {
+function marked(id: Id): ReactNode[] {
   const out: ReactNode[] = [];
-  let rest = m.question;
-  DECIDES[m.id as Id].forEach((p, k) => {
+  let rest = LOCAL[id].q;
+  LOCAL[id].lit.forEach((p, k) => {
     const i = rest.indexOf(p.t);
     if (i < 0) return;
     if (i > 0) out.push(rest.slice(0, i));
@@ -48,91 +53,119 @@ function marked(m: Moment): ReactNode[] {
   return out;
 }
 
-/** One cell of the specimen: every state stacked in place, only the chosen one shown. */
-function Stack({ value, className, children }: { value: Id; className?: string; children: (m: Moment) => ReactNode }) {
-  return (
-    <div className={`${s.stack}${className ? ` ${className}` : ""}`}>
-      {ITEMS.map((m) => (
-        <div key={m.id} className={s.layer} data-on={m.id === value ? "" : undefined} aria-hidden={m.id === value ? undefined : true}>
-          {children(m)}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function Slot({ m }: { m: Moment }) {
-  const kind = kindOf(m);
-  if (kind === "own") return <SponsoredCard className={s.own} name={ADVERTISER.name} text={ADVERTISER.creative} />;
-  if (kind === "other")
-    return (
-      <div className={s.other}>
-        <div className={s.otherHead}>
-          <span className={s.otherTag}>Sponsored</span>
-          <span className={s.otherName}>{m.placed}</span>
-        </div>
-        <div className={s.otherLines} aria-hidden><i /><i /><i /></div>
-      </div>
-    );
-  return <div className={s.empty}>{MOMENT.noAd}</div>;
-}
-
 export default function TheMoment() {
   const [value, setValue] = useState<Id>("compare");
   const [touched, setTouched] = useState(false);
-  const [ref, seen] = useInView<HTMLDivElement>();
-  const current = ITEMS.find((m) => m.id === value)!;
-  // Once the one-time entry has played, state changes use the short timings.
   const [done, setDone] = useState(false);
+  const [auto, setAuto] = useState(false);
+  const [ref, seen] = useInView<HTMLDivElement>();
+  const stopped = useRef(false);
+  const timers = useRef<number[]>([]);
+  const current = ITEMS.find((m) => m.id === value)!;
+  const kind = kindOf(current);
+
   useEffect(() => {
-    if (!seen) return;
-    const id = window.setTimeout(() => setDone(true), 1600);
-    return () => window.clearTimeout(id);
+    if (!seen || document.documentElement.dataset.pxMotion !== "on") return;
+    const doneId = window.setTimeout(() => setDone(true), ENTRY_MS);
+    if (!stopped.current) {
+      setAuto(true);
+      timers.current = TOUR.map((id, i) =>
+        window.setTimeout(() => {
+          if (stopped.current) return;
+          setValue(id);
+          if (i === TOUR.length - 1) setAuto(false);
+        }, FIRST_MS + i * STEP_MS),
+      );
+    }
+    return () => {
+      window.clearTimeout(doneId);
+      timers.current.forEach((t) => window.clearTimeout(t));
+    };
   }, [seen]);
 
+  /** Any interaction ends the performance for good. */
+  function stop() {
+    if (stopped.current) return;
+    stopped.current = true;
+    timers.current.forEach((t) => window.clearTimeout(t));
+    setAuto(false);
+  }
+
   return (
-    <Scene id="moment" className={s.sec} who={MOMENT.who} question={MOMENT.question} lede={MOMENT.lede}>
-      <div ref={ref} className={s.root} data-in={seen ? (done ? "done" : "") : undefined}>
-        <p id="moment-hint" className={s.hint}>{MOMENT.hint}</p>
-        <Illustration className={s.illus} />
+    <Scene id="moment" labelledBy="moment-q">
+      <div className={s.comp}>
+        <header className={s.head}>
+          <p className="v8-who">{MOMENT.who}</p>
+          <h2 id="moment-q" className={`v8-q ${s.q}`}>{MOMENT.question}</h2>
+          <p className={`v8-lede ${s.lede}`}>{MOMENT.lede}</p>
+        </header>
 
-        <div className={s.opts} role="radiogroup" aria-labelledby="moment-hint">
-          {ITEMS.map((m, i) => (
-            <label key={m.id} className={s.opt} style={{ "--i": i } as CSSProperties}>
-              <input
-                type="radio"
-                name="moment-question"
-                value={m.id}
-                checked={m.id === value}
-                onChange={() => {
-                  setValue(m.id as Id);
-                  setTouched(true);
-                }}
-              />
-              <span className={s.bubble}>{marked(m)}</span>
-              <span className={s.meta}>
-                <span className={s.person}>{personOf(m)}</span>
-                <span className={s.out} data-kind={kindOf(m)}>
-                  <i className={s.glyph} aria-hidden />
-                  <span className={s.vh}>{LOCAL.beside}: </span>
-                  {m.placed ?? LOCAL.noAdShort}
+        <div
+          ref={ref}
+          className={s.root}
+          data-in={seen ? (done ? "done" : "") : undefined}
+          data-auto={auto ? "" : undefined}
+          style={{ "--hold": `${value === "compare" ? FIRST_MS : STEP_MS}ms` } as CSSProperties}
+          onPointerDown={stop}
+          onKeyDown={stop}
+          onFocus={stop}
+        >
+          <p id="moment-hint" className={s.hint}>{MOMENT.hint}</p>
+          <Illustration className={s.illus} />
+
+          <div className={s.opts} role="radiogroup" aria-labelledby="moment-hint">
+            {ITEMS.map((m, i) => (
+              <label key={m.id} className={s.opt} style={{ "--i": i } as CSSProperties}>
+                <input
+                  type="radio"
+                  name="moment-question"
+                  value={m.id}
+                  checked={m.id === value}
+                  onChange={() => {
+                    stop();
+                    setValue(m.id as Id);
+                    setTouched(true);
+                  }}
+                />
+                <span className={s.bubble}>
+                  <span className={s.bq}>{marked(m.id as Id)}</span>
+                  <span className={s.out} data-kind={kindOf(m)}>
+                    <i className={s.glyph} aria-hidden />
+                    <span className={s.vh}>{BESIDE}: {m.placed ?? MOMENT.noAd}</span>
+                  </span>
                 </span>
-              </span>
-            </label>
-          ))}
+              </label>
+            ))}
+          </div>
+
+          {/* The reply: the app's answer and its one slot. HarborKey's card is always present:
+              seated in the slot, or held back outside it. */}
+          <div className={s.reply} data-kind={kind}>
+            <div className={s.tile}>
+              <div key={value} className={s.ans} aria-hidden>{Array.from({ length: 9 }, (_, i) => <i key={i} style={{ "--n": i } as CSSProperties} />)}</div>
+              <div className={s.well}>
+                {ITEMS.filter((m) => kindOf(m) === "other").map((m) => (
+                  <div key={m.id} className={s.other} data-on={m.id === value ? "" : undefined} aria-hidden={m.id === value ? undefined : true}>
+                    <div className={s.otherHead}>
+                      <span className={s.otherTag}>Sponsored</span>
+                      <span className={s.otherName}>{m.placed}</span>
+                    </div>
+                    <div className={s.otherLines} aria-hidden><i /><i /><i /></div>
+                  </div>
+                ))}
+                <p className={s.empty} data-on={kind === "none" ? "" : undefined} aria-hidden={kind === "none" ? undefined : true}>{MOMENT.noAd}</p>
+                <div className={s.mine} data-seated={kind === "own" ? "" : undefined}>
+                  <SponsoredCard name={ADVERTISER.name} text={ADVERTISER.creative} />
+                  <span key={value} className={s.why}>{LOCAL[value].why}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* The reply: the app's answer (neutral lines, the same in every state) and its one slot. */}
-        <div className={s.tile} data-kind={kindOf(current)}>
-          <div className={s.ans} aria-hidden>{Array.from({ length: 11 }, (_, i) => <i key={i} />)}</div>
-          <Stack value={value} className={s.slot}>{(m) => <Slot m={m} />}</Stack>
-        </div>
-
-        <Stack value={value} className={s.why}>{(m) => <p className={s.reason}>{m.reason}</p>}</Stack>
-
-        {/* Announced only after the reader changes the question. */}
+        {/* Announced only after the reader changes the question, in the story's full words. */}
         <p className={s.vh} aria-live="polite">
-          {touched ? `${personOf(current)}. ${LOCAL.beside}: ${current.placed ? `${current.placed}, Sponsored.` : MOMENT.noAd} ${current.reason}` : ""}
+          {touched ? `${current.question} ${BESIDE}: ${current.placed ? `${current.placed}, Sponsored.` : MOMENT.noAd} ${current.reason}` : ""}
         </p>
       </div>
     </Scene>

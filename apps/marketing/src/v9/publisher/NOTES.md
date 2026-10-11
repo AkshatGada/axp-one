@@ -1,93 +1,92 @@
-# Scene C, "The app's side": builder notes
+# Scene C, "The app's side" (V3): builder notes
 
-Status: built, checked at 1440x900, 1280x800 and 390x844, motion on and off. Not committed.
-
-## Revision 1 (integrator's four points)
-1. One set of real controls. "You carry" is now three real switches (checkbox, role switch); the
-   radio is reduced to what the network returned (a qualifying ad, or none). The app's rule wins:
-   Hardware wallets off means blocked whatever the network has. The other two switches can be
-   turned on and change nothing in this placement. All 16 combinations checked.
-2. Height and grouping. The controls sit on the window's frame as one tray (one row at 1440 and
-   1280, stacked on phones). Window slack trimmed (one line question, 20px answer, tighter bars).
-   The claim and the guide link are one quiet line. Scene uses the kit's `tight` prop. Section
-   height: 1237px at 1440x900 (1.37 screens), 1116px at 1280x800 (1.40), 1641px at 390x844 (1.94).
-   What is left above the specimen is the kit opener and scene padding, which I cannot trim.
-3. Empty state. Answer column is now about 60% of the thread and the card column narrower, the
-   question bubble spans the row, and a dashed trace of the slot appears as the card leaves and
-   fades within about 1.2s (motion only; at rest and with motion off the place is simply empty).
-4. Bridge marker. Now small text with two small glyphs, no container, no fill: an ordinary
-   underlined link for the advertiser's side and plain bold text for the current side.
-
-Removed the "where the slot sits" switch earlier (see Decisions). Remove `tight` in `index.tsx`
-if the page rhythm wants the full top padding.
+Status: V3 built in `v9/publisher/`. Checked at 1440x900, 1366x768, 1280x800, 1024x768 and
+390x844, motion on and off. Not committed. V2 (`v8/publisher/`) was not touched in this round.
 
 ## The idea
-One large close-up of Tidewater (the fictional assistant) holding the same placement the
-advertiser chapter followed: the same question, the app's full answer, and the HarborKey card as
-a separate blue object in the slot. On the window's frame the reader sets what the network returned (a
-qualifying ad, or none) and the app's own category switches. The card leaves and returns; the answer, the
-composer and the window itself do not move by a pixel. The picture carries the three promises, so
-there is no list of label and sentence rows:
+One composition: a two line question with the bridge above it, then one object, Tidewater, with
+its controls on the frame. The app performs once when it enters view, so a builder understands it
+by watching:
 
-- Answer path: the answer is one DOM node whose text never changes; the slot is always laid out
-  (hidden with visibility, not removed), so nothing reflows. A small ink note pinned to the answer
-  ("Your answer") re-ticks and becomes "Your answer, unchanged" on every change.
-- Rules: three real switches on the frame ("You carry"). Switching the card's category off makes
-  the card leave: cause and effect in one glance.
-- Earnings: a small ink note pops onto the card after it lands ("Earnings accrued", the exact
-  receipt wording). It is an accrual mark, has no figure, and is not a payment.
+1. The window arrives; the person's question lands.
+2. Tidewater writes its answer, word by word, with a caret.
+3. While it writes, the Sponsored card arrives separately from the right and the accrual tab
+   lands on it (tab rises, tick draws, a ring passes).
+4. After a beat the network returns nothing: the "Qualifying ad" switch on the frame flips off by
+   itself, the card leaves, four corners close on the answer and hold it, a faint trace of the
+   slot passes, and a note on the frame says why nothing is shown.
+5. The switch flips back, the card returns, the tab lands again, the switches pulse once and the
+   reader has the controls.
 
-The bridge is the sentence from the copy plus a two-face marker: the same miniature tile drawn
-twice, once with the card lit (advertiser's side, a link back to `#advertisers`) and once with the
-answer lit (app's side, current).
+Any pointer press, key press or focus inside the object ends the performance for good (the
+write-in is left to finish; nothing scripted happens after). With motion off there is no
+performance: the scene rests complete with the card shown.
+
+## Why it is a level above V2
+- It plays. V2 waited for the reader; V3 shows cause and effect before any touch, using the same
+  real controls the reader then gets.
+- The answer's independence is physical, not labelled. The "Your answer, unchanged" pill is gone;
+  a hold (four corners and a tick) closes on the answer for about a second whenever the slot
+  changes, then leaves the product clean.
+- Tidewater is a product of its own: a serif reading voice for the answer and wordmark, a soft
+  sidebar with search, grouped chats and window lights, a composer with attach, voice and a
+  blinking caret, hover states on its chrome, layered depth on the window. The kit's card is the
+  one blue object in it.
+- One control language: four identical switches (what the network has, and the three categories
+  the app carries), with a thumb that stretches when pressed.
+- Shorter and quieter: the kit opener is replaced by a heading composed with the v8 classes.
+
+## How the constancy is kept
+- Every word of the answer is in the server markup, in the same nodes for the whole life of the
+  page. The write-in changes only opacity, per word. `textContent` of the answer equals
+  `PLACEMENT.answer` at every sampled moment.
+- The slot is always laid out and only hidden with visibility, so the answer never reflows.
+- The caret is absolutely positioned on each word, so it takes no space.
 
 ## Decisions
-- Ink pills are our notes on the picture, not app UI (same language as the hero's settle tick).
-- No "nothing here" placeholder in the app in the empty states: nothing is shown, and the app is a
-  normal chat window. The sentence `PUBLISHER_SIDE.empty` appears under the control instead.
-- "Where the slot sits" is not a control. I built a beside/below switch and removed it: keeping
-  the answer still in both positions needed a reserved band of empty space inside the window that
-  weakened the still. Desktop shows the slot beside the answer, phones below it.
-- After the owner's text density note the three points row was removed. Only the first point is
-  printed (it is the scoped claim and must be stated exactly); the other two are shown.
-- Entry starts when the window's top passes 55% of the viewport height (own margin on `useInView`,
-  observing the figure): window rises, card arrives from the right, accrual note pops.
-- Motion off (or reduced motion): no transitions or animations, everything in its final state.
+- Scene uses `<Scene id="publishers" tight>` with no kit opener; the h2 keeps id `publishers-q`.
+  The section itself therefore has no `aria-labelledby` (the kit sets it only with `question`).
+- Heading is `v8-q` with a smaller clamp (30px to 54px) so it sets in two lines beside the lede.
+- The bridge is the sentence plus two small tile glyphs (card lit, then answer lit and ringed).
+  The first glyph is a link to `#advertisers` with a spoken name; no printed labels.
+- "A fictional AI assistant" sits in Tidewater's sidebar foot on desktop and under the frame when
+  the sidebar is hidden.
+- The reason nothing is shown is an ink note on the frame, under the empty place, instead of a
+  separate text row.
+- Entry and performance start when the object's top passes 62% of the viewport height.
+- The serif is a system stack (`--tw-serif`: Iowan Old Style, Charter, Palatino, Georgia). No
+  font files, no new dependency. One variable to revert if the page should stay all PolySans.
+- "Where the slot sits" is still not a control (beside on desktop, below on phones).
 
 ## Files
-- `index.tsx` server wrapper (kit `Scene`, id `publishers`).
-- `Stage.tsx` the client specimen (local state only, no network).
-- `words.ts` local microcopy (state labels, pins, the fictional app's chrome).
+- `index.tsx` server wrapper (kit `Scene`, id `publishers`, `tight`).
+- `Stage.tsx` the client specimen: heading, object, performance, controls. Local state only.
+- `words.ts` local microcopy.
 - `publisher.module.css` styles and motion.
 
 ## Copy
 Used from the frozen copy: who, question, lede, bridge, points[0] (k and v), empty, code, action.
-Not printed: points[1] and points[2] (shown by the switches and the accrual note instead).
-Used from story: PLACEMENT question, answer, app, appRules.blocked; ADVERTISER; RECEIPT.app.state.
-Local words (words.ts): "Advertiser's side", "App's side", "The network returns",
-"A qualifying ad", "No qualifying ad", "You carry", "Hardware wallets" (the card's category),
-"Your answer", "Your answer, unchanged", "You block this category. Nothing is shown.", and the
-app chrome (chat titles, "New chat", "Recent", "Ask a follow up").
+Not printed: points[1], points[2]. Used from story: PLACEMENT question, answer, app,
+appRules.blocked; ADVERTISER; RECEIPT.app.state.
+Local words: "Network", "Qualifying ad", "You carry", "Hardware wallets" (the card's category),
+"You block this category. Nothing is shown.", and the app chrome ("Search", "New chat", "Today",
+"Earlier", chat titles, "Ask a follow up").
 
 Proposals for the integrator:
-- story.ts could name the card's category ("Hardware wallets") so scenes B and D can use the same
-  word; it is local here.
-- `PLACEMENT.appRules.slots` ("One Sponsored card per answer") is no longer printed in this scene.
+- story.ts could name the card's category ("Hardware wallets"); it is local here.
+- `PLACEMENT.appRules.slots` is not printed in this scene.
 
 ## Kit requests
-- None required. The state control is a local radio group (native inputs, same pattern as kit
-  `Choices`) because each option carries the miniature tile; if other scenes want pictured
-  options, `Choices` could accept an optional node per option.
-- `SponsoredCard` background is `--white` (warm); inside the white app window I set it to #fff
-  through `className`.
+- `Scene` could accept an `aria-labelledby` (or a heading id) when a builder composes the heading.
+- `SponsoredCard` background is `--white` (warm); inside the white window I set it to #fff.
 
 ## Known issues and things to know
-- A full page screenshot taken without scrolling shows the window blank when motion is on,
-  because the entry has not been triggered. Scroll to it first, or use `?still=1` or reduced motion.
-- During the entry the whole window rises 28px, so the answer moves with it for about 0.7s. After
-  that the answer's box is identical in every frame of every state change.
-- The slot keeps its space on phones too, so the empty states leave white space above the
-  composer. That is how a chat window looks; it also keeps the page from jumping.
-- The mobile entry was not captured as frames in the lab (the window is already in view at load
-  at 390x844); the desktop entry was.
-- The `#advertisers` link assumes the advertiser scene keeps that id (the page nav uses it).
+- In the lab route at 1440x900 the object is in view at load, so the performance starts at once.
+  In the page it starts on scroll.
+- A full page screenshot taken without scrolling shows the object blank when motion is on. Scroll
+  to it first, or use `?still=1` or reduced motion.
+- During the window's own entry (about 0.75s) everything inside rises with it; the answer is not
+  yet visible then. From the first written word on, the answer's box never changes.
+- The serif renders with whatever the visitor's system has; only macOS Chrome was looked at.
+- The slot keeps its space on phones, so the empty state leaves white space above the composer.
+- The `#advertisers` link assumes the advertiser scene keeps that id.

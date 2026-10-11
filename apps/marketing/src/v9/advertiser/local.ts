@@ -21,10 +21,10 @@ export const DECLARED: CapId[] = CAPS.filter((c) => c.declared).map((c) => c.id)
  *  the question excludes; `other` is something that cannot be declared in this illustration. */
 type Ask = { short: string; needs: CapId[]; other?: string; rulesOut?: CapId; learning?: boolean };
 const ASKS: Record<string, Ask> = {
-  compare: { short: "Hardware wallet for Ethereum and Solana?", needs: ["device", "offline", "eth", "sol"] },
-  mobile: { short: "Best mobile-only Solana wallet?", needs: [], other: "mobile app", rulesOut: "device" },
-  learn: { short: "How does offline key storage work?", needs: [], learning: true },
-  bitcoin: { short: "Cheapest hardware wallet for Bitcoin?", needs: ["device", "btc"] },
+  compare: { short: "Wallet for Ethereum and Solana?", needs: ["device", "offline", "eth", "sol"] },
+  mobile: { short: "Mobile-only Solana wallet?", needs: [], other: "mobile app", rulesOut: "device" },
+  learn: { short: "How do offline keys work?", needs: [], learning: true },
+  bitcoin: { short: "Cheapest Bitcoin hardware wallet?", needs: ["device", "btc"] },
 };
 export const SHOWN = ["compare", "mobile", "learn", "bitcoin"] as const;
 
@@ -41,12 +41,12 @@ export const L = {
   actorAgent: "The agent",
   declared: "declared",
   notDeclared: "not declared",
-  tryIt: "Try adding Bitcoin",
   reset: "Reset",
-  approved: "Approved, word for word",
+  approved: "Approved",
   pendingState: "Not approved",
   draft: "Draft",
-  edit: "Change a word",
+  edit: "Edit",
+  editLabel: "Change a word",
   approve: "Approve",
   undo: "Undo",
   ceiling: "per placement",
