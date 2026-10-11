@@ -1,5 +1,6 @@
 import {assert,object} from '../core.mjs';
 import {JEV_ENDPOINT} from './jev.mjs';
+import {officialProvider} from '../../product/provider-provenance.mjs';
 
 export const JEV_MODEL='jev-1.13.0';
 export const JEV_INPUT_USD_PER_MILLION=0.042;
@@ -24,5 +25,5 @@ export function createJevHttpTransport({apiKey,maxCalls=24,fetchImpl=fetch}={}) 
     return result;
   };
   transport.usage=()=>({attempts,maxCalls,inputTokens,outputTokens,unknownUsageAttempts:attempts-usageRecorded,knownProviderUsd:inputTokens*JEV_INPUT_USD_PER_MILLION/1e6,estimatedProviderUsd:attempts===usageRecorded?inputTokens*JEV_INPUT_USD_PER_MILLION/1e6:null,priceSource:'https://docs.typesafe.ai/models',priceCheckedAt:'2026-10-01',excludesLocalCompute:true});
-  return transport;
+  return officialProvider(transport,fetchImpl===fetch);
 }

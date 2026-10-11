@@ -1,0 +1,152 @@
+{
+  "source": "artifacts/network-scale/devnet-funded-acceptance.json",
+  "sha256": "77c6670b6565deb7fec95451efc3cd23f3bf38683c77fe66baaf529c36b3342e",
+  "date": "7 October 2026",
+  "channels": [
+    {
+      "name": "Channel 01",
+      "id": "7mzhd35Dsq4UZ8CNmmXPt21xUo3G5GwztXZUGMEho7Em",
+      "deposit": "50000",
+      "paid": "15000",
+      "refunded": "35000",
+      "voucherCount": 10,
+      "vouchers": [
+        {
+          "sequence": "1",
+          "cumulative": "1500"
+        },
+        {
+          "sequence": "2",
+          "cumulative": "3000"
+        },
+        {
+          "sequence": "3",
+          "cumulative": "4500"
+        },
+        {
+          "sequence": "4",
+          "cumulative": "6000"
+        },
+        {
+          "sequence": "5",
+          "cumulative": "7500"
+        },
+        {
+          "sequence": "6",
+          "cumulative": "9000"
+        },
+        {
+          "sequence": "7",
+          "cumulative": "10500"
+        },
+        {
+          "sequence": "8",
+          "cumulative": "12000"
+        },
+        {
+          "sequence": "9",
+          "cumulative": "13500"
+        },
+        {
+          "sequence": "10",
+          "cumulative": "15000"
+        }
+      ],
+      "openUrl": "https://explorer.solana.com/tx/3hXiioHqxT5ERJZtZXpnMqCnTJT8uS7opi6sqSPXNGa2FMfUh6kebmp1wDYkDrBNh2xMMiR47VxLbQgf2eqX7vvA?cluster=devnet",
+      "closeUrl": "https://explorer.solana.com/tx/2hVAM8LgTGpCjgGPbTT9MCZcDVsZw9fy6ZUYPdZ287kvWEWjDcFT5wfiwNAeYwuPCBBRBToDwVsA2E3UxeMyby1U?cluster=devnet",
+      "channelUrl": "https://explorer.solana.com/address/7mzhd35Dsq4UZ8CNmmXPt21xUo3G5GwztXZUGMEho7Em?cluster=devnet",
+      "openedAt": 1791374614,
+      "closedAt": 1791383248
+    },
+    {
+      "name": "Channel 02",
+      "id": "HhMHu119PNhoNqyGPXZJcajBDRJyrwiZ39DrBHmg78TK",
+      "deposit": "50000",
+      "paid": "15000",
+      "refunded": "35000",
+      "voucherCount": 10,
+      "vouchers": [
+        {
+          "sequence": "1",
+          "cumulative": "1500"
+        },
+        {
+          "sequence": "2",
+          "cumulative": "3000"
+        },
+        {
+          "sequence": "3",
+          "cumulative": "4500"
+        },
+        {
+          "sequence": "4",
+          "cumulative": "6000"
+        },
+        {
+          "sequence": "5",
+          "cumulative": "7500"
+        },
+        {
+          "sequence": "6",
+          "cumulative": "9000"
+        },
+        {
+          "sequence": "7",
+          "cumulative": "10500"
+        },
+        {
+          "sequence": "8",
+          "cumulative": "12000"
+        },
+        {
+          "sequence": "9",
+          "cumulative": "13500"
+        },
+        {
+          "sequence": "10",
+          "cumulative": "15000"
+        }
+      ],
+      "openUrl": "https://explorer.solana.com/tx/4grS3jKS7mHVS4DBN4TRsVt269p9FiGsdcp9Kiyc7uyYHccxbaUYi5m5VjPPBoje7sdbBf97mFB5xY7Hc9kemERv?cluster=devnet",
+      "closeUrl": "https://explorer.solana.com/tx/5Jt4gt1WdmUtgbBfzcyS6WdTFBZATZFdJ4wPH8f7web4tY6zTbB23Gog4LJ5UuwkyjyBBPDh2yZcinM5KNCVvXjV?cluster=devnet",
+      "channelUrl": "https://explorer.solana.com/address/HhMHu119PNhoNqyGPXZJcajBDRJyrwiZ39DrBHmg78TK?cluster=devnet",
+      "openedAt": 1791373865,
+      "closedAt": 1791381907
+    }
+  ],
+  "totals": {
+    "unit": "Solana Devnet test USDC base units",
+    "depositBaseUnits": "6250000",
+    "acceptedBaseUnits": "1236000",
+    "authorizedBaseUnits": "1236000",
+    "settledBaseUnits": "1236000",
+    "refundBaseUnits": "5014000",
+    "retainedNativeFeeReservationLamports": "1280050000",
+    "provider": {
+      "jev": {
+        "attempts": 6593,
+        "inputTokens": 11335892,
+        "outputTokens": 1021574,
+        "knownUsd": 0.476107464,
+        "priceBasis": "reported_input_tokens_at_published_rate",
+        "reservedUsd": 0.477936186,
+        "unknownAttempts": 8,
+        "pendingAttempts": 0,
+        "terminalUnknownAttempts": 8
+      },
+      "deepseek": {
+        "attempts": 825,
+        "inputTokens": 80144,
+        "outputTokens": 265794,
+        "knownUsd": 0.342996,
+        "priceBasis": "conservative_peak_cache_miss_usage_estimate",
+        "reservedUsd": 0.3452286,
+        "unknownAttempts": 1,
+        "pendingAttempts": 0,
+        "terminalUnknownAttempts": 1
+      }
+    }
+  },
+  "programUrl": "https://explorer.solana.com/address/CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX?cluster=devnet",
+  "mintUrl": "https://explorer.solana.com/address/4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU?cluster=devnet"
+}

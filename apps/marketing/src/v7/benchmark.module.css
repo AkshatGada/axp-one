@@ -1,0 +1,17 @@
+/* Separate Prospectus sheets for the local ledger workload and real Devnet subset. */
+.benchmark { position: relative; background: var(--paper); color: var(--ink); }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: stretch; padding: 64px 0; }
+.panel { display: grid; justify-items: start; align-content: start; gap: 20px; padding: 32px; border: 1px solid var(--line); border-radius: var(--px-r-xl); background: var(--white); color: var(--ink); }
+.label { margin: 0; font-size: 13px; font-weight: 500; color: var(--brand-deep); }
+.h2 { margin: 0; max-width: 17ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(36px, 3.5vw, 56px); line-height: 1; letter-spacing: -0.035em; }
+.mode { margin: 0; font-size: 16px; font-weight: 500; }
+.channels { margin: 0; font-size: 14px; color: var(--muted); }
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 0 0; border-top: 1px solid var(--line); width: 100%; font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 2vw, 28px); letter-spacing: -0.02em; }
+.flow svg { flex: none; color: var(--brand); }
+.close { color: var(--brand-deep); }
+.note { margin: 0; max-width: 48ch; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.native { border-color: var(--sol-deep); background: var(--sol); color: #fff; }
+.native .label, .native .note, .native .close, .native .flow svg { color: #fff; }
+.native .flow { border-color: rgba(255,255,255,0.35); }
+.method { grid-column: 1 / -1; justify-self: start; margin-top: 8px; }
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; padding: 48px 0; } .panel { padding: 24px; } }

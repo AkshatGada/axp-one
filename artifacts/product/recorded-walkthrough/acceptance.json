@@ -1,0 +1,25 @@
+{
+  "network": "solana-devnet",
+  "answerProvider": "DeepSeek (example publisher app)",
+  "decisionProvider": "Jev",
+  "campaign": "HarborKey",
+  "accepted": "3000",
+  "settled": "3000",
+  "refund": "17000",
+  "transactions": [
+    {
+      "operation": "open",
+      "status": "finalized",
+      "signature": "2G3PGZeQUoxwJYazdY3rEAxgcv2pLAsDs4yiwt62w4hwV2WRuyj4EbsnJ5yRernU5NveNTmkAKfnrZXTRauzbTtu"
+    },
+    {
+      "operation": "close",
+      "status": "finalized",
+      "signature": "3qEPnMp5PjXjYZU5LbQbNTYBoZVNdp9DxRXng4EJTxtBYSW38LcVVexQRp4C7ZoFR2q9k2SgvBsxjHMSfMt74EVb"
+    }
+  ],
+  "replayChargedAgain": false,
+  "capture": "Actual browser interactions against a Vercel Preview, in an isolated recording workspace",
+  "capturedAt": "2026-10-07",
+  "durationSeconds": 161.188
+}

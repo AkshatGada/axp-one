@@ -1,6 +1,39 @@
 # Phase/component execution register
 
-Updated 2026-10-01. User approved phase-by-phase restart after planning reset.
+## Current release — 7 October 2026
+
+- User-operated dashboard, editable Jev hints, source-distributed publisher SDK and
+  independent DeepSeek chat are implemented and hosted at https://axp.one.
+- Native Devnet channels persist through private encrypted Blob snapshots and
+  fenced financial writes. The hosted workspace retains the prepared advertisers
+  and the updated server-held sponsor; original MVP runs remain separate.
+- The 1080p product recording demonstrates campaign creation, a fresh organic/ad
+  turn, exact delivery, duplicate receipt identity and finalized payout/refund.
+  See artifacts/product/recorded-walkthrough/acceptance.json and /demo/.
+- Current page/API map: [pages.md](../pages.md). Current operational guides:
+  [PRODUCT_DEMO.md](product/PRODUCT_DEMO.md), [HOSTING.md](product/HOSTING.md),
+  [publisher SDK](../packages/publisher-sdk/README.md).
+- September/October phase records below preserve their observed results and test
+  counts. They are not the current release checklist. No targeting-lift, new-model
+  training, mainnet, multi-tenant or fleet-scale claim is added by this release.
+
+### Final documentation and hosted SDK audit
+
+- Hosted integration is the primary SDK guide; localhost remains under explicit
+  development setup. The SDK defaults to `https://axp.one/api/product`.
+- README, `pages.md`, architecture, design system, setup, product journeys, hosting
+  runbook and environment template describe the current release.
+- Verification: 474 tests passed, 6 optional tests skipped, no failures; complete
+  static/function build passed; 61 relative documentation links resolved.
+- Public production readiness checked without protection credentials: encrypted
+  Blob reachable, Jev/DeepSeek configured, updated native sponsor and three open
+  channels. No provider send, charge or wallet transaction was performed for this audit.
+- Prepared channels have 24-hour terms; check application deadlines before every
+  presentation and close/reconcile before preparing replacement campaigns.
+
+## Historical phase records
+
+Historical register begun 2026-10-01. User approved phase-by-phase restart after planning reset.
 Master concept: MVP_MASTER_PLAN.md. Verification policy: EXECUTION_LOOPS.md.
 Main integrates; Sol 6.1 High builders have isolated owned worktrees.
 Final polished frontend remains specialist-owned. No push/deploy. Phase4's

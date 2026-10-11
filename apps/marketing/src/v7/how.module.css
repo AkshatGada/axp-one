@@ -1,147 +1,81 @@
-/* v7 how it works: the dark stage. The order-book floor streams behind; the rail of seven
-   stations sits in front. Radius scale: specimen cards 10, chips full. */
-.how { position: relative; background: var(--stage); color: var(--stage-ink); }
-.stage { position: relative; min-height: 100svh; overflow: hidden; display: grid; align-content: center; padding: calc(var(--px-header-h, 72px) + 24px) 0 56px; }
-@media (min-width: 900px) {
-  :global(html[data-px-motion="on"]) .how { height: 150vh; }
-  :global(html[data-px-motion="on"]) .stage { position: sticky; top: 0; height: 100svh; min-height: 640px; }
-}
-.in { position: relative; z-index: 3; display: grid; gap: clamp(40px, 7vh, 80px); }
-.head { display: grid; gap: 14px; }
-.label { margin: 0; font-size: 14px; font-weight: 500; color: var(--stage-brand); }
-.h2 { max-width: 16ch; color: var(--stage-ink); }
-
-/* The floor and its tape (illustrative bidding over real observed questions). */
-.view { position: absolute; inset: 0; perspective: 900px; perspective-origin: 70% 30%; pointer-events: none; opacity: 0.3; }
-.floor { position: absolute; left: calc(86% - 360px); top: calc(30% - 840px); width: 720px; height: 1400px; transform-origin: 50% 840px; transform: rotateX(66deg); }
-.grid {
-  position: absolute;
-  inset: -120px -900px 0;
-  background:
-    repeating-linear-gradient(180deg, var(--stage-line-soft) 0 1px, transparent 1px 110.83px),
-    repeating-linear-gradient(90deg, color-mix(in oklab, var(--stage-line-soft) 70%, transparent) 0 1px, transparent 1px 140px);
-  animation: gridRun 1.25s linear infinite;
-}
-@keyframes gridRun { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, 110.83px, 0); } }
-.row {
-  --d: calc(var(--t) * var(--i) / var(--n) * -1);
-  position: absolute;
-  left: 0;
-  top: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 120px 64px;
-  align-items: center;
-  gap: 14px;
-  width: 720px;
-  height: 54px;
-  padding: 0 14px;
-  border: 1px solid var(--stage-line-soft);
-  border-radius: var(--px-r-md);
-  background: color-mix(in oklab, var(--stage-2) 90%, transparent);
-  opacity: 0;
-  animation: rowRun var(--t) linear var(--d) infinite;
-}
-.rq { overflow: hidden; font-size: 14px; color: var(--stage-ink); white-space: nowrap; text-overflow: ellipsis; }
-.rb { display: grid; gap: 4px; }
-.rb i { display: block; height: 5px; width: calc(var(--b) * 100%); border-radius: var(--px-r-full); background: var(--stage-line); }
-.rb i[data-win] { background: var(--stage-brand); }
-.rs { justify-self: end; height: 20px; padding: 0 8px; border-radius: var(--px-r-full); background: var(--sol); color: #fff; font-size: 11px; line-height: 20px; }
-@keyframes rowRun {
-  0% { opacity: 0; transform: translate3d(0, 0, 0); }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { opacity: 0; transform: translate3d(0, 1330px, 0); }
-}
-:global(html:not([data-px-motion="on"])) .row, :global(html:not([data-px-motion="on"])) .grid { animation-play-state: paused; }
-.view { -webkit-mask-image: radial-gradient(22% 26% at 90% 24%, #000, transparent); mask-image: radial-gradient(22% 26% at 90% 24%, #000, transparent); }
-.fog {
-  display: none;
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, var(--stage) 0%, var(--stage) 12%, color-mix(in oklab, var(--stage) 55%, transparent) 30%, color-mix(in oklab, var(--stage) 45%, transparent) 44%, color-mix(in oklab, var(--stage) 92%, transparent) 58%, var(--stage) 100%),
-    linear-gradient(90deg, color-mix(in oklab, var(--stage) 80%, transparent) 0%, transparent 45%),
-    radial-gradient(50% 30% at 50% 32%, color-mix(in oklab, var(--brand) 22%, transparent), transparent 70%);
-}
-
-/* The rail: four numbered steps, plain words first, then each step's visual moment. */
-.railWrap { position: relative; }
-.line { position: absolute; left: 0; right: 0; top: 17px; height: 2px; border-radius: 2px; background: var(--stage-line); }
-.line i { position: absolute; inset: 0; border-radius: 2px; background: var(--stage-brand); transform-origin: 0 50%; transform: scaleX(1); box-shadow: 0 0 14px rgba(101, 115, 255, 0.7); }
-.how[data-pinned] .line i { transform: scaleX(0); }
-.rail { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); margin: 0; padding: 0; list-style: none; }
-.rail li { display: grid; grid-template-rows: 36px auto 1fr; gap: 16px; align-content: start; min-width: 0; }
-/* Four across: the steps share row tracks, so the four cards start at one height however the titles wrap. */
-@media (min-width: 1100px) {
-  .rail { grid-template-rows: 36px auto 1fr; row-gap: 16px; }
-  .rail li { grid-row: span 3; grid-template-rows: subgrid; }
-}
-.node { display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--px-r-full); background: var(--stage); box-shadow: inset 0 0 0 2px var(--stage-line); font-size: 15px; font-weight: 500; color: var(--stage-muted); font-variant-numeric: tabular-nums; transition: background 300ms var(--ease), box-shadow 300ms var(--ease), color 300ms var(--ease); }
-.t { margin: 0; max-width: 24ch; font-family: var(--font-display); font-size: clamp(18px, 1.45vw, 23px); font-weight: 400; line-height: 1.2; letter-spacing: -0.01em; color: var(--stage-ink); transition: opacity 400ms var(--ease); }
-.spec {
-  display: grid;
-  align-content: start;
-  gap: 10px;
-  min-width: 0;
-  padding: 16px;
-  border: 1px solid var(--stage-line);
-  border-radius: var(--px-r-lg);
-  background: var(--stage-2);
-  box-shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.7);
-  font-size: 13px;
-  line-height: 1.35;
-  transition: opacity 500ms var(--ease-out), transform 600ms var(--ease-out), border-color 400ms var(--ease);
-}
-.rail li[data-on="1"] .node { background: var(--stage-brand); box-shadow: 0 0 0 5px rgba(101, 115, 255, 0.25); color: #fff; }
-.rail li:last-child[data-on="1"] .node { background: var(--sol); box-shadow: 0 0 0 5px rgba(153, 69, 255, 0.3); }
-.rail li[data-on="1"] .spec { border-color: color-mix(in oklab, var(--stage-brand) 55%, var(--stage-line)); }
-.how[data-pinned] .rail li:not([data-on="1"]) .spec { opacity: 0.16; transform: translateY(14px); }
-.how[data-pinned] .rail li:not([data-on="1"]) .t { opacity: 0.35; }
-/* The tagline sits on the stage colour itself (invisible on the stage), so when the page colour blends into
-   the ContextHint vermillion below, the line keeps its dark backing and stays readable. */
-.tagline { justify-self: start; width: fit-content; margin: 0 0 0 -12px; padding: 5px 12px; border-radius: var(--px-r-full); background: var(--stage); font-size: 15px; font-weight: 500; color: var(--stage-ink); }
-
-/* Specimens. */
-.app { font-size: 12px; color: var(--stage-muted); }
-.jev { justify-self: end; height: 22px; padding: 0 9px; border-radius: var(--px-r-full); background: var(--brand); color: #fff; font-size: 12px; line-height: 22px; }
-.chip[data-ch] { box-shadow: none; background: var(--contexthint); color: var(--ink); }
-.rule { font-size: 12.5px; color: var(--stage-muted); }
-.rule s { color: var(--stage-ink); }
-.rule b { font-weight: 500; color: var(--stage-ink); }
-.sq { margin: 0; padding: 8px 10px; border-radius: 10px 10px 3px 10px; background: var(--stage-3); font-size: 12.5px; line-height: 1.3; }
-.chip { justify-self: start; height: 22px; padding: 0 9px; border-radius: var(--px-r-full); box-shadow: inset 0 0 0 1px var(--stage-line); font-size: 12px; line-height: 22px; color: var(--stage-muted); }
-.list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.list li { display: flex; justify-content: space-between; gap: 6px; font-size: 13px; }
-.list b { font-weight: 500; color: #8b96ff; }
-.list li[data-out] { color: var(--stage-muted); }
-.list li[data-out] b { color: var(--stage-muted); }
-.list s { text-decoration-thickness: 1px; }
-.bars { display: grid; gap: 10px; }
-.barRow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 8px; font-size: 12.5px; color: var(--stage-muted); }
-.barRow i { grid-column: 1 / -1; grid-row: 2; display: block; height: 6px; width: calc(var(--w) * 100%); border-radius: var(--px-r-full); background: var(--stage-line); }
-.barRow[data-win] { color: var(--stage-ink); }
-.barRow[data-win] i { background: var(--stage-brand); }
-.num { font-variant-numeric: tabular-nums; }
-.dim { color: var(--stage-muted); }
-.mini { display: grid; gap: 6px; }
-.mini > i { display: block; height: 6px; border-radius: 3px; background: var(--stage-3); }
-.mini > i + i { width: 70%; }
-.miniCard { margin-top: 4px; padding: 8px; border: 1.5px solid var(--stage-brand); border-radius: 8px; font-size: 12.5px; }
-.miniCard span { display: inline-block; height: 18px; padding: 0 6px; margin-right: 4px; border-radius: var(--px-r-full); background: var(--brand); color: #fff; font-size: 10.5px; line-height: 18px; }
-.receipt { display: grid; gap: 10px; justify-items: start; }
-.tick { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: var(--px-r-full); background: color-mix(in oklab, var(--stage-brand) 22%, transparent); color: var(--stage-ink); font-size: 12.5px; font-weight: 500; }
-.settle { display: grid; gap: 10px; }
-.solTrack { position: relative; height: 10px; border-radius: var(--px-r-full); background: var(--stage-3); overflow: hidden; }
-.solTrack i { position: absolute; inset: 0 auto 0 0; background: var(--sol); }
-
-@media (max-width: 1099px) {
-  .rail { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 36px; }
-  .line { display: none; }
-}
-@media (max-width: 899px) {
-  .stage { padding: 72px 0 64px; }
-  .rail { grid-template-columns: 1fr; row-gap: 28px; }
-  .view { opacity: 0.2; }
-}
+.how{position:relative;background:var(--stage);color:var(--stage-ink);padding:clamp(72px,8vw,120px) 0}
+.in{display:grid;gap:48px}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:48px}
+.label{margin:0 0 20px;font-size:14px;font-weight:500;color:var(--stage-brand)}
+.h2{color:var(--stage-ink);max-width:18ch}
+.intro{max-width:26ch;margin:0 0 8px;font-size:18px;line-height:1.5;color:var(--stage-muted)}
+.figure{margin:0;min-width:0}
+.figureLabel{font-size:12px;color:var(--stage-muted);margin-bottom:16px}
+.flow{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:0;padding:0;border:1px solid var(--stage-line);border-radius:var(--px-r-lg);overflow:hidden;background:var(--stage-2)}
+.step{position:relative;min-width:0;padding:20px;display:flex;flex-direction:column;gap:20px}
+.step+.step{border-left:1px solid var(--stage-line)}
+.stepHead{display:grid;gap:12px;min-height:72px}
+.number{font-family:var(--font-mono);font-size:12px;font-weight:400;color:var(--stage-brand)}
+.stepHead h3{font-family:var(--font-display);font-size:18px;line-height:1.25;font-weight:400;letter-spacing:-.015em;margin:0;max-width:16ch}
+.visual{display:flex;flex-direction:column;gap:12px;flex:1;font-size:12px;line-height:1.45;min-height:240px}
+.visual b{font-weight:500}
+.eyebrow{font-size:10px;color:var(--stage-muted);display:block}
+.campaign,.question,.card{border:1px solid var(--stage-line);border-radius:var(--px-r-md);padding:14px;background:var(--stage)}
+.campaign>b{display:block;font-size:17px;margin:10px 0 16px}
+.campaign dl{display:grid;gap:10px;margin:0 0 20px;font-size:10px}
+.campaign dl>div{display:flex;justify-content:space-between;gap:8px}
+.campaign dt{color:var(--stage-muted)}
+.campaign dd{margin:0}
+.action{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--stage-ink);border-top:1px solid var(--stage-line);padding-top:12px;font-size:11px}
+.endpoint{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--stage-muted)}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--sol);flex:none}
+.question p{font-size:12px;line-height:1.55;margin:8px 0 0}
+.branch{display:grid;gap:10px;margin-top:4px}
+.branch>div{display:flex;align-items:center;gap:10px;color:var(--stage-muted)}
+.branch>div[data-ad]{color:var(--stage-ink)}
+.branchMark{font-size:18px;color:var(--stage-brand)}
+.branch b,.branch small{display:block;font-size:11px;line-height:1.5}
+.branch small{font-size:10px;color:var(--stage-muted);margin-top:3px}
+.inputs{display:grid;gap:8px}
+.inputs>div{padding:10px;border:1px solid var(--stage-line);border-radius:var(--px-r-sm);display:grid;gap:4px;background:var(--stage)}
+.inputs b{font-size:10px}
+.inputs span{font-size:9px;color:var(--stage-muted)}
+.inputs .evidence{border-color:color-mix(in oklab,var(--contexthint) 55%,var(--stage-line))}
+.evidence b{color:#ff9b73}
+.judgment{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border:1px solid var(--stage-brand);border-radius:var(--px-r-sm);background:color-mix(in oklab,var(--brand) 16%,var(--stage))}
+.judgment b{font-size:13px}
+.judgment span{color:var(--stage-muted);font-size:10px}
+.auction{display:grid;gap:5px;padding:0 2px}
+.auction b{font-size:10px}
+.auction>span:last-child{font-size:10px;color:var(--stage-muted)}
+.answer{display:grid;gap:5px;padding:0 2px}
+.answer i{display:block;height:4px;background:var(--stage-line);border-radius:2px}
+.answer i:nth-child(2){width:90%}
+.answer i:nth-child(3){width:60%}
+.answer span{font-size:9px;color:var(--stage-muted);margin-top:3px}
+.card{border-color:var(--stage-brand);padding:12px}
+.card>span:first-child{display:block;color:var(--stage-muted);font-size:10px;margin-bottom:6px}
+.card>b{font-size:12px}
+.card p{font-size:10px;line-height:1.55;margin:8px 0 12px}
+.destination{font-size:9px;color:var(--stage-brand);overflow-wrap:anywhere}
+.receipt{display:flex;gap:6px;align-items:center;color:var(--stage-muted);font-size:9px}
+.receipt>span{color:var(--stage-brand);font-size:12px}
+.payment{gap:12px}
+.payment>div:first-child{padding:14px;border:1px solid var(--stage-line);border-radius:var(--px-r-md);background:var(--stage)}
+.payment b{display:block;font-size:12px;margin-top:8px}
+.vouchers{display:flex;align-items:center;gap:6px;margin:20px 0 12px}
+.vouchers i{width:10px;height:16px;display:block;border:1px solid var(--stage-brand);border-radius:2px;background:color-mix(in oklab,var(--brand) 20%,var(--stage))}
+.vouchers i:last-of-type{background:var(--stage-brand)}
+.vouchers>span{color:var(--stage-muted);margin-left:auto}
+.latest{font-size:9px;color:var(--stage-muted)}
+.down{font-size:16px;line-height:1;color:var(--stage-muted);align-self:center}
+.close{border-left:2px solid var(--sol);padding-left:12px}
+.close>div{display:grid;gap:6px;margin-top:12px;font-size:10px;color:var(--stage-muted)}
+.caption{font-size:11px;line-height:1.6;color:var(--stage-muted);margin:0;border-top:1px solid var(--stage-line);padding-top:16px;min-height:52px}
+.foot{display:flex;align-items:flex-start;justify-content:space-between;gap:32px;margin-top:-24px}
+.details{max-width:760px;font-size:13px;line-height:1.6;color:var(--stage-muted)}
+.details summary{cursor:pointer;color:var(--stage-ink);padding:8px 0}
+.details summary:focus-visible,.link:focus-visible{outline:2px solid var(--stage-brand);outline-offset:5px}
+.details>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding-top:12px}
+.details p{margin:0}
+.link{display:flex;align-items:center;gap:12px;padding:8px 0;font-size:13px;line-height:1.6;color:var(--stage-ink);text-decoration:none;white-space:nowrap}
+.link:hover{color:var(--stage-brand)}
+@media(min-width:1600px){.step{padding:24px}.visual{font-size:13px}.inputs b,.auction b,.campaign dl,.branch b{font-size:12px}.inputs span,.branch small,.card p,.close>div{font-size:11px}.stepHead h3{font-size:20px}}
+@media(max-width:1199px){.flow{grid-template-columns:repeat(3,minmax(0,1fr))}.step:nth-child(4){border-left:0}.step:nth-child(n+4){border-top:1px solid var(--stage-line)}.visual{min-height:220px}.head{gap:32px}.intro{font-size:16px}}
+@media(max-width:899px){.head{display:grid;gap:24px}.intro{max-width:40ch;font-size:16px}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.step:nth-child(4){border-left:1px solid var(--stage-line)}.step:nth-child(odd){border-left:0}.step:nth-child(n+3){border-top:1px solid var(--stage-line)}.step:last-child{grid-column:1/-1}.payment{display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);align-items:center;min-height:0}.down{transform:rotate(-90deg)}.stepHead{min-height:0}.foot{flex-direction:column;gap:16px}.details>div{grid-template-columns:1fr;gap:16px}.in{gap:32px}.foot{margin-top:-8px}}
+@media(max-width:599px){.how{padding:64px 0}.flow{grid-template-columns:1fr}.step+.step{border-left:0!important;border-top:1px solid var(--stage-line)}.step{padding:24px}.stepHead{display:flex;align-items:baseline;gap:16px}.stepHead h3{max-width:none;font-size:19px}.visual{min-height:0}.step:last-child{grid-column:auto}.payment{grid-template-columns:1fr}.down{transform:none}.visual b,.branch b,.inputs b,.auction b{font-size:12px}.visual span,.branch small,.inputs span,.card p,.close>div,.campaign dl{font-size:11px}.card>span:first-child{font-size:11px}.caption{min-height:0;font-size:12px}.question p{font-size:13px}.campaign>b{font-size:18px}.vouchers i{width:14px;height:20px}.intro{font-size:15px}}

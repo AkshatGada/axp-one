@@ -1,0 +1,26 @@
+// Read-only sanitization of an already-finalized offline fixture channel.
+import {writeFileSync} from 'node:fs';
+import {join} from 'node:path';
+import assert from 'node:assert/strict';
+import {SQLitePaymentStore} from '../../axp-one/packages/payments/store.mjs';
+const store = new SQLitePaymentStore(join(import.meta.dirname, '../offline-voucher-million-root-worker-1/closed-channels.sqlite'), {readOnly:true});
+const channel = store.get('offline-worker-1-memory-channel-0');
+assert.equal(channel.phase, 'finalized');
+assert.equal(channel.intents.length, 64);
+assert.equal(channel.close.status, 'finalized');
+const vouchers = channel.intents.map((intent,index) => {
+  assert.equal(intent.status,'authorized');
+  assert.equal(intent.sequence,String(index+1));
+  assert.equal(intent.cumulativeAmountBaseUnits,String((index+1)*1000));
+  return {sequence:Number(intent.sequence),chargeId:intent.charge.id,acceptedAt:new Date(intent.charge.acceptedAt).toISOString(),incrementBaseUnits:intent.charge.amountBaseUnits,cumulativeAmountBaseUnits:intent.cumulativeAmountBaseUnits,status:intent.status,payloadHash:intent.payloadHash,voucherRecordHash:intent.voucherRecordHash};
+});
+const specimen = {schemaVersion:'axp.offline-voucher-specimen.v1',execution:'offline-synthetic-fixture',extractedAt:new Date().toISOString(),channelId:channel.channelId,termsHash:channel.termsHash,
+  provenance:{exchange:'actual Exchange auctions; accepted charge records deliberately injected as fixtures',payment:'actual NetworkPaymentAdapter and store state machine',signatures:'inert mock strings; no cryptographic signing',settlement:'mock finalized outcome; no native transaction or token transfer',publisherReceiptVerification:false},
+  policy:{thresholdVoucherCount:64,thresholdAcceptedBaseUnits:'64000',invocation:'external experimental policy calls beginDrain, prepareClose, confirmClose',productionThresholdWatcher:false},
+  vouchers,latestVoucher:{sequence:64,cumulativeAmountBaseUnits:channel.watermark.cumulativeAmountBaseUnits,orderedChargeCommitment:channel.watermark.orderedChargeCommitment,finalVoucherRecordHash:channel.watermark.finalVoucherHash},
+  close:{status:'synthetic-finalized',closeRecordHash:channel.close.signedRecordHash,depositBaseUnits:channel.terms.depositBaseUnits,acceptedBaseUnits:channel.acceptedBaseUnits,authorizedBaseUnits:channel.authorizedBaseUnits,syntheticSettledBaseUnits:channel.close.receipt.settledBaseUnits,syntheticRefundBaseUnits:channel.close.receipt.refundBaseUnits,actualOnChainTransactions:0,actualPayoutBaseUnits:'0'},
+  counting:'Only the latest cumulative amount is payable. Earlier cumulative values are superseded, not added together.'};
+assert.equal(BigInt(specimen.close.syntheticSettledBaseUnits)+BigInt(specimen.close.syntheticRefundBaseUnits),BigInt(specimen.close.depositBaseUnits));
+store.close();
+writeFileSync(join(import.meta.dirname,'specimen.json'),JSON.stringify(specimen,null,2)+'\n');
+console.log(JSON.stringify({status:'passed',channelId:specimen.channelId,vouchers:vouchers.length,latestCumulativeBaseUnits:specimen.latestVoucher.cumulativeAmountBaseUnits,syntheticSettledBaseUnits:specimen.close.syntheticSettledBaseUnits,syntheticRefundBaseUnits:specimen.close.syntheticRefundBaseUnits,actualOnChainTransactions:0}));

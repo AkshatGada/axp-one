@@ -1,0 +1,10 @@
+export type FinancialMode = 'synthetic' | 'devnet' | 'sandbox' | (string & {});
+export type FinancialMetadata = {financialMode?: FinancialMode; mode?: string};
+export type NativeTransaction = {operation: 'open' | 'close'; status: string; signature?: string; explorerURL?: string; finality?: string; networkFeeLamports?: string; newRentLamports?: string; reclaimedRentLamports?: string; tokenDeltas?: {payer?: string; publisher?: string; treasury?: string}};
+export type PaymentVoucher = {chargeId: string; status: string; sequence?: string | number; incrementBaseUnits: string; cumulativeAmountBaseUnits: string; payloadHash?: string};
+export type NativePayment = {mode: FinancialMode; network?: 'solana-devnet'; channelId?: string; protocolChannelId?: string; address?: string; payer?: string; payee?: string; mint?: string; phase?: 'pending_open' | 'open' | 'draining' | 'closing' | 'finalized'; openStatus?: string; closeStatus?: string; depositBaseUnits?: string; confirmedDepositBaseUnits?: string; acceptedBaseUnits?: string; authorizedBaseUnits?: string; settledBaseUnits?: string; refundBaseUnits?: string; reconciliationRequired?: boolean; canReconcile?: boolean; canRetryOpen?: boolean; canSettle?: boolean; reason?: string; transactions?: NativeTransaction[]; vouchers?: PaymentVoucher[]};
+export type PaymentAuthorization = {status: 'authorized' | 'unknown' | 'blocked'; reason?: string};
+export function financialModeOf(...records: Array<FinancialMetadata | null | undefined>): FinancialMode | undefined;
+export function moneyUnit(mode?: FinancialMode): 'test credits' | 'test USDC' | 'units';
+export function devnetTransactionURL(signature?: string): string | undefined;
+export function isFinalizedNativeTransaction(transaction?: NativeTransaction): boolean;

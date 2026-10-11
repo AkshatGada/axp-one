@@ -1,0 +1,20 @@
+// Independent offline process. Any transport invocation is a test failure.
+import {join,resolve} from 'node:path';
+import {writeFileSync} from 'node:fs';
+import {NetworkPaymentAdapter,hashNetworkTerms} from '../../axp-one/packages/payments/network-adapter.mjs';
+import {SQLitePaymentStore} from '../../axp-one/packages/payments/store.mjs';
+import {NATIVE_LIMITS} from '../../axp-one/packages/product/native.mjs';
+import assert from 'node:assert/strict';
+const directory=resolve(process.argv[2]);let channels=0,vouchers=0,closes=0,transportCalls=0;const sampled=[];
+for(const file of ['closed-channels.sqlite','durable-cohort.sqlite']){
+  const store=new SQLitePaymentStore(join(directory,file),{readOnly:true}),ids=store.db.prepare('SELECT channel_id FROM c06_payment_state ORDER BY channel_id').all().map(r=>r.channel_id),stride=Math.max(1,Math.floor(ids.length/32));
+  for(let index=0;index<ids.length;index+=stride){
+    const id=ids[index],snapshot=store.get(id),charges=snapshot.intents.map(i=>i.charge),ledger=new Map(charges.map(c=>[c.id,c])),noTransport=async()=>{transportCalls++;throw Error('cold_replay_external_operation');},transport={evidenceLabel:'synthetic_transport_fake'};
+    for(const method of ['prepareOpen','signOpen','submitOpen','lookupOpen','reserveDelivery','prepareVoucher','commitVoucher','lookupCommit','prepareClose','signClose','submitClose','lookupClose'])transport[method]=noTransport;
+    const adapter=new NetworkPaymentAdapter({store,protocolTransport:transport,getLedgerCharge:key=>ledger.get(key),getLedgerObligations:()=>({acceptedBaseUnits:snapshot.acceptedBaseUnits,reservedBaseUnits:'0',charges}),approvalTermsHash:hashNetworkTerms(snapshot.terms),limits:NATIVE_LIMITS});
+    for(const charge of [charges[0],charges.at(-1)]){const result=await adapter.authorizeCumulative({channelId:id,chargeId:charge.id});assert.equal(result.status,'authorized');vouchers++;}
+    assert.equal((await adapter.confirmClose({channelId:id,planId:snapshot.close.id})).status,'finalized');closes++;channels++;sampled.push({channelId:id,closeHash:snapshot.close.signedRecordHash,authorizedBaseUnits:snapshot.authorizedBaseUnits});
+  }
+  store.close();
+}
+assert.equal(transportCalls,0);const result={schemaVersion:'axp.offline-cold-replay.v1',execution:'offline-synthetic-fixture',status:'passed',observedAt:new Date().toISOString(),runtime:process.version,independentProcess:true,channels,voucherReplays:vouchers,closeReplays:closes,transportCalls:0,providerCalls:0,cryptographicSignatures:0,nativeBroadcasts:0,sampled};writeFileSync(join(directory,'cold-replay.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({status:'passed',channels,voucherReplays:vouchers,closeReplays:closes,transportCalls:0}));

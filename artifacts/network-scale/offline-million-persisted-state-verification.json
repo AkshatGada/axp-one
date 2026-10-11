@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "axp.offline-persisted-state-verification.v1",
+  "execution": "offline-synthetic-fixture",
+  "status": "passed",
+  "startedAt": "2026-10-07T13:28:46.475Z",
+  "completedAt": "2026-10-07T13:28:57.472Z",
+  "elapsedMs": 10996.982333,
+  "runtime": "v24.19.0",
+  "independentProcess": true,
+  "readOnly": true,
+  "verifierSourceHash": "e8dc927084a08520359aab4bed97cc1150d685e3c158a1028ea7fb339609e58e",
+  "channels": 16448,
+  "vouchers": 1052672,
+  "uniqueChannelIdentities": 16448,
+  "checks": [
+    "authorized intent sequences and cumulative amounts",
+    "immutable charge hashes",
+    "voucher record hashes",
+    "ordered charge commitment",
+    "frozen final voucher hash",
+    "stable inert mock transaction identity",
+    "mock finalized payout/refund conservation"
+  ],
+  "accounting": {
+    "unit": "fixture base units; no real tokens",
+    "depositBaseUnits": "1315840000",
+    "acceptedBaseUnits": "1052672000",
+    "syntheticSettledBaseUnits": "1052672000",
+    "syntheticRefundBaseUnits": "263168000"
+  },
+  "operations": {
+    "providerCalls": 0,
+    "rpcCalls": 0,
+    "paymentTransportCalls": 0,
+    "cryptographicSignatures": 0,
+    "nativeBroadcasts": 0
+  },
+  "files": [
+    {
+      "workerId": "worker-1",
+      "file": "closed-channels.sqlite",
+      "channels": 4096,
+      "bytes": 503562240,
+      "synchronous": 2,
+      "journalMode": "delete"
+    },
+    {
+      "workerId": "worker-1",
+      "file": "durable-cohort.sqlite",
+      "channels": 16,
+      "bytes": 2097152,
+      "synchronous": 2,
+      "journalMode": "delete"
+    },
+    {
+      "workerId": "worker-2",
+      "file": "closed-channels.sqlite",
+      "channels": 4096,
+      "bytes": 503562240,
+      "synchronous": 2,
+      "journalMode": "delete"
+    },
+    {
+      "workerId": "worker-2",
+      "file": "durable-cohort.sqlite",
+      "channels": 16,
+      "bytes": 2097152,
+      "synchronous": 2,
+      "journalMode": "delete"
+    },
+    {
+      "workerId": "worker-3",
+      "file": "closed-channels.sqlite",
+      "channels": 4096,
+      "bytes": 503562240,
+      "synchronous": 2,
+      "journalMode": "delete"
+    },
+    {
+      "workerId": "worker-3",
+      "file": "durable-cohort.sqlite",
+      "channels": 16,
+      "bytes": 2097152,
+      "synchronous": 2,
+      "journalMode": "delete"
+    },
+    {
+      "workerId": "worker-4",
+      "file": "closed-channels.sqlite",
+      "channels": 4096,
+      "bytes": 503562240,
+      "synchronous": 2,
+      "journalMode": "delete"
+    },
+    {
+      "workerId": "worker-4",
+      "file": "durable-cohort.sqlite",
+      "channels": 16,
+      "bytes": 2097152,
+      "synchronous": 2,
+      "journalMode": "delete"
+    }
+  ],
+  "limitation": "This checks persisted fixture records and SHA-256 identities. It does not authenticate the inert mock signatures or native chain finality."
+}

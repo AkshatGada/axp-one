@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "axp.native-proof-verification.v1",
+  "status": "verified",
+  "network": "solana-devnet",
+  "transactions": 52,
+  "channels": 26,
+  "verification": "finalized signatures, native program, token deltas, network fees and conserved deposits",
+  "signed": false,
+  "broadcast": false,
+  "recordSHA256": "5d38ae361e73145a173401e307689713b489d624408021bd108ae976aa7d4573",
+  "verifierSourceSHA256": "48458dbf2d28f7ee412b37c9bd86ad6c24cd291e15e4cc52d0eca321fd490a93",
+  "scope": "26 threshold-selected channels from the isolated paid Devnet run; does not assert completion of the full run.",
+  "readOnly": true
+}

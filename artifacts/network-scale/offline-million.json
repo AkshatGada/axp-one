@@ -1,0 +1,355 @@
+{
+  "schemaVersion": "axp.offline-million-voucher-stress.v1",
+  "execution": "offline-synthetic-fixture",
+  "status": "completed",
+  "startedAt": "2026-10-07T12:05:02.672Z",
+  "completedAt": "2026-10-07T13:26:11.362Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "sourceCommit": "9909b97c185505a11149415b9bad8061598715f6",
+  "executableSourceHash": "94915966420b135d794b8567fd456cf1999a61372fd96c0673d7cd6342982c7f",
+  "workerPolicySourceHash": "99c58493bbd7b6ec7704424cd79330d5fdcba84ef0e80416126d25147ef8adce",
+  "controllerSourceHash": "484aa7dbfeebf3fdf51c364f3b6689910a4a6020e952724e7d655df0372f851a",
+  "targets": {
+    "localFixtureVouchers": 1048576,
+    "isolatedFixtureChannels": 16384,
+    "thresholdVouchers": 64
+  },
+  "measured": {
+    "largeStressVouchers": 1048576,
+    "largeStressChannels": 16384,
+    "durableProofVouchers": 4096,
+    "durableProofChannels": 64,
+    "totalVouchers": 1052672,
+    "totalSyntheticCloses": 16448,
+    "peakConcurrentWorkerProcesses": 4,
+    "peakVoucherInflightPerWorker": 1,
+    "elapsedMs": 4867715.47875,
+    "vouchersPerSecond": 216.25586059732478,
+    "authorizationLatencyMs": {
+      "p50": 10.924833000055514,
+      "p95": 21.92279199999757,
+      "samples": 1052672
+    },
+    "aggregateWorkerLifetimePeakRssUpperBoundBytes": 1197375488,
+    "vouchersPerSyntheticThresholdClose": 64
+  },
+  "counters": {
+    "vouchers": 1052672,
+    "syntheticOpenOutcomes": 16448,
+    "syntheticCloseOutcomes": 16448,
+    "fixtureVoucherPrepareCalls": 1052672,
+    "fixtureCommitCalls": 1052672,
+    "fixtureTxPrepareCalls": 32896,
+    "duplicateVoucherReplays": 65792,
+    "duplicateCloseReplays": 16448,
+    "budgetExhaustionChecks": 16448,
+    "outstandingReservationBlocks": 8,
+    "mutatedChargeRejects": 8,
+    "unknownCommitLookups": 8,
+    "restartReplayChecks": 320,
+    "cryptographicSignatures": 0,
+    "nativeBroadcasts": 0,
+    "rpcRequests": 0,
+    "providerRequests": 0
+  },
+  "accounting": {
+    "unit": "offline fixture base units; no tokens or transfers",
+    "depositBaseUnits": "1315840000",
+    "acceptedBaseUnits": "1052672000",
+    "authorizedBaseUnits": "1052672000",
+    "syntheticSettledBaseUnits": "1052672000",
+    "syntheticRefundBaseUnits": "263168000",
+    "actualPublisherPayoutBaseUnits": "0",
+    "actualNativeFeesLamports": "0"
+  },
+  "actualExecution": {
+    "providerCalls": 0,
+    "rpcCalls": 0,
+    "walletsReadOrCreated": 0,
+    "cryptographicSignatures": 0,
+    "nativeBroadcasts": 0,
+    "realOnChainSettlements": 0,
+    "organicAnswers": 0,
+    "jevDecisions": 0,
+    "domObservations": 0,
+    "signedPublisherReceiptVerification": false
+  },
+  "policy": {
+    "thresholdVouchers": 64,
+    "thresholdAcceptedBaseUnits": "64000",
+    "settlement": "explicit close invoked by external experimental count/amount threshold policy",
+    "productionBehavior": "Current product/coordinator supports explicit final drain/settle; no automatic threshold watcher.",
+    "channelReuse": "Each closed channel stays finalized. Every later batch has a distinct fixture identity."
+  },
+  "limitations": [
+    "This measures local fixture state-machine work and cannot establish Solana, provider or production throughput.",
+    "Native transport outcomes and signature-shaped strings are inert mocks, not actual Ed25519 signatures or chain receipts.",
+    "Accepted charges are explicitly injected fixtures after real Exchange auctions; browser receipt authentication is not performed.",
+    "Large stress cohort checkpoints finalized channel snapshots, not every voucher transition. The separate durable cohort uses actual SQLitePaymentStore for every adapter transition.",
+    "Threshold scheduling is external experimental policy; the committed paid runner settles only through explicit drain/settle.",
+    "Fixtures use sandbox envelope internally; no sandbox, Devnet or mainnet endpoint is contacted.",
+    "The 100k+ fixture count is separate from the approved paid run and does not enlarge its bounds.",
+    "Four independent local processes shared the Mac with other tasks; this is not an isolated hardware or production fleet benchmark.",
+    "Concurrent worker count is measured; each worker awaits one voucher operation at a time. Aggregate per-voucher inflight timing is not independently sampled.",
+    "Aggregate memory is the sum of per-worker OS lifetime peak RSS, an upper bound rather than a simultaneous peak measurement."
+  ],
+  "jobs": [
+    {
+      "workerId": "worker-1",
+      "startedAt": "2026-10-07T12:05:02.675Z",
+      "endedAt": "2026-10-07T13:25:57.157Z",
+      "exitCode": 0
+    },
+    {
+      "workerId": "worker-2",
+      "startedAt": "2026-10-07T12:05:02.676Z",
+      "endedAt": "2026-10-07T13:26:04.819Z",
+      "exitCode": 0
+    },
+    {
+      "workerId": "worker-3",
+      "startedAt": "2026-10-07T12:05:02.676Z",
+      "endedAt": "2026-10-07T13:26:10.378Z",
+      "exitCode": 0
+    },
+    {
+      "workerId": "worker-4",
+      "startedAt": "2026-10-07T12:05:02.676Z",
+      "endedAt": "2026-10-07T13:25:56.150Z",
+      "exitCode": 0
+    }
+  ],
+  "cohorts": [
+    {
+      "id": "durable-proof",
+      "channels": 16,
+      "vouchers": 1024,
+      "elapsedMs": 12676.527375,
+      "storage": "actualSQLitePaymentStore FULL transitions",
+      "workerId": "worker-1"
+    },
+    {
+      "id": "large-local-stress",
+      "channels": 4096,
+      "vouchers": 262144,
+      "elapsedMs": 4841617.685666,
+      "storage": "actualMemoryPaymentStore and actualSQLitePaymentStore per closed channel",
+      "workerId": "worker-1"
+    },
+    {
+      "id": "durable-proof",
+      "channels": 16,
+      "vouchers": 1024,
+      "elapsedMs": 12671.441041,
+      "storage": "actualSQLitePaymentStore FULL transitions",
+      "workerId": "worker-2"
+    },
+    {
+      "id": "large-local-stress",
+      "channels": 4096,
+      "vouchers": 262144,
+      "elapsedMs": 4849309.7373750005,
+      "storage": "actualMemoryPaymentStore and actualSQLitePaymentStore per closed channel",
+      "workerId": "worker-2"
+    },
+    {
+      "id": "durable-proof",
+      "channels": 16,
+      "vouchers": 1024,
+      "elapsedMs": 12679.043,
+      "storage": "actualSQLitePaymentStore FULL transitions",
+      "workerId": "worker-3"
+    },
+    {
+      "id": "large-local-stress",
+      "channels": 4096,
+      "vouchers": 262144,
+      "elapsedMs": 4854884.655958,
+      "storage": "actualMemoryPaymentStore and actualSQLitePaymentStore per closed channel",
+      "workerId": "worker-3"
+    },
+    {
+      "id": "durable-proof",
+      "channels": 16,
+      "vouchers": 1024,
+      "elapsedMs": 12700.153124999999,
+      "storage": "actualSQLitePaymentStore FULL transitions",
+      "workerId": "worker-4"
+    },
+    {
+      "id": "large-local-stress",
+      "channels": 4096,
+      "vouchers": 262144,
+      "elapsedMs": 4840571.572083,
+      "storage": "actualMemoryPaymentStore and actualSQLitePaymentStore per closed channel",
+      "workerId": "worker-4"
+    }
+  ],
+  "faults": [
+    {
+      "type": "lost_commit_ack_lookup",
+      "channelId": "offline-worker-1-durable-channel-0",
+      "sequence": 7,
+      "result": "authorized"
+    },
+    {
+      "type": "existing_outstanding_award_blocks_close",
+      "channelId": "offline-worker-1-durable-channel-0",
+      "acceptedBaseUnits": "63000",
+      "reservedBaseUnits": "1000",
+      "result": "close_not_drained"
+    },
+    {
+      "type": "lost_commit_ack_lookup",
+      "channelId": "offline-worker-1-memory-channel-0",
+      "sequence": 7,
+      "result": "authorized"
+    },
+    {
+      "type": "existing_outstanding_award_blocks_close",
+      "channelId": "offline-worker-1-memory-channel-0",
+      "acceptedBaseUnits": "63000",
+      "reservedBaseUnits": "1000",
+      "result": "close_not_drained"
+    },
+    {
+      "type": "lost_commit_ack_lookup",
+      "channelId": "offline-worker-2-durable-channel-0",
+      "sequence": 7,
+      "result": "authorized"
+    },
+    {
+      "type": "existing_outstanding_award_blocks_close",
+      "channelId": "offline-worker-2-durable-channel-0",
+      "acceptedBaseUnits": "63000",
+      "reservedBaseUnits": "1000",
+      "result": "close_not_drained"
+    },
+    {
+      "type": "lost_commit_ack_lookup",
+      "channelId": "offline-worker-2-memory-channel-0",
+      "sequence": 7,
+      "result": "authorized"
+    },
+    {
+      "type": "existing_outstanding_award_blocks_close",
+      "channelId": "offline-worker-2-memory-channel-0",
+      "acceptedBaseUnits": "63000",
+      "reservedBaseUnits": "1000",
+      "result": "close_not_drained"
+    },
+    {
+      "type": "lost_commit_ack_lookup",
+      "channelId": "offline-worker-3-durable-channel-0",
+      "sequence": 7,
+      "result": "authorized"
+    },
+    {
+      "type": "existing_outstanding_award_blocks_close",
+      "channelId": "offline-worker-3-durable-channel-0",
+      "acceptedBaseUnits": "63000",
+      "reservedBaseUnits": "1000",
+      "result": "close_not_drained"
+    },
+    {
+      "type": "lost_commit_ack_lookup",
+      "channelId": "offline-worker-3-memory-channel-0",
+      "sequence": 7,
+      "result": "authorized"
+    },
+    {
+      "type": "existing_outstanding_award_blocks_close",
+      "channelId": "offline-worker-3-memory-channel-0",
+      "acceptedBaseUnits": "63000",
+      "reservedBaseUnits": "1000",
+      "result": "close_not_drained"
+    },
+    {
+      "type": "lost_commit_ack_lookup",
+      "channelId": "offline-worker-4-durable-channel-0",
+      "sequence": 7,
+      "result": "authorized"
+    },
+    {
+      "type": "existing_outstanding_award_blocks_close",
+      "channelId": "offline-worker-4-durable-channel-0",
+      "acceptedBaseUnits": "63000",
+      "reservedBaseUnits": "1000",
+      "result": "close_not_drained"
+    },
+    {
+      "type": "lost_commit_ack_lookup",
+      "channelId": "offline-worker-4-memory-channel-0",
+      "sequence": 7,
+      "result": "authorized"
+    },
+    {
+      "type": "existing_outstanding_award_blocks_close",
+      "channelId": "offline-worker-4-memory-channel-0",
+      "acceptedBaseUnits": "63000",
+      "reservedBaseUnits": "1000",
+      "result": "close_not_drained"
+    }
+  ],
+  "rawRecordSHA256": "def5e509ce12be76eea3d39bf496bfa2eadcb9d305f9b6b847199be2610d2a64",
+  "verificationReports": {
+    "latency": "offline-million-latency-verification.json",
+    "persistedState": "offline-million-persisted-state-verification.json",
+    "specimen": "offline-million-specimen.json",
+    "coldReplay": "offline-million-cold-replay.json"
+  },
+  "latencyRaw": [
+    {
+      "workerId": "worker-1",
+      "resultSHA256": "be9197dc60c753636a5fee92c1f19a2ca75e4dfe0f0991ad99d2e7c81db124c5",
+      "format": "IEEE754-float64-little-endian-ms",
+      "samples": 263168,
+      "rawBytes": 2105344,
+      "rawSHA256": "cad1778d728956d916d8d8c7b9df8155b43b6d0c73ff8186437ac19d809ed68f",
+      "finiteNonnegativeValues": true,
+      "sourceCommit": "9909b97c185505a11149415b9bad8061598715f6",
+      "executableSourceHash": "94915966420b135d794b8567fd456cf1999a61372fd96c0673d7cd6342982c7f",
+      "policySourceHash": "99c58493bbd7b6ec7704424cd79330d5fdcba84ef0e80416126d25147ef8adce"
+    },
+    {
+      "workerId": "worker-2",
+      "resultSHA256": "d083a74e95c36ba60aca4ae2f0b980f761d39a842110e39be4680bc07560784d",
+      "format": "IEEE754-float64-little-endian-ms",
+      "samples": 263168,
+      "rawBytes": 2105344,
+      "rawSHA256": "217d07cbba7ad6e602762040e95570a8f8dba84150ade783dd4b97287ca7adad",
+      "finiteNonnegativeValues": true,
+      "sourceCommit": "9909b97c185505a11149415b9bad8061598715f6",
+      "executableSourceHash": "94915966420b135d794b8567fd456cf1999a61372fd96c0673d7cd6342982c7f",
+      "policySourceHash": "99c58493bbd7b6ec7704424cd79330d5fdcba84ef0e80416126d25147ef8adce"
+    },
+    {
+      "workerId": "worker-3",
+      "resultSHA256": "8f7eda3b564ef16852a7d65c5231ab9d3c5b18088bc5a892f161bf25e08e14dc",
+      "format": "IEEE754-float64-little-endian-ms",
+      "samples": 263168,
+      "rawBytes": 2105344,
+      "rawSHA256": "bc2694abc3240edb9df6f4aedbbed28c9c44b018b28802d8f60d6234ea7d9d1e",
+      "finiteNonnegativeValues": true,
+      "sourceCommit": "9909b97c185505a11149415b9bad8061598715f6",
+      "executableSourceHash": "94915966420b135d794b8567fd456cf1999a61372fd96c0673d7cd6342982c7f",
+      "policySourceHash": "99c58493bbd7b6ec7704424cd79330d5fdcba84ef0e80416126d25147ef8adce"
+    },
+    {
+      "workerId": "worker-4",
+      "resultSHA256": "f7a5dcfdc854e7b426da50a1748a4e68bd87fb930a893f40ee0b8be13ea87a7b",
+      "format": "IEEE754-float64-little-endian-ms",
+      "samples": 263168,
+      "rawBytes": 2105344,
+      "rawSHA256": "15eb7a01d2b1e32a080c04ef6d53c2d8ffe17705c0839c44c07d10c9a6dbb4d4",
+      "finiteNonnegativeValues": true,
+      "sourceCommit": "9909b97c185505a11149415b9bad8061598715f6",
+      "executableSourceHash": "94915966420b135d794b8567fd456cf1999a61372fd96c0673d7cd6342982c7f",
+      "policySourceHash": "99c58493bbd7b6ec7704424cd79330d5fdcba84ef0e80416126d25147ef8adce"
+    }
+  ]
+}

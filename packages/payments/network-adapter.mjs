@@ -70,13 +70,15 @@ function immutableCharge(charge) {
 const chargeHash = charge => hashNetworkRecord(immutableCharge(charge));
 
 export class NetworkPaymentAdapter {
-  constructor({ store, protocolTransport, getLedgerCharge, getLedgerObligations, approvalTermsHash, beforeSigning = async () => {}, now = () => Math.floor(Date.now() / 1000) }) {
+  constructor({ store, protocolTransport, getLedgerCharge, getLedgerObligations, approvalTermsHash, beforeSigning = async () => {}, limits = null, now = () => Math.floor(Date.now() / 1000) }) {
     check(store && ['get', 'list', 'update'].every(k => typeof store[k] === 'function'), 'durable_store_required');
     check(protocolTransport && ['prepareOpen', 'signOpen', 'submitOpen', 'lookupOpen', 'reserveDelivery', 'prepareVoucher', 'commitVoucher', 'lookupCommit', 'prepareClose', 'signClose', 'submitClose', 'lookupClose'].every(k => typeof protocolTransport[k] === 'function'), 'transport_required');
     check(typeof getLedgerCharge === 'function' && typeof getLedgerObligations === 'function', 'ledger_provider_required');
     check(typeof approvalTermsHash === 'string' && /^[a-f0-9]{64}$/.test(approvalTermsHash), 'approval_missing');
     this.store = store; this.transport = protocolTransport; this.getLedgerCharge = getLedgerCharge;
     this.getLedgerObligations = getLedgerObligations; this.approvalTermsHash = approvalTermsHash; this.now = now;
+    this.limits = limits === null ? null : Object.freeze({...limits});
+    if(this.limits) for(const k of ['maxDepositBaseUnits','maxBudgetBaseUnits','maxBidBaseUnits'])check(amount(this.limits[k])>0n,'limits_invalid');
     this.evidenceLabel = protocolTransport.evidenceLabel ?? 'injected_transport';
     check(typeof beforeSigning === 'function', 'signing_guard_invalid'); this.beforeSigning = beforeSigning;
     if (!queues.has(store)) queues.set(store, new Map());
@@ -105,7 +107,8 @@ export class NetworkPaymentAdapter {
     const rpc = new URL(terms.rpc);
     check(rpc.protocol === 'https:' && !rpc.username && !rpc.password && !rpc.hash, 'network_not_allowed');
     check(terms.network !== 'mainnet' && terms.network !== 'mainnet-beta' && terms.payer !== terms.payee, 'network_not_allowed');
-    check(terms.depositBaseUnits === '20000' && amount(terms.chargeCapBaseUnits) > 0n && amount(terms.chargeCapBaseUnits) <= 8000n, 'cap_exceeded');
+    if(this.limits)check(amount(terms.depositBaseUnits)>0n&&amount(terms.depositBaseUnits)<=amount(this.limits.maxDepositBaseUnits)&&amount(terms.chargeCapBaseUnits)>0n&&amount(terms.chargeCapBaseUnits)<=amount(this.limits.maxBudgetBaseUnits)&&amount(terms.chargeCapBaseUnits)<=amount(terms.depositBaseUnits)&&amount(terms.maxBidBaseUnits)>0n&&amount(terms.maxBidBaseUnits)<=amount(this.limits.maxBidBaseUnits),'cap_exceeded');
+    else check(terms.depositBaseUnits === '20000' && amount(terms.chargeCapBaseUnits) > 0n && amount(terms.chargeCapBaseUnits) <= 8000n, 'cap_exceeded');
     for (const k of ['voucherExpiresAt', 'applicationDeadlineAt']) check(Number.isSafeInteger(terms[k]) && terms[k] > this._time(), 'terms_invalid');
     check(terms.voucherExpiresAt > terms.applicationDeadlineAt, 'terms_invalid');
     if (terms.settlementMarginSeconds !== undefined) check(Number.isSafeInteger(terms.settlementMarginSeconds) && terms.settlementMarginSeconds >= 60, 'terms_invalid');

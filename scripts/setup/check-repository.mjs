@@ -6,7 +6,7 @@ import {spawnSync} from 'node:child_process';
 import {repositoryRoot as root} from '../../packages/config/local.mjs';
 
 // Generated, gitignored build output (Next dist dirs incl. the NEXT_DIST_DIR variants, static exports).
-const ignored = new Set(['node_modules', '.next', '.next-dev', '.next-build', '.next-first', 'out', 'dist', 'coverage', '.git', '__pycache__']);
+const ignored = new Set(['node_modules', '.next', '.next-dev', '.next-build', '.next-first', '.next-product-dev', '.next-product-build', 'out', 'dist', 'coverage', '.git', '__pycache__']);
 const findings = [];
 let checked = 0;
 function walk(path) {

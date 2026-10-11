@@ -1,0 +1,3326 @@
+{
+  "schemaVersion": "axp.network-scale-financial-chain-verification.v1",
+  "status": "verified",
+  "verifiedAt": "2026-10-07T14:30:33.660Z",
+  "network": "solana-devnet",
+  "genesisHash": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+  "source": {
+    "runId": "network-scale-2026-10-07-v1",
+    "acceptanceSHA256": "77c6670b6565deb7fec95451efc3cd23f3bf38683c77fe66baaf529c36b3342e",
+    "executionSourceHash": "c7b7a4b9b3ae6dd1636da2df9c3eb84ada2d51bdf721f55d1c841a19f3538b5b",
+    "verifierSHA256": "7a675a38ec00634b16a460c33c1ce6cbd651dfcf2c6ae3c04960d208e4c1723b",
+    "operatorPolicySHA256": {
+      "network-close-recovery.mjs": "87314ae1248caca999687a95cba39e021c14bfe0fb20dda638117999a030704d",
+      "network-close-recovery-v2.mjs": "f8e8fa12a62d5cabb036d9fd76d5db030dcbe85ba21472b873e60dc39b787ad6",
+      "network-close-recovery-v3.mjs": "6ef67639cf0bbfb6a1d7a1f4310a69ad3c4f059c122a9a0f21392a8d6dc9b0ed",
+      "network-close-recovery-v4.mjs": "8617ab8d1082ce1fd305e56ce9999d8a82dd8ae62c6a823a73ebaa4c067bdd84",
+      "network-fourth-expired-close-proof.mjs": "8ea713acd2f040498b02fcb98272c1ddeb671b37217b5f3a4087feda0546ebc4",
+      "network-fourth-expired-close-proof.json": "80ce0f4f4787b7f6231f3d49dbf369da47bd874eec18dab3091f687263de7942",
+      "network-close-recovery-v5.mjs": "a231b4398329bc7851d7df2efbd64c4ce80b702e4a72e1f6c474ed85bfa2181d",
+      "network-fifth-expired-close-proof.mjs": "ad3f8a9ed98f60b05f2442e83a04796c9ff34687aded131ad952ae03f78218dc",
+      "network-fifth-expired-close-proof.json": "b84278fa8f4e44109995de761c21e19b664091f2edf798490205be95ee285e73",
+      "network-expired-close-proof.mjs": "baf5828318cb7231ca4fefab472cca60bdb01c16aeaec2ec0ad120409657ac22",
+      "network-second-expired-close-proof.mjs": "cdbc6a2f64ba4a94f747945981e569bfed1f34c4f677f30def80b44a4970c572",
+      "network-third-expired-close-proof.mjs": "609e3ed4180e71fc0d79333d1fb42612a729e669bacf6d384bd75ef2ec368f4a",
+      "network-expired-close-proof.json": "03bb784c4d03a49ff394c6407907f8fa14d08e720f1a59e98445ae5fd3ac3857",
+      "network-second-expired-close-proof.json": "0b74d6cfa3f5f765ae8e6b3f2b1379f503deabbba737c256bff1b64fc537cdac",
+      "network-third-expired-close-proof.json": "ae0713ddfc8f1deefd144626d8d48d7db562e7576f561d58131e66f9c1e2244a",
+      "frozen-build-site.mjs": "4cf4270a4f5af06849fe00b19975c2c209d2183c10a121d410b84c641527c930"
+    }
+  },
+  "scope": {
+    "fundedChannels": 125,
+    "finalizedOpeningTransactions": 125,
+    "finalizedClosingTransactions": 125,
+    "finalizedTransactions": 250,
+    "offChainVoucherUpdates": 824,
+    "voucherCryptographicVerification": "all 824 verified offline by the bound acceptance builder; RPC checks final cumulative payouts",
+    "parentRunStatus": "partial",
+    "planned128StagePassed": false,
+    "unfundedExpiredOriginalOpenings": 3,
+    "retiredExpiredSignedCloseAttempts": 5
+  },
+  "accounting": {
+    "depositBaseUnits": "6250000",
+    "publisherPayoutBaseUnits": "1236000",
+    "payerRefundBaseUnits": "5014000",
+    "networkFeeLamports": "2070000",
+    "newRentLamports": "429895000",
+    "reclaimedRentLamports": "429895000"
+  },
+  "checks": {
+    "devnetGenesis": true,
+    "deploymentHashes": true,
+    "uniqueExactSignatures": true,
+    "finalizedStatusAndSuccessfulTransactions": true,
+    "channelProgramAndExactChannelBound": true,
+    "payerAndClosePublisherSigners": true,
+    "tokenDeltasFeesAndRent": true,
+    "depositPayoutRefundConserved": true
+  },
+  "operations": {
+    "providerCalls": 0,
+    "rpcCalls": 254,
+    "cryptographicSignaturesCreated": 0,
+    "nativeBroadcasts": 0,
+    "paymentStateWrites": 0
+  },
+  "transactions": [
+    {
+      "channelId": "campaign-0813fc7e-93ee-445b-a4d7-4015e480b881-channel",
+      "protocolChannelId": "31iAcDSZpbdaqorcXx9LZ8AF9nbdrWkFUAnbRcqxp39E",
+      "operation": "open",
+      "signature": "28TqALnUusEzHz5iPCgtssmwd1UMAzeFNxGeDNGxkADJBqpMQpUXL2KNZcrkPjNSS5MyHNE93rSEGQE3NuAdy2fo",
+      "slot": 508433966,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0813fc7e-93ee-445b-a4d7-4015e480b881-channel",
+      "protocolChannelId": "31iAcDSZpbdaqorcXx9LZ8AF9nbdrWkFUAnbRcqxp39E",
+      "operation": "close",
+      "signature": "5EUnkhXfCDStWccwnej4CyZLAXEjkPJqCNMG33faTyFNixAYpXFujx4DnXCsCyV5ZR5Bbfp1kzHStdjHcyuAJkyF",
+      "slot": 508455163,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-578a8d32-6241-489c-8c99-5e0cc2c632e6-channel",
+      "protocolChannelId": "4TB1yCcSKHkbjD2UJesAs1KMaS8E3vQopTCD99Gtc1SA",
+      "operation": "open",
+      "signature": "WK3GLYaoiCrcLhSkw9DMed916UdbBFV2H63t22JiyRp6GNLV63WKioRKRHkBwCuKCvLjpRNStAajvdm5eRJMcCp",
+      "slot": 508434080,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-578a8d32-6241-489c-8c99-5e0cc2c632e6-channel",
+      "protocolChannelId": "4TB1yCcSKHkbjD2UJesAs1KMaS8E3vQopTCD99Gtc1SA",
+      "operation": "close",
+      "signature": "5N6ADiLK22FeUtpHxUhNUSgQhB52zL3UHQAunyidEs8qxbC7hFfYqGtqVh2VoEtDQoAR4bNuawwyjrrohavbyg6h",
+      "slot": 508455205,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-65fa9e6c-a341-4048-abad-28646d9684e1-channel",
+      "protocolChannelId": "DumUr5H7SkyaFXSkiRn6gQkWNfLFoMpuyJEvFkYADEZh",
+      "operation": "open",
+      "signature": "UfBkmKcqhsUBgM69SBNfiSKVoHfxCmTnBWbqkaFDk6mWRMPKhkZTfCk3RuEfU2LYTzAaBa6hisTXBYV4JGvJxrU",
+      "slot": 508433848,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-65fa9e6c-a341-4048-abad-28646d9684e1-channel",
+      "protocolChannelId": "DumUr5H7SkyaFXSkiRn6gQkWNfLFoMpuyJEvFkYADEZh",
+      "operation": "close",
+      "signature": "5WXBnrTkBpdZunYrxJvZuskbFkuCvfGo7vU9XAFsJUQojuj4yx642Aw8zFLowKy8yzzGNLo3xon3i9NtdmWdEX75",
+      "slot": 508456252,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "32000",
+        "publisher": "18000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-6cf35d4c-f87d-4716-9b81-7d87d10f2450-channel",
+      "protocolChannelId": "4hCjLLeKPPvLQwPatQD24eCQ3L5uCT52yYmnY38g6QJS",
+      "operation": "open",
+      "signature": "KvDT6yZAPeYe6kKk7UfvTr99u7jisR4kaduHdkoVLqJBMrueW5Gz6MubZfgWq2jCqiCGLsDTsESsLwJYBG5TNBc",
+      "slot": 508433734,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-6cf35d4c-f87d-4716-9b81-7d87d10f2450-channel",
+      "protocolChannelId": "4hCjLLeKPPvLQwPatQD24eCQ3L5uCT52yYmnY38g6QJS",
+      "operation": "close",
+      "signature": "3mbSUms2VJdphnQxpLEPWHXGouFvTtWQwEBzhtc3qMzkNAucXTufm5u6H5Q8hwwvCpbPyt14LRVFkUGoBYmxBuBs",
+      "slot": 508456288,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-b80226fd-d716-4999-8a01-fa6bac12af11-channel",
+      "protocolChannelId": "8wzRCUBwBghF8p5LfxSHZtACvUUMhrNCUgunPm5TKuE6",
+      "operation": "open",
+      "signature": "3Lcbvy4d9SjGSaKmWJzYgaX5ixuFSyYbx6eoi3JxebqswC5cp9V4XKSLxMT4eyFLjwNnagGbicATzXacSMDss2TP",
+      "slot": 508433678,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-b80226fd-d716-4999-8a01-fa6bac12af11-channel",
+      "protocolChannelId": "8wzRCUBwBghF8p5LfxSHZtACvUUMhrNCUgunPm5TKuE6",
+      "operation": "close",
+      "signature": "5SwdpBNAEB7vXsLPJcznDRRR84U8EqET1E6Uhp95kKe4hnf4Rek1ytqwxxo25gvGd7n6fvZJcWEDuP1YxaN9PHP1",
+      "slot": 508456323,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-cb8e4949-1d14-4bf1-8763-e22bdf71f048-channel",
+      "protocolChannelId": "8uHAQau5f8hANrzR9e6x7z7yGfekE75Z8PJvJwRXMz7W",
+      "operation": "open",
+      "signature": "22QUqms5WKunHfnGPZK84TLzcRR8LeWzHoZ464Q72hne8naqhwVS162wFyDLyGheUTmEooB3p6xDUjzN3wQVtRAE",
+      "slot": 508433794,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-cb8e4949-1d14-4bf1-8763-e22bdf71f048-channel",
+      "protocolChannelId": "8uHAQau5f8hANrzR9e6x7z7yGfekE75Z8PJvJwRXMz7W",
+      "operation": "close",
+      "signature": "4BFQT7bBGorPvA3faiJfQm955Pgtjz9owz5mFnGwpx5nh5NkwAhNnfKPBc9U4FpNsaGg6pJLrLBT7NcodKnaeF88",
+      "slot": 508456369,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-f7e7d51a-778c-471c-9185-1da154427b0a-channel",
+      "protocolChannelId": "Acg7pHSBBMvTUWyf1YJahmz1nmjUpKAWJxDfgyqeG8DM",
+      "operation": "open",
+      "signature": "5sstZ5HeFY4mfK3xCtD2raEjaPMRxnG5rn1AjkRwyZnQxevYiYHnhJBp5ZYnf21zFymfWWBAoWkD2egC6cWv7UGt",
+      "slot": 508433904,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-f7e7d51a-778c-471c-9185-1da154427b0a-channel",
+      "protocolChannelId": "Acg7pHSBBMvTUWyf1YJahmz1nmjUpKAWJxDfgyqeG8DM",
+      "operation": "close",
+      "signature": "4LzKns9KrLgaC5dkbvyV3DS9CxGLjR73tosEYEfoSsQt9oXLf17uqP1eyAyChwWnEgDBJjeRoH6rM5keMBhJtqtm",
+      "slot": 508456408,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-fdc009ed-23c8-40ed-8d20-c3943a81d1ee-channel",
+      "protocolChannelId": "6TE8Gy1GQmcAGf5XxqNStWxtuLCMbrjm9Vu73bRXYVjX",
+      "operation": "open",
+      "signature": "52nNVwinXXuVLp3CVhDzSJVMW9dEXdv9vjj4jM6zUQ4LJLK2Zcfzasm2c32ZgaTkmZYNauDU7dZ2JKnwA8JjJSFo",
+      "slot": 508434024,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-fdc009ed-23c8-40ed-8d20-c3943a81d1ee-channel",
+      "protocolChannelId": "6TE8Gy1GQmcAGf5XxqNStWxtuLCMbrjm9Vu73bRXYVjX",
+      "operation": "close",
+      "signature": "5uUumHnHPwLpq8jrFQ4GztMLH3KhVcb99ZHgSfh7tjmaDPachhNYimdhBW9ehZyisG2xnsJRqwM88K5KeR6RuQ3P",
+      "slot": 508456448,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1108bcea-7732-4862-8d2b-385c21da3e09-channel",
+      "protocolChannelId": "82Yw3Y2gB7kdTbF5nLnsMxChrod52aaBvygJ28dS83Ei",
+      "operation": "open",
+      "signature": "g34fVqz3ZrHdWKK9qr6UU6RmyBDaEcvpVYQ6XmSMg9duXk5zmZw9GqegvA3qr2QJZMbyXxPLMSPebfhEXMnQXDr",
+      "slot": 508434557,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1108bcea-7732-4862-8d2b-385c21da3e09-channel",
+      "protocolChannelId": "82Yw3Y2gB7kdTbF5nLnsMxChrod52aaBvygJ28dS83Ei",
+      "operation": "close",
+      "signature": "5YwLx2uNHG7d8ehnTAus5DQpwFuLS13pi3ZRyg1JkmuaR3VDCPgJwsdxTkvV4VcPcQWwTbGtuNh1XfZYciCiNovH",
+      "slot": 508455247,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2b186e91-acec-4d15-a24f-c72f1df0c589-channel",
+      "protocolChannelId": "43ZMP24FHpJcrhGEz7kcpvwuLprzzodJJs15kxdD8Mcy",
+      "operation": "open",
+      "signature": "5Rjfhu5U8baKN4H1yWcxL1TYKhaWkKfJ4o9zGNm4pG6JtSLyCgnFQSoWj8q3p93HJggoHyoX7x9KiTNw2WVHJDBj",
+      "slot": 508434150,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2b186e91-acec-4d15-a24f-c72f1df0c589-channel",
+      "protocolChannelId": "43ZMP24FHpJcrhGEz7kcpvwuLprzzodJJs15kxdD8Mcy",
+      "operation": "close",
+      "signature": "5b2AoUwaHXA61aYdueKj8iT3U1reLb7JjxG3aeFmCMAB7ajjfowZnsuzpmr6XzCUdrgqJrTpvS8RwKhJnCGhhu2P",
+      "slot": 508455291,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-447f732f-7283-49fa-83ee-2dec6ebbbc72-channel",
+      "protocolChannelId": "6wRpbY8pFmdFWpCYkdXBgcyFMVNGacLrpSqxTY3iRXcd",
+      "operation": "open",
+      "signature": "rKsuV9TTijotmP73XJihCdrfC4uWEmsJ3pu7JabvffSXyP7D6P2NBeLHnHZ5E9TMqLhSDaFRT9WozhgLPh2H4Y2",
+      "slot": 508434267,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-447f732f-7283-49fa-83ee-2dec6ebbbc72-channel",
+      "protocolChannelId": "6wRpbY8pFmdFWpCYkdXBgcyFMVNGacLrpSqxTY3iRXcd",
+      "operation": "close",
+      "signature": "jbZdKrwXcjZGwnq6QZZfigWoRYEmoDCrhwihFF3yQbLpEkRweDtxKwV1ctxX9YFpkVMEneES3XZgZ3nbkGnhLvk",
+      "slot": 508456485,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "32000",
+        "publisher": "18000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-8d2d4b35-36f8-447e-9b15-f9bb6a50b633-channel",
+      "protocolChannelId": "FWJW4y7mqkwHRqV4wUmE1E56s5QCMZnEftKHuUwE4JuU",
+      "operation": "open",
+      "signature": "67VoTDMhKD8LXZU1rvPWYw6LUQJ466aGGvXxe5qkrjEM8dYAF2ZoM8dwGT4xZQsHJCdDCiQFwVJLMzqiLS5WsLC5",
+      "slot": 508434438,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-8d2d4b35-36f8-447e-9b15-f9bb6a50b633-channel",
+      "protocolChannelId": "FWJW4y7mqkwHRqV4wUmE1E56s5QCMZnEftKHuUwE4JuU",
+      "operation": "close",
+      "signature": "4dvuPv2ApgZS7q4LbFNytYs9d8FGd3y3K3uamctxZS5qWiXFRDD63bJCuoBvmmpRVALPQro3ihJKrEWP5joZ3bMZ",
+      "slot": 508456525,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-92470b3d-5f2e-459c-abe0-80c5661bd261-channel",
+      "protocolChannelId": "8DqzrSpDd73ZLQKU3qFmxcxwLb2og3b71UXvxCrtZEYa",
+      "operation": "open",
+      "signature": "5snp6cfJ4fuBzcexWvjYwfm5vnKPVDArr1VcThG1My5qE2p62mpQGEEGX4qHQmffrvqLgQzJLzrBktMpjV9WWNjt",
+      "slot": 508434326,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-92470b3d-5f2e-459c-abe0-80c5661bd261-channel",
+      "protocolChannelId": "8DqzrSpDd73ZLQKU3qFmxcxwLb2og3b71UXvxCrtZEYa",
+      "operation": "close",
+      "signature": "4UPBFEpvqJ9d4pPHcVJ7mNuvhvXkWgcVC7xkBJqSoT6bYtZJ2cdTiT6ebVnSD8ZsmFE9o8zKGhKgXbXR9aoJH1Lj",
+      "slot": 508456561,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-abcc47d4-b8d8-4ed7-829c-7d3b2817bc16-channel",
+      "protocolChannelId": "JDjFt2iACAih4tLiGxTE6khfGDGk2gjhTj6miYNPfLoc",
+      "operation": "open",
+      "signature": "4kXmQHdaASwZmR1wW1o6frzti6bn8DPBcrKD86NwV94em1gzFyFaqeDtCgZq1wMiUToK1e4Bcfj3YNuUeP3VJaCx",
+      "slot": 508434212,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-abcc47d4-b8d8-4ed7-829c-7d3b2817bc16-channel",
+      "protocolChannelId": "JDjFt2iACAih4tLiGxTE6khfGDGk2gjhTj6miYNPfLoc",
+      "operation": "close",
+      "signature": "2Z9xhkzGp3LrBeHCTpaX5iMmFriTE2HzxPaJAdkjrRWDxvt5fUqBEPUzaK3LRAo7i6W6fsLySoGq1QZSeMXN45oA",
+      "slot": 508456597,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-bf154e51-df17-4f92-93f4-b11c778bfb94-channel",
+      "protocolChannelId": "4XcvUxKNNf6dhW87yJz7tdaZqwgfE7TmrvJxLpCqUwKR",
+      "operation": "open",
+      "signature": "5qz6WuLFVaiiWpEgCUdCu7nuMkNhz9ndrjodYyKggT7TdxNTCeCL9Mf6A53Y4DSAZaaCggr5zFKhREb1pDXX4RY7",
+      "slot": 508434382,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-bf154e51-df17-4f92-93f4-b11c778bfb94-channel",
+      "protocolChannelId": "4XcvUxKNNf6dhW87yJz7tdaZqwgfE7TmrvJxLpCqUwKR",
+      "operation": "close",
+      "signature": "61H1xSFzNF6RWGJvA5BBcMdxpVgrSLUZbraxccouwHTapKoAF1kTFXXW1ykC4s4uocg8iXut9c4BXrLXA1nWVGr2",
+      "slot": 508466299,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-ca86eb52-13af-4d48-9e7d-57673c2f6449-channel",
+      "protocolChannelId": "8qaG2tcDUF4Dj8gSMPHPdqLr84U2aNRAoN5kAKPz6njh",
+      "operation": "open",
+      "signature": "4XjCMrfZuZ9tcSL2WRbHC8GNw2WgVB2UeCz1DEvHi4tJ1mZmtjoD2ZodgywGPqg8yuzJz1mjPcVL7TyvEGYB2Naq",
+      "slot": 508434500,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-ca86eb52-13af-4d48-9e7d-57673c2f6449-channel",
+      "protocolChannelId": "8qaG2tcDUF4Dj8gSMPHPdqLr84U2aNRAoN5kAKPz6njh",
+      "operation": "close",
+      "signature": "5Gy2eHvsi8n4qQcZnL9ezUKAuAK9sz8msZMS7EqUAGWSjTVRfomUjKodfbaiCGPk2Czb3VAdHrbDt4pt4G8q22Er",
+      "slot": 508466356,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-150f316a-7058-410b-9377-73e6c87cd470-channel",
+      "protocolChannelId": "ArkeKy3DrNboqqQJxam7vmabu5ywZoVj5j5nBh1GTVCq",
+      "operation": "open",
+      "signature": "2ciCZWQPg82pkeCRhzwdtvSNCSWnRi7EEtAY13cZkiZWhpGEUte8DHUU9nPtCaAG78roeuAb1GXnKvfXox713KHP",
+      "slot": 508436267,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-150f316a-7058-410b-9377-73e6c87cd470-channel",
+      "protocolChannelId": "ArkeKy3DrNboqqQJxam7vmabu5ywZoVj5j5nBh1GTVCq",
+      "operation": "close",
+      "signature": "3J8t5KBQRcQcrWDYDR5hWvbjrkUsvRuFxk2P3mDYKwxU34NbT2EGTVcCK5fKUw5MHUMD1rhjUxbgv98GbUB25ZX6",
+      "slot": 508455344,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1df82488-cf0c-4108-8c8c-d4bf6097c4c1-channel",
+      "protocolChannelId": "2phhx9gjaaaa6NW9eBpVo728PVsWf7XVEyT97r2GZoEr",
+      "operation": "open",
+      "signature": "5HMGzV4ipbRVFzz1BnWPgjADYcitFQXshKLhMA2dpkGBvUyLydTUuCTBhLHBDHM6DEsLSpoFFhRpeXfPXW7zfMWj",
+      "slot": 508436321,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1df82488-cf0c-4108-8c8c-d4bf6097c4c1-channel",
+      "protocolChannelId": "2phhx9gjaaaa6NW9eBpVo728PVsWf7XVEyT97r2GZoEr",
+      "operation": "close",
+      "signature": "eiquCs6ZwR4jC1JZmktCQRGrkRyjbzRxvCNiUhwtY64i7D5wDc6QcJA1vasLyzJ6nDLy8dxr6LFwWEv7VVtxrba",
+      "slot": 508455383,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-4239a020-5e39-437f-89f3-1890f348d51a-channel",
+      "protocolChannelId": "Er1rCK5AbSzaZruKjGCNmzisRzpvuauiDbqo1zkyydaY",
+      "operation": "open",
+      "signature": "5qhR6tJ1aAnyxoEW7Lc4xjHtbr675UBtceEF245eV1taw7FGxuuhwZTWXKqwKMLaSS4qTT6dsK9x8Qd1bGW1w3G9",
+      "slot": 508436213,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-4239a020-5e39-437f-89f3-1890f348d51a-channel",
+      "protocolChannelId": "Er1rCK5AbSzaZruKjGCNmzisRzpvuauiDbqo1zkyydaY",
+      "operation": "close",
+      "signature": "3gcicsaTSyrhULwTqUVinwCQmrTmWaE2jdaDooxF6i55cd2LNZbWiYTmPz7tdur6QTFpkhwerHhJq4GWwaRi8SCR",
+      "slot": 508466403,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "32000",
+        "publisher": "18000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-504d62ad-c8c4-4d1b-8c95-588fdbcb209a-channel",
+      "protocolChannelId": "HtMhDceJd1UxwMgWCWsp5cy9TR5gWBCpcT1ZdCg4hPN6",
+      "operation": "open",
+      "signature": "3CNo6nrPTi1iaAkayDfzUW1gGtwFY4sk5P9yoMeHH9RekGaLXFd7y6LgEEa3fMYP2WGWKTrpykf7YA5kVa88HtFU",
+      "slot": 508436440,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-504d62ad-c8c4-4d1b-8c95-588fdbcb209a-channel",
+      "protocolChannelId": "HtMhDceJd1UxwMgWCWsp5cy9TR5gWBCpcT1ZdCg4hPN6",
+      "operation": "close",
+      "signature": "4bM45GxgrUwJzWT6B6aGLW11hz4JR1AJA3uDsHgvfNtb9pXtYU7QDjsJShdGjKzWaSafzX7Cqopb5MQUPUvvAcRS",
+      "slot": 508466451,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-52537af1-62ee-40a9-b5ab-8b56a80bec80-channel",
+      "protocolChannelId": "FKRE4ScX38gihJCtDYhPAsfDQ8XkkyhN9ShTqbeA7V5L",
+      "operation": "open",
+      "signature": "35gYzZYWECQG3r14EgVFyV3EipM9fwpn65oNSoE6yfS7fRMS5tFuezL4eaKdAJz1HpZzAW2XaZvfNPwKG6ghotqg",
+      "slot": 508436159,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-52537af1-62ee-40a9-b5ab-8b56a80bec80-channel",
+      "protocolChannelId": "FKRE4ScX38gihJCtDYhPAsfDQ8XkkyhN9ShTqbeA7V5L",
+      "operation": "close",
+      "signature": "2xKRMbBK13eirAN2DFGrTzbTKKf6cKoiMeHDUVmMenTPVBSgT2m7RiL9hPjvbGYFhUnaEBxV4d77s9ac2Q3q2nJw",
+      "slot": 508466500,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-746e47fa-029e-4d64-ae39-f598a2ec840f-channel",
+      "protocolChannelId": "AUBGKrPaGF7CV4u5Tj8NPjQYFMYU1ZLaPq3JkcNz6BLU",
+      "operation": "open",
+      "signature": "5eR2e2pAL1Zia3CEYQnVkqRY2onzhQaE9N7AhfVw1Sw5baqaNJjQWiQGFwyEa7HTpwMUsCmwLksSKCvfaAEyQy67",
+      "slot": 508436548,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-746e47fa-029e-4d64-ae39-f598a2ec840f-channel",
+      "protocolChannelId": "AUBGKrPaGF7CV4u5Tj8NPjQYFMYU1ZLaPq3JkcNz6BLU",
+      "operation": "close",
+      "signature": "4imjW51QvLyWPTCke2j48SNDUpYQpeB7juxxDV9D6LAAYSS9txrWmPRUviaBVb9wxmPNNhwbJSGM9YWUBBtmEQCk",
+      "slot": 508466549,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-c0527eb3-3c68-4107-997e-97e2ce6fbbe2-channel",
+      "protocolChannelId": "4MVYqDHhwz9Ct2zmN912tf2xWivc5ufDM3oATeH5UjzW",
+      "operation": "open",
+      "signature": "45sTaLpF1FmV8UmxXBE42Xv7MvWVAGsK5VuQhCvCNKDG8qX38Fe5eoxhFAGghRj2mmLhmVx5YxmyX1jAUWp5xuSP",
+      "slot": 508436376,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-c0527eb3-3c68-4107-997e-97e2ce6fbbe2-channel",
+      "protocolChannelId": "4MVYqDHhwz9Ct2zmN912tf2xWivc5ufDM3oATeH5UjzW",
+      "operation": "close",
+      "signature": "4M769k2kM2dFtjsbFPkag6aoPrCBTh9JktL31xVK763Gki2cikXQaowsRzXa5QRYwLyDBZ2of98VDWLybmJh4zVK",
+      "slot": 508466599,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-e6cbb184-782b-434d-ac56-0ee559660955-channel",
+      "protocolChannelId": "3E3ZvU3fBgtYmV4iTqWAMeAq7ebjrLAm6z3H3GtqVapT",
+      "operation": "open",
+      "signature": "5P82cEjJBwZ3PCj3mu46CakRrK1iAfCsS49CqH8svjkdxJJbNid6bJcEu4fVhnQfRomsfxD3kWwcbCzAJYuiGDWX",
+      "slot": 508436495,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-e6cbb184-782b-434d-ac56-0ee559660955-channel",
+      "protocolChannelId": "3E3ZvU3fBgtYmV4iTqWAMeAq7ebjrLAm6z3H3GtqVapT",
+      "operation": "close",
+      "signature": "ykRzjW7KMexz3pnoNMyq2h7joopJsfL5cxnM7WRonxjSCvgTAH4t9b5ptQJ5jgWzox18mGFYVrHyFKLvgaqPHVS",
+      "slot": 508466646,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0fe668d6-1ad6-4de8-b11d-c2f16519d61b-channel",
+      "protocolChannelId": "55MQs46aE6BkfTdbhDugBMTHbZFPnZ4o89ebi4XoGHeP",
+      "operation": "open",
+      "signature": "4dCBNbnNztpZsgpqq4Jb2QSxBuHusi6J9mA1JodBQ5wFApip1CDuCn83g5VFGXDrNAyCXAnQSutzUaHzSvqRs3tW",
+      "slot": 508436949,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0fe668d6-1ad6-4de8-b11d-c2f16519d61b-channel",
+      "protocolChannelId": "55MQs46aE6BkfTdbhDugBMTHbZFPnZ4o89ebi4XoGHeP",
+      "operation": "close",
+      "signature": "2PKA1WRr2b4vRpjRogzcvKgdHUj9hUQ4r9xb98wrXxbo7XNFGGHLCz9bRRPN6noy6Kfq27tpCcTrg92a9Q4XFLMX",
+      "slot": 508455422,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-302100a8-deaf-40d2-b218-75a3b0d3c62c-channel",
+      "protocolChannelId": "DrT8wZpAwtP1Fn4swEosjNZKqeki923RD8ovQaYH4XHS",
+      "operation": "open",
+      "signature": "57PjaGipKg6BApbmTYmmW1XikXrnj5JEZy2W6Cini6xVz4hAKjaGHbvFiyCs6AFsawcweQyNJzc4nLmgxGvoKy1P",
+      "slot": 508436833,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-302100a8-deaf-40d2-b218-75a3b0d3c62c-channel",
+      "protocolChannelId": "DrT8wZpAwtP1Fn4swEosjNZKqeki923RD8ovQaYH4XHS",
+      "operation": "close",
+      "signature": "ceYVRsgH19HRbkEkzqvc8iC5XkqvwX49MRJCVqV42xqyqfzYYf4W1srLT3Z3P2asFmHBhoGHgir4D6bXhkmjVXa",
+      "slot": 508455465,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-30d793f3-fdce-4df2-928d-6c56a6faf02e-channel",
+      "protocolChannelId": "7pJRB4EZgEcaQQbS88aKCsd2vBFrSdFDPKsKbF5rHCxh",
+      "operation": "open",
+      "signature": "aBtJKnppLhFvdQxH2bM9EjNcFZsaBgVwaiGD9pBFnb4R5vmbniuZ3e1zZv1EiTuHYeUwmvQUZHDvKJeUfBqd9A6",
+      "slot": 508437007,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-30d793f3-fdce-4df2-928d-6c56a6faf02e-channel",
+      "protocolChannelId": "7pJRB4EZgEcaQQbS88aKCsd2vBFrSdFDPKsKbF5rHCxh",
+      "operation": "close",
+      "signature": "t5zWx6DvpH9QdYNSS3BXgSo1QjfZFviKXojzoJuAjA4bzUwGAV1ky5coeSa9J2G8PT459ifSaqeEywKee2j1qUc",
+      "slot": 508466693,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "32000",
+        "publisher": "18000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-38050a0f-73ba-4871-951a-d030ec29cacd-channel",
+      "protocolChannelId": "2ZpHMbx589NAD7Ky7fUA7WAP7VvTsHXZUnmxFqJgicSg",
+      "operation": "open",
+      "signature": "5DspC1Mago94b1q1QFrGrefA7GMpq2UfMMLiKkiL75QhRVg9sZThy6T78Myb41dNUfY8NqdAfZMPdNnyAq43BxrT",
+      "slot": 508436603,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-38050a0f-73ba-4871-951a-d030ec29cacd-channel",
+      "protocolChannelId": "2ZpHMbx589NAD7Ky7fUA7WAP7VvTsHXZUnmxFqJgicSg",
+      "operation": "close",
+      "signature": "4sbmDCJh25HWea4DKHYXHZyqEPf1Z7c8npEso6EzfWv6MDMaoHGmkGq6z9j2X7gKmdquLaXvxAxMZR1R6K2nU227",
+      "slot": 508466740,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-7d5bd1c5-1602-4d6f-ba56-356f63d27629-channel",
+      "protocolChannelId": "8LUbb9orr8a87GyJVw6ephaY3yD46nJzCQ84Btshpbmk",
+      "operation": "open",
+      "signature": "5oYopsPfeWAC3zE9i9P3AAeDN91SvBqHxb81yY1S8Xbn1od2VkWKWw8ZwHseDVqWDSytLwPUkJPhcYJJsaouBnXK",
+      "slot": 508436773,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-7d5bd1c5-1602-4d6f-ba56-356f63d27629-channel",
+      "protocolChannelId": "8LUbb9orr8a87GyJVw6ephaY3yD46nJzCQ84Btshpbmk",
+      "operation": "close",
+      "signature": "5X7vWNknyiXdCQNEVfrm9PHZWdg5dE1BWhkUKJkdXqVeTpzh2Q3NgL5H4SXg6DhSR9HRdh4wFGssmLK3b9647Ez8",
+      "slot": 508466791,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-b146b3e4-f69b-43fb-9df0-46604dbf127c-channel",
+      "protocolChannelId": "GdPzSA8VcQJnGXbR41x1gzSHre3QeFvCQCriHMVMq6jU",
+      "operation": "open",
+      "signature": "5iAJAyExb7D4udu44tsA6uRGpmjPBdqQrF5WoD97eS6jjoKP2SFhQYA5rbgqvUsGEVapqME8QNR63sLj1mShEDFA",
+      "slot": 508436892,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-b146b3e4-f69b-43fb-9df0-46604dbf127c-channel",
+      "protocolChannelId": "GdPzSA8VcQJnGXbR41x1gzSHre3QeFvCQCriHMVMq6jU",
+      "operation": "close",
+      "signature": "3rNcY4MtdAGeKMzxfGpQZM2P3xGZEzMAJ34Khqx8bo8uwWB66GrSogefbaLsEypjpjzMbUKwSWvGhvxNmuM79arc",
+      "slot": 508466840,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-b37e057a-e15b-4261-8502-76ac8d9adaf5-channel",
+      "protocolChannelId": "4ppLEgbCEfchvK8c8HPTLQDqhGF4vo72MK2c2UxAMKXb",
+      "operation": "open",
+      "signature": "3qxySnNNzXgzHU7megat1zU5DvzwVmh9G2GgCAqNyPFzDz7jUJjPFih4H5BLSoTwoaeyDBUTfJsjmBE51cjVDtUU",
+      "slot": 508436665,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-b37e057a-e15b-4261-8502-76ac8d9adaf5-channel",
+      "protocolChannelId": "4ppLEgbCEfchvK8c8HPTLQDqhGF4vo72MK2c2UxAMKXb",
+      "operation": "close",
+      "signature": "3kxJLvfm3wCWcEjiaRBoHNuZzMjo5QdbVdt9TcT8kJDNNUqFdz4xFnJMhz72akanAsSCv63Zx9xqfN3ZVkURs3pc",
+      "slot": 508469132,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-b7a10478-4e0a-4501-a0ce-c70b6a362f35-channel",
+      "protocolChannelId": "Pyn4nvi6Hb3gQUq2GWcMwfj4eWZGMQ6vJdGs8uSFsB9",
+      "operation": "open",
+      "signature": "3jPE8MMTQ8PNVbnb2To7yrZid5JSL39njr7cynUfP3KHydeV7uiZrTAyVDcJhBbbrSGFMk4k55N2y9EPNbA2T2mr",
+      "slot": 508436720,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-b7a10478-4e0a-4501-a0ce-c70b6a362f35-channel",
+      "protocolChannelId": "Pyn4nvi6Hb3gQUq2GWcMwfj4eWZGMQ6vJdGs8uSFsB9",
+      "operation": "close",
+      "signature": "JagQbjedbyT6x2rA2UHd1GNdZCXiRrE9aRL7a39kYf65U1oWV1qhhdfKuFp3E7fe4m1Juq1xSZszuwR1PmzxXMS",
+      "slot": 508469200,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-009b9a29-3dbd-4ea0-9c7d-1a0c1e58f64b-channel",
+      "protocolChannelId": "GAfR6adbhfbxSdjKKdeXnHLtsdM8t2xNe2vFbyD9AfdS",
+      "operation": "open",
+      "signature": "a8HnfRCbihqnfiK8hQggdnu1ocrZYzrGQdrXbcNHZ5iwTTpyJxGEYUvA2qiMUx1BoPJWTkPFgfVWYJZTdTFMyq8",
+      "slot": 508437060,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-009b9a29-3dbd-4ea0-9c7d-1a0c1e58f64b-channel",
+      "protocolChannelId": "GAfR6adbhfbxSdjKKdeXnHLtsdM8t2xNe2vFbyD9AfdS",
+      "operation": "close",
+      "signature": "2er4JaNhV9cn2sBC3DNtDLxouXep8TTxVJk2qRgCn6CzqER6hYrXZm9J8RgWwUNx5FJu5nsN8wvjpDCgiecTmmWg",
+      "slot": 508455508,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-045c01aa-3def-402e-ac77-9bd5007350d9-channel",
+      "protocolChannelId": "GiYaM5ysgLWkVs28noTZgPfv6ivpnJEm7vkauJEsYycZ",
+      "operation": "open",
+      "signature": "466XXcnNYwLUjAEyNmWnsqqmpcAHyk3xnh2FxBXwbTEFkACP5J5cwAh1AkcQnZU2yeas6GBZwFC5K5Adu7ALnPt7",
+      "slot": 508437345,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-045c01aa-3def-402e-ac77-9bd5007350d9-channel",
+      "protocolChannelId": "GiYaM5ysgLWkVs28noTZgPfv6ivpnJEm7vkauJEsYycZ",
+      "operation": "close",
+      "signature": "3n2F5jrWGC825SG6CkdJEJwQNmnZmSdUVEQdm65ZeUUG4QnN7HcqHgGPyixwCeJS2dB44cGQrKwnM5VSDzxrGZGM",
+      "slot": 508455548,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-22dd3914-a4df-4c2f-8914-0b02a2aa0332-channel",
+      "protocolChannelId": "AwuzeiskTPLHPXzrb5u3xppFZZfDD7bviM6yPeFQnL9a",
+      "operation": "open",
+      "signature": "5VCFJMxQbaZXocKz8QVXbPukP3TshZ5TRquU5bWvFMXNo3rB1U5MkV9P5PkRHixWcRfNNzbsc93mbU1hhV1C6miQ",
+      "slot": 508437404,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-22dd3914-a4df-4c2f-8914-0b02a2aa0332-channel",
+      "protocolChannelId": "AwuzeiskTPLHPXzrb5u3xppFZZfDD7bviM6yPeFQnL9a",
+      "operation": "close",
+      "signature": "Hhapo27sxiQCxS9B9uaTmmT5FufRmo9bwhtYHm9yhZ1sG4HvqRsFwZgB1iy4adp6o3k8MrZS1rTnF7xZ58nQrwc",
+      "slot": 508469251,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "32000",
+        "publisher": "18000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2767d513-e3c4-4fa3-847f-b1d1f73d1aba-channel",
+      "protocolChannelId": "FSbTgK7JqPUgsDYXrRNBLA3RQA92oZwE2ofZVXyM5SSX",
+      "operation": "open",
+      "signature": "2ue2esm4buqUZfyHvHoc6F4ffUPwe5Zi4H5eh8vsLrRFH1XkizAu9Ep9pvwQqsyB84EYEodiUUtLcyZ8pbs74xKR",
+      "slot": 508437465,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2767d513-e3c4-4fa3-847f-b1d1f73d1aba-channel",
+      "protocolChannelId": "FSbTgK7JqPUgsDYXrRNBLA3RQA92oZwE2ofZVXyM5SSX",
+      "operation": "close",
+      "signature": "2LGeUEDG9akggHKViAAoxousjVsiz5G2oq4W7kwNURwVPus8hMwke7NFQzBxxBmkh8RskCWHRA3G3dH3322Zrq4P",
+      "slot": 508469300,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2baecdf7-1c0f-4053-a60b-02edf44e46e9-channel",
+      "protocolChannelId": "9MCxXPdFPP8voBUkLwdGQQ9ECkuAntDYojxqbjxAUi1i",
+      "operation": "open",
+      "signature": "FkV9CgjT1FaEkmNMWWCudtT1LNTcoyjaMUDE8koCXMUh88Uvt5RZ1ZeB28dc7PYFy8rhVRs6MXFUWYJcDWeHRhd",
+      "slot": 508437288,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2baecdf7-1c0f-4053-a60b-02edf44e46e9-channel",
+      "protocolChannelId": "9MCxXPdFPP8voBUkLwdGQQ9ECkuAntDYojxqbjxAUi1i",
+      "operation": "close",
+      "signature": "YUDJeLpXeWU6vaK6HankSktfTLWbhhH6wxWJbucD1EGcETQA1TN9ebVatKpTnUsNmyGT3vN28kcEhTBBRb6LzeM",
+      "slot": 508469349,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-52f26d4b-2ae2-4147-8e6f-0ddbe20febda-channel",
+      "protocolChannelId": "CxFawEfziahHkfoAF6uJDgy6zRy1urF5PRbZ6pct2g3X",
+      "operation": "open",
+      "signature": "paeWZpqs4r2qUXqEh8Bu9Ava2oNFquUCCztvMjAYjjVZQ57bi7juGmCh3BTXG5EDZPzQ9nNM6DKRGx2NXqnpGbP",
+      "slot": 508437172,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-52f26d4b-2ae2-4147-8e6f-0ddbe20febda-channel",
+      "protocolChannelId": "CxFawEfziahHkfoAF6uJDgy6zRy1urF5PRbZ6pct2g3X",
+      "operation": "close",
+      "signature": "53MGpeA4knyMKTZfNUZFfBZgunM48s6hXtGSy8EM1eCEQABYPvehjg3UW2xgf3dYteV4VhU3FZ5x5DeWE4nYzMY1",
+      "slot": 508469398,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-773cb0c6-d4af-4281-bfdc-39904418af72-channel",
+      "protocolChannelId": "EzCd9uPtRK39Q77zpFFpvu6b8YhE6cgCfoyRMaFyaYJE",
+      "operation": "open",
+      "signature": "4k6i4q4LyETgtdq9xdK64nYoG2CbCXvFQ6wmnY6MYEw6WE9eD4Eo6tDtQMAHZ2WmTerGkLGQELCuAEEeJmceEYzG",
+      "slot": 508437116,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-773cb0c6-d4af-4281-bfdc-39904418af72-channel",
+      "protocolChannelId": "EzCd9uPtRK39Q77zpFFpvu6b8YhE6cgCfoyRMaFyaYJE",
+      "operation": "close",
+      "signature": "2q2pvuhS9shvEKBS8DGySUvBoHFhz7bWdHKs2oCLqmNq9vLUyg4HszVvmWybZ1TRz7DuCsEDXSegzwnwE9HgRknN",
+      "slot": 508469448,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-96abe2eb-0d44-43a9-8de9-add8d5a6aef4-channel",
+      "protocolChannelId": "8rRdByf33Qb4wqyFYXbFK8yrUQohVR4gUiTKct9BBEAL",
+      "operation": "open",
+      "signature": "5t7wUszbn8Lukq6vu2CC1W88CfRXx4qiJfbVSNnqeoKcFfDBa7qHkcUvmthtQWRM5B8yecaHK6YpiL2cmRMgHkj2",
+      "slot": 508437229,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-96abe2eb-0d44-43a9-8de9-add8d5a6aef4-channel",
+      "protocolChannelId": "8rRdByf33Qb4wqyFYXbFK8yrUQohVR4gUiTKct9BBEAL",
+      "operation": "close",
+      "signature": "3dS1B3PMKv9hzj5pPVJmhA4T1icdHFejvixvzmb8uFZZ1BSvm9weHTNdj1z4Pjgxzpoz4YiweDAnkCwsHwKawVXD",
+      "slot": 508469493,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0b888f1a-9867-452a-93c6-8f93b2c26ad4-channel",
+      "protocolChannelId": "ApZ9HxHK3eSLqZHzXBMPXkHd3gUpR6femkW3yoLcJ8Vx",
+      "operation": "open",
+      "signature": "Fss9p3og6oFRP2obKVyaBqKjGPrvAPu5FAVYHaYEMhaXKFbfzhPgvTk4pSa2dLkj9x2Rmi6x9iUCCz4fyi1yFfT",
+      "slot": 508437935,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0b888f1a-9867-452a-93c6-8f93b2c26ad4-channel",
+      "protocolChannelId": "ApZ9HxHK3eSLqZHzXBMPXkHd3gUpR6femkW3yoLcJ8Vx",
+      "operation": "close",
+      "signature": "5fyS5kmTdEVpAwsV7da7zVQwdN2ktpi2v1BFj3sj9SFEffZ9yJawnBpZaroppdbXw92aH7cTXvNJNk8GsxCMjw18",
+      "slot": 508455591,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2d873394-d2bd-4336-be0f-91c5de57990d-channel",
+      "protocolChannelId": "7sUpKJhBr76JzvH4ZP5csewpsyozJPwmMLk4JtKZh8Kw",
+      "operation": "open",
+      "signature": "3iLMhDfGgMNRrjMDz1vQXBvWRY1nNjjNkJPwrSRodiZFYy4CRXp4Lg6xgmoqyRzCagx9XqwnQ9HtYUnwCbBtyAM7",
+      "slot": 508437523,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2d873394-d2bd-4336-be0f-91c5de57990d-channel",
+      "protocolChannelId": "7sUpKJhBr76JzvH4ZP5csewpsyozJPwmMLk4JtKZh8Kw",
+      "operation": "close",
+      "signature": "4oXw8fwwJwwVstD3fqpHGVyhhiLvJhnHntvrsTpoN5z8YT4M6sB16uo5dgku9s8EvZ2eGCA2WG9cDwvaXsNHNiLA",
+      "slot": 508455628,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-8c379a00-ef9c-4a78-87cf-454a60681502-channel",
+      "protocolChannelId": "3wpJadreYSUgWPUeXiA8CXMEV6atENrMFS7KY5fRnbFx",
+      "operation": "open",
+      "signature": "f4mqoGoKdxz7krATms3b7GR6iEq8Nu4wMD2RsZ9S8VDfn34gcpup5KJaYy7soREGGNkGF3MA9u3qPLqxAd5SZ1a",
+      "slot": 508437697,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-8c379a00-ef9c-4a78-87cf-454a60681502-channel",
+      "protocolChannelId": "3wpJadreYSUgWPUeXiA8CXMEV6atENrMFS7KY5fRnbFx",
+      "operation": "close",
+      "signature": "25a7AvtEcLc5BhDXWCTu8eLQ64Dx6rfC7Y8aSLtVZiv8Wuo4NUByVVArtxRGbH9hHXsbhN2gHEpfHgWt6q97prkf",
+      "slot": 508469543,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "32000",
+        "publisher": "18000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-a21bd958-bc80-428c-8fae-a145f135d666-channel",
+      "protocolChannelId": "EwtFjNXAtnHQ96WmsaMJkMPs5V6kC8bqgvuxotFGXzA7",
+      "operation": "open",
+      "signature": "5mMFHwBGXPz9HzC54DJRvWsQThbGeeBwdGJXrhkD6BZDiik2sweNEfwUPJgBKdZAvbaCFmbC3tJCQefRPPsJ8M2F",
+      "slot": 508437640,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-a21bd958-bc80-428c-8fae-a145f135d666-channel",
+      "protocolChannelId": "EwtFjNXAtnHQ96WmsaMJkMPs5V6kC8bqgvuxotFGXzA7",
+      "operation": "close",
+      "signature": "z8X6HMuyfRaSke5WWiSUj218hA3xJjAdn2LJ6NrXCfVwLMfrd8fzoLf9pNoBjcmHr3F6JPkL3UGeCiz8n2863AS",
+      "slot": 508469591,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-af435e8c-1269-4dce-bf1e-4d13f26709e6-channel",
+      "protocolChannelId": "2o3pJUcRS2tpxLAPhEfD9yK1Fvxdi4zJ3vpe7nunFysA",
+      "operation": "open",
+      "signature": "5kgPGYLTb4YcRH79H9LVCMqDzktsTSkhMfpmCm5woCHTSXtTH16TSvrL847NqPNsQJVaLiUu6sfa2iPKi5fq4b3N",
+      "slot": 508437812,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-af435e8c-1269-4dce-bf1e-4d13f26709e6-channel",
+      "protocolChannelId": "2o3pJUcRS2tpxLAPhEfD9yK1Fvxdi4zJ3vpe7nunFysA",
+      "operation": "close",
+      "signature": "5nsdTc2ERhPfbcgV9TgfPTw8Rs8eZU3sHZtjJAUQTuD5m5Si9rcDLRrFWApM5otG2a7ZAbF82fMzdGSnnAzDwGiD",
+      "slot": 508469648,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-b0f7ea20-792d-4e1a-a089-96566fa998d9-channel",
+      "protocolChannelId": "APooGjqMCaSw4NuVWUuwd5A2rkXDtYAVx5U23xiPzrZ6",
+      "operation": "open",
+      "signature": "7QfATiRaTdMB2ac2uBajQJFwCA65m4G6VWPhP6goWgrR8V8bEku9E7sgC7uduP1mm4X2smTyykmnujq8nDre52Y",
+      "slot": 508437869,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-b0f7ea20-792d-4e1a-a089-96566fa998d9-channel",
+      "protocolChannelId": "APooGjqMCaSw4NuVWUuwd5A2rkXDtYAVx5U23xiPzrZ6",
+      "operation": "close",
+      "signature": "5ZfdD8gL5Nd2qYPyoUAkJ6CZVNJrdpE9D97dq9Zsw9xepoy84r4XNNuDUTTC4rNwdkGQj1yoYjS2sa63Bxr5eUyk",
+      "slot": 508469702,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-c93770d5-07ec-4885-987b-a51f7bae73e9-channel",
+      "protocolChannelId": "E51Xtn74uWb3YMGGPv3fsXEAk74z3k84DZwDpxTZgHxb",
+      "operation": "open",
+      "signature": "4PAn9VyTwXrVi9MzCRrhW8hszbvJ7i2tJFHyt6a9BxHa6k8JoDWsmmAvFjS94UsjQNendJy1VYZmAuTLbeKeNLUY",
+      "slot": 508437585,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-c93770d5-07ec-4885-987b-a51f7bae73e9-channel",
+      "protocolChannelId": "E51Xtn74uWb3YMGGPv3fsXEAk74z3k84DZwDpxTZgHxb",
+      "operation": "close",
+      "signature": "3xH6NcYLv3juCWJNNLVGm25cXK9efKDHsHLk7za7yG1N4BgpVc2wtDC31Cu2mj4nL9WnszgM1c7gZxS3EM4fXkec",
+      "slot": 508469752,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-ef82baa7-db1c-4cb5-8ca0-41202d9cb717-channel",
+      "protocolChannelId": "31FkC7szeAY2q3at7qchNLwURQrQ4B49kcnVb7P6AWvP",
+      "operation": "open",
+      "signature": "3gGchooARYAoGsq9nF6HBFaU9J2JaNNKa1FodrNnacHYighjUecLgitp7Z4pC3dtY31yQuYXToCuDdswQ3gUYn8u",
+      "slot": 508437756,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-ef82baa7-db1c-4cb5-8ca0-41202d9cb717-channel",
+      "protocolChannelId": "31FkC7szeAY2q3at7qchNLwURQrQ4B49kcnVb7P6AWvP",
+      "operation": "close",
+      "signature": "BmuiwzsJyuVeKNgoudwyxzWRfRLVtWrqueboqnSwYVgD8tv8wJenmBVXJsmgXyLTixmED4dmPTdTjnuWRNPgowv",
+      "slot": 508476694,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-315dd958-f1fe-48f0-b324-54c370aad734-channel",
+      "protocolChannelId": "FkXtj3gs3mEdoMXat8KpdYqSUm1h9ff1FhvRygyQNZFB",
+      "operation": "open",
+      "signature": "2r8Uo4KbpQwaw1UN6V4AC1TpuEPp5jQ2c9nGeJ7WSxmUrLzZyUijex9fPYto8wrvdMWxCZGreJPmZbhRobohkKEQ",
+      "slot": 508438314,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-315dd958-f1fe-48f0-b324-54c370aad734-channel",
+      "protocolChannelId": "FkXtj3gs3mEdoMXat8KpdYqSUm1h9ff1FhvRygyQNZFB",
+      "operation": "close",
+      "signature": "9jMjxPMUgjupYYQ2tXj88Rey88VTDHYtRuPRWL8aiKAqD5YgE1Rxx8bUk27QVBKH2PfRWzarFRdcMTqBrbF3xRg",
+      "slot": 508455669,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-577e34b1-d1eb-4e8b-9b46-52bb4a6fdefa-channel",
+      "protocolChannelId": "6LGFR3Hzx9yNAYQ3QZTR9NwqAMWH7j38G3aQBiVUuySk",
+      "operation": "open",
+      "signature": "4ipDe3FDbKoDs7fMCVgcErpHBDTiLFm5dmkcd3ed2XqZdoJonmF1VExZ2aLNjEGwjHkSn67HuPqngzVWCTdZVW5o",
+      "slot": 508438190,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-577e34b1-d1eb-4e8b-9b46-52bb4a6fdefa-channel",
+      "protocolChannelId": "6LGFR3Hzx9yNAYQ3QZTR9NwqAMWH7j38G3aQBiVUuySk",
+      "operation": "close",
+      "signature": "5nn9sPH4DkzpWrqKsCy1LAmqEroY3Ascr1MP3rWSgfqJDGcQZq2ANLpRvQGFMbDTYgf37jRHgA783Siyk2bgmKAY",
+      "slot": 508455713,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-5c3fceb9-71f9-446d-b231-77f439114bae-channel",
+      "protocolChannelId": "6AWbFA3Whi7wuyc1ygmieuaAgRa2zGxTUiThXcq4Fgys",
+      "operation": "open",
+      "signature": "5b4CM9H4tpRoVgHQos2Y984d9T1sE8Keb7YPkq1W41io1SZqXQFxWaF9WYYACSoNRnZTLjiuZwhzfj1XfJs4PwUq",
+      "slot": 508438379,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-5c3fceb9-71f9-446d-b231-77f439114bae-channel",
+      "protocolChannelId": "6AWbFA3Whi7wuyc1ygmieuaAgRa2zGxTUiThXcq4Fgys",
+      "operation": "close",
+      "signature": "5H1g8ZZzq3E1q1u5BdNkDFB5yzJFnW85MhsKLsURfQW2BnmCv97GNth3ZJRk8UNK2NLhR1RUdN98FqqHpMjyagzv",
+      "slot": 508476748,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "32000",
+        "publisher": "18000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-7a97e83f-34c4-4d08-aac8-ae84b01ac0a6-channel",
+      "protocolChannelId": "56shGt4Fucvadb3SN1zqXZKeHKWZoVdDiqdcVEakyys6",
+      "operation": "open",
+      "signature": "iEGZTMT16CtD9yeZ5DqjQ9Ka747SVSLRb2kJmHQp2ZkBVZPyTZndd9AsE3s8X8xiPtXBiPw98cC6payxBwmrXRq",
+      "slot": 508437998,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-7a97e83f-34c4-4d08-aac8-ae84b01ac0a6-channel",
+      "protocolChannelId": "56shGt4Fucvadb3SN1zqXZKeHKWZoVdDiqdcVEakyys6",
+      "operation": "close",
+      "signature": "2BXp6qad2U2SqoAiMoM2u1ZLp81EjzSgRciMf8Ejhax1ykbzekxXw3RTAWHAYXxGXqc1GuNpLHbanVc4PSbubR3W",
+      "slot": 508476800,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-85a8a95a-9773-4a10-ba87-1208cb92b59a-channel",
+      "protocolChannelId": "Eb6JeCGBwsVUnoNr4S2YkUNeY4MUG2TTgAbr1VvnGkpx",
+      "operation": "open",
+      "signature": "5sW9tMXTayNFZETG5KhM9CRGAtUhXFeMsSX12xRmJGz2cacuMGui5hhvqXc7fqPE9d6gtbXEbsgosdffDXzbb2Qd",
+      "slot": 508438128,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-85a8a95a-9773-4a10-ba87-1208cb92b59a-channel",
+      "protocolChannelId": "Eb6JeCGBwsVUnoNr4S2YkUNeY4MUG2TTgAbr1VvnGkpx",
+      "operation": "close",
+      "signature": "62NmtaLdBnVKfx2JK5emZ36MPobJzsHcg1MGH2q1NWScQiDNHMcirbQCBUG71voitkkYpKaghsaU17RvNGjJVXT1",
+      "slot": 508476847,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-95d95d26-c073-49e6-9855-b9ccaa9dc9e7-channel",
+      "protocolChannelId": "AhXzTFsvPoocwV2d1VxvGBhzCFeHpeE7P3YK58rVbrhc",
+      "operation": "open",
+      "signature": "2ADuQJVcVtZinATTDvkPc4HeVV8V8MeYoCSVxdFMvJ4dBwE9GYXdcEuNv9B81qgoSaoYy3GCmFQaKK5xLtu1sKJS",
+      "slot": 508438442,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-95d95d26-c073-49e6-9855-b9ccaa9dc9e7-channel",
+      "protocolChannelId": "AhXzTFsvPoocwV2d1VxvGBhzCFeHpeE7P3YK58rVbrhc",
+      "operation": "close",
+      "signature": "2G1aixWvMXFrkwoiC2JkibrQBCPK6n4bqFE1jcJ4Sx8LgEVuVV7zKFFPGtMxLg3URK7DesiTNfoZe1EygX2NmDGf",
+      "slot": 508476899,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-9aee13d2-bd3b-4a2b-b387-0bb21d22eec8-channel",
+      "protocolChannelId": "71d6RfkzR2wA8ZTjhDUEcGuNsq74e39JeZwQGtLRYHy7",
+      "operation": "open",
+      "signature": "3uJxt8E1GGjJh6RJPgC2fN8GTCWAxTisstZeBM9dTAkee9QaUZy48fMYGmYHm6aHS2psoq8zCkAQMPLPnQoexKCR",
+      "slot": 508438250,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-9aee13d2-bd3b-4a2b-b387-0bb21d22eec8-channel",
+      "protocolChannelId": "71d6RfkzR2wA8ZTjhDUEcGuNsq74e39JeZwQGtLRYHy7",
+      "operation": "close",
+      "signature": "2wzp7hKbdac9kCEWegW18ohU5aXJJXGT1fMqyoSnuTC4UVqycxxqsJyQ7ap1uYTMZt9twFhL7xu9sJT3vzvMdAgv",
+      "slot": 508476942,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-ae4db36e-703e-4268-a13e-db2dd4a1607c-channel",
+      "protocolChannelId": "DD6HzbZhY7ncn45vbRwfC79SrCLFY3aLhjNFUz8d9nwa",
+      "operation": "open",
+      "signature": "38YFvvqYqJ9FDxVRK1prKAiDUkhzi1GwSmMsGRxPcrVxyGA1rGQS9WZpp1eA1WqPmS7aE8jEUHcGu36NR8XiL5VR",
+      "slot": 508438068,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-ae4db36e-703e-4268-a13e-db2dd4a1607c-channel",
+      "protocolChannelId": "DD6HzbZhY7ncn45vbRwfC79SrCLFY3aLhjNFUz8d9nwa",
+      "operation": "close",
+      "signature": "3YayNVQgPw1nmT9PXCMLFqZSpTtUQvQBEG44i52G6hZa1WFnASMntZB1pGdkC7vP116vNWjHWqPqMAQX9JNSHqkY",
+      "slot": 508476999,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-03d5efb0-8654-44a9-a833-5e011444b15b-channel",
+      "protocolChannelId": "5si1NBDfoNhvWAdxR2QtsPcJqyzJLeeaPbQAGbrc8vyE",
+      "operation": "open",
+      "signature": "638Mt9T7x6NfqSpyyRzXwFMjxYZmDMmWZTezGc3js69sSeuZf56jhU5WvEMP9Kd6jZWLaM6J5MHDDCgPPkR8jAm7",
+      "slot": 508438902,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-03d5efb0-8654-44a9-a833-5e011444b15b-channel",
+      "protocolChannelId": "5si1NBDfoNhvWAdxR2QtsPcJqyzJLeeaPbQAGbrc8vyE",
+      "operation": "close",
+      "signature": "2kzSjS1HEwSQQWfcxfXCwynJqf2qGsmhU96aD2NxUwFTLtg9zWrBa9QJ4iPZRNCaokHgKNua3fTkwgh2BaGH1HU9",
+      "slot": 508455757,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0b85318a-2871-45a5-b885-070c1c7ae974-channel",
+      "protocolChannelId": "9WEoEikcxc4XHNPSAAM7HDceGj8kpoqmxab74wzdQWZj",
+      "operation": "open",
+      "signature": "2rUaynqhw3TYSTBx8i14bfAu7ZztK2rTVB2AjJaM5yhHKFkHB1ac26cfQ9ErrsVeB6E71xMX97yN7ib1ZY985tJr",
+      "slot": 508438709,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0b85318a-2871-45a5-b885-070c1c7ae974-channel",
+      "protocolChannelId": "9WEoEikcxc4XHNPSAAM7HDceGj8kpoqmxab74wzdQWZj",
+      "operation": "close",
+      "signature": "4thUBrPSs9R3DHCxDbvBLrZeYfGWCPBipgNMDCAh3D6LA8nqKknSqxJsM4s3eaPG9VXu4RK8mf2vBGn6BpZ1LZHi",
+      "slot": 508455806,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0ce21c4b-6f46-4f5f-8e68-abf911a21f6a-channel",
+      "protocolChannelId": "HaoJMzuSCDkWx8wMe1aEZnmcmZVMPrpViuowkpTEVAMJ",
+      "operation": "open",
+      "signature": "5aKo7iHCoBEeqA5QNZGeBgqrr32L4pmBpXgkYjEadVWuCBhzfa37eitJ9SyqFyK1TLUai5zDLf8YyKM5vXUVRD9m",
+      "slot": 508438766,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0ce21c4b-6f46-4f5f-8e68-abf911a21f6a-channel",
+      "protocolChannelId": "HaoJMzuSCDkWx8wMe1aEZnmcmZVMPrpViuowkpTEVAMJ",
+      "operation": "close",
+      "signature": "Uk3oxfuvwEzLY1KnLVQA4UD8qV1CvXWxzXnDuu74EWmp4v5MTfVSjWFEYfGPQ7VU87LcpbBMNMToG9A7yoYpnMY",
+      "slot": 508477048,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "33500",
+        "publisher": "16500",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-4377c078-09c8-4356-8966-8ef39bd5768d-channel",
+      "protocolChannelId": "D4wZ1qzpxSNofQM52FvaDyBVkJaZ3EG1gGQ1BU9vHopx",
+      "operation": "open",
+      "signature": "3TUm6977txPxFFZJaqvmhEco4iLB9ZJ1tUy1nSpMxYx1sbJPKua9HrTAgb5jFTvs4zM6cwT6Cz6rzP3HWWBP4WAN",
+      "slot": 508438504,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-4377c078-09c8-4356-8966-8ef39bd5768d-channel",
+      "protocolChannelId": "D4wZ1qzpxSNofQM52FvaDyBVkJaZ3EG1gGQ1BU9vHopx",
+      "operation": "close",
+      "signature": "3AvYhqsB73xDRtcz6vYb9dLaKpVCVC9ekzpdZkHu4nc3275PsBokwoTH8Htdz8rSinWF36eVtSwvR8E5MaPHbCmn",
+      "slot": 508477104,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-4a76470d-e22c-481e-949d-83e7a9127bf4-channel",
+      "protocolChannelId": "Dkq1odH4NY8RRJpHbEW4sxKqN4jeHUpfj4mqXCDLSG5",
+      "operation": "open",
+      "signature": "3SBtf6rpbRUN4sRaufuHreYSGXj6D5bzMmCJ8joxgpN8Zk5NK2ZapCtT48VUEMLfRHNQTkYJncC5JEWn6qN2Hniz",
+      "slot": 508438968,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-4a76470d-e22c-481e-949d-83e7a9127bf4-channel",
+      "protocolChannelId": "Dkq1odH4NY8RRJpHbEW4sxKqN4jeHUpfj4mqXCDLSG5",
+      "operation": "close",
+      "signature": "4UF6KJm9sAbX94JNYvk31rGph9T6gv1HJQLPmDmHDFhh5kfCr5jUicLL3Je6kkmYLAbpbnUVPwxPBm3ZutLnswmv",
+      "slot": 508477159,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-5352b8ee-e464-45b4-958a-c832a5da0bf1-channel",
+      "protocolChannelId": "DDkoTLrsoWxkP5asZGGxgB4eQREr3ET4mfbLYeiGBh9r",
+      "operation": "open",
+      "signature": "5zrdXf6oBfjTYmQ8YcRYg1gq7uJPNas2Zd9RbJEf7tnRHARR6thZagWCw5RJKFXp7SSqinvMkFj1Yg313muRmpGn",
+      "slot": 508438834,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-5352b8ee-e464-45b4-958a-c832a5da0bf1-channel",
+      "protocolChannelId": "DDkoTLrsoWxkP5asZGGxgB4eQREr3ET4mfbLYeiGBh9r",
+      "operation": "close",
+      "signature": "tzs635zcuJmffsp4uyHGNpxVT1jUjVGK7HWRBL15GMyzJWUCkLjCvXVkuHjZzVNk66zCdrAhn3rUWRaAFW8Bt8g",
+      "slot": 508477208,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-7fba1a59-9dfc-43fc-bdc7-f41a7810f83c-channel",
+      "protocolChannelId": "3wm72wyZPTPuxg2kKap5jgm6wRmuzgawthWZuscPe28b",
+      "operation": "open",
+      "signature": "4ZhvpkBbZ68MpfSnhteNp1qbqy4s1t8bWe38wccZ6mUp6mfmYwrKcpsqnFqf2yhSkbccpBC9ToCRVcvc6XMAJYcC",
+      "slot": 508438648,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-7fba1a59-9dfc-43fc-bdc7-f41a7810f83c-channel",
+      "protocolChannelId": "3wm72wyZPTPuxg2kKap5jgm6wRmuzgawthWZuscPe28b",
+      "operation": "close",
+      "signature": "MkasNAn7ZFq2SoRNdVpc3zT9kiFkRiB9zxCVQPbB3CMpga1Zps55AkX77cVJp5qpMrFARmwgKmLu8AAy3Qf7Sdk",
+      "slot": 508477257,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-fd334aca-20a1-4f16-9446-abe581b9b390-channel",
+      "protocolChannelId": "H861N11m5gna8s49o4JW4Qkb6y6E9tPDEShRYkhCoqEv",
+      "operation": "open",
+      "signature": "zQDrU8kU8rQAAwNThpTMyNt7PgixW2ATRKj5d33EYRHBZsgUBFMTv98uXj4aKJMNk4PjKEDEGgcsti17GNRCwdj",
+      "slot": 508438570,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-fd334aca-20a1-4f16-9446-abe581b9b390-channel",
+      "protocolChannelId": "H861N11m5gna8s49o4JW4Qkb6y6E9tPDEShRYkhCoqEv",
+      "operation": "close",
+      "signature": "mSC6TLtJdRTKVXZvymKN3dWGv5RagEjYA3UfrftcJMwwE8doKZxKdSnHxHARvYj5PhoiAzPww5TBjH4LunU5nty",
+      "slot": 508477308,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-075b645b-4115-4fa8-9a7c-c9c6a61b62d7-channel",
+      "protocolChannelId": "89ZUwborNJGi7axYZqcj4VRqdTy35zHVxFLeAZDis6pV",
+      "operation": "open",
+      "signature": "4gu412CwbbWQrJWDuFT1o7CawtWCYFbNNCfjZnkuGwvHVffqzjp5qjb4MPEMGnNcFQ3TMTWKzN5vhhWi1oz7SiJ5",
+      "slot": 508440907,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-075b645b-4115-4fa8-9a7c-c9c6a61b62d7-channel",
+      "protocolChannelId": "89ZUwborNJGi7axYZqcj4VRqdTy35zHVxFLeAZDis6pV",
+      "operation": "close",
+      "signature": "5coPSGrxTn9NLcaRtqVvNKF7qBEAeCLsffRMPKdy9kAydgdvH8wd6knevRknX3UownoisxBXSLvWvE9bFH9AoATT",
+      "slot": 508455848,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1704e60e-39d9-431e-a4a9-3cd6c2cf2299-channel",
+      "protocolChannelId": "CVy4AyCgbY7JB2NPZzkNsBMJXB39dqGaQwQ1LtE4f7e6",
+      "operation": "open",
+      "signature": "JC1ZcjGXUBXFGNd3V1E6rtzMNUfqZuhPiDZGeyW3cRwkMVxXFqQxQeYVZEpDU7RneCowKb2ti3dqijUSnCBm7Te",
+      "slot": 508441180,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1704e60e-39d9-431e-a4a9-3cd6c2cf2299-channel",
+      "protocolChannelId": "CVy4AyCgbY7JB2NPZzkNsBMJXB39dqGaQwQ1LtE4f7e6",
+      "operation": "close",
+      "signature": "5hrSWEnHv456uPkPttPbkfXAFFrEqjzwq3wL2WetUkFSHeD13bmKRq9MtMdKqDGCKqw42bAHD5ZWLZ6gRwZVPRgc",
+      "slot": 508455887,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2c8b8ada-a66c-4576-b740-b1535a94881c-channel",
+      "protocolChannelId": "3CCkdcqgSRonSvyhCzWEJiTtbd1wRnumG2Wcyv9tqfPq",
+      "operation": "open",
+      "signature": "2XLxzbnGMJ8HW7jbQ8D58Dfh2SAAxWHgDb83YAHfu3JPYtYDk6cK7k5ZfKfccJ54ZiB8CUSMqzofvv2ztkqSgsch",
+      "slot": 508441068,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2c8b8ada-a66c-4576-b740-b1535a94881c-channel",
+      "protocolChannelId": "3CCkdcqgSRonSvyhCzWEJiTtbd1wRnumG2Wcyv9tqfPq",
+      "operation": "close",
+      "signature": "2jG8LQk5u5EcKT1w9KzGWivmfyetiBsKy7jhQoUbVHfqy3W6rkAPNyzAr2wi2qVXYRRQmfrcXC4cs6hCr5oyP9Mv",
+      "slot": 508477361,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "33500",
+        "publisher": "16500",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-55ecd800-a972-444b-ba82-7b9fcbe7fe95-channel",
+      "protocolChannelId": "7tX7Cr4YEwNyyRyRiq9C3vck72FoXBupy6ep3HjSM5QW",
+      "operation": "open",
+      "signature": "2HBNYPntK8naGQvMiFP5qfyzAwqcy2hwd8uwumCDAgqsGxbiB3y4D5K9cF9C3aimwFBNmsnACsmAKo2Hpka1qWoi",
+      "slot": 508441124,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-55ecd800-a972-444b-ba82-7b9fcbe7fe95-channel",
+      "protocolChannelId": "7tX7Cr4YEwNyyRyRiq9C3vck72FoXBupy6ep3HjSM5QW",
+      "operation": "close",
+      "signature": "3g3ALj35hLxRQVgBEzTD2gWLs2KP2crZk1iDz9gxLdDG5hxQW9rDhB7GT1mrR2CWbgp8tY8r8hhbPioya7naEc4z",
+      "slot": 508477421,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-69219392-0caa-45fe-95ee-39e0e6435f4f-channel",
+      "protocolChannelId": "63KBVjNehbq9GYqHX3RQWiE2U5HFzc6JY6drWZJqKQHZ",
+      "operation": "open",
+      "signature": "2z1fJbJ3biZn7gPWVm1MWh9rDm7VPBy3a9V43h8ASbM7DUg5PYBsPKW4NBpC9DnsJSvRT1vgyVp6rPp4H1dRnwLQ",
+      "slot": 508440843,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-69219392-0caa-45fe-95ee-39e0e6435f4f-channel",
+      "protocolChannelId": "63KBVjNehbq9GYqHX3RQWiE2U5HFzc6JY6drWZJqKQHZ",
+      "operation": "close",
+      "signature": "4sXf5rEpFGZEDFxmUkfuBTWdjds4JUb6Gnt9kz3qEbmQHn2AQuJ7AN71dWhpb2gQ3hn2LjNeHzJrUcu1CiB3mNh4",
+      "slot": 508477492,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-8e1d2d01-f35d-4bfa-bf90-15ef5f29a221-channel",
+      "protocolChannelId": "DzDokC8SfogNNXzEebdz54XeJjrR4h7wpQVtXxHBEgWQ",
+      "operation": "open",
+      "signature": "4GtjAfQ1X95BNB3UghVJHQHX4jxjUUGjG7pXu8EKHrpubffj9fe1m1Z1EETFgFy9M2HeKKeBHaPSaPwuh2m6YpoX",
+      "slot": 508440722,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-8e1d2d01-f35d-4bfa-bf90-15ef5f29a221-channel",
+      "protocolChannelId": "DzDokC8SfogNNXzEebdz54XeJjrR4h7wpQVtXxHBEgWQ",
+      "operation": "close",
+      "signature": "28n1z2cCt5QpVdFZaaWrGuJvJpyHtzDTYyW5N7vKq7vMivnBHxRYHiAkhjjSFBpyM2xp7zeLVvoJyQsnvSPnnKmn",
+      "slot": 508477587,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-ba28d800-7594-4d93-b326-7d1abe526545-channel",
+      "protocolChannelId": "GMvPtE7CrJo32FqpqpPSeXuxiH9rjk5WjfkCPU58wCSs",
+      "operation": "open",
+      "signature": "39SYLbeXdmEGoufHmwW4Eb9YZPrmZ64DJZcHERHC7aFuC7dKzd519JqnZ3a315zf2a2CTimP1LutARZFpdY9koiu",
+      "slot": 508440787,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-ba28d800-7594-4d93-b326-7d1abe526545-channel",
+      "protocolChannelId": "GMvPtE7CrJo32FqpqpPSeXuxiH9rjk5WjfkCPU58wCSs",
+      "operation": "close",
+      "signature": "4wUNXWRZ9TnqzRWcSmF1gSUv97ysdBdKepFnxS8bA6AvkHRMWvHQaeJLtX3JLnrhfCaigqgiNthDcgPpDupYo1sp",
+      "slot": 508477686,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-d096179e-fc65-488b-9d49-81ba63f22782-channel",
+      "protocolChannelId": "Fm423LgYHSuYTKrsqZZ7gJPZrnsX4B2LdHkZZPX3n8cH",
+      "operation": "open",
+      "signature": "2oh3dH1itHX8XVMED2aLLsFQSMzCovh7xiq9Vo2Ag2RteiqinKtTjWc2vAcUvuGnxRYWqCLcLL3iBUaEPT89NQvh",
+      "slot": 508441012,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-d096179e-fc65-488b-9d49-81ba63f22782-channel",
+      "protocolChannelId": "Fm423LgYHSuYTKrsqZZ7gJPZrnsX4B2LdHkZZPX3n8cH",
+      "operation": "close",
+      "signature": "5Xe7X65GfZ733CgxBU8ZgUvzsy1hFE45LXreTHSsnmqWmQfh1Q5iTRC81KEJ8YyjRNz5qPqkhteGBJmUxYAnFupj",
+      "slot": 508477866,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0c5471ff-599d-4647-b9b9-9f90a0eed3d4-channel",
+      "protocolChannelId": "A83VTWKDrDTnY61cPKY6LWaq1tQknDCszR6SbHb1ydmG",
+      "operation": "open",
+      "signature": "fis73LJbTvJ3JK42Zj4zoRCSJTt98bJxVddFUW7XrWPQpth56PoKCFgwDbHjBfHafVBY3GDdSDKNSyp3XBTvds3",
+      "slot": 508441609,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0c5471ff-599d-4647-b9b9-9f90a0eed3d4-channel",
+      "protocolChannelId": "A83VTWKDrDTnY61cPKY6LWaq1tQknDCszR6SbHb1ydmG",
+      "operation": "close",
+      "signature": "4FKD2KiL28vF2nKRK344yLi9WZG5usGe4Zi8aUg7yAXjqyYhvHd4KrUjh3GrEUbD7hut9F4gGeZe7KFRbG5UtXko",
+      "slot": 508455932,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-3ac913d9-7d0c-4557-8365-3f5b65db9970-channel",
+      "protocolChannelId": "3BfW61A3irB5C7YYGfjjNuftYXbuitjMqdtLMfxAyyZR",
+      "operation": "open",
+      "signature": "KSLtvPX97WfRf1sp6sDNoZFAcncUgQyFGEueF1yTcTZjeonvb4wiPNQR41286Ka7PJfKDzVmshdUQhkjrXkYHhm",
+      "slot": 508441242,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-3ac913d9-7d0c-4557-8365-3f5b65db9970-channel",
+      "protocolChannelId": "3BfW61A3irB5C7YYGfjjNuftYXbuitjMqdtLMfxAyyZR",
+      "operation": "close",
+      "signature": "XVk3LVq6JjGRDpnW7d4AsHcaBFoH31r2QSpH5PxyAw5mdNUGvg9TAhHiSdN5C6XSaAjSyC1jMWdVZuLrMrcyZBz",
+      "slot": 508455972,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-50744eb9-93d9-41e4-af27-fdd13fd262af-channel",
+      "protocolChannelId": "9KcGeQKP5wvVt9q8VXJsCmHMtuXkdtdb71AmvqDWygBG",
+      "operation": "open",
+      "signature": "3TpVuamA4SGtKDyYXLSsLWKhYn4yVyTEz2yUkgK686S1xW7csKhPRKB8DaaG6Hi8F3Vn2UisVGHP1bLGByBbxErT",
+      "slot": 508441428,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-50744eb9-93d9-41e4-af27-fdd13fd262af-channel",
+      "protocolChannelId": "9KcGeQKP5wvVt9q8VXJsCmHMtuXkdtdb71AmvqDWygBG",
+      "operation": "close",
+      "signature": "5k5qSzkKDaFy2XoziiVF8J8XoDSMw7J8c79Kt671mfjAKJ8fUd36coUymJm2ALu5SUDfMwawQFqNSXCDhiSLpfKo",
+      "slot": 508477930,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "33500",
+        "publisher": "16500",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-68c3f3f1-781f-4c3e-b49b-fde72d259afc-channel",
+      "protocolChannelId": "HCZoq6Dm2Ciwwknc7eUc97HvhfwHacRUmMPi1eBhyKNh",
+      "operation": "open",
+      "signature": "2CUx6FNXyAjkA17vqaoVZss9hvsKp3KcGH9ZbELWpSsB8zNPKcKKnCckxDQqpeqSxPG4HeapN9ttqLcDhZMVCJHF",
+      "slot": 508441488,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-68c3f3f1-781f-4c3e-b49b-fde72d259afc-channel",
+      "protocolChannelId": "HCZoq6Dm2Ciwwknc7eUc97HvhfwHacRUmMPi1eBhyKNh",
+      "operation": "close",
+      "signature": "5GDkESF4KN2RWFnmf5EGs6YCervcCBtQp6CpdcagQubMeZsp5AMqY6ZaoMJqchFKkykMNJ9YFCXddWoCNpVXHtpQ",
+      "slot": 508477991,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-82785f8a-5665-4fb2-b6ba-f71d045230ba-channel",
+      "protocolChannelId": "4RBdkphim86mfNLKvpCU3NgMb3S85kFy7w8CfmHb2pdy",
+      "operation": "open",
+      "signature": "souczDHF8MF9FLpwdWv6aE7RmgpN2MZMkBhGa1iRpsM2vu4tbyqA2vWfDBioLaZUtbb7EteJj4fhWVFbiiXHzjz",
+      "slot": 508441549,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-82785f8a-5665-4fb2-b6ba-f71d045230ba-channel",
+      "protocolChannelId": "4RBdkphim86mfNLKvpCU3NgMb3S85kFy7w8CfmHb2pdy",
+      "operation": "close",
+      "signature": "X5kjz9rrVbQLczEXapxkBTNuNfNeN6y2oordG583iH12w5wXMSRpckmrzysTKwUy7TLA3ceuHkbBnbRDgZwB4Dm",
+      "slot": 508478044,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-b683b9a6-164c-4178-8c27-068f69b4ae3d-channel",
+      "protocolChannelId": "FYXducexaHwhz42bWPfxktspppx1g5ByaYTwramY28nM",
+      "operation": "open",
+      "signature": "2Ux9YcBSttDPs6XCGVfKRCd3W9D5TXZ26nThkfnceBznFTWYSvCxYXo8x5GqHoeyFpLAqt8LKxgVgkdLr9zvBkv1",
+      "slot": 508441676,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-b683b9a6-164c-4178-8c27-068f69b4ae3d-channel",
+      "protocolChannelId": "FYXducexaHwhz42bWPfxktspppx1g5ByaYTwramY28nM",
+      "operation": "close",
+      "signature": "3oRgzUJCDaUSRq351TwwCGHmufv2cWicupfnuv6uNJ8D9PpzW7sr4ryF7xpqzV5FJFUNqR7eRCTswexHrFuC2Jhw",
+      "slot": 508478104,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-d10dd2d4-b3bc-4bfb-b281-ff360e682c62-channel",
+      "protocolChannelId": "8tYNhuabupkj8HwNEJCeA1uY4bykTjzPigYo2fhsj5kr",
+      "operation": "open",
+      "signature": "3Ht2KVbzkRG3YoZWrUGFbSai7SaQCvTMun8nXfpQ13wrSXkB8j1xok7NZfNwxgMDGgGJSUjhEAxYZ1ZqtsHzTKpv",
+      "slot": 508441364,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-d10dd2d4-b3bc-4bfb-b281-ff360e682c62-channel",
+      "protocolChannelId": "8tYNhuabupkj8HwNEJCeA1uY4bykTjzPigYo2fhsj5kr",
+      "operation": "close",
+      "signature": "exPLcZNJW87vm4pnSeYmeEBkXXAkxXWupLiggrfC41hFbMncVXWAhRdbcfwXu2FHUe9r7jtfhb4noa9LghpknWt",
+      "slot": 508478164,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-e874741b-844e-44bf-85b5-862beddf58ca-channel",
+      "protocolChannelId": "J7PKqMj4nA6wyuwBjo9W7nUP8sd3LDRcmuv3SzQweH8x",
+      "operation": "open",
+      "signature": "3sDcpKiWAHBaWs5v6iV4qemonUnGwNYQWNdxo7j8ci5QD5piCARzVK3PT51UYDTti3aKTnzLPNwGH3vnXChiev3A",
+      "slot": 508441304,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-e874741b-844e-44bf-85b5-862beddf58ca-channel",
+      "protocolChannelId": "J7PKqMj4nA6wyuwBjo9W7nUP8sd3LDRcmuv3SzQweH8x",
+      "operation": "close",
+      "signature": "FVPoTVozqHTsvDQp5AUMfFzPe8PfnEpMYP8Vgm1wSxns2wohjuyMX3wVnGMP8CYBWpeVkrK8e85BLZxeVGbQVGL",
+      "slot": 508478218,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-3b31b587-55c8-43c2-a223-a13ee820086c-channel",
+      "protocolChannelId": "D2iUmNkmBBYZmf384MtYQ8inWsCFYRJfP8jkELLGTc15",
+      "operation": "open",
+      "signature": "5wf9gDMRBVvSirVvmBXorPaCU7t23paz1Jq2hcX7m95T5Fi2nnJVKJvDib1rMoi6wqyhU5Enri2KDJzvB1rrex4g",
+      "slot": 508441738,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-3b31b587-55c8-43c2-a223-a13ee820086c-channel",
+      "protocolChannelId": "D2iUmNkmBBYZmf384MtYQ8inWsCFYRJfP8jkELLGTc15",
+      "operation": "close",
+      "signature": "51TRfV86xASVuKq2F7Nsnfeb1xUkibGvAxpsp6GnSnQWNB4uTs75i4Daq9RFDAY59iQuUHMSFvqjcRizUUsihD12",
+      "slot": 508478274,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-4c8c3ce5-8c2c-4c71-8088-817e232314a9-channel",
+      "protocolChannelId": "ThdJUBPNgtwhdSd8S4Nv9FK6cCk7qKtpA66vk1yke67",
+      "operation": "open",
+      "signature": "5CevJ8wJ6J57spRuiUSQtpsrw9UnXRDrEEbapvLop1ZhXvKQanvSwsEweshiRxh6wv5f7TV5W7S9AVLk6PAtDiMH",
+      "slot": 508441800,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-4c8c3ce5-8c2c-4c71-8088-817e232314a9-channel",
+      "protocolChannelId": "ThdJUBPNgtwhdSd8S4Nv9FK6cCk7qKtpA66vk1yke67",
+      "operation": "close",
+      "signature": "5J1YCAWLSzZndPFFvPjxAWLGpCgensQEUVzVVVokAjCSm9Pm3E74SZUnb1mpFiFjqFGazSYqoKnDweFMkYb3NEQP",
+      "slot": 508478333,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-6e6a9d33-9e63-4d09-a9ef-38ffa1cad1db-channel",
+      "protocolChannelId": "SDUaxMjooSfYJdLxkJYhK9xcypK8WhyNFDtGfxveF7H",
+      "operation": "open",
+      "signature": "M3vYGHeDtLBDm8CKEnYGZfYMdAq9JBHMpTKXvjV8kgp8kGFyk9L3ed4eX9iPoW2p8rXmbgKhRTnseaAzrJCo7qL",
+      "slot": 508441917,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-6e6a9d33-9e63-4d09-a9ef-38ffa1cad1db-channel",
+      "protocolChannelId": "SDUaxMjooSfYJdLxkJYhK9xcypK8WhyNFDtGfxveF7H",
+      "operation": "close",
+      "signature": "F393RPSMBLiftU3eLNAEdUfvXrr9LKXFpsNxJxxqUonuXc76oA7xiCDz2XQHCrSLuMXpaLRGNkxwG9S8SvmjTKV",
+      "slot": 508478394,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-94de3d36-1836-417e-8b05-6d8f5e5effc3-channel",
+      "protocolChannelId": "C6gGcdveLEPoFbvQ5AycHZu5hqkbNpUTCAApReXWeLgH",
+      "operation": "open",
+      "signature": "2wk6mXsLwhT99ampYr9yc7wL7SWoQt1XV3hppxpfpkWcjW62XMAcS7mJJfBeiG866j1mEj5QogkSiT7GH2KEBMQT",
+      "slot": 508442039,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-94de3d36-1836-417e-8b05-6d8f5e5effc3-channel",
+      "protocolChannelId": "C6gGcdveLEPoFbvQ5AycHZu5hqkbNpUTCAApReXWeLgH",
+      "operation": "close",
+      "signature": "5aBmR4RvmYrc18BnAjUyPBLNrZu8oYN8tUKn93pGgTLoyj6t8oYrKG8a2RTN3UMgfHAyNC82LkdXuvsjCdooc1o6",
+      "slot": 508478450,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-bb6d6e05-b3a7-4a1d-a7bf-88ae3e74bfcf-channel",
+      "protocolChannelId": "7tUVrPfxTMmL5zDi4gEZuFEwFjkQAnF8yPA8AtsZfhPR",
+      "operation": "open",
+      "signature": "2jdNqzNybXcDTbTcXzUNTKaPek3upSpcERSn8mXo6UFKdTwWuwbzCPvg5vcqA1WFEyuXDmL4kmhRfm2yRoqY7iJ6",
+      "slot": 508441978,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-bb6d6e05-b3a7-4a1d-a7bf-88ae3e74bfcf-channel",
+      "protocolChannelId": "7tUVrPfxTMmL5zDi4gEZuFEwFjkQAnF8yPA8AtsZfhPR",
+      "operation": "close",
+      "signature": "J4U3DYNtLQyXr5v6iY8KBPt8PmhQwhKbeVAnJKvEL3GqeJbsw9n6LWk36GG1NrHjmiYb7FenpQw2GUinMTDs5U5",
+      "slot": 508478503,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-bd291ed2-4574-4a79-95b0-d583f3727245-channel",
+      "protocolChannelId": "D4LtvBNqtfiSatD3MgEcKVag4GAYErdsyd17KzZqRchR",
+      "operation": "open",
+      "signature": "5o5Y5C9oq6Hm1VxXw851mccZxYJnJJ5sxNizqKhniqVcxAJHCfQSfU7csYyUVGBdS1wNscQaadfadaZhX9wA6wQW",
+      "slot": 508441858,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-bd291ed2-4574-4a79-95b0-d583f3727245-channel",
+      "protocolChannelId": "D4LtvBNqtfiSatD3MgEcKVag4GAYErdsyd17KzZqRchR",
+      "operation": "close",
+      "signature": "3Vm11CviUjUBbm2HD8pTRQEejwRECJrvKaNofiGy4S7Kxg9meWbtREyD5FSmxzasKwJGYZvNNcWH9zv4b843eESA",
+      "slot": 508478550,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-c2598f3b-f95e-44e2-bd26-62d43c54e5cb-channel",
+      "protocolChannelId": "73ztrpkYm6Km9zydpMjqxABNMjm5R2QffDQJ6akHUFSL",
+      "operation": "open",
+      "signature": "5bJ1W67LUxTokhgnegGujkYxPqR6gCmsPR28UNiMFWUAN3txhCZs6yb2aPU6oU7bkoLxicroQYee3qK9hG9GjSUZ",
+      "slot": 508444272,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-c2598f3b-f95e-44e2-bd26-62d43c54e5cb-channel",
+      "protocolChannelId": "73ztrpkYm6Km9zydpMjqxABNMjm5R2QffDQJ6akHUFSL",
+      "operation": "close",
+      "signature": "3vT5L8hqMsyLCVU8bK3JbSKpGAK1tC2HdZ3bBDTxtoEBQq5XdKiU4Eczk15HGmu72XB7AkY9HQCQMerZQi5VbkMi",
+      "slot": 508478603,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-16eb12fe-da3c-4ea8-8ecc-cddc30db4bed-channel",
+      "protocolChannelId": "DLs3pdt5m6gbbN1pt6XmoLdqq14P1wMUsVEe9qfo5Tct",
+      "operation": "open",
+      "signature": "3CM5C2mk5ASgLaekftUyNbHUwDWuXVTGHfnV6WjFcuM8N9h8b94tssJmhRbYwTt5gofMXa8reHtgTjWFAmKV7zt3",
+      "slot": 508444565,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-16eb12fe-da3c-4ea8-8ecc-cddc30db4bed-channel",
+      "protocolChannelId": "DLs3pdt5m6gbbN1pt6XmoLdqq14P1wMUsVEe9qfo5Tct",
+      "operation": "close",
+      "signature": "26pn94oNj9yCMwyT7iE9M59SbnNr7nQWo1qLG7qQrdscni7BTa7N23a92zmaceSJ2uK9MXahuY8yX7dxdkR1y5EB",
+      "slot": 508456016,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-26bb38ab-1d95-495f-bfcb-e9eb3f9fb105-channel",
+      "protocolChannelId": "A1wNnrW1VQLeKWGsihCN6Ndr6XKCvpBG5TrcGdB6fSaJ",
+      "operation": "open",
+      "signature": "4kTMNhwD3aBeKn896yU63tX3WB8QUeTioqHx5edQXgBuGDt5pRKHqsgrcVubevbpxFQERDVxJFtBZhUKoDj44wej",
+      "slot": 508444749,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-26bb38ab-1d95-495f-bfcb-e9eb3f9fb105-channel",
+      "protocolChannelId": "A1wNnrW1VQLeKWGsihCN6Ndr6XKCvpBG5TrcGdB6fSaJ",
+      "operation": "close",
+      "signature": "5w5a4wqdFTV2wXxoBrktJEAkK5FhJDFRRjcW4JUAnJjp6KK6s5R999zFLBa4n8kwkZRCLUL7zUo3gxs4LZL81TGn",
+      "slot": 508456056,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-3e84a2fd-f992-4a90-8279-61c0c1124631-channel",
+      "protocolChannelId": "DU92r5XH3qPAUMWaF3bCzpTavhYoURLmXVxSHKUijCN4",
+      "operation": "open",
+      "signature": "4VNWa3zqtJpLKcstyFaC2wPmQJ77i2f86YN8af2FGLnMCuBAnehiY6WRNDDAHEJgKhYjAt9KuKPV4xGsUxiCx56h",
+      "slot": 508444444,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-3e84a2fd-f992-4a90-8279-61c0c1124631-channel",
+      "protocolChannelId": "DU92r5XH3qPAUMWaF3bCzpTavhYoURLmXVxSHKUijCN4",
+      "operation": "close",
+      "signature": "uHGXzRKWRgYg6i8aB99Lthf4RYiXV57JAt44nqj35hAoQL1W9edtK9MDRG8ph2qNRX74Zh1eTrNuiewEgCDubUb",
+      "slot": 508478652,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "33500",
+        "publisher": "16500",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-4025d4b1-d513-4280-b322-c2d447be4649-channel",
+      "protocolChannelId": "9Wwv1kugKW7cHCSZ1evfoAVhVHh52sPHvZ4iZsPjd6vJ",
+      "operation": "open",
+      "signature": "4LocaMLJFiXadTF4i3MF5xWQkQJhxdsEXzRQMchgpJwR2xvjyGFHmNhGRF4C8zX4EumnM3GXu2h1ZLeb2V1wHyyK",
+      "slot": 508444329,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-4025d4b1-d513-4280-b322-c2d447be4649-channel",
+      "protocolChannelId": "9Wwv1kugKW7cHCSZ1evfoAVhVHh52sPHvZ4iZsPjd6vJ",
+      "operation": "close",
+      "signature": "16SjgLNFyb8YmXytPmugv1pXgB2jCw6qi4HLDWykJdyZXMWbSxcvJaDRAV7y2vcBcauLJmsFAEsf4VaFjePxZT8",
+      "slot": 508478699,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-96751b27-8283-400e-95ec-173735f6d3c7-channel",
+      "protocolChannelId": "639jtuUKAsJCvfoaJfiBk1zitC5YYkVnNaL5AWcgb1N2",
+      "operation": "open",
+      "signature": "4JxNX6tNRjfRjWvEuRbmbeRk99h2mJuX8U6Agy8RSgkgxESocas4VKYoJSo4U2Kob9NQVbtt6BxVUhahB5tSJo31",
+      "slot": 508444687,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-96751b27-8283-400e-95ec-173735f6d3c7-channel",
+      "protocolChannelId": "639jtuUKAsJCvfoaJfiBk1zitC5YYkVnNaL5AWcgb1N2",
+      "operation": "close",
+      "signature": "4WJviGnBaPZs3oDKhbgj5hQ9nuvGdMWAE5NHhQScEaanMCtBkhYxNqdZY3Z1PycypmkyZbSWky6UaRcvPmi8AsoT",
+      "slot": 508478758,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-be5c8c93-e68d-4933-83cf-77090d20c16c-channel",
+      "protocolChannelId": "8nRPUQuCYLrgQnVjYJLXXVdge3trJKHkcpZ6S9QNKAJm",
+      "operation": "open",
+      "signature": "4ErNz5yVvTmYAhs9PX71d98ZzQ521cUVP8z9kCb7155nU3qH5DKdYJtotP7C1HnUeXhfEy4xPfuyzvR8es6pUHRH",
+      "slot": 508444506,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-be5c8c93-e68d-4933-83cf-77090d20c16c-channel",
+      "protocolChannelId": "8nRPUQuCYLrgQnVjYJLXXVdge3trJKHkcpZ6S9QNKAJm",
+      "operation": "close",
+      "signature": "2y9XpYykBhwWGJ58EfFrwPqM5UuKdPnDzZJ5GFMZwScSTu8nPkP97NBP7DXdzHyEZxC3aNWUV3SfLmfJesF3Bn2A",
+      "slot": 508478814,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-f7aa9eea-624d-4fd6-a722-ba78cf2e570b-channel",
+      "protocolChannelId": "2uKUnUDWN3ZLJ7Nz5En1qCKBTS3emeNPwadgvih6FacN",
+      "operation": "open",
+      "signature": "3GtdLUwjz56BrrRaZ4VrGM3vFaFbVS6FHTS9h4NybaE4kxLeg9Gy6TsVNE21j32fd2ctqv44S3FYYk3NVb1LJgrY",
+      "slot": 508444627,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-f7aa9eea-624d-4fd6-a722-ba78cf2e570b-channel",
+      "protocolChannelId": "2uKUnUDWN3ZLJ7Nz5En1qCKBTS3emeNPwadgvih6FacN",
+      "operation": "close",
+      "signature": "5M42WKFos1vmJefpHw1miU3PqqRznLr7LeNeE5MvUuFYL1g26uWJLzwqtSvhNbFFQ1xpwEhQZjXbVKG3Lyivx1zS",
+      "slot": 508478866,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-fc6ed7be-1bf3-4e7b-8de8-bee6e3a92ab7-channel",
+      "protocolChannelId": "8CW48VE1DWzwjaYkLEDUSHVn2Lxa7r4Qx2hwqxK4yUsd",
+      "operation": "open",
+      "signature": "4zypBVheXAYZiZdHazSSNyP3tpy8Kf11X1mpzrFjsB4hBrbPa6kYSMHtbFPxjZxQrQwKqDCDLSc65bkAsb6N21bx",
+      "slot": 508444380,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-fc6ed7be-1bf3-4e7b-8de8-bee6e3a92ab7-channel",
+      "protocolChannelId": "8CW48VE1DWzwjaYkLEDUSHVn2Lxa7r4Qx2hwqxK4yUsd",
+      "operation": "close",
+      "signature": "28ub5kuETib2kyTf9omWPUEF9RmK7iFRkHRNt1b2oHrSeLh4246BzHP3TJ1nZWZhtU55nTo2v6KPBu6QpGoR79Lf",
+      "slot": 508478918,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0b2507fd-fa24-4671-956c-c2e37500a5b2-channel",
+      "protocolChannelId": "6r39vERYzeV8GWaoGmU7d3KSUHTa8rPp5AePs6wJXisZ",
+      "operation": "open",
+      "signature": "3JQJSuDyzvSsezf79t1cYbgKfjjoTkKrYz6XzCWxQJfWNo937rQcrDkteAjRc15ggeFyeBc1Pc947Wg4bZNFGiJE",
+      "slot": 508445016,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-0b2507fd-fa24-4671-956c-c2e37500a5b2-channel",
+      "protocolChannelId": "6r39vERYzeV8GWaoGmU7d3KSUHTa8rPp5AePs6wJXisZ",
+      "operation": "close",
+      "signature": "64XMiYqbswTYBqBV2zLwe9h9h7htrMo8h4CkQbq5WGkaYu1Qv9TpgAq4q2qDLir42SxUTsx9EGDJWa4v5rMb61e3",
+      "slot": 508456103,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1083d0f1-f012-4afa-b73d-cd5bd42eb878-channel",
+      "protocolChannelId": "Hn5jCHQ6veTT1JpVdtWgm5TYK1Rewy9dvzEEUPPRQ6P5",
+      "operation": "open",
+      "signature": "5xYuCJcGUWBqCgfb6MY5AJiEFUZReBjxr87oPVTPYZTg6URk5N27t1dEXnacex6ZP6vXVnj2A3TQGXLvyurKDPUn",
+      "slot": 508445163,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1083d0f1-f012-4afa-b73d-cd5bd42eb878-channel",
+      "protocolChannelId": "Hn5jCHQ6veTT1JpVdtWgm5TYK1Rewy9dvzEEUPPRQ6P5",
+      "operation": "close",
+      "signature": "2rkUMheRrJQ22TofEprph2F8YubZotv1GhLB1iTyHtpJNKp9bar65mNUEcencu8oBNvfR2MzXUqCDpaTh5Agj17G",
+      "slot": 508456140,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1124479c-18ae-45d1-97e2-f9ac719db015-channel",
+      "protocolChannelId": "HhMHu119PNhoNqyGPXZJcajBDRJyrwiZ39DrBHmg78TK",
+      "operation": "open",
+      "signature": "4grS3jKS7mHVS4DBN4TRsVt269p9FiGsdcp9Kiyc7uyYHccxbaUYi5m5VjPPBoje7sdbBf97mFB5xY7Hc9kemERv",
+      "slot": 508445298,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1124479c-18ae-45d1-97e2-f9ac719db015-channel",
+      "protocolChannelId": "HhMHu119PNhoNqyGPXZJcajBDRJyrwiZ39DrBHmg78TK",
+      "operation": "close",
+      "signature": "5Jt4gt1WdmUtgbBfzcyS6WdTFBZATZFdJ4wPH8f7web4tY6zTbB23Gog4LJ5UuwkyjyBBPDh2yZcinM5KNCVvXjV",
+      "slot": 508478971,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "35000",
+        "publisher": "15000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-13d85f15-501b-4771-ac9b-6c4d3602cd0d-channel",
+      "protocolChannelId": "CQebiR141rEMjTqdLYA4wK9bfgu85FBWzAbq7oZ9WVw3",
+      "operation": "open",
+      "signature": "4QKh1PMfCV1pj9VXGWG4BVPYkata9E5sePwREN7DAaRrVEffuHdGa37kNZLNdWicPktd6nV3vuSkG8LDyr4gb2Y5",
+      "slot": 508444812,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-13d85f15-501b-4771-ac9b-6c4d3602cd0d-channel",
+      "protocolChannelId": "CQebiR141rEMjTqdLYA4wK9bfgu85FBWzAbq7oZ9WVw3",
+      "operation": "close",
+      "signature": "3to69L4tcVFNHAE2Q6U6bAddXEqmsfcGn6FZjemmSH78ZW6ywSRNS5nRKHvUcixXyhKeXPwaB7rfkSsFYnCF4Jy1",
+      "slot": 508479024,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-13f0f24c-3db4-416e-a27b-5375a15a8924-channel",
+      "protocolChannelId": "4oLBSoD7d2hGY2daHXG2tLN3b1L9pGoL7cphJpD2j9aW",
+      "operation": "open",
+      "signature": "3cQ76AjmZo7q742nd2D8dg6yUEGtzc53k9YAiPD1nhvGSC5K1uDNdSqXyYDaxgx1YtrM7m2JWtnn4NyKprQBJ1Gy",
+      "slot": 508445224,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-13f0f24c-3db4-416e-a27b-5375a15a8924-channel",
+      "protocolChannelId": "4oLBSoD7d2hGY2daHXG2tLN3b1L9pGoL7cphJpD2j9aW",
+      "operation": "close",
+      "signature": "4TWeHHhKbm5N1tCto1MQCpkwWEK8X5rZPEqFngoU6DrogqMVi3aQWMFcC9Wijk41EFJojwDQsWRSNomp5ucFEZMs",
+      "slot": 508479079,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1426807c-9a3b-46bf-aa3b-6b2d8945649b-channel",
+      "protocolChannelId": "BWv2Bsd75Fe2kbWfgWzfNQ5UwEmrRoTqMujmxhor2rVW",
+      "operation": "open",
+      "signature": "47QzNsxDU5ttjP1Xzn33pkj8yNhqoMs3Hvr9UV98UzLKCzQVsZpxA2c5ReAVTek7cHjcA2edrbpQATZdbH9hjCVR",
+      "slot": 508445084,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1426807c-9a3b-46bf-aa3b-6b2d8945649b-channel",
+      "protocolChannelId": "BWv2Bsd75Fe2kbWfgWzfNQ5UwEmrRoTqMujmxhor2rVW",
+      "operation": "close",
+      "signature": "25HJZTAhW6e4BTzjB5o3ykeiX2gsZNkeH5uY4e3u7KNN2awVkVSEKsyLvwjfEcDT3rh6UnjKeHtWHi51DGVgKn1s",
+      "slot": 508479133,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1581979c-5ac6-4438-8ee5-b042d99dfe48-channel",
+      "protocolChannelId": "5JkWKYJWbkhjupKBGXP6v7eGqBgqUzSwJ7nGRLL8xh7m",
+      "operation": "open",
+      "signature": "4paEnfypfGjbyvuxRSBYPE4S4veUS95F4hxeP5UTnHAF73gBhAQb8QkDJPP1ucztxXwK7MwUqDpS8QUNfLTdNn1j",
+      "slot": 508444872,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-1581979c-5ac6-4438-8ee5-b042d99dfe48-channel",
+      "protocolChannelId": "5JkWKYJWbkhjupKBGXP6v7eGqBgqUzSwJ7nGRLL8xh7m",
+      "operation": "close",
+      "signature": "3AHLssKA9oZfQSM7ae3XUt4Bmc17FhE8YcjFRxrpE95gJ2SwSAiKrJzhKLvLdGmUFS4TZwN9w2xWpFjyNeW6wGnN",
+      "slot": 508479185,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-dce5e984-a1fd-4041-8e07-2dceaaee8400-channel",
+      "protocolChannelId": "BPxjYid7jE7UZHrN1CBZVLZebQUrAX5k6yR7KMNaaddc",
+      "operation": "open",
+      "signature": "nDZdzcpumz5X71qzdM56bcDWpdXbwmc6PKnfQkGCNs7b9BMPtFpsd7YdQogFMBHAy1Mos9zxJacPVcd6TwN1Vv4",
+      "slot": 508444935,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-dce5e984-a1fd-4041-8e07-2dceaaee8400-channel",
+      "protocolChannelId": "BPxjYid7jE7UZHrN1CBZVLZebQUrAX5k6yR7KMNaaddc",
+      "operation": "close",
+      "signature": "3ZQciNu7GRtoAMHmqVmH4NX4hEEYEBV4SJQWTs8aWyqG3VnNrrYg7sb4W6n8SQb1hhN3JbsvvVh7ZD3CjKMrQnmT",
+      "slot": 508480194,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-001a4d8a-e95d-4b31-a3c5-6153c41418c9-channel",
+      "protocolChannelId": "9DWYw8pMnSQkCGKvdRpJLPxGfqjVnnwav3W3YYpKTzkG",
+      "operation": "open",
+      "signature": "Q4VN5RGaYkkbrTpWSxswj12wRvPsuJKqSJrJdpLqKgbrdj1Pu17wYy6HjiAxz6qXpwTj1Kdy7iL4groatL9feB6",
+      "slot": 508446811,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-001a4d8a-e95d-4b31-a3c5-6153c41418c9-channel",
+      "protocolChannelId": "9DWYw8pMnSQkCGKvdRpJLPxGfqjVnnwav3W3YYpKTzkG",
+      "operation": "close",
+      "signature": "4Kc9fTUDF2KRhiTNBWQfSiPS1z4cmnXY5xfSAsZXdd72eGMXAvifaxafYQw1pib6nLkg6WW6CJREAhAZNQ1825Cc",
+      "slot": 508480248,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-067e1256-83d1-46dc-8d05-e296df1d9443-channel",
+      "protocolChannelId": "FJi2c4ax4sNL4KrNye7J3p23pmgLsVHWVE41dE2AsXwD",
+      "operation": "open",
+      "signature": "pyuRAHTRZXAL9i1j18SyhYqqSVDXV68roMiUToA5EL9HBQV8QvFkMVnJXFuy8kXMgSpSDYd5H81QL5KU18rZvaf",
+      "slot": 508446753,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-067e1256-83d1-46dc-8d05-e296df1d9443-channel",
+      "protocolChannelId": "FJi2c4ax4sNL4KrNye7J3p23pmgLsVHWVE41dE2AsXwD",
+      "operation": "close",
+      "signature": "43zkGYiE6bAQ3fFsJbawiNGXpEdu3bdW66CX2wm4kXVfoBv4KtGPb5hytnNJKYVh75nXtCQkKweNRwxySWTggZmA",
+      "slot": 508480304,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-147a6626-ff46-4c7c-a2c1-52ef9587dd52-channel",
+      "protocolChannelId": "BJYtSnMoLJKWXud6YFGQRktzTosyZWkdJi3PTfgDkVmj",
+      "operation": "open",
+      "signature": "4TZTC2KYpaHq3AXqD2bBYrtyA2pryTJNoVF7ZBxySTshSVZjm5T55jcB9TZQvEHRHS1uvccg8m31aJFyMwvwmsPj",
+      "slot": 508446579,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-147a6626-ff46-4c7c-a2c1-52ef9587dd52-channel",
+      "protocolChannelId": "BJYtSnMoLJKWXud6YFGQRktzTosyZWkdJi3PTfgDkVmj",
+      "operation": "close",
+      "signature": "37eatomJUGYd2SaYCZ7wduyqCKwC8WjkEZvseEn3BHG48F2pP2eRaQtTZaD4JcH4o1CoCN24ScAwms7LY9gR4RX7",
+      "slot": 508480360,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-35a606e6-0117-411f-a89b-9f006687da11-channel",
+      "protocolChannelId": "5XEvUdYmzeqUgGa9Bn23WN5ybxsDEXESpedFZPhKaWiJ",
+      "operation": "open",
+      "signature": "2S4US6EkbdvW54DgMcbT8LALNkfvQkGfLp5Fh1cRyh7oSiMSgxAiJBcXoZ9xHfzZCcbPMNqFmQB4qp6uGDyWTxuh",
+      "slot": 508446694,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-35a606e6-0117-411f-a89b-9f006687da11-channel",
+      "protocolChannelId": "5XEvUdYmzeqUgGa9Bn23WN5ybxsDEXESpedFZPhKaWiJ",
+      "operation": "close",
+      "signature": "2fLBRQuFHiVi7R1rehKyF74feJeneRH3wP1A9mb3PGktydx46Ax6Zk72QCVXjtJMiUe6SZ32sUxZXrRMveiDjkFV",
+      "slot": 508480415,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-a1105c48-be86-45df-b11d-9358b46d073e-channel",
+      "protocolChannelId": "7XdofA6JJHDNmgpPavgNYYpXuLvZ265RxvNyk5UV86wQ",
+      "operation": "open",
+      "signature": "3ihD6FQMY687TaGCvW2cuaZiXMHRyAXbEneavtJf1DnxiyedM3og2cxqpZibw2VtCjq6qoeEQHo9K4NbYdr9U8vr",
+      "slot": 508446636,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-a1105c48-be86-45df-b11d-9358b46d073e-channel",
+      "protocolChannelId": "7XdofA6JJHDNmgpPavgNYYpXuLvZ265RxvNyk5UV86wQ",
+      "operation": "close",
+      "signature": "2tbGEE9Y1tyjV6mMMVwRBUwc2GG1t87DMh8Ww4qx51Th9z4naJ5sk4XbW9YFz2YzpZvLp81BCgBPvmpgzsrCtpvZ",
+      "slot": 508480468,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-bf41a6b7-f4a1-422c-af9c-5924146417d2-channel",
+      "protocolChannelId": "5iBrFpNkbbjxeUMcrKapGeVpscFAYVR4rTchELj8r3FM",
+      "operation": "open",
+      "signature": "4bqRorfYVvWndNshCBhoivMgsectNg8XXcKReqju5XiyDH8B9FHUFPdwfDG2JSEyQFj3imgDMsyBNaucqzskGyRp",
+      "slot": 508445397,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-bf41a6b7-f4a1-422c-af9c-5924146417d2-channel",
+      "protocolChannelId": "5iBrFpNkbbjxeUMcrKapGeVpscFAYVR4rTchELj8r3FM",
+      "operation": "close",
+      "signature": "5y7uVGKSYePqaTWzhEJXQqB5fAJbpvBZ939QEGctATBmuCm8uuZZimjrYbTmozfkFqUpZEsadMM8LQmvWAbKjNG",
+      "slot": 508480523,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-fc0d9777-b82d-46df-9289-d276249457db-channel",
+      "protocolChannelId": "H65LFM4QKsRhfn6LXgxAgP7X4MwAUBXgmTDswS48Kcmw",
+      "operation": "open",
+      "signature": "294bLsDPSKnzntPtvoAyg6jjrgVVZaBYZhwhq6f3tS9ABVqkq7MXr84b7jjh2VR1PqaJVxYSnGtwAfiSoQrzCB5J",
+      "slot": 508446525,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-fc0d9777-b82d-46df-9289-d276249457db-channel",
+      "protocolChannelId": "H65LFM4QKsRhfn6LXgxAgP7X4MwAUBXgmTDswS48Kcmw",
+      "operation": "close",
+      "signature": "4hM21mR4tn8x3CBzkXMBvcwY9t43oVE5m5MoL5MJW6sNAdQmhmLQB4eEwXUkE6xpCxkJ1x4qXov9UXvCzTQ24NKK",
+      "slot": 508480576,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2704789f-acb7-4d2c-b384-949dd73b9cd4-channel",
+      "protocolChannelId": "D56yA7B9nATm8tJBqa5UdsEZ3hibdoaCGBFt8k96qTs1",
+      "operation": "open",
+      "signature": "fToqwLgX1VNe3zbhRxH8wyqU3iskD828XGGBZ5RrWbaFAcmif3KfCE5UuWwzfKYcbDtpeKDaxtWCgQ58tq1R254",
+      "slot": 508446868,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2704789f-acb7-4d2c-b384-949dd73b9cd4-channel",
+      "protocolChannelId": "D56yA7B9nATm8tJBqa5UdsEZ3hibdoaCGBFt8k96qTs1",
+      "operation": "close",
+      "signature": "35HDhQH2jezFZZN4bKo1Tih6nuwrBM8Yn2DAkSRAYsDbwQ3ZzM8bBewg65NkQB4MAX6GtiGradTiRcBm6h3LgyYR",
+      "slot": 508480641,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-6c500290-50c3-4704-9194-a5bf468c1320-channel",
+      "protocolChannelId": "2btTxHsEw4q8WEDAmMjP8r62rnjjDXjdUZAZ79t7Xerh",
+      "operation": "open",
+      "signature": "3a2ZviJSZ7QgszaJsG42DdCVuJWJwbtzXSqWQsFAzTQPmjTVb5q8chbf6d1xyJFjBjPc7wAqFgAcvZibMpPgmRfw",
+      "slot": 508447040,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-6c500290-50c3-4704-9194-a5bf468c1320-channel",
+      "protocolChannelId": "2btTxHsEw4q8WEDAmMjP8r62rnjjDXjdUZAZ79t7Xerh",
+      "operation": "close",
+      "signature": "3Ynr6Z4YtL3RNpV7kArKD8D8T1SF4X6JDNamcb1RaRVJQG7gBgRfBySYHC7BoGK5p9SdSaQs3P23DGJg6vvsFCKu",
+      "slot": 508480692,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-6cfe021f-09a5-468d-8064-9565ec75cc63-channel",
+      "protocolChannelId": "Cf4NgyE42iRauMJzs954qinV2oxAr73dAo2CXEBQuJod",
+      "operation": "open",
+      "signature": "3yGCjjHWBuFUXehLyoaasRVkk3rkhZ44LiUr2RkewkmPiTHeXFaxTAhxqcUHtuNtnfSFx5KA5Hk6CHDLwV8tuCWv",
+      "slot": 508446927,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-6cfe021f-09a5-468d-8064-9565ec75cc63-channel",
+      "protocolChannelId": "Cf4NgyE42iRauMJzs954qinV2oxAr73dAo2CXEBQuJod",
+      "operation": "close",
+      "signature": "32HuzrnsGpmGzCpLidLNszFo2xHQzhRF1gQrxVBxDPCGwLeC8frgJMBLFGtUqNS2qLBQyc9wegA73r7edFRkMrXE",
+      "slot": 508480753,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-7b83bceb-56a6-4b27-8f54-a00eaade6e1b-channel",
+      "protocolChannelId": "6HkaZPrZsHgGivqadRxSxU4XA4i6zDyewmiEzti9Kwt7",
+      "operation": "open",
+      "signature": "29ikLYxiWtW2qgiSJsBVpjo2CsbnkRJjcBhwmM4moGbfiML6CLTCvVev7jfjk41B1JTeYBimebGxoMENQRCdVk9t",
+      "slot": 508447890,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-7b83bceb-56a6-4b27-8f54-a00eaade6e1b-channel",
+      "protocolChannelId": "6HkaZPrZsHgGivqadRxSxU4XA4i6zDyewmiEzti9Kwt7",
+      "operation": "close",
+      "signature": "5hc2rwaKDJ5sUhzxtpZs1PYWibJzE89n6KvJuC7LtyJeoHrFsW9TjjoEA2sUdnBxDEcMYihobgMrK1CpH22RVhQ",
+      "slot": 508480812,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-7c0538db-53c2-44d7-b2b4-eb88204b621e-channel",
+      "protocolChannelId": "CNk9kb5qFY5AxbSVR6HcZdwZtEVN2Sx2XtJPwnQqLkUq",
+      "operation": "open",
+      "signature": "4kK1nJ1gu1v4wbJTFr58JhL5ZzSHfLGVb8BZxeCmzkUbXDTKi7UNpAm5jKYR3zbE28rt1Nak3ajR4gTbPU9mZRzy",
+      "slot": 508448051,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-7c0538db-53c2-44d7-b2b4-eb88204b621e-channel",
+      "protocolChannelId": "CNk9kb5qFY5AxbSVR6HcZdwZtEVN2Sx2XtJPwnQqLkUq",
+      "operation": "close",
+      "signature": "6eu3zs64h7zhFKnUsLuLFcihrX7qmzJo1FSA4Lz8pRQHxUHVT73CRM4netupf1ZBW3GkEtGaw1qyXujbhiMfYkP",
+      "slot": 508480872,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-dc1542df-874b-4a73-ab8d-d69487facb14-channel",
+      "protocolChannelId": "BkJBCrVVkkctQJ3uoRWTLraQzx6K4VGVY7JpnZjvTEnT",
+      "operation": "open",
+      "signature": "5PfTmKWNq8Ts25iP6ZYKL9PVb8DyS51TUk18PwBukK85MzdgbptGf1bmgsQUV6rGkCmAfWTeEh13mFJAyi76BzPn",
+      "slot": 508448186,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-dc1542df-874b-4a73-ab8d-d69487facb14-channel",
+      "protocolChannelId": "BkJBCrVVkkctQJ3uoRWTLraQzx6K4VGVY7JpnZjvTEnT",
+      "operation": "close",
+      "signature": "5d5cpyNjikJ2cH5ghx4gdHkgdCjQfQGXKaoWkn9yLWRvEQQtCdpJhrcDFeMdT79eX59mU6uEwXWJXvi3pRBSKWkP",
+      "slot": 508480928,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-f13a7274-913c-4589-993f-6eb6e9af77e5-channel",
+      "protocolChannelId": "Gfz1r65NtkMQ1Mvv6r76zRAej3Ryh45jAubfoWqabnf2",
+      "operation": "open",
+      "signature": "4ovkmUtjgoxxs5tm1ajUi7wEvTJbfS4EZCr4DAfkBRuKFGNiyGyygM2V5R7hmU33dYcSM8Wynyungjqq9J8gp7ST",
+      "slot": 508446984,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-f13a7274-913c-4589-993f-6eb6e9af77e5-channel",
+      "protocolChannelId": "Gfz1r65NtkMQ1Mvv6r76zRAej3Ryh45jAubfoWqabnf2",
+      "operation": "close",
+      "signature": "QtmzDCSAfBsVrbV3jpnsjJvzaDMPvLHfnP2bPM6BT2gWz2Yuxei1efbiNRZzYJE1TJ8aL6L7aNykNLp5q9pWtG3",
+      "slot": 508484542,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-165cba4d-ccd4-4626-aecf-3a0e49ea748f-channel",
+      "protocolChannelId": "91BHkrRJGLWwPLqGBz9hhPD3wgxCXJySJxYA8xSB7MWX",
+      "operation": "open",
+      "signature": "tLtKHMYCwBPeu3CQKbifmEP4LcUhzESTmykv2MNQYb1dpSgGfLdbQha3DM8EM8eJ2CuCHSFojkUUYyBm79RGC65",
+      "slot": 508448658,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-165cba4d-ccd4-4626-aecf-3a0e49ea748f-channel",
+      "protocolChannelId": "91BHkrRJGLWwPLqGBz9hhPD3wgxCXJySJxYA8xSB7MWX",
+      "operation": "close",
+      "signature": "5Wgxffe4BKgN5YtJPYCKfCKQqjwuazFwhcmxTKDmtbkkJcgSkMskXc8vY6jk4juLKd6ecVULiyxtUK62UEbtRDG6",
+      "slot": 508456179,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2dd3c57f-0872-41a0-b8e1-b3c1ceb80587-channel",
+      "protocolChannelId": "ChuRubNXNQpjZb4Hxtn3Bb2U2G9W5h8fPXmERfQpqigF",
+      "operation": "open",
+      "signature": "4zDX7c28SPXksrSiwVuzUBmZTxn1LBShGZea8DiY6X6QLVsdS9huh7zEP7g944pCThCNbt6h6mesV4kqTA8ym85f",
+      "slot": 508448312,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-2dd3c57f-0872-41a0-b8e1-b3c1ceb80587-channel",
+      "protocolChannelId": "ChuRubNXNQpjZb4Hxtn3Bb2U2G9W5h8fPXmERfQpqigF",
+      "operation": "close",
+      "signature": "soTuTdVR1h9yq8P72MHEmYuouyp45nNvTwrDkFWcE4B2rxoEaPGWV9N5kTf9LPYQ3aD6KEzNPL4SFHHMgKX7PPj",
+      "slot": 508456215,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "11000",
+        "publisher": "39000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-552d7039-767f-4bbf-9a42-5904a9542368-channel",
+      "protocolChannelId": "7mzhd35Dsq4UZ8CNmmXPt21xUo3G5GwztXZUGMEho7Em",
+      "operation": "open",
+      "signature": "3hXiioHqxT5ERJZtZXpnMqCnTJT8uS7opi6sqSPXNGa2FMfUh6kebmp1wDYkDrBNh2xMMiR47VxLbQgf2eqX7vvA",
+      "slot": 508448434,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-552d7039-767f-4bbf-9a42-5904a9542368-channel",
+      "protocolChannelId": "7mzhd35Dsq4UZ8CNmmXPt21xUo3G5GwztXZUGMEho7Em",
+      "operation": "close",
+      "signature": "2hVAM8LgTGpCjgGPbTT9MCZcDVsZw9fy6ZUYPdZ287kvWEWjDcFT5wfiwNAeYwuPCBBRBToDwVsA2E3UxeMyby1U",
+      "slot": 508484594,
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {
+        "payer": "35000",
+        "publisher": "15000",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-5b0184de-943d-411f-84c4-c462a041fa17-channel",
+      "protocolChannelId": "3SyMngaqf5MetSDu228JLyGKyDtbgLS5efHUqikhdC1V",
+      "operation": "open",
+      "signature": "28kYyhSeRgsdNTKkxJYdsJtFQo5PQEnoyTWj7NfvMt6CftgmGufkZWuPdhwsK5AGvE5NQXKZdXj8dncm4u6yGfUN",
+      "slot": 508448375,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-5b0184de-943d-411f-84c4-c462a041fa17-channel",
+      "protocolChannelId": "3SyMngaqf5MetSDu228JLyGKyDtbgLS5efHUqikhdC1V",
+      "operation": "close",
+      "signature": "3kuV2XxVNUXcrYrYtCj4u7At4Fths3X9RxRCZ6zGFGexjkzkJTkxcnBrvDa27YmnWr8Mndv5YS1whovwRU61dPik",
+      "slot": 508484643,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-8a985833-721f-4303-9862-f0c4bdfdf4ea-channel",
+      "protocolChannelId": "6HeTZQ6A6jkSdyLqHhw4VdwSD1H14KtidKFpuPxLVwSF",
+      "operation": "open",
+      "signature": "5VhqXAe8wQWcKp4S7UMzTLGGp2CBQ92vVvwhfuLZXhemHfDQTaKC9ZSnbZkWZejoHfYKzrkJG73xQLAewcYPpxGA",
+      "slot": 508448490,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-8a985833-721f-4303-9862-f0c4bdfdf4ea-channel",
+      "protocolChannelId": "6HeTZQ6A6jkSdyLqHhw4VdwSD1H14KtidKFpuPxLVwSF",
+      "operation": "close",
+      "signature": "w4PBF4wAVM8yCKx5GFSef2S5MDBoU4H3bDXhDMVCjzJFZ1bNSZubhr14oS2zZyjbb69yAp4pgZYkaNaXJA9982p",
+      "slot": 508484697,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-bbcf064b-ab8a-42a3-8f0b-a55cd46ebce2-channel",
+      "protocolChannelId": "FyQhxLe2PBaBuK6wFYLgNNPYyAcggYnF17BKeiaECMKP",
+      "operation": "open",
+      "signature": "4vSTduXMVox7BFTsfpMvgHFtzTYsmQfueKccYjPzCMzLyFxynvgDhSHxWFAKFYDCZgTTjfB7AJnmEsUaWbw1ghaV",
+      "slot": 508448541,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-bbcf064b-ab8a-42a3-8f0b-a55cd46ebce2-channel",
+      "protocolChannelId": "FyQhxLe2PBaBuK6wFYLgNNPYyAcggYnF17BKeiaECMKP",
+      "operation": "close",
+      "signature": "EGsnL4o6FeLYFjpTtSAovSqb6BFNygcZLCFQfp4N1W2BZmKHFDRMjw9vJVdmdVFNskvovjJaGsLD3M6cGU98XTo",
+      "slot": 508484782,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-bed691ce-033d-4997-a571-464667198721-channel",
+      "protocolChannelId": "FQiYXSK3GGikEMa6Ya7xvh9AmLnEFQNHCet3dwBT6J4D",
+      "operation": "open",
+      "signature": "596ohsBp1JHsA819DKPqUCsGGnHfDuDQcEQvGB2eUa5VNCo7fGvkMDXv4VkP5M81bFCCexGNQs3TwMpgNMhtJ3wt",
+      "slot": 508448601,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-bed691ce-033d-4997-a571-464667198721-channel",
+      "protocolChannelId": "FQiYXSK3GGikEMa6Ya7xvh9AmLnEFQNHCet3dwBT6J4D",
+      "operation": "close",
+      "signature": "4QboP9sNKx393qJNRtgbqoHM4TyrQCt1Ct7FZCfnLAb6xzJabU8aXE1wRuLtUQo5UxJ14tQJn2TAYKCsyU3WPhvb",
+      "slot": 508484828,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-ee74cdb3-2750-4047-a512-ada2454d02c5-channel",
+      "protocolChannelId": "8xadQmmvQAVJ7W32AeciV4HCPwvhybAS3xgfJBChnNAu",
+      "operation": "open",
+      "signature": "e5J3vVi6tjdsPETAS6hDngWmjQehvgpFqF9t75pygqH1SZAYCgaYaLpS62VuTfFLsr9vNnUyq3JuHZWxR4oSexp",
+      "slot": 508448254,
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {
+        "payer": "-50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    },
+    {
+      "channelId": "campaign-ee74cdb3-2750-4047-a512-ada2454d02c5-channel",
+      "protocolChannelId": "8xadQmmvQAVJ7W32AeciV4HCPwvhybAS3xgfJBChnNAu",
+      "operation": "close",
+      "signature": "5Mn4752NzSvF9cGvXLC8SWZh4s7LLsiMoeyeEmjE1z2j2n89Py5fd5fAkbmYaoDSPEonDtsdU5bmXpr99jSkCBzf",
+      "slot": 508484877,
+      "networkFeeLamports": "10000",
+      "tokenDeltas": {
+        "payer": "50000",
+        "publisher": "0",
+        "treasury": "0"
+      }
+    }
+  ],
+  "limitations": [
+    "Verification covers all 125 funded channels; the original planned 128-advertiser / 1,024-turn stage remains partial.",
+    "Three original expired/unfunded openings remain failed and retain reservations; expired close identities are preserved in the bound acceptance record.",
+    "One configured dedicated RPC provider; this is not independent-provider consensus.",
+    "Public Devnet test USDC and one shared sponsor; off-chain vouchers are cumulative authorizations, not 824 separate native transfers."
+  ]
+}

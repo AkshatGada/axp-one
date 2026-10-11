@@ -1,0 +1,101 @@
+// OFFLINE SYNTHETIC EXPERIMENT. No network, provider, wallet or cryptographic signer.
+import {mkdirSync,writeFileSync,statSync,statfsSync,readFileSync} from 'node:fs';
+import {join,resolve} from 'node:path';
+import {performance} from 'node:perf_hooks';
+import {createHash,createPublicKey} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+import {Exchange} from '../../axp-one/packages/exchange/index.mjs';
+import {NetworkPaymentAdapter,hashNetworkTerms,hashNetworkRecord} from '../../axp-one/packages/payments/network-adapter.mjs';
+import {createMemoryPaymentStore,SQLitePaymentStore} from '../../axp-one/packages/payments/store.mjs';
+import {ledgerCharge,ledgerObligations} from '../../axp-one/packages/v3/devnet-live.mjs';
+import {NATIVE_LIMITS} from '../../axp-one/packages/product/native.mjs';
+import {productDecision} from '../../axp-one/packages/product/decisions.mjs';
+import {hash} from '../../axp-one/packages/contracts/index.mjs';
+const root=resolve(import.meta.dirname,'../../axp-one'),out=import.meta.dirname,startedAt=new Date().toISOString(),start=performance.now(),
+  channelCount=Number(process.env.OFFLINE_STRESS_CHANNELS??2048),threshold=64,charge='1000',deposit='80000',chargeCap='64000';
+assert.ok(Number.isInteger(channelCount)&&channelCount>=1&&channelCount<=2048);mkdirSync(out,{recursive:true,mode:0o700});
+if(statfsSync(out).bavail*statfsSync(out).bsize<50*1024**3)throw Error('50gib_disk_floor');
+const sourceCommit=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),sourceFiles=['packages/exchange/index.mjs','packages/payments/network-adapter.mjs','packages/payments/store.mjs','packages/v3/devnet-live.mjs','packages/contracts/index.mjs'],
+  sourceHash=createHash('sha256');for(const f of sourceFiles)sourceHash.update(f).update(readFileSync(join(root,f)));const executableSourceHash=sourceHash.digest('hex');
+// Public-only SPKI bytes; no private key or wallet is generated or read.
+const publicKeyPEM=createPublicKey({key:Buffer.concat([Buffer.from('302a300506032b6570032100','hex'),Buffer.alloc(32,1)]),format:'der',type:'spki'}).export({format:'pem',type:'spki'});
+const counters={vouchers:0,syntheticOpenOutcomes:0,syntheticCloseOutcomes:0,fixtureVoucherPrepareCalls:0,fixtureCommitCalls:0,fixtureTxPrepareCalls:0,
+  duplicateVoucherReplays:0,duplicateCloseReplays:0,budgetExhaustionChecks:0,outstandingReservationBlocks:0,mutatedChargeRejects:0,
+  unknownCommitLookups:0,restartReplayChecks:0,cryptographicSignatures:0,nativeBroadcasts:0,rpcRequests:0,providerRequests:0};
+const closedCheckpoint=new SQLitePaymentStore(join(out,'closed-channels.sqlite')),durableStore=new SQLitePaymentStore(join(out,'durable-cohort.sqlite'));
+const latencies=[],channels=[],events=[],faults=[];let payout=0n,refund=0n,active=0,peakRss=process.memoryUsage().rss;
+const progress=(status='running')=>writeFileSync(join(out,'progress.json'),JSON.stringify({execution:'offline-synthetic-fixture',status,updatedAt:new Date().toISOString(),channels:channels.length,vouchers:counters.vouchers,elapsedSeconds:(performance.now()-start)/1000,peakRssBytes:peakRss,...counters},null,2)+'\n');
+async function oneChannel(index,{durable=false,adversarial=false}={}){
+  const prefix=durable?'durable':'memory',channelId=`offline-${prefix}-channel-${index}`,runId=`offline-${prefix}-${index}`,now=Math.floor(Date.now()/1000),t0=performance.now(),
+    store=durable?durableStore:createMemoryPaymentStore(),commits=new Map();let adapter;
+  const exchange=new Exchange({dbPath:':memory:',runId,mode:'sandbox',networkState:id=>{
+    if(!adapter||!store.get(id))return null;return {...adapter.getChannel(id),mode:'sandbox'};
+  }});
+  const terms={channelId,mode:'sandbox',runId,advertiserId:`offline-advertiser-${index}`,campaignVersionId:`offline-campaign-${index}-v1`,
+    rpc:'https://offline-fixture.invalid/',network:'offline-synthetic-fixture',genesisHash:'offline-never-queried',program:'offline-never-loaded',mint:'offline:test-credits',tokenProgram:'offline-never-loaded',
+    payer:'offline-mock-payer',payee:'offline-mock-publisher',depositBaseUnits:deposit,chargeCapBaseUnits:chargeCap,maxBidBaseUnits:charge,maxCharges:NATIVE_LIMITS.maxCharges,
+    voucherExpiresAt:now+86400,applicationDeadlineAt:now+85500,settlementMarginSeconds:60,compatibilityHash:'0'.repeat(64)};
+  const protocolChannelId=`mock:${channelId}`,wire=operation=>{counters.fixtureTxPrepareCalls++;return {wireBase64:Buffer.from(`INERT OFFLINE ${operation} ${channelId}`).toString('base64'),txSignature:`INERT-NON-SIGNATURE:${operation}:${channelId}`,blockhash:'inert-offline-blockhash',lastValidBlockHeight:'1',estimatedFeeAndRentLamports:'0'};};
+  const openOutcome=input=>({status:'finalized',finality:'finalized',txSignature:input.signed.txSignature,protocolChannelId,depositBaseUnits:deposit});
+  const closeOutcome=input=>{const s=store.get(channelId),amount=s.watermark.cumulativeAmountBaseUnits;return {status:'finalized',finality:'finalized',txSignature:input.signed.txSignature,settledBaseUnits:amount,refundBaseUnits:(BigInt(deposit)-BigInt(amount)).toString(),publisherDeltaBaseUnits:amount,feeAndRentLamports:'0'};};
+  const transport={evidenceLabel:'synthetic_transport_fake',prepareOpen:async()=>({protocolChannelId,estimatedFeeAndRentLamports:'0'}),signOpen:async()=>wire('open'),submitOpen:async input=>{counters.syntheticOpenOutcomes++;return openOutcome(input);},lookupOpen:async input=>openOutcome(input),
+    reserveDelivery:async({charge})=>({deliveryId:charge.id,amountBaseUnits:charge.amountBaseUnits}),
+    prepareVoucher:async({intent})=>{counters.fixtureVoucherPrepareCalls++;return {signatureType:'ed25519',signature:`INERT-NON-SIGNATURE:${channelId}:${intent.sequence}`,signer:terms.payer,voucher:{channelId:protocolChannelId,cumulativeAmount:intent.cumulativeAmountBaseUnits,expiresAt:terms.voucherExpiresAt}};},
+    commitVoucher:async input=>{counters.fixtureCommitCalls++;const receipt={status:'authorized',deliveryId:input.intent.charge.id,incrementBaseUnits:input.intent.charge.amountBaseUnits,cumulativeAmountBaseUnits:input.intent.cumulativeAmountBaseUnits,payloadHash:input.intent.payloadHash};commits.set(input.intent.charge.id,receipt);
+      if(adversarial&&input.intent.sequence==='7')throw Error('offline-lost-commit-ack');return receipt;},
+    lookupCommit:async input=>{counters.unknownCommitLookups++;return commits.get(input.intent.charge.id)??{status:'absent'};},
+    prepareClose:async()=>({protocolChannelId,estimatedFeeAndRentLamports:'0'}),signClose:async()=>wire('close'),submitClose:async input=>{counters.syntheticCloseOutcomes++;return closeOutcome(input);},lookupClose:async input=>closeOutcome(input)};
+  const makeAdapter=target=>new NetworkPaymentAdapter({store:target,protocolTransport:transport,getLedgerCharge:id=>ledgerCharge(exchange,id),getLedgerObligations:id=>ledgerObligations(exchange,id),approvalTermsHash:hashNetworkTerms(terms),limits:NATIVE_LIMITS});
+  adapter=makeAdapter(store);
+  exchange.registerPublisher({publisherId:'offline-publisher',publisherKeyId:'offline-public-only',payee:terms.payee,publicKeyPEM});
+  exchange.createChannel({channelId,advertiserId:terms.advertiserId,publisherId:'offline-publisher',payee:terms.payee,depositBaseUnits:deposit,mode:'sandbox'});
+  const open=await adapter.prepareOpen(terms);assert.equal((await adapter.confirmOpen({channelId,planId:open.planId})).status,'finalized');exchange.syncNetworkChannel(channelId);
+  const campaign={campaignId:`offline-campaign-${index}`,campaignVersionId:terms.campaignVersionId,advertiserId:terms.advertiserId,status:'active',allowedIntents:['product_tools'],destination:'global',declaredConstraints:['crypto_storage'],
+    creatives:[{creativeVersionId:`offline-creative-${index}`,approvedText:'Clearly fictional offline fixture creative.',destinationURL:'https://fixture.example/',fictional:true,softFitTags:['crypto_storage'],evidenceFieldIds:['declaredConstraints']}],softFitTags:['crypto_storage'],maxBidBaseUnits:charge,budgetCapBaseUnits:chargeCap,channelId,policyVersion:'fit_intent_bid_v1'};
+  exchange.createCampaign(campaign);
+  const opportunity=i=>exchange.createOpportunity({publisherId:'offline-publisher',slotId:'offline-slot',randomSessionId:`offline-session-${index}-${i}`,turnId:`offline-turn-${i}`,coarseIntent:'product_tools',destination:'global',taskConstraints:['crypto_storage'],softPreferences:[],floorBaseUnits:charge,expiresAt:Date.now()+3600000},{idempotencyKey:`offline-key-${i}`});
+  let firstCharge;
+  for(let i=0;i<threshold;i++){
+    const o=opportunity(i),d=productDecision(campaign,o,{decision:'bid',creativeVersionId:campaign.creatives[0].creativeVersionId,relevanceLevel:3,commercialIntentLevel:3,reason:'offline_fixture_fit',provenance:{execution:'fixture',model:'no-model-called'}}),auction=exchange.runAuction(o.id,[d]);assert.equal(auction.status,'awarded');
+    if(adversarial&&i===threshold-1){assert.equal(ledgerObligations(exchange,channelId).acceptedBaseUnits,'63000');assert.equal(ledgerObligations(exchange,channelId).reservedBaseUnits,'1000');await adapter.beginDrain({channelId});await assert.rejects(adapter.prepareClose({channelId}),e=>e.reasonCode==='close_not_drained');counters.outstandingReservationBlocks++;faults.push({type:'existing_outstanding_award_blocks_close',channelId,acceptedBaseUnits:'63000',reservedBaseUnits:'1000',result:'close_not_drained'});}
+    // Deliberate fixture admission: no browser or signed receipt authentication.
+    const a=auction.award,id=`offline-charge-${i}`,record={id,runId,mode:'sandbox',awardId:a.id,deliveryId:`offline-delivery-${i}`,campaignId:campaign.campaignId,campaignVersionId:campaign.campaignVersionId,channelId,amountBaseUnits:a.priceBaseUnits,acceptedAt:Date.now(),sequence:i+1,status:'accepted',receiptHash:hash({fixture:true,channelId,id})};
+    exchange.tx(()=>{a.status='delivered';exchange.put('awards',a.id,a);exchange.put('charges',id,record);exchange.event('offline_fixture_charge_admitted',{channelId,chargeId:id});});if(i===0)firstCharge=id;
+    const before=performance.now();let authorization=await adapter.authorizeCumulative({channelId,chargeId:id});
+    if(authorization.status!=='authorized'){assert.ok(adversarial&&i===6);const prepareCount=counters.fixtureVoucherPrepareCalls,commitCount=counters.fixtureCommitCalls;authorization=await adapter.reconcile({channelId,chargeId:id});assert.equal(counters.fixtureVoucherPrepareCalls,prepareCount);assert.equal(counters.fixtureCommitCalls,commitCount);faults.push({type:'lost_commit_ack_lookup',channelId,sequence:i+1,result:authorization.status});}
+    assert.equal(authorization.status,'authorized');assert.equal(authorization.cumulativeAmountBaseUnits,String((i+1)*1000));latencies.push(performance.now()-before);counters.vouchers++;
+    record.status='authorized';exchange.put('charges',id,record);
+    if(i%16===0){const prepareCount=counters.fixtureVoucherPrepareCalls,commitCount=counters.fixtureCommitCalls;assert.equal((await adapter.authorizeCumulative({channelId,chargeId:id})).cumulativeAmountBaseUnits,String((i+1)*1000));assert.equal(counters.fixtureVoucherPrepareCalls,prepareCount);assert.equal(counters.fixtureCommitCalls,commitCount);counters.duplicateVoucherReplays++;}
+  }
+  const extra=opportunity(threshold);assert.equal(exchange.eligibleCampaigns(extra.id).eligible.length,0);assert.equal(exchange.eligibleCampaigns(extra.id).excluded[0].reason,'budget_unavailable');counters.budgetExhaustionChecks++;
+  if(adversarial){
+    const original=exchange.require('charges',firstCharge);exchange.put('charges',firstCharge,{...original,amountBaseUnits:'999'});
+    await assert.rejects(adapter.authorizeCumulative({channelId,chargeId:firstCharge}));counters.mutatedChargeRejects++;exchange.put('charges',firstCharge,original);
+  }
+  // Experimental policy wrapper: threshold64 closes this channel, never resets it.
+  assert.equal(adapter.getChannel(channelId).authorizedBaseUnits,chargeCap);assert.equal(adapter.getChannel(channelId).settledBaseUnits,'0');
+  if(index<2)events.push({channelId,type:'threshold_reached',voucherCount:threshold,authorizedBaseUnits:chargeCap,settledBaseUnitsBeforeClose:'0'});
+  await adapter.beginDrain({channelId});const close=await adapter.prepareClose({channelId});assert.equal(close.status,'prepared');const settled=await adapter.confirmClose({channelId,planId:close.planId});assert.equal(settled.status,'finalized');assert.equal(settled.settledBaseUnits,chargeCap);assert.equal(settled.refundBaseUnits,'16000');
+  const closeCalls=counters.syntheticCloseOutcomes;assert.deepEqual(await adapter.confirmClose({channelId,planId:close.planId}),settled);assert.equal(counters.syntheticCloseOutcomes,closeCalls);counters.duplicateCloseReplays++;
+  const snapshot=store.get(channelId);if(!durable)closedCheckpoint.update(channelId,()=>snapshot);
+  if(index%64===0||durable){const persisted=durable?durableStore:closedCheckpoint,restored=makeAdapter(persisted),prepares=counters.fixtureVoucherPrepareCalls;assert.equal((await restored.authorizeCumulative({channelId,chargeId:firstCharge})).cumulativeAmountBaseUnits,'1000');assert.equal((await restored.confirmClose({channelId,planId:close.planId})).settledBaseUnits,chargeCap);assert.equal(counters.fixtureVoucherPrepareCalls,prepares);assert.equal(counters.syntheticCloseOutcomes,closeCalls);counters.restartReplayChecks++;}
+  channels.push({id:channelId,execution:'synthetic_transport_fake',storage:durable?'SQLite-full-per-adapter-transition':'memory-plus-SQLite-closed-checkpoint',vouchers:threshold,depositBaseUnits:deposit,acceptedBaseUnits:chargeCap,authorizedBaseUnits:chargeCap,syntheticSettledBaseUnits:chargeCap,syntheticRefundBaseUnits:'16000',realNativeTransactions:0,elapsedMs:performance.now()-t0,termsHash:hashNetworkTerms(terms),finalVoucherRecordHash:snapshot.watermark.finalVoucherHash});
+  payout+=BigInt(chargeCap);refund+=16000n;exchange.close();peakRss=Math.max(peakRss,process.memoryUsage().rss);return channels.at(-1).elapsedMs;
+}
+let status='completed',error=null;const cohorts=[];
+try{
+  for(const cohort of [{id:'durable-proof',count:16,durable:true},{id:'large-local-stress',count:channelCount,durable:false}]){
+    const c0=performance.now(),v0=counters.vouchers;for(let i=0;i<cohort.count;i++){await oneChannel(i,{durable:cohort.durable,adversarial:i===0});if(i%16===0){progress();await new Promise(resolve=>setImmediate(resolve));}if(i%128===0){if(process.memoryUsage().rss>1.5*1024**3)throw Error('offline_memory_bound');if(statfsSync(out).bavail*statfsSync(out).bsize<50*1024**3)throw Error('50gib_disk_floor');console.log(JSON.stringify({execution:'offline-synthetic-fixture',cohort:cohort.id,channelsDone:i+1,totalVouchers:counters.vouchers,elapsedSeconds:Math.round((performance.now()-start)/1000)}));}}
+    cohorts.push({id:cohort.id,channels:cohort.count,vouchers:counters.vouchers-v0,elapsedMs:performance.now()-c0,storage:cohort.durable?'actualSQLitePaymentStore FULL transitions':'actualMemoryPaymentStore and actualSQLitePaymentStore per closed channel'});
+  }
+}catch(e){status='partial';error={name:e.name,message:e.message,reason:e.reasonCode??e.code??null};console.error(JSON.stringify(error));}
+const elapsedMs=performance.now()-start,sorted=latencies.sort((a,b)=>a-b),pct=p=>sorted.length?sorted[Math.ceil(sorted.length*p)-1]:null;
+const result={schemaVersion:'axp.offline-voucher-stress.v1',execution:'offline-synthetic-fixture',status,startedAt,completedAt:new Date().toISOString(),sourceCommit,executableSourceHash,
+  policy:{thresholdVouchers:64,thresholdAcceptedBaseUnits:chargeCap,settlement:'explicit close invoked by external experimental count/amount threshold policy',productionBehavior:'Current product/coordinator supports explicit final drain/settle; no automatic threshold watcher.',channelReuse:'Each closed channel stays finalized. Every later batch has a distinct fixture identity.'},
+  counters,cohorts,metrics:{elapsedMs,vouchersPerSecond:counters.vouchers/(elapsedMs/1000),authorizationLatencyMs:{p50:pct(.5),p95:pct(.95),samples:latencies.length},peakRssBytes:peakRss,channels:channels.length,vouchersPerSyntheticClose:64,syntheticClosesAvoidedVersusOneClosePerVoucher:counters.vouchers-counters.syntheticCloseOutcomes},
+  accounting:{unit:'offline fixture base units; no token value or transfers',depositBaseUnits:String(BigInt(channels.length)*BigInt(deposit)),acceptedBaseUnits:payout.toString(),authorizedBaseUnits:payout.toString(),syntheticSettledBaseUnits:payout.toString(),syntheticRefundBaseUnits:refund.toString(),actualDepositBaseUnits:'0',actualPublisherPayoutBaseUnits:'0',actualNativeFeesLamports:'0'},
+  actualExecution:{providerCalls:0,rpcCalls:0,walletsReadOrCreated:0,cryptographicSignatures:0,nativeBroadcasts:0,realOnChainSettlements:0,organicAnswers:0,jevDecisions:0,domObservations:0,signedPublisherReceiptVerification:false},
+  limitations:['This measures local fixture state-machine work and cannot establish Solana, provider or production throughput.','Native transport outcomes and signature-shaped strings are inert mocks, not actual Ed25519 signatures or chain receipts.','Accepted charges are explicitly injected fixtures after real Exchange auctions; browser receipt authentication is not performed.','Large stress cohort checkpoints finalized channel snapshots, not every voucher transition. The separate durable cohort uses actual SQLitePaymentStore for every adapter transition.','Threshold scheduling is external experimental policy; the committed paid runner settles only through explicit drain/settle.','Fixtures use sandbox envelope internally; no sandbox, Devnet or mainnet endpoint is contacted.','The 100k+ fixture count is separate from the approved paid run and does not enlarge its bounds.'],
+  storageBytes:{closedChannels:statSync(join(out,'closed-channels.sqlite')).size,durableCohort:statSync(join(out,'durable-cohort.sqlite')).size},events,faults,channels,error};
+writeFileSync(join(out,'result.json'),JSON.stringify(result,null,2)+'\n');progress(status);closedCheckpoint.close();durableStore.close();console.log(JSON.stringify({status,counters,metrics:result.metrics,cohorts,error},null,2));if(status!=='completed')process.exitCode=1;

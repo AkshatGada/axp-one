@@ -5,3 +5,4 @@
 .aside p { margin: 0; }
 .aside a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--brand); text-underline-offset: 5px; }
 .aside > a { font-family: var(--font-display); font-size: 22px; color: var(--contexthint-ink); text-decoration-color: var(--contexthint); }
+.aside > .historical { font-family: var(--font-body); font-size: 13px; color: var(--muted); text-decoration-color: var(--muted); }
