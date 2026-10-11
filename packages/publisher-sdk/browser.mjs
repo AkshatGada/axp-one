@@ -1,4 +1,5 @@
 // Browser-safe: no publisher key, Node imports, payment code or creative rewriting.
+import {validateReceiptResult} from './receipt.mjs';
 function visible(element) {
   if (!element || element.hidden || element.closest?.('[hidden],[aria-hidden="true"]')) return false;
   const window = element.ownerDocument?.defaultView;
@@ -49,13 +50,18 @@ export function createRenderAcknowledger({post}) {
     const observed = inspectPlacement(node, award);
     if (!observed.domInserted || !observed.sponsoredLabelPresent) throw new Error('render_not_observed');
     if (!deliveryToken) throw new Error('delivery_token_required');
+    const financialMode = award.financialMode ?? award.mode;
     const previous = outcomes.get(award.id);
     if (previous) {
-      if (previous.creativeHash !== award.creativeHash || previous.deliveryToken !== deliveryToken) throw new Error('award_binding_conflict');
+      if (previous.creativeHash !== award.creativeHash || previous.deliveryToken !== deliveryToken ||
+        previous.priceBaseUnits !== award.priceBaseUnits || previous.financialMode !== financialMode) throw new Error('award_binding_conflict');
       return previous.promise;
     }
-    const promise = Promise.resolve().then(() => post(`/awards/${encodeURIComponent(award.id)}/render`, observed, deliveryToken));
-    const pending = {creativeHash: award.creativeHash, deliveryToken, promise};
+    const binding = {awardId: award.id, creativeHash: award.creativeHash, priceBaseUnits: award.priceBaseUnits, financialMode};
+    const promise = Promise.resolve()
+      .then(() => post(`/awards/${encodeURIComponent(award.id)}/render`, observed, deliveryToken))
+      .then(result => validateReceiptResult(result, binding));
+    const pending = {creativeHash: award.creativeHash, priceBaseUnits: award.priceBaseUnits, financialMode, deliveryToken, promise};
     outcomes.set(award.id, pending);
     try { return await promise; }
     catch (error) { if (outcomes.get(award.id) === pending) outcomes.delete(award.id); throw error; }

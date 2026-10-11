@@ -42,6 +42,17 @@ The public product requires no local installation. The guide connects to
 provisioned by the workspace operator. Configuration endpoints do not issue keys.
 The SDK is repository source, not a published npm package.
 
+### Local SDK pilot improvements (not deployed)
+
+The `codex/sdk-cleanroom-integration` branch adds SDK 0.2.0 as an installable local
+tarball, authenticated read-only opportunity/receipt recovery, validated receipt
+caching, explicit errors/contracts and manually scoped/revocable publisher keys.
+Use one dedicated publisher-only workspace/endpoint per platform, not shared demo
+inventory. [Pilot plan](docs/sdk-cleanroom/PILOT_FIX_PLAN.md),
+[operator guide](docs/sdk-cleanroom/PILOT_OPERATOR.md) and the
+[SDK README](packages/publisher-sdk/README.md) define this bounded scope.
+No package publication, mainnet readiness or public deployment is implied.
+
 ## Documentation
 
 - [Page and API map](pages.md): public routes, source owners and recorded/live boundaries.

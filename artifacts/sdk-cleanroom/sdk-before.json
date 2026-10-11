@@ -1,0 +1,54 @@
+{
+  "algorithm": "sha256",
+  "files": [
+    {
+      "path": "browser.d.mts",
+      "sha256": "81546e80b43a7eaf47c472d89b86d777c12c2b2123b34630e916b5502559b603"
+    },
+    {
+      "path": "browser.mjs",
+      "sha256": "60dcc02502d4451f142f1e158f956396dd9b26d3e6efdf889936f3b6047444e9"
+    },
+    {
+      "path": "examples/app.mjs",
+      "sha256": "82f2351685d0e7d875dd93dbb9cbe2a879f3e9c49bab48a5080c8897b4a2c89f"
+    },
+    {
+      "path": "examples/index.html",
+      "sha256": "21fdf082c176caa26cfb7d54bcd5ece54520b7ce15e07c5401e5033fabc5c1aa"
+    },
+    {
+      "path": "examples/server.mjs",
+      "sha256": "479790f67170cc39cab16fe9b25d3d8d9ac42a53d7430f7f178de1062542cc7c"
+    },
+    {
+      "path": "financial.d.mts",
+      "sha256": "0d3c85ab2c8349e70b97c62415f7126a4dd8eee96290c148b465f1620b30bfee"
+    },
+    {
+      "path": "financial.mjs",
+      "sha256": "9e0171c0b775060bcc2ad09fbabe534e4acd554922a532de18ff34684b847562"
+    },
+    {
+      "path": "index.d.mts",
+      "sha256": "7f926a1e800fa478ab486ad423d45b37e7a0c73b13e6ccbc0c52da8ab424df9f"
+    },
+    {
+      "path": "index.mjs",
+      "sha256": "6a467d911c3751d958a9075f0caf23b45e189cf856744eb727d48a1ba7efd79b"
+    },
+    {
+      "path": "package.json",
+      "sha256": "241be0ee1c5d869e47c27258854e51392a07d79828d22d30dcd6742694c4fd98"
+    },
+    {
+      "path": "react.tsx",
+      "sha256": "743e42938219e969fb0a53ed037b3137a7a49cd62de0b930c8baf8427a39b05d"
+    },
+    {
+      "path": "README.md",
+      "sha256": "5fe6a5b733702e142749e2a058b4b8bdd05e2ae7bd3599b25d980b9719ec22de"
+    }
+  ],
+  "treeHash": "104582f1a3d02d019114b49aa3809c0372db1c0d6845455e697281dbea3a1636"
+}

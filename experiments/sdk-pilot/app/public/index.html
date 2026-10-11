@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conversation · Fixture chat</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/app.js" type="module"></script>
+  </head>
+  <body>
+    <main class="chat">
+      <header>
+        <div>
+          <h1>Conversation</h1>
+          <p class="badge">Deterministic fixture · Not an AI model</p>
+        </div>
+        <button id="reset" type="button">New chat</button>
+      </header>
+      <p class="intro">Independent fixture answers. This local conversation is saved on the app server and can recover after restart. Sponsored insertion is not proof of human attention or payment.</p>
+      <section id="messages" role="log" aria-label="Conversation messages" aria-live="polite" aria-relevant="additions" tabindex="0">
+        <p id="empty">Your conversation starts here.</p>
+      </section>
+      <p id="status" role="status"></p>
+      <p id="error" role="alert" hidden></p>
+      <form id="composer">
+        <label for="message">Your message</label>
+        <textarea id="message" name="message" rows="3" maxlength="1600" aria-describedby="hint" required></textarea>
+        <label><input id="consent" type="checkbox"> Share only this current question with the local fixture exchange to request a developer-tool Sponsored card. Do not include private information. Consent resets after each submission; questions over 1,200 characters are not shared.</label>
+        <div class="compose-footer">
+          <span id="hint">Enter to send · Shift + Enter for a new line · 1,600 character limit</span>
+          <button id="send" type="submit">Send message</button>
+        </div>
+      </form>
+      <noscript>This chat requires JavaScript. Please enable it to send messages.</noscript>
+    </main>
+  </body>
+</html>

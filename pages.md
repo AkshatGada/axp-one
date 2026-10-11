@@ -80,6 +80,8 @@ Base URL: `https://axp.one/api/product`. Implementation:
 | `POST /opportunities` | SDK ad request with stable session/turn identity | Server-only `x-axp-publisher-key` |
 | `POST /awards/:id/render` | Exact inserted/disclosed creative observation | Publisher key and `x-axp-delivery-token` |
 | `POST /awards/:id/fail` | Release an undelivered award | Same bound credentials |
+| `GET /publisher/opportunities?sessionId=...&turnId=...` | Read-only saved outcome or pending/unknown status (SDK 0.2 local branch) | Publisher key, `opportunities:read` |
+| `GET /awards/:id/status` | Read-only saved receipt or reservation/terminal status (SDK 0.2 local branch) | Publisher key `delivery:read` plus delivery token |
 | `POST /account`, `/campaigns` | Dashboard account/draft writes | Same-origin `x-axp-csrf` |
 | `POST /campaigns/:id/approve`, `/launch` | Approve saved copy; fund and launch | Same-origin CSRF, empty JSON body |
 | `POST /campaigns/:id/pause`, `/resume`, `/duplicate`, `/preview` | Campaign operations | Same-origin CSRF |
@@ -93,6 +95,13 @@ Do not invent public publisher signup or a key-download endpoint. This release
 has one operator-provisioned publisher/workspace rather than multi-tenant auth.
 Provider sends and channel actions have side effects; browsing/configuration do not.
 Original MVP APIs remain under `/api/runs/*` with their existing contracts.
+
+SDK 0.2 pilot changes are local to the SDK integration branch; this is not a
+deployment statement. With `AXP_PRODUCT_PUBLISHER_ONLY=1`, only configuration and
+authenticated SDK request/delivery/recovery routes are exposed by the product API.
+Public state/bootstrap and dashboard/example mutations are unavailable. Manually
+provision a separate endpoint/state per pilot publisher. See
+[pilot operator instructions](docs/sdk-cleanroom/PILOT_OPERATOR.md).
 
 ## Build and verification
 

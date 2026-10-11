@@ -2,7 +2,7 @@ import {randomBytes} from 'node:crypto';
 import {ContractError} from '../contracts/index.mjs';
 import {CAPABILITIES,PRESETS,LIMITS,secretMatches} from './service.mjs';
 
-export function createProductAPI({service,csrf:providedCSRF}) {
+export function createProductAPI({service,csrf:providedCSRF,publisherOnly=false}) {
   const csrf=providedCSRF??randomBytes(32).toString('hex');
   const send=(res,status,value)=>{res.writeHead(status,{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'});res.end(JSON.stringify(value));};
   async function read(req) {
@@ -17,19 +17,29 @@ export function createProductAPI({service,csrf:providedCSRF}) {
     if(origin&&origin!==`http://${req.headers.host}`&&origin!==`https://${req.headers.host}`)throw new ContractError('origin_invalid',undefined,403);
     if(req.headers['sec-fetch-site']==='cross-site')throw new ContractError('origin_invalid',undefined,403);
   };
-  const publisher=req=>{if(!service.authenticate(req.headers['x-axp-publisher-key']))throw new ContractError('publisher_key_invalid',undefined,401);};
+  const publisher=(req,scope)=>{if(!service.authenticate(req.headers['x-axp-publisher-key'],scope))throw new ContractError('publisher_key_invalid',undefined,401);};
   async function handler(req,res) {
     try {
-      const path=new URL(req.url,'http://local').pathname.replace(/^\/api\/product/,'').replace(/\/$/,'')||'/';
+      const url=new URL(req.url,'http://local'),path=url.pathname.replace(/^\/api\/product/,'').replace(/\/$/,'')||'/';
+      if(publisherOnly&&!((req.method==='GET'&&['/publisher/config','/publisher/opportunities'].includes(path))||(req.method==='GET'&&/^\/awards\/[-\w]+\/status$/.test(path))||(req.method==='POST'&&(path==='/opportunities'||/^\/awards\/[-\w]+\/(render|fail)$/.test(path)))))throw new ContractError('not_found',undefined,404);
       let value;
       if(req.method==='GET') {
         if(path==='/bootstrap')value={csrf,mode:service.financialMode,financialMode:service.financialMode,payments:service.payments(),engine:service.engine(),demo:service.demo(),capabilities:CAPABILITIES,presets:PRESETS,limits:service.limits};
         else if(path==='/state')value=service.state();
         else if(path==='/publisher/config')value=service.publisherConfig();
+        else if(path==='/publisher/opportunities'){
+          publisher(req,'opportunities:read');
+          if([...url.searchParams.keys()].some(k=>!['sessionId','turnId'].includes(k))||url.searchParams.getAll('sessionId').length!==1||url.searchParams.getAll('turnId').length!==1)throw new ContractError('invalid_lookup');
+          value=service.lookupOpportunity({sessionId:url.searchParams.get('sessionId'),turnId:url.searchParams.get('turnId')});
+        }
+        else if(/^\/awards\/[-\w]+\/status$/.test(path)){
+          publisher(req,'delivery:read');if(url.search)throw new ContractError('invalid_lookup');
+          value=service.lookupDelivery(path.split('/')[2],req.headers['x-axp-delivery-token']);
+        }
         else throw new ContractError('not_found',undefined,404);
       } else if(req.method==='POST') {
         const sdk=path==='/opportunities'||/^\/awards\//.test(path);
-        if(sdk)publisher(req);else browser(req);
+        if(sdk)publisher(req,path==='/opportunities'?'opportunities:write':'delivery:write');else browser(req);
         const body=await read(req);
         if(path==='/account')value=service.saveAccount(body);
         else if(path==='/campaigns')value=service.saveCampaign(body);

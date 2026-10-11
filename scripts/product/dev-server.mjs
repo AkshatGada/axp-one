@@ -15,7 +15,7 @@ if(!noUI&&!existsSync(next))throw Error('Install workspace dependencies first.')
 const service=createProductService({stateDir:resolve(repositoryRoot,config.AXP_PRODUCT_STATE_DIR??'local-state/product'),
   publisherKey:config.AXP_PUBLISHER_API_KEY,apiKey:config.JEV_API_KEY||config.TYPESAFE_API_KEY,
   organicApiKey:config.DEEPSEEK_API_KEY,retriever:loadEvidence(),dailyModelCap:Number(config.AXP_PRODUCT_JEV_DAILY_CAP??50),demoMode:config.AXP_PRODUCT_DEMO_MODE==='1',financialMode:config.AXP_PRODUCT_FINANCIAL_MODE??'synthetic',signingEnabled:config.AXP_PRODUCT_DEVNET_SIGN==='1',walletPath:resolve(repositoryRoot,config.AXP_PRODUCT_DEVNET_WALLET_PATH??'local-state/product/secrets/devnet-wallet.json'),runId:config.AXP_PRODUCT_FINANCIAL_MODE==='devnet'?'product-devnet-v1':'product-workspace-v1'});
-const api=createProductAPI({service});
+const api=createProductAPI({service,publisherOnly:config.AXP_PRODUCT_PUBLISHER_ONLY==='1'});
 const ui=noUI?null:spawn(process.execPath,[next,'dev','--hostname','127.0.0.1','--port',String(uiPort)],{
   cwd:resolve(repositoryRoot,'apps/product-ui'),stdio:'inherit',env:{...process.env,NEXT_PUBLIC_BASE_PATH:'',NEXT_DIST_DIR:'.next-product-dev',WATCHPACK_POLLING:'1000'}});
 const server=createServer((req,res)=>{

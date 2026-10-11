@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "sdk-pilot-browser-checks.v1",
+  "date": "2026-10-11",
+  "observer": "Main, interactive in-app browser",
+  "appURL": "http://127.0.0.1:3473/",
+  "exchangeURL": "http://127.0.0.1:3472/api/product",
+  "financialMode": "synthetic",
+  "answerExecution": "deterministic fixture",
+  "decisionExecution": "fixture",
+  "checks": [
+    "Sharing off: independent answer, zero exchange requests or charges.",
+    "Opted-in developer question: exact separate Sponsored card and accepted receipt.",
+    "Consent resets after submission; only the current question reaches exchange.",
+    "Unrelated mobile-wallet question: no_fill, independent answer preserved, zero added charges.",
+    "App SIGTERM/relaunch and browser reload: saved answers and original accepted receipt preserved, no added decision call or charge.",
+    "No browser console errors or warnings observed during these checks.",
+    "Bounded recheck after history correction: accepted Sponsored card displays after restart with no token or acknowledgement; original chat still has two requests and one charge of 3000."
+  ],
+  "correlation": {
+    "runId": "sdk-pilot-v2",
+    "sessionId": "6b3c8df3-cf7a-4dee-a170-dce0eb173b75",
+    "turnId": "069f154f-c572-4629-bd1f-cf3a0cfea9c5",
+    "opportunityId": "opp-b245f1688274e84cf90edd62",
+    "awardId": "award-ecaf64b3-1174-4765-9387-18be0d189567",
+    "chargeId": "charge-award-ecaf64b3-1174-4765-9387-18be0d189567",
+    "receiptHash": "4ab20a37fd9f55c79bb3fb35e6d4dc2a15d969b57a52a526a7eb37fbcc06d57d"
+  },
+  "beforeAndAfterRestart": {
+    "fixtureDecisionCalls": 1,
+    "requests": 2,
+    "charges": 1,
+    "receipts": 1,
+    "acceptedSyntheticBaseUnits": "3000",
+    "networkPayments": 0
+  },
+  "screenshot": "browser-accepted.png",
+  "restartScreenshot": "browser-restart.png",
+  "limitations": [
+    "Lost-response recovery and hidden/detached/malformed cases have separate automated HTTP or DOM-fixture coverage; not all were manually performed in this browser.",
+    "This is integration evidence, not real model quality, financial settlement, viewability or human attention."
+  ]
+}

@@ -1,0 +1,14 @@
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
+import {join} from 'node:path';
+import {createHash} from 'node:crypto';
+const root=fileURLToPath(new URL('../../',import.meta.url));
+const response=await fetch('http://127.0.0.1:3470/__lab/evidence');
+if(!response.ok)throw new Error('local_exchange_evidence_unavailable');
+const evidence=await response.json();
+if(evidence.financialMode!=='synthetic'||evidence.decisionExecution!=='fixture')throw new Error('wrong_experiment_mode');
+const body={capturedAt:new Date().toISOString(),...evidence};
+const document={...body,sha256:createHash('sha256').update(JSON.stringify(body)).digest('hex')};
+const directory=join(root,'artifacts/sdk-cleanroom');mkdirSync(directory,{recursive:true});
+writeFileSync(join(directory,'connected-evidence.json'),JSON.stringify(document,null,2)+'\n');
+console.log(JSON.stringify({file:'artifacts/sdk-cleanroom/connected-evidence.json',sha256:document.sha256,summary:document.summary}));

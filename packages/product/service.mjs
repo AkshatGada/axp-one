@@ -9,6 +9,7 @@ import {createProductPayments} from './payments.mjs';
 import {NATIVE_LIMITS} from './native.mjs';
 import {providerExecution} from './provider-provenance.mjs';
 import {isBenchmarkProfile} from '../network-scale/profile.mjs';
+import {publisherCredentials} from './publisher-credentials.mjs';
 
 export const CAPABILITIES=Object.freeze([
  ['crypto_storage','Crypto custody','Store cryptocurrency and manage private keys.'],
@@ -75,6 +76,9 @@ export function createProductService({stateDir='local-state/product',runId='prod
  mkdirSync(stateDir,{recursive:true,mode:0o700});
  const secretFile=join(stateDir,'publisher-api-key');
  if(!publisherKey){if(!existsSync(secretFile))writeFileSync(secretFile,randomBytes(32).toString('hex'),{mode:0o600,flag:'wx'});publisherKey=readFileSync(secretFile,'utf8').trim();}
+ // Preserve the original delivery-token secret across credential rotations.
+ if(!existsSync(secretFile))writeFileSync(secretFile,publisherKey,{mode:0o600,flag:'wx'});
+ const deliverySecret=readFileSync(secretFile,'utf8').trim();
  const keyFile=join(stateDir,'publisher-receipt.pem');
  if(!existsSync(keyFile))writeFileSync(keyFile,generateKeyPairSync('ed25519').privateKey.export({format:'pem',type:'pkcs8'}),{mode:0o600,flag:'wx'});
  const receiptKey=createPrivateKey(readFileSync(keyFile));
@@ -85,12 +89,18 @@ export function createProductService({stateDir='local-state/product',runId='prod
  if(financialMode==='devnet')payments=createProductPayments({exchange,stateDir,walletPath,signingEnabled,now,...(checkpoint?{checkpoint}:{}),...paymentOptions});
  const payee=payments?.identities.payee??'synthetic:axp-demo-publisher';
  const limits=financialMode==='devnet'?{...LIMITS,maxBidBaseUnits:NATIVE_LIMITS.maxBidBaseUnits,maxBudgetBaseUnits:NATIVE_LIMITS.maxBudgetBaseUnits,maxDepositBaseUnits:NATIVE_LIMITS.maxDepositBaseUnits}:LIMITS;
- for(const table of ['product_accounts','product_advertisers','product_campaigns','product_requests','product_answers'])exchange.db.exec(`CREATE TABLE IF NOT EXISTS ${table}(run TEXT NOT NULL,id TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(run,id))`);
+ for(const table of ['product_accounts','product_advertisers','product_campaigns','product_requests','product_request_admissions','product_answers'])exchange.db.exec(`CREATE TABLE IF NOT EXISTS ${table}(run TEXT NOT NULL,id TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(run,id))`);
+ const credentials=publisherCredentials({exchange,publisherId,initialKey:publisherKey,now});
  const organicDailyCap=isBenchmarkProfile(benchmarkProfile)?64:20;
  const buyers=createProductDecisions({exchange,apiKey,transport,retriever,now,dailyCap:dailyModelCap,checkpoint,benchmarkProfile});
  const inFlight=new Map(),answerFlight=new Map();
  exchange.registerPublisher({publisherId,publisherKeyId,payee,publicKeyPEM:createPublicKey(receiptKey).export({format:'pem',type:'spki'})});
- const tokenFor=awardId=>createHmac('sha256',publisherKey).update(`${runId}:${awardId}`).digest('hex');
+ const tokenFor=awardId=>{
+  // Historical awards can predate an explicit key override. Their saved capability
+  // is authoritative; rotation must never strand a previously issued delivery.
+  const saved=exchange.all('product_requests').find(r=>r.result?.award?.id===awardId);
+  return saved?.result.deliveryToken??createHmac('sha256',deliverySecret).update(`${runId}:${awardId}`).digest('hex');
+ };
  const stamp=()=>new Date(now()).toISOString();
  const organicStatus=()=>({ready:Boolean(organicApiKey?.trim()||organicTransport),execution:organicTransport?providerExecution(organicTransport):organicApiKey?.trim()?'actual-api-model':'unavailable',model:PRODUCT_ORGANIC_MODEL,reason:organicApiKey?.trim()||organicTransport?null:'organic_key_unavailable',dailyCap:organicDailyCap,usedToday:exchange.all('product_answers').filter(r=>r.day===stamp().slice(0,10)).length});
  const account=()=>exchange.get('product_accounts','workspace');
@@ -160,17 +170,23 @@ export function createProductService({stateDir='local-state/product',runId='prod
   const reason=missing.length?'missing_constraint':o.coarseIntent!=='product_tools'?'policy_excluded':null;
   return {eligible:!reason,reason,creative:{brandName:draft.brandName,text:draft.approvedText,websiteURL:draft.websiteURL},matchedHints:draft.contextHints.filter(h=>[...tokens(h)].some(t=>tokens(question).has(t))),question,previewOnly:true,providerCalls:0,mode:financialMode,engine:buyers.status(),decision:null,explanation:'Checks declared eligibility and previews copy. Jev has not judged this preview; it does not predict a bid or win.'};
  }
- async function runOpportunity(body){
-  if(payments)for(const c of exchange.all('channels'))payments.sync(c.channelId);
-  const startedAt=now();
+ function normalizeOpportunity(body){
   strictObject(body,['question','sessionId','turnId','placementId','requiredCapabilities','excludedCategories'],['question','sessionId','turnId']);
   const question=text(body.question,1200);id(body.sessionId);id(body.turnId);
   if(/[\w.+-]+@[\w.-]+\.[a-z]{2,}|apikey_[a-z0-9_]+|-----BEGIN .*PRIVATE KEY/iu.test(question))fail('private_content');
-  if(body.placementId&&body.placementId!=='chat-sponsored-card')fail('placement_not_configured');
-  const required=list(body.requiredCapabilities??[],CAPABILITIES.map(x=>x.id),17),blocked=list(body.excludedCategories??[],CAPABILITIES.map(x=>x.id),17);
-  const normalized={question,sessionId:body.sessionId,turnId:body.turnId,placementId:body.placementId??'chat-sponsored-card',requiredCapabilities:required,excludedCategories:blocked};
+  if(body.placementId!==undefined&&body.placementId!=='chat-sponsored-card')fail('placement_not_configured');
+  const required=list(body.requiredCapabilities??[],CAPABILITIES.map(x=>x.id),17).sort(),blocked=list(body.excludedCategories??[],CAPABILITIES.map(x=>x.id),17).sort();
+  return {question,sessionId:body.sessionId,turnId:body.turnId,placementId:body.placementId??'chat-sponsored-card',requiredCapabilities:required,excludedCategories:blocked};
+ }
+ async function runOpportunity(body){
+  if(payments)for(const c of exchange.all('channels'))payments.sync(c.channelId);
+  const startedAt=now(),normalized=normalizeOpportunity(body),{question,requiredCapabilities:required,excludedCategories:blocked}=normalized;
   const key=hash([body.sessionId,body.turnId]),prior=exchange.get('product_requests',key);
-  if(prior){if(prior.inputHash!==hash(normalized))fail('turn_conflict',409);return {...prior.result,replayed:true};}
+  if(prior){const savedHash=prior.input?hash({...prior.input,requiredCapabilities:[...(prior.input.requiredCapabilities??[])].sort(),excludedCategories:[...(prior.input.excludedCategories??[])].sort()}):prior.inputHash;if(savedHash!==hash(normalized))fail('turn_conflict',409);return {...prior.result,replayed:true};}
+  const admission=exchange.get('product_request_admissions',key);
+  if(admission){if(admission.inputHash!==hash(normalized))fail('turn_conflict',409);fail('opportunity_outcome_unknown',409);}
+  exchange.tx(()=>exchange.put('product_request_admissions',key,{id:key,inputHash:hash(normalized),sessionId:body.sessionId,turnId:body.turnId,status:'pending',admittedAt:now()}));
+  if(checkpoint)await checkpoint('publisher_opportunity_admitted');
   exchange.expireAwards();const context=taskContext(question,required);
   const existing=exchange.get('opportunities',`opp-${hash([publisherId,body.sessionId,body.turnId]).slice(0,24)}`);
   const o=exchange.createOpportunity({publisherId,slotId:normalized.placementId,randomSessionId:body.sessionId,turnId:body.turnId,...context,destination:'global',floorBaseUnits:'1000',expiresAt:existing?.expiresAt??now()+5*60*1000},{idempotencyKey:key});
@@ -183,9 +199,9 @@ export function createProductService({stateDir='local-state/product',runId='prod
   const result={status:outcome.status==='awarded'?'awarded':'no_fill',financialMode,mode:financialMode,opportunityId:o.id,...(award?{award:{...award,renderTokenHash:undefined,brandName:requireCampaign(award.campaignId).brandName},deliveryToken:tokenFor(award.id)}:{}),trace:{...(payments&&award?{payment:payments.evidence(award.channelId)}:{}),engine:'jev-1.13.0',execution:buyers.status().execution,context:{coarseIntent:o.coarseIntent,taskConstraints:o.taskConstraints,softPreferences:o.softPreferences,floorBaseUnits:o.floorBaseUnits,expiresAt:o.expiresAt},candidates:candidateViews,timings:{eligibilityMs:eligibilityAt-startedAt,decisionsMs:decisionsAt-eligibilityAt,auctionMs:now()-decisionsAt,totalMs:now()-startedAt},bids:outcome.bids,rejections:[...outcome.rejections,...blockedCampaigns.map(c=>({campaignId:c.campaignId,reason:'publisher_category_blocked'}))],decisions},replayed:false};
   // Undefined is deliberately omitted before canonical storage.
   if(result.award)delete result.award.renderTokenHash;
-  exchange.tx(()=>exchange.put('product_requests',key,{inputHash:hash(normalized),input:normalized,result}));return result;
+  exchange.tx(()=>{exchange.put('product_requests',key,{inputHash:hash(normalized),input:normalized,result});exchange.put('product_request_admissions',key,{...exchange.require('product_request_admissions',key),status:'resolved'});});return result;
  }
- function opportunity(body){const k=hash([body.sessionId,body.turnId]),inputHash=hash(body),pending=inFlight.get(k);if(pending){if(pending.inputHash!==inputHash)return Promise.reject(new ContractError('turn_conflict',undefined,409));return pending.promise;}const promise=runOpportunity(body).finally(()=>inFlight.delete(k));inFlight.set(k,{inputHash,promise});return promise;}
+ function opportunity(body){let normalized;try{normalized=normalizeOpportunity(body);}catch(e){return Promise.reject(e);}const k=hash([normalized.sessionId,normalized.turnId]),inputHash=hash(normalized),pending=inFlight.get(k);if(pending){if(pending.inputHash!==inputHash)return Promise.reject(new ContractError('turn_conflict',undefined,409));return pending.promise;}const promise=runOpportunity(normalized).finally(()=>inFlight.delete(k));inFlight.set(k,{inputHash,promise});return promise;}
  function render(awardId,body,token){if(payments)return renderNative(awardId,body,token);return acceptRender(awardId,body,token);}
  function acceptRender(awardId,body,token){id(awardId);strictObject(body,['creativeHash','domInserted','sponsoredLabelPresent'],['creativeHash','domInserted','sponsoredLabelPresent']);
   if(!secretMatches(token,tokenFor(awardId)))fail('delivery_token_invalid',403);
@@ -197,6 +213,26 @@ export function createProductService({stateDir='local-state/product',runId='prod
  }
  async function renderNative(awardId,body,token){const result=acceptRender(awardId,body,token),channelId=result.charge.channelId,authorization=await payments.authorize(channelId);return {...result,charge:exchange.require('charges',result.charge.id),authorization,payment:payments.evidence(channelId)};}
  function failAward(awardId,body,token){strictObject(body,['reason']);if(!secretMatches(token,tokenFor(id(awardId))))fail('delivery_token_invalid',403);if(body.reason!==undefined)text(body.reason,120);return {award:exchange.failAward(awardId),status:'failed'};}
+ function awardStatus(award){return award.status==='reserved'&&award.expiresAt<=now()?'expired':award.status;}
+ function lookupOpportunity(body){
+  strictObject(body,['sessionId','turnId'],['sessionId','turnId']);id(body.sessionId);id(body.turnId);
+  const key=hash([body.sessionId,body.turnId]),saved=exchange.get('product_requests',key),schemaVersion='publisher-opportunity-status.v1';
+  if(saved){const award=saved.result.award?exchange.require('awards',saved.result.award.id):null;return {schemaVersion,status:'resolved',result:{...saved.result,replayed:true},...(award?{awardStatus:awardStatus(award)}:{})};}
+  if(inFlight.has(key))return {schemaVersion,status:'pending'};
+  const admission=exchange.get('product_request_admissions',key),orphan=exchange.get('opportunities',`opp-${hash([publisherId,body.sessionId,body.turnId]).slice(0,24)}`);
+  return {schemaVersion,status:admission||orphan?'unknown':'not_found'};
+ }
+ function lookupDelivery(awardId,token){
+  id(awardId);if(!secretMatches(token,tokenFor(awardId)))fail('delivery_token_invalid',403);
+  const award=exchange.require('awards',awardId),schemaVersion='publisher-award-status.v1';
+  if(award.publisherId!==publisherId)fail('publisher_key_invalid',403);
+  const charge=exchange.get('charges',`charge-${awardId}`);
+  if(!charge)return {schemaVersion,status:awardStatus(award),awardId,expiresAt:award.expiresAt,financialMode};
+  const record=exchange.get('receipt_records',charge.id);
+  if(!record)fail('receipt_record_unavailable',409);
+  // Read the immutable receipt. Never call renderNative/authorize from a lookup.
+  return {schemaVersion,status:'accepted',awardId,financialMode,result:{status:'accepted',financialMode,receipt:record.receipt,signature:record.signature,receiptHash:record.receiptHash,charge,replayed:true,...(payments?{payment:payments.evidence(award.channelId)}:{})}};
+ }
  async function runAnswer(body){strictObject(body,['question','sessionId','turnId'],['question']);const question=text(body.question,1200);
   if(/[\w.+-]+@[\w.-]+\.[a-z]{2,}|apikey_[a-z0-9_]+|-----BEGIN .*PRIVATE KEY/iu.test(question))fail('private_content');
   if(!organicApiKey?.trim()&&!organicTransport)fail('organic_key_unavailable',503);
@@ -222,5 +258,5 @@ export function createProductService({stateDir='local-state/product',runId='prod
   return {schemaVersion:'axp.product-state.v1',financialMode,mode:financialMode,payments:paymentStatus(),engine:buyers.status(),account:account(),advertisers:exchange.all('product_advertisers'),campaigns,drafts:campaigns.filter(c=>c.status==='draft'),summary:{campaignCount:campaigns.length,activeCount:campaigns.filter(c=>c.status==='active').length,deliveryCount:deliveries.length,spendBaseUnits:sum('spendBaseUnits'),reservedBaseUnits:sum('reservedBaseUnits'),authorizedBaseUnits:sum('authorizedBaseUnits'),settledBaseUnits:sum('settledBaseUnits'),remainingBaseUnits:sum('remainingBaseUnits'),refundBaseUnits:sum('refundBaseUnits')},deliveries,events,publisher:{publisherId,publicKeyPEM:exchange.require('publishers',publisherId).publicKeyPEM},limitations:['One local demo workspace; no multi-tenant account authentication.',payments?'Devnet test USDC channels funded by one server-held demo sponsor; no mainnet or independent advertiser wallet custody.':'Synthetic test credits; no real funding or blockchain settlement.','Live Jev judges supplied declarations; historical support may be unavailable for a category.','Signed receipts assert app insertion and Sponsored disclosure, not human attention.']};
  }
  const paymentStatus=()=>payments?.status()??{mode:'synthetic',ready:true,signingEnabled:false};
- return {exchange,financialMode,limits,payments:paymentStatus,paymentWorker:payments,saveAccount,saveCampaign,approve,launch,campaignAction,preview,opportunity,render,failAward,answer,state,engine:buyers.status,organic:organicStatus,demo:()=>({enabled:demoMode,seededAdvertiserCount:exchange.all('product_advertisers').filter(a=>['ClearVault','KeyArc','ColdNest'].includes(a.brandName)).length,advertiserSuggestion:DEMO_ADVERTISER}),authenticate:key=>secretMatches(key,publisherKey),publisherConfig:()=>({publisherId,mode:financialMode,financialMode,payments:paymentStatus(),placementId:'chat-sponsored-card',keyConfigured:true,apiBasePath:'/api/product',engine:buyers.status(),organic:organicStatus(),answerMode:organicStatus().execution,quickstartCommand:'npm run demo:product',capabilities:CAPABILITIES,sampleQuestions:demoMode?[PRESETS[1].exampleQuestion,...PRESETS.filter(p=>p.id!=='wallet').map(p=>p.exampleQuestion)]:PRESETS.map(p=>p.exampleQuestion)}),close:()=>{payments?.dispose();exchange.close();}};
+ return {exchange,financialMode,limits,payments:paymentStatus,paymentWorker:payments,saveAccount,saveCampaign,approve,launch,campaignAction,preview,opportunity,render,failAward,lookupOpportunity,lookupDelivery,credentials,answer,state,engine:buyers.status,organic:organicStatus,demo:()=>({enabled:demoMode,seededAdvertiserCount:exchange.all('product_advertisers').filter(a=>['ClearVault','KeyArc','ColdNest'].includes(a.brandName)).length,advertiserSuggestion:DEMO_ADVERTISER}),authenticate:credentials.authenticate,publisherConfig:()=>({schemaVersion:'publisher-config.v2',contractVersion:'0.2.0',expiresAtUnit:'unix_epoch_milliseconds',maxQuestionCharacters:1200,restrictionLimit:17,recoverySupported:true,publisherId,mode:financialMode,financialMode,payments:paymentStatus(),placementId:'chat-sponsored-card',keyConfigured:credentials.list().some(k=>k.revokedAt===null),apiBasePath:'/api/product',engine:buyers.status(),organic:organicStatus(),answerMode:organicStatus().execution,quickstartCommand:'npm run demo:product',capabilities:CAPABILITIES,sampleQuestions:demoMode?[PRESETS[1].exampleQuestion,...PRESETS.filter(p=>p.id!=='wallet').map(p=>p.exampleQuestion)]:PRESETS.map(p=>p.exampleQuestion)}),close:()=>{payments?.dispose();exchange.close();}};
 }
