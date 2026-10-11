@@ -8,7 +8,7 @@ import {randomBytes} from 'node:crypto';
 import {DatabaseSync} from 'node:sqlite';
 import {Readable} from 'node:stream';
 import {preparePreviewVerification} from '../../scripts/tempo/prepare-preview-verification.mjs';
-import {VERSION,WORKSPACE,installPreviewState,budgetKey,boundedProvider,createPreviewVerificationHandler,assertPreview} from '../../scripts/tempo/runtime.mjs';
+import {VERSION,WORKSPACE,installPreviewState,budgetKey,boundedProvider,createPreviewVerificationHandler,readPreviewVerification,assertPreview} from '../../scripts/tempo/runtime.mjs';
 import {productStateKey} from '../../packages/product/hosted.mjs';
 import {unpackDirectory} from '../../packages/hosted/vault.mjs';
 import {createProductService,PRESETS} from '../../packages/product/service.mjs';
@@ -76,7 +76,14 @@ test('Preview wrapper freezes campaign edits and unknown payment IDs while allow
  const boot=await request('/bootstrap');assert.equal(boot.status,200);const csrf=boot.body.csrf;
  for(const path of ['/campaigns',`/campaigns/${f.ids[0]}/approve`,`/campaigns/${f.ids[0]}/duplicate`,'/campaigns/unlisted/close'])assert.equal((await request(path,{},csrf)).body.error,'verification_campaigns_frozen');
  const key=productStateKey(WORKSPACE),prior=await kv.get(key);assert.equal((await request('/state')).status,200);assert.equal(await kv.get(key),prior);assert.equal(providerCalls,0);
+ const before=new Map(kv.values),proof=await request('/verification');assert.equal(proof.status,200);assert.equal(proof.body.version,VERSION);assert.equal(proof.body.workspace,WORKSPACE);assert.deepEqual([...proof.body.campaignIds].sort(),[...f.ids].sort());assert.equal(proof.body.verificationBounds.tempo.maxChannels,2);assert.equal(proof.body.verificationBounds.solana.importedCampaigns,1);assert.equal(proof.body.budget.reservedMicroUSD,0);assert.equal(proof.body.packageFingerprint.length,64);assert.deepEqual(kv.values,before);assert.equal(providerCalls,0);assert.equal(launches,0);assert.equal((await request('/verification',{},csrf)).status,405);assert.deepEqual(kv.values,before);
  const launch=await request(`/campaigns/${f.ids[2]}/launch`,{},csrf);assert.notEqual(launch.body.error,'verification_campaigns_frozen');assert.equal(launches,1);assert.equal(providerCalls,0);
+});
+
+test('Preview verification redacts arbitrary budget fields, reads latest usage and never writes KV',async()=>{
+ const kv=memory(),m=manifest(),c=config();await installPreviewState({config:c,kv,manifest:m});const b=budget();b.reservedMicroUSD=15000;b.attempts=[{kind:'jev',status:'completed',reservedMicroUSD:15000,at:'2026-10-11T00:00:00Z',completedAt:'2026-10-11T00:00:01Z',secret:'PRIVATE PROVIDER BODY',usage:{input_tokens:50,output_tokens:10,apiKey:'PRIVATE PROVIDER KEY',prompt:'PRIVATE QUESTION',bad_tokens:-1}}];b.walletHashes={private:'PRIVATE WALLET HASH'};seededBudget(kv,b);const before=new Map(kv.values);kv.compareAndSet=()=>{throw Error('read proof must never write');};
+ const proof=await readPreviewVerification({config:c,kv,manifest:m});assert.deepEqual(proof.budget.counts,{jev:1,answer:0,completed:1,admitted:0,unknown:0});assert.deepEqual(proof.budget.attempts[0].usage,{input_tokens:50,output_tokens:10});assert.equal(proof.budget.reservedMicroUSD,15000);assert.equal(JSON.stringify(proof).includes('PRIVATE'),false);assert.equal(JSON.stringify(proof).includes('v1.fixture'),false);assert.deepEqual(kv.values,before);
+ await assert.rejects(readPreviewVerification({config:{...c,VERCEL_ENV:'production'},kv,manifest:m}),code('verification_preview_required'));assert.deepEqual(kv.values,before);
 });
 
 test('packaging refuses wrong run and oversized collateral without touching destination',async t=>{
