@@ -42,7 +42,7 @@ export function launchNotice(campaign: Campaign, native: boolean): string {
 /** Construct a pinned Devnet explorer URL rather than trusting arbitrary response URLs. */
 export function transactionURL(signature?: string, network: SettlementNetwork = 'solana-devnet'): string | null {
   if (network === 'tempo-testnet') return signature && /^0x[0-9a-fA-F]{64}$/.test(signature) ? `https://explore.tempo.xyz/tx/${signature}` : null;
-  return signature && /^[1-9A-HJ-NP-Za-km-z]{64,100}$/.test(signature) ? `https://explorer.solana.com/tx/${signature}?cluster=devnet` : null;
+  return signature && /^[1-9A-HJ-NP-Za-km-z]{64,88}$/.test(signature) ? `https://explorer.solana.com/tx/${signature}?cluster=devnet` : null;
 }
 export function paymentActions(campaign: Campaign): { closed: boolean; pending: boolean; uncertain: boolean; authorize: boolean; settle: boolean; payout: boolean; close: boolean; reconcile: boolean } {
   const payment = campaign.payment, phase = paymentPhase(campaign);
@@ -51,8 +51,9 @@ export function paymentActions(campaign: Campaign): { closed: boolean; pending: 
   const pending = ['pending_open', 'opening', 'authorizing', 'paying_out', 'closing'].includes(phase);
   const accepted = campaign.acceptedBaseUnits ?? payment?.acceptedBaseUnits ?? '0';
   const authorized = campaign.authorizedBaseUnits ?? payment?.authorizedBaseUnits ?? '0';
-  const gap = /^\d+$/.test(accepted) && /^\d+$/.test(authorized) && BigInt(accepted) > BigInt(authorized);
-  return { closed, pending, uncertain, authorize: !closed && !pending && !uncertain && ['open', 'draining'].includes(phase) && gap, settle: !closed && !pending && !uncertain && payment?.canSettle === true, payout: networkOf(campaign) === 'tempo-testnet' && !closed && !pending && !uncertain && !gap && campaign.reservedBaseUnits === '0' && payment?.canPayout === true, close: networkOf(campaign) === 'tempo-testnet' && !closed && !pending && !uncertain && payment?.canClose === true, reconcile: payment?.canReconcile === true };
+  const amountsValid = /^\d+$/.test(accepted) && /^\d+$/.test(authorized);
+  const gap = amountsValid && BigInt(accepted) > BigInt(authorized);
+  return { closed, pending, uncertain, authorize: !closed && !pending && !uncertain && ['open', 'draining'].includes(phase) && gap, settle: !closed && !pending && !uncertain && payment?.canSettle === true, payout: networkOf(campaign) === 'tempo-testnet' && !closed && !pending && !uncertain && amountsValid && accepted === authorized && campaign.reservedBaseUnits === '0' && payment?.canPayout === true, close: networkOf(campaign) === 'tempo-testnet' && !closed && !pending && !uncertain && payment?.canClose === true, reconcile: payment?.canReconcile === true };
 }
 
 /** Retry only the same saved opening; a signed/uncertain identity requires lookup. */

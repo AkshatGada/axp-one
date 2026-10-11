@@ -158,6 +158,8 @@ test('Tempo payout can keep a channel open; uncertainty and authorizations still
   assert.equal(controls.payout,true); assert.equal(controls.close,true); assert.equal(controls.closed,false);
   assert.equal(paymentActions({...c, authorizedBaseUnits:'3000'}).payout,false);
   assert.equal(paymentActions({...c, reservedBaseUnits:'1000'}).payout,false);
+  assert.equal(paymentActions({...c, acceptedBaseUnits:'invalid'}).payout,false);
+  assert.equal(paymentActions({...c, acceptedBaseUnits:'3000'}).payout,false);
   for (const phase of ['paying_out','closing','uncertain']) {
     assert.equal(paymentActions({...c,payment:{...c.payment,phase}}).payout,false);
     assert.equal(paymentActions({...c,payment:{...c.payment,phase}}).close,false);
@@ -178,4 +180,5 @@ test('Tempo publisher payout is shown before final close only with finalized evi
   assert.equal(nativeSettlementLabel(c,'settledBaseUnits'),'0.003 test PathUSD');
   assert.equal(nativeSettlementLabel(c,'refundBaseUnits'),'Not settled');
   assert.equal(nativeSettlementLabel({...c,payment:{...c.payment,transactions:[{...c.payment.transactions[0],status:'submitted'}]}},'settledBaseUnits'),'Not settled');
+  assert.equal(nativeSettlementLabel({...c,payment:{...c.payment,transactions:[{...c.payment.transactions[0],chainId:1}]}},'settledBaseUnits'),'Not settled');
 });
