@@ -1,0 +1,78 @@
+/* Two doors. One ultramarine object on the paper: the wall returns in its head, a perforation
+   crosses it, and its two sides are the two doors. The same anatomy as the receipt above. */
+
+.close { position: relative; padding: 0 0 clamp(24px, 3vw, 48px); scroll-margin-top: 16px; }
+.panel { position: relative; overflow: hidden; border-radius: var(--v8-r-xl); background: var(--brand); color: #fff; box-shadow: var(--v8-shadow-brand); }
+
+/* ---------- The head: the wall, and the line ---------- */
+.top { position: relative; display: grid; align-items: end; min-height: clamp(320px, 30vw, 440px); padding: clamp(28px, 4.4vw, 68px); }
+.h2 { position: relative; margin: 0; max-width: 8ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(52px, 8vw, 128px); line-height: .9; letter-spacing: -.04em; text-wrap: balance; }
+
+.wall {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none; perspective: 1500px; perspective-origin: 62% 26%;
+  -webkit-mask-image: linear-gradient(96deg, transparent 22%, #000 55%), linear-gradient(180deg, #000 70%, transparent 100%);
+  mask-image: linear-gradient(96deg, transparent 22%, #000 55%), linear-gradient(180deg, #000 70%, transparent 100%);
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+}
+.plane { position: absolute; left: 70%; top: calc(50% + 76px); display: flex; gap: 20px; width: max-content; transform: translate(-50%, -50%) rotateX(26deg) rotateY(7deg) rotateZ(-11deg) scale(.86); transform-origin: center; }
+.col { flex: none; display: grid; align-content: start; gap: 20px; width: 264px; }
+.col:nth-child(1) { transform: translateY(-64px); }
+.col:nth-child(2) { transform: translateY(38px); }
+.col:nth-child(3) { transform: translateY(-22px); }
+.col:nth-child(4) { transform: translateY(54px); }
+.col:nth-child(5) { transform: translateY(-40px); }
+.wall .dim { border-color: transparent; background: #fff; box-shadow: none; opacity: .2; }
+.wall .col:nth-child(even) .dim { opacity: .14; }
+.wall .lit { border-color: transparent; background: #fff; box-shadow: 10px 10px 0 rgba(11, 20, 112, .42); color: var(--ink); }
+
+/* ---------- The perforation ---------- */
+.perf { position: relative; display: block; height: 0; border-top: 2px dashed rgba(255, 255, 255, .5); }
+.perf::before, .perf::after { content: ""; position: absolute; top: -17px; width: 32px; height: 32px; border-radius: 50%; background: var(--paper); }
+.perf::before { left: -17px; }
+.perf::after { right: -17px; }
+
+/* ---------- The two sides ---------- */
+.doors { list-style: none; display: grid; grid-template-columns: 1fr 1fr; margin: 0; padding: 0; }
+.doors li { display: grid; }
+.doors li + li { border-left: 1px solid rgba(255, 255, 255, .34); }
+.door { display: grid; grid-template-rows: auto 1fr auto; gap: 14px; min-height: clamp(200px, 18vw, 260px); padding: clamp(26px, 3.2vw, 48px) clamp(28px, 4.4vw, 68px) clamp(28px, 3.4vw, 52px); color: #fff; text-decoration: none; transition: background var(--v8-d-1) var(--v8-ease), color var(--v8-d-1) var(--v8-ease); }
+.who { font-size: 15px; font-weight: 500; line-height: 1.3; letter-spacing: .01em; opacity: .86; }
+.line { max-width: 15ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(27px, 3vw, 46px); line-height: 1.04; letter-spacing: -.03em; text-wrap: balance; }
+.go { display: inline-flex; align-items: center; gap: 14px; align-self: end; margin-top: clamp(14px, 2vw, 30px); font-size: 17px; font-weight: 500; line-height: 1.3; }
+.go svg { transition: transform var(--v8-d-1) var(--v8-ease-out); }
+.door:hover, .panel .door:focus-visible { background: #fff; color: var(--brand-ink); }
+.door:hover .go svg, .door:focus-visible .go svg { transform: translateX(6px); }
+.panel .door:focus-visible { outline: 3px solid var(--ink); outline-offset: -9px; border-radius: 0; }
+
+.also { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; margin: 0; padding: 18px clamp(28px, 4.4vw, 68px) 20px; border-top: 1px solid rgba(255, 255, 255, .34); font-size: 15px; line-height: 1.4; color: rgba(255, 255, 255, .86); }
+.also a { color: #fff; font-weight: 500; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .6); text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+.also a:hover { text-decoration-color: #fff; }
+.panel .also a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; border-radius: 4px; }
+
+@media (max-width: 899px) {
+  .top { min-height: 400px; }
+  .wall { -webkit-mask-image: linear-gradient(180deg, #000 58%, transparent 88%); mask-image: linear-gradient(180deg, #000 58%, transparent 88%); -webkit-mask-composite: source-over; mask-composite: add; }
+  .plane { left: 60%; top: calc(26% + 104px); gap: 14px; transform: translate(-50%, -50%) rotateX(26deg) rotateY(7deg) rotateZ(-11deg) scale(.78); }
+  .col { gap: 14px; }
+  .doors { grid-template-columns: 1fr; }
+  .doors li + li { border-left: 0; border-top: 1px solid rgba(255, 255, 255, .34); }
+  .door { min-height: 0; gap: 12px; }
+  .line { max-width: 18ch; }
+  .go { margin-top: 12px; }
+  .perf::before, .perf::after { top: -13px; width: 24px; height: 24px; }
+  .perf::before { left: -13px; }
+  .perf::after { right: -13px; }
+}
+
+/* ---------- Entrance: the wall settles back into place, then our tile comes up in it ---------- */
+:global(html[data-px-motion="on"]) .panel:not([data-seen]) .plane { opacity: 0; }
+:global(html[data-px-motion="on"]) .panel:not([data-seen]) .lit { opacity: .15; box-shadow: none; }
+:global(html[data-px-motion="on"]) .panel[data-seen] .plane { animation: doorsWall 1100ms var(--v8-ease-out) both; }
+:global(html[data-px-motion="on"]) .panel .lit { transition: opacity 600ms var(--v8-ease) 700ms, box-shadow 600ms var(--v8-ease) 700ms; }
+@keyframes doorsWall { from { opacity: 0; translate: 0 46px; } to { opacity: 1; translate: 0 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .door, .go svg { transition: none; }
+  .panel .plane { animation: none !important; opacity: 1 !important; }
+  .panel .lit { transition: none !important; opacity: 1 !important; }
+}

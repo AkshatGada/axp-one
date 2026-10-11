@@ -1,0 +1,15 @@
+/* V3 footer: quiet links, a hairline, then the wordmark, bold and edge to edge. */
+.footer { background: var(--paper); padding: clamp(48px, 7vw, 112px) 0 0; overflow: clip; }
+.in { display: grid; grid-template-columns: minmax(0, 1fr); }
+.cols { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 28px clamp(40px, 9vw, 150px); padding-bottom: clamp(32px, 4vw, 56px); border-bottom: 1px solid var(--line); }
+.col { display: grid; gap: 12px; align-content: start; min-width: 150px; font-size: 16px; }
+.head { margin: 0; font-weight: 500; color: var(--ink); }
+.col a { color: var(--muted); text-decoration: none; }
+.col a:hover { color: var(--ink); text-decoration: underline; text-decoration-color: var(--brand); text-underline-offset: 5px; }
+.col a:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 4px; }
+.line { margin: 24px 0 0; font-size: 14.5px; color: var(--muted); }
+/* The wordmark: PolySans Wide at its heaviest, sized to the width of the page. The dot is the
+   brand's one blue square, sitting on the baseline. */
+.mark { display: flex; align-items: baseline; margin: clamp(0px, 0.5vw, 8px) 0 0 -0.03em; padding-bottom: 0.06em; font-family: var(--font-body); font-weight: 700; font-size: clamp(80px, 25.3vw, 472px); line-height: 1; letter-spacing: -0.05em; color: var(--ink); white-space: nowrap; }
+.mark i { flex: none; width: 0.155em; height: 0.155em; margin: 0 0.03em 0 0.04em; border-radius: 0.04em; background: var(--brand); }
+@media (max-width: 699px) { .cols { justify-content: flex-start; } .col { min-width: 40%; } }
