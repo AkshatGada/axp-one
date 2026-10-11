@@ -7,6 +7,7 @@
 
 /* A stage: a tall block whose inner frame sticks while the reader's scroll drives it. */
 .stage { position: relative; }
+:global(html[data-px-motion="on"]) .stageFlow { height: calc(var(--x-len) * 100vh); overflow: clip; }
 .stick { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: clip; }
 
 /* Figure furniture. */
@@ -15,7 +16,7 @@
 .figNo { font-weight: 500; color: var(--x-ink); }
 
 /* The one Sponsored card. A blue tab names it; the body is the advertiser's approved words. */
-.ad { position: relative; display: grid; gap: 10px; padding: 18px 20px 20px; border: 2px solid var(--x-blue); border-radius: var(--x-r-m); background: var(--x-sheet); text-align: left; }
+.ad { position: relative; display: grid; gap: 10px; padding: 18px 20px 20px; border: 2px solid var(--x-blue); border-radius: var(--x-r-m); background: var(--x-sheet); color: var(--x-ink); text-align: left; }
 .adHead { display: flex; align-items: center; gap: 12px; }
 .adTag { height: 22px; padding: 0 9px; border-radius: 5px; background: var(--x-blue); color: #fff; font-size: 12.5px; font-weight: 500; line-height: 22px; letter-spacing: .02em; }
 .adName { font-family: var(--font-display); font-weight: 500; font-size: 18px; letter-spacing: -.015em; }

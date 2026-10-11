@@ -1,12 +1,13 @@
-// Placeholder until the builder for this movement replaces it.
+// 01 The shift. Three clipped keywords in a search field open out into one whole question.
+// The stage (client) is server-rendered in its still form first, so every word is in the HTML.
 import { Chapter } from "../kit";
+import { SHIFT_COPY } from "../copy";
+import ShiftStage from "./ShiftStage";
 
 export default function Shift() {
   return (
-    <Chapter id="shift" bare>
-      <div className="x-wrap" style={{ padding: "20vh 0" }}>
-        <p className="x-h2">Shift, in progress.</p>
-      </div>
+    <Chapter id="shift" no={SHIFT_COPY.no} title={SHIFT_COPY.title} bare labelledBy="shift-h">
+      <ShiftStage />
     </Chapter>
   );
 }

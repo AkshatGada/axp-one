@@ -2,6 +2,10 @@
 .mast { position: fixed; inset: 0 0 auto 0; z-index: 60; height: 68px; background: color-mix(in oklab, var(--x-paper) 92%, transparent); backdrop-filter: saturate(140%) blur(10px); border-bottom: 1px solid transparent; transition: transform 380ms var(--x-ease), border-color var(--x-d1) var(--x-ease); }
 .mast[data-raised] { border-bottom-color: var(--x-hair); }
 .mast[data-hidden] { transform: translateY(-101%); }
+.mast[data-tone="blue"] { background: color-mix(in oklab, var(--x-blue) 92%, transparent); border-bottom-color: rgba(255, 255, 255, .3); }
+.mast[data-tone="blue"] .word, .mast[data-tone="blue"] .nav a, .mast[data-tone="blue"] .menu summary { color: #fff; }
+.mast[data-tone="blue"] .word i { background: #fff; }
+.mast[data-tone="blue"] .tip, .mast[data-tone="blue"] .tip::before { background: #fff; color: var(--x-ink); }
 .mastIn { display: flex; align-items: center; gap: clamp(16px, 2.4vw, 36px); height: 100%; }
 .skip { position: absolute; left: 12px; top: -60px; z-index: 2; padding: 10px 14px; border-radius: 8px; background: var(--x-ink); color: #fff; font-size: 15px; text-decoration: none; }
 .skip:focus { top: 10px; }

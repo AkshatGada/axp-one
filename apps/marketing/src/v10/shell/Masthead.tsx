@@ -1,7 +1,8 @@
 "use client";
 
 // The masthead: wordmark, three anchors, one link out to ContextHint (described on hover and on
-// keyboard focus), and the advertiser action. It leaves on the way down and returns on the way up.
+// keyboard focus), and the advertiser action. It leaves on the way down and returns on the way up,
+// and takes the ultramarine spread's colours while a [data-masthead="blue"] element sits under it.
 import { useEffect, useId, useRef, useState } from "react";
 import { Action } from "../kit";
 import { ADVERTISER_URL, CONTEXTHINT, NAV } from "../copy";
@@ -12,6 +13,7 @@ const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 export default function Masthead() {
   const [hidden, setHidden] = useState(false);
   const [raised, setRaised] = useState(false);
+  const [blue, setBlue] = useState(false);
   const last = useRef(0);
   const menu = useRef<HTMLDetailsElement>(null);
   const ch = useRef<HTMLSpanElement>(null);
@@ -37,6 +39,12 @@ export default function Masthead() {
       const dy = y - last.current;
       if (Math.abs(dy) > 4) { setHidden(dy > 0 && y > 160); last.current = y; }
       setRaised(y > 8);
+      let on = false;
+      document.querySelectorAll<HTMLElement>('[data-masthead="blue"]').forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top <= 34 && r.bottom >= 34) on = true;
+      });
+      setBlue(on);
     };
     const on = () => { if (!raf) raf = requestAnimationFrame(tick); };
     tick();
@@ -47,7 +55,7 @@ export default function Masthead() {
   const undismiss = () => ch.current?.removeAttribute("data-dismissed");
 
   return (
-    <header className={s.mast} data-hidden={hidden ? "" : undefined} data-raised={raised ? "" : undefined} onFocusCapture={() => setHidden(false)}>
+    <header className={s.mast} data-hidden={hidden ? "" : undefined} data-raised={raised ? "" : undefined} data-tone={blue ? "blue" : undefined} data-on-blue={blue ? "" : undefined} onFocusCapture={() => setHidden(false)}>
       <a className={s.skip} href="#main">Skip to content</a>
       <div className={`x-wrap ${s.mastIn}`}>
         <a className={s.word} href="#top" aria-label="axp.one, back to top">
@@ -71,7 +79,7 @@ export default function Masthead() {
           </nav>
         </details>
         <div className={s.cta}>
-          <Action href={ADVERTISER_URL} size="s" tone="ink">Advertiser dashboard</Action>
+          <Action href={ADVERTISER_URL} size="s" tone={blue ? "white" : "ink"}>Advertiser dashboard</Action>
         </div>
       </div>
     </header>

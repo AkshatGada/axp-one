@@ -1,0 +1,233 @@
+/* 01 The shift. One number, --p (the stage's progress, 0 to 1), drives every moving part.
+   Each part declares a start (--a) and a length (--d) on that clock; --t is its own 0 to 1.
+   With motion off --p is 1, so the same rules draw the finished picture. */
+
+.inner {
+  /* The statement ("People used to search." / "Now they ask."): set large, then it steps back
+     to a running head at scale --hk. */
+  --hf: clamp(40px, 7.4vw, 132px);
+  --hlh: .94;
+  --hk: .4;
+  --hgap: clamp(10px, 1.8svh, 18px);
+  /* The question: four lines that fill the measure, as large as the frame allows. */
+  --q: clamp(44px, min(9.72vw, calc((100svh - 220px - 5.8vw) / 4.07)), 165px);
+  --lh: .95;
+  --pt: calc(var(--q) * .1);
+  --pb: calc(var(--q) * .17);
+  /* The keywords in the field are the sentence's words at this scale. */
+  --k: .19;
+  /* The width of a word space at the question's tracking (the underline bridges it). */
+  --sp: .29em;
+  /* The field, and where it rests inside the plate it will become (0 top, 1 bottom). */
+  --fh: clamp(60px, calc(var(--q) * .66), 100px);
+  --fy: .46;
+  /* Marginal notes. */
+  --nf: clamp(17px, 1.7vw, 28px);
+  /* The three beats in which one phrase holds the stage alone. Each is 0, rises to 1, falls to 0;
+     consecutive beats cross exactly, so the words outside every phrase stay quiet throughout. */
+  --b0: calc(clamp(0, calc((var(--p) - var(--says-a)) / var(--says-r)), 1) - clamp(0, calc((var(--p) - var(--says-a) - var(--says-s)) / var(--says-r)), 1));
+  --b1: calc(clamp(0, calc((var(--p) - var(--says-a) - var(--says-s)) / var(--says-r)), 1) - clamp(0, calc((var(--p) - var(--says-a) - 2 * var(--says-s)) / var(--says-r)), 1));
+  --b2: calc(clamp(0, calc((var(--p) - var(--says-a) - 2 * var(--says-s)) / var(--says-r)), 1) - clamp(0, calc((var(--p) - var(--says-a) - 3 * var(--says-s)) / var(--says-r)), 1));
+  position: relative;
+}
+@media (max-width: 899px) {
+  .inner {
+    --hf: clamp(40px, 13vw, 112px);
+    --hk: .46;
+    /* Seven short lines, so the type is very large on a phone. */
+    --q: clamp(40px, min(15.4vw, calc((100svh - 208px - 17.7vw) / 6.92)), 132px);
+    --k: .265;
+    --fh: clamp(54px, calc(var(--q) * .9), 84px);
+    --fy: .3;
+    --nf: clamp(14px, 4.3vw, 28px);
+  }
+}
+
+/* ---------- the stage ---------- */
+.frame { background: var(--x-paper); }
+.pinned { --p: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); height: 100%; padding-top: 84px; padding-bottom: clamp(12px, 2.2svh, 24px); }
+@media (max-width: 899px) { .pinned { padding-top: 74px; } .body { align-self: center; margin-bottom: 3svh; } }
+.body { position: relative; min-height: 0; padding-top: calc(var(--hf) * var(--hlh) * var(--hk) + 2 * var(--hgap)); }
+.heads {
+  --t: clamp(0, calc((var(--p) - var(--shrink-a)) / var(--shrink-d)), 1);
+  --e: calc(var(--t) * var(--t) * (3 - 2 * var(--t)));
+  position: absolute; left: 0; right: 0; top: var(--hgap); display: grid; align-items: start;
+  transform-origin: 0 0; transform: scale(calc(1 - (1 - var(--hk)) * var(--e)));
+}
+.heads > * { grid-area: 1 / 1; }
+.head { margin: 0; font-family: var(--font-display); font-weight: 300; font-size: var(--hf); line-height: var(--hlh); letter-spacing: -.048em; color: var(--x-ink); text-wrap: balance; }
+
+/* Timing helpers. */
+.rise, .note, .headIn :global(.x-w), .close :global(.x-w) {
+  --t: clamp(0, calc((var(--p) - var(--a)) / var(--d)), 1);
+  --e: calc(1 - (1 - var(--t)) * (1 - var(--t)) * (1 - var(--t)));
+  opacity: calc(clamp(0, calc(var(--t) * 1.7), 1) * var(--dim, 1));
+  transform: translate3d(0, calc((1 - var(--e)) * .46em), 0);
+}
+.headOut :global(.x-w) {
+  --a: calc(var(--out-a) + var(--i) * .01);
+  --d: var(--out-d);
+  --t: clamp(0, calc((var(--p) - var(--a)) / var(--d)), 1);
+  --e: calc(var(--t) * var(--t));
+  opacity: calc(1 - var(--t));
+  transform: translate3d(0, calc(var(--e) * -.4em), 0);
+}
+.headIn :global(.x-w) { --a: calc(var(--in-a) + var(--i) * .015); --d: var(--in-d); }
+.close :global(.x-w) { --a: calc(var(--close-a) + var(--i) * var(--close-s)); --d: var(--close-d); }
+
+/* ---------- the plate: the field's two hairlines part and become its rules ---------- */
+.plate { position: relative; padding: var(--pt) 0 var(--pb); }
+.lineT, .lineB {
+  --a: var(--open-a);
+  --d: var(--open-d);
+  --t: clamp(0, calc((var(--p) - var(--a)) / var(--d)), 1);
+  --e: calc(1 - (1 - var(--t)) * (1 - var(--t)) * (1 - var(--t)));
+  position: absolute; inset: 0; pointer-events: none;
+}
+.lineT { border-top: 1px solid var(--x-ink); transform: translate3d(0, calc((100% - var(--fh)) * var(--fy) * (1 - var(--e))), 0); }
+.lineB { border-bottom: 1px solid var(--x-ink); transform: translate3d(0, calc((100% - var(--fh)) * (var(--fy) - 1) * (1 - var(--e))), 0); }
+
+/* ---------- the search field: long, exact, a little cold ---------- */
+.field {
+  display: flex; align-items: center; gap: calc(var(--fh) * .24);
+  height: var(--fh); padding-left: calc(var(--fh) * .34);
+  border: 1px solid var(--x-ink);
+  font-family: var(--font-display); font-weight: 300; font-size: calc(var(--q) * var(--k)); line-height: var(--lh); letter-spacing: -.045em;
+  color: var(--x-ink); white-space: nowrap;
+}
+.field[data-live] { position: absolute; left: 0; right: 0; top: calc((100% - var(--fh)) * var(--fy)); border-color: transparent; }
+.sides {
+  --t: clamp(0, calc((var(--p) - var(--chrome-a)) / var(--chrome-d)), 1);
+  position: absolute; inset: 1px 0; border-inline: 1px solid var(--x-ink); opacity: calc(1 - var(--t)); pointer-events: none;
+}
+.lens { flex: none; width: 1.1em; height: 1.1em; }
+.terms { display: inline-flex; align-items: center; }
+.term { display: inline-block; }
+.term + .term { margin-left: 1.3em; }
+.kw { display: inline-block; }
+.caret { display: inline-block; margin-left: .22em; }
+.caret i { display: block; width: 1.5px; height: 1.1em; background: var(--x-ink); }
+.go { display: grid; place-items: center; align-self: stretch; flex: none; width: var(--fh); margin-left: auto; border-left: 1px solid var(--x-ink); color: var(--x-ink); }
+@media (max-width: 899px) { .go { display: none; } .term + .term { margin-left: 1.1em; } }
+.field[data-live] .kw[data-ph] { visibility: hidden; }
+.field[data-live] .lens, .field[data-live] .caret, .field[data-live] .go {
+  --t: clamp(0, calc((var(--p) - var(--chrome-a)) / var(--chrome-d)), 1);
+  opacity: calc(1 - var(--t));
+}
+.field[data-live] .caret i { animation: blink 1.15s steps(1, end) infinite; }
+@keyframes blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
+/* "best": struck, then it falls away. */
+.field[data-live] .term[data-dropped] {
+  --a: var(--drop-a);
+  --d: var(--drop-d);
+  --t: clamp(0, calc((var(--p) - var(--a)) / var(--d)), 1);
+  position: relative; opacity: calc(1 - var(--t)); transform: translate3d(0, calc(var(--t) * var(--t) * .9em), 0);
+}
+.field[data-live] .term[data-dropped]::after {
+  --t: clamp(0, calc((var(--p) - var(--strike-a)) / var(--strike-d)), 1);
+  content: ""; position: absolute; left: -.1em; right: -.06em; top: 54%; height: 1.5px; background: var(--x-ink);
+  transform: scaleX(var(--t)); transform-origin: 0 50%;
+}
+
+/* ---------- the question ---------- */
+.q {
+  position: relative; margin: 0;
+  font-family: var(--font-display); font-weight: 300; font-size: var(--q); line-height: var(--lh); letter-spacing: -.05em;
+  color: var(--x-ink); white-space: nowrap;
+}
+.w {
+  --hold: calc(var(--b0) + var(--b1) + var(--b2));
+  --dim: calc(1 - .8 * var(--hold));
+  position: relative; display: inline-block;
+}
+.w[data-says="0"] { --hold: calc(var(--b1) + var(--b2)); }
+.w[data-says="1"] { --hold: calc(var(--b0) + var(--b2)); }
+.w[data-says="2"] { --hold: calc(var(--b0) + var(--b1)); }
+.tie { white-space: nowrap; }
+.brN { display: none; }
+@media (max-width: 899px) { .brW { display: none; } .brN { display: inline; } }
+
+/* A keyword: the sentence's own word, resting in the field at scale --k, then released. */
+.trav {
+  --t: clamp(0, calc((var(--p) - var(--a)) / var(--d)), 1);
+  --e: calc(var(--t) * var(--t) * (3 - 2 * var(--t)));
+  --ex: var(--e);
+  --ey: var(--e);
+  z-index: 2; transform-origin: 0 0; opacity: var(--dim);
+  transform: translate3d(calc(var(--dx, 0) * (1 - var(--ex)) * 1px), calc(var(--dy, 0) * (1 - var(--ey)) * 1px), 0) scale(calc(var(--k) + (1 - var(--k)) * var(--e)));
+}
+/* Words that shared the field end on different lines, so each goes to its line first and only
+   then slides along it: they never cross through one another. The rules open on the same curve
+   as the words move, so no word ever crosses a rule. */
+.trav { --ey: calc(1 - (1 - var(--t)) * (1 - var(--t)) * (1 - var(--t))); }
+.trav[data-pair] {
+  --tx: clamp(0, calc((var(--t) - .24) / .76), 1);
+  --ex: calc(var(--tx) * var(--tx) * (3 - 2 * var(--tx)));
+}
+/* Before the first measurement the keywords have nowhere to rest: keep them out of sight. */
+.pinned:not([data-ready]) .trav { visibility: hidden; }
+/* "solana" was typed small; the question gives it its capital. */
+.cap { position: relative; display: inline-block; }
+.capU { opacity: clamp(0, calc((var(--e) - .34) * 4), 1); }
+.capL { position: absolute; right: 0; top: 0; opacity: clamp(0, calc(1 - (var(--e) - .34) * 4), 1); }
+
+/* What the question says: the words turn ultramarine as a rule is drawn under them. The rule runs
+   behind the letters, and a paper edge around each letter lets descenders pass through it cleanly. */
+.say {
+  --st: clamp(0, calc((var(--p) - var(--sa)) / var(--sd)), 1);
+  color: color-mix(in srgb, var(--x-blue) calc(var(--st) * 100%), var(--x-ink));
+  -webkit-text-stroke: .07em var(--x-paper); paint-order: stroke fill;
+}
+.say::after {
+  content: ""; position: absolute; z-index: -1; left: .04em; right: calc(-1 * var(--sp)); bottom: .075em; height: max(2px, .026em); background: var(--x-blue);
+  transform: scaleX(var(--st)); transform-origin: 0 50%;
+}
+.say[data-end]::after { right: .06em; }
+.mark::after { content: none; }
+@media (min-width: 900px) { .say[data-eolw]::after { right: .06em; } }
+@media (max-width: 899px) { .say[data-eoln]::after { right: .06em; } }
+
+/* ---------- marginal notes: each beside the words that say it ---------- */
+.notes { margin: 0; padding: 0; list-style: none; }
+.note {
+  --row: var(--row-w);
+  --x: var(--x-w);
+  position: absolute; left: calc(var(--q) * var(--x)); right: 0; top: calc(var(--pt) + var(--row) * var(--q) * var(--lh) + var(--q) * .15);
+  padding-top: .5em;
+  font-family: var(--font-display); font-weight: 400; font-size: var(--nf); line-height: 1.06; letter-spacing: -.025em; color: var(--x-blue);
+}
+.note::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1.5px; background: var(--x-blue);
+  transform: scaleX(var(--t)); transform-origin: 0 50%;
+}
+.noteText { display: block; }
+.echo { display: block; margin-bottom: .2em; font-size: .7em; letter-spacing: -.01em; opacity: .8; }
+@media (min-width: 900px) {
+  .note[data-below-w] { left: auto; top: calc(100% + var(--cgap, 16px)); width: max-content; }
+}
+@media (max-width: 899px) {
+  .note { --row: var(--row-n); --x: var(--x-n); }
+  .note[data-below-n] { left: auto; top: calc(100% + 14px); width: max-content; }
+}
+
+/* ---------- the closing line: the last beat ---------- */
+.close {
+  margin: clamp(12px, 2svh, 20px) 0 0; font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(22px, min(2.75vw, 5.2svh), 46px); line-height: 1.08; letter-spacing: -.034em; color: var(--x-ink);
+}
+@media (max-width: 899px) { .close { max-width: 17ch; font-size: clamp(20px, 5.6vw, 40px); } }
+
+/* Whole pixels, so the hairlines stay crisp at every step (where round() is understood). */
+@supports (top: round(1.5px, 1px)) {
+  .plate { padding-top: round(var(--pt), 1px); padding-bottom: round(var(--pb), 1px); }
+  .q { line-height: round(calc(var(--q) * var(--lh)), 1px); }
+  .lineT { transform: translate3d(0, round(calc((100% - var(--fh)) * var(--fy) * (1 - var(--e))), 1px), 0); }
+  .lineB { transform: translate3d(0, round(calc((100% - var(--fh)) * (var(--fy) - 1) * (1 - var(--e))), 1px), 0); }
+  .field[data-live] { top: round(calc((100% - var(--fh)) * var(--fy)), 1px); height: round(var(--fh), 1px); }
+}
+
+/* ---------- motion off: two still frames in normal flow ---------- */
+.flow { --p: 1; padding-top: var(--x-space-s); padding-bottom: var(--x-space-s); }
+.still { padding-top: clamp(28px, 4.4vw, 64px); }
+.still + .still { padding-top: clamp(64px, 9vw, 136px); }
+.flow .head { margin-bottom: clamp(20px, 2.8vw, 44px); }

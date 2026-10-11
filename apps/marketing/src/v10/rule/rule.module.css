@@ -1,0 +1,223 @@
+/* 05 The rule, and the doors: the page's one ultramarine spread. Owner: the rule builder. */
+
+.sheet {
+  --w: #fff;
+  --w2: rgba(255, 255, 255, .78);
+  --hair: rgba(255, 255, 255, .42);
+  --pad: clamp(16px, 1.9vw, 28px);
+  --snap: 90ms linear;
+  position: relative;
+  color: var(--w);
+}
+
+/* The ground. A cap one screen tall that rises with rounded shoulders and widens to the bleed
+   (scaleX, driven by scroll), and the rest of the sheet below it. */
+.ground { position: absolute; inset: 0 0 auto 0; height: 100vh; border-radius: var(--x-r-xl) var(--x-r-xl) 0 0; background: var(--x-blue); transform-origin: 50% 0; will-change: transform; }
+.groundRest { position: absolute; inset: calc(100vh - 1px) 0 0 0; background: var(--x-blue); }
+
+/* ---------- The manifesto ---------- */
+.manifesto { position: relative; }
+/* The hold is armed by CSS from the first paint (html[data-px-motion] is set before paint), so its
+   height never changes at hydration and anchors below it land where they should. */
+:global(html[data-px-motion="on"]) .manifesto { height: 120vh; }
+.stick { min-height: 100vh; min-height: 100svh; display: grid; }
+:global(html[data-px-motion="on"]) .manifesto .stick { position: sticky; top: 0; height: 100vh; height: 100svh; min-height: 0; overflow: clip; }
+.frame { position: relative; display: grid; grid-template-rows: auto 1fr; height: 100%; padding-top: clamp(18px, 3vh, 30px); padding-bottom: clamp(22px, 5vh, 52px); }
+.sheet .mark { border-top-color: var(--w); color: var(--w); }
+
+/* Three lines at full measure: the judgment across the top, the rule in two lines on the floor of
+   the frame, a hairline between. Sizes are set by the width and capped by the height. */
+.mega {
+  --mj: clamp(52px, min(11.75vw, 21.5vh), 236px);
+  --mf: clamp(64px, min(14.1vw, 25.4vh), 284px);
+  display: grid;
+  align-content: space-between;
+  margin: 0;
+  padding-top: clamp(10px, 3.4vh, 40px);
+  color: var(--w);
+  font-size: var(--mj);
+}
+.row { display: block; white-space: nowrap; }
+.brNarrow { display: none; }
+.w { display: inline-block; white-space: pre; transform-origin: 0 100%; will-change: transform, opacity; }
+
+/* A judgment: wide, light, round. */
+.judge { display: block; font-family: var(--font-display); font-weight: 300; font-size: var(--mj); line-height: .9; letter-spacing: -.055em; }
+.stopWrap { display: inline-block; margin-left: .06em; vertical-align: baseline; will-change: transform; }
+.stopRound { display: inline-block; vertical-align: baseline; width: .2em; height: .2em; border-radius: 50%; background: var(--w); }
+.stopChar { position: absolute; font-size: 0; color: transparent; }
+
+.ruleBlock { display: block; }
+/* The hairline between them: it is a rule, so it cuts in. */
+.hard { display: block; height: 2px; margin: 0 0 .15em; background: var(--w); font-size: var(--mf); transform: scaleX(0); transform-origin: 0 50%; transition: transform 140ms linear; }
+.hard[data-set] { transform: none; }
+
+/* A rule: heavy, square, exact. Unset type waits faint; each word is set with a hard cut. */
+.fixed { display: block; font-family: var(--font-body); font-weight: 700; font-size: var(--mf); line-height: .84; letter-spacing: -.04em; }
+.rw { display: inline-block; white-space: pre; opacity: .2; transform: translateY(-.09em); transition: opacity 50ms linear, transform var(--snap); will-change: transform, opacity; }
+.rw[data-set] { opacity: 1; transform: none; }
+.stopSquare { display: inline-block; vertical-align: baseline; width: .18em; height: .18em; margin-left: .05em; background: var(--x-ink); opacity: 0; transform: translateX(-.22em); transition: opacity 40ms linear, transform var(--snap); }
+.stopSquare[data-set] { opacity: 1; transform: none; }
+
+@keyframes breathe { 50% { transform: scale(1.18); } }
+:global(html[data-px-motion="on"]) .stopRound { animation: breathe 3.6s ease-in-out infinite; }
+
+/* ---------- The figure ---------- */
+.figure { position: relative; padding-top: clamp(36px, 7vh, 72px); }
+.fig { position: relative; padding-top: 40px; border-top: 1px solid var(--hair); }
+.fig figcaption { position: absolute; top: 11px; right: 0; margin: 0; color: var(--w2); }
+.board { --bolt: clamp(22px, 2.3vw, 34px); --bite: clamp(20px, 2.2vw, 34px); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--x-col-gap); row-gap: clamp(14px, 2.2vh, 22px); }
+
+/* Three holds. Each is one large control: its words, and a bolt that runs across to the card and
+   bites into its edge. A rule is a square ink bolt that slams. A judgment is a round white one
+   that settles, and breathes while it holds. */
+.holds { position: relative; z-index: 2; grid-column: 1 / span 6; display: grid; grid-auto-rows: 1fr; margin-right: calc(-1 * var(--x-col-gap) - var(--bite)); border-bottom: 1px solid var(--hair); }
+.hold { all: unset; box-sizing: border-box; display: grid; grid-template-columns: max-content minmax(96px, 1fr); align-items: center; column-gap: clamp(14px, 1.6vw, 26px); min-height: clamp(92px, 13.6vh, 132px); padding: 8px 0; border-top: 1px solid var(--hair); color: var(--w); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.holdText { display: grid; gap: 8px; min-width: 15.2em; font-size: clamp(22px, 2.5vw, 40px); }
+.holdK { font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 2.5vw, 40px); line-height: 1; letter-spacing: -.032em; white-space: nowrap; }
+.holdState { font-size: clamp(15px, 1.25vw, 18px); line-height: 1.2; color: var(--w2); }
+.hold:not([data-on]) .holdK { opacity: .7; }
+.hold:hover .holdK { opacity: 1; }
+
+.track { position: relative; height: var(--bolt); overflow: hidden; }
+/* where the bolt would be */
+.track::before { content: ""; position: absolute; left: var(--bolt); right: var(--bite); top: calc(50% - 1px); border-top: 2px dashed var(--hair); }
+.bolt { position: absolute; inset: 0; transform: translateX(calc(-100% + var(--bolt))); transition: transform 110ms cubic-bezier(.7, 0, 1, 1); will-change: transform; }
+.bolt::before { content: ""; position: absolute; left: 0; right: 4px; top: 22%; bottom: 22%; background: var(--x-ink); }
+.bolt::after { content: ""; position: absolute; top: 0; right: 0; width: var(--bolt); height: var(--bolt); background: var(--x-ink); }
+.hold[data-on] .bolt { transform: none; }
+.hold[data-kind="judgment"] .bolt { transition: transform 640ms var(--x-out); }
+.hold[data-kind="judgment"] .bolt::before { right: calc(var(--bolt) / 2); border-radius: 999px 0 0 999px; background: var(--w); }
+.hold[data-kind="judgment"]:not([data-on]) .bolt::before { opacity: 0; transition: opacity 200ms linear 200ms; }
+.hold[data-kind="judgment"] .bolt::after { border: calc(var(--bolt) * .24) solid var(--w); border-radius: 50%; background: var(--x-blue); }
+:global(html[data-px-motion="on"]) .hold[data-kind="judgment"][data-on] .bolt::after { animation: breathe 3.6s ease-in-out infinite; }
+.hold:hover:not([data-on]) .bolt { transform: translateX(calc(-100% + var(--bolt) + 10px)); }
+.hold[data-on]:hover .bolt { transform: translateX(-8px); }
+.hold:active .bolt { transition-duration: 60ms; }
+
+/* The card's place. When any one is released, the card is not hidden: it does not exist. */
+.slot { grid-column: 7 / span 6; position: relative; display: grid; min-height: 200px; }
+.slot::before { content: ""; position: absolute; inset: 0; border: 2px dashed var(--w2); border-radius: var(--x-r-l); opacity: 0; transition: opacity 0s; }
+.cardBox { position: relative; display: grid; transition: opacity 70ms linear, transform var(--snap); }
+.ad { align-content: space-between; height: 100%; padding-left: calc(var(--bite) + 12px) !important; box-shadow: 0 2px 4px rgba(6, 10, 60, .18), 0 34px 70px -28px rgba(6, 10, 60, .7); }
+.board[data-card="off"] .slot::before { opacity: 1; transition: opacity 60ms linear 70ms; }
+.board[data-card="off"] .cardBox { opacity: 0; transform: translateX(26px); pointer-events: none; }
+.board[data-cause="judgment"] .cardBox { transition: opacity 460ms var(--x-ease), transform 620ms var(--x-out); }
+.board[data-card="off"][data-cause="judgment"] .slot::before { transition: opacity 420ms var(--x-ease) 320ms; }
+.board[data-card="off"][data-cause="judgment"] .cardBox { transform: translateY(12px) scale(.97); }
+.board[data-card="on"] .cardBox { transition-delay: 120ms; }
+.board[data-card="on"][data-cause="judgment"] .cardBox { transition-delay: 340ms; }
+
+/* The receipt: written only when all three hold. An accepted charge and an accrual, in words.
+   When it does not exist, the statement owns its place. */
+.receiptSlot { grid-column: 1 / -1; position: relative; }
+.none { position: absolute; inset: 0; display: flex; align-items: center; margin: 0; border-top: 2px solid var(--w); font-family: var(--font-display); font-weight: 300; font-size: clamp(40px, 8.9vw, 172px); line-height: .9; letter-spacing: -.055em; white-space: nowrap; opacity: 0; transform: translateY(.08em); transition: opacity 0s, transform 0s; }
+.board[data-card="off"] .none { opacity: 1; transform: none; transition: opacity 50ms linear 90ms, transform var(--snap) 90ms; }
+.board[data-card="off"][data-cause="judgment"] .none { transition: opacity 520ms var(--x-ease) 300ms, transform 700ms var(--x-out) 300ms; }
+.receipt { position: relative; border-radius: var(--x-r-m); background: var(--x-sheet); color: var(--x-ink); transition: opacity 70ms linear, transform var(--snap), visibility 0s; }
+.receipt > * { transition: opacity 260ms var(--x-ease), transform 420ms var(--x-out); }
+.board[data-card="off"] .receipt { opacity: 0; transform: translateY(-10px); visibility: hidden; transition: opacity 70ms linear, transform var(--snap), visibility 0s linear 100ms; }
+.board[data-card="off"] .receipt > * { opacity: 0; transform: translateY(8px); transition: opacity 0s linear 420ms, transform 0s linear 420ms; }
+.board[data-card="off"][data-cause="judgment"] .receipt { transition: opacity 380ms var(--x-ease), transform 500ms var(--x-out), visibility 0s linear 400ms; }
+.board[data-card="on"] .receipt { transition: opacity 200ms var(--x-ease) 380ms, transform 480ms var(--x-out) 380ms, visibility 0s; }
+.board[data-card="on"][data-cause="judgment"] .receipt { transition-delay: 620ms, 620ms, 0s; }
+.board[data-card="on"] .rHead { transition-delay: 560ms; }
+.board[data-card="on"] .rSides { transition-delay: 700ms; }
+.board[data-card="on"] .rFoot { transition-delay: 840ms; }
+.board[data-card="on"][data-cause="judgment"] .rHead { transition-delay: 800ms; }
+.board[data-card="on"][data-cause="judgment"] .rSides { transition-delay: 940ms; }
+.board[data-card="on"][data-cause="judgment"] .rFoot { transition-delay: 1080ms; }
+.board[data-instant], .board[data-instant] *, .board[data-instant] *::before, .board[data-instant] *::after { transition: none !important; }
+
+.rHead { display: flex; align-items: center; gap: 10px clamp(16px, 2vw, 32px); padding: clamp(14px, 2.1vh, 22px) var(--pad); border-bottom: 1px solid var(--x-hair); }
+.rTitle { margin: 0; font-size: 13.5px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
+.rConfirms { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(18px, 1.6vw, 25px); line-height: 1.15; letter-spacing: -.018em; }
+.proof { display: grid; justify-items: end; gap: 4px; margin-left: auto; color: var(--x-blue-deep); text-decoration: none; text-align: right; }
+.proofText { display: inline-flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 500; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
+.proofText svg { flex: none; transition: transform var(--x-d2) var(--x-out); }
+.proof:hover .proofText svg { transform: translateX(5px); }
+.proof:hover .proofText { text-decoration-thickness: 2.5px; }
+.proofLabel { font-size: 14px; line-height: 1.3; color: var(--x-ink); }
+.sheet .receipt a:focus-visible { outline-color: var(--x-blue); }
+.rSides { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--x-col-gap); }
+.rSide { display: grid; gap: 10px; padding: clamp(14px, 2.3vh, 24px) var(--pad) clamp(16px, 2.6vh, 28px); }
+.rSide + .rSide { position: relative; }
+.rSide + .rSide::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(var(--x-col-gap) / -2); width: 1px; background: var(--x-hair); }
+.rLabel { margin: 0; font-size: 13.5px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.rState { display: flex; align-items: center; gap: .36em; margin: 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(26px, 3.7vw, 58px); line-height: 1; letter-spacing: -.04em; }
+.rState i { flex: none; width: .26em; height: .26em; background: var(--x-ink); }
+.rFoot { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--x-col-gap); border-top: 1px solid var(--x-hair); }
+.rFoot p { margin: 0; padding: 13px var(--pad) 15px; font-size: 14.5px; line-height: 1.4; color: var(--x-ink); }
+
+.sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- The doors ---------- */
+.start { position: relative; }
+.startIn { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--x-col-gap); row-gap: clamp(20px, 3.6vh, 40px); padding-top: clamp(56px, 10vh, 104px); }
+.startH { grid-column: 1 / -1; grid-row: 1; margin: 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(44px, min(7.4vw, 15vh), 132px); line-height: .92; letter-spacing: -.05em; }
+.also { grid-column: 2; grid-row: 1; justify-self: end; align-self: end; display: grid; justify-items: end; gap: 0; margin: 0; padding-bottom: .4vw; }
+.sheet .quiet { font-size: 15.5px; text-decoration-color: var(--w2); }
+.sheet .quiet:hover { text-decoration-color: var(--w); }
+
+.door { position: relative; display: block; min-height: clamp(300px, 58vh, 620px); border: 1px solid var(--w); border-bottom: 0; color: var(--w); text-decoration: none; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+.face, .openIn { display: grid; grid-template-rows: auto auto 1fr; align-content: start; gap: clamp(10px, 1.8vh, 18px); padding: clamp(18px, 2.4vw, 36px) var(--pad) calc(clamp(18px, 2vw, 28px) + 12px); }
+.face { position: relative; height: 100%; min-height: inherit; }
+.who { font-family: var(--font-display); font-weight: 300; font-size: clamp(48px, min(7.3vw, 15vh), 132px); line-height: .9; letter-spacing: -.055em; white-space: nowrap; }
+.doorLine { max-width: 32ch; font-size: clamp(19px, 1.9vw, 30px); line-height: 1.22; letter-spacing: -.018em; color: var(--w2); }
+.go { display: flex; align-items: center; justify-content: space-between; align-self: end; gap: 16px; padding-top: clamp(14px, 2.2vh, 22px); border-top: 1px solid var(--hair); font-size: clamp(17px, 1.6vw, 24px); font-weight: 500; letter-spacing: -.01em; }
+.go svg { flex: none; transition: transform 520ms var(--x-out); }
+/* The paper beyond the door. At rest only a strip of its light shows under the door. */
+.open { position: absolute; inset: 0; overflow: hidden; transform: translateY(calc(100% - 12px)); transition: transform 620ms var(--x-out); will-change: transform; }
+.openIn { position: absolute; inset: 0; background: var(--x-paper); color: var(--x-ink); transform: translateY(calc(-100% + 12px)); transition: transform 620ms var(--x-out), background 120ms linear; will-change: transform; }
+.openIn .doorLine { color: var(--muted); }
+.openIn .go { border-top-color: var(--x-ink); color: var(--x-blue-deep); }
+.door:hover .open, .door:hover .openIn, .door:focus-visible .open, .door:focus-visible .openIn, .door:active .open, .door:active .openIn { transform: none; }
+.door:hover .go svg, .door:focus-visible .go svg { transform: translateX(10px); }
+.door:active .openIn { background: var(--x-sheet); transition-duration: 160ms, 60ms; }
+.door:active .open { transition-duration: 160ms; }
+.door:active .go svg { transform: translateX(22px); transition-duration: 140ms; }
+.sheet .door:focus-visible { outline: 3px solid var(--w); outline-offset: 4px; border-radius: 0; }
+.door:focus-visible::after { content: ""; position: absolute; inset: 8px 8px 20px; z-index: 3; border: 3px solid var(--x-blue); pointer-events: none; }
+
+/* ---------- Phones and narrow screens: the same movement, recomposed ---------- */
+@media (max-width: 899px) {
+  .mega { --mj: clamp(40px, min(19.6vw, 10.4vh), 150px); --mf: clamp(56px, min(25.6vw, 13.4vh), 190px); align-content: end; }
+  .brNarrow { display: inline; }
+  .hard { margin: .1em 0 .12em; }
+  .fixed .rw { display: block; }
+  .figure { padding-top: 34px; }
+  .board { --bolt: 26px; --bite: 0px; grid-template-columns: minmax(0, 1fr); row-gap: 12px; }
+  .holds, .slot, .receiptSlot { grid-column: 1; }
+  .holds { margin-right: 0; }
+  .hold { grid-template-columns: minmax(0, 1fr) 104px; min-height: 62px; padding: 6px 0; }
+  .holdText { min-width: 0; }
+  .holdText { gap: 4px; }
+  .track::before { right: 0; }
+  .slot { min-height: 0; }
+  .ad { padding: 16px 18px 18px !important; gap: 8px !important; }
+  .ad p { font-size: 17px !important; line-height: 1.36 !important; }
+  .none { align-items: flex-start; padding-top: 18px; font-size: clamp(40px, 13.4vw, 84px); white-space: normal; text-wrap: balance; }
+  .rHead { flex-wrap: wrap; align-items: baseline; gap: 6px 12px; padding: 14px var(--pad) 12px; }
+  .rConfirms { flex-basis: 100%; order: 2; font-size: 17px; }
+  .proof { order: 3; justify-items: start; margin-left: 0; margin-top: 4px; text-align: left; }
+  .proofText { font-size: 16px; }
+  .rSides { grid-template-columns: minmax(0, 1fr); }
+  .rSide { gap: 6px; padding: 11px var(--pad) 13px; }
+  .rSide + .rSide::before { top: 0; bottom: auto; left: var(--pad); right: var(--pad); width: auto; height: 1px; }
+  .rState { font-size: clamp(22px, 6.4vw, 34px); letter-spacing: -.035em; }
+  .rFoot { grid-template-columns: minmax(0, 1fr); }
+  .rFoot p { padding: 10px var(--pad) 0; font-size: 13.5px; }
+  .rFoot p:last-child { padding-bottom: 12px; }
+  .startIn { grid-template-columns: minmax(0, 1fr); row-gap: 14px; padding-top: 56px; }
+  .startH { font-size: clamp(40px, 12.6vw, 96px); text-wrap: balance; }
+  .also { grid-column: 1; grid-row: auto; justify-self: start; justify-items: start; display: flex; flex-wrap: wrap; gap: 0 22px; padding: 0 0 6px; }
+  .door { min-height: clamp(250px, 37vh, 420px); }
+  .who { font-size: clamp(44px, 14.2vw, 120px); }
+  .go { gap: 8px; font-size: 15.5px; white-space: nowrap; }
+}
+
+/* Motion off: every state is a still; controls still work, with cuts. */
+@media (prefers-reduced-motion: reduce) {
+  .sheet *, .sheet *::before, .sheet *::after { transition: none !important; animation: none !important; }
+}
+:global(html[data-px-motion="off"]) .sheet *, :global(html[data-px-motion="off"]) .sheet *::before, :global(html[data-px-motion="off"]) .sheet *::after { transition: none !important; animation: none !important; }

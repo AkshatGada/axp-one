@@ -46,7 +46,7 @@ export function Fig({ no, caption, illustration = true, className, children }: {
 
 /** The one Sponsored card. The text is always the advertiser's approved words, unaltered, and the
  *  card always sits below the answer. */
-export function Ad({ name, text, domain, size = "m", className, style }: { name: string; text: string; domain?: string; size?: "s" | "m" | "l"; className?: string; style?: CSSProperties }) {
+export function Ad({ name, text, domain, size = "m", className, style }: { name: string; /** The approved words. A node is allowed so a figure can mark a changed word. */ text: ReactNode; domain?: string; size?: "s" | "m" | "l"; className?: string; style?: CSSProperties }) {
   return (
     <div className={`${s.ad}${className ? ` ${className}` : ""}`} data-size={size} style={style}>
       <div className={s.adHead}>

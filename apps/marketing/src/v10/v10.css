@@ -58,7 +58,7 @@
 .v10 em { font-style: normal; color: var(--x-blue); }
 
 /* Focus: one visible ring everywhere. */
-.v10 :focus-visible { outline: 2px solid var(--x-blue); outline-offset: 3px; border-radius: 4px; }
+.v10 :focus-visible { outline: 2px solid var(--x-blue); outline-offset: 3px; }
 .v10 [data-on-blue] :focus-visible { outline-color: #fff; }
 
 /* Kinetic type: Split renders words (and optionally characters) as inline blocks you can move.
@@ -78,3 +78,6 @@
 @media (prefers-reduced-motion: reduce) { .x-sw, .x-sw::after { transition: none; } }
 
 /* Motion is opt-in: html[data-px-motion="on"] is set only when the visitor allows motion. */
+
+/* The page's rhythm: air between movements (the orchestrator's seam). */
+.v10 main > section[data-chapter] + section[data-chapter] { margin-top: clamp(72px, 9vw, 144px); }

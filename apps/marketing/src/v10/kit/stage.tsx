@@ -29,7 +29,10 @@ export function Stage({ length, minWidth = 0, pinned, flow, className, frameClas
   const ref = useRef<HTMLDivElement>(null);
   const mode = useStageMode(minWidth);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  if (mode === "flow") return <div className={className} style={style} data-stage="flow">{flow}</div>;
+  // The ref is attached in both modes: useScroll needs a hydrated target even when nothing sticks.
+  // Before hydration, when motion is allowed, the block already takes its pinned height (CSS, from
+  // --x-len), so anchors land in the right place and nothing shifts when the stage arms.
+  if (mode === "flow") return <div ref={ref} className={`${minWidth === 0 ? s.stageFlow : ""}${className ? ` ${className}` : ""}`} style={{ ...style, "--x-len": length } as CSSProperties} data-stage="flow">{flow}</div>;
   return (
     <div ref={ref} className={`${s.stage}${className ? ` ${className}` : ""}`} style={{ ...style, height: `${length * 100}vh` }} data-stage="pinned">
       <div className={`${s.stick}${frameClassName ? ` ${frameClassName}` : ""}`}>{pinned(scrollYProgress)}</div>

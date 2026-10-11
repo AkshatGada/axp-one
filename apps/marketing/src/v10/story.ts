@@ -66,8 +66,20 @@ export const MOMENTS: { id: string; question: string; choosing: boolean; outcome
   { id: "bitcoin", question: "Cheapest hardware wallet for Bitcoin only?", choosing: true, outcome: "left alone", why: "Bitcoin not listed", card: "ColdNest" },
 ];
 
+/** The other fictional advertisers' approved words, where a figure shows their card. */
+export const OTHER_CREATIVES = {
+  ClearVault: { domain: "clearvault.example", creative: "ClearVault. A wallet app for Solana that keeps your keys on your phone." },
+  ColdNest: { domain: "coldnest.example", creative: "ColdNest. A hardware wallet for Bitcoin, and nothing else." },
+} as const;
+
 /** When nothing fits. */
-export const NO_AD = { question: "How does offline key storage work?", line: "No ad. The answer stands alone." };
+export const NO_AD = {
+  question: "How does offline key storage work?",
+  /** The app's own answer to it. */
+  answer: "The private key is created on the device and never leaves it. The device signs each transaction itself, so only the signature goes online.",
+  line: "No ad. The answer stands alone.",
+  receipt: "No receipt.",
+};
 
 /** The receipt. Exact wording, so no figure drifts into payout language. */
 export const RECEIPT = {
