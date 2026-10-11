@@ -1,0 +1,680 @@
+{
+  "schemaVersion": "axp.offline-voucher-specimen.v1",
+  "execution": "offline-synthetic-fixture",
+  "extractedAt": "2026-10-07T13:28:47.612Z",
+  "channelId": "offline-worker-1-memory-channel-0",
+  "termsHash": "b22fbc71b8f2ec150b0d9b67d4bb9665a78cfcc2f3ecfcc69505ded68c0fd1e4",
+  "provenance": {
+    "exchange": "actual Exchange auctions; accepted charge records deliberately injected as fixtures",
+    "payment": "actual NetworkPaymentAdapter and store state machine",
+    "signatures": "inert mock strings; no cryptographic signing",
+    "settlement": "mock finalized outcome; no native transaction or token transfer",
+    "publisherReceiptVerification": false
+  },
+  "policy": {
+    "thresholdVoucherCount": 64,
+    "thresholdAcceptedBaseUnits": "64000",
+    "invocation": "external experimental policy calls beginDrain, prepareClose, confirmClose",
+    "productionThresholdWatcher": false
+  },
+  "vouchers": [
+    {
+      "sequence": 1,
+      "chargeId": "offline-charge-0",
+      "acceptedAt": "2026-10-07T12:05:15.405Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "1000",
+      "status": "authorized",
+      "payloadHash": "77bd5af85b9eaf3174e36e4286f8d469cc4b97c4f43a277d3b43229e53f561f3",
+      "voucherRecordHash": "77bd5af85b9eaf3174e36e4286f8d469cc4b97c4f43a277d3b43229e53f561f3"
+    },
+    {
+      "sequence": 2,
+      "chargeId": "offline-charge-1",
+      "acceptedAt": "2026-10-07T12:05:15.406Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "2000",
+      "status": "authorized",
+      "payloadHash": "f7b90468703e8fee0a3b10bfd168fcfce20e420d79a40fe5be4c1507d5b251a2",
+      "voucherRecordHash": "f7b90468703e8fee0a3b10bfd168fcfce20e420d79a40fe5be4c1507d5b251a2"
+    },
+    {
+      "sequence": 3,
+      "chargeId": "offline-charge-2",
+      "acceptedAt": "2026-10-07T12:05:15.407Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "3000",
+      "status": "authorized",
+      "payloadHash": "37fd963e44b89ade16c5033bb93ad911cffbbcb7e8bb8092d07b7a1d6695be65",
+      "voucherRecordHash": "37fd963e44b89ade16c5033bb93ad911cffbbcb7e8bb8092d07b7a1d6695be65"
+    },
+    {
+      "sequence": 4,
+      "chargeId": "offline-charge-3",
+      "acceptedAt": "2026-10-07T12:05:15.408Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "4000",
+      "status": "authorized",
+      "payloadHash": "d22e34000e14373b6eae8349ff32a4fa9599f7b1e6c88b2620eb775e19f6c352",
+      "voucherRecordHash": "d22e34000e14373b6eae8349ff32a4fa9599f7b1e6c88b2620eb775e19f6c352"
+    },
+    {
+      "sequence": 5,
+      "chargeId": "offline-charge-4",
+      "acceptedAt": "2026-10-07T12:05:15.410Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "5000",
+      "status": "authorized",
+      "payloadHash": "18e93d19e346afb863ea13715257250981b82f0bfd6c93973e50132bebb16585",
+      "voucherRecordHash": "18e93d19e346afb863ea13715257250981b82f0bfd6c93973e50132bebb16585"
+    },
+    {
+      "sequence": 6,
+      "chargeId": "offline-charge-5",
+      "acceptedAt": "2026-10-07T12:05:15.412Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "6000",
+      "status": "authorized",
+      "payloadHash": "348f56b0c0db469e86a669f8266ba97f37f818678afd799c778cb425e5b7940c",
+      "voucherRecordHash": "348f56b0c0db469e86a669f8266ba97f37f818678afd799c778cb425e5b7940c"
+    },
+    {
+      "sequence": 7,
+      "chargeId": "offline-charge-6",
+      "acceptedAt": "2026-10-07T12:05:15.414Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "7000",
+      "status": "authorized",
+      "payloadHash": "c69809b0f3d5eb39fa7bc616ef2842c0f8a3f7fde433377672f256b294288bb2",
+      "voucherRecordHash": "c69809b0f3d5eb39fa7bc616ef2842c0f8a3f7fde433377672f256b294288bb2"
+    },
+    {
+      "sequence": 8,
+      "chargeId": "offline-charge-7",
+      "acceptedAt": "2026-10-07T12:05:15.418Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "8000",
+      "status": "authorized",
+      "payloadHash": "723c5e3b52da8031627b6d97b49fa18e738a951063a3abe5e44ee26be34be6ca",
+      "voucherRecordHash": "723c5e3b52da8031627b6d97b49fa18e738a951063a3abe5e44ee26be34be6ca"
+    },
+    {
+      "sequence": 9,
+      "chargeId": "offline-charge-8",
+      "acceptedAt": "2026-10-07T12:05:15.420Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "9000",
+      "status": "authorized",
+      "payloadHash": "863c5878745e27226a9d06767859745a6956211c9ec9d54ada290056cf08a043",
+      "voucherRecordHash": "863c5878745e27226a9d06767859745a6956211c9ec9d54ada290056cf08a043"
+    },
+    {
+      "sequence": 10,
+      "chargeId": "offline-charge-9",
+      "acceptedAt": "2026-10-07T12:05:15.423Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "10000",
+      "status": "authorized",
+      "payloadHash": "1c362b77a6931214a66330d7af45a0f02151684d5493a00fd18139c4e7f909be",
+      "voucherRecordHash": "1c362b77a6931214a66330d7af45a0f02151684d5493a00fd18139c4e7f909be"
+    },
+    {
+      "sequence": 11,
+      "chargeId": "offline-charge-10",
+      "acceptedAt": "2026-10-07T12:05:15.426Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "11000",
+      "status": "authorized",
+      "payloadHash": "88df1203d10eec88f00d2391d5efad8895a13df91b86ec3cda7d248d8789452c",
+      "voucherRecordHash": "88df1203d10eec88f00d2391d5efad8895a13df91b86ec3cda7d248d8789452c"
+    },
+    {
+      "sequence": 12,
+      "chargeId": "offline-charge-11",
+      "acceptedAt": "2026-10-07T12:05:15.429Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "12000",
+      "status": "authorized",
+      "payloadHash": "2a72dcfbfe51563ab4a766ba451814274e6809ed1941d8a6feec2d8026aef2ec",
+      "voucherRecordHash": "2a72dcfbfe51563ab4a766ba451814274e6809ed1941d8a6feec2d8026aef2ec"
+    },
+    {
+      "sequence": 13,
+      "chargeId": "offline-charge-12",
+      "acceptedAt": "2026-10-07T12:05:15.433Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "13000",
+      "status": "authorized",
+      "payloadHash": "5adaf697e99cce5488375970371894bb65ae88f434e3e95ccb038cb567d02858",
+      "voucherRecordHash": "5adaf697e99cce5488375970371894bb65ae88f434e3e95ccb038cb567d02858"
+    },
+    {
+      "sequence": 14,
+      "chargeId": "offline-charge-13",
+      "acceptedAt": "2026-10-07T12:05:15.437Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "14000",
+      "status": "authorized",
+      "payloadHash": "30592366fc7a0a769584f5de71d1fc56da0eec4075ca996e04df1e34fc24b112",
+      "voucherRecordHash": "30592366fc7a0a769584f5de71d1fc56da0eec4075ca996e04df1e34fc24b112"
+    },
+    {
+      "sequence": 15,
+      "chargeId": "offline-charge-14",
+      "acceptedAt": "2026-10-07T12:05:15.445Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "15000",
+      "status": "authorized",
+      "payloadHash": "735b82737914a947f3b2fb8c1fea10681cdb4e8f49dc3e7d54acf435f7e95da2",
+      "voucherRecordHash": "735b82737914a947f3b2fb8c1fea10681cdb4e8f49dc3e7d54acf435f7e95da2"
+    },
+    {
+      "sequence": 16,
+      "chargeId": "offline-charge-15",
+      "acceptedAt": "2026-10-07T12:05:15.452Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "16000",
+      "status": "authorized",
+      "payloadHash": "9e6f2716eab15e914628c61204c6595987f72d87565834ea3b911eb51b940a3c",
+      "voucherRecordHash": "9e6f2716eab15e914628c61204c6595987f72d87565834ea3b911eb51b940a3c"
+    },
+    {
+      "sequence": 17,
+      "chargeId": "offline-charge-16",
+      "acceptedAt": "2026-10-07T12:05:15.457Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "17000",
+      "status": "authorized",
+      "payloadHash": "c0eb78c1e5186890e799333a65dab2e6b3c03aff465502ba51202f13f48afa60",
+      "voucherRecordHash": "c0eb78c1e5186890e799333a65dab2e6b3c03aff465502ba51202f13f48afa60"
+    },
+    {
+      "sequence": 18,
+      "chargeId": "offline-charge-17",
+      "acceptedAt": "2026-10-07T12:05:15.463Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "18000",
+      "status": "authorized",
+      "payloadHash": "7d5a5224a842b1c5face1317d74dd12fbabc00a821ffe521f3b76ff3599f545a",
+      "voucherRecordHash": "7d5a5224a842b1c5face1317d74dd12fbabc00a821ffe521f3b76ff3599f545a"
+    },
+    {
+      "sequence": 19,
+      "chargeId": "offline-charge-18",
+      "acceptedAt": "2026-10-07T12:05:15.468Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "19000",
+      "status": "authorized",
+      "payloadHash": "8b091391ae39ad76c62f80702dc4482917b69e9fb788c367f1e646d9f7a1fabf",
+      "voucherRecordHash": "8b091391ae39ad76c62f80702dc4482917b69e9fb788c367f1e646d9f7a1fabf"
+    },
+    {
+      "sequence": 20,
+      "chargeId": "offline-charge-19",
+      "acceptedAt": "2026-10-07T12:05:15.473Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "20000",
+      "status": "authorized",
+      "payloadHash": "8ed6db313e133fdb7f6869ee785209e06746f48d795564fa76d2fddfa799fd42",
+      "voucherRecordHash": "8ed6db313e133fdb7f6869ee785209e06746f48d795564fa76d2fddfa799fd42"
+    },
+    {
+      "sequence": 21,
+      "chargeId": "offline-charge-20",
+      "acceptedAt": "2026-10-07T12:05:15.479Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "21000",
+      "status": "authorized",
+      "payloadHash": "37e1e948fcac1e04655393447b4e041e54174cedb0c5a9b6f5f1e70212bdf80f",
+      "voucherRecordHash": "37e1e948fcac1e04655393447b4e041e54174cedb0c5a9b6f5f1e70212bdf80f"
+    },
+    {
+      "sequence": 22,
+      "chargeId": "offline-charge-21",
+      "acceptedAt": "2026-10-07T12:05:15.485Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "22000",
+      "status": "authorized",
+      "payloadHash": "8be5022139654b787ed6b65c12a8789d6478c9477f1fb2de3aa9e1d881d804dc",
+      "voucherRecordHash": "8be5022139654b787ed6b65c12a8789d6478c9477f1fb2de3aa9e1d881d804dc"
+    },
+    {
+      "sequence": 23,
+      "chargeId": "offline-charge-22",
+      "acceptedAt": "2026-10-07T12:05:15.492Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "23000",
+      "status": "authorized",
+      "payloadHash": "5f114523eeee2d6670ec2489cfd58b9bf50c03e8d66516ba76775c5e46e2b194",
+      "voucherRecordHash": "5f114523eeee2d6670ec2489cfd58b9bf50c03e8d66516ba76775c5e46e2b194"
+    },
+    {
+      "sequence": 24,
+      "chargeId": "offline-charge-23",
+      "acceptedAt": "2026-10-07T12:05:15.498Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "24000",
+      "status": "authorized",
+      "payloadHash": "f47720faf79327094c93353386e32ab39b15fceb842dc01db0a7e4e5b0c22ab6",
+      "voucherRecordHash": "f47720faf79327094c93353386e32ab39b15fceb842dc01db0a7e4e5b0c22ab6"
+    },
+    {
+      "sequence": 25,
+      "chargeId": "offline-charge-24",
+      "acceptedAt": "2026-10-07T12:05:15.504Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "25000",
+      "status": "authorized",
+      "payloadHash": "c604d4c5005770ab5d34bfd003247bcb38a08049fc575b0c39072d202b6fd2b5",
+      "voucherRecordHash": "c604d4c5005770ab5d34bfd003247bcb38a08049fc575b0c39072d202b6fd2b5"
+    },
+    {
+      "sequence": 26,
+      "chargeId": "offline-charge-25",
+      "acceptedAt": "2026-10-07T12:05:15.514Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "26000",
+      "status": "authorized",
+      "payloadHash": "fd2c946e5bff8f28ffc0f662753c946b578e396790a6365a6fa29b053003adb5",
+      "voucherRecordHash": "fd2c946e5bff8f28ffc0f662753c946b578e396790a6365a6fa29b053003adb5"
+    },
+    {
+      "sequence": 27,
+      "chargeId": "offline-charge-26",
+      "acceptedAt": "2026-10-07T12:05:15.524Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "27000",
+      "status": "authorized",
+      "payloadHash": "67d804ee233342f784f08ae074e413240ddeb26e9aab26bfddc3510e28f167a6",
+      "voucherRecordHash": "67d804ee233342f784f08ae074e413240ddeb26e9aab26bfddc3510e28f167a6"
+    },
+    {
+      "sequence": 28,
+      "chargeId": "offline-charge-27",
+      "acceptedAt": "2026-10-07T12:05:15.531Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "28000",
+      "status": "authorized",
+      "payloadHash": "bb90f306dbc1717d1c218b1353b04c2c9970cade21ec2e21f387c7557f5f5227",
+      "voucherRecordHash": "bb90f306dbc1717d1c218b1353b04c2c9970cade21ec2e21f387c7557f5f5227"
+    },
+    {
+      "sequence": 29,
+      "chargeId": "offline-charge-28",
+      "acceptedAt": "2026-10-07T12:05:15.539Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "29000",
+      "status": "authorized",
+      "payloadHash": "8d3de78216bd38df38eb3eab73e4765c03ab167c68c4725c4295b2f17aa2ef6d",
+      "voucherRecordHash": "8d3de78216bd38df38eb3eab73e4765c03ab167c68c4725c4295b2f17aa2ef6d"
+    },
+    {
+      "sequence": 30,
+      "chargeId": "offline-charge-29",
+      "acceptedAt": "2026-10-07T12:05:15.547Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "30000",
+      "status": "authorized",
+      "payloadHash": "d14c43639063324fa357d1b82cc6e412408c1c654aa391ef37f1d583663fef8c",
+      "voucherRecordHash": "d14c43639063324fa357d1b82cc6e412408c1c654aa391ef37f1d583663fef8c"
+    },
+    {
+      "sequence": 31,
+      "chargeId": "offline-charge-30",
+      "acceptedAt": "2026-10-07T12:05:15.556Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "31000",
+      "status": "authorized",
+      "payloadHash": "a85632472f68111f3df082867211d8d9bdf35f474632651e01a1a9ce262c2900",
+      "voucherRecordHash": "a85632472f68111f3df082867211d8d9bdf35f474632651e01a1a9ce262c2900"
+    },
+    {
+      "sequence": 32,
+      "chargeId": "offline-charge-31",
+      "acceptedAt": "2026-10-07T12:05:15.564Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "32000",
+      "status": "authorized",
+      "payloadHash": "ab672ed8e03630c7b4369753b090f01a4251f2b6f0bcecb139ed78fdb74a62d8",
+      "voucherRecordHash": "ab672ed8e03630c7b4369753b090f01a4251f2b6f0bcecb139ed78fdb74a62d8"
+    },
+    {
+      "sequence": 33,
+      "chargeId": "offline-charge-32",
+      "acceptedAt": "2026-10-07T12:05:15.573Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "33000",
+      "status": "authorized",
+      "payloadHash": "f49840b518cf2fbfba20c31c37749c925ddf2c4356b2acee4aa71a34fbcc7b3b",
+      "voucherRecordHash": "f49840b518cf2fbfba20c31c37749c925ddf2c4356b2acee4aa71a34fbcc7b3b"
+    },
+    {
+      "sequence": 34,
+      "chargeId": "offline-charge-33",
+      "acceptedAt": "2026-10-07T12:05:15.586Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "34000",
+      "status": "authorized",
+      "payloadHash": "11285c1c034f341d3fd6d40ca061fb59b77bbfa71021d175ec373e057e663ceb",
+      "voucherRecordHash": "11285c1c034f341d3fd6d40ca061fb59b77bbfa71021d175ec373e057e663ceb"
+    },
+    {
+      "sequence": 35,
+      "chargeId": "offline-charge-34",
+      "acceptedAt": "2026-10-07T12:05:15.595Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "35000",
+      "status": "authorized",
+      "payloadHash": "9ff72193e46c9216a19114f6e87377157c548373371fe7d705c1745d0a3dac36",
+      "voucherRecordHash": "9ff72193e46c9216a19114f6e87377157c548373371fe7d705c1745d0a3dac36"
+    },
+    {
+      "sequence": 36,
+      "chargeId": "offline-charge-35",
+      "acceptedAt": "2026-10-07T12:05:15.604Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "36000",
+      "status": "authorized",
+      "payloadHash": "8eada30d748d2adabd3b27bd6509bdf4ad383b30e59c75842dad8c97dd7be352",
+      "voucherRecordHash": "8eada30d748d2adabd3b27bd6509bdf4ad383b30e59c75842dad8c97dd7be352"
+    },
+    {
+      "sequence": 37,
+      "chargeId": "offline-charge-36",
+      "acceptedAt": "2026-10-07T12:05:15.614Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "37000",
+      "status": "authorized",
+      "payloadHash": "92570fcefeba874496a28fc37ffcc374fb436fd147070615dd083f2318f4bbac",
+      "voucherRecordHash": "92570fcefeba874496a28fc37ffcc374fb436fd147070615dd083f2318f4bbac"
+    },
+    {
+      "sequence": 38,
+      "chargeId": "offline-charge-37",
+      "acceptedAt": "2026-10-07T12:05:15.625Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "38000",
+      "status": "authorized",
+      "payloadHash": "75d0eec96a671d3d67100e226b641e5ad7bd959d0d0b8a18362e907d36de2b6e",
+      "voucherRecordHash": "75d0eec96a671d3d67100e226b641e5ad7bd959d0d0b8a18362e907d36de2b6e"
+    },
+    {
+      "sequence": 39,
+      "chargeId": "offline-charge-38",
+      "acceptedAt": "2026-10-07T12:05:15.635Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "39000",
+      "status": "authorized",
+      "payloadHash": "cf5fa2e8e5afdce22eb425ba186c3aa9d1fe44ae92a073b590ad8bcf9290f2c9",
+      "voucherRecordHash": "cf5fa2e8e5afdce22eb425ba186c3aa9d1fe44ae92a073b590ad8bcf9290f2c9"
+    },
+    {
+      "sequence": 40,
+      "chargeId": "offline-charge-39",
+      "acceptedAt": "2026-10-07T12:05:15.646Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "40000",
+      "status": "authorized",
+      "payloadHash": "49b3dbf6f62f7fa3831af923b1895700c5b7542d1d3210c9751f5803ca2105ba",
+      "voucherRecordHash": "49b3dbf6f62f7fa3831af923b1895700c5b7542d1d3210c9751f5803ca2105ba"
+    },
+    {
+      "sequence": 41,
+      "chargeId": "offline-charge-40",
+      "acceptedAt": "2026-10-07T12:05:15.659Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "41000",
+      "status": "authorized",
+      "payloadHash": "8992dffd0cbf1d6c3a3e52fd080e3174c941088806847c8747e7df9e7ade260e",
+      "voucherRecordHash": "8992dffd0cbf1d6c3a3e52fd080e3174c941088806847c8747e7df9e7ade260e"
+    },
+    {
+      "sequence": 42,
+      "chargeId": "offline-charge-41",
+      "acceptedAt": "2026-10-07T12:05:15.675Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "42000",
+      "status": "authorized",
+      "payloadHash": "7d0a66f00af918653ce0ff071c7ee39e1462178b2323ea79b0e80243092cad26",
+      "voucherRecordHash": "7d0a66f00af918653ce0ff071c7ee39e1462178b2323ea79b0e80243092cad26"
+    },
+    {
+      "sequence": 43,
+      "chargeId": "offline-charge-42",
+      "acceptedAt": "2026-10-07T12:05:15.688Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "43000",
+      "status": "authorized",
+      "payloadHash": "9e0df48319e555966d329a0e1d6fa7a1801b9d7ed53363e4fdaf485ec7a4ac7f",
+      "voucherRecordHash": "9e0df48319e555966d329a0e1d6fa7a1801b9d7ed53363e4fdaf485ec7a4ac7f"
+    },
+    {
+      "sequence": 44,
+      "chargeId": "offline-charge-43",
+      "acceptedAt": "2026-10-07T12:05:15.701Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "44000",
+      "status": "authorized",
+      "payloadHash": "9bedabeb7ed77f78b48a525edcb9d6c518bdc75dbb2ae0779856734565490937",
+      "voucherRecordHash": "9bedabeb7ed77f78b48a525edcb9d6c518bdc75dbb2ae0779856734565490937"
+    },
+    {
+      "sequence": 45,
+      "chargeId": "offline-charge-44",
+      "acceptedAt": "2026-10-07T12:05:15.716Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "45000",
+      "status": "authorized",
+      "payloadHash": "851972441a20b62c7dfd0dc83c48c18d976e37964f66165343931d1f5ecd08ad",
+      "voucherRecordHash": "851972441a20b62c7dfd0dc83c48c18d976e37964f66165343931d1f5ecd08ad"
+    },
+    {
+      "sequence": 46,
+      "chargeId": "offline-charge-45",
+      "acceptedAt": "2026-10-07T12:05:15.737Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "46000",
+      "status": "authorized",
+      "payloadHash": "c8881c71b92d945b68a36a214c1a1b8052cf155a77c26e09951ace6fb930914e",
+      "voucherRecordHash": "c8881c71b92d945b68a36a214c1a1b8052cf155a77c26e09951ace6fb930914e"
+    },
+    {
+      "sequence": 47,
+      "chargeId": "offline-charge-46",
+      "acceptedAt": "2026-10-07T12:05:15.749Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "47000",
+      "status": "authorized",
+      "payloadHash": "4cb347eb617d9d8f8c92e75dd5c2195fef03267a99e879e07d5dadb53560005a",
+      "voucherRecordHash": "4cb347eb617d9d8f8c92e75dd5c2195fef03267a99e879e07d5dadb53560005a"
+    },
+    {
+      "sequence": 48,
+      "chargeId": "offline-charge-47",
+      "acceptedAt": "2026-10-07T12:05:15.762Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "48000",
+      "status": "authorized",
+      "payloadHash": "d815f6cb47bf10afdcc9245bc0cc21a1bcf8c04569f12decdcd7373990d06cba",
+      "voucherRecordHash": "d815f6cb47bf10afdcc9245bc0cc21a1bcf8c04569f12decdcd7373990d06cba"
+    },
+    {
+      "sequence": 49,
+      "chargeId": "offline-charge-48",
+      "acceptedAt": "2026-10-07T12:05:15.774Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "49000",
+      "status": "authorized",
+      "payloadHash": "43ac5f5d18d55c437539286cca42f81a72bbb5ac9f5b40298ce476bc264cc92a",
+      "voucherRecordHash": "43ac5f5d18d55c437539286cca42f81a72bbb5ac9f5b40298ce476bc264cc92a"
+    },
+    {
+      "sequence": 50,
+      "chargeId": "offline-charge-49",
+      "acceptedAt": "2026-10-07T12:05:15.790Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "50000",
+      "status": "authorized",
+      "payloadHash": "c4aefa833e17de674b2e672ea259382ade403ec73126796bdc9f495a060ef251",
+      "voucherRecordHash": "c4aefa833e17de674b2e672ea259382ade403ec73126796bdc9f495a060ef251"
+    },
+    {
+      "sequence": 51,
+      "chargeId": "offline-charge-50",
+      "acceptedAt": "2026-10-07T12:05:15.815Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "51000",
+      "status": "authorized",
+      "payloadHash": "5bd96140072f95b17d1efd3f7df6009974b51bfad68dc6a4629db0e02052ca46",
+      "voucherRecordHash": "5bd96140072f95b17d1efd3f7df6009974b51bfad68dc6a4629db0e02052ca46"
+    },
+    {
+      "sequence": 52,
+      "chargeId": "offline-charge-51",
+      "acceptedAt": "2026-10-07T12:05:15.829Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "52000",
+      "status": "authorized",
+      "payloadHash": "7966d325b5d61024388d44fcafd27724561238452c046b4089f557f6ad8bce2f",
+      "voucherRecordHash": "7966d325b5d61024388d44fcafd27724561238452c046b4089f557f6ad8bce2f"
+    },
+    {
+      "sequence": 53,
+      "chargeId": "offline-charge-52",
+      "acceptedAt": "2026-10-07T12:05:15.843Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "53000",
+      "status": "authorized",
+      "payloadHash": "f8c7bb400f13bde35a635ce448c47824417acb63773f8b26e63d4ccdd8d503af",
+      "voucherRecordHash": "f8c7bb400f13bde35a635ce448c47824417acb63773f8b26e63d4ccdd8d503af"
+    },
+    {
+      "sequence": 54,
+      "chargeId": "offline-charge-53",
+      "acceptedAt": "2026-10-07T12:05:15.860Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "54000",
+      "status": "authorized",
+      "payloadHash": "b23215b55e8019952199bf632d554d1e527b182376fa32c0b160bde7db2d1a14",
+      "voucherRecordHash": "b23215b55e8019952199bf632d554d1e527b182376fa32c0b160bde7db2d1a14"
+    },
+    {
+      "sequence": 55,
+      "chargeId": "offline-charge-54",
+      "acceptedAt": "2026-10-07T12:05:15.878Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "55000",
+      "status": "authorized",
+      "payloadHash": "2381520b44a9e5593931f090a65f6f5bcb563ab434137f74a88b7d31cdce453c",
+      "voucherRecordHash": "2381520b44a9e5593931f090a65f6f5bcb563ab434137f74a88b7d31cdce453c"
+    },
+    {
+      "sequence": 56,
+      "chargeId": "offline-charge-55",
+      "acceptedAt": "2026-10-07T12:05:15.895Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "56000",
+      "status": "authorized",
+      "payloadHash": "a5607ec76acda5b0aa276c4807c8f732c81e439ea550d9080cecc205ab58b9a0",
+      "voucherRecordHash": "a5607ec76acda5b0aa276c4807c8f732c81e439ea550d9080cecc205ab58b9a0"
+    },
+    {
+      "sequence": 57,
+      "chargeId": "offline-charge-56",
+      "acceptedAt": "2026-10-07T12:05:15.910Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "57000",
+      "status": "authorized",
+      "payloadHash": "83fd8e3d85667ad71806f84c10b099743645f4ff181c2809fc4ae64a58de28fd",
+      "voucherRecordHash": "83fd8e3d85667ad71806f84c10b099743645f4ff181c2809fc4ae64a58de28fd"
+    },
+    {
+      "sequence": 58,
+      "chargeId": "offline-charge-57",
+      "acceptedAt": "2026-10-07T12:05:15.925Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "58000",
+      "status": "authorized",
+      "payloadHash": "c9b57afc1bd5d58fe9dd9f515f1927463ddec018c6a7ea8131137d9e75da7dbc",
+      "voucherRecordHash": "c9b57afc1bd5d58fe9dd9f515f1927463ddec018c6a7ea8131137d9e75da7dbc"
+    },
+    {
+      "sequence": 59,
+      "chargeId": "offline-charge-58",
+      "acceptedAt": "2026-10-07T12:05:15.941Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "59000",
+      "status": "authorized",
+      "payloadHash": "4a473e8a76f09938c2b14a46239a13527c576ab7b15f3afa6fdf2d404a7a8422",
+      "voucherRecordHash": "4a473e8a76f09938c2b14a46239a13527c576ab7b15f3afa6fdf2d404a7a8422"
+    },
+    {
+      "sequence": 60,
+      "chargeId": "offline-charge-59",
+      "acceptedAt": "2026-10-07T12:05:15.959Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "60000",
+      "status": "authorized",
+      "payloadHash": "02fc4ae8b89d63fa2433700f69cbabc1a891c0e1909a4997d2634c2ae8c58668",
+      "voucherRecordHash": "02fc4ae8b89d63fa2433700f69cbabc1a891c0e1909a4997d2634c2ae8c58668"
+    },
+    {
+      "sequence": 61,
+      "chargeId": "offline-charge-60",
+      "acceptedAt": "2026-10-07T12:05:15.978Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "61000",
+      "status": "authorized",
+      "payloadHash": "f60fb62bba58eb043b6d466f61ad41c19a1199e58102d770e3b2ae60136c9d2b",
+      "voucherRecordHash": "f60fb62bba58eb043b6d466f61ad41c19a1199e58102d770e3b2ae60136c9d2b"
+    },
+    {
+      "sequence": 62,
+      "chargeId": "offline-charge-61",
+      "acceptedAt": "2026-10-07T12:05:15.995Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "62000",
+      "status": "authorized",
+      "payloadHash": "f62f8f34ad797c9e2d86ad1d0b57ebb5acac7d990a975ae9b62bc6e7bdbfaa53",
+      "voucherRecordHash": "f62f8f34ad797c9e2d86ad1d0b57ebb5acac7d990a975ae9b62bc6e7bdbfaa53"
+    },
+    {
+      "sequence": 63,
+      "chargeId": "offline-charge-62",
+      "acceptedAt": "2026-10-07T12:05:16.018Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "63000",
+      "status": "authorized",
+      "payloadHash": "b213ae579c0c8458e8740849f7725b2f9795f695cb9d2dec80e3f6b00bec46b6",
+      "voucherRecordHash": "b213ae579c0c8458e8740849f7725b2f9795f695cb9d2dec80e3f6b00bec46b6"
+    },
+    {
+      "sequence": 64,
+      "chargeId": "offline-charge-63",
+      "acceptedAt": "2026-10-07T12:05:16.050Z",
+      "incrementBaseUnits": "1000",
+      "cumulativeAmountBaseUnits": "64000",
+      "status": "authorized",
+      "payloadHash": "e9f15d2ecabd07a68fb0960a4c07ed86994ef41e5eb9eb3f255554f85796383a",
+      "voucherRecordHash": "e9f15d2ecabd07a68fb0960a4c07ed86994ef41e5eb9eb3f255554f85796383a"
+    }
+  ],
+  "latestVoucher": {
+    "sequence": 64,
+    "cumulativeAmountBaseUnits": "64000",
+    "orderedChargeCommitment": "3a0fd8a2742d940c22001b6f345b8263d65516a0e60d106ea50e55b0e76fd072",
+    "finalVoucherRecordHash": "e9f15d2ecabd07a68fb0960a4c07ed86994ef41e5eb9eb3f255554f85796383a"
+  },
+  "close": {
+    "status": "synthetic-finalized",
+    "closeRecordHash": "284d683434f660fd907b46abe9c4c0e2f8f5c8b0954324258adcdae3962f5668",
+    "depositBaseUnits": "80000",
+    "acceptedBaseUnits": "64000",
+    "authorizedBaseUnits": "64000",
+    "syntheticSettledBaseUnits": "64000",
+    "syntheticRefundBaseUnits": "16000",
+    "actualOnChainTransactions": 0,
+    "actualPayoutBaseUnits": "0"
+  },
+  "counting": "Only the latest cumulative amount is payable. Earlier cumulative values are superseded, not added together."
+}

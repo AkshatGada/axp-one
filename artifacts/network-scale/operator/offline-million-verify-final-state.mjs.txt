@@ -1,0 +1,52 @@
+// Independent read-only verification. No payment transport or signer is constructed.
+import {readFileSync,writeFileSync,statSync} from 'node:fs';
+import {join} from 'node:path';
+import {createHash} from 'node:crypto';
+import {performance} from 'node:perf_hooks';
+import assert from 'node:assert/strict';
+import {SQLitePaymentStore} from '../../axp-one/packages/payments/store.mjs';
+import {hashNetworkRecord,hashNetworkTerms} from '../../axp-one/packages/payments/network-adapter.mjs';
+const startedAt=new Date().toISOString(),start=performance.now(),out=import.meta.dirname;
+let channels=0,vouchers=0,deposit=0n,accepted=0n,settled=0n,refund=0n;
+const files=[],identities=new Set();
+for(let worker=1;worker<=4;worker++)for(const filename of ['closed-channels.sqlite','durable-cohort.sqlite']){
+  const path=join(out,`../offline-voucher-million-root-worker-${worker}`,filename),store=new SQLitePaymentStore(path,{readOnly:true});
+  let fileChannels=0;
+  for(const row of store.db.prepare('SELECT channel_id, body FROM c06_payment_state ORDER BY channel_id').iterate()){
+    const s=JSON.parse(row.body);
+    assert.equal(s.channelId,row.channel_id);assert.ok(!identities.has(s.channelId));identities.add(s.channelId);
+    assert.equal(s.schemaVersion,1);assert.equal(s.phase,'finalized');assert.equal(s.open.status,'finalized');assert.equal(s.close.status,'finalized');
+    assert.equal(s.termsHash,hashNetworkTerms(s.terms));assert.equal(s.intents.length,64);
+    assert.equal(s.terms.depositBaseUnits,'80000');assert.equal(s.terms.chargeCapBaseUnits,'64000');assert.equal(s.acceptedBaseUnits,'64000');assert.equal(s.authorizedBaseUnits,'64000');
+    const chargeIds=new Set(),chargeHashes=[];
+    let cumulative=0n;
+    for(let index=0;index<s.intents.length;index++){
+      const i=s.intents[index],immutable={...i.charge};delete immutable.status;
+      assert.ok(!chargeIds.has(i.charge.id));chargeIds.add(i.charge.id);
+      assert.equal(i.status,'authorized');assert.equal(i.sequence,String(index+1));assert.equal(i.charge.sequence,String(index+1));
+      assert.equal(i.charge.amountBaseUnits,'1000');assert.equal(i.charge.channelId,s.channelId);
+      assert.equal(i.chargeHash,hashNetworkRecord(immutable));chargeHashes.push(i.chargeHash);
+      assert.equal(i.previousAmountBaseUnits,String(cumulative));cumulative+=BigInt(i.charge.amountBaseUnits);
+      assert.equal(i.cumulativeAmountBaseUnits,String(cumulative));assert.equal(i.receipt.cumulativeAmountBaseUnits,String(cumulative));
+      assert.equal(i.receipt.payloadHash,i.payloadHash);assert.equal(i.voucherRecordHash,hashNetworkRecord(i.voucher));
+      vouchers++;
+    }
+    assert.equal(String(cumulative),'64000');assert.equal(s.watermark.sequence,'64');assert.equal(s.watermark.cumulativeAmountBaseUnits,'64000');
+    assert.equal(s.watermark.orderedChargeCommitment,hashNetworkRecord(chargeHashes));assert.equal(s.watermark.finalVoucherHash,s.intents.at(-1).voucherRecordHash);
+    for(const operation of [s.open,s.close]){assert.equal(operation.signedRecordHash,hashNetworkRecord(operation.signed));assert.equal(operation.receipt.txSignature,operation.signed.txSignature);assert.equal(operation.receipt.finality,'finalized');}
+    assert.equal(s.close.receipt.settledBaseUnits,'64000');assert.equal(s.close.receipt.publisherDeltaBaseUnits,'64000');assert.equal(s.close.receipt.refundBaseUnits,'16000');
+    assert.equal(BigInt(s.close.receipt.settledBaseUnits)+BigInt(s.close.receipt.refundBaseUnits),BigInt(s.terms.depositBaseUnits));
+    deposit+=BigInt(s.terms.depositBaseUnits);accepted+=cumulative;settled+=BigInt(s.close.receipt.settledBaseUnits);refund+=BigInt(s.close.receipt.refundBaseUnits);
+    channels++;fileChannels++;
+  }
+  assert.equal(fileChannels,filename==='closed-channels.sqlite'?4096:16);
+  files.push({workerId:`worker-${worker}`,file:filename,channels:fileChannels,bytes:statSync(path).size,synchronous:store.db.prepare('PRAGMA synchronous').get().synchronous,journalMode:store.db.prepare('PRAGMA journal_mode').get().journal_mode});store.close();
+}
+assert.equal(channels,16448);assert.equal(vouchers,1052672);assert.equal(deposit,settled+refund);assert.equal(accepted,settled);
+const result={schemaVersion:'axp.offline-persisted-state-verification.v1',execution:'offline-synthetic-fixture',status:'passed',startedAt,completedAt:new Date().toISOString(),elapsedMs:performance.now()-start,runtime:process.version,independentProcess:true,readOnly:true,
+  verifierSourceHash:createHash('sha256').update(readFileSync(import.meta.filename)).digest('hex'),channels,vouchers,uniqueChannelIdentities:identities.size,
+  checks:['authorized intent sequences and cumulative amounts','immutable charge hashes','voucher record hashes','ordered charge commitment','frozen final voucher hash','stable inert mock transaction identity','mock finalized payout/refund conservation'],
+  accounting:{unit:'fixture base units; no real tokens',depositBaseUnits:String(deposit),acceptedBaseUnits:String(accepted),syntheticSettledBaseUnits:String(settled),syntheticRefundBaseUnits:String(refund)},
+  operations:{providerCalls:0,rpcCalls:0,paymentTransportCalls:0,cryptographicSignatures:0,nativeBroadcasts:0},files,
+  limitation:'This checks persisted fixture records and SHA-256 identities. It does not authenticate the inert mock signatures or native chain finality.'};
+writeFileSync(join(out,'persisted-state-verification.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({status:'passed',channels,vouchers,elapsedMs:result.elapsedMs,operations:result.operations}));

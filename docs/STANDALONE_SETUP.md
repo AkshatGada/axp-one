@@ -1,5 +1,10 @@
 # Standalone repository setup
 
+For the current hosted product, open https://axp.one; no local installation is needed.
+See [pages.md](../pages.md) and [the product runbook](product/PRODUCT_DEMO.md).
+This guide covers development and preserved replay; old source paths are historical.
+
+
 All AXP application code, fonts/design assets, contracts, screened wallet
 evidence, V1–V3 public results, replay bundles and pinned native payment source
 belong in this repository. No runtime module imports another local project.
@@ -8,7 +13,7 @@ Old absolute paths in research/provenance documents describe history, not setup.
 ## 1. Present the recorded demonstration
 
 Use Node 22.18 or newer (the `engines` field in `package.json`: native SQLite plus
-TypeScript type stripping); Node 25.5 is the tested runtime. From the repository root:
+TypeScript type stripping); the current release was verified with Node 24.19. From the repository root:
 
 ```sh
 npm run demo:v3:replay
@@ -33,8 +38,8 @@ pnpm --filter @axp/product-ui dev
 ```
 
 They use this repository's `design-system` workspace. No personal-site or old
-AXP checkout is required. Their final design/build acceptance remains owned by
-the frontend specialist; consolidation does not certify unfinished frontend work.
+AXP checkout is required. The dashboard, chat and SDK guide are implemented in the product workspace.
+The site build publishes their root routes separately from the `/mvp/` explorer.
 
 ## 3. Configure optional actual model use
 
@@ -129,5 +134,6 @@ maintenance/export scripts can read the authorized original corpus, but ordinary
 V3 retrieval, laboratory and replay do not depend on that database. No clone,
 source writes, recollection or embedding generation is part of standalone setup.
 
-No push, deployment, new model call, transaction or wallet generation is
-authorized or performed by consolidation.
+Installation and replay do not themselves authorize paid calls, native signing,
+wallet generation, deployment or replacement of funded state. Follow the operator
+runbooks and the user’s current explicit authorization.

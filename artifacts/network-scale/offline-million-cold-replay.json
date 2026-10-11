@@ -1,0 +1,1053 @@
+{
+  "schemaVersion": "axp.offline-cold-replay-summary.v1",
+  "execution": "offline-synthetic-fixture",
+  "status": "passed",
+  "scope": "48 sampled persisted channels per worker, 192 total; not every persisted channel",
+  "channels": 192,
+  "voucherReplays": 384,
+  "closeReplays": 192,
+  "operations": {
+    "providerCalls": 0,
+    "paymentTransportCalls": 0,
+    "cryptographicSignatures": 0,
+    "nativeBroadcasts": 0
+  },
+  "workers": [
+    {
+      "workerId": "worker-1",
+      "recordSHA256": "0e1a21a198715f62f1f5ecca99b787496e5cfcf325a7e7601286fc533350122e",
+      "schemaVersion": "axp.offline-cold-replay.v1",
+      "execution": "offline-synthetic-fixture",
+      "status": "passed",
+      "observedAt": "2026-10-07T13:26:10.627Z",
+      "runtime": "v24.19.0",
+      "independentProcess": true,
+      "channels": 48,
+      "voucherReplays": 96,
+      "closeReplays": 48,
+      "transportCalls": 0,
+      "providerCalls": 0,
+      "cryptographicSignatures": 0,
+      "nativeBroadcasts": 0,
+      "sampled": [
+        {
+          "channelId": "offline-worker-1-memory-channel-0",
+          "closeHash": "284d683434f660fd907b46abe9c4c0e2f8f5c8b0954324258adcdae3962f5668",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-1112",
+          "closeHash": "566cee47412934787d9611f146f4e4da1c51f45ec2510b9437ec355b5e296eb6",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-1228",
+          "closeHash": "8a5064545328050ae2131b863cb6cd8e6633c824f6b6408a34e99e50f6bfe505",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-1343",
+          "closeHash": "bedf6a14873c6e0cc9f09bebf348e0eb7d34e3ad8189f42777000b0275dff145",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-1459",
+          "closeHash": "e3424cbe7a25314201c436f2dd5652c433075733237f370288b84c6feccbccd7",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-1574",
+          "closeHash": "cc31899c43a667d7224cd85655846a4360c01f4c04e1c7d61d4b8a3eb2daace0",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-169",
+          "closeHash": "cfec2d945fa3a0ab329000f2caf611cb4afb05d8423eb164068c25ef5badd8df",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-1804",
+          "closeHash": "d67f0faa64898a38d284d9b21c452085a5a6854d92cd1abcb87290d37b777cfd",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-192",
+          "closeHash": "3a057b95965a67527d9b7547deb314df492c524ef9acf147a55b0bbb0f7c295a",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-2034",
+          "closeHash": "744e3efa26e3186ad27b16aa6ebbcb19c2060a367a0073b0a0624855ffc6624a",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-215",
+          "closeHash": "08139536b408a8e8c6f17c6037b1b5d745bcca99d295852ab996d083d6bdcdbd",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-2265",
+          "closeHash": "66de46f6a091fd364d02758f12985f9ba3ceff169ad5cfefec14ba5158d21b2e",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-2380",
+          "closeHash": "517109f6e6ed4119fcdbbbf4f88f7eec4dc261647e26b16f7d33f1cd3f232884",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-2496",
+          "closeHash": "097f19f0d7402e4392ca3522cf73179df71d4c4e82da9ff5720a194af2249cf7",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-2610",
+          "closeHash": "f80446dc7ec08354b5731023fa388d3e935ba55785b97d94b607ec6f05ad375f",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-2726",
+          "closeHash": "a9304417ae6b0fe1b45de5f031124cea5f5e44026eee92abca0d02c6e1a70fa7",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-2841",
+          "closeHash": "f82475ad3e08f747f25e9055ea9ab452d69b3aae9942315533ff903bebc456d5",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-2957",
+          "closeHash": "cae01711861830571358d279f98170fad5d5512a01ab46fef3769a5c6ba9cb32",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-3071",
+          "closeHash": "0e17e2effc6986fd866c03c775e225adc0b151ddf0f36cb73903e2759a477c7f",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-3187",
+          "closeHash": "443c8fe90c222b345505f9f7c34fcd58765b1adb3a30e4782d168e9c7844d957",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-3301",
+          "closeHash": "ac5a4b5fa68ea927a1806339c47ba00152343c237e513fb660753f09d542c786",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-3417",
+          "closeHash": "61796be015e06ccb8161319b57f96dd2572b75a530e97898c98cb8beac598aa3",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-3532",
+          "closeHash": "f32a3e5d1afe8536a0291573c64b0e68b20eff02825f24e576b73698889c9190",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-3648",
+          "closeHash": "d259691efbf492e024deb889270eda65a0f79d2fde950d0fbc6b08d479b431b7",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-3763",
+          "closeHash": "d47e74a2d81db7ea285c4766efee39f9b9137dc9bb63b189b280a27fafec866d",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-3879",
+          "closeHash": "18b95b75d49144415a50b7ed3695c4b2389f5e0abd13672c2d22c1019754eed6",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-3994",
+          "closeHash": "a801415c3e887a3cb2dea9dd13dc33e915abb76e066564b950e4b82bbca0c936",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-422",
+          "closeHash": "e43400f72c139c2ee30d30b13b01e19958d0595b0c0732467f97df4ca5dd6593",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-538",
+          "closeHash": "ceb213983fdebd8db82cc482cc871e368186d96c03e6e5fcfcde66f6194f7368",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-653",
+          "closeHash": "e07291c824623ce12846c42edf81b9c37cec9b3c26999d0465345b8089d0039c",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-769",
+          "closeHash": "096dbf2a51a485ef1e6b865fa2809eab2cb1fc292b77a1a632db0c4acc668ed6",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-memory-channel-884",
+          "closeHash": "3fcbb9f456cc4dab79bfe9f39a0c3c662b1ce559f6d035ce65c10aa447b950ab",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-0",
+          "closeHash": "d8dbbf3ec1957824e4048ddfa75e268de318a0dda2047ddce67e1918a43dbefe",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-1",
+          "closeHash": "84dd465aab9d0224df6c61fc7e7c888d2ac53525f9ea54cab739ebafd804e11f",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-10",
+          "closeHash": "f44f0e26d77227bdae06b6a4670d34c5258a663d0735854d6ab45838750ec9bc",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-11",
+          "closeHash": "d09213c72abebde28dd91e63db7d3547a5a9d7931b6e63035ffd80f8c5254708",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-12",
+          "closeHash": "e8409cb747522fc1eb03a4c3006f654c4e2cfa6c5893ba001511ae21b78af7d6",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-13",
+          "closeHash": "028c9e3444eb82313538d91919776c6fba00789d883626e1291b01205e7e2df1",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-14",
+          "closeHash": "0b5609d6ee37da41b59f1dee07ec6bfea79765acce32e0bc5834977266e7e15f",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-15",
+          "closeHash": "79ffe6a6b3e9a30b814131eea7cf57a58e15ef27d99ad53e5b2f7ca7cbb368e0",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-2",
+          "closeHash": "a8f6299b22cc04c209bb6e8c31ed10e518b154de72aa10e150d02261a6ffb8e5",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-3",
+          "closeHash": "0b9b5cba3e10fbf0c95bf9a8fe76c34f4a1445554361c736f62caf929f3faad3",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-4",
+          "closeHash": "5618f0a49b522a208d89dd1b65f857e6a1a71f7dd6332f13bc79b2f27b87ea50",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-5",
+          "closeHash": "c87ab708abaf93a6845075d5855a17035b5213d23fec1a4a090e2c6ad0a6d13b",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-6",
+          "closeHash": "10042d9452af45e9de5be9ac71b814722ead8886be077e7be0958ca9d2d8dded",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-7",
+          "closeHash": "4bce3cc306c8a1b5f7c93efa5dfba855d4dff761d0ad82559c56d7712ad3eb00",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-8",
+          "closeHash": "9d633b8b132aea116cff31a0cd58702cdddf363c589329bd4316c0afcd84d2d8",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-1-durable-channel-9",
+          "closeHash": "745809537531825dfd4866c75b3c2d098d3c5a0af3c1c315a042cbdeda2c83fb",
+          "authorizedBaseUnits": "64000"
+        }
+      ]
+    },
+    {
+      "workerId": "worker-2",
+      "recordSHA256": "6061c1cb676d8165e4a1063aba9095d5eb0516e6d1bb0ec01a99a00815a22cab",
+      "schemaVersion": "axp.offline-cold-replay.v1",
+      "execution": "offline-synthetic-fixture",
+      "status": "passed",
+      "observedAt": "2026-10-07T13:26:10.851Z",
+      "runtime": "v24.19.0",
+      "independentProcess": true,
+      "channels": 48,
+      "voucherReplays": 96,
+      "closeReplays": 48,
+      "transportCalls": 0,
+      "providerCalls": 0,
+      "cryptographicSignatures": 0,
+      "nativeBroadcasts": 0,
+      "sampled": [
+        {
+          "channelId": "offline-worker-2-memory-channel-0",
+          "closeHash": "b90035d7f54758e4a18581b0aed9cbc76fabc8d1727d98cec5abc441d724955e",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-1112",
+          "closeHash": "579d2f0f956f6760531ff8189383199787d2755a84635195340822f8ca42ca0c",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-1228",
+          "closeHash": "2ddf2535add97565477ea9ef03452e195c60bdf992a55bd496c56f79d13efa37",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-1343",
+          "closeHash": "9bfa3d56bdcb943e6caa31dc2d35ac018f2070e0452a136d65d20a532cf71396",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-1459",
+          "closeHash": "b23a4e3b171743b21c53bfba1f44a2f2ab7d58ed698e18548bb877069a63ad8c",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-1574",
+          "closeHash": "f519e4f4ed3d8fca9cc0d0d03faa83dd8256d3b0c4f7a54fac93c8ea0754d457",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-169",
+          "closeHash": "c94e4f3512984154b59604cc24cadeea2e91e06752c802218ed6bbe26d3da5d0",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-1804",
+          "closeHash": "472035b4f74a6a408664c2bb54bc5c3d9d9a56e39d2f38d467f93122f37bfc0a",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-192",
+          "closeHash": "a9bd05a6d063c86717e0979951cd11c86b718c412683837acf3d07808182592e",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-2034",
+          "closeHash": "210d923330eafb0f6705c87156b273c0061e5607b9aa0aec492871f0a8b8c1a0",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-215",
+          "closeHash": "78b99967588bb5f299ee360c1563115b3604594694a09f414302a081bdc36cfd",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-2265",
+          "closeHash": "377131645a6b8111454cb09b989c0356198c3e365efa5a35ff8fae11a2ec8159",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-2380",
+          "closeHash": "b8aa3bc005a9bb4ab699a6f7d8568c4a5caf8de8a47a18b0428cfa3cc4905c19",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-2496",
+          "closeHash": "def7f7f5870b341a09077d7c8d09f266a9d4523c318caf73fbc4007fe12437d4",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-2610",
+          "closeHash": "00a4a7166e18e5e05b5ecb4a80e2c0b0edba8bea35c683ee54ea82c0599490c4",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-2726",
+          "closeHash": "9023c6b5df10db8feeb2be1abb225c25360a0c8d99eb0d48e9ea240ce1bdbed6",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-2841",
+          "closeHash": "25d1a5c15f941dc72765c71792a7b1afeb704bc9eab41fa5639fc9bf04f20826",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-2957",
+          "closeHash": "e2e5433e1e2d16a5ea003d2ab13ffa9094c4c8156add2dfb32e635d15c45ce61",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-3071",
+          "closeHash": "8b0710dbe437527336a5e182dbc22528e7eea4df2744aee42a82f630d4618e02",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-3187",
+          "closeHash": "20944be9ec13f0e324cf84eb75120330a4b46234305fa614ac6e133069d9bd35",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-3301",
+          "closeHash": "093d6c06bb142b3d34c19d265e890e3ab97d11be3fc1796a0b1ba1aa624ec9c1",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-3417",
+          "closeHash": "214927f2cf777d42c2b4751579cc571e30d99cedb6741ea816a5e07ee0c072a8",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-3532",
+          "closeHash": "8dff928e0c749337be0eea85891b8a00fa5f4d176de8d064e7bf7a7bc6d4f109",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-3648",
+          "closeHash": "0b2fb62b69bf54eb599e603097dcdc6fb9ef2db8034becbc3c1ea17fd97dff14",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-3763",
+          "closeHash": "52cef63e439e999e33f4fe3839e69d0a60f10d803053f021da13ef436f6ebbfd",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-3879",
+          "closeHash": "7c81b1d352134b67bd4726b805a51b204b01522dfd9484d8702c68536c7e9d80",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-3994",
+          "closeHash": "7ed3ebeb6160f2f1eb4a06f72c0e0aacebeaba4694e3c9cfdaebd78f5f76cd13",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-422",
+          "closeHash": "ec0be120b2ce4d3b71f4afc08aafb3af7d45dff045a9e53cc77df9618b14e3e3",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-538",
+          "closeHash": "174b41d8cc0ebe4eab4050d53614bec4ce33373217743f3af8164035d452130d",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-653",
+          "closeHash": "c9622ffcb6c6cfb105370074e66cf08bea590e28476a2b6493cf44e63e144b09",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-769",
+          "closeHash": "2b38519c418d08283ba7c90ab51c2cfa35a88cc176298a46f00881342d89d3c5",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-memory-channel-884",
+          "closeHash": "e2bdb4fca71aef634a7205709af1132fac0e44f7f623970a822874b8315a4d25",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-0",
+          "closeHash": "8c4c61e5de088d7b27f11604720912a8aee8f195a11063724323957281db418e",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-1",
+          "closeHash": "15c624159dce01cb2f1edabc6bd18e9b84065b93d40fe0fe14329f942c8830fa",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-10",
+          "closeHash": "cbe4aa843abd4cf05bd40148bedd343aa6beffdc8b341346156594b58a2a5691",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-11",
+          "closeHash": "7cb9cc803129de12cd1bb9eed6ce5600dba13e2e7ce8272ed1ad6c4a50829d11",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-12",
+          "closeHash": "151c3827f49d4e6a2f836292b181e540089014a9968810a2f002531a69b218d4",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-13",
+          "closeHash": "c6b233e72dd76d2cf2cb811a22d0cc505a17b6e77108a715059b158c18378f1d",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-14",
+          "closeHash": "832f02f9ececca7d04472325bfc9c98d71bfa7df5cfa39ff6e8056f2f88de46b",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-15",
+          "closeHash": "9206134a6a4ad49bdc76abcb1cc69cf11128fd56131de2ce37fa24748e7bcbc3",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-2",
+          "closeHash": "10c80ef771196d07d68853bbcc8993e505dc229fee17b7e7b718b3705b06f475",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-3",
+          "closeHash": "5bab4b325a15357edabef703537b131ff2241ac3fde0ca0d322fabf881036a6c",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-4",
+          "closeHash": "b6b469c63c4d45a17af1819b60f8fc2df72449c99e2fb5ab0d935f3181576854",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-5",
+          "closeHash": "657769161144d953ecee1a56936e6845b7904dbfa54a5a9f56a58277ccbbd1e4",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-6",
+          "closeHash": "df133a68abff64f30885887500cc04ae96a0aafc5da2e2a8a43cfec67cb0da87",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-7",
+          "closeHash": "3d69c86d45f2fada029d7df10f490926435418cd541d047deed8989099b1dfbe",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-8",
+          "closeHash": "058e17f1cd31f544b05b038a98a1349ab890bbbaec69f8901cb8c741e4bfe125",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-2-durable-channel-9",
+          "closeHash": "94465bf5fb65ee9b4fab35a854f8addb09868661f739142c6f9c626f39b9118e",
+          "authorizedBaseUnits": "64000"
+        }
+      ]
+    },
+    {
+      "workerId": "worker-3",
+      "recordSHA256": "f75053432ba7ed4be2599345aa7fc4618b9ef237efb016edd54d83566814754a",
+      "schemaVersion": "axp.offline-cold-replay.v1",
+      "execution": "offline-synthetic-fixture",
+      "status": "passed",
+      "observedAt": "2026-10-07T13:26:11.070Z",
+      "runtime": "v24.19.0",
+      "independentProcess": true,
+      "channels": 48,
+      "voucherReplays": 96,
+      "closeReplays": 48,
+      "transportCalls": 0,
+      "providerCalls": 0,
+      "cryptographicSignatures": 0,
+      "nativeBroadcasts": 0,
+      "sampled": [
+        {
+          "channelId": "offline-worker-3-memory-channel-0",
+          "closeHash": "42b74d9c25e08eb7fc27eb2765dc9544e56608597ce7934976d8608d5e8ebfa4",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-1112",
+          "closeHash": "a5a7e47ccec841e4b47434ae8bb7b625b693b4c0afe517292d62669df27312d3",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-1228",
+          "closeHash": "6a989170a7393512ec6f385d64fde737f5f6001d46e3ba4f86542dca82b4bfc0",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-1343",
+          "closeHash": "3f894c55eff70a47984b6e042e7bcd677d9064d14ddfd031e5f936dddbc205bd",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-1459",
+          "closeHash": "c7fa55528497f05ad785915330f724e0aa16639e1afc6555c931c5870f18ff74",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-1574",
+          "closeHash": "0602f3cbd3b7436123319cfb1e0c6fbf7a8b65d636b8a3676774d75c578a17cb",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-169",
+          "closeHash": "805df49186a9548c1c478670c4ab44e55058158078f0ce27d2adb1dd57dfa547",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-1804",
+          "closeHash": "3108de5cf6f8a28d4262a2005045343faa43ff1f5fa8e61b899025c1ea7822d7",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-192",
+          "closeHash": "0b430587087c91dbfcdbfcbc89bf8435afaac0a49d789e5a6d0d8daf1ca5f8da",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-2034",
+          "closeHash": "a498b5046fa997dd777a6b7e45a009a299e29c188da6b0ce286869b465617481",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-215",
+          "closeHash": "d053e8f5f760317650f8b6d47411380d2e613c92cfb3bc37b59ddf1b35cf284a",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-2265",
+          "closeHash": "a5b55c44329c419f0833e54b45dc998dcd69de7ac2cf7342bc69d6ca4a31a95c",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-2380",
+          "closeHash": "f6d6e235a7d29fcccfd8dc956f1e91b9d13f5bf46d05c817df18fa8d8d712098",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-2496",
+          "closeHash": "3b97e65b285f93eef9fba0fec736843749edd8590660152626775088b5dacc89",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-2610",
+          "closeHash": "8fcec5283cdce33d69029aa7987c47b2f6fdee7a3027f50382ff80a9a12761d3",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-2726",
+          "closeHash": "10972340e8e3df30d9b47e21107423ad6a81ffce2dd9ddd385d6e23a63be893d",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-2841",
+          "closeHash": "c5ffdde471c9059e358e7cc7f46cb69481adde23d15c051c162989b478c2abb6",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-2957",
+          "closeHash": "31e8996dd6cf3a177759cd19e57f51ec8e7024212b0e045c610a5927429effdb",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-3071",
+          "closeHash": "7eb7bfc613e26a32de601488a035d5e5bae828946d36f06bd0a4e661f06d041e",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-3187",
+          "closeHash": "00a427d66f2bb6298b1a5375131bfd415e098eba426c80a04688eacbd166230d",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-3301",
+          "closeHash": "4c44fa78ff1d5e651397088a0861aeedbf70492345607d939fe9290c59c27698",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-3417",
+          "closeHash": "a5e6c1aa22f3006ff35503f9b35ed81ef857d88443d7d3dda3b6448600a40cbe",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-3532",
+          "closeHash": "05f13bf8e192a87a53ced55b4972e46e9dc0635e2246a3423b8e9b267dba5288",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-3648",
+          "closeHash": "892a2695c06d0df082d79f0d0651e4ac9d834f6eac853ce4afe5a0a2a9f1cf77",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-3763",
+          "closeHash": "05886108fcd8f74761614ade9b378a41200c01c030a3e373aa5cc5a10bac1616",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-3879",
+          "closeHash": "4a9592684de1b2a1e79620671d67f989e3ad177bfa54b19871b9f8b533297972",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-3994",
+          "closeHash": "ce6a9f4aa4350bfb528d67f31e74863a9a363e4e2f1bbb91c3e850e624d89be1",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-422",
+          "closeHash": "24ad6742a2c85596ccc369e92d11a54f0041e15fe95aa861e50bf03b3a40cfbf",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-538",
+          "closeHash": "84f0043b2447ee3028c7d70f8857153ace582dade2c865943881bb9594f3a249",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-653",
+          "closeHash": "fd929974b25ac7c85faa2f4a06a70816c2d5dc916cfb89fb3790f18e5208a6e4",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-769",
+          "closeHash": "2381ebd6fd43f4c8bcefd2a0d308051b1693080b144176671fe82b31407241aa",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-memory-channel-884",
+          "closeHash": "f705cf9b66df6ffed2eec049712aa5bf55397ee6265ae1d6bf466c0dea5bd310",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-0",
+          "closeHash": "81c54dcececc463dd089c9a1138eeea92bf97d35fb788955879e01beb1c1d176",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-1",
+          "closeHash": "88d243f63511ddd3ed6d42c810f0df8d251843d57d8575ae9494154a6dae1d27",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-10",
+          "closeHash": "f7a35289a52e0eb4826104d2b2457691742df1a0be200c4d4573f5983ee40b73",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-11",
+          "closeHash": "6d19408920d1b9465e55cca5762ac2d0426c4f751ef06ffb7baff2f7260cec61",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-12",
+          "closeHash": "848e0e418efc36c810cb1ed4adee46b5038dfeb98c3519561bf08ad2f4010764",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-13",
+          "closeHash": "95001cb0fe0fc58633f97889891cd340523b1e42994f1400926c0a9fe209e78c",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-14",
+          "closeHash": "0fb03997733e7e8b86715106e9db1143eaec29ab8d0d15e16f8d83ad9be37d54",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-15",
+          "closeHash": "45c8edf01323a5e0d3c533d4c1fcb3d77788dd5f71272907aeb31752da026ae6",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-2",
+          "closeHash": "bee2cd6bfd15cdf5db6a428042ded1e023f896ad9290292789bfbf3e6dd8d91e",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-3",
+          "closeHash": "be221bc097ab40c607216ffbea0c8bd703ea6f8087aaa49385393b178013818a",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-4",
+          "closeHash": "4f91cb6274903f4d765feaf59b033e99e6865443fb2a781441d27ed6e95cf2ac",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-5",
+          "closeHash": "6d50eea17f0de8bcc9bdfa48ccaf258afd375d4d06b35635170bef22bd739bb8",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-6",
+          "closeHash": "d95ca6d0979e9b08a43a9267ce0559ea9ae468775965acf43221ee5b1701a965",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-7",
+          "closeHash": "9501ea674c1689b6c41e3d84172f7989c572744ab8019d8bed26b062eada74aa",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-8",
+          "closeHash": "8669ebd07e6d48849974044ff52bbdb7e423fe2af5815bf75d5a21d6dd2f5df0",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-3-durable-channel-9",
+          "closeHash": "710605091990e56e18c8a15a48968a278b799d2249a5aa47f786ec6f3895b40c",
+          "authorizedBaseUnits": "64000"
+        }
+      ]
+    },
+    {
+      "workerId": "worker-4",
+      "recordSHA256": "825042fef62e046e8ea313976082b553cce3eea47c3c6afaa2502d8218741775",
+      "schemaVersion": "axp.offline-cold-replay.v1",
+      "execution": "offline-synthetic-fixture",
+      "status": "passed",
+      "observedAt": "2026-10-07T13:26:11.286Z",
+      "runtime": "v24.19.0",
+      "independentProcess": true,
+      "channels": 48,
+      "voucherReplays": 96,
+      "closeReplays": 48,
+      "transportCalls": 0,
+      "providerCalls": 0,
+      "cryptographicSignatures": 0,
+      "nativeBroadcasts": 0,
+      "sampled": [
+        {
+          "channelId": "offline-worker-4-memory-channel-0",
+          "closeHash": "1f6a4688910bcfea21adc13c2de4572d1746911a309f9c8f5f4b1cadf0328b64",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-1112",
+          "closeHash": "5ddbfd4cbeb19d673f17821581310fd43364463b012309f6e2ab8f17b8e72a17",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-1228",
+          "closeHash": "cc939219bae2eeba3f617859b0ce60a9b7f8a6fc8fcde46ee3ffb0b8be2947e6",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-1343",
+          "closeHash": "1169f0a2e87390e695258e03aef9abedc55fb009370f9a951f1ac74e181257cf",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-1459",
+          "closeHash": "63f671b322ac7ea1e252b94c14cdda6ad2378dcb7a626d091edb44bbb816ceb3",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-1574",
+          "closeHash": "b025149ed4b3f7652a6ca317a9610c01bcd53a88dcc0acaf8886032cd8930075",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-169",
+          "closeHash": "5b6180ef703db0d3b527edc01e9e5eba9669dccb7df40b1f47c406ccbbf725f1",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-1804",
+          "closeHash": "b1daaf498704d6a0c02506e7b71beede67eae92af4b01af73c5ca675811b410a",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-192",
+          "closeHash": "2f0f9254dac98335a98870e193d616a6f5c3d25306c62973bca8a9e827d06d8b",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-2034",
+          "closeHash": "a46ac1a46728083f28aae05e50b2905471f459e5dc78a5f3ca92b65dfc144c39",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-215",
+          "closeHash": "7358b597ab969e130093684b2dcd560117eddcab860ba9808fd903666dbfdfd1",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-2265",
+          "closeHash": "d1d102d029bbe433e663943f7afe3a930db0ffffdbb6d3e12caadf1f019fa540",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-2380",
+          "closeHash": "9b6ad71810adbb42006a82f60e8827aa5f774e3dee197805189e6ae11709e683",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-2496",
+          "closeHash": "fb14cd904e3ba661429d1c8e897c5f581db8a32230fb5e2a1e28c8e6f65a7017",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-2610",
+          "closeHash": "45e799c6d34687a48041620a88ab7a76808bbdd5a3a6d65e53fc3bfca7a56c85",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-2726",
+          "closeHash": "ce6d0b07e1adc6a3c4b45fd96375821f5ff47c28b597da3549a7bc05448319ce",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-2841",
+          "closeHash": "ebc19f4d81b8e14e429fa4ea4088d7fa9279a063a4e6776f36862213fd63f82c",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-2957",
+          "closeHash": "e1e57a74ec408ee84a175b8f396e8fddc33e3435fa02d0a96912047eaecd7970",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-3071",
+          "closeHash": "515daff3dea181b89fad37823f04cb71ef6df672a9344224ca5f41d5c4269ee6",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-3187",
+          "closeHash": "126535ca50a1572007b9f764ced79c2c8d57ab9f8b45486c173c5a1aa7fe3e9d",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-3301",
+          "closeHash": "1d0af3d3f18c79670418c25995c6bd3786aa71288ccfc5baf55678a7574bd44f",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-3417",
+          "closeHash": "afe1057ee7772791e54901617f7d78020ee04439bd3e490d0ac7ef9209aaa41b",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-3532",
+          "closeHash": "2997c665a361768ce0f00033cb429121d2627100d661bb31638577a9aa505164",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-3648",
+          "closeHash": "96ae85d06df809ab8db4ee9bc5ea76708acb6893b8a93ff446ff93ab2820b70d",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-3763",
+          "closeHash": "ccaaf95f4991b74629b77f3dc85b6410110b53d5fafc209ef5bd8d0a4180085e",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-3879",
+          "closeHash": "b9b3f705be29e84d5225328d45dc756794f658668365f1df67d61e957f74770e",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-3994",
+          "closeHash": "8d1ec90b6afb15b4b5bf6b77297775cdd2252e2949344116b1804a98532d0e89",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-422",
+          "closeHash": "0f4515a5b31c24682fadfa90ca3304db7ddeea430842c4abe650bd626d1e93af",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-538",
+          "closeHash": "fa2dde2fc7a6704946178fb3183118cc07d8ce4fb6aac175b8ed497be94d960b",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-653",
+          "closeHash": "7c498bf118684f9d6b81e4f2345d370e8e42b335f0efe763be192ad39305ec3f",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-769",
+          "closeHash": "1caf0ff25f150f34db6a45daad3a0d65429fd90e58e317110658a469292ab30d",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-memory-channel-884",
+          "closeHash": "a833d4dd3f5c9f360341485179b056fe74ddf0c6e588c0b798e201961b47f801",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-0",
+          "closeHash": "b08e026eeb40d64e78c64ac2d3c3a0c33ee98cc12dfa822fca66544359d968e5",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-1",
+          "closeHash": "982e8acc031125983dbbf7ca67d315d3689516a4b12b539af4e5a4bebe4049b1",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-10",
+          "closeHash": "e65bcf449de20c25070fd8aa9c040b15fea6914d2e579ab52f938ee524d666dc",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-11",
+          "closeHash": "35b9c9d6a449ff4947a5ccd8b8759e1978ee8503a77e2ac572d9d68e5192be6a",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-12",
+          "closeHash": "47ac91e821e7aa57d7b509232609023d257583303849a23568a2f6ccafbc4ba3",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-13",
+          "closeHash": "b095414e698cbf80ade6b1cba398eebc0dee01177c6b150c04dc0ed03ffbd472",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-14",
+          "closeHash": "c5f5f4c71857cc3c1f2257ce0a60b55ecc0665a01bbded6fefa5cd87eee8b518",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-15",
+          "closeHash": "1995d64abba4060c1df0a3cb124609e18195bacddda5022a47677330a7a498f5",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-2",
+          "closeHash": "757e29d71dc62062d8b9fc6d52e4f7c957d36712fadae1fb4ffd60068dd55b72",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-3",
+          "closeHash": "b7a52ae713ec871dfeecff344721fbfe2f35b71a40590fea0fe431350fd9cf88",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-4",
+          "closeHash": "fedd28b794a90f06ff40d5a51f27463016ee0658b45caabce63a6bc09ccf57b0",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-5",
+          "closeHash": "828dfb0d1faedf47ed17f304537ecba0920894ad21c40f334c0ebc79d9f734ad",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-6",
+          "closeHash": "75cf0526ac08a9ee86b8b49196b21cfc3e663e3a90b6f743ef791f9ed756b228",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-7",
+          "closeHash": "586124aa3b2b25b810b6971d2aaae6bd64ae420482064d983330d651673c9773",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-8",
+          "closeHash": "75fdf7366dcd88c8e1389361c228a64175ed5f110e7455bd6c129610fd8ab639",
+          "authorizedBaseUnits": "64000"
+        },
+        {
+          "channelId": "offline-worker-4-durable-channel-9",
+          "closeHash": "78d0084c81aad0e6e42b4ca20340e44933cd2e7f7e60bd84a77a9eee7780bba5",
+          "authorizedBaseUnits": "64000"
+        }
+      ]
+    }
+  ]
+}

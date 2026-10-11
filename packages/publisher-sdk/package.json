@@ -1,0 +1,14 @@
+{
+  "name": "@axp/publisher-sdk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Server ad requests and observed native Sponsored rendering for AXP",
+  "exports": {
+    ".": { "types": "./index.d.mts", "import": "./index.mjs" },
+    "./browser": { "types": "./browser.d.mts", "import": "./browser.mjs" },
+    "./financial": { "types": "./financial.d.mts", "import": "./financial.mjs" },
+    "./react": "./react.tsx"
+  },
+  "engines": { "node": ">=22.18.0" }
+}

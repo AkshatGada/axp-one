@@ -1,0 +1,55 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {network} from '../axp-one/packages/product/native.mjs';
+const outer=import.meta.dirname, repo=path.resolve(outer,'../axp-one'), out=path.join(repo,'artifacts/network-scale');
+fs.mkdirSync(path.join(out,'operator'),{recursive:true});
+const read=p=>JSON.parse(fs.readFileSync(path.join(outer,p),'utf8'));
+const sha=p=>createHash('sha256').update(fs.readFileSync(path.join(outer,p))).digest('hex');
+const save=(p,v)=>fs.writeFileSync(path.join(out,p),JSON.stringify(v,null,2)+'\n');
+const pick=(obj,keys)=>Object.fromEntries(keys.filter(k=>Object.hasOwn(obj,k)).map(k=>[k,obj[k]]));
+const run=read('network-current-run.json');
+assert.equal(run.execution,'actual-api-model/native-devnet');assert.equal(run.network,'solana-devnet');assert.equal(run.status,'partial');
+const subset=run.channels.filter(c=>c.openStatus==='finalized'&&c.closeStatus==='finalized'&&c.voucherUpdates===26);
+assert.equal(subset.length,26);
+const payerOwner=subset[0].payer,publisherOwner=subset[0].payee;
+let voucherCount=0,deposit=0n,settled=0n,refund=0n;
+const pkeys=['mode','network','channelId','protocolChannelId','address','payer','payee','mint','phase','openStatus','closeStatus','depositBaseUnits','confirmedDepositBaseUnits','acceptedBaseUnits','authorizedBaseUnits','settledBaseUnits','refundBaseUnits','reconciliationRequired','canReconcile','canRetryOpen','canSettle','reason','expiresAt','id','campaignId','workerId','paymentPhase','voucherUpdates'];
+const tkeys=['operation','status','signature','explorerURL','finality','slot','blockTime','networkFeeLamports','newRentLamports','reclaimedRentLamports','tokenDeltas','reason'];
+const vkeys=['chargeId','status','sequence','incrementBaseUnits','cumulativeAmountBaseUnits','payloadHash'];
+const campaigns=subset.map(p=>{
+ assert.equal(p.payer,payerOwner);assert.equal(p.payee,publisherOwner);assert.equal(p.mint,network.mint);assert.equal(p.reconciliationRequired,false);
+ assert.equal(p.confirmedDepositBaseUnits,'50000');assert.equal(p.authorizedBaseUnits,'39000');assert.equal(p.acceptedBaseUnits,p.authorizedBaseUnits);assert.equal(p.settledBaseUnits,p.authorizedBaseUnits);assert.equal(p.refundBaseUnits,'11000');
+ assert.equal(p.transactions.length,2);assert.ok(p.transactions.every(t=>t.status==='finalized'&&t.finality==='finalized'));
+ const deliveryCount=run.campaigns.find(c=>c.id===p.campaignId).acceptedDeliveries;assert.equal(deliveryCount,26);assert.equal(p.vouchers.length,26);
+ p.vouchers.forEach((v,i)=>{assert.equal(v.status,'authorized');assert.equal(v.sequence,String(i+1));assert.equal(v.incrementBaseUnits,'1500');assert.equal(v.cumulativeAmountBaseUnits,String((i+1)*1500));});
+ voucherCount+=p.vouchers.length;deposit+=BigInt(p.depositBaseUnits);settled+=BigInt(p.settledBaseUnits);refund+=BigInt(p.refundBaseUnits);
+ return {id:p.campaignId,deliveryCount,payment:{...pick(p,pkeys),transactions:p.transactions.map(t=>pick(t,tkeys)),vouchers:p.vouchers.map(v=>pick(v,vkeys))}};
+});
+assert.equal(deposit,settled+refund);
+save('devnet-threshold-acceptance.json',{schemaVersion:'axp.product-native-acceptance.v1',mode:'devnet',network:'solana-devnet',genesisHash:network.genesisHash,mint:network.mint,program:network.program,payerOwner,publisherOwner,
+ source:{runId:run.runId,sourceCommit:run.sourceCommit,sourceDirty:run.sourceDirty,executionSourceHash:run.executionSourceHash,runRecordSHA256:sha('network-current-run.json'),runUpdatedAt:run.updatedAt},
+ scope:{kind:'verified threshold-selected subset',channels:26,acceptedDeliveries:voucherCount,offChainVoucherUpdates:voucherCount,depositTransactions:26,closeTransactions:26,transactions:52,selection:'finalized open and close; exactly 26 cumulative voucher updates; 39,000 authorized base units against 50,000 deposited',parentRunStatus:run.status,parentFundedAdvertisers:run.measured.fundedAdvertisers,parentAcceptedDeliveries:run.measured.acceptedDeliveries,limitation:'This subset does not establish completion of all 125 funded channels or the planned 128-advertiser stage.'},
+ accounting:{unit:'Solana Devnet test USDC base units',depositBaseUnits:String(deposit),acceptedBaseUnits:String(settled),authorizedBaseUnits:String(settled),settledBaseUnits:String(settled),refundBaseUnits:String(refund)},campaigns});
+const million=read('offline-voucher-million-root/result.json');assert.equal(million.status,'completed');assert.equal(million.execution,'offline-synthetic-fixture');assert.equal(million.jobs.length,4);assert.ok(million.jobs.every(j=>j.exitCode===0));
+const rawValues=[],latencyWorkers=[],combined=createHash('sha256');
+for(let worker=1;worker<=4;worker++){
+ const directory=`offline-voucher-million-root-worker-${worker}`,workerResult=read(`${directory}/result.json`),buf=fs.readFileSync(path.join(outer,directory,'authorization-latencies.f64'));
+ assert.equal(workerResult.status,'completed');assert.equal(workerResult.error,null);assert.equal(buf.length%8,0);assert.equal(buf.length/8,workerResult.latencyRaw.samples);assert.equal(sha(`${directory}/authorization-latencies.f64`),workerResult.latencyRaw.sha256);
+ for(let offset=0;offset<buf.length;offset+=8){const value=buf.readDoubleLE(offset);assert.ok(Number.isFinite(value)&&value>=0);rawValues.push(value);}combined.update(buf);
+ latencyWorkers.push({workerId:workerResult.workerId,resultSHA256:sha(`${directory}/result.json`),format:workerResult.latencyRaw.format,samples:buf.length/8,rawBytes:buf.length,rawSHA256:workerResult.latencyRaw.sha256,finiteNonnegativeValues:true,sourceCommit:workerResult.sourceCommit,executableSourceHash:workerResult.executableSourceHash,policySourceHash:workerResult.policySourceHash});
+}
+rawValues.sort((a,b)=>a-b);const pct=p=>rawValues[Math.ceil(rawValues.length*p)-1];
+assert.equal(rawValues.length,1052672);assert.equal(rawValues.length,million.measured.authorizationLatencyMs.samples);assert.equal(pct(.5),million.measured.authorizationLatencyMs.p50);assert.equal(pct(.95),million.measured.authorizationLatencyMs.p95);
+const persisted=read('offline-voucher-million-root/persisted-state-verification.json');assert.equal(persisted.status,'passed');assert.equal(persisted.channels,16448);assert.equal(persisted.vouchers,1052672);assert.equal(persisted.verifierSourceHash,sha('offline-voucher-million-root/verify-final-state.mjs'));
+const coldReplay=[];for(let worker=1;worker<=4;worker++){const filename=`offline-voucher-million-root-worker-${worker}/cold-replay.json`,r=read(filename);assert.equal(r.status,'passed');assert.equal(r.transportCalls,0);coldReplay.push({workerId:`worker-${worker}`,recordSHA256:sha(filename),...r});}
+assert.equal(coldReplay.reduce((n,r)=>n+r.channels,0),192);assert.equal(coldReplay.reduce((n,r)=>n+r.voucherReplays,0),384);
+const rawAudit={schemaVersion:'axp.offline-latency-verification.v1',status:'passed',verifiedAt:new Date().toISOString(),readOnly:true,rawRecordSHA256:sha('offline-voucher-million-root/result.json'),combinedRawLatencySHA256:combined.digest('hex'),concatenationOrder:latencyWorkers.map(w=>w.workerId),quantileMethod:'nearest rank: sorted values at ceil(n*p)-1',samples:rawValues.length,p50Ms:pct(.5),p95Ms:pct(.95),jobsExitCode:0,workers:latencyWorkers,verifierSourceSHA256:sha('build-final-public-proofs.mjs'),operations:{providerCalls:0,rpcCalls:0,cryptographicSignatures:0,nativeBroadcasts:0}};
+save('offline-million-latency-verification.json',rawAudit);
+save('offline-million-persisted-state-verification.json',persisted);
+save('offline-million-specimen.json',read('offline-voucher-million-root/specimen.json'));
+save('offline-million-cold-replay.json',{schemaVersion:'axp.offline-cold-replay-summary.v1',execution:'offline-synthetic-fixture',status:'passed',scope:'48 sampled persisted channels per worker, 192 total; not every persisted channel',channels:192,voucherReplays:384,closeReplays:192,operations:{providerCalls:0,paymentTransportCalls:0,cryptographicSignatures:0,nativeBroadcasts:0},workers:coldReplay});
+save('offline-million.json',{...pick(million,['schemaVersion','execution','status','startedAt','completedAt','runtime','sourceCommit','executableSourceHash','workerPolicySourceHash','controllerSourceHash','targets','measured','counters','accounting','actualExecution','policy','limitations','jobs','cohorts','faults']),rawRecordSHA256:sha('offline-voucher-million-root/result.json'),verificationReports:{latency:'offline-million-latency-verification.json',persistedState:'offline-million-persisted-state-verification.json',specimen:'offline-million-specimen.json',coldReplay:'offline-million-cold-replay.json'},latencyRaw:latencyWorkers});
+for(const [from,to] of [['offline-voucher-million-root/worker-template.mjs','offline-million-worker-policy.mjs.txt'],['offline-voucher-million-root/controller.mjs','offline-million-controller.mjs.txt'],['offline-voucher-million-root/cold-replay.mjs','offline-million-cold-replay.mjs.txt'],['offline-voucher-million-root/specimen.mjs','offline-million-specimen.mjs.txt'],['offline-voucher-million-root/verify-final-state.mjs','offline-million-verify-final-state.mjs.txt'],['judge-harness/verify-native-proof.mjs','devnet-verify-native-proof.mjs.txt'],['build-final-public-proofs.mjs','build-final-public-proofs.mjs.txt']])fs.copyFileSync(path.join(outer,from),path.join(out,'operator',to));
+console.log(JSON.stringify({status:'public proof prepared',nativeSubset:{channels:26,transactions:52,vouchers:voucherCount,deposit:String(deposit),settled:String(settled),refund:String(refund)},offline:{samples:rawValues.length,p50:pct(.5),p95:pct(.95),persistedChannels:persisted.channels,persistedVouchers:persisted.vouchers,coldReplayChannels:192}}));

@@ -1,6 +1,6 @@
 // v7 footer: the giant lowercase wordmark, the scope lines, ContextHint and the credits.
 import { SiteFooter } from "@axp/design-system/prospectus";
-import { CH_URL, FOOTER, JEV_URL, SOLANA_URL } from "@/data/copy";
+import { CH_URL, FOOTER, JEV_URL, MVP_URL, SOLANA_URL } from "@/data/copy";
 import s from "./footer.module.css";
 
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
@@ -27,6 +27,7 @@ export default function Footer() {
             </a>
             .
           </p>
+          <a className={s.historical} href={MVP_URL}>{FOOTER.historical}</a>
         </div>
       }
       base={<span>{FOOTER.base}</span>}

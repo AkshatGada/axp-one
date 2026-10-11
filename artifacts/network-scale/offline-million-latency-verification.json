@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "axp.offline-latency-verification.v1",
+  "status": "passed",
+  "verifiedAt": "2026-10-07T13:51:13.254Z",
+  "readOnly": true,
+  "rawRecordSHA256": "def5e509ce12be76eea3d39bf496bfa2eadcb9d305f9b6b847199be2610d2a64",
+  "combinedRawLatencySHA256": "e7f9ea6f169d0c9e675dfe57648f303e736080e7c52dc04e83ceb232a5c665fe",
+  "concatenationOrder": [
+    "worker-1",
+    "worker-2",
+    "worker-3",
+    "worker-4"
+  ],
+  "quantileMethod": "nearest rank: sorted values at ceil(n*p)-1",
+  "samples": 1052672,
+  "p50Ms": 10.924833000055514,
+  "p95Ms": 21.92279199999757,
+  "jobsExitCode": 0,
+  "workers": [
+    {
+      "workerId": "worker-1",
+      "resultSHA256": "be9197dc60c753636a5fee92c1f19a2ca75e4dfe0f0991ad99d2e7c81db124c5",
+      "format": "IEEE754-float64-little-endian-ms",
+      "samples": 263168,
+      "rawBytes": 2105344,
+      "rawSHA256": "cad1778d728956d916d8d8c7b9df8155b43b6d0c73ff8186437ac19d809ed68f",
+      "finiteNonnegativeValues": true,
+      "sourceCommit": "9909b97c185505a11149415b9bad8061598715f6",
+      "executableSourceHash": "94915966420b135d794b8567fd456cf1999a61372fd96c0673d7cd6342982c7f",
+      "policySourceHash": "99c58493bbd7b6ec7704424cd79330d5fdcba84ef0e80416126d25147ef8adce"
+    },
+    {
+      "workerId": "worker-2",
+      "resultSHA256": "d083a74e95c36ba60aca4ae2f0b980f761d39a842110e39be4680bc07560784d",
+      "format": "IEEE754-float64-little-endian-ms",
+      "samples": 263168,
+      "rawBytes": 2105344,
+      "rawSHA256": "217d07cbba7ad6e602762040e95570a8f8dba84150ade783dd4b97287ca7adad",
+      "finiteNonnegativeValues": true,
+      "sourceCommit": "9909b97c185505a11149415b9bad8061598715f6",
+      "executableSourceHash": "94915966420b135d794b8567fd456cf1999a61372fd96c0673d7cd6342982c7f",
+      "policySourceHash": "99c58493bbd7b6ec7704424cd79330d5fdcba84ef0e80416126d25147ef8adce"
+    },
+    {
+      "workerId": "worker-3",
+      "resultSHA256": "8f7eda3b564ef16852a7d65c5231ab9d3c5b18088bc5a892f161bf25e08e14dc",
+      "format": "IEEE754-float64-little-endian-ms",
+      "samples": 263168,
+      "rawBytes": 2105344,
+      "rawSHA256": "bc2694abc3240edb9df6f4aedbbed28c9c44b018b28802d8f60d6234ea7d9d1e",
+      "finiteNonnegativeValues": true,
+      "sourceCommit": "9909b97c185505a11149415b9bad8061598715f6",
+      "executableSourceHash": "94915966420b135d794b8567fd456cf1999a61372fd96c0673d7cd6342982c7f",
+      "policySourceHash": "99c58493bbd7b6ec7704424cd79330d5fdcba84ef0e80416126d25147ef8adce"
+    },
+    {
+      "workerId": "worker-4",
+      "resultSHA256": "f7a5dcfdc854e7b426da50a1748a4e68bd87fb930a893f40ee0b8be13ea87a7b",
+      "format": "IEEE754-float64-little-endian-ms",
+      "samples": 263168,
+      "rawBytes": 2105344,
+      "rawSHA256": "15eb7a01d2b1e32a080c04ef6d53c2d8ffe17705c0839c44c07d10c9a6dbb4d4",
+      "finiteNonnegativeValues": true,
+      "sourceCommit": "9909b97c185505a11149415b9bad8061598715f6",
+      "executableSourceHash": "94915966420b135d794b8567fd456cf1999a61372fd96c0673d7cd6342982c7f",
+      "policySourceHash": "99c58493bbd7b6ec7704424cd79330d5fdcba84ef0e80416126d25147ef8adce"
+    }
+  ],
+  "verifierSourceSHA256": "b110ee5f132bb962d31b19d834920a8e7b6b3fd2fb4150d08447ce079005063d",
+  "operations": {
+    "providerCalls": 0,
+    "rpcCalls": 0,
+    "cryptographicSignatures": 0,
+    "nativeBroadcasts": 0
+  }
+}

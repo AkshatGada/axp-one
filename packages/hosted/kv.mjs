@@ -30,6 +30,11 @@ export function createUpstashKV({url,token,fetchImpl=fetch,timeoutMs=10000}) {
       return (await command(...args))==='OK';
     },
     del:key=>command('DEL',key).then(n=>n>0),
+    // Exact-value compare-and-swap, including absent keys. No read/write race.
+    async compareAndSet(key,expected,value) {
+      const script="local v=redis.call('GET',KEYS[1]); if (ARGV[1]=='0' and v) or (ARGV[1]=='1' and v~=ARGV[2]) then return 0 end; redis.call('SET',KEYS[1],ARGV[3]); return 1";
+      return Number(await command('EVAL',script,1,key,expected===null?'0':'1',expected??'',String(value)))===1;
+    },
     async incr(key,ttlSeconds) {const n=await command('INCR',key);if(n===1&&ttlSeconds)await command('EXPIRE',key,Math.ceil(ttlSeconds));return n;},
     async lpush(key,value,max=500) {await command('LPUSH',key,value);await command('LTRIM',key,0,max-1);},
     lrange:(key,start,stop)=>command('LRANGE',key,start,stop),
@@ -54,6 +59,13 @@ export function createFileKV({dir}) {
       write(key,v);return true;
     },
     async del(key){const p=pathOf(key),had=existsSync(p);rmSync(p,{force:true});return had;},
+    async compareAndSet(key,expected,value) {
+      // Synchronous critical section; separate file processes cannot both win CAS.
+      const lockPath=pathOf(key)+'.cas-lock';let fd;
+      try{fd=openSync(lockPath,'wx',0o600);}catch(e){if(e.code==='EEXIST')return false;throw e;}
+      try{if((read(key)?.value??null)!==expected)return false;write(key,{key,value:String(value)});return true;}
+      finally{closeSync(fd);rmSync(lockPath,{force:true});}
+    },
     async incr(key,ttlSeconds){const v=read(key),n=Number(v?.value??0)+1;write(key,{key,value:String(n),expiresAt:v?.expiresAt??(ttlSeconds?Date.now()+ttlSeconds*1000:undefined)});return n;},
     async lpush(key,value,max=500){const v=read(key),list=v?JSON.parse(v.value):[];list.unshift(String(value));write(key,{key,value:JSON.stringify(list.slice(0,max))});},
     async lrange(key,start,stop){const v=read(key),list=v?JSON.parse(v.value):[];return list.slice(start,stop<0?list.length+stop+1:stop+1);},
@@ -84,12 +96,21 @@ export function createBlobKV({token,apiURL='https://vercel.com/api/blob',prefix=
   // Content plus ETag, uncached. null when absent.
   async function read(key) {
     let r;
-    for(let attempt=0;;attempt++){try{r=await fetchImpl(`${urlOf(key)}?cache=0`,{headers:{authorization:`Bearer ${token}`},redirect:'error',signal:AbortSignal.timeout(timeoutMs)});break;}catch{if(attempt<2)continue;fail('blob_unavailable');}}
+    // CDN compression turns an object ETag into W/"…". That weak validator
+    // cannot be used by Blob's x-if-match PUT, so read the original bytes.
+    for(let attempt=0;;attempt++){try{r=await fetchImpl(`${urlOf(key)}?cache=0`,{headers:{authorization:`Bearer ${token}`,'accept-encoding':'identity'},redirect:'error',signal:AbortSignal.timeout(timeoutMs)});break;}catch{if(attempt<2)continue;fail('blob_unavailable');}}
     if(r.status===404)return null;if(!r.ok)fail(`blob_read_${r.status}`);
     const text=await r.text();let v;try{v=JSON.parse(text);}catch{return null;}
     return {...v,etag:r.headers.get('etag')};
   }
   const live=v=>v&&!(v.exp&&v.exp<Date.now());
+  const fenceOf=record=>{
+    if(!record.etag)fail('blob_etag_required');
+    // Never strip W/ or obtain HEAD after GET: either could associate an
+    // unverified validator with the snapshot and weaken stale-worker fencing.
+    if(!/^"[^"\r\n]*"$/.test(record.etag))fail('blob_etag_not_strong');
+    return record.etag;
+  };
   const put=(key,record,{overwrite=true,ifMatch}={})=>api(`/?${new URLSearchParams({pathname:pathOf(key)})}`,{method:'PUT',body:JSON.stringify(record),headers:{'x-vercel-blob-access':'private','x-add-random-suffix':'0','x-content-type':'application/json',
     'x-allow-overwrite':overwrite||ifMatch?'1':'0',...(ifMatch?{'x-if-match':ifMatch}:{}),'x-cache-control-max-age':'60'}});
   const conflict=e=>e.code==='blob_precondition_failed'||(e.status>=400&&e.status<500&&/exist/i.test(e.blobMessage??''))||e.status===409;
@@ -97,7 +118,7 @@ export function createBlobKV({token,apiURL='https://vercel.com/api/blob',prefix=
     for(let i=0;i<8;i++) {
       const cur=await read(key),next=update(live(cur)?cur.v:null);
       const record={v:next,...(ttlSeconds?{exp:live(cur)&&cur.exp?cur.exp:Date.now()+ttlSeconds*1000}:{})};
-      try{if(cur)await put(key,record,{ifMatch:cur.etag});else await put(key,record,{overwrite:false});return next;}
+      try{if(cur)await put(key,record,{ifMatch:fenceOf(cur)});else await put(key,record,{overwrite:false});return next;}
       catch(e){if(!conflict(e))throw e;await new Promise(r=>setTimeout(r,50+Math.random()*150));}
     }
     fail('blob_contention');
@@ -113,8 +134,14 @@ export function createBlobKV({token,apiURL='https://vercel.com/api/blob',prefix=
         if(!conflict(e))throw e;
         const cur=await read(key);if(live(cur))return false;
         // Expired (or vanished): take it over only if nobody else changed it meanwhile.
-        try{if(cur)await put(key,record,{ifMatch:cur.etag});else await put(key,record,{overwrite:false});return true;}catch(e2){if(conflict(e2))return false;throw e2;}
+        try{if(cur)await put(key,record,{ifMatch:fenceOf(cur)});else await put(key,record,{overwrite:false});return true;}catch(e2){if(conflict(e2))return false;throw e2;}
       }
+    },
+    async compareAndSet(key,expected,value) {
+      const cur=await read(key);
+      if((live(cur)?cur.v:null)!==expected)return false;
+      try{await put(key,{v:String(value)},cur?{ifMatch:fenceOf(cur)}:{overwrite:false});return true;}
+      catch(e){if(conflict(e))return false;throw e;}
     },
     async del(key){await api('/delete',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({urls:[urlOf(key)]})});return true;},
     incr:(key,ttlSeconds)=>cas(key,v=>String(Number(v??0)+1),ttlSeconds).then(Number),

@@ -1,9 +1,10 @@
-/* v7 closing: ultramarine, the wall returns in white at low contrast behind the promises. */
-.close { position: relative; overflow: clip; min-height: 92svh; display: grid; align-content: center; background: var(--brand); color: #fff; }
-/* The wall fades out before its own bottom edge, and the section's foot blends into the footer's paper. */
-.wallMask { position: absolute; inset: 0; -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 52%, transparent 86%); mask-image: linear-gradient(180deg, #000 0%, #000 52%, transparent 86%); }
-.close::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; height: clamp(96px, 16vh, 180px); background: linear-gradient(180deg, color-mix(in oklab, var(--paper) 0%, transparent), var(--paper)); pointer-events: none; }
-.fog { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: radial-gradient(70% 70% at 30% 55%, color-mix(in oklab, var(--brand) 94%, transparent) 0%, color-mix(in oklab, var(--brand) 80%, transparent) 45%, color-mix(in oklab, var(--brand) 35%, transparent) 75%, transparent 100%); }
-.in { position: relative; z-index: 3; display: grid; gap: 40px; padding: clamp(96px, 14vh, 160px) 0; }
-.h2 { margin: 0; max-width: 13ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(52px, 7vw, 124px); line-height: 0.92; letter-spacing: -0.04em; }
-.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 34px; }
+/* A compact Prospectus action row, blending the last chapter into the paper footer. */
+.close { position: relative; overflow: clip; background: var(--brand); color: #fff; }
+.close::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 64px; background: linear-gradient(180deg, transparent, var(--paper)); pointer-events: none; }
+.in { position: relative; z-index: 1; display: grid; gap: 32px; padding: 80px 0 104px; }
+.h2 { margin: 0; max-width: 21ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(36px, 4.5vw, 68px); line-height: 1; letter-spacing: -0.035em; text-wrap: balance; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; }
+@media (max-width: 560px) {
+  .in { padding: 56px 0 88px; }
+  .actions { align-items: flex-start; flex-direction: column; gap: 24px; }
+}

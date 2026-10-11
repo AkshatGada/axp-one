@@ -16,14 +16,17 @@ const MAIN_LABEL = 'Replay of a live Solana Devnet run, Oct 1';
 
 function sh(cmd, args, env = {}) {
   const r = spawnSync(cmd, args, { cwd: app, stdio: 'inherit', env: { ...process.env, ...env } });
+  if (r.error) throw r.error;
   if (r.status !== 0) process.exit(r.status ?? 1);
 }
 function build(env) {
-  sh('node', ['scripts/project-run.mjs'], env);
-  sh('node', ['scripts/project-devnet.mjs'], env);
-  sh('node', ['scripts/project-live-sample.mjs'], env);
-  sh('node', ['scripts/beats-to-srt.mjs'], env);
-  sh('npx', ['next', 'build'], env);
+  sh(process.execPath, ['scripts/project-run.mjs'], env);
+  sh(process.execPath, ['scripts/project-devnet.mjs'], env);
+  sh(process.execPath, ['scripts/project-live-sample.mjs'], env);
+  sh(process.execPath, ['scripts/beats-to-srt.mjs'], env);
+  // Use the installed, lockfile-pinned Next binary; npx may fetch packages and
+  // is not available in some bundled Node runtimes.
+  sh(process.execPath, [resolve(app, 'node_modules/next/dist/bin/next'), 'build'], env);
 }
 
 // 1. The first recording, under <base>/first-recording/.

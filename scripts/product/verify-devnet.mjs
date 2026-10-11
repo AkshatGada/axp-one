@@ -1,0 +1,27 @@
+// Read-only verification of the public acceptance record. No wallet, keys or writes.
+import {readFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+import {nativeRPC,network} from '../../packages/product/native.mjs';
+const record=JSON.parse(readFileSync(process.argv[2]??'artifacts/product/devnet-acceptance.json','utf8'));
+assert.equal(record.schemaVersion,'axp.product-native-acceptance.v1');
+assert.equal(record.mode,'devnet');assert.equal(record.network,'solana-devnet');
+assert.equal(record.genesisHash,network.genesisHash);assert.equal(record.mint,network.mint);assert.equal(record.program,network.program);
+assert.equal(await nativeRPC('getGenesisHash'),network.genesisHash);
+const txs=record.campaigns.flatMap(c=>c.payment.transactions);
+assert.equal(new Set(txs.map(t=>t.signature)).size,txs.length);
+const statuses=(await nativeRPC('getSignatureStatuses',[txs.map(t=>t.signature),{searchTransactionHistory:true}])).value;
+for(const [i,proof] of txs.entries()){
+ assert.match(proof.signature,/^[1-9A-HJ-NP-Za-km-z]{80,90}$/);
+ assert.equal(proof.status,'finalized');assert.equal(proof.finality,'finalized');
+ assert.ok(statuses[i]);assert.equal(statuses[i].err,null);assert.equal(statuses[i].confirmationStatus,'finalized');assert.equal(statuses[i].slot,proof.slot);
+ const tx=await nativeRPC('getTransaction',[proof.signature,{encoding:'jsonParsed',commitment:'finalized',maxSupportedTransactionVersion:0}]);
+ assert.ok(tx);assert.equal(tx.meta.err,null);assert.equal(tx.slot,proof.slot);assert.equal(String(tx.meta.fee),proof.networkFeeLamports);
+ assert.ok(tx.transaction.message.accountKeys.some(k=>(k.pubkey??k)===network.program),'bound channel program required');
+ const sum=(balances,owner)=>balances.filter(b=>b.mint===network.mint&&b.owner===owner).reduce((n,b)=>n+BigInt(b.uiTokenAmount.amount),0n);
+ for(const [role,owner] of [['payer',record.payerOwner],['publisher',record.publisherOwner],['treasury',network.treasuryOwner]]){
+  const delta=sum(tx.meta.postTokenBalances,owner)-sum(tx.meta.preTokenBalances,owner);
+  assert.equal(String(delta),proof.tokenDeltas[role],`${proof.operation} ${role} token delta`);
+ }
+}
+for(const c of record.campaigns){const p=c.payment;assert.equal(p.closeStatus,'finalized');assert.equal(p.acceptedBaseUnits,p.authorizedBaseUnits);assert.equal(p.acceptedBaseUnits,p.settledBaseUnits);assert.equal(BigInt(p.settledBaseUnits)+BigInt(p.refundBaseUnits),BigInt(p.depositBaseUnits));assert.equal(c.deliveryCount,p.vouchers.length);}
+console.log(JSON.stringify({status:'verified',network:'solana-devnet',transactions:txs.length,channels:record.campaigns.length,verification:'finalized signatures, native program, token deltas, network fees and conserved deposits',signed:false,broadcast:false}));

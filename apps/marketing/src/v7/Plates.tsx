@@ -1,11 +1,12 @@
-// v7 exploded card: the six plates behind one Sponsored card, as small real specimens from the
-// recorded run. Drawn for crispness: every plate is laid out at its final pixel size, placed with a
+// Six product layers behind a Sponsored card; payment values are verified separately. Drawn for crispness: every plate is laid out at its final pixel size, placed with a
 // 2D matrix whose translation is rounded to whole pixels, and never promoted to its own layer
 // (no will-change, no 3D), so its text is painted as live text at the screen's resolution in
 // every frame. The geometry is one pure function, shared by the hero (scroll), the reduced-motion
 // still and /design.
 import type { CSSProperties, ReactNode } from "react";
-import { CACHED, CV, CV_CHANNEL, HELPFUL_EXCERPT, KF, LG, RUN, usdc } from "@/data/run";
+import { usdc } from "@/data/run";
+import { PRODUCT_STORY as story } from "@/data/product.story";
+import proof from "@/data/settlement.latest.json";
 import { STACK } from "@/data/copy";
 import { IDENTITY, mixM, mul, rotate, scale, skewX, type M2 } from "@/motion/motion";
 import s from "./plates.module.css";
@@ -18,94 +19,19 @@ export const PH = 210;
 export const GAP = 138;
 
 const cut = (t: string, n: number) => (t.length <= n ? t : `${t.slice(0, n).replace(/\s+\S*$/, "")}…`);
-const winner = CACHED.winner;
+const channel = proof.channels[0]!;
 /** The v7 plate: a sheet laid on the table, seen from the front right. Flatter than v4 (0.6) so
  *  six plates fit a laptop screen with only a hairline of overlap. */
 export const PLATE_M7: M2 = mul(rotate(-3), mul(skewX(-26), scale(1, 0.6)));
 
 function Body({ id }: { id: PlateId }) {
   switch (id) {
-    case "answer":
-      return (
-        <>
-          <p className={s.q}>{CACHED.question}</p>
-          <p className={s.lines}>{cut(HELPFUL_EXCERPT, 118)}</p>
-        </>
-      );
-    case "card":
-      return (
-        <div className={s.card}>
-          <div className={s.cardHead}>
-            <span className={s.sponsored}>Sponsored</span>
-            <b>{CV.name}</b>
-          </div>
-          <p>{cut(CV.approvedText ?? "", 92)}</p>
-        </div>
-      );
-    case "auction":
-      return (
-        <div className={s.rows}>
-          {CACHED.bids.map((b) => (
-            <div key={b.campaign} className={s.row} data-win={b.campaign === winner ? "" : undefined}>
-              <span>{b.name}</span>
-              <span className={s.num}>{usdc(b.amount)} USDC</span>
-            </div>
-          ))}
-          <div className={s.row} data-quiet="">
-            <span>{STACK.price}</span>
-          </div>
-        </div>
-      );
-    case "agents":
-      return (
-        <div className={s.agents}>
-          <div className={s.agent}>
-            <b>{CV.name}</b>
-            <span className={s.pill}>Bid</span>
-          </div>
-          <div className={s.agent}>
-            <b>{KF.name}</b>
-            <span className={s.pill}>Bid</span>
-          </div>
-          <div className={s.agent} data-out="">
-            <b>{LG.name}</b>
-            <span className={s.pill} data-out="">{STACK.ruledOut}</span>
-          </div>
-        </div>
-      );
-    case "evidence":
-      return (
-        <div className={s.evi}>
-          <div>
-            <span className={s.eviK}>Prompt</span>
-            <span>{RUN.evidence.observedPrompt}</span>
-          </div>
-          <div>
-            <span className={s.eviK}>Audience</span>
-            <span>{cut(RUN.evidence.hintText, 78)}</span>
-          </div>
-        </div>
-      );
-    case "payment": {
-      const dep = Number(CV_CHANNEL.deposit);
-      const vs = CV_CHANNEL.vouchers;
-      return (
-        <div className={s.pay}>
-          <div className={s.payTrack}>
-            {vs.map((v, k) => {
-              const prev = k === 0 ? 0 : Number(vs[k - 1]!.cumulative);
-              return <i key={k} style={{ left: `${(prev / dep) * 100}%`, width: `${((Number(v.cumulative) - prev) / dep) * 100}%` } as CSSProperties} />;
-            })}
-          </div>
-          <div className={s.payRow}>
-            <span>
-              {vs.map((v) => usdc(v.cumulative)).join(", then ")} <span className={s.dim}>of {usdc(CV_CHANNEL.deposit)}</span>
-            </span>
-            <span className={s.dim}>one close</span>
-          </div>
-        </div>
-      );
-    }
+    case "answer": return <><p className={s.q}>{story.question}</p><p className={s.lines}>{cut(story.answer, 118)}</p></>;
+    case "card": return <div className={s.card}><div className={s.cardHead}><span className={s.sponsored}>Sponsored</span><b>{story.advertiser}</b></div><p>{cut(story.creative, 92)}</p></div>;
+    case "auction": return <div className={s.rows}><div className={s.row}><span>Eligible campaigns</span><span>Funded + active</span></div><div className={s.row}><span>Bid policy</span><span>Fit + campaign ceiling</span></div><div className={s.row} data-win=""><span>Winning ad</span><span>Highest valid bid</span></div></div>;
+    case "agents": return <div className={s.agents}>{story.buyers.map(name => <div key={name} className={s.agent}><b>{name}</b><span className={s.pill}>Jev judges fit</span></div>)}</div>;
+    case "evidence": return <div className={s.evi}><div><span className={s.eviK}>ContextHint</span><span>Embeddings from ChatGPT ad data</span></div><div><span className={s.eviK}>Advertiser</span><span>Capabilities + targeting hints</span></div></div>;
+    case "payment": return <div className={s.pay}><div className={s.payTrack}><i style={{ left: 0, width: `${Number(channel.paid) / Number(channel.deposit) * 100}%` } as CSSProperties} /></div><div className={s.payRow}><span>{channel.voucherCount} vouchers → one close</span><span className={s.dim}>{usdc(channel.paid)} paid</span></div><span className={s.dim}>Verified 7 October · test USDC</span></div>;
   }
 }
 
