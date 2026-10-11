@@ -10,6 +10,7 @@ import {createProductOrganic} from '../../packages/product/organic.mjs';
 import {createJevHttpTransport} from '../../packages/ml/engines/jev-http.mjs';
 import {inheritProviderExecution} from '../../packages/product/provider-provenance.mjs';
 import {createProductDevnetRPC,inspectProductDevnet,walletIdentities} from '../../packages/product/native.mjs';
+import {createTempoNativeTransport} from '../../packages/payments/tempo-transport.mjs';
 import {createNativeTransport} from '../../packages/payments/sdk-transport.mjs';
 import {loadEvidence} from '../../packages/v2/evidence.mjs';
 
@@ -23,20 +24,21 @@ const budgetPath=join(state,'verification-budget.json'),hashFile=p=>createHash('
 const originalWalletHashes={solana:hashFile(wallet),tempo:hashFile(tempoWallet)};
 const budget=existsSync(budgetPath)?JSON.parse(readFileSync(budgetPath,'utf8')):{schemaVersion:'axp.tempo-verification-budget.v1',maxUSD:1,maxJev:40,maxAnswers:12,reservedMicroUSD:0,attempts:[],walletHashes:originalWalletHashes};
 if(JSON.stringify(budget.walletHashes)!==JSON.stringify(originalWalletHashes))throw Error('Verification wallet identities changed');
+for(const row of budget.attempts)if(row.status==='admitted'){row.status='unknown';row.reason='process_interrupted';}
 const save=()=>writeFileSync(budgetPath,JSON.stringify(budget,null,2),{mode:0o600});save();
 function bounded(provider,kind,reservation){return inheritProviderExecution(async(...input)=>{
- if(budget.attempts.some(a=>a.status!=='completed'))throw Object.assign(Error('Unresolved provider attempt'),{code:'verification_provider_uncertain'});
+ if(budget.attempts.some(a=>a.status==='unknown'))throw Object.assign(Error('Unresolved provider attempt'),{code:'verification_provider_uncertain'});
  if(budget.attempts.filter(a=>a.kind===kind).length>=(kind==='jev'?budget.maxJev:budget.maxAnswers)||budget.reservedMicroUSD+reservation>1000000)throw Object.assign(Error('Verification budget exhausted'),{code:'verification_budget_exhausted'});
  const row={kind,status:'admitted',reservedMicroUSD:reservation,at:new Date().toISOString()};budget.attempts.push(row);budget.reservedMicroUSD+=reservation;save();
  try{const result=await provider(...input);row.status='completed';row.usage=result.usage??null;save();return result;}catch(e){row.status='unknown';row.reason=e.code??'provider_failed';save();throw e;}
 },provider);}
 const rpcURL=config.AXP_NETWORK_DEVNET_RPC_URL??config.AXP_PRODUCT_DEVNET_RPC_URL;
 const rpc=createProductDevnetRPC(rpcURL);
-const service=createProductService({stateDir:state,runId:'tempo-verification-20261011',financialMode:'devnet',signingEnabled:true,walletPath:wallet,tempoEnabled:true,tempoSigningEnabled:true,tempoWalletPath:tempoWallet,dailyModelCap:40,organicApiKey:config.DEEPSEEK_API_KEY,
+const service=createProductService({stateDir:state,runId:'product-devnet-v1',financialMode:'devnet',signingEnabled:true,walletPath:wallet,tempoEnabled:true,tempoSigningEnabled:true,tempoWalletPath:tempoWallet,dailyModelCap:40,organicApiKey:config.DEEPSEEK_API_KEY,
  transport:bounded(createJevHttpTransport({apiKey:config.JEV_API_KEY||config.TYPESAFE_API_KEY,maxCalls:28}),'jev',15000),
  organicTransport:bounded(createProductOrganic({apiKey:config.DEEPSEEK_API_KEY}),'answer',30000),retriever:loadEvidence(),
  paymentOptions:{preflight:input=>inspectProductDevnet({...input,rpc}),transportFactory:input=>createNativeTransport({...input,rpcURL})},
- tempoOptions:{limits:{maxChannels:2,maxDepositBaseUnits:'50000',aggregateDepositBaseUnits:'100000',aggregateFeeAttoUSD:'1000000000000000000'}},
+ tempoOptions:{transportFactory:createTempoNativeTransport,limits:{maxChannels:2,maxDepositBaseUnits:'50000',aggregateDepositBaseUnits:'100000',aggregateFeeAttoUSD:'1000000000000000000'}},
 });
 const api=createProductAPI({service});
 const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.woff2':'font/woff2','.json':'application/json'};
