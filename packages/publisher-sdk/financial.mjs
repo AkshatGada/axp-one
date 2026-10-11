@@ -5,7 +5,9 @@ export function financialModeOf(...records) {
   return undefined;
 }
 
-export function moneyUnit(mode) {
+export function moneyUnit(mode, networkOrPayment) {
+  const network = typeof networkOrPayment === 'string' ? networkOrPayment : networkOrPayment?.network ?? networkOrPayment?.settlementNetwork;
+  if (mode !== 'synthetic' && network === 'tempo-testnet') return 'test PathUSD';
   return mode === 'synthetic' ? 'test credits' : mode === 'devnet' || mode === 'sandbox' ? 'test USDC' : 'units';
 }
 
@@ -15,6 +17,14 @@ export function devnetTransactionURL(signature) {
 }
 
 // This checks the backend's reported evidence; it does not query the network.
-export function isFinalizedNativeTransaction(transaction) {
-  return transaction?.status === 'finalized' && transaction?.finality === 'finalized' && !!devnetTransactionURL(transaction.signature);
+export function nativeTransactionURL(transaction, network = transaction?.network ?? 'solana-devnet') {
+  if (transaction?.network && transaction.network !== network) return undefined;
+  if (network === 'solana-devnet') return devnetTransactionURL(transaction?.signature);
+  if (network !== 'tempo-testnet' || (transaction?.chainId !== undefined && transaction.chainId !== 42431)) return undefined;
+  const hash = transaction?.transactionHash;
+  return typeof hash === 'string' && /^0x[0-9a-fA-F]{64}$/.test(hash) ? `https://explore.tempo.xyz/tx/${hash}` : undefined;
+}
+
+export function isFinalizedNativeTransaction(transaction, network = transaction?.network ?? 'solana-devnet') {
+  return transaction?.status === 'finalized' && transaction?.finality === 'finalized' && !!nativeTransactionURL(transaction, network);
 }

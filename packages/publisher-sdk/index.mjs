@@ -18,7 +18,7 @@ function requireString(value, code, max = 4096) {
   if (typeof value !== 'string' || !value.trim() || value.length > max) throw new PublisherSDKError(code);
 }
 function opportunityInput(input) {
-  const {question, sessionId, turnId, placementId = 'chat-sponsored-card', requiredCapabilities, excludedCategories} = input ?? {};
+  const {question, sessionId, turnId, placementId = 'chat-sponsored-card', requiredCapabilities, excludedCategories, settlementNetwork} = input ?? {};
   requireString(question, 'invalid_question', 1200);
   if (/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/u.test(question)) throw new PublisherSDKError('invalid_question');
   for (const [key, value] of Object.entries({sessionId, turnId, placementId})) {
@@ -26,6 +26,10 @@ function opportunityInput(input) {
     if (!/^[-\w]+$/.test(value)) throw new PublisherSDKError(`invalid_${key}`);
   }
   const body = {question, sessionId, turnId, placementId};
+  if (settlementNetwork !== undefined) {
+    if (!['solana-devnet', 'tempo-testnet'].includes(settlementNetwork)) throw new PublisherSDKError('invalid_settlementNetwork');
+    body.settlementNetwork = settlementNetwork;
+  }
   for (const [key, value] of Object.entries({requiredCapabilities, excludedCategories})) {
     if (value === undefined) continue;
     if (!Array.isArray(value) || value.length > 30 || value.some(v => typeof v !== 'string' || !v.trim() || v.length > 100))
