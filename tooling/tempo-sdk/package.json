@@ -1,0 +1,8 @@
+{
+  "name": "axp-tempo-sdk",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Exact-pinned published Tempo Sessions v2 primitives for the trusted AXP backend",
+  "dependencies": { "mppx": "0.13.4", "viem": "2.57.4" }
+}
