@@ -1,18 +1,18 @@
 // Offline adapter stubs: exercise product authority/routing, never network proof.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtempSync,rmSync,readFileSync} from 'node:fs';
+import {mkdtempSync,rmSync,readFileSync,writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {Readable} from 'node:stream';
 import {createProductService,PRESETS} from '../../packages/product/service.mjs';
 import {createProductAPI} from '../../packages/product/api.mjs';
-import {createHostedProductAPI} from '../../packages/product/hosted.mjs';
+import {createHostedProductAPI,createHostedProductWorkspace} from '../../packages/product/hosted.mjs';
 import {hash} from '../../packages/contracts/index.mjs';
 import {jevResponse} from '../ml/fixtures.mjs';
 const TOKEN='0x20c0000000000000000000000000000000000000';
 function fixture(t,options={}){
- const stateDir=mkdtempSync(join(tmpdir(),'axp-tempo-routing-')),calls=[],models=[];let service;
+ const stateDir=mkdtempSync(join(tmpdir(),'axp-tempo-routing-')),calls=[],models=[],faults={};let service;
  const factory=network=>({exchange,signingEnabled})=>{
   exchange.db.exec('CREATE TABLE IF NOT EXISTS product_tempo_fixture(run TEXT NOT NULL,id TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(run,id))');
   const ids={payer:`offline-${network}-payer`,payee:`offline-${network}-payee`};
@@ -25,13 +25,13 @@ function fixture(t,options={}){
    async drain(id){const p=get(id);p.phase='draining';put(p);sync(id);return {status:'draining'};},authorize,
    async payout(id){const p=get(id);if(p.settledBaseUnits!==p.authorizedBaseUnits){calls.push(`${network}:payout`);p.settledBaseUnits=p.authorizedBaseUnits;put(p);}sync(id);return {status:'finalized'};},
    async close(id){const p=get(id);if(p.closeStatus!=='finalized'){calls.push(`${network}:close`);p.closeStatus='finalized';p.phase='finalized';p.settledBaseUnits=p.authorizedBaseUnits;p.refundBaseUnits=String(BigInt(p.depositBaseUnits)-BigInt(p.authorizedBaseUnits));put(p);}sync(id);return {status:'finalized'};},
-   async reconcile(id){sync(id);return {status:'reconciled'};},projection:get,evidence:id=>{const p=get(id);return p?{...p,canPayout:p.phase==='open',canClose:p.phase==='open',canSettle:p.phase==='open'}:null;},sync,dispose(){},
+   async reconcile(id){sync(id);return {status:'reconciled'};},projection:id=>{if(network==='tempo-testnet'&&faults.projection)throw Object.assign(Error('fixture projection unavailable'),{code:'tempo_projection_unavailable'});return get(id);},evidence:id=>{if(network==='tempo-testnet'&&faults.evidence)throw Object.assign(Error('fixture evidence unavailable'),{code:'tempo_evidence_unavailable'});const p=get(id);return p?{...p,canPayout:p.phase==='open',canClose:p.phase==='open',canSettle:p.phase==='open'}:null;},sync,dispose(){},
   };
  };
  const start=extra=>service=createProductService({stateDir,financialMode:'devnet',signingEnabled:true,publisherKey:'offline-publisher',tempoEnabled:true,tempoSigningEnabled:true,transport:async packet=>{models.push(packet.state.campaign.campaignId);return jevResponse(packet,3,3);},paymentOptions:{solanaFactory:factory('solana-devnet')},tempoFactory:factory('tempo-testnet'),...options,...extra});
  start();service.saveAccount({name:'Offline mixed-rail workspace',websiteURL:'https://example.test/'});
  t.after(()=>{service.close();rmSync(stateDir,{recursive:true,force:true});});
- return {get service(){return service;},calls,models,stateDir,start(extra){service.close();return start(extra);},async campaign(network){const {id,label,exampleQuestion,...draft}=PRESETS[0];if(network)draft.settlementNetwork=network;const c=service.saveCampaign(draft).campaign;service.approve(c.id);return (await service.launch(c.id)).campaign;},ad(network,turn='one'){return service.opportunity({question:PRESETS[0].exampleQuestion,sessionId:'offline',turnId:turn,...(network?{settlementNetwork:network}:{})});},render(ad){return service.render(ad.award.id,{creativeHash:ad.award.creativeHash,domInserted:true,sponsoredLabelPresent:true},ad.deliveryToken);}};
+ return {get service(){return service;},calls,models,faults,stateDir,start(extra){service.close();return start(extra);},async campaign(network){const {id,label,exampleQuestion,...draft}=PRESETS[0];if(network)draft.settlementNetwork=network;const c=service.saveCampaign(draft).campaign;service.approve(c.id);return (await service.launch(c.id)).campaign;},ad(network,turn='one'){return service.opportunity({question:PRESETS[0].exampleQuestion,sessionId:'offline',turnId:turn,...(network?{settlementNetwork:network}:{})});},render(ad){return service.render(ad.award.id,{creativeHash:ad.award.creativeHash,domInserted:true,sponsoredLabelPresent:true},ad.deliveryToken);}};
 }
 
 test('mixed campaigns filter settlement rails before Jev and preserve legacy publisher identity',async t=>{
@@ -91,4 +91,39 @@ test('wrong-chain projections and publisher route replacements fail closed witho
  const f=fixture(t),c=await f.campaign('tempo-testnet'),channel=f.service.exchange.require('channels',`${c.id}-channel`),route=f.service.exchange.settlementRoute('axp-demo-publisher','tempo-testnet');
  assert.throws(()=>f.service.exchange.registerPublisherSettlementRoute({...route,payee:'replacement-payee'}),e=>e.code==='publisher_route_conflict');assert.deepEqual(f.service.exchange.settlementRoute('axp-demo-publisher','tempo-testnet'),route);
  const projection=f.service.paymentWorker.projection(channel.channelId);f.service.exchange.networkState=()=>({...projection,network:'solana-devnet'});assert.throws(()=>f.service.exchange.syncNetworkChannel(channel.channelId),e=>e.code==='channel_binding');assert.deepEqual(f.service.exchange.require('channels',channel.channelId),channel);
+});
+
+test('Tempo projection and evidence read failures preserve obligations and leave Solana usable',async t=>{
+ for(const failure of ['projection','evidence'])await t.test(failure,async t=>{
+  const f=fixture(t),sol=await f.campaign(),tempo=await f.campaign('tempo-testnet'),ad=await f.ad('tempo-testnet');await f.render(ad);
+  const channel=f.service.exchange.require('channels',ad.award.channelId),charges=f.service.exchange.all('charges'),calls=f.calls.length,stored=f.service.exchange.require('product_tempo_fixture',ad.award.channelId);
+  f.faults[failure]=true;const report=f.service.state(),view=report.campaigns.find(c=>c.id===tempo.id);
+  assert.equal(report.payments.networks['solana-devnet'].ready,true);assert.equal(report.payments.networks['tempo-testnet'].ready,false);assert.equal(view.payment.phase,'unavailable');assert.equal(view.payment.reason,`tempo_${failure}_unavailable`);assert.equal(view.payment.acceptedBaseUnits,ad.award.priceBaseUnits);assert.equal(view.payment.canClose,false);
+  assert.deepEqual(f.service.exchange.require('channels',ad.award.channelId),channel);assert.deepEqual(f.service.exchange.all('charges'),charges);assert.deepEqual(f.service.exchange.require('product_tempo_fixture',ad.award.channelId),stored);assert.equal(f.calls.length,calls);
+  assert.equal((await f.ad(undefined,'sol-after-fault')).award.campaignId,sol.id);await assert.rejects(f.ad('tempo-testnet','tempo-after-fault'),e=>e.code===`tempo_${failure}_unavailable`);await assert.rejects(f.service.campaignAction(tempo.id,'close'),e=>e.code===`tempo_${failure}_unavailable`);
+ });
+});
+
+test('Tempo paying-out and uncertain projections block new decisions, awards and receipt accepts, preserving duplicate receipts',async t=>{
+ for(const projection of [{phase:'paying_out',reconciliationRequired:false},{phase:'open',reconciliationRequired:true}])await t.test(JSON.stringify(projection),async t=>{
+  const f=fixture(t),tempo=await f.campaign('tempo-testnet'),ad=await f.ad('tempo-testnet'),accepted=await f.render(ad),pending=await f.ad('tempo-testnet','pending');
+  const id=ad.award.channelId,p=f.service.exchange.require('product_tempo_fixture',id);f.service.exchange.put('product_tempo_fixture',id,{...p,...projection});
+  f.service.state();assert.equal(f.service.exchange.require('channels',id).status,'blocked');const count=f.models.length;
+  const next=await f.ad('tempo-testnet','while-uncertain');assert.equal(next.status,'no_fill');assert.equal(f.models.length,count);assert.equal(next.trace.candidates.find(c=>c.campaignId===tempo.id).reason,'channel_unavailable');
+  assert.equal(f.service.exchange.decisionCandidates(pending.opportunityId).excluded.find(c=>c.campaignId===tempo.id).reason,'channel_unavailable');
+  await assert.rejects(f.render(pending),e=>e.code==='channel_unavailable');assert.equal(f.service.exchange.all('charges').length,1);
+  assert.equal(f.service.exchange.acceptDelivery({receipt:accepted.receipt,signature:accepted.signature}).replayed,true);assert.equal(f.service.exchange.all('charges').length,1);
+  f.service.exchange.put('product_tempo_fixture',id,{...p,phase:'open',reconciliationRequired:false});f.service.state();assert.equal(f.service.exchange.require('channels',id).status,'open');assert.equal((await f.render(pending)).charge.amountBaseUnits,pending.award.priceBaseUnits);
+ });
+});
+
+test('missing Tempo projection fails closed for new receipt charges without removing an existing funded channel',async t=>{
+ const f=fixture(t),tempo=await f.campaign('tempo-testnet'),ad=await f.ad('tempo-testnet'),before=f.service.exchange.require('channels',ad.award.channelId);f.start({tempoEnabled:false});
+ await assert.rejects(f.render(ad),e=>e.code==='channel_unavailable');assert.deepEqual(f.service.exchange.require('channels',ad.award.channelId),before);assert.equal(f.service.exchange.all('charges').length,0);assert.equal(f.service.state().campaigns.find(c=>c.id===tempo.id).payment.phase,'unavailable');
+});
+
+test('hosted migration refuses a running Tempo worker before copying any financial state',async t=>{
+ const source=mkdtempSync(join(tmpdir(),'axp-tempo-import-'));t.after(()=>rmSync(source,{recursive:true,force:true}));writeFileSync(join(source,'tempo-payment-worker.lock'),JSON.stringify({pid:process.pid}));
+ const values=new Map(),kv={get:async k=>values.get(k)??null,compareAndSet:async(k,b,v)=>{if((values.get(k)??null)!==b)return false;values.set(k,v);return true;}},workspace=createHostedProductWorkspace({kv,stateKey:Buffer.alloc(32,9)});
+ await assert.rejects(workspace.importDirectory(source),e=>e.code==='product_local_worker_running');assert.equal(values.size,0);
 });

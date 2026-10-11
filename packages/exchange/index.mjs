@@ -44,7 +44,7 @@ export class Exchange {
   syncNetworkChannel(id) {if(this.mode==='synthetic'||!this.networkState)throw new ContractError('network_adapter_required');return this.tx(()=>{const c=this.require('channels',id),s=this.networkState(id);if(!s)return c;if(s.channelId!==id||s.runId!==this.runId||s.mode!==this.mode)throw new ContractError('channel_binding');
     if((s.network!==undefined&&s.network!==(c.settlementNetwork??'solana-devnet'))||(c.settlementNetwork==='tempo-testnet'&&s.network!=='tempo-testnet')||(s.payee!==undefined&&s.payee!==c.payee)||(s.token!==undefined&&s.token!==c.token))throw new ContractError('channel_binding');
     if(s.openStatus!=='finalized')return c;
-    const status=s.phase==='finalized'?'finalized':['draining','closing'].includes(s.phase)?'draining':'open';
+    const status=s.phase==='finalized'?'finalized':c.settlementNetwork==='tempo-testnet'&&(s.reconciliationRequired||s.phase==='paying_out')?'blocked':['draining','closing'].includes(s.phase)?'draining':'open';
     Object.assign(c,{status,depositBaseUnits:s.depositBaseUnits,authorizedBaseUnits:s.authorizedBaseUnits,settledBaseUnits:s.settledBaseUnits,refundBaseUnits:s.refundBaseUnits,protocolChannelId:s.protocolChannelId,termsHash:s.termsHash,closeStatus:s.closeStatus});
     this.put('channels',id,c);return c;});}
   drainNetworkChannel(id) {if(this.mode==='synthetic')throw new ContractError('network_adapter_required');return this.tx(()=>{const c=this.require('channels',id);if(c.status==='open'){c.status='draining';this.put('channels',id,c);}return c;});}
@@ -78,6 +78,7 @@ export class Exchange {
     if(c.status!=='active')return 'campaign_paused';if(!c.allowedIntents.includes(o.coarseIntent)||c.destination!==o.destination)return 'policy_excluded';
     if(o.taskConstraints.some(k=>!c.declaredConstraints.includes(k)))return 'missing_constraint';
     const ch=this.require('channels',c.channelId);if(ch.publisherId!==o.publisherId||(!ignoreFunding&&ch.status!=='open'))return 'channel_unavailable';
+    if(ch.settlementNetwork==='tempo-testnet'){const s=this.networkState?.(ch.channelId);if(!s||s.reconciliationRequired||s.phase!=='open')return 'channel_unavailable';}
     if(baseUnits(c.maxBidBaseUnits)<baseUnits(o.floorBaseUnits))return 'below_floor';
     const counts=this.all('awards').filter(a=>a.campaignId===c.campaignId&&a.randomSessionId===o.randomSessionId&&['reserved','delivered'].includes(a.status)).length;
     if(counts>=2)return 'frequency_cap';const av=this.available(c);if(baseUnits(av.campaign)<baseUnits(o.floorBaseUnits)||(!ignoreFunding&&baseUnits(av.channel)<baseUnits(o.floorBaseUnits)))return 'budget_unavailable';return null;
@@ -115,6 +116,7 @@ export class Exchange {
     const ch=this.require('channels',a.channelId);
     if(a.payee!==ch.payee||(a.settlementNetwork??'solana-devnet')!==(ch.settlementNetwork??'solana-devnet')||(a.token!==undefined&&a.token!==ch.token))throw new ContractError('channel_binding');
     const chargeId=`charge-${a.id}`,old=this.get('charges',chargeId);if(old){if(old.receiptHash!==hash(receipt))throw new ContractError('receipt_conflict',undefined,409);if(!this.get('receipt_records',chargeId))this.put('receipt_records',chargeId,{chargeId,receipt,signature,receiptHash:hash(receipt),recordedOnReplay:true});return {delivery:old.delivery,charge:old,replayed:true};}
+    if(ch.settlementNetwork==='tempo-testnet'){const s=this.networkState?.(ch.channelId);if(!s||s.reconciliationRequired||!['open','draining'].includes(s.phase))throw new ContractError('channel_unavailable',undefined,409);}
     const at=this.now();if(!['open','draining'].includes(ch.status)||a.status!=='reserved'||at>=a.expiresAt)throw new ContractError('award_expired',undefined,409);
     const sequence=this.all('charges').filter(c=>c.channelId===a.channelId).length+1;
     const delivery={id:`delivery-${a.id}`,awardId:a.id,status:'accepted',receivedAt:at,receiptHash:hash(receipt)};

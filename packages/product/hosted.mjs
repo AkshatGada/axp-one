@@ -77,7 +77,7 @@ export function createHostedProductWorkspace({kv,stateKey,id='demo',kind='financ
   async function importDirectory(source) {
     // Operator-only migration; refuse a running local payment worker and refuse
     // replacement of any hosted state, including an empty initialized workspace.
-    if(existsSync(join(source,'payment-worker.lock')))fail('product_local_worker_running');
+    if(['payment-worker.lock','tempo-payment-worker.lock'].some(name=>existsSync(join(source,name))))fail('product_local_worker_running');
     if(await kv.get(key)!==null)fail('product_workspace_already_exists',409);
     const dir=mkdtempSync(join(tempRoot,'axp-product-import-'));
     try {
