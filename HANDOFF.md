@@ -256,12 +256,13 @@ During preparation of this branch on October 11:
 
 - Repository tests: **477 passed, 11 skipped, zero failed** (488 total).
 - Marketing and product UI TypeScript checks: passed.
-- Staged repository hygiene and whitespace checks: passed before this handoff;
+- Staged repository hygiene and whitespace checks: passed including this handoff;
   rerun after any further staged change.
 - No fresh provider call, token transfer, benchmark or deployment was performed
   for this synchronization. Prior hosted acceptance is dated evidence.
 
-Use Node 22.18+ and the pinned pnpm version from package.json. Main commands:
+Use Node 22.18+ and pnpm 10+; this release was checked with pnpm 10.12.4.
+Main commands:
 
 ```sh
 pnpm install --frozen-lockfile
