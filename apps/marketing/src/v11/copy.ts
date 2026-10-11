@@ -26,7 +26,7 @@ export const COVER = {
   deck: "People now ask AI what to buy. axp.one places one labelled ad below the answer, only when it fits.",
   primary: { label: "Open the advertiser dashboard", href: ADVERTISER_URL },
   secondary: { label: "Read the integration guide", href: GUIDE_URL },
-  note: "Illustrative questions, brands and bidding.",
+  note: "Illustrative questions and bidding.",
 };
 
 /** 01 The shift. */

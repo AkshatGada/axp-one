@@ -1,13 +1,13 @@
 "use client";
 
-// The plate for movement 04: Tidewater (a fictional assistant) shown whole and at rest, with the
-// builder's two controls. The answer is one element that never changes: the slot below it keeps
-// its place whether it holds the Sponsored card or nothing, so the answer cannot move.
+// The plate for movement 04: Tidewater (a fictional assistant) shown whole, with four marginal
+// notes. Nothing here is a control: the plate plays once as it enters and then rests complete.
+// The answer is one element that no state touches, and the slot below it always keeps its place
+// (the card is in the flow from the first paint), so the answer cannot move.
 //
-// Stages: "still" is the server render and the motion-off page (complete, card shown).
-// With motion armed: "pre" (waiting to be seen) > "write" (the answer writes in) > "card" (the card
-// arrives, is confirmed, the accrual lands, then the empty slot is demonstrated once) > "done"
-// (the reader has control). Any click or key press jumps to "done" for good.
+// Stages: "still" is the server render, the motion-off page and an abrupt arrival (complete).
+// With motion armed and the plate still below the screen: "pre" (waiting) > "write" (the answer
+// writes in) > "card" (the card arrives below the answer, is confirmed, the accrual lands; rest).
 import { useCallback, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { Ad, Fig, Split, useInView } from "../kit";
@@ -15,27 +15,10 @@ import { ADVERTISER, ANSWER, APP, APP_RULES, INDEPENDENCE, QUESTION, RECEIPT } f
 import { APPS } from "../copy";
 import s from "./apps.module.css";
 
-type Stage = "still" | "pre" | "write" | "card" | "done";
-
-const NOT_ALLOWED = "Not allowed. Nothing is shown.";
-const SCROLL_KEYS = new Set(["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "]);
+type Stage = "still" | "pre" | "write" | "card";
 
 // The performance, in milliseconds from the moment the plate is seen.
-const T = { write: 0, card: 1400, demoOff: 4700, demoOn: 6900, done: 8700, confirm: 640 };
-
-function Latch({ kind, on, onToggle, name, label, state }: { kind: "rule" | "judgment"; on: boolean; onToggle: () => void; name: string; label: string; state?: string }) {
-  return (
-    <button type="button" role="switch" aria-checked={on} aria-label={name} className={s.latch} data-latch="" onClick={onToggle}>
-      <span className={s.sw}>
-        <span className="x-sw" data-on={on ? "" : undefined} data-kind={kind === "judgment" ? "judgment" : undefined} aria-hidden />
-      </span>
-      <span className={s.latchText} aria-hidden>
-        <span className={s.latchLabel}>{label}</span>
-        {state ? <span className={s.latchState}>{state}</span> : null}
-      </span>
-    </button>
-  );
-}
+const T = { write: 0, card: 1400, confirm: 2040 };
 
 function Tick({ size = 13 }: { size?: number }) {
   return (
@@ -49,38 +32,14 @@ export default function Plate() {
   const [ref, seen] = useInView<HTMLDivElement>(0.35);
   const [stage, setStage] = useState<Stage>("still");
   const [instant, setInstant] = useState(false);
-  const [allowed, setAllowed] = useState(true);
-  const [fits, setFits] = useState(true);
   const [confirmed, setConfirmed] = useState(true);
-  const [burst, setBurst] = useState(0);
-  const [same, setSame] = useState(false);
-  const [reason, setReason] = useState<string>(APPS.empty);
-  const [say, setSay] = useState("");
-  const [hint, setHint] = useState(false);
   const [entered, setEntered] = useState(false);
 
   const motion = useRef(false);
   const timers = useRef<number[]>([]);
   const enteredRef = useRef(false);
-  const auto = useRef(false);      // the slot is empty because the performance emptied it
-  const running = useRef(false);   // the performance owns the plate
-  const skip = useRef(false);      // the next confirmation is already on the plate: no ceremony
-  const sameTimer = useRef(0);
 
-  const live = stage === "card" || stage === "done";
-  const active = live || stage === "still";
-  const cardOn = allowed && fits && active;
-
-  const clear = () => { timers.current.forEach((t) => window.clearTimeout(t)); timers.current = []; };
-  const jump = useCallback(() => { setInstant(true); window.setTimeout(() => setInstant(false), 120); }, []);
-
-  // The quiet mark: each time the slot changes, the answer is shown to be unchanged.
-  const flash = useCallback(() => {
-    window.clearTimeout(sameTimer.current);
-    setSame(true);
-    sameTimer.current = window.setTimeout(() => setSame(false), 2400);
-  }, []);
-  useEffect(() => () => window.clearTimeout(sameTimer.current), []);
+  const cardOn = stage === "card" || stage === "still";
 
   // How much of the plate is on screen, and whether it has been scrolled past.
   const measure = () => {
@@ -92,37 +51,30 @@ export default function Plate() {
   };
 
   // Enter: perform once. `abrupt` means the reader landed on the plate all at once (an anchor
-  // link, a flick, coming back up from below): then the plate is whole at once, in the same frame,
-  // the writing is skipped, and only the empty slot is demonstrated.
-  const enter = useCallback((abrupt: boolean, sync = true) => {
+  // link, a flick, coming back up from below): then the plate is whole at once, in the same frame.
+  const enter = useCallback((abrupt: boolean) => {
     if (enteredRef.current) return;
     enteredRef.current = true;
-    running.current = true;
     const at = (ms: number, fn: () => void) => { timers.current.push(window.setTimeout(fn, ms)); };
-    let t0 = 0;
     if (abrupt) {
-      const whole = () => { setInstant(true); skip.current = true; setConfirmed(true); setStage("card"); setEntered(true); };
-      if (sync) flushSync(whole); else whole();
-      window.setTimeout(() => setInstant(false), 120);
-      t0 = T.card + 400;
-    } else {
-      setEntered(true);
-      at(T.write, () => setStage("write"));
-      at(T.card, () => setStage("card"));
+      flushSync(() => { setInstant(true); setConfirmed(true); setStage("still"); setEntered(true); });
+      at(160, () => setInstant(false));
+      return;
     }
-    at(T.demoOff - t0, () => { auto.current = true; setReason(APPS.empty); setFits(false); flash(); });
-    at(T.demoOn - t0, () => { auto.current = false; setFits(true); flash(); });
-    at(T.done - t0, () => { running.current = false; setStage("done"); setHint(true); });
-  }, [flash]);
+    setEntered(true);
+    at(T.write, () => setStage("write"));
+    at(T.card, () => setStage("card"));
+    at(T.confirm, () => setConfirmed(true));
+  }, []);
 
   // Arm, only when the visitor allows motion. The server render is the whole plate; it is only
   // cleared for the performance while it is still off screen, so nothing ever flashes empty.
   useEffect(() => {
     motion.current = document.documentElement.dataset.pxMotion === "on";
     if (!motion.current) return;
+    const reset = () => { timers.current.forEach((t) => window.clearTimeout(t)); timers.current = []; enteredRef.current = false; };
     const first = measure();
-    const reset = () => { clear(); enteredRef.current = false; running.current = false; };
-    if (first.ratio >= 0.2 || first.above) { enter(true, false); return reset; }
+    if (first.ratio >= 0.2 || first.above) { enteredRef.current = true; setEntered(true); return reset; }
     setConfirmed(false);
     setStage("pre");
     // The plate has entered when a good quarter of it is on screen. A scroll crosses that line
@@ -147,59 +99,12 @@ export default function Plate() {
     return () => window.clearTimeout(t);
   }, [seen, entered, enter]);
 
-  // Any click or key press hands the plate to the reader, for good.
-  useEffect(() => {
-    if (!entered || stage === "still" || stage === "done") return;
-    const root = ref.current?.closest("section") ?? null;
-    const stop = (e: Event) => {
-      const target = e.target as Element | null;
-      const inside = !!(target && root && root.contains(target));
-      if (e.type === "pointerdown" && !inside) return;
-      if (e.type === "keydown") {
-        const k = e as KeyboardEvent;
-        if (k.metaKey || k.ctrlKey || k.altKey) return;
-        if (!inside && SCROLL_KEYS.has(k.key)) return; // scrolling by keyboard is not an interaction with the plate
-      }
-      clear();
-      running.current = false;
-      if (auto.current && !(target && target.closest?.("[data-latch]"))) setFits(true);
-      auto.current = false;
-      if (stage !== "card") { jump(); skip.current = true; setConfirmed(true); }
-      setStage("done");
-    };
-    window.addEventListener("pointerdown", stop, true);
-    window.addEventListener("keydown", stop, true);
-    return () => { window.removeEventListener("pointerdown", stop, true); window.removeEventListener("keydown", stop, true); };
-  }, [entered, stage, ref, jump]);
-
-  // Confirmation follows the card; the accrual follows the confirmation.
-  useEffect(() => {
-    if (!active) return;
-    if (!cardOn) { skip.current = false; setConfirmed(false); return; }
-    if (!motion.current || skip.current) { skip.current = false; setConfirmed(true); return; }
-    const t = window.setTimeout(() => { setConfirmed(true); setBurst((n) => n + 1); }, T.confirm);
-    return () => window.clearTimeout(t);
-  }, [cardOn, active]);
-
-  const change = (nextAllowed: boolean, nextFits: boolean) => {
-    const was = allowed && fits;
-    const now = nextAllowed && nextFits;
-    const why = !nextAllowed ? NOT_ALLOWED : APPS.empty;
-    if (!now) setReason(why);
-    if (was !== now) flash();
-    setAllowed(nextAllowed);
-    setFits(nextFits);
-    setSay(`${now ? "One Sponsored card is shown below the answer." : why} The answer is unchanged.`);
-  };
-  const toggleAllowed = () => change(!allowed, fits);
-  const toggleFits = () => change(allowed, !fits);
-
   const [model, slot, rules, earn] = APPS.points;
 
   return (
     <div className={s.figWrap}>
-      <Fig no="4" caption={`${APP.name}, a fictional assistant`} className={s.fig}>
-        <div className={s.stage} data-stage={stage} data-card={cardOn ? "on" : "off"} data-confirmed={confirmed ? "" : undefined} data-instant={instant ? "" : undefined} data-same={same ? "" : undefined} data-hint={hint ? "" : undefined}>
+      <Fig caption={`${APP.name}, a fictional assistant`} className={s.fig}>
+        <div className={s.stage} data-stage={stage} data-card={cardOn ? "on" : "off"} data-confirmed={confirmed ? "" : undefined} data-instant={instant ? "" : undefined}>
           {/* The sheet itself (its material and depth). The plate's parts are laid over it. */}
           <div ref={ref} className={s.sheet} aria-hidden />
           <div className={s.plate}>
@@ -212,7 +117,6 @@ export default function Plate() {
                 </span>
                 <i className={s.me}><i /></i>
               </span>
-              <i className={s.tideLine} aria-hidden />
             </div>
 
             <div className={s.col}>
@@ -221,7 +125,6 @@ export default function Plate() {
               <div className={s.a}>
                 <p className={s.aLabel}>
                   <i className={s.tide} data-s="" aria-hidden />{APP.name}
-                  <span className={s.same} aria-hidden><i />Unchanged</span>
                 </p>
                 <Split as="p" text={ANSWER} className={s.answer} />
                 <i className={`${s.brace} ${s.dk}`} aria-hidden />
@@ -235,27 +138,25 @@ export default function Plate() {
 
               <div className={s.slot}>
                 <div className={s.slotIn}>
-                  <i className={s.ticks} aria-hidden><b /><b /><b /><b /></i>
-                  <p className={s.reason} aria-hidden={cardOn}>{reason}</p>
                   <div className={s.cardWrap} aria-hidden={!cardOn}>
                     <Ad name={ADVERTISER.name} text={ADVERTISER.creative} domain={ADVERTISER.domain} className={s.card} />
                   </div>
                   <i className={s.chip} aria-hidden><Tick size={12} /></i>
                 </div>
-                {burst > 0 ? <i key={burst} className={`${s.token} ${s.dk}`} aria-hidden /> : null}
+                {stage === "card" && confirmed ? <i className={`${s.token} ${s.dk}`} aria-hidden /> : null}
 
                 <i className={`${s.lead} ${s.leadL} ${s.lead3} ${s.dk}`} aria-hidden />
                 <div className={`${s.note} ${s.noteL} ${s.note3}`}>
                   <p className={s.k}>{rules.k}</p>
                   <p className={s.line}>{rules.line}</p>
-                  <Latch kind="rule" on={allowed} onToggle={toggleAllowed} name={`Allow ${APP_RULES.allow.toLowerCase()}`} label={APP_RULES.allow} state={allowed ? "Allowed" : "Not allowed"} />
+                  {/* A plain statement of the allowed category: an ink mark and words. Not a control. */}
+                  <p className={s.mark}><i aria-hidden><Tick size={13} /></i><b>{APP_RULES.allow}</b><span>Allowed</span></p>
                 </div>
 
                 <i className={`${s.lead} ${s.leadR} ${s.lead2} ${s.dk}`} aria-hidden />
                 <div className={`${s.note} ${s.noteR} ${s.note2}`}>
                   <p className={s.k}>{slot.k}</p>
                   <p className={s.line}>{slot.line}</p>
-                  <Latch kind="judgment" on={fits} onToggle={toggleFits} name="An ad fits this question" label={fits ? "An ad fits" : "No ad fits"} />
                 </div>
 
                 <i className={`${s.lead} ${s.leadR} ${s.lead4} ${s.dk}`} aria-hidden />
@@ -280,8 +181,6 @@ export default function Plate() {
           </div>
         </div>
       </Fig>
-
-      <p className={s.sr} role="status" aria-live="polite">{say}</p>
     </div>
   );
 }

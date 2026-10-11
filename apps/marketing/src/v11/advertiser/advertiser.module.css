@@ -1,353 +1,109 @@
-/* 03 For advertisers. An unpinned editorial spread: three enormous verbs, each with one object.
-   The still state is the default; every entrance and transition is armed only under
-   html[data-px-motion="on"], and only until its figure is [data-seen]. Transform and opacity only. */
+/* 03 For advertisers. A calm section: heading, four equal parts under hairline rules, one action.
+   The still state is the default. Motion is armed only under html[data-px-motion="on"], and only
+   until a part is [data-seen]; then each figure plays once and rests. Transform and opacity only. */
 
-.root { --verb: clamp(64px, 15vw, 272px); --dip: calc(var(--verb) * .13); --lap: calc(var(--verb) * .08 + var(--dip)); padding-block: clamp(20px, 2.4vw, 40px) clamp(56px, 6vw, 96px); }
-.sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.root { --fig-h: 156px; --step: 110ms; }
 
-/* ---------- The title ---------- */
-.title { padding-block: clamp(22px, 2.6vw, 44px) 0; }
-.h :global(.x-line) { overflow: clip; padding: .1em .04em .16em; margin: -.1em -.04em -.16em; }
-:global(html[data-px-motion="on"]) .title:not([data-seen]) .h :global(.x-w) { transform: translateY(112%); }
-:global(html[data-px-motion="on"]) .title[data-seen] .h :global(.x-w) { animation: adv-rise var(--x-d3) var(--x-out) both; animation-delay: calc(var(--i) * 70ms); }
-@keyframes adv-rise { from { transform: translateY(112%); } to { transform: none; } }
+.head { margin-top: clamp(40px, 5.6vw, 88px); }
+.head .h { grid-column: 1 / span 9; }
 
-/* ---------- An act: the verb, its line, its plate. The verb overlaps the top of its plate. ---------- */
-.act { padding-top: clamp(28px, 3.4vw, 56px); }
-.head { position: relative; z-index: 2; align-items: end; row-gap: 12px; padding-top: clamp(12px, 1.4vw, 22px); border-top: 1px solid var(--x-hair); pointer-events: none; }
-.head .verb { grid-column: 1 / span 9; grid-row: 1; margin-left: -.04em; font-size: var(--verb); line-height: .86; }
-.verb :global(.x-line) { overflow: clip; padding: .1em .05em .22em; margin: -.1em -.05em -.22em; }
-.head .line { grid-column: 10 / -1; grid-row: 1; padding-bottom: calc(var(--lap) + .55em); color: var(--x-ink); font-size: clamp(19px, 1.75vw, 28px); }
-.act[data-side="right"] .verb { grid-column: 4 / -1; text-align: right; margin-left: 0; margin-right: -.02em; }
-.act[data-side="right"] .line { grid-column: 1 / span 3; max-width: 15ch; }
-:global(html[data-px-motion="on"]) .head:not([data-seen]) .verb :global(.x-c) { transform: translateY(118%); }
-:global(html[data-px-motion="on"]) .head[data-seen] .verb :global(.x-c) { animation: adv-rise var(--x-d3) var(--x-out) both; animation-delay: calc(var(--i) * 38ms); }
-:global(html[data-px-motion="on"]) .head:not([data-seen]) .line { opacity: 0; }
-:global(html[data-px-motion="on"]) .head[data-seen] .line { animation: adv-fade var(--x-d3) var(--x-ease) 320ms both; }
-@keyframes adv-fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-.act .plate { margin-top: calc(var(--lap) * -1); }
-.act .plate > figcaption { margin-top: clamp(10px, 1.1vw, 16px); }
+/* Four parts, three grid columns each. Rows are shared (subgrid) so verbs, lines and figures
+   align across the row however a line wraps. */
+.parts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: auto auto auto; column-gap: var(--x-col-gap); margin-top: clamp(48px, 7.6vw, 116px); }
+.part { position: relative; display: grid; grid-row: span 3; grid-template-rows: subgrid; align-content: start; min-width: 0; padding-top: 18px; --d: calc(var(--p) * var(--step)); }
+.part::before { content: ""; position: absolute; inset: 0 0 auto; height: 1px; background: var(--x-ink); transform-origin: 0 50%; }
+.part .line { margin-top: 8px; font-size: 16px; line-height: 1.45; text-wrap: balance; }
+.part .fig { position: relative; height: var(--fig-h); margin-top: clamp(24px, 2.6vw, 38px); }
 
-/* =====================================================================
-   1. DESCRIBE: a written sheet, the listed things as blocks on a ledge
-   ===================================================================== */
-.describe { position: relative; align-items: end; row-gap: 22px; }
-.desk { grid-column: 1 / span 7; position: relative; }
-.sheet { position: relative; z-index: 1; padding: calc(var(--dip) + clamp(22px, 2.4vw, 40px)) clamp(22px, 3vw, 48px) clamp(34px, 3.4vw, 54px); border-radius: 2px; background: var(--x-sheet); box-shadow: var(--x-shadow); }
-.offer { margin: 0; max-width: 17ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(27px, 3.4vw, 54px); line-height: 1.04; letter-spacing: -.038em; }
-.offer :global(.x-c) { position: relative; }
-.offer :global(.x-c)::after { content: ""; position: absolute; top: .08em; bottom: .02em; right: -.07em; width: .05em; min-width: 2px; background: var(--x-ink); opacity: 0; }
-.offer :global(.x-line)::after { content: ""; display: inline-block; width: .05em; min-width: 2px; height: .82em; margin-left: .07em; vertical-align: -.06em; background: var(--x-ink); opacity: 0; }
+.root .note { margin-top: 20px; }
+.end { margin-top: clamp(40px, 5vw, 76px); }
 
-.shelf { position: relative; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px; margin: clamp(14px, 1.6vw, 22px) 0 0; padding: 0; list-style: none; border-bottom: 2px solid var(--x-ink); }
-.token, .tokenSlot { flex: none; }
-.token, .add { display: inline-flex; align-items: center; height: clamp(42px, 3.6vw, 52px); padding: 0 clamp(13px, 1.3vw, 19px); border-radius: 3px 3px 0 0; font-size: clamp(15px, 1.2vw, 17.5px); font-weight: 500; letter-spacing: -.005em; white-space: nowrap; }
-.token { background: var(--x-ink); color: var(--x-paper); }
-.add { position: relative; gap: 10px; overflow: clip; border: 1.5px dashed var(--x-quiet); border-bottom: 0; background: transparent; color: var(--x-ink); cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.add:focus-visible { outline-offset: 4px; }
-.addFill { position: absolute; inset: -2px; background: var(--x-ink); transform: translateY(-104%); }
-.addWord, .plus { position: relative; }
-.plus { width: 13px; height: 13px; flex: none; }
-.plus::before, .plus::after { content: ""; position: absolute; left: 0; top: 5.75px; width: 13px; height: 1.5px; background: currentColor; }
-.plus::after { transform: rotate(90deg); }
-.add:hover { border-color: var(--x-ink); border-style: solid; }
-.add:active .addWord, .add:active .plus { transform: translateY(1.5px); }
-.describe[data-listed] .add { border-style: solid; border-color: var(--x-ink); color: var(--x-paper); }
-.describe[data-listed] .addFill { transform: none; }
-.describe[data-listed] .plus { transform: rotate(45deg); }
+/* Describe: the offer on a sheet; what was listed, as ink tokens below it. */
+.describe { display: grid; gap: 12px; align-content: start; }
+.offer { position: relative; z-index: 1; margin: 0; padding: 12px 14px 13px; border: 1px solid var(--x-hair); border-radius: var(--x-r-s); background: var(--x-sheet); font-size: 14.5px; line-height: 1.4; letter-spacing: -.005em; color: var(--x-ink); text-wrap: pretty; }
+.tokens { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.token { padding: 5px 10px 6px; border-radius: 6px; background: var(--x-ink); color: #fff; font-size: 12.5px; font-weight: 500; line-height: 1.25; letter-spacing: .005em; white-space: nowrap; }
 
-.moment { grid-column: 8 / -1; position: relative; display: grid; gap: clamp(10px, 1.1vw, 16px); padding-left: clamp(0px, 1.4vw, 24px); }
-.q { justify-self: start; margin: 0; padding: clamp(13px, 1.2vw, 18px) clamp(17px, 1.6vw, 24px) clamp(14px, 1.3vw, 19px); border: 1px solid var(--x-ink); border-radius: 22px 22px 22px 4px; background: var(--x-sheet); font-size: clamp(17px, 1.6vw, 24px); line-height: 1.26; letter-spacing: -.012em; text-wrap: balance; }
-.qKey { position: relative; white-space: nowrap; }
-.qKey::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: var(--x-blue); transform: scaleX(0); transform-origin: left; }
-.describe[data-listed] .qKey::after { transform: none; }
-.answer { display: grid; gap: 8px; padding: 4px 2px; }
-.answer i { display: block; height: 6px; border-radius: 3px; background: var(--x-hair); }
-.answer i:nth-child(2) { width: 86%; }
-.answer i:nth-child(3) { width: 58%; }
-.slot { position: relative; display: grid; min-height: clamp(96px, 9.4vw, 150px); padding: clamp(16px, 1.7vw, 26px) clamp(18px, 1.9vw, 30px); border: 1.5px dashed var(--x-quiet); border-radius: var(--x-r-l); }
-.slot::after { content: ""; position: absolute; inset: -1.5px; border: 2.5px solid var(--x-blue); border-radius: var(--x-r-l); background: var(--x-sheet); box-shadow: var(--x-shadow-blue); opacity: 0; transform: scale(.97); }
-.describe[data-listed] .slot::after { opacity: 1; transform: none; }
-.slotState { position: relative; z-index: 1; grid-area: 1 / 1; display: grid; align-content: center; gap: 6px; margin: 0; }
-.slotState[data-yes] { opacity: 0; }
-.describe[data-listed] .slotState { opacity: 0; }
-.describe[data-listed] .slotState[data-yes] { opacity: 1; }
-.slotWord { font-family: var(--font-display); font-weight: 300; font-size: clamp(30px, 3.5vw, 56px); line-height: 1; letter-spacing: -.04em; }
-.slotState[data-yes] .slotWord { color: var(--x-blue); }
-.slotWhy { font-size: clamp(15px, 1.2vw, 18px); line-height: 1.3; color: var(--muted); }
-/* The mark that carries the cause to its effect: round and ultramarine, a judgment. */
-.spark { position: absolute; left: 0; top: 0; z-index: 3; width: 0; height: 0; pointer-events: none; opacity: 0; }
-.spark i { position: absolute; left: -11px; top: -11px; width: 22px; height: 22px; border-radius: 50%; background: var(--x-blue); }
+/* Approve: the kit card, and the seal across its lower edge. */
+.approve { position: relative; }
+.seal { position: absolute; right: 16px; bottom: -17px; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--x-ink); color: #fff; box-shadow: 0 0 0 3px var(--x-paper); transform: rotate(-8deg); }
+.seal::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(255, 255, 255, .5); border-radius: 50%; }
 
-/* Describe, in motion. Entrance: the offer is written, the blocks settle out from under the sheet. */
-:global(html[data-px-motion="on"]) .describe:not([data-seen]) .offer :global(.x-c),
-:global(html[data-px-motion="on"]) .describe:not([data-seen]) .token,
-:global(html[data-px-motion="on"]) .describe:not([data-seen]) .tokenSlot,
-:global(html[data-px-motion="on"]) .describe:not([data-seen]) .moment { opacity: 0; }
-:global(html[data-px-motion="on"]) .describe[data-seen] .offer :global(.x-c) { animation: adv-type 20ms step-start both; animation-delay: calc(240ms + var(--i) * 24ms); }
-:global(html[data-px-motion="on"]) .describe[data-seen] .offer :global(.x-c)::after { animation: adv-caret 26ms linear both; animation-delay: calc(240ms + var(--i) * 24ms); }
-:global(html[data-px-motion="on"]) .describe[data-seen] .offer :global(.x-line)::after { animation: adv-caret-end 1500ms steps(1) 1380ms forwards; }
-:global(html[data-px-motion="on"]) .describe[data-seen] .token,
-:global(html[data-px-motion="on"]) .describe[data-seen] .tokenSlot { animation: adv-settle 620ms linear both; animation-delay: calc(1500ms + var(--t) * 130ms); }
-:global(html[data-px-motion="on"]) .describe[data-seen] .moment { animation: adv-fade var(--x-d3) var(--x-ease) 1900ms both; }
-@keyframes adv-type { from { opacity: 0; } to { opacity: 1; } }
-@keyframes adv-caret { 0% { opacity: 0; } 1%, 99% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes adv-caret-end { 0%, 34%, 68% { opacity: 1; } 17%, 51%, 85%, 100% { opacity: 0; } }
-@keyframes adv-settle {
-  0% { opacity: 0; transform: translateY(-88px); animation-timing-function: cubic-bezier(.5, 0, .9, .55); }
-  8% { opacity: 1; }
-  52% { opacity: 1; transform: translateY(0); animation-timing-function: cubic-bezier(.2, .8, .4, 1); }
-  70% { transform: translateY(-7px); animation-timing-function: cubic-bezier(.5, 0, .8, .5); }
-  86% { transform: translateY(0); animation-timing-function: ease-out; }
-  93% { transform: translateY(-1.5px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-/* Interaction, one event: the block drops into its slot, the ledge takes the weight, a mark leaves
-   the block, crosses to the slot below the answer, and the moment turns as it lands. */
-:global(html[data-px-motion="on"]) .addFill { transition: transform 150ms cubic-bezier(.4, 0, 1, 1); }
-:global(html[data-px-motion="on"]) .describe[data-listed] .addFill { transition: transform 230ms cubic-bezier(.55, 0, .95, .55); }
-:global(html[data-px-motion="on"]) .add { transition: color 60ms linear 120ms, border-color 60ms linear 120ms; }
-:global(html[data-px-motion="on"]) .plus { transition: transform var(--x-d2) var(--x-out); }
-:global(html[data-px-motion="on"]) .describe[data-seen][data-listed] .shelf { animation: adv-thud 420ms linear 215ms both; }
-@keyframes adv-thud { 0% { transform: none; } 14% { transform: translateY(3.5px); } 46% { transform: translateY(-1px); } 100% { transform: none; } }
-:global(html[data-px-motion="on"]) .spark { animation: adv-fly-x 520ms cubic-bezier(.45, 0, .55, 1) 230ms both; }
-:global(html[data-px-motion="on"]) .spark i { animation: adv-fly-y 520ms cubic-bezier(.3, 0, .2, 1) 230ms both; }
-@keyframes adv-fly-x { 0% { opacity: 0; transform: translateX(var(--x0)); } 10% { opacity: 1; } 84% { opacity: 1; transform: translateX(var(--x1)); } 100% { opacity: 0; transform: translateX(var(--x1)); } }
-@keyframes adv-fly-y { 0% { transform: translateY(var(--y0)) scale(.5); } 40% { transform: translateY(calc(var(--y0) * .5 + var(--y1) * .5 - 46px)) scale(1); } 84% { transform: translateY(var(--y1)) scale(1); } 100% { transform: translateY(var(--y1)) scale(4); } }
-:global(html[data-px-motion="on"]) .qKey::after { transition: transform var(--x-d2) var(--x-out) 60ms; }
-:global(html[data-px-motion="on"]) .describe[data-listed] .qKey::after { transition-delay: 300ms; }
-:global(html[data-px-motion="on"]) .slot::after { transition: opacity 140ms linear, transform var(--x-d2) var(--x-out); }
-:global(html[data-px-motion="on"]) .describe[data-listed] .slot::after { transition-delay: 650ms; }
-:global(html[data-px-motion="on"]) .slotState { transition: opacity 140ms linear; }
-:global(html[data-px-motion="on"]) .describe[data-listed] .slotState { transition-delay: 650ms; }
-:global(html[data-px-motion="on"]) .describe[data-listed] .slotState[data-yes] { transition-delay: 720ms; }
-/* A quiet invitation on the unlisted block; it stops for good at the first touch. */
-:global(html[data-px-motion="on"]) .describe[data-seen]:not([data-touched]) .plus { animation: adv-nudge 2600ms var(--x-inout) 3200ms 3 both; }
-@keyframes adv-nudge { 0%, 62%, 100% { transform: none; } 76% { transform: rotate(90deg) scale(1.25); } 90% { transform: rotate(90deg); } }
+/* Limit: a ceiling and a wall in ink. Two soft bodies are cut flat where they meet them. */
+.limit { display: grid; grid-template-rows: auto 1fr auto; gap: 7px; height: 100%; }
+.bound { margin: 0; font-size: 12.5px; font-weight: 500; line-height: 1.25; letter-spacing: .005em; color: var(--x-ink); }
+.bound[data-side] { justify-self: end; padding-right: 8px; }
+.room { position: relative; min-height: 0; border-top: 2px solid var(--x-ink); border-right: 2px solid var(--x-ink); overflow: hidden; }
+.rise, .reach { position: absolute; display: block; border-radius: 50%; background: radial-gradient(closest-side, rgba(43, 59, 255, .86), rgba(43, 59, 255, .66) 44%, rgba(43, 59, 255, .2) 80%, rgba(43, 59, 255, 0)); }
+.rise { left: 8%; top: -62px; width: 136px; height: 136px; }
+.reach { right: -48px; top: 12px; width: 94px; height: 94px; }
 
-/* =====================================================================
-   2. APPROVE: the exact words on a proof, held by a seal
-   ===================================================================== */
-.approve { align-items: end; row-gap: 20px; }
-.proof { grid-column: 1 / span 8; position: relative; padding: calc(var(--dip) + clamp(34px, 3.4vw, 58px)) clamp(22px, 6vw, 104px) clamp(40px, 3.8vw, 64px); border-radius: 2px; background: var(--x-sheet); box-shadow: var(--x-shadow); }
-.adWrap { position: relative; }
-.crop { position: absolute; width: 26px; height: 26px; }
-.crop::before, .crop::after { content: ""; position: absolute; background: var(--x-ink); }
-.crop::before { width: 15px; height: 1px; }
-.crop::after { width: 1px; height: 15px; }
-.crop[data-c="tl"] { right: 100%; bottom: 100%; }
-.crop[data-c="tl"]::before { left: 0; bottom: 0; } .crop[data-c="tl"]::after { right: 0; top: 0; }
-.crop[data-c="tr"] { left: 100%; bottom: 100%; }
-.crop[data-c="tr"]::before { right: 0; bottom: 0; } .crop[data-c="tr"]::after { left: 0; top: 0; }
-.crop[data-c="bl"] { right: 100%; top: 100%; }
-.crop[data-c="bl"]::before { left: 0; top: 0; } .crop[data-c="bl"]::after { right: 0; bottom: 0; }
-.crop[data-c="br"] { left: 100%; top: 100%; }
-.crop[data-c="br"]::before { right: 0; top: 0; } .crop[data-c="br"]::after { left: 0; bottom: 0; }
-/* Under the card: the empty place it leaves when it is withdrawn. */
-.adWrap::before { content: ""; position: absolute; inset: 0; border: 1.5px dashed var(--x-quiet); border-radius: var(--x-r-l); opacity: 0; }
-.approve:not([data-sealed]) .adWrap::before { opacity: 1; }
-.card { position: relative; transform-origin: 18% 80%; }
-.ad { box-shadow: 0 1px 0 rgba(14, 18, 32, .04), 0 18px 40px -26px rgba(43, 59, 255, .55); }
-.edit { position: relative; white-space: nowrap; }
-.edit::after { content: ""; position: absolute; left: -1px; right: -1px; bottom: -1px; height: 2px; background: var(--x-ink); opacity: 0; }
-.edit[data-fresh]::after { opacity: 1; }
-/* Withdrawn: off its marks, faded, struck through. */
-.approve:not([data-sealed]) .card { opacity: .36; transform: translate(-2.2%, 9%) rotate(-3.2deg); }
-.void { position: absolute; left: -3%; right: -3%; top: 50%; height: 3px; margin-top: -1.5px; background: var(--x-ink); transform: rotate(-9deg) scaleX(0); transform-origin: left center; }
-.approve:not([data-sealed]) .void { transform: rotate(-9deg) scaleX(1); }
+/* See why: a small page (question, answer, the card below it) and the reason beside the card. */
+.see { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 14px; align-items: end; }
+.thumb { display: grid; gap: 7px; align-content: start; padding: 12px; border: 1px solid var(--x-hair); border-radius: var(--x-r-s); background: var(--x-sheet); }
+.thumb i { display: block; height: 5px; border-radius: 3px; background: var(--x-hair); }
+.thumb .ask { justify-self: end; width: 62%; height: 14px; margin-bottom: 5px; border-radius: 7px; background: var(--x-hair-soft); }
+.thumb .bar:nth-of-type(3) { width: 86%; }
+.thumb .bar:nth-of-type(4) { width: 58%; }
+.mini { display: grid; gap: 6px; margin-top: 6px; padding: 8px; border: 1.5px solid var(--x-blue); border-radius: 6px; }
+.mini i:first-child { width: 26px; height: 7px; border-radius: 2px; background: var(--x-blue); }
+.mini i:last-child { width: 88%; }
+.reason { position: relative; padding: 0 0 4px 16px; }
+.reason::before { content: ""; position: absolute; left: -27px; top: 10px; width: 35px; height: 1.5px; background: var(--x-blue); transform-origin: 0 50%; }
+.out { margin: 0; font-size: 15px; font-weight: 500; line-height: 1.3; color: var(--x-blue); }
+.why { margin: 4px 0 0; font-size: 14.5px; line-height: 1.38; color: var(--x-ink); text-wrap: pretty; }
 
-.seal { position: absolute; right: clamp(4px, 1.5vw, 26px); bottom: clamp(4px, .7vw, 12px); width: clamp(92px, 10.4vw, 158px); aspect-ratio: 1; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--x-ink); cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.seal[aria-disabled="true"] { cursor: default; }
-.seal:focus-visible { outline-offset: 5px; }
-.seal::before { content: ""; position: absolute; inset: 9% 3% -5%; border-radius: 50%; background: radial-gradient(closest-side, rgba(14, 18, 32, .34), rgba(14, 18, 32, 0) 100%); }
-.half { position: absolute; inset: 0; display: block; }
-.half[data-h="l"] { clip-path: polygon(0 0, 54% 0, 45% 24%, 56% 44%, 43% 63%, 51% 100%, 0 100%); transform-origin: 30% 60%; }
-.half[data-h="r"] { clip-path: polygon(54% 0, 100% 0, 100% 100%, 51% 100%, 43% 63%, 56% 44%, 45% 24%); transform-origin: 70% 60%; }
-.approve:not([data-sealed]) .half[data-h="l"] { transform: translate(-17%, 5%) rotate(-19deg); }
-.approve:not([data-sealed]) .half[data-h="r"] { transform: translate(15%, 20%) rotate(16deg); }
-.approve:not([data-sealed]) .half { opacity: .55; }
-.approve:not([data-sealed]) .seal::before { opacity: 0; }
-.approve:not([data-sealed]) .seal:hover .half, .approve:not([data-sealed]) .seal:focus-visible .half { opacity: 1; }
-.sealRing { position: absolute; inset: -4%; border: 2px solid var(--x-ink); border-radius: 50%; opacity: 0; }
+/* Entry: armed until the part is seen, then played once. */
+:global(html[data-px-motion="on"]) .part:not([data-seen])::before { transform: scaleX(0); }
+:global(html[data-px-motion="on"]) .part:not([data-seen]) :is(.verb, .line, .offer, .token, .card, .seal, .bound, .room, .rise, .reach, .thumb, .mini, .out, .why) { opacity: 0; }
+:global(html[data-px-motion="on"]) .part:not([data-seen]) .reason::before { transform: scaleX(0); }
 
-.bench { grid-column: 10 / -1; display: grid; justify-items: start; gap: clamp(14px, 1.6vw, 24px); padding-bottom: 6px; }
-.verdict { display: grid; margin: 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(26px, 2.9vw, 46px); line-height: 1; letter-spacing: -.036em; }
-.verdict > span { grid-area: 1 / 1; opacity: 0; }
-.verdict > span[data-on] { opacity: 1; }
-.key { display: inline-flex; align-items: center; min-height: 50px; padding: 0 22px; border: 1.5px solid var(--x-ink); border-radius: 4px; background: transparent; color: var(--x-ink); font-size: 16.5px; font-weight: 500; letter-spacing: -.005em; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.key:hover, .key[data-solid] { background: var(--x-ink); color: var(--x-paper); }
-.key:active { transform: translateY(1.5px); }
+:global(html[data-px-motion="on"]) .part[data-seen]::before { animation: adv-rule 900ms var(--x-out) var(--d) backwards; }
+:global(html[data-px-motion="on"]) .part[data-seen] .verb { animation: adv-up 620ms var(--x-out) calc(var(--d) + 80ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-seen] .line { animation: adv-up 620ms var(--x-out) calc(var(--d) + 150ms) backwards; }
 
-/* Approve, in motion. The seal comes down hard; the card and the proof take the press. */
-:global(html[data-px-motion="on"]) .approve:not([data-seen]) .seal,
-:global(html[data-px-motion="on"]) .approve:not([data-seen]) .crop { opacity: 0; }
-:global(html[data-px-motion="on"]) .approve[data-seen] .crop { animation: adv-type 300ms linear 150ms both; }
-:global(html[data-px-motion="on"]) .approve[data-seen][data-sealed] .seal { animation: adv-stamp 300ms cubic-bezier(.6, 0, .95, .5) 620ms both; }
-:global(html[data-px-motion="on"]) .approve[data-seen][data-sealed] .sealRing { animation: adv-ring 620ms var(--x-out) 910ms both; }
-:global(html[data-px-motion="on"]) .approve[data-seen][data-sealed] .adWrap { animation: adv-press 460ms linear 900ms both; }
-@keyframes adv-stamp { 0% { opacity: 0; transform: translateY(-44px) scale(1.7) rotate(-12deg); } 30% { opacity: 1; } 100% { opacity: 1; transform: none; } }
-@keyframes adv-ring { 0% { opacity: .55; transform: scale(.94); } 100% { opacity: 0; transform: scale(1.42); } }
-@keyframes adv-press { 0% { transform: none; } 16% { transform: translateY(4px) scale(.992); } 52% { transform: translateY(-.5px); } 100% { transform: none; } }
-/* The reader's own stamp: the card snaps back onto its marks, then the seal lands and the proof jolts. */
-:global(html[data-px-motion="on"]) .approve[data-seen][data-sealed][data-again] .seal { animation-duration: 230ms; animation-delay: 120ms; }
-:global(html[data-px-motion="on"]) .approve[data-seen][data-sealed][data-again] .sealRing { animation-delay: 340ms; }
-:global(html[data-px-motion="on"]) .approve[data-seen][data-sealed][data-again] .adWrap { animation-delay: 335ms; }
-:global(html[data-px-motion="on"]) .approve[data-seen][data-sealed][data-again] .proof { animation: adv-thud 420ms linear 335ms both; }
-:global(html[data-px-motion="on"]) .half { transition: transform 560ms cubic-bezier(.3, 1.4, .5, 1), opacity 200ms linear; }
-:global(html[data-px-motion="on"]) .approve[data-sealed] .half { transition: none; }
-:global(html[data-px-motion="on"]) .card { transition: transform 520ms cubic-bezier(.3, 1.25, .5, 1) 60ms, opacity 220ms linear; }
-:global(html[data-px-motion="on"]) .approve[data-sealed] .card { transition: transform 170ms cubic-bezier(.3, 0, .2, 1), opacity 120ms linear 150ms; }
-:global(html[data-px-motion="on"]) .void { transition: transform 300ms var(--x-inout) 260ms; }
-:global(html[data-px-motion="on"]) .approve[data-sealed] .void { transition: transform 90ms linear; }
-:global(html[data-px-motion="on"]) .adWrap::before { transition: opacity 200ms linear 120ms; }
-:global(html[data-px-motion="on"]) .approve[data-sealed] .adWrap::before { transition: opacity 60ms linear 160ms; }
-:global(html[data-px-motion="on"]) .approve:not([data-sealed]) .adWrap { animation: adv-shiver 300ms linear both; }
-@keyframes adv-shiver { 0%, 100% { transform: none; } 20% { transform: translateX(-3px); } 45% { transform: translateX(2.5px); } 70% { transform: translateX(-1.5px); } }
-:global(html[data-px-motion="on"]) .verdict > span { transition: opacity 140ms linear; }
-:global(html[data-px-motion="on"]) .approve[data-sealed][data-again] .verdict > span { transition-delay: 330ms; }
-:global(html[data-px-motion="on"]) .key { transition: transform 90ms linear; }
+:global(html[data-px-motion="on"]) .part[data-seen] .offer { animation: adv-up 620ms var(--x-out) calc(var(--d) + 260ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-seen] .token { animation: adv-settle 760ms var(--x-out) calc(var(--d) + 620ms + var(--t) * 90ms) backwards; }
 
-/* =====================================================================
-   3. LIMIT: one heavy ink frame; two soft bodies that meet it and cannot pass
-   ===================================================================== */
-.act[data-act="limit"] { display: grid; grid-template-columns: minmax(0, 1fr); }
-.act[data-act="limit"] > * { grid-area: 1 / 1; min-width: 0; }
-.act[data-act="limit"] .head { align-self: start; }
-.act[data-act="limit"] .head .verb { grid-column: 1 / span 5; }
-.act[data-act="limit"] .head .line { grid-column: 1 / span 4; grid-row: 2; padding-bottom: 0; }
-.act[data-act="limit"] .plate { margin-top: 0; padding-top: clamp(22px, 2.4vw, 40px); }
-.limit { align-items: end; row-gap: 22px; }
-.yard { grid-column: 6 / -1; grid-row: 1; position: relative; padding: 12% 12% 0 0; --ink-w: clamp(8px, .95vw, 15px); }
-.bay { position: relative; aspect-ratio: 2 / 1; }
-.room, .ghosts { position: absolute; inset: var(--ink-w); }
-.room { z-index: 1; overflow: clip; }
-.orb { position: absolute; aspect-ratio: 1; border-radius: 50%; --rest: 0%; --press: -50%; --over: -52.5%; }
-.orb[data-o="a"] { width: 38%; left: 10%; bottom: 6%; transform: translateY(var(--press)) scale(1.03, .97); }
-.orb[data-o="b"] { width: 30%; left: 56%; top: 38%; --rest: -40%; --press: 75%; --over: 79%; transform: translateX(var(--press)) scale(.97, 1.03); }
-.room .orb[data-o="a"] { background: var(--x-blue); }
-.room .orb[data-o="b"] { background: var(--x-blue-line); }
-.ghosts .orb { border: 1.5px dashed var(--x-blue); }
-.bar { position: absolute; z-index: 2; background: var(--x-ink); }
-.bar[data-s="t"] { left: 0; right: 0; top: 0; height: var(--ink-w); transform-origin: left; }
-.bar[data-s="r"] { right: 0; top: 0; bottom: 0; width: var(--ink-w); transform-origin: top; }
-.bar[data-s="b"] { left: 0; right: 0; bottom: 0; height: var(--ink-w); transform-origin: right; }
-.bar[data-s="l"] { left: 0; top: 0; bottom: 0; width: var(--ink-w); transform-origin: bottom; }
-.bound { position: absolute; font-size: 13.5px; font-weight: 500; line-height: 1; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; color: var(--x-ink); }
-.bar[data-s="t"] .bound { right: 0; bottom: calc(100% + 11px); }
-.bar[data-s="r"] .bound { left: calc(100% + 11px); top: 0; writing-mode: vertical-rl; }
+:global(html[data-px-motion="on"]) .part[data-seen] .card { animation: adv-up 620ms var(--x-out) calc(var(--d) + 260ms) backwards, adv-press 420ms var(--x-ease) calc(var(--d) + 1040ms); }
+:global(html[data-px-motion="on"]) .part[data-seen] .seal { animation: adv-seal 520ms var(--x-ease) calc(var(--d) + 820ms) backwards; }
 
-.pause { grid-column: 1 / span 4; grid-row: 1; justify-self: start; display: inline-flex; align-items: center; gap: 22px; min-height: 56px; padding: 6px 8px 6px 10px; margin-left: -10px; border: 0; background: none; color: var(--x-ink); cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.latch { transform: scale(1.5); transform-origin: left center; margin-right: 20px; border-color: var(--x-ink); }
-.latch::after { background: var(--x-ink); }
-.latch[data-on]::after { background: var(--x-paper); }
-.pause:hover .pauseWord { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 6px; }
-.pause:active .latch { transform: scale(1.5) translateY(1px); }
-.pauseWord { display: grid; font-family: var(--font-display); font-weight: 300; font-size: clamp(26px, 2.9vw, 46px); line-height: 1; letter-spacing: -.036em; }
-.pauseWord > span { grid-area: 1 / 1; opacity: 0; }
-.pauseWord > span[data-on] { opacity: 1; }
-.limit[data-paused] .room { opacity: .34; }
-.limit[data-paused] .ghosts { opacity: .4; }
+:global(html[data-px-motion="on"]) .part[data-seen] .room { animation: adv-fade 520ms var(--x-ease) calc(var(--d) + 260ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-seen] .bound { animation: adv-fade 520ms var(--x-ease) calc(var(--d) + 260ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-seen] .rise { animation: adv-rise 1300ms var(--x-out) calc(var(--d) + 420ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-seen] .reach { animation: adv-reach 1300ms var(--x-out) calc(var(--d) + 640ms) backwards; }
 
-/* Limit, in motion. The frame is drawn, then the bodies drift up to the ink and sideways to it,
-   in a slow loop the reader can still with the latch. It rests while it is off screen. */
-:global(html[data-px-motion="on"]) .limit:not([data-seen]) .bar[data-s="t"], :global(html[data-px-motion="on"]) .limit:not([data-seen]) .bar[data-s="b"] { transform: scaleX(0); }
-:global(html[data-px-motion="on"]) .limit:not([data-seen]) .bar[data-s="r"], :global(html[data-px-motion="on"]) .limit:not([data-seen]) .bar[data-s="l"] { transform: scaleY(0); }
-:global(html[data-px-motion="on"]) .limit:not([data-seen]) .room,
-:global(html[data-px-motion="on"]) .limit:not([data-seen]) .ghosts { opacity: 0; }
-:global(html[data-px-motion="on"]) .limit[data-seen] .bar[data-s="t"] { animation: adv-draw-x 380ms var(--x-inout) 100ms both; }
-:global(html[data-px-motion="on"]) .limit[data-seen] .bar[data-s="r"] { animation: adv-draw-y 280ms var(--x-inout) 460ms both; }
-:global(html[data-px-motion="on"]) .limit[data-seen] .bar[data-s="b"] { animation: adv-draw-x 380ms var(--x-inout) 720ms both; }
-:global(html[data-px-motion="on"]) .limit[data-seen] .bar[data-s="l"] { animation: adv-draw-y 280ms var(--x-inout) 1080ms both; }
-:global(html[data-px-motion="on"]) .limit[data-seen] .room,
-:global(html[data-px-motion="on"]) .limit[data-seen] .ghosts { transition: opacity 420ms linear 1150ms; }
-:global(html[data-px-motion="on"]) .limit[data-seen] .orb[data-o="a"] { animation: adv-orb-a 7.6s infinite 1200ms both; }
-:global(html[data-px-motion="on"]) .limit[data-seen] .orb[data-o="b"] { animation: adv-orb-b 7.6s infinite 2700ms both; }
-:global(html[data-px-motion="on"]) .limit[data-seen][data-paused] .orb[data-o],
-:global(html[data-px-motion="on"]) .limit[data-seen]:not([data-live]) .orb[data-o] { animation-play-state: paused; }
-:global(html[data-px-motion="on"]) .limit[data-seen][data-paused] .room,
-:global(html[data-px-motion="on"]) .limit[data-seen][data-paused] .ghosts { transition: opacity 80ms linear; }
-@keyframes adv-draw-x { from { transform: scaleX(0); } to { transform: none; } }
-@keyframes adv-draw-y { from { transform: scaleY(0); } to { transform: none; } }
-@keyframes adv-orb-a {
-  0%, 100% { transform: translateY(var(--rest)) scale(1); animation-timing-function: cubic-bezier(.45, 0, .3, 1); }
-  30% { transform: translateY(var(--press)) scale(1.03, .97); animation-timing-function: linear; }
-  58% { transform: translateY(var(--over)) scale(1.045, .955); animation-timing-function: cubic-bezier(.6, 0, .4, 1); }
-}
-@keyframes adv-orb-b {
-  0%, 100% { transform: translateX(var(--rest)) scale(1); animation-timing-function: cubic-bezier(.45, 0, .3, 1); }
-  32% { transform: translateX(var(--press)) scale(.97, 1.03); animation-timing-function: linear; }
-  60% { transform: translateX(var(--over)) scale(.955, 1.045); animation-timing-function: cubic-bezier(.6, 0, .4, 1); }
-}
-:global(html[data-px-motion="on"]) .pauseWord > span { transition: opacity 80ms linear; }
+:global(html[data-px-motion="on"]) .part[data-seen] .thumb { animation: adv-up 620ms var(--x-out) calc(var(--d) + 260ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-seen] .mini { animation: adv-drop 620ms var(--x-out) calc(var(--d) + 640ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-seen] .reason::before { animation: adv-rule 480ms var(--x-out) calc(var(--d) + 1040ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-seen] .out { animation: adv-up 520ms var(--x-out) calc(var(--d) + 1180ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-seen] .why { animation: adv-up 520ms var(--x-out) calc(var(--d) + 1280ms) backwards; }
 
-/* =====================================================================
-   4. SEE WHY: each moment, its outcome in a word, its reason
-   ===================================================================== */
-.act[data-act="see"] .head .line { padding-bottom: .5em; }
-.act[data-act="see"] .plate { margin-top: clamp(4px, .8vw, 14px); }
-.why { margin: 0; padding: 0; list-style: none; border-bottom: 1px solid var(--x-ink); }
-.whyRow { position: relative; align-items: center; row-gap: 12px; padding-block: clamp(14px, 1.4vw, 22px); }
-.whyRow::before { content: ""; position: absolute; inset: 0 0 auto; height: 1px; background: var(--x-ink); transform-origin: left; }
-.whyQ { grid-column: 1 / span 7; margin: 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(22px, 2.4vw, 38px); line-height: 1.08; letter-spacing: -.034em; text-wrap: balance; }
-.whyQ > span { background: linear-gradient(var(--x-blue-wash), var(--x-blue-wash)) no-repeat 0 0 / 0% 100%; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-.whyOut { grid-column: 9 / -1; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: clamp(14px, 1.5vw, 22px); align-items: center; }
-.glyph { grid-row: 1 / span 2; display: grid; gap: 4px; width: clamp(40px, 3.6vw, 54px); }
-.glyph i { display: block; height: 3px; border-radius: 2px; background: var(--x-hair); }
-.glyph i:nth-child(2) { width: 62%; }
-.glyph b { display: block; height: clamp(18px, 1.7vw, 25px); margin-top: 2px; border: 1.5px dashed var(--x-quiet); border-radius: 5px; }
-.whyRow[data-outcome="yes"] .glyph b { border: 0; background: var(--x-blue); }
-.whyWord { margin: 0; align-self: end; font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 2.1vw, 32px); line-height: 1.05; letter-spacing: -.028em; }
-.whyRow[data-outcome="yes"] .whyWord { color: var(--x-blue); }
-.whyWhy { margin: 3px 0 0; align-self: start; font-size: clamp(14.5px, 1.1vw, 16.5px); line-height: 1.35; color: var(--muted); }
+@keyframes adv-rule { from { transform: scaleX(0); } }
+@keyframes adv-fade { from { opacity: 0; } }
+@keyframes adv-up { from { opacity: 0; transform: translateY(10px); } }
+@keyframes adv-drop { from { opacity: 0; transform: translateY(-8px); } }
+@keyframes adv-settle { 0% { opacity: 0; transform: translateY(-20px); } 62% { opacity: 1; transform: translateY(1.5px); } 100% { opacity: 1; transform: none; } }
+@keyframes adv-seal { 0% { opacity: 0; transform: translateY(-14px) rotate(-22deg) scale(1.28); } 58% { opacity: 1; transform: rotate(-8deg) scale(.95); } 100% { opacity: 1; transform: rotate(-8deg); } }
+@keyframes adv-press { 40% { transform: translateY(1.5px); } }
+@keyframes adv-rise { from { opacity: 0; transform: translateY(64px); } }
+@keyframes adv-reach { from { opacity: 0; transform: translateX(-72px); } }
 
-:global(html[data-px-motion="on"]) .why:not([data-seen]) .whyQ,
-:global(html[data-px-motion="on"]) .why:not([data-seen]) .whyOut { opacity: 0; }
-:global(html[data-px-motion="on"]) .why:not([data-seen]) .whyRow::before { transform: scaleX(0); }
-:global(html[data-px-motion="on"]) .why[data-seen] .whyRow::before { animation: adv-draw-x var(--x-d3) var(--x-inout) both; animation-delay: calc(var(--r) * 420ms); }
-:global(html[data-px-motion="on"]) .why[data-seen] .whyQ { animation: adv-fade var(--x-d3) var(--x-ease) both; animation-delay: calc(120ms + var(--r) * 420ms); }
-/* The reading: a soft ultramarine pass over the question (the judgment), then the outcome. */
-:global(html[data-px-motion="on"]) .why[data-seen] .whyQ > span { animation: adv-read 900ms var(--x-inout) both; animation-delay: calc(520ms + var(--r) * 420ms); }
-:global(html[data-px-motion="on"]) .why[data-seen] .whyOut { animation: adv-fade 520ms var(--x-out) both; animation-delay: calc(1180ms + var(--r) * 420ms); }
-:global(html[data-px-motion="on"]) .why[data-seen] .glyph b { animation: adv-pop 520ms var(--x-out) both; animation-delay: calc(1240ms + var(--r) * 420ms); }
-@keyframes adv-read { 0% { background-size: 0% 100%; background-position: 0 0; } 50% { background-size: 100% 100%; background-position: 0 0; } 51% { background-size: 100% 100%; background-position: 100% 0; } 100% { background-size: 0% 100%; background-position: 100% 0; } }
-@keyframes adv-pop { from { transform: translateY(-9px); opacity: 0; } to { transform: none; opacity: 1; } }
-
-/* ---------- The one action: the end of the sentence ---------- */
-.end { padding-top: clamp(26px, 3vw, 48px); }
-.end .cta { min-height: clamp(62px, 5.6vw, 88px); gap: clamp(18px, 2vw, 32px); padding: 0 clamp(24px, 2.6vw, 42px) 0 clamp(28px, 3vw, 50px); font-size: clamp(18px, 1.75vw, 27px); letter-spacing: -.015em; }
-
-/* =====================================================================
-   Smaller screens: the same figures, recomposed, cause and effect in one view
-   ===================================================================== */
-@media (max-width: 1100px) {
-  .proof { grid-column: 1 / span 9; }
-  .yard { grid-column: 5 / -1; }
-}
-@media (max-width: 820px) {
-  .root { --verb: clamp(64px, 18.4vw, 150px); --lap: 0px; --dip: 0px; }
-  .head .verb, .act[data-side="right"] .head .verb, .act[data-act="limit"] .head .verb { grid-column: 1 / -1; text-align: left; margin-left: -.04em; margin-right: 0; }
-  .head .line, .act[data-side="right"] .head .line, .act[data-act="limit"] .head .line, .act[data-act="see"] .head .line { grid-column: 1 / -1; grid-row: 2; padding-bottom: 0; max-width: 26ch; }
-  .act .plate, .act[data-act="limit"] .plate, .act[data-act="see"] .plate { margin-top: 20px; padding-top: 0; }
-  .act[data-act="limit"] { display: block; }
-  .desk, .moment, .proof, .bench, .yard, .pause, .whyQ, .whyOut { grid-column: 1 / -1; }
-  .describe { row-gap: 16px; }
-  .sheet { padding: 24px 22px 40px; }
-  .moment { padding-left: 0; }
-  .proof { padding: 44px 34px 52px; }
-  .bench { grid-template-columns: minmax(0, 1fr) auto; align-items: center; justify-items: start; padding-bottom: 0; }
-  .yard { grid-row: 1; padding: 12.5% 11% 0 0; }
-  .bay { aspect-ratio: 3 / 2; }
-  .orb[data-o="a"] { width: 50%; left: 6%; }
-  .orb[data-o="b"] { width: 42%; left: 48%; top: 36%; --rest: -40%; --press: 45%; --over: 48%; }
-  .pause { grid-row: 2; }
-}
-@media (max-width: 480px) {
-  .bound { font-size: 11.5px; }
-  .proof { padding: 40px 30px 50px; }
-  .bench { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-  .end .cta { gap: 14px; padding: 0 20px 0 24px; font-size: 16.5px; white-space: nowrap; }
+/* Two by two between a tablet and a small laptop. */
+@media (max-width: 1040px) {
+  .root { --step: 0ms; }
+  .parts { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 44px; }
+  .part { grid-template-rows: auto auto auto; }
+  .head .h { grid-column: 1 / -1; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .root *, .root *::before, .root *::after { animation: none !important; transition: none !important; }
+/* Phones: the four parts stack, each compact. Each plays as it arrives. */
+@media (max-width: 640px) {
+  .parts { grid-template-columns: minmax(0, 1fr); row-gap: 34px; margin-top: 32px; }
+  .part { padding-top: 14px; }
+  .part .line { margin-top: 5px; }
+  .part .fig { height: auto; margin-top: 18px; }
+  .limit { height: 156px; }
+  .approve { padding-bottom: 20px; }
+  .end { margin-top: 30px; }
 }

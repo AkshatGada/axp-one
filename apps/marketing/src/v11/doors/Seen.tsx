@@ -1,14 +1,14 @@
 "use client";
 
-// Marks its element once it has entered the view, so CSS can play a short one-time entrance.
-// With motion off the kit's hook reports true at once and the still is complete.
+// Marks its element for a short one-time entrance as it enters the view from below. Whole and at
+// rest in every other case (motion off, already on screen, reached from below): see useEntry.
 import type { ReactNode } from "react";
-import { useInView } from "../kit";
+import { useEntry } from "../rule/useEntry";
 
 export default function Seen({ className, children }: { className?: string; children: ReactNode }) {
-  const [ref, seen] = useInView<HTMLDivElement>("0px 0px -12% 0px");
+  const [ref, entry] = useEntry<HTMLDivElement>(0.22);
   return (
-    <div ref={ref} className={className} data-seen={seen ? "" : undefined}>
+    <div ref={ref} className={className} data-entry={entry}>
       {children}
     </div>
   );

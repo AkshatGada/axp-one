@@ -20,16 +20,12 @@ export type World = {
   a1: Box;
   /** The slot below the answer, where the card lands. */
   slot1: Box;
-  /** The coda's slot. */
-  slot2: Box;
   /** The readers, by AGENTS index. */
   readers: Box[];
   /** The height of the line above the row of readers (one unit of the world's furniture). */
   rail: number;
   /** The receipt. */
   receipt: Box;
-  /** The coda's empty outline where a receipt would be. */
-  none: Box;
 };
 
 const right = (b: Box) => b.x + b.w;
@@ -58,7 +54,7 @@ export function keys(w: World, compact: boolean): Key[] {
 
   if (!compact) {
     // Wide. Close on the question; back for the answer; across to the readers; in on the slot;
-    // down to the receipt; and one wide look at the whole world for the coda.
+    // down to the receipt, where the film rests.
     const asked = fit(span(w.plate.x, w.plate.y, right(w.plate), bottom(w.q1)), scr, 40, 30, "top");
     const answered = fit(span(w.plate.x, w.plate.y, right(w.plate), bottom(w.a1)), scr, 40, 26, "top");
     // The readers stand in a row beside the conversation; the camera travels across to them.
@@ -72,57 +68,55 @@ export function keys(w: World, compact: boolean): Key[] {
     const recTop = Math.max(bottom(w.a1), bottom(all)) + 8;
     const rec = fit(span(w.slot1.x - w.rail, recTop, right(w.receipt) + w.rail, bottom(w.receipt) + 26), scr, 26, 0);
     const recorded = { ...rec, cy: recTop + scr.h / (2 * rec.s) };
-    // The coda: the readers again, then the conversation with the nearest reader and no receipt.
-    const cod = fit(span(w.plate.x, w.plate.y, right(fitsOne) + w.rail * 0.3, Math.max(bottom(w.slot2), bottom(w.none)) + 24), scr, 30, 22);
-    const coda = { ...cod, cx: Math.min(cod.cx, right(fitsOne) + w.rail * 0.36 - scr.w / (2 * cod.s)) };
     return [
-      k(0, nudge(asked, 0.95)),
-      k(0.05, asked, "lin"),
-      k(0.122, nudge(asked, 1, 0, scr.h * 0.02), "lin"),
-      k(0.2, nudge(answered, 1.05)),
-      k(0.292, answered, "lin"),
-      k(0.372, judged),
-      k(0.496, nudge(judged, 1.03, scr.w * 0.012), "lin"),
-      k(0.566, placed),
-      k(0.676, placed),
-      k(0.738, recorded),
-      k(0.838, nudge(recorded, 1.02), "lin"),
-      k(0.88, judged),
-      k(0.926, nudge(judged, 1.02), "lin"),
-      k(0.966, coda),
-      k(1, nudge(coda, 0.985), "lin"),
+      k(0, nudge(asked, 0.97)),
+      k(0.06, asked, "lin"),
+      k(0.145, nudge(asked, 1, 0, scr.h * 0.02), "lin"),
+      k(0.238, nudge(answered, 1.03)),
+      k(0.348, answered, "lin"),
+      k(0.443, judged),
+      k(0.59, nudge(judged, 1.02, scr.w * 0.008), "lin"),
+      k(0.674, placed),
+      k(0.805, placed),
+      k(0.879, recorded),
+      k(1, nudge(recorded, 1.015), "lin"),
     ];
   }
 
-  // Narrow: the same world and the same moves in a tall frame, one subject at a time.
-  // Close on the question: the plate fills the screen from edge to edge, the question at its heart.
-  const qs = Math.min(1, scr.w / (w.plate.w * 0.95));
-  const qc = { cx: w.plate.x + w.plate.w / 2, cy: w.plate.y - 10 / qs + scr.h / (2 * qs), s: qs };
-  const answered = fit(span(w.plate.x, w.plate.y, right(w.plate), bottom(w.a1)), scr, 10, 12, "top");
-  const judged = fit(all, scr, 12, 12);
+  // Narrow: the same world and the same moves in a tall frame, one subject at a time. The world is
+  // laid out so that every one of these framings is drawn at its laid-out size (scale 1) on a
+  // phone: what is set at 13px or more is read at 13px or more.
+  const pad = Math.max(8, (scr.w - w.plate.w) / 2);
+  const top = (b: Box, s: number, gap: number): Shot => ({ cx: b.x + b.w / 2, cy: b.y - gap / s + scr.h / (2 * s), s });
+  const wide = Math.min(1, (scr.w - 2 * pad) / w.plate.w);
+  // Close on the question at the head of the plate.
+  const asked = top(w.plate, wide, pad);
+  // The answer: from the top of the plate if it fits; otherwise from the question down.
+  const whole = span(w.plate.x, w.plate.y, right(w.plate), bottom(w.a1) + pad);
+  const answered = whole.h + pad <= scr.h / wide ? top(w.plate, wide, pad) : { cx: w.plate.x + w.plate.w / 2, cy: bottom(w.a1) + (pad * 2) / wide - scr.h / (2 * wide), s: wide };
+  const judged = fit(all, scr, pad, 12);
   const leaving = { cx: fitsOne.x + fitsOne.w / 2, cy: bottom(fitsOne) + (scr.h * 0.04) / judged.s, s: judged.s };
-  const placed = fit(span(w.plate.x, w.a1.y - 12, right(w.plate), bottom(w.slot1) + 30), scr, 10, 12);
-  const rec = fit(span(w.receipt.x, fitsOne.y, right(w.receipt), bottom(w.receipt)), scr, 12, 14);
-  const recorded = { ...rec, cy: fitsOne.y - 12 / rec.s + scr.h / (2 * rec.s) };
-  const codaReaders = fit(union(all, w.none), scr, 12, 12);
-  const coda = fit(span(w.plate.x, w.plate.y, right(w.plate), bottom(w.slot2) + 30), scr, 10, 12, "top");
+  // The slot, with the whole conversation above it when the screen has the room (so the question
+  // is not cut by the frame's edge); otherwise from the answer down.
+  const convo = span(w.plate.x, w.q1.y - 14, right(w.plate), bottom(w.plate) + 6);
+  const placed = fit(convo.h + 2 * pad <= scr.h / wide ? convo : span(w.plate.x, w.a1.y - 12, right(w.plate), bottom(w.slot1) + 24), scr, pad, pad);
+  // The receipt, with the foot of the reader it came from above it when there is room.
+  const both = span(w.receipt.x, fitsOne.y, right(w.receipt), bottom(w.receipt));
+  const alone = fit(w.receipt, scr, pad, 14);
+  const recorded = both.h + 28 <= scr.h ? { cx: both.x + both.w / 2, cy: both.y + both.h / 2, s: 1 } : { ...alone, cy: bottom(w.receipt) + 14 / alone.s - scr.h / (2 * alone.s) };
   return [
-    k(0, nudge(qc, 0.95)),
-    k(0.05, qc, "lin"),
-    k(0.122, nudge(qc, 1, 0, scr.h * 0.015), "lin"),
-    k(0.2, nudge(answered, 1.04)),
-    k(0.292, answered, "lin"),
-    k(0.366, judged),
-    k(0.5, nudge(judged, 1.02), "lin"),
-    k(0.538, leaving),
-    k(0.606, placed),
-    k(0.676, placed),
-    k(0.734, recorded),
-    k(0.838, nudge(recorded, 1.02), "lin"),
-    k(0.878, codaReaders),
-    k(0.926, nudge(codaReaders, 1.02), "lin"),
-    k(0.966, coda),
-    k(1, nudge(coda, 0.985), "lin"),
+    k(0, nudge(asked, 0.97)),
+    k(0.06, asked, "lin"),
+    k(0.145, nudge(asked, 1, 0, scr.h * 0.015), "lin"),
+    k(0.238, answered),
+    k(0.348, nudge(answered, 1, 0, scr.h * 0.01), "lin"),
+    k(0.436, judged),
+    k(0.595, nudge(judged, 1, 0, scr.h * 0.01), "lin"),
+    k(0.64, leaving),
+    k(0.721, placed),
+    k(0.805, placed),
+    k(0.874, recorded),
+    k(1, nudge(recorded, 1, 0, scr.h * 0.008), "lin"),
   ];
 }
 

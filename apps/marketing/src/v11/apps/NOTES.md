@@ -1,92 +1,84 @@
-# 04 For AI apps: builder notes
+# 04 For AI apps: builder notes (V5)
 
 ## The idea
-One plate: the fictional assistant Tidewater, whole and at rest, drawn as a white sheet on the paper.
-The four ideas are marginal notes that hang from fine leader lines running to the part of the plate
-they describe. Two of the notes carry the builder's controls, so the annotation is the control.
+A calm heading and one plate: the fictional assistant Tidewater, whole, drawn as a white sheet on
+the paper. The four ideas are marginal notes that hang from fine leader lines running to the part of
+the plate they describe. Nothing is a control. The plate plays once as it enters and rests complete.
 
-- Left margin, at the answer: "Your model" with the scoped independence claim (once, quietly). Its
-  leader ends in a bracket along the answer's text.
-- Left margin, at the slot: "Your rules" with the rule latch (square ink `.x-sw`): Hardware wallets.
-- Right margin, at the slot: "One slot" with a judgment latch (round, ultramarine): An ad fits.
-- Right margin, off the card's foot: "You earn" with the accrual seal and the outcome in words.
-
-The proof of independence is physical. The Sponsored card (kit `Ad`) stays in the flow of the slot
-whether it is shown or hidden, so the slot keeps its exact place and the answer cannot move. When the
-slot empties, four hairline corner ticks mark the reserved place, and a small "= Unchanged" mark
-appears beside the answer's bracket for a moment.
+- Left margin, at the answer: "Your model" with the scoped independence claim (`INDEPENDENCE`, once,
+  quietly). Its leader ends in a bracket along the answer's text.
+- Left margin, at the slot: "Your rules" with a plain statement of the allowed category: a bare ink
+  tick, "Hardware wallets" (`APP_RULES.allow`) and "Allowed" under it. No box, so it does not read
+  as a checkbox.
+- Right margin, at the slot: "One slot", a plain note.
+- Right margin, off the card's foot: "You earn" with the ink tab "Earnings accrued"
+  (`RECEIPT.app.state`). Words only, never a figure, never payout language.
 
 ## Files
 - `index.tsx`: the chapter, heading, close line and action (server component).
-- `Plate.tsx`: the figure, the performance and the two controls (client component).
+- `Plate.tsx`: the figure and its one performance (client component). No event handlers on any
+  element; the only listeners are passive `scroll` and `resize` on the window, used to start.
 - `apps.module.css`: all styles.
 
-## The performance
-Stages on `.stage[data-stage]`: `still` (server render and motion off: complete, card shown), `pre`,
-`write`, `card`, `done`.
-1. The answer writes in by word (opacity only) and leader 1 draws.
-2. The card rises into the slot; leaders 2, 3 and 4 draw.
-3. Confirmation: a small ultramarine token leaves the card's foot and travels the leader to the seal,
-   which stamps to ink with a tick, and "Earnings accrued" (story `RECEIPT.app.state`) fades in.
-   No figures, no payout language.
-4. After a beat the judgment latch turns itself off: the card leaves, the ticks show, the outcome
-   reads `APPS.empty`, and "Unchanged" marks the answer. Then it returns and accrues again.
-5. The two latches ring once and the plate belongs to the reader.
+## What changed for V5
+- Controls removed: both latches, every click and key handler, the "stop on interaction" logic, the
+  live status region and the hand-over ring. The only focusable element is the action link.
+- "No ad" removed: the empty slot demonstration, the corner ticks, the reason line, the "Unchanged"
+  mark, the dashed empty accrual tab and every not-allowed wording. The card is simply there.
+- Heading set at `x-h2` (was `x-h1`), a plain `h2` with no reveal. At full measure `x-h1` was louder
+  than the plate and out of step with the movement before it. With no reveal the heading can never be
+  caught half built on an abrupt arrival.
+- Restraint inside the plate: the three endless loops are gone (the drifting waterline under the
+  header, the blinking caret in the composer, the breathing brand mark), so the plate truly rests.
+  The answer mark moves only while the answer is being written. The accrual tab no longer scales
+  (it was text scaled above its size) and the confirmation tick no longer overshoots; both simply
+  appear. The token on the leader is smaller (7px). The card's blue shadow is softer.
+- Figure caption is now exactly "Tidewater, a fictional assistant. Illustration." (the "Fig. 4"
+  number is dropped; no other V5 movement numbers its figures).
+- Section bottom padding reduced (the page seam between movements already adds air).
 
-Any click inside the movement, or any key press, stops it for good (scroll keys pressed outside the
-movement are ignored so keyboard scrolling does not cancel a performance the reader has not seen).
+## The performance
+Stages on `.stage[data-stage]`: `still` (server render, motion off, abrupt arrival: complete),
+`pre`, `write`, `card` (rest).
+1. The answer writes in by word (opacity only) and the bracket and leader 1 draw.
+2. At 1.4s the card rises into the reserved slot below the answer; leaders 2, 3 and 4 draw.
+3. At about 2s an ink tick lands on the card's foot, a small ultramarine token runs the leader, and
+   the ink tab "Earnings accrued" appears at its end. Then nothing moves again.
+
+## The answer never moves
+The answer is one element no state touches. The card is in the flow from the first paint (hidden by
+opacity and visibility only while waiting), so the slot's place is always reserved. Checked by
+script: the answer's text and its box (relative to the sheet) were sampled every frame from before
+the first page script through to rest, at four sizes, in the lab and inside /v5/: one value each.
 
 ## Never empty
 - The server render is the whole plate. It is only cleared for the performance by JS, and only while
   less than a fifth of it is on screen. Nothing is hidden by CSS before hydration.
-- It enters when 28 percent is on screen (the answer's first line is still below the fold at that
-  point at every tested size). This is checked on scroll, before the frame paints.
-- A jump (anchor link, flick, coming back up from below) is recognised because it lands well past
-  the entry line in one step or with the plate's top above the screen. Then the plate is made whole
-  in the same frame (`flushSync`), the writing is skipped, and only the empty slot is demonstrated.
-- The kit's `useInView` is the fail safe: if it reports the plate seen but the plate has not entered
-  within four seconds (a sliver at the bottom of the screen), the plate is made whole.
+- It enters when 28 percent is on screen, checked on scroll before the frame paints.
+- A jump (anchor link, flick, coming back up from below) lands well past the entry line in one step
+  or with the plate's top above the screen. Then the plate is made whole in the same frame
+  (`flushSync`, stage `still`, transitions off for that frame) and there is no performance.
+- The kit's `useInView` is the fail safe: seen but not entered within four seconds means whole.
 
-## Decisions
-- Recomposition below 1180px: margins become too narrow for notes, so the notes move below the plate
-  as a two column list and the two latches sit directly under the plate (control and slot in one
-  view on a 390x844 phone). The desktop notes and the narrow notes are both in the HTML; one set is
-  `display: none` at any width.
-- The empty slot shows no words inside the app. The reason ("No ad fits. Nothing is shown." or "Not
-  allowed. Nothing is shown.") is in the margin, in the builder's voice, so the app reads finished.
-- "Not allowed. Nothing is shown." is my wording for the rule being off (there is no copy for it in
-  `copy.ts`). See proposals.
-- `Fig. 4` is my guess at the page's figure numbering.
-- The section has no top padding of its own (the chapter mark is the top) and `--x-space` below.
+## Narrow screens (below 1180px)
+One set of notes in the HTML. The plate's wrappers become `display: contents`, the plate's parts and
+the four notes share one grid: the sheet spans the app's rows and the notes sit in two columns under
+it in reading order (Your model, One slot; Your rules, You earn). The leaders, bracket, token and
+the tick on the card's foot are desktop only.
 
 ## Proposals for shared files
-- `copy.ts` `APPS`: add `notAllowed: "Not allowed. Nothing is shown."`, `unchanged: "Unchanged"`,
-  and the latch labels ("Allowed", "Not allowed", "An ad fits", "No ad fits") so they are frozen.
-- Kit `Fig`: agree the figure numbers across movements.
-- Kit `Split` does not pass through data attributes; I put `data-reveal` on the wrapping header.
+- `copy.ts` `APPS`: freeze the one word "Allowed" used under the category in the "Your rules" note
+  (`RULE.agree[1].state` already has the same word; it could be exported for reuse).
+- `index.tsx` passes `className={s.action}` to the kit `Action` with no such class defined. Harmless
+  (left as it was).
 
 ## Known issues and unknowns
-- Visible words outside the app sheet at 1440: 70 counting everything (chapter mark 4, heading 4,
-  four notes 27, claim 10, latch labels 6, outcome 2, figure caption 8, code line 5, action 4).
-- Laptop fit depends on the masthead being hidden (it is, on scroll down).
-- Safari and Firefox were not tested (captures are Chrome only). The margins use container query
-  units (`cqw`), which need Safari 16 or later and Firefox 110 or later.
-- The dev server sometimes logs an aborted `?_rsc` request for the lab route itself; it is Next's own
-  dev behaviour, not a request made by this movement.
-
-## Polish pass (after the orchestrator's review)
-- Heading is now the kit `x-h1`, one line across the measure on a laptop (wraps below 1180px).
-- The sheet has material: a white leaf with layered shadow and a second leaf under it. Tidewater's
-  header has a "New question" control, an avatar and a waterline that drifts; the answer is set in
-  the light wide face; the composer has an add control, a blinking caret and a send key. No words
-  were added inside the sheet.
-- Accrual: an ink tick lands on the card's foot (confirmed), the ultramarine token runs the leader,
-  and an ink tab "Earnings accrued" is stamped on the leader's end. When nothing is shown the tab is
-  an empty dashed outline.
-- Empty slot: the reason is now stated inside the reserved place, in the caption voice, with the
-  corner ticks. The margin no longer repeats it.
-- One set of notes in the HTML. Below 1180px the plate's wrappers become `display: contents` and the
-  plate's parts and the four notes share one grid: the sheet (`.sheet`, a separate element that also
-  carries the entry measurement) spans the app's rows, and the notes sit in two columns under it,
-  the two that carry a latch first. The earlier "Decisions" line about two sets no longer applies.
-- Phone: the accrual tab now sits inside the "You earn" note with room around it.
+- Safari and Firefox were not tested (captures are headless Chrome only). The margins use container
+  query units (`cqw`), which need Safari 16 or later and Firefox 110 or later.
+- At 1366x768 the heading, plate and caption fit one view with about 11px to spare when the section's
+  top rule is at the top of the screen and the masthead is hidden (it hides on scroll down). After an
+  anchor jump the masthead is shown and covers the chapter mark (a page matter, not this folder).
+- On a phone the accrual tab is in the "You earn" note under the plate, below the first view, so its
+  arrival is usually not seen; the note is complete by the time the reader reaches it.
+- While sibling folders were being edited the dev server returned 500 at times and once swapped
+  fonts mid run (hot reload). Not reproduced in later runs; not caused by this folder.

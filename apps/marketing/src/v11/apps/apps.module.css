@@ -1,17 +1,15 @@
 /* 04 For AI apps. One plate (Tidewater, a fictional assistant) with marginal notes.
    Everything here is scoped to this movement. Motion is transform and opacity only. */
 
-.root { padding-bottom: var(--x-space); }
+.root { padding-bottom: clamp(20px, 3vw, 48px); }
 .sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 
-/* The heading: the page's large display scale, one line across the measure on a laptop. */
-.head { padding-top: clamp(14px, 2.6svh, 36px); }
+/* The heading: the calm second display size, one line, simply there. The plate is the image. */
+.head { padding-top: clamp(14px, 2.8svh, 40px); }
 .h { white-space: nowrap; }
-:global(html[data-px-motion="on"]) .head[data-reveal] :global(.x-w) { opacity: 0; transform: translateY(.42em); transition: opacity 700ms var(--x-ease), transform 900ms var(--x-out); transition-delay: calc(var(--i) * 70ms); }
-:global(html[data-px-motion="on"]) .head[data-reveal][data-in] :global(.x-w) { opacity: 1; transform: none; }
 
 /* The figure. The wrapper is the container the margins are measured from. */
-.figWrap { container-type: inline-size; margin-top: clamp(14px, 2.6svh, 40px); }
+.figWrap { container-type: inline-size; margin-top: clamp(16px, 3.2svh, 44px); }
 .fig { position: relative; }
 .stage {
   --col: calc((100cqw - 11 * var(--x-col-gap)) / 12);
@@ -37,21 +35,14 @@
 .me { position: relative; width: 32px; height: 32px; overflow: hidden; border: 1px solid var(--x-hair); border-radius: 50%; background: var(--x-paper); }
 .me::before { content: ""; position: absolute; top: 7px; left: 50%; width: 9px; height: 9px; margin-left: -4.5px; border-radius: 50%; background: var(--x-quiet); opacity: .55; }
 .me i { position: absolute; top: 19px; left: 50%; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%; background: var(--x-quiet); opacity: .55; }
-/* The waterline under the header: a darker stretch drifts along it. */
-.tideLine { position: absolute; right: 0; bottom: -1px; left: 0; height: 1px; overflow: hidden; }
-.tideLine::after { content: ""; position: absolute; inset: 0 auto 0 0; width: 26%; background: linear-gradient(90deg, transparent, var(--x-quiet), transparent); opacity: .7; transform: translateX(40%); }
-@keyframes drift { from { transform: translateX(-20%); } to { transform: translateX(310%); } }
-:global(html[data-px-motion="on"]) .tideLine::after { animation: drift 11s var(--x-inout) infinite alternate; }
 
-/* Tidewater's mark: a waterline in a ring. It breathes. */
+/* Tidewater's mark: a waterline in a ring. It moves only while the answer is being written. */
 .tide { position: relative; flex: none; width: 18px; height: 18px; border: 1.5px solid var(--x-ink); border-radius: 50%; overflow: hidden; }
 .tide::after { content: ""; position: absolute; inset: -1px; background: var(--x-ink); transform: translateY(54%); }
 .tide[data-s] { width: 14px; height: 14px; border-color: var(--x-quiet); }
 .tide[data-s]::after { background: var(--x-quiet); }
-@keyframes tide { from { transform: translateY(46%); } to { transform: translateY(64%); } }
-@keyframes tideFast { from { transform: translateY(18%); } to { transform: translateY(82%); } }
-:global(html[data-px-motion="on"]) .tide::after { animation: tide 4.6s var(--x-inout) infinite alternate; }
-:global(html[data-px-motion="on"]) .stage:is([data-stage="pre"], [data-stage="write"]) .tide[data-s]::after { animation: tideFast 620ms var(--x-inout) infinite alternate; }
+@keyframes tideWrite { from { transform: translateY(30%); } to { transform: translateY(74%); } }
+:global(html[data-px-motion="on"]) .stage[data-stage="write"] .tide[data-s]::after { animation: tideWrite 700ms var(--x-inout) infinite alternate; }
 
 .col { display: grid; margin-inline: var(--px); padding-block: calc(var(--gy) + 4px) calc(var(--gy) - 2px); }
 .q { position: relative; justify-self: end; width: fit-content; max-width: 76%; margin: 0; padding: 12px 17px 13px; border-radius: 18px 18px 4px 18px; background: var(--x-paper); font-size: 16px; line-height: 1.4; color: var(--x-ink); }
@@ -63,29 +54,16 @@
 :global(html[data-px-motion="on"]) .stage .answer :global(.x-w) { transition: opacity 360ms linear calc(var(--i) * 27ms); }
 :global(html[data-px-motion="on"]) .stage[data-stage="pre"] .answer :global(.x-w) { opacity: 0; transition: none; }
 
-/* The slot keeps its place: the card stays in the flow whether it is shown or not. */
+/* The slot keeps its place: the card is in the flow from the first paint, so its arrival moves nothing. */
 .slot { position: relative; margin-top: calc(var(--gy) - 2px); }
 .slotIn { position: relative; }
 .cardWrap { position: relative; transition: opacity 420ms var(--x-ease), transform 680ms var(--x-out), visibility 0s; }
-.stage[data-card="off"] .cardWrap { opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity 240ms var(--x-ease), transform 300ms var(--x-inout), visibility 0s linear 300ms; }
-.card { box-shadow: 0 18px 40px -26px rgba(43, 59, 255, .5); }
-/* Empty: the reserved place is marked, and says why, in the plate's caption voice. */
-.ticks { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 200ms var(--x-ease); }
-.ticks b { position: absolute; width: 11px; height: 11px; border: 0 solid var(--x-quiet); }
-.ticks b:nth-child(1) { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; }
-.ticks b:nth-child(2) { top: 0; right: 0; border-top-width: 1px; border-right-width: 1px; }
-.ticks b:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 1px; border-left-width: 1px; }
-.ticks b:nth-child(4) { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; }
-.reason { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 0 20px; font-size: 14px; line-height: 1.4; color: var(--x-quiet); text-align: center; opacity: 0; transition: opacity 200ms var(--x-ease); }
-.stage[data-card="off"]:is([data-stage="still"], [data-stage="card"], [data-stage="done"]) :is(.ticks, .reason) { opacity: 1; transition-delay: 180ms; }
+.stage[data-card="off"] .cardWrap { opacity: 0; visibility: hidden; transform: translateY(10px); transition: none; }
+.card { box-shadow: 0 16px 34px -26px rgba(43, 59, 255, .38); }
 
 /* Tidewater's composer. */
 .composer { position: relative; display: flex; align-items: center; height: 52px; margin-top: var(--gy); padding: 0 9px 0 9px; border: 1px solid var(--x-hair); border-radius: 16px; background: var(--x-sheet); box-shadow: 0 1px 0 rgba(14, 18, 32, .03), 0 10px 20px -16px rgba(14, 18, 32, .3); font-size: 15.5px; color: var(--x-quiet); }
 .plus { display: grid; place-items: center; flex: none; width: 32px; height: 32px; margin-right: 12px; border: 1px solid var(--x-hair); border-radius: 50%; color: var(--muted); }
-.ask { position: relative; padding-left: 7px; }
-.ask::before { content: ""; position: absolute; top: 50%; left: 0; width: 1.5px; height: 19px; margin-top: -9.5px; background: var(--x-ink); opacity: 0; }
-@keyframes caret { 0%, 45% { opacity: 1; } 55%, 100% { opacity: 0; } }
-:global(html[data-px-motion="on"]) .ask::before { animation: caret 1.15s linear infinite; }
 .send { display: grid; place-items: center; width: 34px; height: 34px; margin-left: auto; border-radius: 10px; background: var(--x-ink); color: #fff; }
 
 /* Marginal notes. Each hangs from a fine leader line that runs to the part it describes. */
@@ -116,51 +94,34 @@
 .lead3 { transition-delay: 120ms; }
 .lead4 { transition-delay: 560ms; }
 
-/* The quiet mark that the answer has not changed. */
-.same { position: absolute; top: calc(50% + 14px); right: calc(100% + 34px); display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 500; line-height: 1; letter-spacing: .01em; color: var(--x-ink); white-space: nowrap; opacity: 0; transform: translateX(6px); transition: opacity 420ms var(--x-ease), transform 420ms var(--x-ease); pointer-events: none; }
-.same i { width: 9px; height: 6px; border-block: 1.5px solid var(--x-ink); }
-.stage[data-same] .same { opacity: 1; transform: none; transition: opacity 200ms var(--x-ease) 120ms, transform 420ms var(--x-out) 120ms; }
+/* "Your rules": the allowed category as a plain statement. An ink mark and words; not a control. */
+.mark { display: grid; grid-template-columns: 13px minmax(0, 1fr); column-gap: 8px; margin: 10px 0 0; color: var(--x-ink); }
+.mark i { display: grid; place-items: center; height: 18px; }
+.mark b { font-size: 14px; font-weight: 500; line-height: 18px; }
+.mark span { grid-column: 2; font-size: 12.5px; line-height: 1.3; color: var(--x-quiet); }
 
-/* The latch: the page's switch language, as a real control. */
-.latch { display: inline-flex; align-items: center; gap: 10px; min-height: 36px; margin: 4px 0 0 -7px; padding: 5px 9px 5px 7px; border: 0; border-radius: 8px; background: none; color: var(--x-ink); font: inherit; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background var(--x-d1) var(--x-ease); }
-@media (hover: hover) { .latch:hover { background: rgba(14, 18, 32, .06); } }
-.sw { position: relative; display: inline-flex; flex: none; transition: transform 120ms var(--x-ease); }
-.latch:active .sw { transform: scale(.92); }
-/* Handing over: when the performance ends on its own, the two latches ring once. */
-.sw::after { content: ""; position: absolute; inset: -5px; border: 1.5px solid var(--x-ink); border-radius: 9px; opacity: 0; pointer-events: none; }
-.latch:has([data-kind="judgment"]) .sw::after { border-radius: 999px; border-color: var(--x-blue); }
-@keyframes ring { 0% { opacity: 0; transform: scale(.82); } 30% { opacity: .9; } 100% { opacity: 0; transform: scale(1.18); } }
-:global(html[data-px-motion="on"]) .stage[data-hint] .sw::after { animation: ring 900ms var(--x-out) 2; }
-:global(html[data-px-motion="on"]) .stage[data-hint] .note2 .sw::after { animation-delay: 220ms; }
-.latchText { display: grid; gap: 1px; }
-.latchLabel { font-size: 14px; font-weight: 500; line-height: 1.2; white-space: nowrap; }
-.latchState { font-size: 12.5px; line-height: 1.2; color: var(--x-quiet); }
-
-/* The accrual. The card is confirmed (an ink tick lands on its foot), a token runs the leader,
-   and an ink tab is stamped at the leader's end. Words only: an accrual, never a payout. */
-.chip { position: absolute; top: calc(100% - 34px); right: -10px; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 5px; background: var(--x-ink); color: #fff; opacity: 0; transform: scale(.4); transition: opacity 120ms linear, transform 160ms var(--x-ease); pointer-events: none; }
+/* The accrual. The card is confirmed (an ink tick lands on its foot), a small token runs the
+   leader, and the ink tab at the leader's end appears. Words only: an accrual, never a payout. */
+.chip { position: absolute; top: calc(100% - 34px); right: -10px; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 5px; background: var(--x-ink); color: #fff; opacity: 0; transform: scale(.6); transition: opacity 160ms linear, transform 320ms var(--x-out); pointer-events: none; }
 .stage[data-confirmed] .chip { opacity: 1; transform: none; }
-.tag { display: inline-flex; align-items: center; gap: 7px; height: 28px; margin: 0; padding: 0 11px 0 8px; border: 1px dashed var(--x-quiet); border-radius: 6px; background: var(--x-paper); color: transparent; font-size: 14px; font-weight: 500; line-height: 1; letter-spacing: -.003em; white-space: nowrap; transition: color 120ms linear, background 120ms linear, border-color 120ms linear; }
+.tag { display: inline-flex; align-items: center; gap: 7px; height: 28px; margin: 0; padding: 0 11px 0 8px; border-radius: 6px; background: var(--x-ink); color: #fff; font-size: 14px; font-weight: 500; line-height: 1; letter-spacing: -.003em; white-space: nowrap; opacity: 0; transition: opacity 260ms var(--x-ease); }
 .note4 .tag { position: absolute; top: -14px; left: 0; }
-.stage[data-confirmed] .tag { border-style: solid; border-color: var(--x-ink); background: var(--x-ink); color: #fff; }
-@keyframes stamp { 0% { transform: scale(1); } 30% { transform: scale(1.16); } 100% { transform: scale(1); } }
-@keyframes pop { 0% { opacity: 0; transform: scale(.4); } 55% { opacity: 1; transform: scale(1.22); } 100% { opacity: 1; transform: scale(1); } }
-@keyframes token { 0% { opacity: 0; transform: translateX(0) scale(.6); } 16% { opacity: 1; transform: translateX(0) scale(1); } 88% { opacity: 1; } 100% { opacity: 0; transform: translateX(calc(var(--reach) - 14px)) scale(1); } }
-.token { position: absolute; top: calc(100% - 28.5px); left: calc(100% + 12px); width: 9px; height: 9px; border-radius: 2.5px; background: var(--x-blue); opacity: 0; pointer-events: none; }
-:global(html[data-px-motion="on"]) .token { animation: token 540ms var(--x-inout) 140ms both; }
-:global(html[data-px-motion="on"]) .stage:is([data-stage="card"], [data-stage="done"])[data-confirmed] .chip { animation: pop 380ms var(--x-out) both; }
-:global(html[data-px-motion="on"]) .stage:is([data-stage="card"], [data-stage="done"])[data-confirmed] .tag { animation: stamp 520ms var(--x-out) 640ms both; transition: color 0s linear 660ms, background 0s linear 660ms, border-color 0s linear 660ms; }
+.stage[data-confirmed] .tag { opacity: 1; }
+.stage[data-stage="card"][data-confirmed] .tag { transition-delay: 640ms; }
+@keyframes token { 0% { opacity: 0; transform: translateX(0); } 16% { opacity: 1; transform: translateX(0); } 88% { opacity: 1; } 100% { opacity: 0; transform: translateX(calc(var(--reach) - 14px)); } }
+.token { position: absolute; top: calc(100% - 27.5px); left: calc(100% + 12px); width: 7px; height: 7px; border-radius: 2px; background: var(--x-blue); opacity: 0; pointer-events: none; }
+:global(html[data-px-motion="on"]) .token { animation: token 560ms var(--x-inout) 140ms both; }
 
-/* A jump to a finished state (abrupt arrival, or the reader stepping in): no ceremony. */
-.stage[data-instant] :is(.cardWrap, .lead, .brace, .chip, .tag, .ticks, .reason), .stage[data-instant] .answer :global(.x-w) { transition: none !important; animation: none !important; }
+/* A jump to the finished plate (abrupt arrival): no ceremony. */
+.stage[data-instant] :is(.cardWrap, .lead, .brace, .chip, .tag), .stage[data-instant] .answer :global(.x-w) { transition: none !important; animation: none !important; }
 
 /* The close: one line for builders, and the one action. */
 .close { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 20px 40px; margin-top: clamp(40px, 7svh, 84px); margin-inline: calc((100% - 11 * var(--x-col-gap)) / 6 + 2 * var(--x-col-gap)); padding-top: clamp(22px, 3.4svh, 36px); border-top: 1px solid var(--x-ink); }
 .code { font-weight: 300; text-wrap: balance; }
 
 /* Narrow screens and phones: the same plate and the same notes, recomposed. The plate's parts and
-   the notes become one grid: the sheet spans the app's rows, the notes sit in two columns under it,
-   the two notes that carry a latch first, directly below the slot they change. */
+   the notes become one grid: the sheet spans the app's rows, the notes sit in two columns under it
+   in reading order. */
 @media (max-width: 1179px) {
   .dk { display: none; }
   .h { white-space: normal; }
@@ -183,22 +144,20 @@
   .slotIn { grid-row: 5; margin: 14px var(--px) 0; }
   .card { padding: 13px 15px 14px; gap: 7px; }
   .card p { font-size: 15px; line-height: 1.4; }
-  .chip { top: calc(100% - 30px); right: -9px; }
+  .chip { display: none; }
   .composer { grid-row: 6; height: 44px; margin: 12px var(--px) 12px; padding: 0 6px; border-radius: 14px; font-size: 15px; }
   .plus { width: 28px; height: 28px; margin-right: 9px; }
   .send { width: 30px; height: 30px; border-radius: 9px; }
-  .same { position: static; margin-left: auto; transform: none; }
   .note { position: relative; left: auto; right: auto; top: auto; width: auto; padding: 11px 0 14px; border-top: 1px solid var(--x-hair); }
-  .note3, .note2 { grid-row: 7; margin-top: 16px; border-top-color: var(--x-ink); }
-  .note1, .note4 { grid-row: 8; }
-  .note3, .note1 { grid-column: 1; }
+  .note1, .note2 { grid-row: 7; margin-top: 16px; border-top-color: var(--x-ink); }
+  .note3, .note4 { grid-row: 8; }
+  .note1, .note3 { grid-column: 1; }
   .note2, .note4 { grid-column: 2; }
-  .latch { min-height: 44px; margin-top: 4px; }
   .note4 .tag { position: static; margin-top: 10px; }
   .claim { margin-top: 8px; }
   .close { grid-template-columns: minmax(0, 1fr); justify-items: start; margin-inline: 0; margin-top: 40px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cardWrap, .lead, .brace, .same, .chip, .tag, .ticks, .reason, .latch, .sw { transition: none !important; animation: none !important; }
+  .cardWrap, .lead, .brace, .chip, .tag, .token { transition: none !important; animation: none !important; }
 }

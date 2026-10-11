@@ -36,7 +36,49 @@ question is asked and answered; a pass of light crosses each reader and every on
 stays an empty outline ("No ad. The answer stands alone."); where the receipt was, an empty outline
 ("No receipt."). The strip replays only its first three steps.
 
-## How it is built
+## Revision 2 (V5, 12 October 2026): calmer, shorter, no coda, no controls
+Everything above describes revision 1. What changed:
+- The coda is gone. `FILM.coda`, `NO_AD`, the second thread, the "No ad" slot, the "No receipt"
+  outline, the readers' second layer and the sixth still are all removed. The film is five beats
+  and rests on the receipt; `timeline.ts` has no state that takes anything away again, so progress 1
+  is the whole story at rest.
+- No controls. The strip is a plain mark (`div`/`span`, `aria-hidden`; the captions carry the same
+  five beats as text). No button, link, tabindex, hover state or pointer cursor anywhere in the
+  movement. The scroll is the only clock.
+- Stage length: 3.6 (360vh) at every width, down from 4.6. Beats begin at 0, .167, .357, .595, .81.
+- Quieter: the card travels level (no tilt), lands without the press and settle, and no ring opens
+  around the label; its travelling shadow is neutral, not blue. The readers rise half as far. The
+  pass of light is fainter, and fainter and shorter still on the two readers that sit out, which
+  resolve quickly and go quiet (45 percent). The camera's slow drifts are smaller. The slot's
+  outline is drawn only as the card sets out (on phones it used to stand empty from beat 2).
+- Phone (below 1000px): the screen's em is set so the plate is 94.5 percent of the screen's width
+  and every framing is drawn at scale 1; nothing is set below 1.56em (13.4px at 390). The two
+  readers that sit out are short sheets (name, verdict, one reason); only HarborKey holds the
+  question. The receipt's two sides are stacked. The placed framing shows the whole conversation
+  when it fits; the recorded framing is HarborKey's sheet with the receipt below it, centred.
+- Small sizes raised on wide frames too: the app's kind line, the answer's byline and the card's
+  label are .8em (were .66, .72, .68), so the label is 13px or more at 1366 and 1280 in beat 5.
+  In the stills the readers' row is .7em and the fit's reasons 1.14em (they were 11.7px).
+
+Verified in revision 2 (lab route and /v5/, system Chrome headless, scripts in the scratchpad):
+- 1440x900, 1366x768, 1280x800, 390x844: answer text, layout box and every word box identical at
+  progress .36, .45, .59, .68, .725, .74, .76, .8, .9, .99; on-screen box identical at .725, .74,
+  .76, .8 (camera still while the card lands); card top below answer bottom; 37 samples of the
+  flight, 0 overlaps with the answer or the two other readers.
+- Forwards and backwards give identical geometry, variables, beat and camera at 21 of 21 positions.
+- 0 interactive elements, 0 pointer cursors, no horizontal scroll, no console errors.
+- Smallest text on a 390 phone: 13px (the strip's labels and the Illustration note); inside the
+  world 13.47px (the answer's byline, the card's label, the receipt's side labels).
+- Motion off: five stills, smallest text 13.5px at 1440 and 390.
+
+Known and not checked (revision 2)
+- At 0.45 (readers arriving) the sheets show a name and question with the verdict area still blank
+  for a short stretch; it is a passing state, not a rest.
+- On wide frames beat 5 leaves the lower left of the screen empty (card top left, receipt right).
+- Below 390 wide the plate still fits the screen but type scales with it (about 12.4px at 360).
+- Not tried on a real phone, Safari or Firefox; no frame-rate measurement; tablet widths not captured.
+
+## How it is built (revision 1 text; lengths and the coda are superseded above)
 - `timeline.ts`: one pure function, progress (0 to 1) to every value of the picture.
 - `camera.ts`: one pure function, progress to a framing (world point at the screen's centre, and a
   scale). Framings are fitted to the measured boxes of what they show, so they hold at any size.

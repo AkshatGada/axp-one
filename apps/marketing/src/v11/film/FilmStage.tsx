@@ -5,17 +5,18 @@
 // clock. timeline.ts turns progress into every value of the picture (written to custom properties
 // on the frame, drawn by CSS with transforms and opacity only); camera.ts turns the same progress
 // into a framing of the world. Both are pure, so any progress value is a finished frame.
-import { useCallback, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import type { MotionValue } from "motion/react";
 import { Ad, Fig, Split, Stage } from "../kit";
 import { FILM } from "../copy";
-import { ADVERTISER, AGENTS, ANSWER, NO_AD, QUESTION } from "../story";
-import { AnswerMark, Bar, CODA_WHY, Composer, Reader, Receipt, SendMark, SITS_OUT } from "./parts";
+import { ADVERTISER, AGENTS, ANSWER, QUESTION } from "../story";
+import { AnswerMark, Bar, Composer, Reader, Receipt, SendMark } from "./parts";
 import { camera, keys, type Box, type Key } from "./camera";
-import { frame, ORDER, POSES, type Flags } from "./timeline";
+import { frame, ORDER, type Flags } from "./timeline";
 import s from "./film.module.css";
 
-const LENGTH = 4.6;
+// Five beats over 2.6 screens of travel. Nothing in the film can be pressed: the scroll is the only clock.
+const LENGTH = 3.6;
 const COMPACT = "(max-width: 999px)";
 const vars = (o: Record<string, string>) => o as CSSProperties;
 
@@ -31,12 +32,10 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
   const q1 = useRef<HTMLDivElement>(null);
   const a1 = useRef<HTMLDivElement>(null);
   const fly = useRef<HTMLDivElement>(null);
-  const slot2 = useRef<HTMLDivElement>(null);
   const readers = useRef<(HTMLDivElement | null)[]>([]);
   const row0 = useRef<HTMLDivElement>(null);
   const receipt = useRef<HTMLDivElement>(null);
-  const none = useRef<HTMLParagraphElement>(null);
-  const [flags, setFlags] = useState<Flags>(() => frame(progress.get(), false).flags);
+  const [flags, setFlags] = useState<Flags>(() => frame(progress.get()).flags);
 
   useLayoutEffect(() => {
     const el = root.current;
@@ -54,7 +53,7 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
       el.style.setProperty(k, val);
     };
     const paint = (p: number) => {
-      const f = frame(p, mq.matches);
+      const f = frame(p);
       for (const k in f.vars) put(k, f.vars[k]!.toFixed(4));
       if (ks.length) {
         const c = camera(ks, p);
@@ -89,11 +88,9 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
         q1: box(q1.current),
         a1: box(a1.current),
         slot1: box(fly.current),
-        slot2: box(slot2.current),
         readers: AGENTS.map((_, i) => box(readers.current[i] ?? null)),
         rail: em * 1.4,
         receipt: box(receipt.current),
-        none: box(none.current),
       };
       size = { w: sc.clientWidth, h: sc.clientHeight };
       delete el.dataset.measure;
@@ -131,16 +128,6 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
     };
   }, [progress]);
 
-  // A step is also a button: it takes the reader to that beat's composed frame.
-  const go = useCallback((k: number) => {
-    const stage = root.current?.closest<HTMLElement>("[data-stage]");
-    if (!stage) return;
-    const top = stage.getBoundingClientRect().top + window.scrollY;
-    const y = top + (stage.offsetHeight - window.innerHeight) * POSES[k]!;
-    if (window.__lenis) window.__lenis.scrollTo(y, { duration: 1.1 });
-    else window.scrollTo({ top: y, behavior: "smooth" });
-  }, []);
-
   return (
     <div ref={root} className={s.frame} data-beat={flags.beat}>
       <div className={`x-wrap ${s.inner}`}>
@@ -153,9 +140,6 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
               <Split className={s.capLine} text={b.line} />
             </li>
           ))}
-          <li className={s.cap} style={vars({ "--e": "var(--e5)", "--x": "var(--x5)" })}>
-            <Split className={s.capLine} text={FILM.coda} />
-          </li>
         </ol>
 
         <div className={s.screen} ref={screen}>
@@ -179,21 +163,7 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
                       <div className={s.fly} ref={fly}>
                         <i className={s.flyShadow} aria-hidden />
                         <Ad className={s.card} name={ADVERTISER.name} text={ADVERTISER.creative} />
-                        <i className={s.ring} aria-hidden />
                       </div>
-                    </div>
-                  </div>
-                  <div className={s.thread} data-t="2">
-                    <div className={s.qWrap} data-q="2">
-                      <p className={s.q}>{NO_AD.question}</p>
-                    </div>
-                    <div className={s.a}>
-                      <AnswerMark />
-                      <Split as="p" className={s.aText} text={NO_AD.answer} />
-                    </div>
-                    <div className={s.slot} data-empty ref={slot2}>
-                      <i className={s.slotLine} aria-hidden />
-                      <p className={s.noAd}>{NO_AD.line}</p>
                     </div>
                   </div>
                 </div>
@@ -206,8 +176,8 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
               <i className={s.trunk} aria-hidden />
               <div className={s.row} ref={row0}>
               {ORDER.map((i) => (
-                <div key={i} className={s.readerSlot} data-fit={i === 0 ? "" : undefined} ref={(n) => { readers.current[i] = n; }} style={vars({ "--g": `var(--g${i})`, "--rd": `var(--rd${i})`, "--bo": `var(--bo${i})`, "--h": `var(--h${i})`, "--v": `var(--v${i})`, "--w": `var(--w${i})`, "--o": `var(--o${i})` })}>
-                  <Reader index={i} on={i === 0 && flags.fit} second />
+                <div key={i} className={s.readerSlot} data-fit={i === 0 ? "" : undefined} ref={(n) => { readers.current[i] = n; }} style={vars({ "--g": `var(--g${i})`, "--rd": `var(--rd${i})`, "--bo": `var(--bo${i})`, "--h": `var(--h${i})`, "--v": `var(--v${i})`, "--o": `var(--o${i})` })}>
+                  <Reader index={i} on={i === 0 && flags.fit} />
                 </div>
               ))}
               </div>
@@ -218,24 +188,22 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
                     <Receipt r0={flags.r0} r1={flags.r1} />
                   </div>
                 </div>
-                <p className={s.noRc} ref={none}>{NO_AD.receipt}</p>
               </div>
             </div>
           </div>
         </div>
 
+        {/* A plain progress mark: five steps that fill as the film plays. Not a control. */}
         <div className={s.strip}>
-          <ol className={s.steps} aria-label="The five beats">
+          <div className={s.steps} aria-hidden>
             {FILM.beats.map((b, k) => (
-              <li key={b.k}>
-                <button type="button" className={s.step} style={vars({ "--s": `var(--s${k})` })} data-now={flags.now === k ? "" : undefined} aria-current={flags.beat === k ? "step" : undefined} onClick={() => go(k)}>
-                  <i aria-hidden />
-                  <b>{k + 1}</b>
-                  <span>{b.k}</span>
-                </button>
-              </li>
+              <span key={b.k} className={s.step} style={vars({ "--s": `var(--s${k})` })} data-now={flags.beat === k ? "" : undefined}>
+                <i />
+                <b>{k + 1}</b>
+                <span>{b.k}</span>
+              </span>
             ))}
-          </ol>
+          </div>
           <p className={s.note}>Illustration</p>
         </div>
       </div>
@@ -243,12 +211,12 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
   );
 }
 
-/** Motion off, and the server render: the same story as six composed stills in normal flow. */
+/** Motion off, and the server render: the same story as five composed stills in normal flow. */
 function Stills() {
   const cap = (k: number) => (
     <div className={s.stillCap}>
-      {k < 5 ? <p className={s.capK}><b>{k + 1}</b>{FILM.beats[k]!.k}</p> : null}
-      <p className={s.stillLine}>{k < 5 ? FILM.beats[k]!.line : FILM.coda}</p>
+      <p className={s.capK}><b>{k + 1}</b>{FILM.beats[k]!.k}</p>
+      <p className={s.stillLine}>{FILM.beats[k]!.line}</p>
     </div>
   );
   const question = <div className={s.qWrap}><p className={s.q}>{QUESTION}</p></div>;
@@ -285,7 +253,7 @@ function Stills() {
           <div className={s.stillPlate}>
             <div className={s.stillRow}>
               {ORDER.map((i) => (
-                <div key={i} className={s.readerSlot}>
+                <div key={i} className={s.readerSlot} data-fit={i === 0 ? "" : undefined}>
                   <Reader index={i} on={i === 0} />
                 </div>
               ))}
@@ -313,33 +281,6 @@ function Stills() {
             <div className={s.stillReaders}>
               <Receipt />
             </div>
-          </div>
-        </li>
-        <li className={s.still}>
-          {cap(5)}
-          <div className={s.stillPlate}>
-            <div className={s.sheet}>
-              <Bar />
-              <div className={s.threads}>
-                <div className={s.thread}>
-                  <div className={s.qWrap}><p className={s.q}>{NO_AD.question}</p></div>
-                  <div className={s.a}>
-                    <AnswerMark />
-                    <p className={s.aText}>{NO_AD.answer}</p>
-                  </div>
-                  <div className={s.slot} data-empty>
-                    <i className={s.slotLine} aria-hidden />
-                    <p className={s.noAd}>{NO_AD.line}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <ul className={s.sitOuts}>
-              {AGENTS.map((a) => (
-                <li key={a.name}><b>{a.name}</b><span>{SITS_OUT}</span></li>
-              ))}
-              <li className={s.sitWhy}>{CODA_WHY}. {NO_AD.receipt}</li>
-            </ul>
           </div>
         </li>
       </ol>

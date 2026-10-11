@@ -1,12 +1,8 @@
 // The film's props: Tidewater's furniture, a reader (an advertiser's agent), the receipt. Shared by
 // the pinned film and by the still sequence, so both draw the same objects.
 import type { CSSProperties, ReactNode, Ref } from "react";
-import { AGENTS, APP, MOMENTS, NO_AD, QUESTION, RECEIPT } from "../story";
+import { AGENTS, APP, QUESTION, RECEIPT } from "../story";
 import s from "./film.module.css";
-
-/** Why every agent sits the second question out (the story's own words for that moment). */
-export const CODA_WHY = MOMENTS.find((m) => m.id === "learn")?.why ?? "";
-export const SITS_OUT = "Sits out";
 
 /** The words of the question each reader's reason rests on. For the fit, one phrase per reason, in
  *  the order of its reasons; for the others, the phrase that rules them out. See NOTES.md. */
@@ -85,9 +81,8 @@ function Marked({ text, phrases }: { text: string; phrases: string[] }) {
 }
 
 /** One advertiser's agent, as a reader: its name, the question it is reading (the words it cares
- *  about marked), its judgment (round, ultramarine when it fits) and its verdict in words.
- *  `second` adds the coda's question and verdict as a second layer. */
-export function Reader({ index, on, second, style, innerRef }: { index: number; on?: boolean; second?: boolean; style?: CSSProperties; innerRef?: Ref<HTMLDivElement> }) {
+ *  about marked), its judgment (round, ultramarine when it fits) and its verdict in words. */
+export function Reader({ index, on, style, innerRef }: { index: number; on?: boolean; style?: CSSProperties; innerRef?: Ref<HTMLDivElement> }) {
   const a = AGENTS[index]!;
   const fits = a.verdict === "fits";
   const phrases = CARES[a.name] ?? [];
@@ -99,23 +94,16 @@ export function Reader({ index, on, second, style, innerRef }: { index: number; 
         <span className={`x-sw ${s.rdSw}`} data-kind="judgment" data-on={on ? "" : undefined} aria-hidden />
       </div>
       <div className={s.rdQs}>
-        <p className={s.rdQ} data-layer="1"><Marked text={QUESTION} phrases={phrases} /></p>
-        {second ? <p className={s.rdQ} data-layer="2">{NO_AD.question}</p> : null}
+        <p className={s.rdQ}><Marked text={QUESTION} phrases={phrases} /></p>
         <i className={s.beam} aria-hidden />
       </div>
       <div className={s.rdOuts}>
-        <p className={s.rdOut} data-layer="1">
+        <p className={s.rdOut}>
           <b>{cap(a.verdict)}</b>
           {reasons.map((r, k) => (
             <span key={r} className={s.reason} style={vars({ "--k": k })}>{r}</span>
           ))}
         </p>
-        {second ? (
-          <p className={s.rdOut} data-layer="2">
-            <b>{SITS_OUT}</b>
-            <span className={s.reason}>{CODA_WHY}</span>
-          </p>
-        ) : null}
       </div>
     </div>
   );
