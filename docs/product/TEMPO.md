@@ -5,10 +5,10 @@ channels. A campaign selects its rail before approval and funding. ContextHint,
 Jev, the auction and accepted-delivery accounting stay shared; payment keys and
 channel state remain specific to the selected network.
 
-This guide describes the implementation and verification procedure. It does not
-establish that a testnet run has completed. Only a recorded, independently checked
-transaction result establishes funding, payout or refund evidence. Historical
-Solana results remain historical evidence, not new Tempo executions.
+The isolated 11 October acceptance run is complete: funding, cumulative vouchers,
+payout while open, continued delivery, final refund and a fresh Solana regression
+passed independent readback. See [the results and evidence](TEMPO_VERIFICATION.md).
+The procedure below describes operation; it does not authorize another funded run.
 
 ## Network and protocol
 
@@ -161,3 +161,20 @@ the acceptance artifacts. Never commit keys, signed voucher material or private
 SQLite snapshots. Repeat the Solana lifecycle regression in isolated state before
 merging. See [the SDK guide](SDK.md), [interface contract](TEMPO_INTERFACE.md) and
 [hosting storage guide](HOSTING.md) for the shared integration boundaries.
+
+## Bounded Preview packaging
+
+`scripts/tempo/prepare-preview-verification.mjs` packages a **stopped**, isolated
+verification workspace into a prebuilt Preview function. It requires the explicit
+`--authorized=tempo-preview-phase4` flag, Preview configuration, the expected run
+identity and the three predeclared campaigns. It encrypts both financial and
+organic shards; wallets remain in server environment secrets. Do not run the local
+writer after transferring ownership to Preview.
+
+The operator wrapper is excluded from ordinary builds. It fixes the verification
+namespace, freezes campaign creation/edits, preserves the original package marker
+across cold starts and applies one durable provider budget across both shards.
+`GET /api/product/verification` exists **only in that wrapper** and exposes
+sanitized usage counters, limits and shard revisions. Reads do not trigger models,
+signing or transfers. A changed package or missing committed state fails closed.
+Do not copy this wrapper or its encrypted bootstrap artifact into production.

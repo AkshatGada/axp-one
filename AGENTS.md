@@ -22,6 +22,17 @@ the remaining earned delta and returns unused collateral. No timer-based
 settlement, bridge, mainnet, wallet onboarding or new scale benchmark is in scope.
 Production activation follows PR review/merge and a final hosted verification.
 
+The approved isolated 11 October run is now financially complete. Two Tempo
+channels/five finalized transactions deposited 100000 PathUSD base units, paid
+18000 and refunded 82000; separate fees were 499 base units. Six accepted
+deliveries advanced six vouchers: three before payout, three after on the same
+channel. The fresh Solana regression deposited 20000 USDC base units, paid 3000
+and refunded 17000 across two finalized transactions. All three channels are
+closed. Eight DeepSeek answers and seven Jev evaluations completed; 345000
+microUSD stays conservatively reserved, with no admitted/unknown attempt. One
+actual frequency-cap no-fill remains recorded. See docs/product/TEMPO_VERIFICATION.md
+and artifacts/tempo/. These results do not authorize additional funded runs.
+
 Current release: Hero → ContextHint → whole product flow → Jev → Solana → compact
 benchmark → Closing landing story, user-operated advertiser dashboard, three-step
 publisher SDK guide, example chat and five-stage View internals with in-dialog
