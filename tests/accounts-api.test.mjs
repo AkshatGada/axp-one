@@ -118,6 +118,30 @@ test('accounts: absent configuration is unavailable, never a fixture sign-in',as
   assert.equal((await invoke(api,'/auth/signin',{method:'POST',body:{}})).status,503);
 });
 
+test('accounts API awaits asynchronous database profile operations and binds only verified identities',async t=>{
+  const {store,provider}=local(t),bindings=[];
+  const asyncStore={profileStore:'supabase',bindIdentity(user,token){bindings.push([user.id,token]);}};
+  for(const name of ['ensureUser','user','updateProfile','organizations','createOrganization','organization','details','saveAdvertiser','saveApp','putSession','session','deleteSession']) {
+    asyncStore[name]=async(...args)=>{await Promise.resolve();return store[name](...args);};
+  }
+  const api=createAccountsAPI({store:asyncStore,provider,origin,now:()=>1000000000000});
+  const a=await login(api);
+  assert.equal((await invoke(api,'/health')).body.profileStore,'supabase');
+  assert.equal((await invoke(api,'/profile',{...a,method:'POST',body:{displayName:'Async profile'}})).body.user.displayName,'Async profile');
+  const org=await invoke(api,'/organizations',{...a,method:'POST',body:{name:'Async organization'}});
+  assert.equal(org.status,201);
+  assert.equal((await invoke(api,`/organizations/${org.body.organization.id}`,a)).body.organization.name,'Async organization');
+  assert.ok(bindings.length>=4);assert.ok(bindings.every(([id,token])=>id===uid&&token===`access-${uid}`));
+});
+
+test('hosted profiles cannot enable the SQLite fixture store on Vercel',async()=>{
+  const api=createHostedAccountsAPI({config:{AXP_ACCOUNTS_ENABLED:'1',AXP_ACCOUNTS_PROFILE_STORE:'sqlite-fixture',VERCEL:'1',AXP_ACCOUNTS_ORIGIN:origin},provider:providerFixture(Date.now)});
+  assert.equal(api.initError,'profile_database_configuration_required');
+  assert.equal((await invoke(api,'/health')).body.enabled,false);
+  const realProvider=createHostedAccountsAPI({config:{AXP_ACCOUNTS_ENABLED:'1',AXP_ACCOUNTS_PROFILE_STORE:'sqlite-fixture',AXP_ACCOUNTS_ORIGIN:origin}});
+  assert.equal(realProvider.initError,'profile_database_configuration_required');
+});
+
 test('Supabase adapter: authoritative /user required; provider secrets never returned',async()=>{
   const calls=[];
   const p=createSupabaseAuth({url:'https://qcejmyhaakoedjaqmcub.supabase.co',key:'sb_publishable_fixture_key_0123456789',fetchImpl:async(url,opts)=>{

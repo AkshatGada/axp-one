@@ -81,6 +81,30 @@ function payout(input) {
   return {network: input.network, address};
 }
 
+// Shared boundary for the offline fixture store and the Supabase repository.
+// PostgreSQL separately enforces ownership; these checks never confer authority.
+export function validateAccountInput(operation, input) {
+  if (operation === 'updateProfile') {
+    exact(input, ['displayName']);
+    return {displayName: text(input.displayName, 120, true)};
+  }
+  if (operation === 'createOrganization') {
+    exact(input, ['name']);
+    return {name: text(input.name, 120)};
+  }
+  if (operation === 'saveAdvertiser') {
+    exact(input, ['name', 'website', 'description']);
+    return {name: text(input.name, 120), website: website(input.website), description: text(input.description, 2000, true)};
+  }
+  if (operation === 'saveApp') {
+    exact(input, ['name', 'website', 'allowedOrigins', 'blockedCategories', 'payout']);
+    return {name: text(input.name, 120), website: website(input.website),
+      allowedOrigins: list(input.allowedOrigins, value => website(value, true)),
+      blockedCategories: list(input.blockedCategories, value => text(value, 80)), payout: payout(input.payout)};
+  }
+  fail('invalid_input');
+}
+
 export function createAccountStore({dir, now = Date.now} = {}) {
   if (typeof dir !== 'string' || !dir || typeof now !== 'function') fail('invalid_input');
   const directory = resolve(dir);

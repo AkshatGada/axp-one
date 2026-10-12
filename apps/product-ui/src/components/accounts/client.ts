@@ -19,6 +19,9 @@ const messages: Record<string, string> = {
   auth_rate_limited: 'Too many authentication requests. Wait before trying again.',
   auth_provider_unavailable: 'The identity provider is unavailable. Try again later.',
   accounts_configuration_required: 'The account service is not configured on this server.',
+  profile_database_unavailable: 'The profile database is unavailable. Your profiles have not been moved to a local fallback.',
+  profile_database_migration_required: 'The AXP profile database migration has not been applied.',
+  profile_database_rate_limited: 'The profile database is busy. Wait before trying again.',
   origin_invalid: 'This page origin is not allowed by the account service.',
   invalid_url: 'Check website URLs and allowed origins. Use HTTPS or loopback HTTP; origins cannot contain paths or wildcards.',
   invalid_payout: 'Check the network and payout address. This is a declaration only.',
@@ -102,7 +105,7 @@ export class AccountsClient {
     const configured: unknown = data.configured;
     if (typeof data.enabled !== 'boolean' || !record(configured) ||
         !['origin', 'provider', 'store'].every(key => typeof configured[key] === 'boolean') ||
-        data.provider !== 'supabase' || !hasCapabilities(data.capabilities)) {
+        data.provider !== 'supabase' || (data.profileStore !== undefined && !['supabase', 'sqlite-fixture'].includes(data.profileStore)) || !hasCapabilities(data.capabilities)) {
       throw new AccountApiError(502, 'invalid_response');
     }
     return data;

@@ -26,29 +26,31 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
   const ready=enabled&&configured&&!!provider&&!!store;
   const cookie=(value,age=604800)=>`axp_session=${value}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${age}${secure?'; Secure':''}`;
   async function issue(data,oldHash) {
-    const user=store.ensureUser(data.user),secret=randomBytes(32).toString('hex');
-    if(oldHash)store.deleteSession(oldHash);
-    store.putSession({hash:hash(secret),userId:user.id,accessToken:data.accessToken,refreshToken:data.refreshToken,expiresAt:data.expiresAt,absoluteExpiresAt:now()+604800000,csrf:randomBytes(32).toString('hex')});
+    store.bindIdentity?.(data.user,data.accessToken);
+    const user=await store.ensureUser(data.user),secret=randomBytes(32).toString('hex');
+    if(oldHash)await store.deleteSession(oldHash);
+    await store.putSession({hash:hash(secret),userId:user.id,accessToken:data.accessToken,refreshToken:data.refreshToken,expiresAt:data.expiresAt,absoluteExpiresAt:now()+604800000,csrf:randomBytes(32).toString('hex')});
     return cookie(secret);
   }
   async function session(req,{verify=true}={}) {
     const secret=cookieOf(req),key=secret?hash(secret):null;
-    let s=key?store.session(key):null;
+    let s=key?await store.session(key):null;
     if(!s)return null;
-    if(s.absoluteExpiresAt<=now()){store.deleteSession(key);return null;}
+    if(s.absoluteExpiresAt<=now()){await store.deleteSession(key);return null;}
     if(!verify)return {...s,hash:key};
     try {
       let user;
       if(s.expiresAt<=now()+45000) {
         const data=await provider.refresh(s.refreshToken);
         if(data.user.id!==s.userId)fail('auth_rejected',401);
-        s={...s,accessToken:data.accessToken,refreshToken:data.refreshToken,expiresAt:data.expiresAt};store.putSession(s);user=data.user;
+        s={...s,accessToken:data.accessToken,refreshToken:data.refreshToken,expiresAt:data.expiresAt};await store.putSession(s);user=data.user;
       } else user=await provider.getUser(s.accessToken);
       if(user.id!==s.userId)fail('auth_rejected',401);
-      store.ensureUser(user);return {...s,hash:key};
+      store.bindIdentity?.(user,s.accessToken);
+      await store.ensureUser(user);return {...s,hash:key};
     } catch(e) {
       // An uncertain refresh cannot be retried indefinitely; require a fresh sign-in.
-      if(s.expiresAt<=now()+45000||[401,403].includes(e.status))store.deleteSession(key);
+      if(s.expiresAt<=now()+45000||[401,403].includes(e.status))await store.deleteSession(key);
       throw e;
     }
   }
@@ -57,7 +59,7 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
     try {
       const url=new URL(req.url,'http://local'),path=url.pathname.replace(/\/$/,'').replace(/^\/api\/accounts(?=\/|$)/,'');
       if(!url.pathname.startsWith('/api/accounts/'))fail('not_found',404);
-      if(req.method==='GET'&&path==='/health')return send(res,200,{enabled:ready,provider:'supabase',configured:{origin:configured,provider:!!provider,store:!!store},capabilities:ACCOUNT_CAPABILITIES});
+      if(req.method==='GET'&&path==='/health')return send(res,200,{enabled:ready,provider:'supabase',profileStore:store?.profileStore??'sqlite-fixture',configured:{origin:configured,provider:!!provider,store:!!store},capabilities:ACCOUNT_CAPABILITIES});
       if(!ready)fail('accounts_configuration_required',503);
       if(!['GET','POST'].includes(req.method))fail('method_not_allowed',405);
       if(req.headers['sec-fetch-site']==='cross-site')fail('origin_invalid',403);
@@ -74,21 +76,21 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
       // Local logout must still work during provider downtime. Revoke best-effort;
       // always invalidate this AXP session before returning.
       const s=await session(req,{verify:path!=='/auth/signout'});
-      if(req.method==='GET'&&path==='/session')return send(res,200,s?{authenticated:true,user:store.user(s.userId),csrf:s.csrf,organizations:store.organizations(s.userId),capabilities:ACCOUNT_CAPABILITIES}:{authenticated:false});
+      if(req.method==='GET'&&path==='/session')return send(res,200,s?{authenticated:true,user:await store.user(s.userId),csrf:s.csrf,organizations:await store.organizations(s.userId),capabilities:ACCOUNT_CAPABILITIES}:{authenticated:false});
       if(!s)fail('authentication_required',401);
       if(req.method==='POST'&&!equal(req.headers['x-axp-csrf'],s.csrf))fail('csrf_invalid',403);
       if(req.method==='POST'&&path==='/auth/signout') {
-        only(body,[]);store.deleteSession(s.hash);await provider.signout(s.accessToken).catch(()=>{});
+        only(body,[]);await store.deleteSession(s.hash);await provider.signout(s.accessToken).catch(()=>{});
         return send(res,200,{signedOut:true},{'set-cookie':cookie('',0)});
       }
-      if(req.method==='POST'&&path==='/profile')return send(res,200,{user:store.updateProfile(s.userId,body)});
-      if(req.method==='POST'&&path==='/organizations')return send(res,201,{organization:store.createOrganization(s.userId,body)});
+      if(req.method==='POST'&&path==='/profile')return send(res,200,{user:await store.updateProfile(s.userId,body)});
+      if(req.method==='POST'&&path==='/organizations')return send(res,201,{organization:await store.createOrganization(s.userId,body)});
       const match=path.match(/^\/organizations\/([a-zA-Z0-9-]+)(?:\/(advertiser|apps)(?:\/([a-zA-Z0-9-]+))?)?$/);
       if(match) {
         const [,orgId,kind,appId]=match;
-        if(req.method==='GET'&&!kind)return send(res,200,store.details(s.userId,orgId));
-        if(req.method==='POST'&&kind==='advertiser'&&!appId)return send(res,200,{advertiser:store.saveAdvertiser(s.userId,orgId,body)});
-        if(req.method==='POST'&&kind==='apps')return send(res,appId?200:201,{app:store.saveApp(s.userId,orgId,body,appId??null)});
+        if(req.method==='GET'&&!kind)return send(res,200,await store.details(s.userId,orgId));
+        if(req.method==='POST'&&kind==='advertiser'&&!appId)return send(res,200,{advertiser:await store.saveAdvertiser(s.userId,orgId,body)});
+        if(req.method==='POST'&&kind==='apps')return send(res,appId?200:201,{app:await store.saveApp(s.userId,orgId,body,appId??null)});
       }
       fail('not_found',404);
     } catch(e) {send(res,e.status??503,{error:safeError(e)});}

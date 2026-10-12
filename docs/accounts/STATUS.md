@@ -11,8 +11,10 @@ campaign serving, customer wallet funding or publisher payout onboarding.
 - Opaque HttpOnly sessions; exact-origin writes and session-bound CSRF.
 - Personal profiles, owner organizations, advertiser profiles and multiple AI-app
   profiles. One person can own both sides. Other people's IDs do not grant access.
-- Private SQLite scratch state and separately namespaced encrypted durable
-  snapshots; cookies are emitted only after persistence succeeds.
+- Dedicated AXP Supabase PostgreSQL profile repository (new database migration
+  and cloud acceptance status recorded below). Private SQLite/encrypted snapshots
+  retain opaque sessions only in the real-provider runtime. Cookies are emitted
+  only after session persistence succeeds; there is no local profile fallback.
 - Separate `/account/` console, disabled-by-default hosted dispatch, static
   packaging and `npm run dev:accounts`. No marketing component edits.
 - Contracts, component plan, runbook and explicit unavailable financial/serving
@@ -39,16 +41,27 @@ campaign serving, customer wallet funding or publisher payout onboarding.
   publishable key. It is saved in ignored `.env.local`, not source control.
 - Real Supabase read-only settings returned 200: email enabled, sign-up allowed,
   email confirmation required. Local health reports configured provider/store.
-  No real sign-up, confirmation email, token refresh or customer session has yet
-  been exercised. SMTP/template and exact redirect setup remain open; see runbook.
+  Human-operated signup, delivered confirmation email, email confirmation and
+  signed-in session re-verification passed on 12 October. This is real Supabase/
+  Resend acceptance, not a fixture. Expiry-driven token refresh and sign-out were
+  not separately exercised with this human session. See `EMAIL_SETUP.md`.
 
 No landing-page checkout edits, ContextHint changes, financial operations,
-paid model calls, cloud configuration writes, merge, push or deployment.
+paid model calls, merge, push or deployment. The later approved cloud changes are
+limited to auth-subdomain DNS, Resend sending credentials and AXP Supabase email/
+redirect settings, documented in `EMAIL_SETUP.md`.
 
 ## Remaining gates
 
-1. Authorized Supabase redirect/sender/template setup and a human-operated
-   real-provider sign-up → confirmation → sign-in → profile → sign-out test.
+Dedicated Supabase profile migration and real signed-in read acceptance now pass;
+see `SUPABASE_DATABASE_RESULT.md` for cloud evidence, hashes and SQL rollback
+acceptance. The local console uses Supabase profiles, not the fixture store.
+
+1. Real browser advertiser/AI-app creation, reload/server-restart persistence and
+   explicit sign-out acceptance now pass; see `END_TO_END_ACCEPTANCE.md`.
+   Signup, email delivery, confirmation and verified signed-in reads also pass.
+   Resend's latest overall domain status should still be checked independently
+   before claiming every DNS record is fully verified.
 2. Organization-scoped campaign management and app-scoped SDK credentials.
 3. Enforced app restrictions and verified payout/financial authorization routing.
 

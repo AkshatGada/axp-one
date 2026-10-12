@@ -8,6 +8,7 @@ export interface Capabilities {
 export interface AccountHealth {
   enabled: boolean;
   provider: 'supabase';
+  profileStore?: 'supabase' | 'sqlite-fixture';
   configured: { origin: boolean; provider: boolean; store: boolean };
   capabilities: Capabilities;
 }

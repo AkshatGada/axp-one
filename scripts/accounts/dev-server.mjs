@@ -19,7 +19,10 @@ const server=createServer((req,res)=>{
   // Never fall through to the shared demo backend from an owned-profile console.
   if(path.startsWith('/api/')){res.writeHead(404,{'content-type':'application/json'});return res.end(JSON.stringify({error:'not_found'}));}
   if(noUI){res.writeHead(404);return res.end('Accounts API only');}
-  const proxy=httpRequest({hostname:'127.0.0.1',port:uiPort,path:req.url,method:req.method,headers:req.headers},upstream=>{res.writeHead(upstream.statusCode,upstream.headers);upstream.pipe(res);});
+  // Confirmation credentials belong only to the browser's explicit callback.
+  // The static account shell does not need them; do not leak them into Next logs.
+  const uiPath=path==='/account/'||path==='/account'?'/account/':req.url;
+  const proxy=httpRequest({hostname:'127.0.0.1',port:uiPort,path:uiPath,method:req.method,headers:req.headers},upstream=>{res.writeHead(upstream.statusCode,upstream.headers);upstream.pipe(res);});
   proxy.on('error',()=>{if(!res.headersSent)res.writeHead(503,{'content-type':'text/plain'});res.end('Account UI is starting. Refresh shortly.');});req.pipe(proxy);
 });
 server.listen(port,'127.0.0.1',()=>console.log(`AXP accounts: http://127.0.0.1:${port}/account/\nSupabase: ${api.initError?'configuration required':'configured'}. Profiles only; ad serving and native funding are disabled.`));

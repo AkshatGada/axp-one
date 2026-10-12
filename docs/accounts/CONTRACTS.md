@@ -39,7 +39,26 @@ origins only, no paths/wildcards. No payment/credential authority derived from t
 declarations. Capabilities identify profiles=true, campaignServing=false,
 nativeFunding=false, appCredentials=false.
 
-## Store interface (synchronous, SQLite private scratch/local state)
+## Profile database and session persistence
+
+Real-provider runtime profiles are stored in dedicated AXP Supabase PostgreSQL.
+`AXP_ACCOUNTS_PROFILE_STORE=supabase` is the default. The request-scoped repository
+binds only the verified provider identity/access token, then invokes
+`axp_account_operation` with that user's JWT. Database RLS independently enforces
+ownership. No browser-supplied identity or service-role/admin key is accepted.
+The API awaits every store operation; the legacy synchronous SQLite store remains
+only for explicit offline fixtures. Vercel refuses the fixture profile mode.
+
+Opaque sessions remain in the existing encrypted durable backend snapshot. A
+minimal local identity reference supports its FK, never profile reads or updates.
+These private sessions are not stored in public Supabase tables. Campaigns,
+payment ledgers and the shared demo are not migrated by this change.
+
+Health additionally returns `profileStore: "supabase" | "sqlite-fixture"` when
+configured. This identifies configuration, not standalone proof of DB reachability;
+an authenticated session read verifies the actual profile RPC path.
+
+## Store interface (async-capable; synchronous SQLite only for offline fixtures)
 
 `createAccountStore({dir,now=Date.now})` returns:
 

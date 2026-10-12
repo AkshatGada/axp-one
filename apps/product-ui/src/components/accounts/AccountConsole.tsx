@@ -238,6 +238,7 @@ export function AccountConsole() {
           <p className="ld-body">Account creation enables owned profiles only. It does not grant ownership of the shared demo, its campaigns, wallets or records.</p>
           <dl className="account-readiness">
             <div><dt>Account service</dt><dd>{!health ? 'Not verified' : !isConfigured(health) ? 'Unconfigured' : !health.enabled ? 'Disabled' : 'Configured'}</dd></div>
+            <div><dt>Profile database</dt><dd>{health?.profileStore === 'supabase' ? 'AXP Supabase PostgreSQL' : health?.profileStore === 'sqlite-fixture' ? 'Local fixture store' : 'Not verified'}</dd></div>
             <div><dt>Profiles</dt><dd>{!ready ? 'Unavailable' : !health?.capabilities.profiles ? 'Disabled by server' : !authenticated ? 'Sign in required' : profiles ? 'Available' : 'Disabled for this session'}</dd></div>
             <div><dt>Campaign serving</dt><dd>Not available in this profile slice</dd></div>
             <div><dt>Native funding</dt><dd>Not available in this profile slice</dd></div>
