@@ -6,6 +6,7 @@ import Masthead from "@/v11/shell/Masthead";
 import Footer from "@/v11/shell/Footer";
 import Rises from "@/v11/shell/Rises";
 import Cover from "@/v11/cover";
+import Users from "@/v11/users";
 import Shift from "@/v11/shift";
 import Film from "@/v11/film";
 import Advertiser from "@/v11/advertiser";
@@ -20,6 +21,7 @@ export default function Home() {
       <Masthead />
       <main id="main">
         <Cover />
+        <Users />
         <Shift />
         <Film />
         <Advertiser />

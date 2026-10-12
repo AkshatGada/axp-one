@@ -1,0 +1,23 @@
+/* The names strip under the cover. It completes the first screen on a laptop (the cover gives up
+   this much height for it). */
+.users { position: relative; z-index: 2; background: var(--x-paper); }
+.in { display: flex; align-items: center; gap: clamp(20px, 3vw, 48px); height: var(--users-h, 92px); }
+.label { flex: none; margin: 0; font-size: 14px; font-weight: 500; color: var(--x-quiet); white-space: nowrap; }
+.view { flex: 1 1 auto; min-width: 0; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.track { display: flex; align-items: center; width: max-content; margin: 0; padding: 0; list-style: none; }
+.track li { flex: none; padding-right: clamp(40px, 4.6vw, 76px); font-family: var(--font-body); font-size: clamp(19px, 1.7vw, 25px); font-weight: 700; letter-spacing: -.03em; line-height: 1; color: var(--x-ink); opacity: .58; white-space: nowrap; }
+:global(html[data-px-motion="on"]) .track { animation: usersRun 46s linear infinite; }
+.view:hover .track { animation-play-state: paused; }
+@keyframes usersRun { to { transform: translate3d(-50%, 0, 0); } }
+
+/* Motion off: one still, wrapped list; the doubled copy is not shown. */
+:global(html:not([data-px-motion="on"])) .in { height: auto; padding-block: 22px; align-items: baseline; }
+:global(html:not([data-px-motion="on"])) .view { -webkit-mask-image: none; mask-image: none; }
+:global(html:not([data-px-motion="on"])) .track { width: auto; flex-wrap: wrap; row-gap: 14px; }
+:global(html:not([data-px-motion="on"])) .track li[data-copy] { display: none; }
+
+@media (max-width: 899px) {
+  .in { flex-direction: column; align-items: flex-start; justify-content: center; gap: 12px; height: auto; padding-block: 22px 26px; }
+  .view { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .track { animation: none !important; } }

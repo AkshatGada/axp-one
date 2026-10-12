@@ -29,6 +29,12 @@ export const COVER = {
   note: "Illustrative prompts.",
 };
 
+/** The companies that use the platform (the owner's list). Names only, set in type. */
+export const USERS = {
+  label: "Used by teams at",
+  names: ["Bybit", "Polygon", "Sobha Realty", "Miden", "Billions", "Infinity", "Merlin AI", "Corsair", "Doe", "Conscious Engines", "Metaborong"],
+};
+
 /** 01 The shift. */
 export const SHIFT_COPY = {
   no: "01",

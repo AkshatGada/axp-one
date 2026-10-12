@@ -91,3 +91,7 @@ html[data-px-motion="on"] .v10 [data-rise="mark"][data-state="play"] { animation
 @keyframes x-rise { from { opacity: 0; transform: translateY(18px); } }
 @keyframes x-rise-mark { from { opacity: 0; transform: translateY(.12em); } }
 @media (prefers-reduced-motion: reduce) { .v10 [data-rise] { animation: none !important; opacity: 1 !important; } }
+
+/* The names strip under the cover (v11/users): on laptops the cover gives up this height so the
+   strip completes the first screen. */
+@media (min-width: 900px) { .v10 { --users-h: 92px; } }
