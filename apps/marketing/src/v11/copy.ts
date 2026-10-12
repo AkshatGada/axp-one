@@ -34,7 +34,7 @@ export const COVER = {
  *  `tone: "grey"` keeps a mark's inner shading, the default draws it as one flat tone;
  *  `word` sets the name beside a mark that has no wordmark of its own. */
 export const USERS: { label: string; logos: { name: string; src: string; h: number; tone?: "grey"; word?: boolean }[] } = {
-  label: "Used by teams at",
+  label: "ContextHint, our platform for AI ad intelligence, is used by teams at",
   logos: [
     { name: "Deloitte", src: "/customers/deloitte.svg", h: 24 },
     { name: "Financial Times", src: "/customers/ft.svg", h: 17 },
