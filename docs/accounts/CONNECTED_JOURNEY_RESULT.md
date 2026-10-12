@@ -74,8 +74,9 @@ No cloud migration, provider spend, native signature, broadcast or funds movemen
 was performed in this slice. The existing Supabase repositories remain in place;
 SQLite fixtures do not become a customer-data fallback.
 
+The source is now integrated locally; see [merge verification](NETWORK_MERGE_RESULT.md).
 Next gates: real participant wallet-extension ownership without spending;
 separately authorized bounded funded acceptance; independent hosted SDK/account
-acceptance; approved integration into the release candidate and submission assets.
+acceptance and submission assets.
 Do not present this local synthetic journey as finalized account-owned payment.
 See [essential release checklist](../SUBMISSION_CHECKLIST.md).

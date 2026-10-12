@@ -63,7 +63,9 @@ conversion lift.
 
 ## Product and evidence scope
 
-The account-owned network implementation is an isolated source candidate.
+The account-owned network implementation is merged into the primary local checkout;
+see [integration verification](NETWORK_MERGE_RESULT.md). It is not yet deployed by
+this integration.
 Public-product behavior must be assessed against the identified deployed revision.
 Real account-owned wallet-extension and funded lifecycle acceptance remain
 separate from the verified migration and offline tests.

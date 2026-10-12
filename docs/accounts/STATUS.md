@@ -28,16 +28,19 @@ persisted after backend restart; wrong-key, altered-message and cross-owner
 requests were rejected. The database contained two challenges, two bindings and
 zero channels. No funds moved. This is not a wallet-extension prompt test.
 
-The latest repository regression passed 733 tests with 23 optional skips and zero
-failures. The focused account-client run passed 72 checks; Wallet Standard/panel
-fixtures passed 17. These are local source checks, not hosted deployment evidence.
+The merged primary checkout's repository regression passed 748 tests with eight
+optional skips and zero failures. Connected account/SDK/ownership checks passed
+64 tests; account-client and Wallet Standard/panel checks passed 49. These are
+local source checks, not hosted deployment evidence.
 See [finance architecture and verification](FINANCE_CLOUD_ACCEPTANCE.md) for the
 commands and evidence scope.
 
 Real user-selected wallet-extension and account-owned funded lifecycle acceptance
 are separate release checks. Broadcasts remain disabled for the current
-non-spending verification. The isolated account-network source candidate is not
-itself evidence of public deployment.
+non-spending verification. The account-network source is merged locally into the
+primary checkout's `frontend` branch. It has not been pushed, deployed or activated
+by this merge. See [integration verification](NETWORK_MERGE_RESULT.md) for the
+merged revision, regression results and preservation checks.
 
 ## Documentation
 

@@ -64,7 +64,9 @@ separate evidence. See [finance verification](accounts/FINANCE_CLOUD_ACCEPTANCE.
 
 ## Phase 5 — Submission package
 
-- [ ] Merge only approved candidate changes while preserving specialist frontend work.
+- [x] Merge only approved candidate changes locally while preserving specialist
+  frontend work. See [merge verification](accounts/NETWORK_MERGE_RESULT.md);
+  push, deployment and activation remain separate.
 - [ ] Pin the revision, SDK artifact, configuration instructions and evidence hashes.
 - [ ] Verify public links and a concise captioned connected walkthrough; retain
   credential-free, mutation-rejecting offline replay.
