@@ -124,10 +124,13 @@ export function OwnerReport({ client, organizationId, resourceId, kind, ready, b
       {ready && error && <div className="account-table-note"><p className="account-error" role="alert">{error}</p></div>}
       {report && <div className="ld-stack-lg" style={{ padding: 'var(--ld-panel-pad) 0 0' }}>
         <div className="ld-stack" style={{ padding: '0 var(--ld-panel-pad)' }}>
-          <p className="ld-body">{report.financialMode === 'devnet'
+          <p className="ld-body">{report.financialMode === 'synthetic' ? 'Simulated totals. No payment has taken place.' : 'Accepted charges, not finalized payouts. See Wallet for payments.'}</p>
+          <details className="account-more"><summary>How totals and receipts work</summary>
+          <p className="ld-secondary">{report.financialMode === 'devnet'
             ? `${money} is the total of accepted receipts. Reserved is budget held for placements still in progress. Neither is a payout: see Wallet for what was authorized, paid and refunded.`
             : `${money} is the simulated total of accepted receipts. Reserved is simulated budget held for placements still in progress. Neither is a payment.`}</p>
           <p className="ld-secondary">A receipt proves an accepted insertion with the Sponsored label. It does not prove attention, clicks or conversion.</p>
+          </details>
         </div>
         <Ld.Table<NetworkRow> caption="Totals by network. Currencies are never combined." rows={rows} columns={[
           { key: 'network', head: 'Network', cell: row => <span className="ld-strong">{networkName(row.network)}</span> },

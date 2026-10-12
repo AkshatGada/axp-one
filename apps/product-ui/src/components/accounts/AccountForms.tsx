@@ -139,10 +139,13 @@ export function AppForm({ app, busy, run, save }: {
       <p className="ld-secondary">These rules are saved with the app. A server key cannot override them or act for a different app.</p>
       <div className="account-pair">
         <Textarea label="Allowed origins" name="allowedOrigins" value={app?.allowedOrigins.join('\n')} rows={4}
-          hint="The web origins your app runs on, one per line. For example https://app.example.com. No paths or wildcards." />
+          hint="One origin per line, e.g. https://app.example.com. No paths or wildcards." />
         <Textarea label="Ad categories you will not show" name="blockedCategories" value={app?.blockedCategories.join('\n')} rows={4}
-          hint={`One per line. Only these product categories can be enforced: ${campaignCapabilities.join(', ')}. Any other entry cannot be enforced, so ad serving for this app stays off until it is removed.`} />
+          hint="One supported category per line. Unsupported entries block ad serving." />
       </div>
+      <details className="account-more"><summary>Supported ad categories</summary>
+        <ul className="account-category-list">{campaignCapabilities.map(category => <li key={category}>{category}</li>)}</ul>
+      </details>
     </div>
     <details className="account-more">
       <summary>Payout address declaration (optional, does not prove ownership)</summary>

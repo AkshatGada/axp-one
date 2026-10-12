@@ -180,15 +180,17 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
       </div>
       <p className="ld-body">{broadcastEnabled
         ? 'Deposit and close transactions can be submitted from this server, but only after you prepare one, tick the authorization box and sign it in your wallet.'
-        : 'With the broadcast gate disabled you can prove wallet ownership and inspect saved channels. No deposit, payout or refund transaction can be submitted from this server, and the signing buttons stay disabled.'}</p>
-      <p className="ld-secondary">Test USDC only. 1 test USDC equals 1,000,000 base units. SOL network fees and rent are separate. Tempo and mainnet are unavailable here. Nothing connects, signs, funds, activates or broadcasts automatically, and this panel makes no provider or model calls.</p>
+        : 'Broadcasts disabled. You can prove ownership and inspect channels, but cannot submit deposits, payouts or refunds.'}</p>
+      <details className="account-more"><summary>Test network and signing limits</summary>
+        <p className="ld-secondary">Test USDC only. 1 test USDC equals 1,000,000 base units. SOL network fees and rent are separate. Tempo and mainnet are unavailable here. Nothing connects, signs, funds, activates or broadcasts automatically, and this panel makes no provider or model calls.</p>
+      </details>
       {!ready && <p role="status" className="account-error">Account wallet bindings are unavailable on this server.</p>}
       <p className="account-wallet-status" role="status" aria-live="polite">{status}</p>
       {error && <p className="account-error" role="alert">{error}</p>}
     </div>
     <fieldset className="account-fields account-wallet-step" disabled={busy}>
       <legend>1. Choose what the wallet is for</legend>
-      <p className="ld-secondary">An advertiser proves the wallet that funds a campaign. An AI app owner proves the wallet that receives payouts. Each proof belongs to one campaign or one app.</p>
+      <p className="ld-secondary">Choose campaign funding or AI app payouts. Each ownership proof belongs to that resource only.</p>
       <div className="account-pair">
         <div className="ld-field">
           <label className="ld-field-l" htmlFor={`${prefix}-kind`}>Wallet purpose</label>
@@ -224,7 +226,7 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
           <select className="ld-select" id={`${prefix}-wallet`} value={wallet && wallets.includes(wallet) ? String(wallets.indexOf(wallet)) : ''} onChange={e => {
             setWallet(e.target.value === '' ? null : wallets[Number(e.target.value)]); setAccount(null); setChallenge(null);
           }}><option value="">Choose a wallet</option>{wallets.map((candidate, i) => <option key={i} value={String(i)}>{candidate.name}</option>)}</select>
-          {!wallets.length && <span className="ld-field-h">Waiting for a Wallet Standard wallet supporting Solana Devnet and message signing. Install or unlock one, then return here. No connection prompt is opened automatically.</span>}
+          {!wallets.length && <span className="ld-field-h">Install or unlock a Solana Devnet wallet with message signing. Connecting always requires your action.</span>}
         </div>
         <div className="ld-field">
           <label className="ld-field-l" htmlFor={`${prefix}-address`}>Expected wallet address (must match the wallet account)</label>
@@ -254,7 +256,8 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
     </fieldset>
     {kind === 'campaigns' && <fieldset className="account-fields account-wallet-step" disabled={busy || blocked || !campaign}>
       <legend>3. Fix the channel terms for one AI app</legend>
-      <p className="ld-secondary">A channel links one approved campaign version to one AI app with a verified payout wallet. Fixing the terms runs a read-only network check. It does not sign, deposit or start serving, and the app, wallets and amounts never follow later edits.</p>
+      <p className="ld-secondary">Bind this approved campaign version to one app and its verified payout wallet. Freezing does not sign, deposit or start serving.</p>
+      <details className="account-more"><summary>What freezing terms means</summary><p className="ld-secondary">This runs a read-only network check. The app, wallets and amounts remain fixed even if profiles change later.</p></details>
       <div className="account-pair">
         <div className="ld-field">
           <label className="ld-field-l" htmlFor={`${prefix}-app`}>Counterparty payout app ID (including an app owned by another organization)</label>
@@ -278,7 +281,7 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
     </fieldset>}
     <fieldset className="account-fields account-wallet-step" disabled={busy}>
       <legend>{kind === 'campaigns' ? '4' : '3'}. Channels · {role}</legend>
-      <p className="ld-secondary">Each amount below is a separate fact. A deposit is collateral, an authorization is a signed promise for accepted charges, a payout is what the app actually received at close, and a refund is the unused deposit returned to the advertiser.</p>
+      <p className="ld-secondary">Deposits, charge authorizations, finalized payouts and refunds are tracked separately.</p>
       <div className="ld-field">
         <label className="ld-field-l" htmlFor={`${prefix}-channel`}>Saved channel</label>
         <select className="ld-select" id={`${prefix}-channel`} value={channelId} onChange={e => { setChannelId(e.target.value); setSigning(null); setAcknowledged(false); setError(''); }}>

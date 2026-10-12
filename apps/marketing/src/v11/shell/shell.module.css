@@ -31,9 +31,9 @@
 .menuNav a { padding: 14px 12px; border-radius: 8px; font-size: 16px; font-weight: 500; color: var(--x-ink); text-decoration: none; }
 .menuCh { display: grid; gap: 3px; }
 .menuCh small { font-size: 13px; font-weight: 400; line-height: 1.35; color: var(--x-quiet); }
-@media (min-width: 1000px) { .nav { display: flex; } .menu { display: none; } .cta { margin-left: 4px; } }
-@media (max-width: 999px) { .mast { height: 60px; } .word { font-size: 22px; } .ctaLong { display: none; } }
-@media (min-width: 1000px) { .ctaShort { display: none; } }
+@media (min-width: 1200px) { .nav { display: flex; } .menu { display: none; } .cta { margin-left: 4px; } }
+@media (max-width: 1199px) { .mast { height: 60px; } .word { font-size: 22px; } .ctaLong { display: none; } }
+@media (min-width: 1200px) { .ctaShort { display: none; } }
 @media (prefers-reduced-motion: reduce) { .mast, .tip { transition: none; } }
 
 .foot { padding: var(--x-space-s) 0 0; overflow: clip; }

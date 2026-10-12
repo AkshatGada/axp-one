@@ -218,8 +218,12 @@ export function AccountConsole() {
   useEffect(() => {
     if (!signedIn || busy) return;
     const fragment = window.location.hash;
-    if (accountViewForFragment(fragment) === view && fragment !== `#${view}`)
-      document.getElementById(fragment.slice(1))?.scrollIntoView({block: 'start'});
+    if (accountViewForFragment(fragment) === view && fragment !== `#${view}`) {
+      const target = document.getElementById(fragment.slice(1));
+      const disclosure = target?.closest('details');
+      if (disclosure) disclosure.open = true;
+      target?.scrollIntoView({block: 'start'});
+    }
   }, [view, signedIn, busy, appId]);
   const unenforceable = selectedApp?.blockedCategories.filter(entry => !(campaignCapabilities as readonly string[]).includes(entry)) ?? [];
   const advertiserSteps: Step[] = [
@@ -260,7 +264,7 @@ export function AccountConsole() {
         { label: 'Settings', items: [{ href: '#settings', label: 'Profile and status', current: view === 'settings' }] },
       ] : [{ label: 'Account', items: [{ href: '#overview', label: 'Sign in', current: true }] }]}
         foot={ready ? `${modeName(financialMode)}. Your account data is separate from the shared demonstration.` : 'Your account data is separate from the shared demonstration.'} />}>
-      <Ld.PageBar title={signedIn ? page.title : 'Your account'} sub={signedIn ? page.sub : pages.overview.sub}
+      <Ld.PageBar title={signedIn ? page.title : authMode === 'signup' ? 'Create account' : 'Sign in'} sub={signedIn ? page.sub : 'Manage your campaigns and AI apps.'}
         meta={signedIn && details ? <Ld.Tag tone="outline">{details.organization.name}</Ld.Tag> : undefined}
         actions={signedIn && authenticated && authenticated.organizations.length > 1 ? <div className="account-org">
           <label htmlFor="account-organization">Organization</label>
@@ -308,12 +312,15 @@ export function AccountConsole() {
       {ready && session?.authenticated === false && !tokenHash && <Ld.Panel>
         <div className="account-welcome">
           <div className="ld-stack-lg">
-            <h2>One account for advertisers and AI apps</h2>
-            <ul className="account-plain-list">
-              <li><span className="ld-body ld-strong">Advertise in AI conversations</span><span className="ld-secondary">Write a Sponsored card, choose the conversations you want, set a bid and a budget cap, then approve and switch it on yourself.</span></li>
-              <li><span className="ld-body ld-strong">Show Sponsored cards in your AI app</span><span className="ld-secondary">Keep your own answers. Show a labelled Sponsored card below them and see a receipt for every accepted placement.</span></li>
-              <li><span className="ld-body ld-strong">Money stays explicit</span><span className="ld-secondary">{modeSentence(financialMode)}</span></li>
+            <div className="account-intro">
+              <h2>{authMode === 'signup' ? 'Create your AXP account' : 'Welcome to AXP'}</h2>
+              <p className="ld-secondary">Your campaigns and AI apps, in one place.</p>
+            </div>
+            <ul className="account-plain-list account-welcome-roles">
+              <li><span className="ld-body ld-strong">For advertisers</span><span className="ld-secondary">Create campaigns and track placements.</span></li>
+              <li><span className="ld-body ld-strong">For AI apps</span><span className="ld-secondary">Connect your app and track accepted deliveries.</span></li>
             </ul>
+            <p className="account-mode-note">{financialMode === 'synthetic' ? 'Simulated accounting. No money moves on this server.' : 'Solana Devnet only. Every payment needs your explicit signature.'}</p>
           </div>
           <div className="account-auth">
             <div className="ld-seg" role="group" aria-label="Account access">
@@ -355,10 +362,10 @@ export function AccountConsole() {
             </div>
             <Ld.Panel title="How money works here" sub={modeName(financialMode)} actions={<Ld.Button variant="secondary" size="sm" href="#wallet">Open wallet →</Ld.Button>}>
               <div className="ld-stack">
-                <p className="ld-body">{modeSentence(financialMode)} {walletBindings
-                  ? `You can prove wallet ownership here. Transaction broadcasts are ${health?.serving?.broadcastEnabled ? 'enabled, and each one still needs your explicit signature' : 'disabled, so no deposit, payout or refund can be submitted from this server'}.`
-                  : 'Own-wallet funding is not enabled on this server.'}</p>
-                <MoneyTerms />
+                <p className="ld-body">{financialMode === 'synthetic' ? 'Simulated accounting. No money moves.' : 'Solana Devnet · test USDC.'} {walletBindings
+                  ? health?.serving?.broadcastEnabled ? 'Payments require your explicit wallet signature.' : 'Ownership proofs are available; transaction broadcasts are disabled.'
+                  : 'Wallet funding is not connected.'}</p>
+                <details className="account-more"><summary>How ownership, charges and payments differ</summary><MoneyTerms /></details>
               </div>
             </Ld.Panel>
           </>}
@@ -441,12 +448,13 @@ export function AccountConsole() {
         </div>
 
         <div className="account-view" hidden={view !== 'wallet'}>
-          <Ld.Panel title="Four things that are never the same" sub={modeName(financialMode)}>
+          <details className="account-disclosure">
+            <summary>How wallet ownership and payments work <span>{modeName(financialMode)}</span></summary>
             <div className="ld-stack">
               <MoneyTerms />
               <p className="ld-secondary">A receipt proves an accepted insertion with the Sponsored label. It does not prove attention, clicks or conversion, and by itself it is not a payment.</p>
             </div>
-          </Ld.Panel>
+          </details>
           {!details && <Ld.Empty title="No organization selected" action={<Ld.Button variant="secondary" href="#overview">Go to overview →</Ld.Button>}>Create or choose an organization first.</Ld.Empty>}
           {details && !walletBindings && <Ld.Callout tone="warning" title="Own-wallet funding is not enabled on this server">
             {modeSentence(financialMode)} Wallet ownership proofs, deposits, payouts and refunds cannot be made here. The spend and earnings in your reports are {financialMode === 'devnet' ? 'accepted charges that have not been paid out from this page' : 'simulated ledger entries'}.
@@ -490,7 +498,9 @@ export function AccountConsole() {
         </div>
       </>}
 
-      {(!signedIn || view === 'settings') && health && <Ld.Panel id="account-readiness" title="What this server can do" sub="Read from the server, not assumed">
+      {(!signedIn || view === 'settings') && health && <details id="account-readiness" className="account-disclosure" open={!ready}>
+        <summary>Service status <span>{ready ? 'Connected' : 'Needs attention'}</span></summary>
+        <Ld.Panel title="What this server can do" sub="Read from the server, not assumed">
         <div className="ld-stack">
           <dl className="account-readiness">
             <div><dt>Account service</dt><dd>{!isConfigured(health) ? 'Not configured' : !health.enabled ? 'Switched off' : 'Running'}</dd></div>
@@ -504,7 +514,8 @@ export function AccountConsole() {
           </dl>
           <p className="ld-secondary">Allowed origins, blocked categories and payout addresses saved in a profile are declarations. They do not prove wallet ownership or authorize a payment. Server keys never sign transactions. Creating an account gives no ownership of the shared demonstration, its campaigns, wallets or records.</p>
         </div>
-      </Ld.Panel>}
+        </Ld.Panel>
+      </details>}
     </Ld.Shell>
   </div>;
 }

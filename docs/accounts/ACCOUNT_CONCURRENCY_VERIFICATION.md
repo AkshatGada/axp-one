@@ -1,5 +1,30 @@
 # Account concurrency and navigation verification
 
+## Account presentation and entry points
+
+The 13 October local presentation follow-up makes sign-in accessible from the
+public desktop navigation and mobile menu, with a separate account link in the
+shared dashboard. The existing demo route is not converted into a private account.
+Account pages retain the same identity, ownership, campaign, SDK and finance APIs.
+
+Sign-in leads with the form and a short role introduction. On narrow screens the
+role list is omitted, while the financial-mode notice remains visible. Service
+configuration, SDK examples, supported categories, receipt explanations and wallet
+terminology expand on demand. Missing integration requirements, unsupported-rule
+warnings, exact signature reviews and transaction-broadcast restrictions remain
+visible. Saved service-status section links open the disclosure before scrolling.
+
+Verification: 79 focused account/dashboard tests passed, including four new
+presentation/recovery guards. Product and marketing typechecks and static exports
+passed. Browser checks covered sign-in layout at desktop and 390-pixel widths,
+mobile-menu account navigation, app setup disclosures, reports and account links.
+Browser data in the local presentation check is explicitly injected fixture data;
+it is not another Supabase signup, wallet-extension or funded acceptance run.
+
+Busy session responses have an explicit Refresh account instruction. Sign-in and
+other mutations are not automatically replayed. No backend, migration, auction,
+publisher chat, wallet-signing behavior or recorded evidence changed in this pass.
+
 Verified locally on 13 October 2026. These are injected offline transport and
 browser-fixture results, not new paid provider or native settlement evidence.
 

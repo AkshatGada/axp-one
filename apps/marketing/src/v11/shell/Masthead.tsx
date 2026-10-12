@@ -67,10 +67,12 @@ export default function Masthead() {
             <a href={CONTEXTHINT.href} aria-describedby={tip} {...ext}>{CONTEXTHINT.label}<span className={s.out} aria-hidden>↗</span></a>
             <span id={tip} role="tooltip" className={s.tip}>{CONTEXTHINT.description}</span>
           </span>
+          <a href="/account/">Sign in</a>
         </nav>
         <details className={s.menu} ref={menu}>
           <summary>Menu</summary>
           <nav className={s.menuNav} aria-label="Sections">
+            <a href="/account/">Sign in</a>
             {NAV.map((l) => <a key={l.href} href={l.href} onClick={() => { if (menu.current) menu.current.open = false; }}>{l.label}</a>)}
             <a className={s.menuCh} href={CONTEXTHINT.href} {...ext}>
               <span>{CONTEXTHINT.label} <span aria-hidden>↗</span></span>

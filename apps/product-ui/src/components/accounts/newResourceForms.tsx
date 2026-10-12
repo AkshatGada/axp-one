@@ -100,7 +100,7 @@ export function CampaignForm({ campaign, busy, run, save, approve, renderServing
             </div>
             <div className="account-part">
               <h4 className="account-part-title">Intended conversations</h4>
-              <Textarea label="Conversations you want to appear in" name="contextHints" value={input?.contextHints.join('\n')} maxLength={2405} rows={3} hint="Up to six hints, one per line, 400 characters each. For example: comparing hardware wallets for long term storage." />
+              <Textarea label="Conversations you want to appear in" name="contextHints" value={input?.contextHints.join('\n')} maxLength={2405} rows={3} hint="Up to six hints, one per line. Maximum 400 characters each." />
               <fieldset className="account-fields">
                 <legend className="ld-field-l">What your product can do (choose up to 12)</legend>
                 <div className="account-checks">
@@ -113,7 +113,7 @@ export function CampaignForm({ campaign, busy, run, save, approve, renderServing
             </div>
             <div className="account-part">
               <h4 className="account-part-title">Sponsored creative</h4>
-              <Textarea label="Sponsored text" name="approvedText" value={input?.approvedText} maxLength={800} rows={3} hint="Plain text, one paragraph, up to 800 characters. Shown exactly as written, labelled Sponsored, below the AI app's own answer. Offer, hints and text together: at most 2,400 characters." />
+              <Textarea label="Sponsored text" name="approvedText" value={input?.approvedText} maxLength={800} rows={3} hint="Exact copy below the answer, labelled Sponsored. One paragraph, up to 800 characters. Offer, hints and copy: 2,400 characters total." />
             </div>
             <div className="account-part">
               <h4 className="account-part-title">Bid and budget</h4>
@@ -312,7 +312,7 @@ export function AppCredentials({ client, organizationId, app, busy, run, issue, 
         <Ld.Button variant="ghost" size="sm" disabled={busy || loading} onClick={() => setRevision(value => value + 1)}>Reload</Ld.Button>
       </>}>
       <div className="ld-stack-lg">
-        <p className="ld-body">Your server uses this key to request ads for {app.name}. It is shown once, only when you issue it. A key cannot fund a campaign, sign with a wallet or change where payouts go.</p>
+        <p className="ld-body">Request ads for {app.name} from your server. Keys are shown once and cannot authorize payments.</p>
         {rawKey && <div className="account-secret" role="region" aria-label="New server credential shown once">
           <span className="ld-card-title">Copy this key now. It will not be shown again.</span>
           <code>{rawKey}</code>
@@ -361,34 +361,37 @@ export function AppCredentials({ client, organizationId, app, busy, run, issue, 
               </section>;
             })}
           </div>}
-          <p className="ld-secondary">Keys expire after 30 days. An app can have up to 10 active keys. Revoking cannot be undone. This list never contains a key or its hash. Signing out here does not revoke your server's keys.</p>
+          <details className="account-more"><summary>Key limits and revocation</summary>
+            <p className="ld-secondary">Keys expire after 30 days. An app can have up to 10 active keys. Revoking cannot be undone. This list never contains a key or its hash. Signing out here does not revoke your server's keys.</p>
+          </details>
         </>}
       </div>
     </Ld.Panel>
     <Ld.Panel id="app-integrate" title="Connect your server" sub="Server side only"
       actions={<span className="ld-tag" data-tone={servingReady ? 'brand' : 'outline'}>{servingReady ? modeName(financialMode) : 'Serving: not connected'}</span>}>
       <div className="ld-stack-lg">
-        <div className="account-pair">
+        <div>
           <div className="ld-field">
             <span className="ld-field-l">API base for this account</span>
             <code className="account-endpoint">{baseURL || '/api/accounts/sdk'}</code>
             <span className="ld-field-h">Use this base, not the shared demonstration endpoint. Requests are never rerouted there.</span>
           </div>
-          <div className="ld-field">
+          <details className="account-more">
+            <summary>Publisher identity</summary>
             <span className="ld-field-l">Your app's publisher identity</span>
             <code className="account-endpoint">app:{app.id}</code>
             <span className="ld-field-h">Set by AXP from this app. A key cannot act for a different app or change its saved rules.</span>
-          </div>
+          </details>
         </div>
         <p className="ld-body">{servingReady
-          ? `Ad serving is connected on this server (${modeName(financialMode).toLowerCase()}). Whether your app can receive an ad is shown under Integration readiness below.`
-          : 'Serving: not connected on this server. You can install the key and read your configuration, but no ad will be returned yet.'} A missing ad never blocks your answer: your app shows its own answer either way.</p>
-        <div className="ld-stack">
-          <h4 className="account-part-title">Server example</h4>
+          ? 'Check integration readiness below before requesting ads.'
+          : 'Ad serving is not connected. Configuration reads are available.'} Your app keeps showing its own answer when no ad is available.</p>
+        <details className="account-more">
+          <summary>SDK installation and server example</summary>
           <p className="ld-secondary">The SDK is not published to npm yet. Install a locally packed copy from the AXP repository, set AXP_PUBLISHER_API_KEY in your server's private environment and read your configuration. This example requests no ad and authorizes no payment.</p>
           <pre className="account-code"><code>{example}</code></pre>
           <p className="ld-secondary">Invalid, expired or revoked keys receive 401. Requests carrying a key from a browser are rejected. Reading your configuration confirms access only, not funding or serving.</p>
-        </div>
+        </details>
       </div>
     </Ld.Panel>
     <AppIntegration key={`integration:${revision}:${activeCount}:${app.updatedAt}`} client={client} organizationId={organizationId} appId={app.id}

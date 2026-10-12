@@ -22,6 +22,7 @@ export function AppIntegration({client, organizationId, appId, busy, ready, onUn
   }, [client, organizationId, appId, ready, revision, onUnauthorized]);
   useEffect(() => { onReadyKnown?.(state ? state.ready : null); }, [state, onReadyKnown]);
   const simulated = state?.financialMode === 'synthetic';
+  const blockers = state ? Object.entries(state.gates).filter(([, passed]) => !passed) : [];
   return <Ld.Panel id="app-readiness" title="Integration readiness" sub="A read-only check of this app's setup"
     actions={<>
       {state && <span className="ld-tag" data-tone={state.ready ? 'success' : 'warning'} role="status">{state.ready ? 'Ready for an ad request' : 'Setup needs attention'}</span>}
@@ -33,6 +34,11 @@ export function AppIntegration({client, organizationId, appId, busy, ready, onUn
       {!ready && <Ld.Callout tone="warning" title="Ad serving is not connected on this server">Your key and rules are saved, but no ad can be requested from here yet. Requests are never routed to the shared demonstration instead.</Ld.Callout>}
       {error && <p className="account-error" role="alert">{error}</p>}
       {state && <>
+        {blockers.length > 0 && <dl className="account-readiness" aria-label="Setup to complete">
+          {blockers.map(([name]) => <div key={name}><dt>{gateLabel[name] ?? name}</dt><dd><span className="ld-tag" data-tone="warning">Needs attention</span></dd></div>)}
+        </dl>}
+        <p className="ld-secondary">{simulated ? 'Simulated accounting. Receipts are not paid earnings.' : 'An accepted charge is not a finalized payout.'} This check makes no model call or payment.</p>
+        <details className="account-more"><summary>All checks and runtime details</summary>
         <dl className="account-readiness">
           {Object.entries(state.gates).map(([name, passed]) => {
             const skipped = simulated && ['funding', 'broadcasts'].includes(name);
@@ -46,6 +52,7 @@ export function AppIntegration({client, organizationId, appId, busy, ready, onUn
           <div><dt>Server broadcast gate</dt><dd>{state.broadcastEnabled ? 'Enabled' : 'Disabled'}</dd></div>
         </dl>
         <p className="ld-secondary">This check reads your saved setup only. It sends no key from this browser, requests no ad and makes no model call or payment. It cannot see whether your own server has installed the key, and a ready result does not guarantee that a campaign will bid. {simulated ? 'Simulated receipts are not paid earnings.' : 'An accepted charge is not a finalized payout.'}</p>
+        </details>
       </>}
     </section>
   </Ld.Panel>;

@@ -65,6 +65,7 @@ const messages: Record<string, string> = {
   session_changed: 'Your account session changed. Refresh your account before continuing.',
   rate_limited: 'Too many requests. Wait a moment before trying again.',
   busy: 'The account service is busy. Try again in a moment.',
+  product_busy_retry: 'Your account is busy with another request. Wait a moment, then select Refresh account. Do not submit the form again.',
   csrf_invalid: 'Your session needs refreshing. Use Refresh account before saving again.',
   invalid_csrf: 'Your session needs refreshing. Use Refresh account before saving again.',
   forbidden_origin: 'This page origin is not allowed by the account service.',

@@ -36,6 +36,10 @@
 /* Sign in */
 .account-console .account-welcome { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 32px; align-items: start; }
 .account-console .account-welcome h2 { margin: 0; font-weight: 500; font-size: 24px; line-height: 1.25; letter-spacing: -.012em; }
+.account-console .account-intro { display: grid; gap: 8px; max-width: 40ch; }
+.account-console .account-intro p { margin: 0; }
+.account-console .account-welcome-roles { gap: 18px; }
+.account-console .account-mode-note { margin: 0; max-width: 48ch; font-size: 13px; line-height: 1.5; color: var(--ld-text-2); }
 .account-console .account-auth { display: grid; gap: 20px; }
 .account-console .account-auth .ld-seg { justify-self: start; }
 .account-console .account-org label { white-space: nowrap; }
@@ -107,6 +111,15 @@
 .account-console details.account-more > summary:hover, .account-console .account-more-inline > summary:hover { color: var(--ld-text); }
 .account-console details.account-more[open] > summary { margin-bottom: 12px; }
 .account-console .account-more-inline[open] > summary { margin-bottom: 8px; }
+.account-console .account-disclosure { border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); min-width: 0; }
+.account-console .account-disclosure > summary { cursor: pointer; padding: 16px 20px; font-size: 14px; font-weight: 500; color: var(--ld-text); }
+.account-console .account-disclosure > summary > span { margin-left: 8px; font-size: 12px; font-weight: 400; color: var(--ld-text-2); }
+.account-console .account-disclosure > .ld-stack { padding: 0 20px 20px; }
+.account-console .account-disclosure > .ld-panel { border: 0; box-shadow: none; }
+.account-console .account-disclosure > summary:focus-visible { outline: 2px solid var(--ld-accent); outline-offset: 3px; border-radius: var(--ld-r-sm); }
+.account-console .account-category-list { margin: 8px 0 0; padding-left: 20px; columns: 2; font-size: 13px; color: var(--ld-text-2); }
+.account-console .account-category-list li { margin-bottom: 4px; overflow-wrap: anywhere; }
+.account-console .account-more > .account-code { margin-top: 12px; }
 
 /* Wallet */
 .account-console .account-money { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
@@ -126,6 +139,7 @@
   .account-console .account-money { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 900px) {
+  .account-console .account-welcome-roles { display: none; }
   .account-console .account-columns, .account-console .account-welcome, .account-console .account-pair { grid-template-columns: minmax(0, 1fr); }
   .account-console .account-checks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .account-console .account-steps { grid-auto-flow: row; grid-auto-columns: auto; }
@@ -137,6 +151,7 @@
   .account-console .ld-pagebar { flex-wrap: wrap; }
 }
 @media (max-width: 520px) {
+  .account-console .account-category-list { columns: 1; }
   .account-console .ld-top-actions .ld-btn { font-size: 12px; padding-inline: 8px; }
   .account-console .account-readiness > div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
   .account-console .account-money, .account-console .account-checks { grid-template-columns: minmax(0, 1fr); }
