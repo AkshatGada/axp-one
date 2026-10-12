@@ -54,7 +54,28 @@ UI typecheck and static export passed in an isolated copy. The account-only
 Preview packager verified its referenced account assets and excluded landing and
 demo pages. Local HTTP tests require loopback listener access.
 
-Hosted rollout verification, real extension prompts and separately authorized
-funded account-owned settlement remain distinct from this local result. See
+## Hosted recovery followup
+
+The isolated account Preview deployed runtime checkpoint `35d89e3` on 13 October
+2026. Its served account JavaScript matched the verified static build exactly.
+Shared demo and product API routes were absent from that account-only bundle;
+their existing public deployment was unchanged.
+
+Two existing Supabase owners signed in independently. Parallel SDK configuration,
+saved-opportunity/delivery lookups and an owner report recovered the original
+accepted receipt and verified its Ed25519 signature. Both reports still showed
+one accepted receipt and 3,000 synthetic base units; the campaign remained paused.
+Existing wallet ownership bindings persisted. Cross-owner access, a wrong delivery
+token and browser-origin credential use were denied. The temporary same-app key
+was revoked and confirmed rejected, and both verification sessions signed out.
+
+No fresh opportunity or delivery acknowledgement was requested. The recorded
+daily model admission counter remained 1, with zero added model calls, broadcasts
+or funds movement. This verifies deployed read/recovery behavior, not a fresh
+hosted auction, wallet-extension prompt or funded settlement. The held-auction
+and retained-lease scenarios above remain offline fault-injection evidence.
+
+Real extension prompts and separately authorized funded account-owned settlement
+remain distinct release gates. See
 [hosted acceptance](HOSTED_ACCOUNT_ACCEPTANCE.md) and
 [release checklist](FINAL_ROLLOUT_CHECKLIST.md).

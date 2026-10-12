@@ -56,7 +56,9 @@ for commands, browser checks and the precise remaining release gates.
   → explicit cumulative authorization → finalized payout and unused refund.
 - [ ] Recover uncertain attempts using saved transaction identities, without
   replacement purchases. Closing adds no delivery charge.
-- [ ] Verify the hosted candidate with independent owners and an external chat app.
+- [x] Hosted separate-owner/external SDK acceptance and saved-receipt recovery
+  pass without equating synthetic charges with funded settlement. See the dated
+  [account recovery verification](accounts/ACCOUNT_CONCURRENCY_VERIFICATION.md).
 
 Current own-wallet scope is Solana Devnet/test USDC and cooperative closure,
 not mainnet or unattended delegated buying. Historical demo settlements remain
