@@ -14,7 +14,7 @@ const next=resolve(repositoryRoot,'apps/product-ui/node_modules/next/dist/bin/ne
 if(!noUI&&!existsSync(next))throw Error('Install workspace dependencies first.');
 const service=createProductService({stateDir:resolve(repositoryRoot,config.AXP_PRODUCT_STATE_DIR??'local-state/product'),
   publisherKey:config.AXP_PUBLISHER_API_KEY,apiKey:config.JEV_API_KEY||config.TYPESAFE_API_KEY,
-  organicApiKey:config.DEEPSEEK_API_KEY,retriever:loadEvidence(),dailyModelCap:Number(config.AXP_PRODUCT_JEV_DAILY_CAP??50),demoMode:config.AXP_PRODUCT_DEMO_MODE==='1',financialMode:config.AXP_PRODUCT_FINANCIAL_MODE??'synthetic',signingEnabled:config.AXP_PRODUCT_DEVNET_SIGN==='1',walletPath:resolve(repositoryRoot,config.AXP_PRODUCT_DEVNET_WALLET_PATH??'local-state/product/secrets/devnet-wallet.json'),runId:config.AXP_PRODUCT_FINANCIAL_MODE==='devnet'?'product-devnet-v1':'product-workspace-v1'});
+  organicApiKey:config.DEEPSEEK_API_KEY,retriever:loadEvidence(),dailyModelCap:Number(config.AXP_PRODUCT_JEV_DAILY_CAP??50),demoMode:config.AXP_PRODUCT_DEMO_MODE==='1',financialMode:config.AXP_PRODUCT_FINANCIAL_MODE??'synthetic',signingEnabled:config.AXP_PRODUCT_DEVNET_SIGN==='1',walletPath:resolve(repositoryRoot,config.AXP_PRODUCT_DEVNET_WALLET_PATH??'local-state/product/secrets/devnet-wallet.json'),tempoEnabled:config.AXP_PRODUCT_TEMPO_ENABLED==='1',tempoSigningEnabled:config.AXP_PRODUCT_TEMPO_SIGN==='1',tempoWalletPath:resolve(repositoryRoot,config.AXP_PRODUCT_TEMPO_WALLET_PATH??'local-state/product/secrets/tempo-wallet.json'),tempoOptions:{rpcURL:config.AXP_TEMPO_RPC_URL},runId:config.AXP_PRODUCT_FINANCIAL_MODE==='devnet'?'product-devnet-v1':'product-workspace-v1'});
 const api=createProductAPI({service,publisherOnly:config.AXP_PRODUCT_PUBLISHER_ONLY==='1'});
 const ui=noUI?null:spawn(process.execPath,[next,'dev','--hostname','127.0.0.1','--port',String(uiPort)],{
   cwd:resolve(repositoryRoot,'apps/product-ui'),stdio:'inherit',env:{...process.env,NEXT_PUBLIC_BASE_PATH:'',NEXT_DIST_DIR:'.next-product-dev',WATCHPACK_POLLING:'1000'}});
@@ -34,7 +34,7 @@ server.on('upgrade',(req,socket,head)=>{
   proxy.on('upgrade',(res,upstream,upstreamHead)=>{upstream.on('error',()=>{socket.destroy();upstream.destroy();});socket.write(`HTTP/1.1 101 Switching Protocols\r\n${Object.entries(res.headers).map(([k,v])=>`${k}: ${v}`).join('\r\n')}\r\n\r\n`);if(head.length)upstream.write(head);if(upstreamHead.length)socket.write(upstreamHead);socket.pipe(upstream).pipe(socket);});
   proxy.on('error',()=>socket.destroy());proxy.end();
 });
-server.listen(port,'127.0.0.1',()=>console.log(`AXP product demo: http://127.0.0.1:${port}/advertiser-dashboard/\nPublisher: http://127.0.0.1:${port}/publisher-demo/\nFinancial mode: ${service.financialMode==='devnet'?'Solana Devnet test USDC':'synthetic test credits'}. Jev: ${service.engine().ready?'configured':'unavailable'}.`));
+server.listen(port,'127.0.0.1',()=>console.log(`AXP product demo: http://127.0.0.1:${port}/advertiser-dashboard/\nPublisher: http://127.0.0.1:${port}/publisher-demo/\nFinancial mode: ${service.financialMode==='devnet'?'native testnet settlement':'synthetic test credits'}. Jev: ${service.engine().ready?'configured':'unavailable'}.`));
 let stopping=false;
 function stop(){if(stopping)return;stopping=true;ui?.kill('SIGTERM');server.close();server.closeAllConnections();service.close();setTimeout(()=>process.exit(0),250).unref();}
 for(const signal of ['SIGINT','SIGTERM'])process.once(signal,stop);

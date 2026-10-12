@@ -64,7 +64,19 @@ creative preview on wide screens and stacked panels on mobile. All controls have
 labels, visible focus, keyboard operation and reduced-motion support.
 
 
-## Keyboard presentation journey
+## Product keyboard behavior
+
+Tab and Shift+Tab now navigate focus without filling any campaign field. The
+Demo autofill switch and whole-step presentation suggestions have been removed.
+Users enter their own campaign details, or deliberately select an editable example
+from **Start with an example**. Choosing an example does not save, approve, fund or
+launch a campaign. Validation still focuses the first invalid field.
+
+## Historical keyboard presentation journey (retired)
+
+The following records the earlier presentation workflow. Its Tab-autofill controls
+are no longer in the product; use the behavior above instead. Existing recordings
+and saved campaign/payment evidence remain unchanged.
 
 The isolated presentation workspace starts with three prepared, active fictional
 hardware-wallet advertisers. The presenter creates HarborKey as a fourth advertiser

@@ -5,7 +5,10 @@ import {Ld} from '@axp/design-system/ledger';
 import {productRequest} from './api.mjs';
 import {createRenderAcknowledger, createSponsoredCard, inspectPlacement} from '../../../../../packages/publisher-sdk/browser.mjs';
 import type {Award, OpportunityInput, OpportunityResult, ReceiptResult, RenderObservation} from '../../../../../packages/publisher-sdk/index.mjs';
+import type {SettlementNetwork} from '../../../../../packages/publisher-sdk/financial.mjs';
 import {boundPaymentIdentity, paymentState} from './payment-state.mjs';
+import {suggestedPrompts} from './suggested-prompts.mjs';
+import {handleComposerKeyDown} from './keyboard.mjs';
 import {PeekInside} from './PeekInside';
 import {ChatDialog} from './ChatDialog';
 import {AnswerText} from './AnswerText';
@@ -41,9 +44,11 @@ function NativeSponsor({award, deliveryToken, acknowledge, onObserved, onReceipt
 
 export function PublisherDemo() {
   const [config, setConfig] = useState<Config>();
+  const examples = suggestedPrompts(config?.sampleQuestions);
   const [connectionError, setConnectionError] = useState<string>();
   const csrf = useRef('');
   const [sessionId, setSessionId] = useState('');
+  const [settlementNetwork, setSettlementNetwork] = useState<SettlementNetwork>('solana-devnet');
   const [question, setQuestion] = useState('');
   const [turns, setTurns] = useState<Turn[]>([]);
   const [busy, setBusy] = useState(false);
@@ -67,7 +72,7 @@ export function PublisherDemo() {
       csrf.current = bootstrap.csrf; setConfig(info);
     } catch (error) {setConnectionError(err(error));}
   }, []);
-  useEffect(() => {const value = loadSession(); setSessionId(value); storeSession(value); void connect();}, [connect]);
+  useEffect(() => {const target = new URL(window.location.href).searchParams.get('network'); const value = target === 'tempo-testnet' ? uid('session') : loadSession(); if (target === 'tempo-testnet') setSettlementNetwork('tempo-testnet'); setSessionId(value); storeSession(value); void connect();}, [connect]);
   const latestTurn = turns[turns.length - 1];
   useEffect(() => {
     const scroll = () => {if (!scrollIntent.current?.away && conversation.current) conversation.current.scrollTop = conversation.current.scrollHeight;};
@@ -103,7 +108,7 @@ export function PublisherDemo() {
       const next = paymentState(result.campaign, identity);
       const blocked = result.paymentOperation?.status === 'blocked';
       const blockedReason = (result.paymentOperation?.reason ?? result.paymentOperation?.reasonCode ?? 'Payment checks blocked this action.').replaceAll('_', ' ');
-      patch(turn.input.turnId, {budgetAfterDelivery: saved, budgetFetchedAt: Date.now(), paymentOperation: {action, pending: false, uncertain: next.needsReconcile, message: blocked ? `Payment action blocked: ${blockedReason}. Inspect the saved records.` : next.finalized ? 'Finalized on Solana Devnet. Publisher payout and refund are recorded below.' : action === 'reconcile' ? 'Saved payment identity checked. Inspect its current status.' : action === 'authorize' ? 'Accepted deliveries processed. Inspect the cumulative authorization.' : 'Close requested. Inspect status and refresh for finality.'}});
+      patch(turn.input.turnId, {budgetAfterDelivery: saved, budgetFetchedAt: Date.now(), paymentOperation: {action, pending: false, uncertain: next.needsReconcile, message: blocked ? `Payment action blocked: ${blockedReason}. Inspect the saved records.` : next.finalized ? `Finalized on ${result.campaign.payment?.network === 'tempo-testnet' ? 'Tempo Testnet' : 'Solana Devnet'}. Payout and refund are recorded below.` : action === 'reconcile' ? 'Saved payment identity checked. Inspect its current status.' : action === 'authorize' ? 'Accepted deliveries processed. Inspect the cumulative authorization.' : action === 'payout' ? 'Payout processed. Inspect finality below; the channel stays open.' : 'Close requested. Inspect status and refresh for finality.'}});
       // Refresh is read-only. Preserve the action response if this lookup is unavailable.
       await snapshot(turn.input.turnId, 'budgetAfterDelivery');
     } catch (error) {
@@ -133,7 +138,7 @@ export function PublisherDemo() {
   }
   async function submit(event: FormEvent) {
     event.preventDefault(); if (!question.trim() || pending || !organicReady || !config || !csrf.current) return;
-    const input: OpportunityInput = {question: question.trim(), sessionId, turnId: uid('turn'), placementId: config.placementId,
+    const input: OpportunityInput = {question: question.trim(), sessionId, settlementNetwork, turnId: uid('turn'), placementId: config.placementId,
       ...(requirement ? {requiredCapabilities: [requirement]} : {}), ...(excluded ? {excludedCategories: [excluded]} : {})};
     followingLatest.current = true;
     scrollIntent.current = {away: false, pointer: false, lastTop: 0};
@@ -164,6 +169,7 @@ export function PublisherDemo() {
   const financialMode = financialModeOf(config);
   const inspected = turns.find(t => t.input.turnId === selected);
   function fresh() {if (pending) return; const value = uid('session'); setSessionId(value); storeSession(value); setTurns([]); setSelected(undefined);}
+  function changeNetwork(value: SettlementNetwork) {if (pending || value === settlementNetwork) return; fresh(); setQuestion(''); setSettlementNetwork(value); setSelected('settings');}
   function choosePrompt(value: string) {setQuestion(value); composer.current?.focus();}
   function intent() {return scrollIntent.current ?? (scrollIntent.current = {away: false, pointer: false, lastTop: conversation.current?.scrollTop ?? 0});}
   function peek(turnId: string) {setSelected(turnId); void snapshot(turnId, 'budgetAfterDelivery');}
@@ -187,7 +193,7 @@ export function PublisherDemo() {
         onKeyDown={event => {if (['ArrowUp', 'PageUp', 'Home'].includes(event.key) || event.key === ' ' && event.shiftKey) intent().away = true; else if (event.key === 'End') intent().away = false;}}
         onScroll={() => {const node = conversation.current, state = intent(); if (node && state.pointer) {if (node.scrollTop < state.lastTop) state.away = true; if (node.scrollHeight - node.scrollTop - node.clientHeight < 20) state.away = false;} if (node) state.lastTop = node.scrollTop;}}>
         <div className={`pub-thread${!turns.length ? ' pub-thread-empty' : ''}`}>
-          {!turns.length ? <div className="pub-welcome"><h2>What are you exploring?</h2><div className="pub-examples">{(config?.sampleQuestions ?? ['Compare hardware wallets for Ethereum and Solana with offline key storage.', 'Recommend a developer tool to debug and build a TypeScript API.']).slice(0, 2).map((q, i) => <button key={q} type="button" onClick={() => choosePrompt(q)}>{i === 0 ? 'Compare hardware wallets' : 'Explore developer tools'} <span aria-hidden>→</span></button>)}</div></div> : turns.map((turn, index) => <article key={turn.input.turnId} id={`chat-turn-${index + 1}`} className="pub-turn" aria-label={`Turn ${index + 1}`}>
+          {!turns.length ? <div className="pub-welcome"><h2>What are you exploring?</h2><div className="pub-examples">{examples.map(({label, question: prompt}) => <button key={label} type="button" onClick={() => choosePrompt(prompt)}>{label} <span aria-hidden>→</span></button>)}</div></div> : turns.map((turn, index) => <article key={turn.input.turnId} id={`chat-turn-${index + 1}`} className="pub-turn" aria-label={`Turn ${index + 1}`}>
             <div className="pub-user"><span className="pub-sr-only">You</span><p>{turn.input.question}</p></div>
             <div className="pub-answer"><span className="pub-answer-brand">DeepSeek</span>
               {turn.answer ? <AnswerText text={turn.answer.answer} /> : turn.answerError ? <div role="alert"><p>The answer could not be generated.</p><Ld.Button variant="ghost" disabled={pending} onClick={() => choosePrompt(turn.input.question)}>Edit and try again</Ld.Button></div> : <p role="status" className="ld-muted">Waiting for DeepSeek…</p>}
@@ -197,9 +203,9 @@ export function PublisherDemo() {
           </article>)}
         </div>
       </div>
-      <div className="pub-composer-wrap"><form className="pub-composer" onSubmit={event => void submit(event)}><label htmlFor="publisher-question" className="pub-sr-only">Your question</label><textarea ref={composer} id="publisher-question" value={question} onChange={e => setQuestion(e.target.value)} onKeyDown={event => {if (event.nativeEvent.isComposing) return; if (event.key === 'Tab' && !event.shiftKey && !question.trim()) {event.preventDefault(); setQuestion(config?.sampleQuestions?.find(q => /hardware wallets?/i.test(q)) ?? 'Compare hardware wallets for Ethereum and Solana with offline key storage.');} else if (event.key === 'Enter' && !event.shiftKey) {event.preventDefault(); event.currentTarget.form?.requestSubmit();}}} placeholder="Ask anything" rows={2} maxLength={1200} required aria-describedby="publisher-send-hint" /><div className="pub-composer-foot"><span id="publisher-send-hint">{pending ? 'Request in progress' : <><kbd>Tab</kbd> suggested prompt</>}</span><button className="pub-send" type="submit" aria-label="Send question" disabled={pending || !organicReady || !config || !sessionId || !question.trim() || !!connectionError}>→</button></div></form><p className="pub-chat-disclosure">AI answers may be inaccurate. Sponsored suggestions are labelled.</p></div>
+      <div className="pub-composer-wrap"><form className="pub-composer" onSubmit={event => void submit(event)}><label htmlFor="publisher-question" className="pub-sr-only">Your question</label><textarea ref={composer} id="publisher-question" value={question} onChange={e => setQuestion(e.target.value)} onKeyDown={handleComposerKeyDown} placeholder="Ask anything" rows={2} maxLength={1200} required aria-describedby="publisher-send-hint" /><div className="pub-composer-foot"><span id="publisher-send-hint">{pending ? 'Request in progress' : 'Enter to send · Shift+Enter for a new line'}</span><button className="pub-send" type="submit" aria-label="Send question" disabled={pending || !organicReady || !config || !sessionId || !question.trim() || !!connectionError}>→</button></div></form><p className="pub-chat-disclosure">AI answers may be inaccurate. Sponsored suggestions are labelled.</p></div>
     </main>
     {inspected ? <ChatDialog title="Inside this turn" subtitle={`Turn ${turns.indexOf(inspected) + 1} · live request records`} onClose={() => setSelected(undefined)}><PeekInside turn={inspected} financialMode={financialMode} onRefreshBudget={() => void snapshot(inspected.input.turnId, inspected.receipt || inspected.awardRelease ? 'budgetAfterDelivery' : 'budgetAfterAward')} onPaymentAction={action => void paymentAction(inspected, action)} onRetryAd={() => void retryAd(inspected)} onRetryRender={() => void retryRender(inspected)} pending={pending} /></ChatDialog> : null}
-    {selected === 'settings' ? <ChatDialog title="Chat settings" compact onClose={() => setSelected(undefined)}><div className="pub-stack"><label className="pub-check"><input type="checkbox" checked={adsEnabled} onChange={e => setAdsEnabled(e.target.checked)} disabled={pending} /> Enable sponsored suggestions</label><Ld.Field label="Required capability" hint="Optional. Campaigns must declare this capability."><select className="ld-select" value={requirement} onChange={e => setRequirement(e.target.value)} disabled={pending}><option value="">Infer from the question</option>{config?.capabilities?.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}</select></Ld.Field><Ld.Field label="Excluded category"><select className="ld-select" value={excluded} onChange={e => setExcluded(e.target.value)} disabled={pending}><option value="">No extra exclusion</option>{config?.capabilities?.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}</select></Ld.Field><div className="pub-between"><span className="ld-caption">Exchange mode</span><Ld.Tag tone="outline">{financialMode === 'devnet' ? 'Devnet · test USDC' : financialMode === 'synthetic' ? 'Synthetic test credits' : 'Connecting'}</Ld.Tag></div><details className="pub-details"><summary>Session and providers</summary><dl><dt>Session</dt><dd className="ld-mono">{sessionId}</dd><dt>Placement</dt><dd className="ld-mono">{config?.placementId}</dd><dt>Buyer</dt><dd>{config?.engine?.id} · {config?.engine?.ready ? 'Ready' : config?.engine?.reason || 'Unavailable'}</dd></dl><p className="ld-caption">A new chat changes the session. Campaign spend persists.</p><Link href="/publisher-demo/integration">SDK integration →</Link></details></div></ChatDialog> : null}
+    {selected === 'settings' ? <ChatDialog title="Chat settings" compact onClose={() => setSelected(undefined)}><div className="pub-stack"><label className="pub-check"><input type="checkbox" checked={adsEnabled} onChange={e => setAdsEnabled(e.target.checked)} disabled={pending} /> Enable sponsored suggestions</label>{financialMode === 'devnet' && <Ld.Field label="Settlement network" hint="Only campaigns on this network compete. Changing it starts a new chat."><select className="ld-select" value={settlementNetwork} onChange={e => changeNetwork(e.target.value as SettlementNetwork)} disabled={pending}><option value="solana-devnet">Solana Devnet · test USDC</option><option value="tempo-testnet" disabled={!config?.payments?.networks?.['tempo-testnet']}>Tempo Testnet · test PathUSD</option></select>{config?.payments?.networks?.[settlementNetwork]?.ready === false && <span className="ld-caption" role="status">{config.payments.networks[settlementNetwork]?.reason?.replaceAll('_', ' ') || 'This payment network is unavailable.'}</span>}</Ld.Field>}<Ld.Field label="Required capability" hint="Optional. Campaigns must declare this capability."><select className="ld-select" value={requirement} onChange={e => setRequirement(e.target.value)} disabled={pending}><option value="">Infer from the question</option>{config?.capabilities?.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}</select></Ld.Field><Ld.Field label="Excluded category"><select className="ld-select" value={excluded} onChange={e => setExcluded(e.target.value)} disabled={pending}><option value="">No extra exclusion</option>{config?.capabilities?.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}</select></Ld.Field><div className="pub-between"><span className="ld-caption">Exchange mode</span><Ld.Tag tone="outline">{financialMode === 'devnet' ? settlementNetwork === 'tempo-testnet' ? 'Tempo Testnet · test PathUSD' : 'Solana Devnet · test USDC' : financialMode === 'synthetic' ? 'Synthetic test credits' : 'Connecting'}</Ld.Tag></div><details className="pub-details"><summary>Session and providers</summary><dl><dt>Session</dt><dd className="ld-mono">{sessionId}</dd><dt>Placement</dt><dd className="ld-mono">{config?.placementId}</dd><dt>Buyer</dt><dd>{config?.engine?.id} · {config?.engine?.ready ? 'Ready' : config?.engine?.reason || 'Unavailable'}</dd></dl><p className="ld-caption">A new chat changes the session. Campaign spend persists.</p><Link href="/publisher-demo/integration">SDK integration →</Link></details></div></ChatDialog> : null}
   </div>;
 }

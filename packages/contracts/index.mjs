@@ -3,6 +3,8 @@ import { createHash, sign, verify } from 'node:crypto';
 export const CONTRACT_VERSION = 'axp.runtime.v1';
 export const BID_POLICY_VERSION = 'fit_intent_bid_v1';
 export const MODES = ['synthetic', 'sandbox', 'devnet'];
+export const SETTLEMENT_NETWORKS = Object.freeze(['solana-devnet','tempo-testnet']);
+export function settlementNetwork(value) { if(!SETTLEMENT_NETWORKS.includes(value))throw new ContractError('settlement_network_invalid');return value; }
 export class ContractError extends Error {
   constructor(code, message = code, status = 400) { super(message); this.code = code; this.status = status; }
 }
@@ -34,10 +36,11 @@ function strings(value, field) {
   if (!Array.isArray(value) || value.length > 100) throw new ContractError('invalid_array', field);
   value.forEach(v => string(v, field)); return value;
 }
-const campaignFields = ['campaignId','campaignVersionId','advertiserId','status','allowedIntents','destination','declaredConstraints','creatives','softFitTags','maxBidBaseUnits','budgetCapBaseUnits','channelId','policyVersion'];
+const campaignFields = ['campaignId','campaignVersionId','advertiserId','status','allowedIntents','destination','declaredConstraints','creatives','softFitTags','maxBidBaseUnits','budgetCapBaseUnits','channelId','policyVersion','settlementNetwork'];
 export function validateCampaign(c) {
-  strictObject(c, campaignFields, campaignFields.filter(x => !['softFitTags','policyVersion'].includes(x)));
+  strictObject(c, campaignFields, campaignFields.filter(x => !['softFitTags','policyVersion','settlementNetwork'].includes(x)));
   for (const k of ['campaignId','campaignVersionId','advertiserId','destination','channelId']) string(c[k],k);
+  if(Object.hasOwn(c,'settlementNetwork'))settlementNetwork(c.settlementNetwork);
   if (!['active','paused'].includes(c.status)) throw new ContractError('invalid_status');
   strings(c.allowedIntents,'allowedIntents'); strings(c.declaredConstraints,'declaredConstraints');
   if (c.softFitTags) strings(c.softFitTags,'softFitTags');
@@ -55,10 +58,11 @@ export function validateCampaign(c) {
   }
   return c;
 }
-const opportunityFields=['publisherId','slotId','randomSessionId','turnId','coarseIntent','destination','taskConstraints','softPreferences','floorBaseUnits','expiresAt'];
+const opportunityFields=['publisherId','slotId','randomSessionId','turnId','coarseIntent','destination','taskConstraints','softPreferences','floorBaseUnits','expiresAt','settlementNetwork'];
 export function validateOpportunity(o) {
-  strictObject(o,opportunityFields,opportunityFields.filter(k=>k!=='softPreferences'));
+  strictObject(o,opportunityFields,opportunityFields.filter(k=>!['softPreferences','settlementNetwork'].includes(k)));
   for(const k of ['publisherId','slotId','randomSessionId','turnId','coarseIntent','destination'])string(o[k],k);
+  if(Object.hasOwn(o,'settlementNetwork'))settlementNetwork(o.settlementNetwork);
   strings(o.taskConstraints,'taskConstraints'); if(o.softPreferences)strings(o.softPreferences,'softPreferences'); baseUnits(o.floorBaseUnits);
   if(!Number.isSafeInteger(o.expiresAt)||o.expiresAt<=0)throw new ContractError('invalid_expiry'); return o;
 }

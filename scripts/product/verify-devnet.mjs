@@ -1,7 +1,8 @@
 // Read-only verification of the public acceptance record. No wallet, keys or writes.
 import {readFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
-import {nativeRPC,network} from '../../packages/product/native.mjs';
+import {createProductDevnetRPC,network} from '../../packages/product/native.mjs';
+const nativeRPC=createProductDevnetRPC(process.env.AXP_PRODUCT_DEVNET_RPC_URL??network.rpc);
 const record=JSON.parse(readFileSync(process.argv[2]??'artifacts/product/devnet-acceptance.json','utf8'));
 assert.equal(record.schemaVersion,'axp.product-native-acceptance.v1');
 assert.equal(record.mode,'devnet');assert.equal(record.network,'solana-devnet');

@@ -46,7 +46,7 @@ export function createProductAPI({service,csrf:providedCSRF,publisherOnly=false}
         else if(path==='/opportunities'||path==='/demo/chat')value=await service.opportunity(body);
         else if(path==='/demo/answer')value=await service.answer(body);
         else {
-          const campaign=path.match(/^\/campaigns\/([-\w]+)\/(approve|launch|pause|resume|duplicate|settle|preview|authorize|reconcile)$/);
+          const campaign=path.match(/^\/campaigns\/([-\w]+)\/(approve|launch|pause|resume|duplicate|settle|close|payout|preview|authorize|reconcile)$/);
           const award=path.match(/^\/(?:demo\/)?awards\/([-\w]+)\/(render|fail)$/);
           if(campaign){
             const [,id,action]=campaign;

@@ -1,0 +1,221 @@
+{
+  "schemaVersion": "axp.tempo-independent-verification.v1",
+  "status": "passed",
+  "verifiedAt": "2026-10-11T15:27:52.341Z",
+  "network": "tempo-testnet",
+  "chainId": 42431,
+  "token": "0x20c0000000000000000000000000000000000000",
+  "tokenSymbol": "PathUSD",
+  "decimals": 6,
+  "escrow": "0x4d50500000000000000000000000000000000000",
+  "providerHostname": "rpc.moderato.tempo.xyz",
+  "sdk": {
+    "mppx": "0.13.4",
+    "viem": "2.57.4",
+    "protocol": "TIP-1034-v2"
+  },
+  "feeMethod": "ceil(gasUsed * effectiveGasPrice / 10^12)",
+  "feeUnitsSource": "https://github.com/tempoxyz/tempo/blob/main/tips/tip-1010.md",
+  "totals": {
+    "channels": 2,
+    "finalizedTransactions": 5,
+    "depositBaseUnits": "100000",
+    "settledBaseUnits": "18000",
+    "refundBaseUnits": "82000",
+    "feeAmountBaseUnits": "499"
+  },
+  "balances": [
+    {
+      "address": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+      "beforeBlock": "39145104",
+      "afterBlock": "39147285",
+      "beforeBaseUnits": "1000000000000",
+      "afterBaseUnits": "999999981630",
+      "observedDeltaBaseUnits": "-18370",
+      "transactionDeltaBaseUnits": "-18370",
+      "matches": true
+    },
+    {
+      "address": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+      "beforeBlock": "39145104",
+      "afterBlock": "39147285",
+      "beforeBaseUnits": "1000000000000",
+      "afterBaseUnits": "1000000017871",
+      "observedDeltaBaseUnits": "17871",
+      "transactionDeltaBaseUnits": "17871",
+      "matches": true
+    }
+  ],
+  "channels": [
+    {
+      "channelId": "campaign-67a6261a-4e72-4f7f-bd97-b7da0fd2a2e1-channel",
+      "protocolChannelId": "0x5834a0e19c35689402b9ffe3a908695fa056cf00885999681803db5c29f0b79c",
+      "payer": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+      "payee": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+      "depositBaseUnits": "50000",
+      "acceptedBaseUnits": "18000",
+      "authorizedBaseUnits": "18000",
+      "settledBaseUnits": "18000",
+      "refundBaseUnits": "32000",
+      "closed": true,
+      "currentDepositBaseUnits": "0",
+      "transactions": [
+        {
+          "operation": "open",
+          "transactionHash": "0x95991a0999669cdf02fbf672a90eeab72421d7b503309aebd2ae4ba35bf36a6c",
+          "explorerURL": "https://explore.testnet.tempo.xyz/tx/0x95991a0999669cdf02fbf672a90eeab72421d7b503309aebd2ae4ba35bf36a6c",
+          "finality": "finalized",
+          "blockNumber": "39145105",
+          "blockHash": "0x60ea748708acc892366f6a14cd80c8634d663a2433526988525cc6f4cf7dba30",
+          "publisherPaymentBaseUnits": "0",
+          "payerRefundBaseUnits": "0",
+          "feeAttoUSD": "184819800308033",
+          "feeAmountBaseUnits": "185",
+          "feePayer": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+          "gasUsed": "308033",
+          "effectiveGasPrice": "600000001",
+          "tokenTransfers": [
+            {
+              "from": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+              "to": "0x4d50500000000000000000000000000000000000",
+              "amountBaseUnits": "50000"
+            },
+            {
+              "from": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+              "to": "0xfeec000000000000000000000000000000000000",
+              "amountBaseUnits": "185"
+            }
+          ]
+        },
+        {
+          "operation": "payout",
+          "transactionHash": "0x3ed8149c0f2058cf656201ccf9e6327464eda18b24d2be3a91ef07e9a2ae1563",
+          "explorerURL": "https://explore.testnet.tempo.xyz/tx/0x3ed8149c0f2058cf656201ccf9e6327464eda18b24d2be3a91ef07e9a2ae1563",
+          "finality": "finalized",
+          "blockNumber": "39145798",
+          "blockHash": "0xa597466a9af12b49b993146135e4b34fb385a801f8b733dcbcc9096aab3dbf4c",
+          "publisherPaymentBaseUnits": "9000",
+          "payerRefundBaseUnits": "0",
+          "feeAttoUSD": "35464200059107",
+          "feeAmountBaseUnits": "36",
+          "feePayer": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+          "gasUsed": "59107",
+          "effectiveGasPrice": "600000001",
+          "tokenTransfers": [
+            {
+              "from": "0x4d50500000000000000000000000000000000000",
+              "to": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+              "amountBaseUnits": "9000"
+            },
+            {
+              "from": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+              "to": "0xfeec000000000000000000000000000000000000",
+              "amountBaseUnits": "36"
+            }
+          ]
+        },
+        {
+          "operation": "close",
+          "transactionHash": "0xee64435daa0c7f579228607c7b1ae5ad1258e7e6bc74f23b7c4e5f7208ea4617",
+          "explorerURL": "https://explore.testnet.tempo.xyz/tx/0xee64435daa0c7f579228607c7b1ae5ad1258e7e6bc74f23b7c4e5f7208ea4617",
+          "finality": "finalized",
+          "blockNumber": "39147285",
+          "blockHash": "0xf6717c58c9b058becdd8c0c34934ae01219940e14c9b1afd3709e8c3adbcfdca",
+          "publisherPaymentBaseUnits": "9000",
+          "payerRefundBaseUnits": "32000",
+          "feeAttoUSD": "47033400078389",
+          "feeAmountBaseUnits": "48",
+          "feePayer": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+          "gasUsed": "78389",
+          "effectiveGasPrice": "600000001",
+          "tokenTransfers": [
+            {
+              "from": "0x4d50500000000000000000000000000000000000",
+              "to": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+              "amountBaseUnits": "9000"
+            },
+            {
+              "from": "0x4d50500000000000000000000000000000000000",
+              "to": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+              "amountBaseUnits": "32000"
+            },
+            {
+              "from": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+              "to": "0xfeec000000000000000000000000000000000000",
+              "amountBaseUnits": "48"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "channelId": "campaign-e43d1588-3c74-4e44-9b58-496d9bbffb0d-channel",
+      "protocolChannelId": "0x7bb83c22c275ed5a873f18bbf784df382df154fbbdf49ae0c0988da26df74a2f",
+      "payer": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+      "payee": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+      "depositBaseUnits": "50000",
+      "acceptedBaseUnits": "0",
+      "authorizedBaseUnits": "0",
+      "settledBaseUnits": "0",
+      "refundBaseUnits": "50000",
+      "closed": true,
+      "currentDepositBaseUnits": "0",
+      "transactions": [
+        {
+          "operation": "open",
+          "transactionHash": "0x91017150dc6fb3b85613115ac8d7c906cd2cb1c52a370092d7540df3c6e916c2",
+          "explorerURL": "https://explore.testnet.tempo.xyz/tx/0x91017150dc6fb3b85613115ac8d7c906cd2cb1c52a370092d7540df3c6e916c2",
+          "finality": "finalized",
+          "blockNumber": "39145234",
+          "blockHash": "0x385a1e035e598ebb50bfce9de1b0e34f17fa83de1be276d41a2107e594a6e649",
+          "publisherPaymentBaseUnits": "0",
+          "payerRefundBaseUnits": "0",
+          "feeAttoUSD": "184819800308033",
+          "feeAmountBaseUnits": "185",
+          "feePayer": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+          "gasUsed": "308033",
+          "effectiveGasPrice": "600000001",
+          "tokenTransfers": [
+            {
+              "from": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+              "to": "0x4d50500000000000000000000000000000000000",
+              "amountBaseUnits": "50000"
+            },
+            {
+              "from": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+              "to": "0xfeec000000000000000000000000000000000000",
+              "amountBaseUnits": "185"
+            }
+          ]
+        },
+        {
+          "operation": "close",
+          "transactionHash": "0xbd9227d9c6dbf86741cc64bc30f42e79a97530301a9901305b9739c35d8ea891",
+          "explorerURL": "https://explore.testnet.tempo.xyz/tx/0xbd9227d9c6dbf86741cc64bc30f42e79a97530301a9901305b9739c35d8ea891",
+          "finality": "finalized",
+          "blockNumber": "39145307",
+          "blockHash": "0x9dd7bd382305dfc75b62c70222840175537fe255c1c5af70f57b5cf3ddc1afed",
+          "publisherPaymentBaseUnits": "0",
+          "payerRefundBaseUnits": "50000",
+          "feeAttoUSD": "44160600073601",
+          "feeAmountBaseUnits": "45",
+          "feePayer": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+          "gasUsed": "73601",
+          "effectiveGasPrice": "600000001",
+          "tokenTransfers": [
+            {
+              "from": "0x4d50500000000000000000000000000000000000",
+              "to": "0xcc4b2ff316ff821ca3a1d8b510c19fbcdaf4e409",
+              "amountBaseUnits": "50000"
+            },
+            {
+              "from": "0x3e6ee8db88ddc0a9dab24b0c8840da202af004fc",
+              "to": "0xfeec000000000000000000000000000000000000",
+              "amountBaseUnits": "45"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

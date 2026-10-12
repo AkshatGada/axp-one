@@ -1,6 +1,6 @@
 # User-operated products on the existing Vercel project
 
-Production origin: https://axp.one. Updated 7 October 2026 (Singapore).
+Production origin: https://axp.one. Tempo branch documentation updated 11 October 2026.
 All product, SDK, recorded MVP and video routes are listed in [pages.md](../../pages.md).
 The live guide uses `https://axp.one/api/product`; localhost is an explicit developer override.
 
@@ -9,6 +9,10 @@ and production. Its three prepared native campaigns were migrated without replac
 channel identities. The recording used a distinct workspace and closed all four of
 its channels. Keep `AXP_STATE_KEY`, workspace ID and wallet identities stable across
 releases. Provider/wallet credentials remain server-side. Never copy them into Git.
+
+The additive Tempo verification uses **`tempo-integration-20261011`** in Preview
+only, with separate Tempo sponsor/publisher keys. It does not replace `demo`,
+its Solana identities or its encryption configuration. See [TEMPO.md](TEMPO.md).
 
 The landing page and recorded `/mvp/` remain static. The additive root
 `/advertiser-dashboard/` and `/publisher-demo/` share `/api/product/*`.
@@ -28,6 +32,10 @@ Use server-only Vercel environment variables (never `NEXT_PUBLIC_*`):
 | `AXP_PRODUCT_DEVNET_SIGN` | `1` explicitly enables bounded Devnet signing; otherwise fail closed |
 | `AXP_PRODUCT_DEMO_MODE` | `1` enables editable demo suggestions/Tab flow |
 | `AXP_PRODUCT_DEVNET_WALLET` | Base64 JSON of the existing disposable product wallet (`network: solana-devnet`, `sponsor`, `publisher`); upload as a secret |
+| `AXP_PRODUCT_TEMPO_ENABLED` | `1` enables the optional Tempo rail; omitted/disabled leaves Solana available |
+| `AXP_PRODUCT_TEMPO_SIGN` | `1` explicitly enables Tempo signing, independently of Solana |
+| `AXP_PRODUCT_TEMPO_WALLET` | Base64 JSON of separate Tempo sponsor/publisher keys; Preview-only during verification |
+| `AXP_TEMPO_RPC_URL` | Optional verified Moderato RPC; default canonical testnet endpoint |
 | `AXP_STATE_KEY` | Stable base64 32-byte AES key; reused private hosted-state encryption capability |
 | `BLOB_READ_WRITE_TOKEN` | Existing private Vercel Blob store binding |
 | `JEV_API_KEY` / `TYPESAFE_API_KEY` | Existing server-side Jev credential |
@@ -95,7 +103,11 @@ public demo is one bounded shared sponsor/workspace, not multi-tenant account au
 
 Prefer migration over redepositing already-funded channels. Stop the local demo
 normally so its SQLite connections/WALs are closed and `payment-worker.lock` is
-removed. Preserve its directory and wallet; do not reset or delete native state.
+removed. For Tempo, also require `tempo-payment-worker.lock` to be absent.
+Preserve its directory and wallets; do not reset or delete native state. Financial
+run IDs must already match the hosted `product-devnet-v1` before funding or signing;
+do not rename a funded run to make it importable. Import both financial and organic
+shards before opening the isolated Preview workspace.
 
 From a **trusted local operator script** with the same target Blob/state-key
 configuration, construct `createHostedProductAPI({config, root})`, then call:
