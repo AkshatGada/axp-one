@@ -81,3 +81,5 @@
 
 /* The page's rhythm: air between movements (the orchestrator's seam). */
 .v10 main > section[data-chapter] + section[data-chapter] { margin-top: clamp(72px, 9vw, 144px); }
+/* The shift ends on a full frame of its own; the film follows it directly. */
+.v10 main > section[data-chapter="02"] { margin-top: 0 !important; }

@@ -47,6 +47,9 @@
 .frame { background: var(--x-paper); }
 .pinned { --p: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); height: 100%; padding-top: 84px; padding-bottom: clamp(12px, 2.2svh, 24px); }
 @media (max-width: 899px) { .pinned { padding-top: 74px; } .body { align-self: center; margin-bottom: 3svh; } }
+/* Tall or wide screens: the picture sits in the middle of the frame, so no empty band is left
+   under it before the next movement (orchestrator). */
+@media (min-width: 900px) { .body { align-self: center; } }
 .body { position: relative; min-height: 0; padding-top: calc(var(--hf) * var(--hlh) * var(--hk) + 2 * var(--hgap)); }
 .heads {
   --t: clamp(0, calc((var(--p) - var(--shrink-a)) / var(--shrink-d)), 1);

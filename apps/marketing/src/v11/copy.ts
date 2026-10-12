@@ -16,7 +16,7 @@ export const CONTEXTHINT = { href: "https://contexthint.com", label: "ContextHin
 export const NAV = [
   { href: "#advertisers", label: "For advertisers" },
   { href: "#apps", label: "For AI apps" },
-  { href: "#rule", label: "The rule" },
+  { href: "#payments", label: "Payments" },
 ];
 
 /** 00 Cover. */
@@ -81,16 +81,33 @@ export const APPS = {
   action: { label: "Read the integration guide", href: GUIDE_URL },
 };
 
-/** 05 The rule, and the doors. */
-export const RULE = {
+/** 05 Agentic payments. The agent decides to buy; the payment follows on its own, inside limits
+ *  the advertiser set. Truth: the agent judges and decides; fixed rules (the advertiser's ceiling
+ *  and budget) bound every payment; a model never holds keys or chooses an amount. A charge is
+ *  accepted per delivered card, charges add up, and settlement comes later in stablecoin. */
+export const PAY = {
   no: "05",
-  title: "The rule",
-  lines: ["Agents judge fit.", "Fixed rules decide money."],
-  agree: [
-    { k: "The advertiser's limits", kind: "rule" as const, state: "Within limits" },
-    { k: "The app's rules", kind: "rule" as const, state: "Allowed" },
-    { k: "The fit", kind: "judgment" as const, state: "Judged a fit" },
+  title: "Agentic payments",
+  h: "The agent decides. The payment follows.",
+  deck: "No insertion orders. No invoices. Each delivered card is paid for on its own, inside the limits you set.",
+  steps: [
+    { k: "Decide", line: "The advertiser's agent judges the moment a fit." },
+    { k: "Deliver", line: "The labelled card is inserted below the answer." },
+    { k: "Pay", line: "The delivery is charged, automatically, within your ceiling." },
+    { k: "Settle", line: "Charges add up, then settle in stablecoin when the campaign closes." },
   ],
+  principle: ["Agents judge fit.", "Fixed rules decide money."],
+  /** Why each half is so. A question in plain language cannot be matched by static code; money can
+   *  and must be. */
+  why: [
+    { k: "Why an agent", line: "A question arrives in plain language. No keyword list or fixed rule can read it. It takes an agent to judge it." },
+    { k: "Why fixed rules", line: "Money is the opposite. The ceiling and the budget are exact, so code enforces them, not a judgment." },
+  ],
+  sides: [
+    { who: "Advertiser", state: "Charge accepted" },
+    { who: "AI app", state: "Earnings accrued" },
+  ],
+  limit: "A receipt confirms insertion. It does not measure attention or conversions.", // claim-ok: limit
 };
 
 export const DOORS = {
@@ -106,3 +123,15 @@ export const DOORS = {
 };
 
 export const FOOTER = { line: "The advertising network for the agentic internet" };
+
+/** Kept only so the previous section 05 compiles while it is being replaced. Do not use. */
+export const RULE = {
+  no: "05",
+  title: "The rule",
+  lines: ["Agents judge fit.", "Fixed rules decide money."],
+  agree: [
+    { k: "The advertiser's limits", kind: "rule" as const, state: "Within limits" },
+    { k: "The app's rules", kind: "rule" as const, state: "Allowed" },
+    { k: "The fit", kind: "judgment" as const, state: "Judged a fit" },
+  ],
+};
