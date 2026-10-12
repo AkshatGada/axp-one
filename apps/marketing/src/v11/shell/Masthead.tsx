@@ -79,7 +79,7 @@ export default function Masthead() {
           </nav>
         </details>
         <div className={s.cta}>
-          <Action href={ADVERTISER_URL} size="s" tone={blue ? "white" : "ink"}>Advertiser dashboard</Action>
+          <Action href={ADVERTISER_URL} size="s" tone={blue ? "white" : "ink"}><span className={s.ctaLong}>Advertiser dashboard</span><span className={s.ctaShort} aria-label="Advertiser dashboard">Dashboard</span></Action>
         </div>
       </div>
     </header>

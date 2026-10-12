@@ -1,6 +1,8 @@
 /* The orchestrator's shell for V4: masthead, footer, seams. */
-.mast { position: fixed; inset: 0 0 auto 0; z-index: 60; height: 68px; background: color-mix(in oklab, var(--x-paper) 92%, transparent); backdrop-filter: saturate(140%) blur(10px); border-bottom: 1px solid transparent; transition: transform 380ms var(--x-ease), border-color var(--x-d1) var(--x-ease); }
-.mast[data-raised] { border-bottom-color: var(--x-hair); }
+/* At the very top the masthead is clear, so the cover runs under it uncut; it takes its paper
+   ground once the page has moved. */
+.mast { position: fixed; inset: 0 0 auto 0; z-index: 60; height: 68px; background: transparent; border-bottom: 1px solid transparent; transition: transform 380ms var(--x-ease), border-color var(--x-d1) var(--x-ease), background var(--x-d1) var(--x-ease); }
+.mast[data-raised] { background: color-mix(in oklab, var(--x-paper) 92%, transparent); backdrop-filter: saturate(140%) blur(10px); border-bottom-color: var(--x-hair); }
 .mast[data-hidden] { transform: translateY(-101%); }
 .mast[data-tone="blue"] { background: color-mix(in oklab, var(--x-blue) 92%, transparent); border-bottom-color: rgba(255, 255, 255, .3); }
 .mast[data-tone="blue"] .word, .mast[data-tone="blue"] .nav a, .mast[data-tone="blue"] .menu summary { color: #fff; }
@@ -30,7 +32,8 @@
 .menuCh { display: grid; gap: 3px; }
 .menuCh small { font-size: 13px; font-weight: 400; line-height: 1.35; color: var(--x-quiet); }
 @media (min-width: 900px) { .nav { display: flex; } .menu { display: none; } .cta { margin-left: 4px; } }
-@media (max-width: 899px) { .mast { height: 60px; } .word { font-size: 22px; } }
+@media (max-width: 899px) { .mast { height: 60px; } .word { font-size: 22px; } .ctaLong { display: none; } }
+@media (min-width: 900px) { .ctaShort { display: none; } }
 @media (prefers-reduced-motion: reduce) { .mast, .tip { transition: none; } }
 
 .foot { padding: var(--x-space-s) 0 0; overflow: clip; }
