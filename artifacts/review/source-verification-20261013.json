@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "axp.source-review.v1",
+  "observedAt": "2026-10-12T21:51:30.967Z",
+  "reviewDate": "2026-10-13",
+  "reviewTimezone": "Asia/Kolkata",
+  "reviewedBaseRevision": "030e5b6c4bd1339da44c7b2c4726d88ea31ec784",
+  "scope": "isolated-clean-checkout-review-entrypoint-and-documentation",
+  "runtime": {"node": "25.5.0", "next": "15.5.27"},
+  "sourceHashes": {
+    "scripts/setup/verify-review.mjs": "ce06c8ed81f87e4b09e710780fe8d4b37e9147f09a5b88c88c8413363fe076e1",
+    "tests/setup/verify-review.test.mjs": "e91338c9b34e1e8687b51d8a492c791aba2ceb955f4863e87bfd9b443937a7c5",
+    "pnpm-lock.yaml": "8db3128bf3cf86e58fd5ad05daafaf48d0a12c59a8c8762223181645ad7542d2"
+  },
+  "checks": {
+    "repositoryTests": {"total": 834, "passed": 811, "failed": 0, "skipped": 23},
+    "productComponentTests": {"total": 90, "passed": 90, "failed": 0, "skipped": 0},
+    "productTypecheck": "passed",
+    "marketingTypecheck": "passed",
+    "reactSDKParity": "passed",
+    "reviewDocumentLinks": {"documents": 12, "findings": []},
+    "repositoryHygiene": "passed",
+    "productStaticExport": "passed",
+    "marketingStaticExport": "passed",
+    "isolatedProfileResourceServingSQL": "passed",
+    "isolatedFinanceSQL": "passed",
+    "staticPageAssets": [
+      {"page": "account/index.html", "assets": 19},
+      {"page": "advertiser-dashboard/index.html", "assets": 19},
+      {"page": "publisher-demo/index.html", "assets": 20},
+      {"page": "publisher-demo/integration/index.html", "assets": 20},
+      {"page": "index.html", "assets": 10},
+      {"page": "demo/index.html", "assets": 11}
+    ],
+    "liveReadonly": {
+      "origin": "https://axp.one",
+      "pageStatus": {"/account/": 200, "/advertiser-dashboard/": 200, "/publisher-demo/": 200, "/sdk/": 200, "/demo/": 200},
+      "anonymousSessionAuthenticated": false,
+      "anonymousOrganizationsStatus": 401,
+      "accountFinancialMode": "synthetic",
+      "accountBroadcastEnabled": false,
+      "accountNativeFunding": false
+    }
+  },
+  "effects": {
+    "paidModelCalls": 0,
+    "nativeBroadcasts": 0,
+    "fundsMoved": false,
+    "cloudMigrations": 0,
+    "deployments": 0,
+    "npmPublications": 0
+  },
+  "interpretation": "Fixture tests and read-only live checks, not a new hosted signup, auction, wallet-extension acceptance or account-owned funded settlement. Ephemeral cryptographic fixtures are separate from native broadcast. Optional toolchain skips are not passing native evidence."
+}

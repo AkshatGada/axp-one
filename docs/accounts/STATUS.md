@@ -37,6 +37,12 @@ commands and evidence scope.
 
 ## Live account release
 
+The current documentation baseline is source `030e5b6c4bd1339da44c7b2c4726d88ea31ec784`,
+which adds desktop/mobile Sign in entry points, a shared-dashboard account link
+and account presentation improvements on top of the live runtime below.
+The [reviewer guide](../REVIEWER_GUIDE.md) and
+[verification matrix](../VERIFICATION.md) provide current source checks.
+
 Account runtime revision `9ab99f02e69762d65f868febdd4a81622e4c03eb` was
 pushed to `main` and deployed at [axp.one/account](https://axp.one/account/)
 on 13 October 2026. Live checks verified separate confirmed Supabase owners,

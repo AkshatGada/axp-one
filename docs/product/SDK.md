@@ -1,173 +1,87 @@
-# Publisher SDK: one integration, two settlement rails
+# Publisher SDK integration
 
-AXP adds a separately disclosed Sponsored card to an AI app through three steps:
-**Request → Render → Acknowledge**. The publisher keeps its own answer model.
-DeepSeek powers only AXP's example chat; Jev evaluates advertising fit.
+AXP adds one separately disclosed Sponsored card below an AI app's independent
+answer through **Request → Render → Acknowledge**. Your app keeps its own model,
+answer generation, user authentication, durable turn storage and interface.
 
-The dependency-free SDK is distributed as repository source under
-`packages/publisher-sdk`; it is not a published npm package. Use Node 22.18+ for
-the server module. The browser helpers work with the app's existing frontend.
-The public product guide is at [axp.one/sdk](https://axp.one/sdk/).
+## Account-owned integration
 
-## Configure the publisher
+1. Sign in at [axp.one/account](https://axp.one/account/) and create an AI-app profile.
+2. Save supported origin/category restrictions and issue the app's server key.
+3. Install a locally packed `@axp001/publisher-sdk@0.2.1` artifact and configure
+   `https://axp.one/api/accounts/sdk` explicitly as its base URL.
+4. Request alongside the independent answer, render the approved card below it,
+   then forward its observed insertion through your own authenticated server route.
+5. Save the original turn, award and receipt. Recover with read-only opportunity
+   and delivery lookups rather than inventing a replacement purchase.
 
-Have the workspace operator provision a publisher key and payout route for each
-supported rail. Public publisher configuration reports readiness but does not
-issue credentials. Keep the key server-side:
-
-```sh
-AXP_EXCHANGE_URL=https://axp.one/api/product
-AXP_PUBLISHER_API_KEY=<operator-provisioned server-only key>
-```
-
-Use the specific Preview exchange URL instead while evaluating an unmerged
-integration. This branch does not imply Tempo is already enabled on Production.
-Read `<exchange base URL>/publisher/config` for the placement and
-`payments.networks` readiness registry.
-
-Set optional `settlementNetwork` per opportunity:
-
-| Value | Auction inventory | Payment token |
-| --- | --- | --- |
-| `solana-devnet` | Solana campaigns only | Test USDC |
-| `tempo-testnet` | Tempo campaigns only | Test PathUSD |
-| Omitted in a native workspace | Legacy Solana default | Test USDC |
-
-The operator configures token metadata and publisher payout addresses. A browser
-request cannot supply them. Mismatched-rail campaigns are excluded before Jev
-calls. Switching rails starts a new conversation/session; explicit retries retain
-the original rail and all original opportunity inputs.
-
-## 1. Request alongside the independent answer
+The [package README](../../packages/publisher-sdk/README.md) is the canonical
+installation and code guide. It includes ESM/browser/React exports, request/result
+contracts, same-origin acknowledgement, receipt binding and restart recovery.
+Registry publication is separate from the locally installable artifact.
 
 ```js
-// Your application server only.
-import { AXPPublisher } from './packages/publisher-sdk/index.mjs';
+// Your application server only; never ship the key to a browser or answer model.
+import {AXPPublisher} from '@axp001/publisher-sdk';
 
 const axp = new AXPPublisher({
-  apiKey: process.env.AXP_PUBLISHER_API_KEY,
-  baseURL: process.env.AXP_EXCHANGE_URL || 'https://axp.one/api/product',
-  timeoutMs: 15000,
-  receiptTimeoutMs: 45000,
-});
-
-const adTask = axp.requestAd({
-  question,
-  sessionId,                         // random per conversation
-  turnId,                            // stable per submission/retry
-  placementId: 'chat-sponsored-card',
-  settlementNetwork: 'tempo-testnet', // optional; legacy default is Solana
-});
-const answerTask = yourExistingLLM({ question });
-
-sendAnswer(await answerTask);
-const ad = await adTask;
-if (ad.status === 'awarded') sendSponsoredAward(ad);
-// no_fill or error: keep the answer and leave the Sponsored slot empty.
-```
-
-`yourExistingLLM`, `sendAnswer` and `sendSponsoredAward` are your application
-functions. The answer request receives no advertiser creative, campaign hints,
-ContextHint evidence or bid context. Do not wait for the ad to display the answer.
-
-The SDK validates the question, IDs and rail. It never automatically retries a
-purchase. A timeout is an uncertain request outcome, not proof that the server did
-no work. Keep session/turn IDs and the complete input stable for an explicit retry.
-
-## 2. Render the exact approved card
-
-```js
-// Your application browser, after an awarded response from your server.
-import { createSponsoredCard, createRenderAcknowledger }
-  from './packages/publisher-sdk/browser.mjs';
-
-const card = createSponsoredCard({
-  document,
-  award: ad.award,
-  className: 'your-native-sponsored-card',
-});
-sponsorSlot.append(card);
-
-const acknowledge = createRenderAcknowledger({
-  post: async (_path, observation, deliveryToken) => {
-    const response = await fetch('/api/axp/render', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', 'x-app-csrf': yourCSRF },
-      body: JSON.stringify({ awardId: ad.award.id, observation, deliveryToken }),
-    });
-    if (!response.ok) throw new Error('delivery_unconfirmed');
-    return response.json();
-  },
+  apiKey: process.env.AXP_APP_SDK_KEY,
+  baseURL: 'https://axp.one/api/accounts/sdk',
 });
 ```
 
-Supply the connected `sponsorSlot` and your application's CSRF token. The helper
-uses approved plain text, the original HTTPS destination and a visible literal
-Sponsored label. Keep this card separate from the answer. No click is required.
-The publisher key never enters the browser or an LLM prompt.
+Installing the SDK does not enable inventory or native payments. The account
+integration currently uses synthetic accounting with broadcasts disabled.
+Readiness indicates configuration, not a guaranteed matching ad or winning bid.
+No-fill and errors leave the independent answer usable.
 
-## 3. Acknowledge the observed insertion
+## Application responsibilities
 
-```js
-// Browser: checks the connected card before forwarding its observation.
-const receipt = await acknowledge({
-  node: card,
-  award: ad.award,
-  deliveryToken: ad.deliveryToken,
-});
+- Persist stable session/turn IDs and the original request before its first POST.
+- Send only context the app has permission to share; do not send private histories
+  by default or include advertiser material in the answer model's input.
+- Authenticate the app user and validate CSRF before forwarding a render observation.
+- Load the user's saved award/token on the server; never accept arbitrary prices,
+  recipients or an unrestricted exchange-forwarding path from the browser.
+- Render exact approved plain text, HTTPS destination and visible Sponsored
+  disclosure below the answer. Keep the answer independent of ad availability.
+- Bind accepted receipt results to the saved award's ID, hash, amount and mode.
+- Preserve unknown/pending states; timeout is not cancellation. SDK retries are explicit.
 
-// Your /api/axp/render server handler, after app authentication and CSRF:
-const receiptFromExchange = await axp.acknowledgeRender({
-  awardId: body.awardId,
-  deliveryToken: body.deliveryToken,
-  observation: body.observation,
-});
-// Return receiptFromExchange to your browser.
-```
+App keys are server-only, scoped and independently revocable. Human sign-out does
+not revoke an app's server credential. An accepted receipt establishes app-reported
+insertion and disclosure, not human attention, conversion or completed payout.
 
-These snippets run in separate browser and server contexts. An award reserves
-budget; an accepted receipt creates exactly one charge. Replaying the same
-accepted observation returns the original charge. Receipt v1 signed bytes remain
-compatible with existing Solana integrations.
+## Shared demonstration compatibility
 
-If the card cannot render, use `axp.failRender({awardId, deliveryToken,
-reason: 'render_failed'})` from your server to release its reservation. Otherwise
-it expires. An uncertain acknowledgement must be reconciled with the same award,
-delivery token and observation; do not buy a replacement placement.
+The older operator-provisioned shared demo integration uses `/api/product`.
+The SDK constructor retains that default for compatibility. Account-issued app
+keys require `/api/accounts/sdk` explicitly and cannot be substituted for shared
+demo credentials. Public configuration never issues a credential.
 
-## Inspect financial evidence
+The example chat's organic provider is DeepSeek; Jev evaluates advertising fit.
+Neither choice is imposed on an integrating app's answer model.
 
-The backend reports financial mode independently from model execution. Synthetic
-credits do not establish native payment activity. Native payment evidence includes
-its network, test token, channel, amounts, transactions and public voucher metadata.
+## Settlement metadata
 
-On Tempo, accepted receipts advance cumulative off-chain vouchers. Explicit payouts
-transfer only the newly earned delta while the same channel remains open. Final
-closure pays the remainder and refunds unused collateral. On Solana, preserve the
-existing close-and-settle flow. Neither payout replenishes campaign spending caps.
+`financialMode` identifies synthetic accounting versus native testnet execution.
+`settlementNetwork` independently identifies a rail. Native shared-workspace
+integration supports `solana-devnet` (test USDC) and `tempo-testnet` (test PathUSD)
+where the corresponding server capability is enabled. Omitted legacy native
+network values mean Solana. Cross-rail campaigns are excluded before Jev.
 
-Use the chain-aware public helpers when presenting evidence:
+Token metadata and payment recipients come from trusted server configuration,
+not browser-supplied amounts/addresses. Keep each currency separate. Switching
+rails requires a fresh conversation/session; an explicit retry retains the
+original input, identities and rail.
 
-```js
-import { moneyUnit, nativeTransactionURL, isFinalizedNativeTransaction }
-  from './packages/publisher-sdk/financial.mjs';
+Solana closes against the latest cumulative authorization and returns unused
+collateral. Tempo can first pay the earned delta while the same channel remains
+open, then close and refund. Payout does not replenish the campaign cap. The SDK's
+financial helpers format validated public metadata and construct pinned network
+links; they do not query a chain, sign or authorize transfers.
 
-const unit = moneyUnit(payment.mode, payment);
-for (const transaction of payment.transactions || []) {
-  const url = nativeTransactionURL(transaction, payment.network);
-  const finalized = isFinalizedNativeTransaction(transaction, payment.network);
-  // Display the saved state; a submitted hash is not a finalized payout.
-}
-```
-
-These helpers validate public metadata and construct pinned network links. They do
-not query a chain, sign a voucher or authorize a transfer. Keep currencies separate
-when displaying multiple campaigns. The browser and publisher SDK do not control
-campaign funding, payout or closure; authorized workspace payment actions do.
-
-In the example app, open Chat settings to select the rail, submit a fresh turn,
-then inspect **View internals → Payment**. Optional details reveal vouchers,
-channel identity and transaction proof without crowding the chat conversation.
-For operator setup, explicit actions and recovery, see [Tempo settlement](TEMPO.md).
-For the renderer's additional contracts and local examples, see the
-[SDK source README](../../packages/publisher-sdk/README.md).
+See [settlement interfaces](TEMPO_INTERFACE.md),
+[native lifecycle evidence](TEMPO_VERIFICATION.md),
+[account contracts](../accounts/CONTRACTS.md) and
+[verification scope](../VERIFICATION.md).

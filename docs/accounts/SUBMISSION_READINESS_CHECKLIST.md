@@ -1,78 +1,30 @@
-# AXP reviewer guide
+# Account network reviewer guide
 
-AXP is an advertising network for the agentic internet. Advertisers describe
-their products and intended conversations; AI apps request a separate Sponsored
-placement while retaining control of their independent answer.
+AXP's signed-in advertiser and AI-app flows share an exchange while retaining
+separate ownership and authority. Advertisers approve exact campaign versions;
+apps use scoped server credentials and render a labelled Sponsored card below
+their independent answer. The accepted receipt reconciles both owners' reports.
 
-## Start with the product
+Start with the [technical reviewer guide](../REVIEWER_GUIDE.md) and
+[verification matrix](../VERIFICATION.md), which include the source/test map and
+the non-spending `npm run verify:review` command.
 
-The two sides of the network are connected through account-owned resources:
+## Detailed account documentation
 
-1. An advertiser signs in, creates a business profile and saves a campaign.
-2. The advertiser approves an exact campaign version and sets bid and spend limits.
-3. An AI-app owner creates an app profile and issues a scoped server-side SDK key.
-4. The app requests a placement through the account SDK endpoint.
-5. Eligible advertiser agents evaluate the opportunity; deterministic rules
-   enforce capabilities, budgets and auction selection.
-6. The publisher renders a separate Sponsored card and acknowledges the exact
-   insertion. An accepted receipt links delivery to one charge.
-
-The organic answer path receives no advertiser material. Historical ContextHint
-observations inform evidence packets, not fictional product capabilities.
-
-## Technical reading order
-
-| Topic | Documentation |
+| Topic | Guide |
 | --- | --- |
-| Account identity and API contracts | [Accounts contracts](CONTRACTS.md) |
-| Supabase profile persistence | [Database verification](SUPABASE_DATABASE_RESULT.md) |
-| Campaign ownership and app credentials | [Resource integration](RESOURCE_OPERATOR_GUIDE.md) |
-| Shared auctions and publisher receipts | [Serving integration](SHARED_SERVING_RUNBOOK.md) |
-| Own-wallet financial architecture | [Finance architecture and verification](FINANCE_CLOUD_ACCEPTANCE.md) |
-| Native channel and voucher interfaces | [Payment integration](ACCOUNT_PAYMENTS_RUNBOOK.md) |
-| Functional release checks | [Release verification checklist](FINAL_ROLLOUT_CHECKLIST.md) |
-| Connected account/SDK acceptance | [Local connected journey](CONNECTED_JOURNEY_RESULT.md) |
-| Standalone repository setup | [Setup guide](../STANDALONE_SETUP.md) |
+| Identity, sessions and API behavior | [Contracts](CONTRACTS.md) |
+| Dedicated Supabase PostgreSQL and RLS | [Database verification](SUPABASE_DATABASE_RESULT.md) |
+| Versioned campaigns and app credentials | [Resource integration](RESOURCE_OPERATOR_GUIDE.md) |
+| Inventory, auctions and receipts | [Serving integration](SHARED_SERVING_RUNBOOK.md) |
+| Own-wallet proof and immutable financial records | [Finance architecture](FINANCE_CLOUD_ACCEPTANCE.md) |
+| Native channel interfaces | [Payment integration](ACCOUNT_PAYMENTS_RUNBOOK.md) |
+| Real hosted account/SDK journey | [Hosted acceptance](HOSTED_ACCOUNT_ACCEPTANCE.md) |
+| Concurrent reads and receipt recovery | [Recovery verification](ACCOUNT_CONCURRENCY_VERIFICATION.md) |
+| Live release scope | [Status](STATUS.md) |
 
-## What to inspect
-
-- Owner-scoped campaigns and app credentials, including cross-account denial.
-- Approved-version identity, mandatory capabilities and deterministic budget caps.
-- Actual agent decisions distinguished from exclusions and provider unavailability.
-- A Sponsored card below the independent answer, with exact delivery acknowledgement.
-- Opportunity, decision, award, receipt and charge correlation.
-- Duplicate delivery and restart behavior without a second charge.
-- Separation of synthetic accounting, historical testnet proof and own-wallet state.
-- Supabase migrations, explicit repository boundaries and reproducible tests.
-
-## Financial evidence
-
-Cumulative authorizations aggregate accepted delivery charges; settlement pays
-the app and returns unused deposit. Authorizing a wallet-control message does
-not deposit funds or grant background spending authority.
-
-The dedicated finance migration and actual Supabase backend access are verified.
-The latest focused account-finance checks pass **55 automated tests**. Their
-[verification report](FINANCE_CLOUD_ACCEPTANCE.md) distinguishes actual cloud
-checks, cryptographic fixtures and the separate real-wallet/funded acceptance steps.
-
-Historical Solana and Tempo records are evidence for their identified runs and
-rails. They are not payment for a different run or proof that every account-facing
-flow is deployed. Receipts establish accepted insertion, not human attention or
-conversion lift.
-
-## Product and evidence scope
-
-The account-owned network implementation is deployed at
-[axp.one/account](https://axp.one/account/), using synthetic accounting with
-account transaction broadcasts disabled. See [live release status](STATUS.md)
-for the identified runtime revision and non-spending verification, and
-[integration verification](NETWORK_MERGE_RESULT.md) for earlier local regressions.
-Public-product behavior must be assessed against its identified deployed revision.
-Real account-owned wallet-extension and funded lifecycle acceptance remain
-separate from the verified migration and offline tests.
-
-ContextHint is an existing intelligence product and AXP's distribution foundation.
-Its observed advertisers, creatives, placements and usage figures describe that
-product/library; they are not AXP network enrollment or independently measured
-AXP advertiser revenue.
+Accounts use synthetic accounting with broadcasts disabled; historical testnet
+settlements remain separately identified evidence. ContextHint supplies screened
+advertising intelligence and a distribution foundation, not automatically enrolled
+AXP advertisers or AXP-only traction. See the verification matrix for the precise
+scope of wallet, model, delivery and settlement checks.

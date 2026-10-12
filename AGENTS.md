@@ -1,5 +1,15 @@
 # AXP operating boundaries
 
+## Technical review entry point
+
+For current product/code review, start with README.md, docs/REVIEWER_GUIDE.md and
+docs/VERIFICATION.md. Run `npm run verify:review` in a clean checkout after locked
+workspace installation. It uses fixture tests and loopback HTTP, not live model
+or payment operations. Review account ownership in both APIs and PostgreSQL
+permissions. Keep fixture, hosted and finalized testnet evidence distinct.
+The dated records below preserve their original authorization and execution
+scope; they are not standing permission for new cloud or financial actions.
+
 ## Additive Tempo release (11 October 2026)
 
 `codex/tempo-settlement` adds per-campaign Tempo Moderato Testnet settlement,
