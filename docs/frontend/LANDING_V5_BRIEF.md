@@ -22,7 +22,11 @@ not a model, decide the money.
    on empty, blocked or failed states.
 4. **The cover is the 3D wall hero** (from the earlier V3). From "The shift" onward the owner likes
    V4's direction. **The doors are the V3 doors** (an ultramarine panel on paper).
-5. Still binding: the Sponsored card sits BELOW the answer; a receipt is an accepted charge and an
+5. **Clean, low text, no internal details (owner, 12 October).** A marketing landing page: clean
+   and elegant, more picture than words. No "Illustration" or "fictional" disclosure labels, no
+   transaction dates, no test-network or token names, no proof link, no small-print caveats. Words
+   are the chapter mark, the heading, at most one short line, and the labels a picture needs.
+6. Still binding: the Sponsored card sits BELOW the answer; a receipt is an accepted charge and an
    accrual, never a payout; no numbers, prices, currency, scores or performance; no customers,
    partners, signup or status framing; fictional names only; no provider or model names; no code;
    ContextHint appears only in the masthead; no orange, no purple.
