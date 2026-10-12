@@ -1,5 +1,10 @@
 # Phase/component execution register
 
+This is a dated build history. Current product entry points, account architecture
+and reproducible checks are in the [reviewer guide](REVIEWER_GUIDE.md) and
+[verification matrix](VERIFICATION.md); the historical statuses below retain
+their original execution scope.
+
 ## Current release — 7 October 2026
 
 - User-operated dashboard, editable Jev hints, source-distributed publisher SDK and

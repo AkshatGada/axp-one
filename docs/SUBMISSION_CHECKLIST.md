@@ -1,91 +1,46 @@
-# AXP essential release journey
+# AXP connected product journey
 
-Scope: one advertiser owns an approved campaign; a separately owned AI app uses
-its own SDK credential, displays a disclosed card and sees the same accepted
-receipt in its earnings that the advertiser sees in spending.
+AXP connects an advertiser's approved campaign with an independently owned AI
+app, a disclosed placement and matching receipt-linked reports. The account
+console is deployed at [axp.one/account](https://axp.one/account/), separately
+from the public shared dashboard and example chat.
 
-The account network is deployed at [axp.one/account](https://axp.one/account/)
-with synthetic accounting and account broadcasts disabled. This list distinguishes
-implementation, non-spending acceptance and funded release evidence.
-Landing pages, shared demonstrations and historical recordings are preserved.
+## Advertiser
 
-## Phase 1 — Owned setup and integration readiness
+- Sign in and save a business profile within an owned organization.
+- Save a versioned campaign, approved creative, eligible context and bid/budget limits.
+- Approve the exact version and explicitly enable serving; editing requires reapproval.
+- Inspect private saved activity, accepted charges and matching receipts; pause serving.
 
-- [x] Dedicated Supabase Auth and PostgreSQL profiles, campaign versions, exact
-  approval and owner-scoped app credentials are implemented.
-- [x] Align generated SDK instructions with the app's actual serving mode.
-- [x] Let the signed-in app owner inspect integration readiness without putting
-  the server-only SDK credential in browser requests.
-- [x] Verify ownership denial and that readiness performs no model or payment calls.
+## AI app
 
-## Phase 2 — Private activity and money visibility
+- Save an app profile with supported origin/category restrictions.
+- Issue and manage its scoped server credential; keep the credential out of browsers.
+- Request through `/api/accounts/sdk` alongside the app's independent answer.
+- Render the approved Sponsored card below that answer and acknowledge its insertion.
+- Inspect app-scoped receipts/earnings and recover saved outcomes without another purchase.
 
-- [x] Show bounded saved opportunities, policy exclusions, genuine model skips,
-  unavailable decisions, bids, wins/losses and delivery outcomes.
-- [x] Keep campaign reports scoped to that advertiser and app reports to that app;
-  omit raw questions, competitor declarations and credentials.
-- [x] Receipt-linked accepted/reserved totals are separated by settlement network.
-- [x] Channel interfaces distinguish accepted accrual, cumulative authorization,
-  finalized payout and unused refund; these are not interchangeable states.
+## Verified behavior
 
-## Phase 3 — Complete non-spending acceptance
+Separate-owner local and hosted acceptance exercised the connected flow, resource
+persistence, exact approval, isolation, scoped credentials, accepted delivery and
+matching reports. Duplicate/restart recovery preserves the original charge.
+No-fill leaves the answer usable. Invalid disclosure, foreign resources and
+revoked/wrong-app credentials are rejected.
 
-- [x] Separate advertiser/app accounts create and restore their own resources.
-- [x] Save → approve → explicitly enable → scoped SDK request → render a separate
-  Sponsored card → acknowledge → inspect both owners' reports.
-- [x] Editing invalidates approval; pause, caps and app restrictions affect serving.
-- [x] No-fill, unavailable model, rejected delivery, revoked/wrong-app keys and
-  cross-owner access produce no accepted charge or private-data disclosure.
-- [x] Duplicate and restarted turns recover saved outcomes without repeat calls
-  or charges. Organic answers receive no advertiser material.
-- [x] Exercise the account UI and independent SDK HTTP path, then run focused
-  tests, typechecks and repository regressions on the same candidate.
+Account serving uses synthetic accounting with broadcasts disabled. Hosted wallet
+bindings verify exact cryptographic ownership and persistence without payment.
+Recorded Solana and Tempo testnet settlements are distinct identified runs, not
+account cash payouts. Participant wallet-extension prompts and an account-owned
+funded lifecycle have separate acceptance scope.
 
-Fixtures must remain labelled synthetic. Local acceptance does not establish
-fresh hosted acceptance, actual Jev execution or participant-wallet settlement.
-Broadcasts remain disabled; this phase makes no funds movement or paid model calls.
+## Review resources
 
-Phases 1–3 were verified locally on 12 October 2026 using separate fixture owners,
-injected decisions and synthetic accrual. See [connected acceptance](accounts/CONNECTED_JOURNEY_RESULT.md)
-for commands, browser checks and the precise remaining release gates.
+- [Reviewer guide and source map](REVIEWER_GUIDE.md)
+- [Verification matrix and executable checks](VERIFICATION.md)
+- [Hosted account/SDK acceptance](accounts/HOSTED_ACCOUNT_ACCEPTANCE.md)
+- [Recovery and concurrency verification](accounts/ACCOUNT_CONCURRENCY_VERIFICATION.md)
+- [Current release](accounts/STATUS.md), [contracts](accounts/CONTRACTS.md) and [architecture](ARCHITECTURE.md)
 
-## Phase 4 — Separately authorized funded and hosted acceptance
-
-- [ ] Real advertiser/app wallet extensions prove ownership without spending.
-- [ ] Agree explicit deposit, charge, fee/rent and model-call limits before funding.
-- [ ] Finalized own-wallet deposit → genuine eligible decisions → accepted receipt
-  → explicit cumulative authorization → finalized payout and unused refund.
-- [ ] Recover uncertain attempts using saved transaction identities, without
-  replacement purchases. Closing adds no delivery charge.
-- [x] Hosted separate-owner/external SDK acceptance and saved-receipt recovery
-  pass without equating synthetic charges with funded settlement. See the dated
-  [account recovery verification](accounts/ACCOUNT_CONCURRENCY_VERIFICATION.md).
-
-Current own-wallet scope is Solana Devnet/test USDC and cooperative closure,
-not mainnet or unattended delegated buying. Historical demo settlements remain
-separate evidence. See [finance verification](accounts/FINANCE_CLOUD_ACCEPTANCE.md).
-
-## Phase 5 — Submission package
-
-- [x] Merge, push and deploy the approved account candidate while preserving
-  specialist frontend work and the shared demo. Live runtime: `9ab99f0`;
-  see [release status](accounts/STATUS.md) for the verified non-spending scope.
-- [ ] Pin the revision, SDK artifact, configuration instructions and evidence hashes.
-- [ ] Verify public links and a concise captioned connected walkthrough; retain
-  credential-free, mutation-rejecting offline replay.
-- [ ] Application, repository, hosted product and recording describe the same
-  verified scope. ContextHint library/combined traction is not AXP enrollment.
-- [ ] Confirm organizer deadline, eligibility and entered-track requirements in
-  the actual portal before submitting.
-
-## Deferred
-
-Password recovery for unrestricted public rollout, elaborate reporting, broad
-responsive redesign, enterprise teams/SSO, infrastructure scaling, mainnet,
-new payment rails, inference credits and agent-facing paywalls are outside this
-slice. Ownership, exact approvals, correct recipients, duplicate safety and
-truthful financial states are necessary product behavior—not optional hardening.
-
-See [system architecture](ARCHITECTURE.md),
-[account verification](accounts/STATUS.md) and
-[account contracts](accounts/CONTRACTS.md).
+The guides identify implemented behavior and evidence scope so reviewers can
+reproduce and assess the connected product.

@@ -1,10 +1,16 @@
 # Current system architecture
 
-Tempo branch implementation, 11 October 2026; production activation follows review.
+Current source includes the account-owned network and both testnet adapters.
+The account console is deployed with synthetic accounting and broadcasts disabled;
+native settlement evidence refers to its separately identified testnet runs.
 The earlier component proposals are preserved
 in [MVP_MASTER_PLAN.md](MVP_MASTER_PLAN.md); this page describes the current product.
 
 ## One user turn
+
+The diagram below describes the common exchange and native-channel architecture.
+The account-owned deployment reuses the exchange with synthetic accounting;
+its currently disabled native broadcasts are not implied by the diagram.
 
 ```mermaid
 flowchart LR
@@ -43,12 +49,44 @@ publisher keeps its own LLM. The answer receives no advertiser material. The ad
 path starts in parallel, but the example displays its Sponsored card after the
 answer. No zero-latency or organic endorsement claim follows from parallelism.
 
+## Account-owned request path
+
+```mermaid
+flowchart LR
+  Owner[Verified advertiser] --> Draft[Owned campaign version]
+  Draft --> Approval[Exact approval and serving enrollment]
+  AppOwner[Verified AI app owner] --> App[Owned app and scoped server key]
+  App --> SDK[Account SDK request]
+  Approval --> Catalogue[Trusted account inventory]
+  Catalogue --> Exchange[Eligibility and first-price exchange]
+  SDK --> Exchange
+  Exchange --> Card[Approved Sponsored card below independent answer]
+  Card --> Receipt[App-bound accepted receipt]
+  Receipt --> Spend[Advertiser private report]
+  Receipt --> Earnings[AI app private report]
+```
+
+Supabase Auth establishes identity; dedicated PostgreSQL repositories hold
+profiles, organizations, campaign versions, app credentials/enrollment and wallet
+bindings. User-scoped RPCs and RLS enforce ownership; backend catalogue and finance
+RPCs have distinct authority. Private encrypted snapshots hold opaque sessions
+and the exchange ledger. These stores are not one distributed atomic transaction.
+
+`/api/accounts` verifies owner access; `/api/accounts/sdk` verifies app credentials.
+The shared `/api/product` demo retains its own inventory, credentials and state.
+Saved SDK lookups and reports read committed outcomes without taking the serving
+writer lease; auctions and acknowledgements use the fenced writer. An SDK key
+cannot fund or sign, and human sign-out does not revoke an independent app key.
+See [account contracts](accounts/CONTRACTS.md) and the
+[verification matrix](VERIFICATION.md).
+
 ## Implementation ownership
 
 | Source | Responsibility |
 |---|---|
 | `apps/marketing`, `design-system/prospectus` | Landing and chaptered video |
 | `apps/product-ui`, `design-system/ledger` | Dashboard, chat, internals and SDK guide |
+| `packages/accounts`, `supabase/migrations` | Verified identity, owner-scoped resources, app credentials, account inventory, private reports and wallet bindings |
 | `packages/product/service.mjs`, `api.mjs` | Campaign lifecycle and product API |
 | `packages/product/decisions.mjs`, `packages/ml` | Evidence-backed Jev requests and validated decisions |
 | `packages/exchange` | Integer budgets, eligibility, first-price auction, reservations and charges |
@@ -61,8 +99,9 @@ answer. No zero-latency or organic endorsement claim follows from parallelism.
 | `scripts/build-site.mjs`, `vercel.json` | One deployment with static clients and Node API |
 
 All clients use one backend authority. No frontend implements another auction,
-ledger or signer. The dependency-free publisher SDK is shipped as source; it is
-not an npm release. The committed screened evidence lives in `artifacts/v2/evidence`.
+ledger or signer. The publisher SDK is packaged locally as ESM, browser helpers
+and an optional React adapter; registry publication is separate. The committed
+screened evidence lives in `artifacts/v2/evidence`.
 The original recorded/live MVP remains in its own `/mvp/` and `/api/runs/*` namespace.
 
 ## Hosted state and external effects

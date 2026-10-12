@@ -1,93 +1,46 @@
-# Account network release verification
+# Account release verification
 
-A release connects the advertiser's own campaign and the AI app's own integration
-through one exchange, with inspectable decisions, disclosed delivery and accurate
-financial state.
+The account-owned network connects approved advertiser inventory to app-scoped
+SDK requests, Sponsored delivery and matching private reports. Its live account
+configuration uses synthetic accounting with broadcasts disabled.
 
-For the complete product and submission scope, see the
-[release and submission checklist](../SUBMISSION_CHECKLIST.md).
+## Exercised account contract
 
-## Verified foundation
+| Area | Verified behavior |
+| --- | --- |
+| Identity | Confirmed owners, sign-in, profiles and organizations, persistence and sign-out |
+| Campaign control | Owner-only drafts, exact-version approval, edit invalidation and explicit serving controls |
+| App integration | Profile restrictions, server-only key scope, rotation/revocation and independent SDK consumer |
+| Delivery | Separate Sponsored insertion, exact acknowledgement and matched advertiser/app receipts |
+| Isolation | Foreign resources, wrong app/token, browser-origin credential use and signed-out access rejected |
+| Recovery | Stable original IDs, duplicate charge protection, saved-result reads during serving and restart recovery |
+| Wallet binding | Exact cryptographic proof, resource/account binding, expiry, replay and hosted persistence |
 
-- [x] Dedicated Supabase authentication and profile database integration implemented.
-- [x] Owner-scoped campaign versions, approval and app credentials implemented.
-- [x] Account SDK requests and app-bound delivery receipts connected to shared serving.
-- [x] Private finance schema applied; backend REST access and database permissions verified.
-- [x] Existing account data preserved during the additive finance migration.
-- [x] Fifty-five focused finance, ownership, client and panel tests pass.
-- [x] Ownership-only tests verify exact signatures, account/resource isolation,
-  expiry, restart and replay without payment transport.
-- [x] Broadcasts remain disabled during non-spending verification.
+## Reproduce
 
-These checks identify the implemented and exercised foundation. They do not
-replace the user-facing release checks below.
+```sh
+pnpm install --frozen-lockfile --ignore-scripts
+npm run verify:review
+```
 
-## Advertiser journey
+The [verification matrix](../VERIFICATION.md) explains local test dependencies,
+component checks, optional SQL fixtures and the scope of each evidence source.
+The [hosted account acceptance](HOSTED_ACCOUNT_ACCEPTANCE.md) used separate
+confirmed owners, an independent SDK consumer and one real Jev evaluation.
+[Hosted recovery](ACCOUNT_CONCURRENCY_VERIFICATION.md) recovered its receipt
+without another opportunity or acknowledgement.
 
-- [x] A fresh advertiser completes signup, confirmation and sign-in.
-- [x] Their profile and campaigns persist across reload and hosted requests.
-- [x] Draft edits create versions; approval binds the exact creative and declarations.
-- [x] Bid limits, campaign caps and pause are enforced in offline integration tests.
-- [x] Saved reports distinguish exclusion, bid, skip, unavailable, win/loss and delivery.
-- [x] Hosted spend and app reports reconcile the same receipt without competitor data.
+## Financial interpretation
 
-## AI app journey
+Own-wallet account interfaces target Solana Devnet/test USDC with frozen payer,
+payee and channel terms, explicit payer authorization and cooperative closure.
+Automated finance tests use injected native transports. Hosted ownership proof
+does not itself establish participant wallet-extension prompts or a finalized
+account-owned deposit/payout/refund lifecycle.
 
-- [x] A fresh app owner creates a profile and configures allowed origins/restrictions.
-- [x] Issue, rotate and revoke their server-only SDK key without exposing it to clients.
-- [x] A separate app integrates against `/api/accounts/sdk`, not the shared demo API.
-- [x] The independent answer remains separate from the Sponsored card.
-- [x] Exact acknowledgement creates one receipt/charge; duplicates create no extra charge.
-- [x] No-fill leaves the browser answer usable; provider failure and rejected
-  delivery are covered with offline injected transports, not fresh hosted failures.
-- [x] The app's receipt and earnings report is private to the correct owner.
+Historical Solana and Tempo lifecycle records retain their own channel identities
+and currency. A receipt establishes accepted insertion, not attention, conversion
+or completed payment. Account synthetic earnings are not withdrawable cash.
 
-## Own-wallet acceptance
-
-- [ ] Separate advertiser and app owners prove their chosen wallets through real
-  extension prompts, signing only the exact ownership messages.
-- [ ] Rejecting a prompt produces no verified proof or claim of funding.
-- [x] Hosted cryptographic wallet bindings persist through Supabase and sign-in;
-  real wallet-extension connection/prompt acceptance remains unchecked above.
-- [ ] A separately scoped testnet lifecycle verifies finalized deposits before serving.
-- [ ] Accepted receipts drive cumulative authorizations using the frozen payer.
-- [ ] Positive-spend and zero-spend closures reconcile payout and unused refund.
-- [ ] Fees/rent are separate from delivery charges; unknown outcomes reconcile saved attempts.
-- [ ] Native state, browser behavior and finalized chain evidence agree for the same run.
-
-The current non-spending verification closes the schema and automated ownership
-checks, not the real-wallet or funded lifecycle boxes.
-See [finance verification](FINANCE_CLOUD_ACCEPTANCE.md).
-
-## Release artifact and integration
-
-- [ ] Pin the source revision, dependency locks, SDK artifact and evidence bundle.
-- [ ] Reproduce setup in a fresh checkout without another developer's repository.
-- [x] Repository/component checks, UI typecheck and static export pass on the
-  identified candidate; the existing marketing deployment is not rebuilt here.
-- [ ] Verify account, advertiser, publisher, SDK and recording routes together.
-- [x] Preserve existing landing-page design, demo assets and historical run identities.
-- [x] Hosted confirmed-owner/independent SDK acceptance and the deployed recovery
-  followup pass; actual account assets match the verified build. See the dated
-  [concurrency and recovery verification](ACCOUNT_CONCURRENCY_VERIFICATION.md).
-- [ ] Check submitted links, captions and recordings from a signed-out browser.
-- [ ] Confirm the final submission identifies the tested product and evidence scope.
-
-## Supported financial model
-
-Own-wallet accounts currently target Solana Devnet/test USDC. The payer explicitly
-signs cumulative voucher increments; cooperative closure uses both frozen parties.
-This is not unattended delegated buying. Current channel recipients and terms
-cannot be redirected through profile edits.
-
-Historical shared-demo Tempo support is separately documented. Own-wallet Tempo,
-mainnet, automatic top-ups, new rails, inference credits and sponsored-access
-experiments are outside this account release's current scope.
-
-The current build slice follows phases 1–3 of the essential checklist: readiness,
-private activity and one non-spending connected journey. The
-[hosted account acceptance](HOSTED_ACCOUNT_ACCEPTANCE.md) exercises that journey
-with separate confirmed owners and a standalone SDK consumer. Real-extension,
-funded and concurrent-serving acceptance remain subsequent gates. Password
-recovery and broader polish are deferred, not prerequisites for this bounded
-verification.
+See [live source status](STATUS.md), [finance verification](FINANCE_CLOUD_ACCEPTANCE.md)
+and the [reviewer guide](../REVIEWER_GUIDE.md).

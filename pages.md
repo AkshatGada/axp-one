@@ -1,7 +1,21 @@
 # Public pages and API map
 
-Canonical origin: **https://axp.one**. Tempo branch documentation updated 11 October 2026.
+Canonical origin: **https://axp.one**. Account entry points updated 13 October 2026.
 Localhost URLs are for explicit development and replay instructions only.
+
+## Account-owned product
+
+| Route | Purpose | Boundary |
+| --- | --- | --- |
+| `/account/` | Sign in, profiles, owned campaigns, AI apps, credentials and wallet bindings | Requires a verified session for owned resources |
+| `/api/accounts/*` | Owner-scoped identity, profile, campaign, app and report operations | Opaque session; configured origin and CSRF for authenticated writes |
+| `/api/accounts/sdk/*` | App-scoped opportunities, render acknowledgement and saved-result recovery | Server-only app credential and original delivery token where required |
+
+Account serving currently uses synthetic accounting with broadcasts disabled.
+The public `/advertiser-dashboard/` and `/publisher-demo/` remain shared demo
+surfaces; their public inventory is not a signed-in user's private campaigns.
+See [account contracts](docs/accounts/CONTRACTS.md) and the
+[reviewer guide](docs/REVIEWER_GUIDE.md).
 
 ## Tempo release additions
 
@@ -17,8 +31,8 @@ See [Tempo operation](docs/product/TEMPO.md) and [SDK setup](docs/product/SDK.md
 [Verified lifecycle results](docs/product/TEMPO_VERIFICATION.md) include both rails
 and the dedicated Preview. Its operator-only `/api/product/verification` endpoint
 is absent from ordinary site builds and production.
-Production continues on its configured rail until the release is merged and
-explicitly enabled; this branch uses an isolated hosted verification workspace.
+Runtime configuration independently enables each rail. The linked isolated
+verification describes its identified run, not a later production configuration.
 
 ## Live product
 
