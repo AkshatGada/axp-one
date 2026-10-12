@@ -10,6 +10,7 @@
     "demo:replay": "node scripts/demo/phase5.mjs",
     "demo:advertiser": "node scripts/demo/advertiser.mjs",
     "demo:product": "node scripts/product/dev-server.mjs",
+    "dev:accounts": "node scripts/accounts/dev-server.mjs",
     "demo:prepare": "node scripts/product/prepare-demo.mjs",
     "demo:prepare-devnet": "node scripts/product/prepare-devnet.mjs",
     "demo:v2": "node scripts/demo/v2.mjs",

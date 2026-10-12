@@ -27,7 +27,7 @@ const parse=text=>{if(text===null)return {schemaVersion:SCHEMA,snapshot:null,rev
  * Persistent KV must implement atomic compareAndSet. A plain get/set lease is
  * insufficient: stale workers could otherwise overwrite signed payment state. */
 export function createHostedProductWorkspace({kv,stateKey,id='demo',kind='financial',now=Date.now,leaseMs=240000,tempRoot=tmpdir()}={}) {
-  safeId(id);if(!['financial','organic'].includes(kind))fail('product_workspace_invalid');
+  safeId(id);if(!['financial','organic','accounts'].includes(kind))fail('product_workspace_invalid');
   if(typeof kv?.compareAndSet!=='function'||!Buffer.isBuffer(stateKey)||stateKey.length!==32)fail('product_durable_store_required');
   if(!Number.isSafeInteger(leaseMs)||leaseMs<1000||leaseMs>240000)fail('product_lease_invalid');
   const key=productStateKey(id,kind),aad=`${SCHEMA}:${id}:${kind}`;
@@ -75,6 +75,7 @@ export function createHostedProductWorkspace({kv,stateKey,id='demo',kind='financ
     finally{rmSync(dir,{recursive:true,force:true});}
   }
   async function importDirectory(source) {
+    if(kind==='accounts')fail('account_demo_import_forbidden',403);
     // Operator-only migration; refuse a running local payment worker and refuse
     // replacement of any hosted state, including an empty initialized workspace.
     if(['payment-worker.lock','tempo-payment-worker.lock'].some(name=>existsSync(join(source,name))))fail('product_local_worker_running');
