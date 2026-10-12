@@ -5,7 +5,11 @@
 .label { flex: none; margin: 0; font-size: 14px; font-weight: 500; color: var(--x-quiet); white-space: nowrap; }
 .view { flex: 1 1 auto; min-width: 0; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
 .track { display: flex; align-items: center; width: max-content; margin: 0; padding: 0; list-style: none; }
-.track li { flex: none; padding-right: clamp(40px, 4.6vw, 76px); font-family: var(--font-body); font-size: clamp(19px, 1.7vw, 25px); font-weight: 700; letter-spacing: -.03em; line-height: 1; color: var(--x-ink); opacity: .58; white-space: nowrap; }
+.track li { flex: none; display: flex; align-items: center; gap: 9px; padding-right: clamp(44px, 5vw, 84px); font-family: var(--font-body); font-size: 21px; font-weight: 700; letter-spacing: -.03em; line-height: 1; color: var(--x-ink); opacity: .6; white-space: nowrap; }
+/* No brand colours: each logo is drawn as one flat ink tone (the strip's opacity makes it grey).
+   A mark that needs its inner shading keeps it, in grey. */
+.track img { display: block; width: auto; max-width: none; filter: brightness(0); }
+.track img[data-tone="grey"] { filter: grayscale(1) contrast(1.15) brightness(.55); }
 :global(html[data-px-motion="on"]) .track { animation: usersRun 46s linear infinite; }
 .view:hover .track { animation-play-state: paused; }
 @keyframes usersRun { to { transform: translate3d(-50%, 0, 0); } }

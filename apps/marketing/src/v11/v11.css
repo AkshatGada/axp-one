@@ -82,7 +82,9 @@
 /* The page's rhythm: air between movements (the orchestrator's seam). */
 .v10 main > section[data-chapter] + section[data-chapter] { margin-top: clamp(72px, 9vw, 144px); }
 /* The shift ends on a full frame of its own; the film follows it directly. */
-.v10 main > section[data-chapter="02"] { margin-top: 0 !important; }
+/* The film follows the shift's closing line directly: it is pulled up over the empty paper left
+   under that line in the shift's last frame (measured in shift/ShiftStage.tsx). */
+.v10 main > section[data-chapter="02"] { margin-top: calc(-1 * var(--shift-slack, 0px)) !important; }
 
 /* Section entrances (shell/Rises.tsx): one quiet rise, once, as a marked element is reached. */
 html[data-px-motion="on"] .v10 [data-rise][data-state="wait"] { opacity: 0; }
