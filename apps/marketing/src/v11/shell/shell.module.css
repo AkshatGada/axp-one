@@ -45,6 +45,7 @@
 .col p { margin: 0; font-weight: 500; }
 .col a { color: var(--muted); text-decoration: none; }
 .col a:hover { color: var(--x-ink); text-decoration: underline; text-decoration-color: var(--x-blue); text-underline-offset: 5px; }
-.footMark { display: flex; align-items: baseline; margin: clamp(0px, .5vw, 8px) 0 0 -.03em; padding-bottom: .06em; font-family: var(--font-body); font-weight: 700; font-size: clamp(80px, 25.3vw, 472px); line-height: 1; letter-spacing: -.05em; white-space: nowrap; }
-.footMark i { flex: none; width: .155em; height: .155em; margin: 0 .03em 0 .04em; border-radius: .04em; background: var(--x-blue); }
+/* The footer wordmark is the masthead's .word, scaled up: same letter-spacing and dot proportions. */
+.footMark { display: flex; align-items: baseline; margin: clamp(0px, .5vw, 8px) 0 0 -.03em; padding-bottom: .06em; font-family: var(--font-body); font-weight: 700; font-size: clamp(80px, 24.6vw, 460px); line-height: 1; letter-spacing: -.045em; white-space: nowrap; color: var(--x-ink); }
+.footMark i { flex: none; width: .17em; height: .17em; margin: 0 .035em 0 .04em; border-radius: .04em; background: var(--x-blue); }
 @media (max-width: 699px) { .col { min-width: 40%; } }
