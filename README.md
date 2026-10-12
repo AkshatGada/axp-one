@@ -68,7 +68,7 @@ No package publication, mainnet readiness or public deployment is implied.
 
 - [Page and API map](pages.md): public routes, source owners and recorded/live boundaries.
 - [Current architecture](docs/ARCHITECTURE.md): request flow, data, decisions and channels.
-- [Demo runbook](docs/product/PRODUCT_DEMO.md): Tab/Enter presentation and payment recovery.
+- [Demo runbook](docs/product/PRODUCT_DEMO.md): explicit presentation actions and payment recovery; old Tab-autofill instructions are retired.
 - [Hosted operation](docs/product/HOSTING.md): private Blob persistence and server configuration.
 - [Publisher SDK](packages/publisher-sdk/README.md): hosted integration and local development.
 - [Advertiser journeys](docs/product/ADVERTISER_JOURNEYS.md) and [publisher journeys](docs/product/PUBLISHER_JOURNEYS.md).

@@ -3,16 +3,14 @@ import { useEffect, useRef, useState } from 'react';
 import { Ld } from '@axp/design-system/ledger';
 import { api, blankDraft, draftFields, decimal, toBaseUnits, type Bootstrap, type Campaign, type Draft, type Preview } from './model';
 import { currencyUnit, nativePayments, networkLabel, paymentReadiness } from './payment';
-import { DEMO_ADVERTISER, isDemoAutofillKey, missingDemoValues } from './demo';
 const STEPS = ['Offer', 'Context', 'Creative', 'Spend', 'Review'];
-type Props = { demoMode: boolean; initial?: Campaign; bootstrap: Bootstrap; account: { name: string; websiteURL: string }; onSaved: () => Promise<void>; onClose: () => void; onLaunched: (campaign: Campaign) => void; onDirtyChange: (dirty: boolean) => void };
-export function CampaignEditor({ demoMode, initial, bootstrap, account, onSaved, onClose, onLaunched, onDirtyChange }: Props) {
+type Props = { initial?: Campaign; bootstrap: Bootstrap; account: { name: string; websiteURL: string }; onSaved: () => Promise<void>; onClose: () => void; onLaunched: (campaign: Campaign) => void; onDirtyChange: (dirty: boolean) => void };
+export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, onLaunched, onDirtyChange }: Props) {
   const native = nativePayments(bootstrap);
-  const suggestion = bootstrap.demo?.advertiserSuggestion ?? DEMO_ADVERTISER;
   const [draft, setDraft] = useState<Draft>(() => initial ? draftFields(initial) : blankDraft());
   const network = draft.settlementNetwork ?? 'solana-devnet', unit = currencyUnit(native, network), readiness = paymentReadiness(bootstrap, network);
   const [step, setStep] = useState(0), [hints, setHints] = useState(initial?.contextHints.join('\n') ?? '');
-  const [money, setMoney] = useState({ maxBidBaseUnits: demoMode && !initial ? '' : decimal(draft.maxBidBaseUnits), budgetCapBaseUnits: demoMode && !initial ? '' : decimal(draft.budgetCapBaseUnits), depositBaseUnits: demoMode && !initial ? '' : decimal(draft.depositBaseUnits) });
+  const [money, setMoney] = useState({ maxBidBaseUnits: decimal(draft.maxBidBaseUnits), budgetCapBaseUnits: decimal(draft.budgetCapBaseUnits), depositBaseUnits: decimal(draft.depositBaseUnits) });
   const [errors, setErrors] = useState<Record<string, string>>({}), [busy, setBusy] = useState(false), [notice, setNotice] = useState(''), [dirty, setDirty] = useState(!initial);
   const [question, setQuestion] = useState(''), [preview, setPreview] = useState<Preview | null>(null), [previewBusy, setPreviewBusy] = useState(false);
   const form = useRef<HTMLFormElement>(null);
@@ -22,20 +20,6 @@ export function CampaignEditor({ demoMode, initial, bootstrap, account, onSaved,
   const [reviewed, setReviewed] = useState(false);
   const markDirty = () => { setDirty(true); setReviewed(false); };
   const patch = (key: keyof Draft, value: Draft[keyof Draft]) => { setDraft(d => ({ ...d, [key]: value })); markDirty(); setNotice(''); setPreview(null); setErrors(e => ({ ...e, [key]: '' })); };
-  useEffect(() => { if (demoMode && step < 4) form.current?.querySelector<HTMLElement>('input[name], textarea[name]')?.focus(); }, [step, demoMode]);
-  function fillStep() {
-    const current = { name: draft.name, brandName: draft.brandName, websiteURL: draft.websiteURL, productDescription: draft.productDescription, approvedText: draft.approvedText, contextHints: hints, ...money };
-    const values = missingDemoValues(step, current, suggestion);
-    if (!Object.keys(values).length) { setNotice('This step is already filled. Suggestions never overwrite your values.'); return; }
-    if (step === 0 || step === 2) setDraft(value => ({ ...value, ...values }));
-    else if (step === 1) setHints(values.contextHints ?? hints);
-    else if (step === 3) setMoney(value => ({ ...value, ...values }));
-    markDirty(); setErrors({}); setNotice(`${suggestion.brandName} suggestions filled the empty fields on this step. Review or edit them before continuing.`); setPreview(null);
-  }
-  function useSuggestedCapabilities() {
-    const allowed = suggestion.declaredCapabilities.filter(id => bootstrap.capabilities.some(cap => cap.id === id));
-    patch('declaredCapabilities', [...new Set([...draft.declaredCapabilities, ...allowed])]);
-  }
   const complete = (): Draft => ({ ...draftFields(draft), contextHints: hints.split(/\n/).map(v => v.trim()).filter(Boolean), ...Object.fromEntries(Object.entries(money).map(([k, v]) => [k, v.trim() ? toBaseUnits(v) ?? '0' : draft[k as keyof typeof money]])) });
   function validate(until = step) {
     const e: Record<string, string> = {};
@@ -117,14 +101,9 @@ export function CampaignEditor({ demoMode, initial, bootstrap, account, onSaved,
     <Ld.PageBar title={initial ? 'Continue your campaign' : 'Create advertiser & campaign'} sub={`Managed by ${account.name}. A distinct brand and website identify the advertiser behind this campaign.`} meta={<Ld.Tag tone="outline">{dirty ? 'Unsaved changes' : 'Saved draft'}</Ld.Tag>} actions={<Ld.Button variant="ghost" disabled={busy || previewBusy} onClick={() => { if (!dirty || window.confirm('Leave this editor? Unsaved changes will be lost. Save your draft first to keep them.')) onClose(); }}>Back to campaigns</Ld.Button>} />
     <div className="ad-steps" aria-label="Campaign setup steps">{STEPS.map((label, i) => <button key={label} type="button" aria-current={i === step ? 'step' : undefined} onClick={() => { if (i <= step || validate(i - 1)) setStep(i); }}><span>{i < step ? '✓' : i + 1}</span>{label}</button>)}</div>
     <div className="ad-editor-grid">
-      <form ref={form} onKeyDown={event => {
-        const field = event.target;
-        if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) || busy || previewBusy || event.ctrlKey || event.altKey || event.metaKey) return;
-        if (isDemoAutofillKey({enabled: demoMode, key: event.key, shiftKey: event.shiftKey, step, name: field.name, value: field.value, type: field instanceof HTMLTextAreaElement ? 'textarea' : field.type})) { event.preventDefault(); fillStep(); }
-      }} onSubmit={e => { e.preventDefault(); if (step < 4) { if (validate()) setStep(s => s + 1); } else void save(true); }} noValidate>
+      <form ref={form} onSubmit={e => { e.preventDefault(); if (step < 4) { if (validate()) setStep(s => s + 1); } else void save(true); }} noValidate>
         <Ld.Panel title={['Tell us about the offer', 'Guide your buying agent', 'Approve your Sponsored card', 'Set clear spending limits', 'Ready for review'][step]} sub={`Step ${step + 1} of 5`}>
           <div className="ad-form-fields">
-          {demoMode && step < 4 && <div className="ad-step-autofill"><div><span className="ld-label">{suggestion.brandName} demo suggestion</span><p className="ld-caption">Press <Ld.Key>Tab</Ld.Key> from an empty field to fill this step. The next Tab moves focus normally.</p></div><Ld.Button variant="secondary" size="sm" disabled={busy || previewBusy} onClick={fillStep}>Fill this step</Ld.Button></div>}
           {step === 0 && <>
             {!initial && bootstrap.presets.length > 0 && <Ld.Field label="Start with an example" hint="Examples are editable. Your campaign is saved separately."><select className="ld-select" defaultValue="" onChange={e => { if (e.target.value !== '') preset(Number(e.target.value)); }}><option value="">Start from scratch</option>{bootstrap.presets.map((p, i) => <option key={p.id ?? i} value={i}>{p.label ?? p.name ?? 'Example campaign'}</option>)}</select></Ld.Field>}
             {input('name', 'Campaign name', 'An internal name to help you find this campaign.')}
@@ -133,7 +112,7 @@ export function CampaignEditor({ demoMode, initial, bootstrap, account, onSaved,
           </>}
           {step === 1 && <>
             <Ld.Field label="Advertiser context hints" hint="One hint per line, up to 6. Tell Jev when your offer fits, when to skip, and which needs matter. These hints stay separate from the Sponsored text." error={errors.contextHints}><textarea className="ld-textarea" name="contextHints" rows={5} value={hints} onChange={e => { setHints(e.target.value); markDirty(); setPreview(null); }} aria-invalid={Boolean(errors.contextHints)} /></Ld.Field>
-            <fieldset className="ad-capabilities" tabIndex={-1} name="declaredCapabilities"><legend className="ld-label">Capabilities your offer supports</legend><p className="ld-secondary">Declare only features your offer actually provides. Publisher requirements can exclude a campaign.</p>{demoMode && <div className="ad-suggested-caps"><Ld.Button variant="secondary" disabled={busy || previewBusy} onClick={useSuggestedCapabilities}>Use suggested capabilities</Ld.Button><span className="ld-caption">Hardware wallet, offline key storage, Ethereum and Solana. Review each declaration.</span></div>}<input className="ld-input ad-cap-search" aria-label="Find a capability" placeholder="Find a capability" value={capQuery} onChange={e => setCapQuery(e.target.value)} /><div className="ad-capability-list">{bootstrap.capabilities.filter(cap => `${cap.label} ${cap.description ?? ''}`.toLowerCase().includes(capQuery.toLowerCase())).map(cap => <label key={cap.id} className="ad-capability"><input type="checkbox" checked={draft.declaredCapabilities.includes(cap.id)} onChange={e => patch('declaredCapabilities', e.target.checked ? [...draft.declaredCapabilities, cap.id] : draft.declaredCapabilities.filter(v => v !== cap.id))} /><span><strong>{cap.label}</strong>{cap.description && <small>{cap.description}</small>}</span></label>)}</div><span className="ld-caption">{draft.declaredCapabilities.length} capabilities declared</span>{errors.declaredCapabilities && <span className="ld-field-e">{errors.declaredCapabilities}</span>}</fieldset>
+            <fieldset className="ad-capabilities" tabIndex={-1} name="declaredCapabilities"><legend className="ld-label">Capabilities your offer supports</legend><p className="ld-secondary">Declare only features your offer actually provides. Publisher requirements can exclude a campaign.</p><input className="ld-input ad-cap-search" aria-label="Find a capability" placeholder="Find a capability" value={capQuery} onChange={e => setCapQuery(e.target.value)} /><div className="ad-capability-list">{bootstrap.capabilities.filter(cap => `${cap.label} ${cap.description ?? ''}`.toLowerCase().includes(capQuery.toLowerCase())).map(cap => <label key={cap.id} className="ad-capability"><input type="checkbox" checked={draft.declaredCapabilities.includes(cap.id)} onChange={e => patch('declaredCapabilities', e.target.checked ? [...draft.declaredCapabilities, cap.id] : draft.declaredCapabilities.filter(v => v !== cap.id))} /><span><strong>{cap.label}</strong>{cap.description && <small>{cap.description}</small>}</span></label>)}</div><span className="ld-caption">{draft.declaredCapabilities.length} capabilities declared</span>{errors.declaredCapabilities && <span className="ld-field-e">{errors.declaredCapabilities}</span>}</fieldset>
             <Ld.Callout>Jev reads your hints when evaluating a publisher opportunity. Capability declarations remain hard eligibility rules. ContextHint historical evidence, when available, has separate provenance.</Ld.Callout>
           </>}
           {step === 2 && <>

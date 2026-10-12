@@ -28,33 +28,6 @@ test('campaign state includes drafts once even when backend also provides a draf
   assert.equal(campaignRows({ campaigns: [campaign], drafts: [campaign] }).length, 1);
 });
 
-import { DEMO_ADVERTISER, missingDemoValues, isDemoAutofillKey } from './demo.ts';
-
-test('demo Tab only intercepts an empty named text field in an opted-in editable step', () => {
-  const base = { enabled: true, key: 'Tab', shiftKey: false, step: 0, name: 'name', value: '', type: 'text' };
-  assert.equal(isDemoAutofillKey(base), true);
-  for (const change of [{ enabled: false }, { shiftKey: true }, { value: 'My campaign' }, { key: 'Enter' }, { type: 'button' }, { type: 'checkbox' }, { name: 'capabilitySearch' }, { step: 4 }]) assert.equal(isDemoAutofillKey({ ...base, ...change }), false);
-  assert.equal(isDemoAutofillKey({ ...base, step: 2, name: 'approvedText', type: 'textarea' }), true);
-  assert.equal(isDemoAutofillKey({ ...base, step: 3, name: 'maxBidBaseUnits' }), true);
-});
-
-test('whole-step suggestions fill only missing fields and never silently declare capabilities or approve launch', () => {
-  const offer = missingDemoValues(0, { name: 'My own name', brandName: '', websiteURL: 'https://my.example/', productDescription: '' });
-  assert.deepEqual(Object.keys(offer).sort(), ['brandName', 'productDescription']);
-  assert.equal(offer.brandName, 'HarborKey');
-  const context = missingDemoValues(1, { contextHints: '' });
-  assert.deepEqual(Object.keys(context), ['contextHints']);
-  assert.equal('declaredCapabilities' in context, false);
-  assert.deepEqual(missingDemoValues(4, {}), {});
-  assert.deepEqual(missingDemoValues(3, { maxBidBaseUnits: '0.01', budgetCapBaseUnits: '', depositBaseUnits: '' }), { budgetCapBaseUnits: '0.016', depositBaseUnits: '0.02' });
-  assert.equal(DEMO_ADVERTISER.approvedText.includes(DEMO_ADVERTISER.contextHints[0]), false);
-});
-
-test('backend-provided advertiser suggestions supply exact money and offer values without changing keyboard boundaries', () => {
-  const suggestion = { ...DEMO_ADVERTISER, brandName: 'Backend fixture brand', maxBidBaseUnits: '1234' };
-  assert.equal(missingDemoValues(0, {}, suggestion).brandName, 'Backend fixture brand');
-  assert.equal(missingDemoValues(3, {}, suggestion).maxBidBaseUnits, '0.001234');
-});
 
 import { nativePayments, currencyUnit, launchNotice, paymentActions, paymentPhase, transactionURL } from './payment.ts';
 

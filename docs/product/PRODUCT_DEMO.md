@@ -155,7 +155,14 @@ same-turn retry does not silently issue a new paid request. A newly submitted us
 question has a fresh turn identity and is a new call. An explicit new conversation
 changes frequency scope, not campaign spend or daily provider caps.
 
-## Keyboard judge flow
+## Historical keyboard judge flow (retired)
+
+The instructions below describe the earlier recorded presentation. Tab autofill,
+the Demo autofill toggle and whole-step suggestions have since been removed from
+the product. For a new walkthrough, type campaign details or explicitly select an
+example; type or click a suggested question, then press Enter to send. Tab and
+Shift+Tab always navigate focus. Do not reset or re-fund historical state to
+reproduce this retired shortcut workflow.
 
 First show the landing story through Solana: what AXP does, ContextHint's existing
 marketer audience/data and the roles of Jev and payment channels. The compact

@@ -35,9 +35,9 @@ remain separate read-only evidence.
 
 1. Open the reference publisher chat and ask an arbitrary question. Example prompts
    help discover supported inventory, but no fixed scenario runs automatically.
-2. Choose a suggested question to autofill the composer, or press Tab in an empty
-   composer for the hardware-wallet question. Edit it, then press Enter to send;
-   Shift+Enter inserts a line, and subsequent Tab/Shift+Tab keep normal focus navigation. Each
+2. Explicitly choose a suggested question to fill the composer, or type your own.
+   Edit it, then press Enter to send. Shift+Enter inserts a line.
+   Tab and Shift+Tab only navigate focus; they never fill the composer. Each
    send creates a fresh turn and a fresh DeepSeek organic request. Without configured
    DeepSeek, sending is disabled with a setup requirement; no fixture is passed off
    as a live answer. A configured organic adapter uses only the sanitized question.
@@ -110,8 +110,8 @@ with `AXP_PRODUCT_STATE_DIR=local-state/product-devnet-presentation`,
 `AXP_PRODUCT_FINANCIAL_MODE=devnet`, `AXP_PRODUCT_DEVNET_SIGN=1` and
 `AXP_PRODUCT_DEMO_MODE=1`, then run `npm run demo:prepare-devnet`. Preparation
 funds three finalized channels for ClearVault, KeyArc and ColdNest, with zero model
-calls. The presenter creates HarborKey as advertiser four using editable Tab
-suggestions, then sends the editable chat question with Tab followed by Enter.
+calls. The presenter enters the fourth advertiser's details or explicitly selects
+an example, then types or selects a chat question before pressing Enter.
 These fictional advertiser identities have real test-USDC channels funded by one
 shared server-held demo sponsor, not independent advertiser wallet custody. The
 original MVP and synthetic workspace stay separate. The publisher SDK example must
@@ -149,4 +149,5 @@ Buyer context, ContextHint evidence, raw records, hashes and voucher details exp
 on demand. Payment preserves the distinction between accepted spend, authorization
 and finalized payout/refund. Refresh is read-only; receipt replay stays bound to the
 same award. Arrow keys select stages; Escape closes the view and restores focus.
-The composer retains editable Tab autofill and Enter submission.
+The composer uses Enter submission and Shift+Enter for new lines. Tab and Shift+Tab
+retain ordinary focus navigation, including when the composer is empty.
