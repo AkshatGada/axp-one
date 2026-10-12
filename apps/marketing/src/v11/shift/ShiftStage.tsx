@@ -208,13 +208,18 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
       }
       root.style.setProperty("--p", p || "0");
       root.dataset.ready = "";
+      // The empty paper under the closing line (the frame is a whole screen; the picture is not
+      // always). The next movement is pulled up by this much, so it follows the line directly.
+      const close = root.querySelector<HTMLElement>(`.${s.close}`);
+      const slack = close ? Math.max(0, Math.floor(root.getBoundingClientRect().bottom - close.getBoundingClientRect().bottom - 12)) : 0;
+      document.documentElement.style.setProperty("--shift-slack", `${slack}px`);
     };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(root);
     let live = true;
     void document.fonts?.ready.then(() => { if (live) measure(); });
-    return () => { live = false; ro.disconnect(); };
+    return () => { live = false; ro.disconnect(); document.documentElement.style.removeProperty("--shift-slack"); };
   }, [progress]);
 
   return (

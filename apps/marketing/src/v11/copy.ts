@@ -23,16 +23,31 @@ export const NAV = [
 export const COVER = {
   h1: "The advertising network for the agentic internet.",
   accent: "agentic internet.",
-  deck: "People now ask conversational AI apps what to buy. axp.one places one labelled ad below the answer, only when it fits.",
+  deck: "Reach people the moment they ask a conversational AI app what to buy. One labelled ad, below the answer, only when it fits.",
   primary: { label: "Open the advertiser dashboard", href: ADVERTISER_URL },
   secondary: { label: "Read the integration guide", href: GUIDE_URL },
   note: "Illustrative prompts.",
 };
 
-/** The companies that use the platform (the owner's list). Names only, set in type. */
-export const USERS = {
+/** The companies that use the platform (the owner's list). Each logo is the company's own file
+ *  from its official site, shown without its colours. `h` is the drawn height in px (optical);
+ *  `tone: "grey"` keeps a mark's inner shading, the default draws it as one flat tone;
+ *  `word` sets the name beside a mark that has no wordmark of its own. */
+export const USERS: { label: string; logos: { name: string; src: string; h: number; tone?: "grey"; word?: boolean }[] } = {
   label: "Used by teams at",
-  names: ["Bybit", "Polygon", "Sobha Realty", "Miden", "Billions", "Infinity", "Merlin AI", "Corsair", "Doe", "Conscious Engines", "Metaborong"],
+  logos: [
+    { name: "Bybit", src: "/customers/bybit.svg", h: 24 },
+    { name: "Polygon", src: "/customers/polygon.svg", h: 25 },
+    { name: "Sobha Realty", src: "/customers/sobha.svg", h: 38 },
+    { name: "Miden", src: "/customers/miden.svg", h: 25 },
+    { name: "Billions", src: "/customers/billions.svg", h: 24 },
+    { name: "Infinity", src: "/customers/infinity.png", h: 26 },
+    { name: "Merlin AI", src: "/customers/merlin.svg", h: 22 },
+    { name: "Corsair", src: "/customers/corsair.png", h: 28, tone: "grey", word: true },
+    { name: "Doe", src: "/customers/doe.svg", h: 25 },
+    { name: "Conscious Engines", src: "/customers/conscious.svg", h: 38 },
+    { name: "Metaborong", src: "/customers/metaborong.svg", h: 20, word: true },
+  ],
 };
 
 /** 01 The shift. */

@@ -20,7 +20,7 @@
   --sp: .29em;
   /* The field, and where it rests inside the plate it will become (0 top, 1 bottom). */
   --fh: clamp(60px, calc(var(--q) * .66), 100px);
-  --fy: .46;
+  --fy: .25;
   /* Marginal notes. */
   --nf: clamp(17px, 1.7vw, 28px);
   /* The three beats in which one phrase holds the stage alone. Each is 0, rises to 1, falls to 0;
