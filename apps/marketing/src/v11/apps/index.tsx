@@ -13,10 +13,10 @@ export default function Apps() {
     <Chapter id="apps" no={APPS.no} title={APPS.title} labelledBy="apps-h" className={s.root}>
       <div className="x-wrap">
         <header className={s.head}>
-          <h2 id="apps-h" className={`x-h2 ${s.h}`}>{APPS.h}</h2>
+          <h2 id="apps-h" className={`x-h2 ${s.h}`} data-rise="">{APPS.h}</h2>
         </header>
         <Plate />
-        <div className={s.close}>
+        <div className={s.close} data-rise="">
           <p className={`x-h3 ${s.code}`}>{APPS.code}</p>
           <Action href={APPS.action.href} className={s.action}>{APPS.action.label}</Action>
         </div>

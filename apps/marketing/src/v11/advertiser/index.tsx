@@ -18,7 +18,7 @@ export default function Advertiser() {
     <Chapter id="advertisers" no={ADVERTISERS.no} title={ADVERTISERS.title} labelledBy="advertisers-h" className={c.root}>
       <div className="x-wrap">
         <div className={`x-grid ${c.head}`}>
-          <h2 id="advertisers-h" className={`x-h2 ${c.h}`}>{ADVERTISERS.h}</h2>
+          <h2 id="advertisers-h" className={`x-h2 ${c.h}`} data-rise="">{ADVERTISERS.h}</h2>
         </div>
 
         <div className={c.parts}>
@@ -31,7 +31,7 @@ export default function Advertiser() {
           ))}
         </div>
 
-        <div className={c.end}>
+        <div className={c.end} data-rise="">
           <Action href={ADVERTISERS.action.href}>{ADVERTISERS.action.label}</Action>
         </div>
       </div>

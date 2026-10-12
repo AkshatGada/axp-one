@@ -13,7 +13,7 @@ export default function Footer() {
   return (
     <footer className={s.foot}>
       <div className={`x-wrap ${s.footIn}`}>
-        <div className={s.footTop}>
+        <div className={s.footTop} data-rise="">
           <p className={s.footLine}>{FOOTER.line}</p>
           <nav className={s.cols} aria-label="Footer">
             {COLS.map((c) => (
@@ -24,7 +24,7 @@ export default function Footer() {
             ))}
           </nav>
         </div>
-        <p className={s.footMark} aria-label="axp.one"><span aria-hidden>axp</span><i aria-hidden /><span aria-hidden>one</span></p>
+        <p className={s.footMark} aria-label="axp.one" data-rise="mark"><span aria-hidden>axp</span><i aria-hidden /><span aria-hidden>one</span></p>
       </div>
     </footer>
   );

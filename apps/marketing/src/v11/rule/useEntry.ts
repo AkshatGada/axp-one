@@ -40,8 +40,8 @@ export function useEntry<T extends HTMLElement>(amount = 0.3, linger = 700) {
       ([e]) => {
         if (!e) return;
         if (e.boundingClientRect.top < 0) return finish(undefined);
-        // Arrived well inside the screen in one step (a jump, not a scroll): simply whole.
-        if (e.intersectionRatio >= share) return finish(e.boundingClientRect.top < window.innerHeight * 0.5 ? undefined : "play");
+        // On screen from below, by a scroll or a jump: the performance always plays, from its start.
+        if (e.intersectionRatio >= share) return finish("play");
         if (e.isIntersecting && !timer) timer = window.setTimeout(() => finish("play"), linger);
       },
       { threshold: [0, share, 1] },

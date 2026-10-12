@@ -23,7 +23,7 @@ export function Chapter({ id, no, title, note, bare, labelledBy, className, chil
 /** The folio line that opens a movement: "01  THE SHIFT". Use it yourself if you render `bare`. */
 export function ChapterMark({ no, title, note, className }: { no: string; title?: string; note?: string; className?: string }) {
   return (
-    <p className={`${s.mark}${className ? ` ${className}` : ""}`}>
+    <p className={`${s.mark}${className ? ` ${className}` : ""}`} data-rise="">
       <span className={s.markNo}>{no}</span>
       {title ? <span className={s.markTitle}>{title}</span> : null}
       {note ? <span className={s.markNote}>{note}</span> : null}

@@ -35,11 +35,11 @@ function Body({ d }: { d: DoorCopy }) {
 export default function Doors() {
   return (
     <section id="start" className={s.close} aria-labelledby="start-h">
-      <div className="x-wrap">
+      <div className="x-wrap" data-rise="">
         <Seen className={s.panel}>
           <div className={s.top}>
             <Wall />
-            <h2 id="start-h" className={s.h2}>{DOORS.h}</h2>
+            <h2 id="start-h" className={s.h2} data-rise="">{DOORS.h}</h2>
           </div>
           <i className={s.perf} aria-hidden />
           <ul className={s.doors}>

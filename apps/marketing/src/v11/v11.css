@@ -83,3 +83,11 @@
 .v10 main > section[data-chapter] + section[data-chapter] { margin-top: clamp(72px, 9vw, 144px); }
 /* The shift ends on a full frame of its own; the film follows it directly. */
 .v10 main > section[data-chapter="02"] { margin-top: 0 !important; }
+
+/* Section entrances (shell/Rises.tsx): one quiet rise, once, as a marked element is reached. */
+html[data-px-motion="on"] .v10 [data-rise][data-state="wait"] { opacity: 0; }
+html[data-px-motion="on"] .v10 [data-rise][data-state="play"] { animation: x-rise 820ms var(--x-out) var(--rise-d, 0ms) both; }
+html[data-px-motion="on"] .v10 [data-rise="mark"][data-state="play"] { animation: x-rise-mark 1100ms var(--x-out) both; }
+@keyframes x-rise { from { opacity: 0; transform: translateY(18px); } }
+@keyframes x-rise-mark { from { opacity: 0; transform: translateY(.12em); } }
+@media (prefers-reduced-motion: reduce) { .v10 [data-rise] { animation: none !important; opacity: 1 !important; } }

@@ -19,12 +19,12 @@ export default function Rule() {
       <Chapter id="payments" no={PAY.no} title={PAY.title} labelledBy="payments-h" className={s.root}>
         <div className="x-wrap">
           <header className={s.head}>
-            <h2 id="payments-h" className={`x-h2 ${s.h}`}>
+            <h2 id="payments-h" className={`x-h2 ${s.h}`} data-rise="">
               {sentences(PAY.h).map((t, i) => (
                 <span key={t}>{i ? " " : null}{t}</span>
               ))}
             </h2>
-            <p className={`x-deck ${s.deck}`}>{PAY.deck}</p>
+            <p className={`x-deck ${s.deck}`} data-rise="">{PAY.deck}</p>
           </header>
           <Figure />
         </div>

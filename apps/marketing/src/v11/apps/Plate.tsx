@@ -92,7 +92,7 @@ export default function Plate() {
       if (enteredRef.current) return;
       const m = measure();
       if (m.ratio < 0.28 && !m.above) return;
-      enter(m.above || m.ratio > 0.62);
+      enter(m.above);
     };
     // The accrual tab: seen once most of it is on screen (or it has been passed).
     if (tagRef.current) {
