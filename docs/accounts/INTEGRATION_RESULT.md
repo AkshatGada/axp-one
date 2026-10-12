@@ -9,7 +9,7 @@ After reload no private profile forms or authenticated identity returned. See
 `END_TO_END_ACCEPTANCE.md`. Labelled test profiles remain in the owner's account.
 
 The accounts source commits `035b0c4` and `fe90f8c` were merged locally into the
-primary checkout `/Users/akshat/agentic-dsp`, keeping its existing `frontend`
+primary checkout `<repository-root>`, keeping its existing `frontend`
 branch, with merge commit `141fa362c34ce21fd2e716a56d60fdb83fa7f7f4`.
 The merge was conflict-free. No branch switch, stash, reset, push or deployment.
 
@@ -30,8 +30,8 @@ to Git. Dedicated Supabase schema was already applied; the merge does not rerun 
 
 ## Post-merge checks
 
-- Main repository suite: **611 tests, 605 passed, zero failed, six skipped**.
-- Main product UI TypeScript check and production build passed, 27 generated
+- Integration QA repository suite: **611 tests, 605 passed, zero failed, six skipped**.
+- Integration QA product UI TypeScript check and production build passed, 27 generated
   pages including account, advertiser dashboard, publisher chat and SDK guide.
 - Repository portability/staged hygiene passed with no findings.
 - Browser checks used the main checkout's newly compiled product UI on a separate
@@ -47,11 +47,11 @@ to Git. Dedicated Supabase schema was already applied; the merge does not rerun 
 Source is merged locally, not pushed or deployed. The existing hosted shared demo
 and private funded state were not touched. Public account enablement still needs
 its explicit environment configuration, exact HTTPS auth redirects and hosted
-acceptance. The running local sign-out test used the isolated worktree; its
+acceptance. The running local sign-out test used the isolated checkout; its
 ignored session/configuration state was not copied into the main checkout or Git.
 The primary repo can run its own `npm run dev:accounts` after setting the documented
 ignored local configuration. Supabase is the profile source of truth, so profiles
-do not depend on the isolated worktree's local storage.
+do not depend on the isolated checkout's local storage.
 
 Private campaign ownership, app-bound SDK credentials, enforced serving/payout
 rules and real customer funding remain separate product integration gates.

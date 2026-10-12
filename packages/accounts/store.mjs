@@ -1,4 +1,5 @@
-import {randomUUID} from 'node:crypto';
+import {createHash, randomUUID} from 'node:crypto';
+import {APP_SCOPES, RESOURCE_LIMITS, validateCampaignInput, validateCredentialInput} from './resources.mjs';
 import {DatabaseSync} from 'node:sqlite';
 import {chmodSync, closeSync, constants, existsSync, fstatSync, lstatSync, mkdirSync, openSync} from 'node:fs';
 import {join, resolve} from 'node:path';
@@ -10,6 +11,15 @@ import {join, resolve} from 'node:path';
 const DAY = 86_400_000;
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 const fail = (code, status = 400) => {throw Object.assign(new Error(code), {code, status});};
+// Canonical JSON v1: sorted object keys, array order preserved, no whitespace.
+// The SQL implementation uses the same UTF-8 bytes (not jsonb's display format).
+function canonical(value) {
+  if (Array.isArray(value)) return '[' + value.map(canonical).join(',') + ']';
+  if (value && typeof value === 'object') return '{' + Object.keys(value).sort()
+    .map(key => JSON.stringify(key) + ':' + canonical(value[key])).join(',') + '}';
+  return JSON.stringify(value);
+}
+const contentHash = input => createHash('sha256').update(canonical(input)).digest('hex');
 function exact(input, fields) {
   if (!input || typeof input !== 'object' || Array.isArray(input) ||
       ![Object.prototype, null].includes(Object.getPrototypeOf(input))) fail('invalid_input');
@@ -105,6 +115,13 @@ export function validateAccountInput(operation, input) {
   fail('invalid_input');
 }
 
+export function validateCampaignServingInput(input) {
+  exact(input, ['expectedVersion', 'enabled']);
+  if (!Number.isSafeInteger(input.expectedVersion) || input.expectedVersion < 1 ||
+      typeof input.enabled !== 'boolean') fail('invalid_input');
+  return {expectedVersion: input.expectedVersion, enabled: input.enabled};
+}
+
 export function createAccountStore({dir, now = Date.now} = {}) {
   if (typeof dir !== 'string' || !dir || typeof now !== 'function') fail('invalid_input');
   const directory = resolve(dir);
@@ -158,6 +175,50 @@ export function createAccountStore({dir, now = Date.now} = {}) {
         createdAt INTEGER NOT NULL, updatedAt INTEGER NOT NULL
       ) STRICT;
       CREATE INDEX IF NOT EXISTS apps_org ON apps(organizationId);
+      CREATE UNIQUE INDEX IF NOT EXISTS advertisers_binding ON advertisers(id,organizationId);
+      CREATE UNIQUE INDEX IF NOT EXISTS apps_binding ON apps(id,organizationId);
+      CREATE TABLE IF NOT EXISTS account_campaigns (
+        id TEXT PRIMARY KEY, organizationId TEXT NOT NULL REFERENCES organizations(id),
+        advertiserId TEXT NOT NULL, version INTEGER NOT NULL CHECK(version>0),
+        status TEXT NOT NULL CHECK(status IN ('draft','approved')), input TEXT NOT NULL,
+        approvedContentHash TEXT, createdAt INTEGER NOT NULL, updatedAt INTEGER NOT NULL,
+        FOREIGN KEY(advertiserId,organizationId) REFERENCES advertisers(id,organizationId),
+        CHECK((status='draft' AND approvedContentHash IS NULL) OR
+          (status='approved' AND length(approvedContentHash)=64))
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS account_campaigns_org ON account_campaigns(organizationId,createdAt,id);
+      CREATE UNIQUE INDEX IF NOT EXISTS account_campaigns_binding ON account_campaigns(id,organizationId);
+      CREATE TABLE IF NOT EXISTS account_campaign_serving (
+        campaignId TEXT PRIMARY KEY, organizationId TEXT NOT NULL,
+        version INTEGER NOT NULL CHECK(version>0), approvedContentHash TEXT,
+        enabled INTEGER NOT NULL CHECK(enabled IN (0,1)),
+        financialMode TEXT NOT NULL CHECK(financialMode='synthetic'), updatedAt INTEGER NOT NULL,
+        advertiserId TEXT NOT NULL, advertiserName TEXT, advertiserWebsite TEXT,
+        FOREIGN KEY(campaignId,organizationId) REFERENCES account_campaigns(id,organizationId),
+        FOREIGN KEY(advertiserId,organizationId) REFERENCES advertisers(id,organizationId),
+        CHECK(enabled=0 OR (length(approvedContentHash)=64 AND advertiserName IS NOT NULL AND advertiserWebsite IS NOT NULL))
+      ) STRICT;
+      CREATE TRIGGER IF NOT EXISTS account_campaign_serving_invalidate AFTER UPDATE ON account_campaigns
+      WHEN NEW.version<>OLD.version OR NEW.status<>'approved' OR NEW.approvedContentHash IS NOT OLD.approvedContentHash
+      BEGIN UPDATE account_campaign_serving SET enabled=0,updatedAt=NEW.updatedAt WHERE campaignId=NEW.id; END;
+      CREATE TABLE IF NOT EXISTS account_app_credentials (
+        id TEXT PRIMARY KEY, organizationId TEXT NOT NULL REFERENCES organizations(id),
+        appId TEXT NOT NULL, label TEXT NOT NULL, keyHash TEXT NOT NULL UNIQUE
+          CHECK(length(keyHash)=64 AND keyHash NOT GLOB '*[^a-f0-9]*'),
+        createdAt INTEGER NOT NULL, expiresAt INTEGER NOT NULL, revokedAt INTEGER,
+        FOREIGN KEY(appId,organizationId) REFERENCES apps(id,organizationId),
+        CHECK(expiresAt=createdAt+2592000000)
+      ) STRICT;
+      CREATE INDEX IF NOT EXISTS account_app_credentials_app ON account_app_credentials(appId,createdAt,id);
+      CREATE TRIGGER IF NOT EXISTS account_campaign_binding BEFORE UPDATE ON account_campaigns
+      WHEN NEW.id<>OLD.id OR NEW.organizationId<>OLD.organizationId OR
+        NEW.advertiserId<>OLD.advertiserId OR NEW.createdAt<>OLD.createdAt
+      BEGIN SELECT RAISE(ABORT,'immutable_binding'); END;
+      CREATE TRIGGER IF NOT EXISTS account_credential_binding BEFORE UPDATE ON account_app_credentials
+      WHEN NEW.id<>OLD.id OR NEW.organizationId<>OLD.organizationId OR NEW.appId<>OLD.appId OR
+        NEW.keyHash<>OLD.keyHash OR NEW.label<>OLD.label OR NEW.createdAt<>OLD.createdAt OR
+        NEW.expiresAt<>OLD.expiresAt OR (OLD.revokedAt IS NOT NULL AND NEW.revokedAt IS NOT OLD.revokedAt)
+      BEGIN SELECT RAISE(ABORT,'immutable_credential'); END;
       CREATE TABLE IF NOT EXISTS sessions (
         hash TEXT PRIMARY KEY, userId TEXT NOT NULL REFERENCES users(id),
         accessToken TEXT NOT NULL, refreshToken TEXT NOT NULL, expiresAt INTEGER NOT NULL,
@@ -192,6 +253,40 @@ export function createAccountStore({dir, now = Date.now} = {}) {
   };
   const appRecord = row => row ? {...row, allowedOrigins: JSON.parse(row.allowedOrigins),
     blockedCategories: JSON.parse(row.blockedCategories), payout: JSON.parse(row.payout)} : null;
+  const campaignRecord = row => row ? {...row, input: JSON.parse(row.input), servingStatus: 'not_connected'} : null;
+  // Frozen enrollment DTO: advertiser snapshots are only for trusted matching.
+  const servingRecord = row => row ? {campaignId: row.campaignId, organizationId: row.organizationId,
+    version: row.version, approvedContentHash: row.approvedContentHash, enabled: !!row.enabled,
+    financialMode: row.financialMode, updatedAt: row.updatedAt} : null;
+  const credentialRecord = row => row ? {id: row.id, organizationId: row.organizationId,
+    appId: row.appId, publisherId: `app:${row.appId}`, label: row.label, scopes: [...APP_SCOPES],
+    createdAt: row.createdAt, expiresAt: row.expiresAt, revokedAt: row.revokedAt} : null;
+  const ownedApp = (userId, orgId, appId) => {
+    owned(userId, orgId);
+    const app = get('SELECT * FROM apps WHERE id=? AND organizationId=?', resourceIdentity(appId), orgId);
+    if (!app) fail('not_found', 404);
+    return app;
+  };
+  const ownedCampaign = (userId, orgId, campaignId) => {
+    owned(userId, orgId);
+    const row = get('SELECT * FROM account_campaigns WHERE id=? AND organizationId=?', resourceIdentity(campaignId), orgId);
+    if (!row) fail('not_found', 404);
+    return row;
+  };
+  const ownedCredential = (userId, orgId, appId, keyId) => {
+    ownedApp(userId, orgId, appId);
+    const row = get('SELECT * FROM account_app_credentials WHERE id=? AND organizationId=? AND appId=?', resourceIdentity(keyId), orgId, appId);
+    if (!row) fail('not_found', 404);
+    return row;
+  };
+  const insertCredential = (orgId, appId, input, time) => {
+    const {label, keyHash} = validateCredentialInput(input, {withHash: true});
+    if (get('SELECT count(*) AS n FROM account_app_credentials WHERE appId=? AND revokedAt IS NULL AND expiresAt>?', appId, time).n >= RESOURCE_LIMITS.activeKeys) fail('limit_exceeded', 409);
+    if (get('SELECT id FROM account_app_credentials WHERE keyHash=?', keyHash)) fail('credential_hash_conflict', 409);
+    const id = randomUUID();
+    run('INSERT INTO account_app_credentials VALUES(?,?,?,?,?,?,?,NULL)', id, orgId, appId, label, keyHash, time, time + RESOURCE_LIMITS.keyLifetimeMs);
+    return credentialRecord(get('SELECT * FROM account_app_credentials WHERE id=?', id));
+  };
   const transaction = fn => {
     db.exec('BEGIN IMMEDIATE');
     try {const result = fn(); db.exec('COMMIT'); return result;}
@@ -208,7 +303,7 @@ export function createAccountStore({dir, now = Date.now} = {}) {
     }
   };
 
-  return {
+  const store = {
     // TRUST BOUNDARY: caller must pass the provider-verified identity, never a
     // request body or an unverified decoded JWT. Email is metadata, not a key.
     ensureUser: safe(input => {
@@ -322,4 +417,106 @@ export function createAccountStore({dir, now = Date.now} = {}) {
       if (!closed) {db.close(); closed = true;}
     },
   };
+  // Additive capabilities are non-enumerable to preserve the original profile
+  // adapter's key enumeration contract. This factory is explicitly an offline
+  // SQLite fixture; real-provider wiring must install the Supabase repository.
+  const resources = {
+    campaignServing: safe((userId, orgId, campaignId) => {
+      ownedCampaign(userId, orgId, campaignId);
+      return servingRecord(get('SELECT * FROM account_campaign_serving WHERE campaignId=? AND organizationId=?', campaignId, orgId));
+    }),
+    setCampaignServing: safe((userId, orgId, campaignId, input) => transaction(() => {
+      const row = ownedCampaign(userId, orgId, campaignId);
+      const {expectedVersion, enabled} = validateCampaignServingInput(input);
+      if (expectedVersion !== row.version) fail('campaign_version_conflict', 409);
+      if (enabled && (row.status !== 'approved' || row.approvedContentHash !== contentHash(JSON.parse(row.input))))
+        fail('campaign_approval_required', 409);
+      const advertiser = get('SELECT * FROM advertisers WHERE id=? AND organizationId=?', row.advertiserId, orgId);
+      if (!advertiser) fail('not_found', 404);
+      const previous = get('SELECT * FROM account_campaign_serving WHERE campaignId=?', row.id);
+      const keepSnapshot = previous?.enabled && enabled && previous.version === row.version &&
+        previous.approvedContentHash === row.approvedContentHash;
+      // Profiles may use loopback development URLs, delivered ad destinations
+      // may not. Reject opt-in before one owner's record can poison inventory.
+      if (enabled && !(keepSnapshot ? previous.advertiserWebsite : advertiser.website).startsWith('https://'))
+        fail('campaign_destination_invalid', 409);
+      run(`INSERT INTO account_campaign_serving VALUES(?,?,?,?,?,'synthetic',?,?,?,?)
+        ON CONFLICT(campaignId) DO UPDATE SET version=excluded.version,approvedContentHash=excluded.approvedContentHash,
+        enabled=excluded.enabled,updatedAt=excluded.updatedAt,advertiserName=excluded.advertiserName,
+        advertiserWebsite=excluded.advertiserWebsite`, row.id, orgId, row.version, row.approvedContentHash,
+      Number(enabled), timestamp(), advertiser.id,
+      enabled && !keepSnapshot ? advertiser.name : previous?.advertiserName ?? null,
+      enabled && !keepSnapshot ? advertiser.website : previous?.advertiserWebsite ?? null);
+      return servingRecord(get('SELECT * FROM account_campaign_serving WHERE campaignId=?', row.id));
+    })),
+    // Explicit offline fixture capability only; real owner stores intentionally
+    // have no catalogue method or privileged credential.
+    networkCampaigns: safe(() => all(`SELECT c.*,s.advertiserName,s.advertiserWebsite,
+      s.updatedAt AS servingUpdatedAt FROM account_campaigns c
+      JOIN account_campaign_serving s ON s.campaignId=c.id AND s.organizationId=c.organizationId
+      JOIN advertisers a ON a.id=c.advertiserId AND a.organizationId=c.organizationId
+      WHERE s.enabled=1 AND c.status='approved' AND s.version=c.version
+        AND s.approvedContentHash=c.approvedContentHash AND s.advertiserId=c.advertiserId
+      ORDER BY c.createdAt,c.id LIMIT 100`).filter(row => row.approvedContentHash === contentHash(JSON.parse(row.input)))
+      .map(row => {
+        const {advertiserName, advertiserWebsite, servingUpdatedAt, ...campaign} = row;
+        return {campaign: campaignRecord(campaign),
+          advertiser: {id: campaign.advertiserId, name: advertiserName, website: advertiserWebsite},
+          enrollment: servingRecord({campaignId: campaign.id, organizationId: campaign.organizationId,
+            version: campaign.version, approvedContentHash: campaign.approvedContentHash, enabled: 1,
+            financialMode: 'synthetic', updatedAt: servingUpdatedAt})};
+      })),
+    campaigns: safe((userId, orgId) => {
+      owned(userId, orgId);
+      return all('SELECT * FROM account_campaigns WHERE organizationId=? ORDER BY createdAt,id', orgId).map(campaignRecord);
+    }),
+    campaign: safe((userId, orgId, campaignId) => campaignRecord(ownedCampaign(userId, orgId, campaignId))),
+    saveCampaign: safe((userId, orgId, input, campaignId = null) => transaction(() => {
+      owned(userId, orgId);
+      const previous = campaignId === null ? null : ownedCampaign(userId, orgId, campaignId);
+      const advertiser = get('SELECT id FROM advertisers WHERE organizationId=?', orgId);
+      if (!advertiser) fail('not_found', 404);
+      const normalized = validateCampaignInput(input), time = timestamp();
+      if (!previous && get('SELECT count(*) AS n FROM account_campaigns WHERE organizationId=?', orgId).n >= RESOURCE_LIMITS.campaigns) fail('limit_exceeded', 409);
+      const id = previous?.id ?? randomUUID();
+      if (previous) run("UPDATE account_campaigns SET input=?,version=version+1,status='draft',approvedContentHash=NULL,updatedAt=? WHERE id=?", JSON.stringify(normalized), time, id);
+      else run("INSERT INTO account_campaigns VALUES(?,?,?,1,'draft',?,NULL,?,?)", id, orgId, advertiser.id, JSON.stringify(normalized), time, time);
+      return campaignRecord(get('SELECT * FROM account_campaigns WHERE id=?', id));
+    })),
+    approveCampaign: safe((userId, orgId, campaignId, expectedVersion) => transaction(() => {
+      const row = ownedCampaign(userId, orgId, campaignId);
+      if (!Number.isSafeInteger(expectedVersion) || expectedVersion < 1) fail('invalid_input');
+      if (row.version !== expectedVersion) fail('campaign_version_conflict', 409);
+      run("UPDATE account_campaigns SET status='approved',approvedContentHash=?,updatedAt=? WHERE id=?", contentHash(JSON.parse(row.input)), timestamp(), row.id);
+      return campaignRecord(get('SELECT * FROM account_campaigns WHERE id=?', row.id));
+    })),
+    appCredentials: safe((userId, orgId, appId) => {
+      ownedApp(userId, orgId, appId);
+      return all('SELECT * FROM account_app_credentials WHERE appId=? AND organizationId=? ORDER BY createdAt,id', appId, orgId).map(credentialRecord);
+    }),
+    issueAppCredential: safe((userId, orgId, appId, input) => transaction(() => {
+      ownedApp(userId, orgId, appId);
+      return insertCredential(orgId, appId, input, timestamp());
+    })),
+    revokeAppCredential: safe((userId, orgId, appId, keyId) => transaction(() => {
+      const row = ownedCredential(userId, orgId, appId, keyId);
+      run('UPDATE account_app_credentials SET revokedAt=coalesce(revokedAt,?) WHERE id=?', timestamp(), row.id);
+      return credentialRecord(get('SELECT * FROM account_app_credentials WHERE id=?', row.id));
+    })),
+    rotateAppCredential: safe((userId, orgId, appId, keyId, input) => transaction(() => {
+      const row = ownedCredential(userId, orgId, appId, keyId), time = timestamp();
+      if (row.revokedAt !== null || row.expiresAt <= time) fail('credential_not_active', 409);
+      run('UPDATE account_app_credentials SET revokedAt=? WHERE id=?', time, row.id);
+      return insertCredential(orgId, appId, input, time);
+    })),
+    resolveAppCredential: safe(keyHash => {
+      if (typeof keyHash !== 'string' || !/^[a-f0-9]{64}$/.test(keyHash)) return null;
+      const row = get('SELECT * FROM account_app_credentials WHERE keyHash=? AND revokedAt IS NULL AND expiresAt>?', keyHash, timestamp());
+      if (!row) return null;
+      const app = get('SELECT * FROM apps WHERE id=? AND organizationId=?', row.appId, row.organizationId);
+      return app ? {credential: credentialRecord(row), app: appRecord(app)} : null;
+    }),
+  };
+  Object.defineProperties(store, Object.fromEntries(Object.entries(resources).map(([key, value]) => [key, {value}])));
+  return store;
 }

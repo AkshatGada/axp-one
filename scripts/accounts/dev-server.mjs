@@ -1,4 +1,5 @@
-// Isolated identity/profile server: no product service, model clients or wallet adapter.
+// Isolated account server; shared synthetic serving is separately opt-in.
+// No demo fallback, organic-answer provider or native wallet/payment adapter.
 import {createServer,request as httpRequest} from 'node:http';
 import {spawn} from 'node:child_process';
 import {resolve} from 'node:path';
@@ -25,7 +26,7 @@ const server=createServer((req,res)=>{
   const proxy=httpRequest({hostname:'127.0.0.1',port:uiPort,path:uiPath,method:req.method,headers:req.headers},upstream=>{res.writeHead(upstream.statusCode,upstream.headers);upstream.pipe(res);});
   proxy.on('error',()=>{if(!res.headersSent)res.writeHead(503,{'content-type':'text/plain'});res.end('Account UI is starting. Refresh shortly.');});req.pipe(proxy);
 });
-server.listen(port,'127.0.0.1',()=>console.log(`AXP accounts: http://127.0.0.1:${port}/account/\nSupabase: ${api.initError?'configuration required':'configured'}. Profiles only; ad serving and native funding are disabled.`));
+server.listen(port,'127.0.0.1',()=>console.log(`AXP accounts: http://127.0.0.1:${port}/account/\nSupabase: ${api.initError?'configuration required':'configured'}. Shared serving is opt-in and synthetic only when separately configured. Native funding remains disabled.`));
 let stopping=false;
 function stop(){if(stopping)return;stopping=true;ui?.kill('SIGTERM');server.close();server.closeAllConnections();setTimeout(()=>process.exit(0),250).unref();}
 for(const signal of ['SIGINT','SIGTERM'])process.once(signal,stop);

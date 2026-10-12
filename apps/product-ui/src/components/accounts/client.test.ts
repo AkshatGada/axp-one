@@ -35,6 +35,84 @@ test('reads are same-origin, cookie-only and no-store', async () => {
   }
 });
 
+test('concurrent owner and finance reads are ordered through body consumption', async () => {
+  const calls: string[] = [];
+  let release!: (value: unknown) => void;
+  const client = new AccountsClient(async url => {
+    calls.push(String(url));
+    if (calls.length === 1) return json(session);
+    if (calls.length === 2) return { ok: true, json: () => new Promise(resolve => { release = resolve; }) } as Response;
+    return json({ wallet: null });
+  });
+  await client.session();
+  const first = client.organization('org-a');
+  const second = client.financeRequest('/organizations/org-a/apps/app-a/wallet');
+  await Promise.resolve();
+  assert.equal(calls.length, 2);
+  release({ organization, advertiser: null, apps: [] });
+  await Promise.all([first, second]);
+  assert.deepEqual(calls.slice(1), ['/api/accounts/organizations/org-a', '/api/accounts/organizations/org-a/apps/app-a/wallet']);
+});
+
+test('a rejected request releases the queue without retrying the mutation', async () => {
+  const { client, calls } = fixture([json(session), json({ error: 'product_busy_retry' }, 429), json({ organization, advertiser: null, apps: [] })]);
+  await client.session();
+  const write = client.profile('Name');
+  const read = client.organization('org-a');
+  await assert.rejects(write, { status: 429 });
+  await read;
+  assert.equal(calls.length, 3);
+  assert.equal(calls.filter(call => call.options.method === 'POST').length, 1);
+});
+
+test('a transport failure releases queued reads without a replacement send', async () => {
+  let count = 0;
+  const client = new AccountsClient(async () => {
+    if (++count === 1) return json(session);
+    if (count === 2) throw new Error('fixture connection lost');
+    return json({ organization, advertiser: null, apps: [] });
+  });
+  await client.session();
+  const failed = client.profile('Name');
+  const read = client.organization('org-a');
+  await assert.rejects(failed, { code: 'connection_failed' });
+  await read;
+  assert.equal(count, 3);
+});
+
+test('session changes discard in-flight and queued owner requests before another send', async () => {
+  let release!: (response: Response) => void;
+  let count = 0;
+  const client = new AccountsClient(async () => ++count === 1 ? json(session) : new Promise(resolve => { release = resolve; }));
+  await client.session();
+  const reading = client.organization('org-a');
+  const writing = client.profile('Name');
+  const results = Promise.allSettled([reading, writing]);
+  client.clearSession();
+  release(json({ organization, advertiser: null, apps: [] }));
+  for (const result of await results) {
+    assert.equal(result.status, 'rejected');
+    if (result.status === 'rejected') assert.equal(result.reason.code, 'session_changed');
+  }
+  assert.equal(count, 2);
+});
+
+test('signout fences queued owner actions immediately and uses its captured CSRF', async () => {
+  let release!: (response: Response) => void;
+  const calls: RequestInit[] = [];
+  const client = new AccountsClient(async (_url, options) => {
+    calls.push(options!);
+    return calls.length === 1 ? json(session) : new Promise(resolve => { release = resolve; });
+  });
+  await client.session();
+  const signingOut = client.signout();
+  await assert.rejects(client.profile('Name'), { code: 'session_required' });
+  assert.equal(new Headers(calls[1].headers).get('x-axp-csrf'), session.csrf);
+  release(json({ signedOut: true }));
+  await signingOut;
+  assert.equal(calls.length, 2);
+});
+
 test('accepts explicit health flags and keeps unconfigured health unavailable', async () => {
   const { client } = fixture([json({ enabled: false, provider: 'supabase', configured: { origin: true, provider: false, store: false }, capabilities })]);
   const health = await client.health();

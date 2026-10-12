@@ -43,7 +43,7 @@ export function Input({ label, name, value = '', required = true, type = 'text',
   </div>;
 }
 
-function Textarea({ label, name, value = '', hint, maxLength = 4000 }: {
+export function Textarea({ label, name, value = '', hint, maxLength = 4000 }: {
   label: string; name: string; value?: string; hint?: string; maxLength?: number;
 }) {
   const id = useId();
@@ -92,7 +92,7 @@ export function AdvertiserForm({ profile, busy, run, save }: {
       const description = text(data, 'description');
       if (/[\u0000-\u001f\u007f]/u.test(description)) throw new Error('Business descriptions must be a single paragraph without line breaks or control characters.');
       await save({ name: text(data, 'name'), website: validateWebsite(text(data, 'website')), description });
-    }, 'Advertiser profile saved. Campaign serving and funding remain unavailable.')}>
+    }, 'Advertiser profile saved. Campaign approval and enrollment are separate actions; no funding occurred.')}>
     <Input label="Business name" name="name" value={profile?.name} autoComplete="organization" maxLength={120} />
     <Input label="Business website" name="website" type="url" value={profile?.website} maxLength={2048}
       hint="HTTPS; HTTP is accepted only for loopback development." />

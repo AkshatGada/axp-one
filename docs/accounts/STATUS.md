@@ -1,69 +1,52 @@
-# Accounts/profile build result — 12 October 2026
+# Account network implementation status
 
-Isolated branch `codex/accounts-profiles`, based on `5d47516`.
-This is an implemented identity/profile foundation, not completed multi-tenant
-campaign serving, customer wallet funding or publisher payout onboarding.
+AXP implements accounts for advertisers and AI apps, connecting owned resources
+to shared ad serving and a separate own-wallet financial lifecycle.
 
-## Delivered
+## Implemented components
 
-- Dedicated Supabase email/password provider adapter, authoritative user checks,
-  explicit confirmation endpoint, server-side refresh and sign-out.
-- Opaque HttpOnly sessions; exact-origin writes and session-bound CSRF.
-- Personal profiles, owner organizations, advertiser profiles and multiple AI-app
-  profiles. One person can own both sides. Other people's IDs do not grant access.
-- Dedicated AXP Supabase PostgreSQL profile repository (new database migration
-  and cloud acceptance status recorded below). Private SQLite/encrypted snapshots
-  retain opaque sessions only in the real-provider runtime. Cookies are emitted
-  only after session persistence succeeds; there is no local profile fallback.
-- Separate `/account/` console, disabled-by-default hosted dispatch, static
-  packaging and `npm run dev:accounts`. No marketing component edits.
-- Contracts, component plan, runbook and explicit unavailable financial/serving
-  capabilities. The old public shared demo is not made tenant-safe implicitly.
+| Component | Implementation |
+| --- | --- |
+| Identity | Supabase email/password authentication, confirmation, verified sessions and sign-out |
+| Profiles | Supabase PostgreSQL personal profiles, organizations, advertiser profiles and AI apps |
+| Campaigns | Owner-scoped versioned drafts, approved creative/declarations, limits and serving controls |
+| App integration | Issue, list, rotate, revoke and expire scoped server-side SDK credentials |
+| Shared serving | Account inventory, advertiser decisions, deterministic auctions and app-bound receipts |
+| Finance | Private revision-controlled records, exact wallet-control proofs and immutable channel terms |
+| Own-wallet transport | Solana native channel preparation, cumulative authorization, cooperative closure and reconciliation |
+| Interface | Functional account, campaign, app credential and Wallet Standard controls |
 
-## Evidence and limits
+## Current verification
 
-- 52 focused account/client/static-packaging checks passed after the confirmation
-  compatibility fix; no failures or skips in that focused command.
-- Fresh review identified the native 56-hex confirmation hash incompatibility;
-  both validators and fixtures were corrected. One bounded reviewer recheck ran
-  all 46 account tests successfully and confirmed resolution.
-- Product UI typecheck and Next static build passed, including `/account/` and
-  existing advertiser/dashboard publisher pages.
-- Final repository suite: 606 tests,
-  585 passed, zero failed, 21 skipped. Native SDK checks are among the skips
-  because this fresh worktree does not install the private prepared SDK. No new
-  native payment or hosted integration acceptance is claimed.
-- Actual browser fixture: Alice signed in, saved a personal name, organization,
-  advertiser and AI-app profile; page reload retained them. Sign-out worked.
-  Bob signed in and saw no organizations or Alice profiles. These are explicitly
-  fictional provider responses, not live Supabase sign-in evidence.
-- The newly connected Chrome profile allowed retrieval of only the public
-  publishable key. It is saved in ignored `.env.local`, not source control.
-- Real Supabase read-only settings returned 200: email enabled, sign-up allowed,
-  email confirmation required. Local health reports configured provider/store.
-  Human-operated signup, delivered confirmation email, email confirmation and
-  signed-in session re-verification passed on 12 October. This is real Supabase/
-  Resend acceptance, not a fixture. Expiry-driven token refresh and sign-out were
-  not separately exercised with this human session. See `EMAIL_SETUP.md`.
+The additive finance migration is applied to the dedicated Supabase database.
+Actual backend REST reads, RLS/ACL checks and unowned-binding rejection pass.
+Existing profiles/resources are unchanged.
 
-No landing-page checkout edits, ContextHint changes, financial operations,
-paid model calls, merge, push or deployment. The later approved cloud changes are
-limited to auth-subdomain DNS, Resend sending credentials and AXP Supabase email/
-redirect settings, documented in `EMAIL_SETUP.md`.
+Two separate real Supabase Auth test identities saved funding and payout ownership
+proofs using existing operator-controlled disposable Devnet keys. Both bindings
+persisted after backend restart; wrong-key, altered-message and cross-owner
+requests were rejected. The database contained two challenges, two bindings and
+zero channels. No funds moved. This is not a wallet-extension prompt test.
 
-## Remaining gates
+The latest repository regression passed 733 tests with 23 optional skips and zero
+failures. The focused account-client run passed 72 checks; Wallet Standard/panel
+fixtures passed 17. These are local source checks, not hosted deployment evidence.
+See [finance architecture and verification](FINANCE_CLOUD_ACCEPTANCE.md) for the
+commands and evidence scope.
 
-Dedicated Supabase profile migration and real signed-in read acceptance now pass;
-see `SUPABASE_DATABASE_RESULT.md` for cloud evidence, hashes and SQL rollback
-acceptance. The local console uses Supabase profiles, not the fixture store.
+Real user-selected wallet-extension and account-owned funded lifecycle acceptance
+are separate release checks. Broadcasts remain disabled for the current
+non-spending verification. The isolated account-network source candidate is not
+itself evidence of public deployment.
 
-1. Real browser advertiser/AI-app creation, reload/server-restart persistence and
-   explicit sign-out acceptance now pass; see `END_TO_END_ACCEPTANCE.md`.
-   Signup, email delivery, confirmation and verified signed-in reads also pass.
-   Resend's latest overall domain status should still be checked independently
-   before claiming every DNS record is fully verified.
-2. Organization-scoped campaign management and app-scoped SDK credentials.
-3. Enforced app restrictions and verified payout/financial authorization routing.
+## Documentation
 
-Only gate 1 is required to validate this sign-in/profile slice end to end;
-gates 2–3 are separate product integration work before inviting real network users.
+- [Reviewer guide](SUBMISSION_READINESS_CHECKLIST.md)
+- [Accounts API and persistence](CONTRACTS.md)
+- [Supabase database integration](SUPABASE_DATABASE_RESULT.md)
+- [Account finance architecture](FINANCE_CLOUD_ACCEPTANCE.md)
+- [Own-wallet integration](ACCOUNT_PAYMENTS_RUNBOOK.md)
+- [Functional release checks](FINAL_ROLLOUT_CHECKLIST.md)
+
+The existing shared demonstration and its historical Solana/Tempo records remain
+separate from account-owned financial state.

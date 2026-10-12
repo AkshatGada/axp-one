@@ -59,7 +59,7 @@ test('client consumes actual API health, signup, signin, session and signout sha
   const health=await client.health();
   assert.deepEqual(health.configured,{origin:true,provider:true,store:true});
   assert.equal(isConfigured(health),true);
-  assert.deepEqual(health.capabilities,{profiles:true,campaignServing:false,nativeFunding:false,appCredentials:false});
+  assert.deepEqual(health.capabilities,{profiles:true,campaignServing:false,nativeFunding:false,appCredentials:true,campaignDrafts:true});
   assert.deepEqual(await client.session(),{authenticated:false});
   assert.deepEqual(await client.signup({email:'a@example.test',password:'fixture-password'}),{confirmationRequired:true});
   assert.deepEqual(await client.session(),{authenticated:false});
