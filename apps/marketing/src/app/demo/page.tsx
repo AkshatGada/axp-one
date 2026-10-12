@@ -3,7 +3,7 @@ import { ActionPrimary, ActionText, VideoFigure, Wordmark } from '@axp/design-sy
 import recording from '@/data/product-recording.json';
 import s from './demo.module.css';
 
-export const metadata: Metadata = {title: 'The product walkthrough · axp.one', description: 'From advertiser setup to an independent AI answer, sponsored delivery and Solana payment-channel settlement.'};
+export const metadata: Metadata = {robots: {index: false, follow: false}, alternates: {canonical: '/demo/'}, title: 'The product walkthrough · axp.one', description: 'From advertiser setup to an independent AI answer, sponsored delivery and Solana payment-channel settlement.'};
 
 export default function Demo() {
   return <>

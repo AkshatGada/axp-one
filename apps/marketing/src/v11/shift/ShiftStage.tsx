@@ -7,7 +7,7 @@
 // final size and scaled down into the field, then released.
 import { Fragment, useEffect, useLayoutEffect, useRef, type CSSProperties } from "react";
 import { useMotionValueEvent, type MotionValue } from "motion/react";
-import { Arrow, ChapterMark, Split, Stage } from "../kit";
+import { Arrow, Split, Stage } from "../kit";
 import { SHIFT_COPY } from "../copy";
 import { SHIFT } from "../story";
 import { BREAK_NARROW, BREAK_WIDE, CLOCK, IMPLIED, MARK, MARK_ORDER, NOTE_NARROW, NOTE_WIDE, TERMS, WORDS, type Place, type Word } from "./model";
@@ -219,7 +219,6 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
 
   return (
     <div ref={ref} className={cx("x-wrap", s.inner, s.pinned)} style={CLOCK_VARS}>
-      <ChapterMark no={SHIFT_COPY.no} title={SHIFT_COPY.title} />
       <div className={s.body}>
         <div className={s.heads}>
           <Split as="h2" id="shift-h" text={SHIFT_COPY.before} className={cx(s.head, s.headOut)} />
@@ -236,7 +235,6 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
 function Flow() {
   return (
     <div className={cx("x-wrap", s.inner, s.flow)} style={CLOCK_VARS}>
-      <ChapterMark no={SHIFT_COPY.no} title={SHIFT_COPY.title} />
       <div className={s.still}>
         <h2 id="shift-h" className={s.head}>{SHIFT_COPY.before}</h2>
         <Field />

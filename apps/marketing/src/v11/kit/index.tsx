@@ -5,16 +5,11 @@ import s from "./kit.module.css";
 export { default as useReduced } from "@/motion/useReduced";
 export { Stage, useStageMode, useInView } from "./stage";
 
-/** A movement of the feature. Renders a <section> with the chapter mark (folio and running
- *  title) unless `bare`. Give your own heading an id and pass it as `labelledBy`. */
+/** A movement of the feature. Renders a plain <section>: no folio, no running title, no rule;
+ *  one movement runs into the next. Give your own heading an id and pass it as `labelledBy`. */
 export function Chapter({ id, no, title, note, bare, labelledBy, className, children }: { id: string; no?: string; title?: string; note?: string; bare?: boolean; labelledBy?: string; className?: string; children: ReactNode }) {
   return (
     <section id={id} className={`${s.chapter}${className ? ` ${className}` : ""}`} aria-labelledby={labelledBy} data-chapter={no}>
-      {!bare && no ? (
-        <div className="x-wrap">
-          <ChapterMark no={no} title={title} note={note} />
-        </div>
-      ) : null}
       {children}
     </section>
   );
