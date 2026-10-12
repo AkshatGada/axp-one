@@ -10,7 +10,7 @@
 // Motion off: the same composition as a still, with the cards the wall holds at first paint.
 import { useEffect, useRef, type CSSProperties, type PointerEvent as RPointerEvent } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
-import { PROMPTS } from "@/hero-lab/data";
+import { WALL_QUESTIONS as PROMPTS } from "./questions";
 import { Action, TextLink, useReduced } from "../kit";
 import { COVER } from "../copy";
 import s from "./hero.module.css";
