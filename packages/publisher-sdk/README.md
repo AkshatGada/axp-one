@@ -61,6 +61,7 @@ const input = {
 };
 
 // Start the separate ad path; never pass its result to your answer model.
+await saveTurnInput(input); // Save stable IDs before the first opportunity POST.
 const adPromise = axp.requestAd(input);
 const answer = await generateYourOwnAnswer(input.question);
 await saveAnswer({input, answer});
@@ -130,13 +131,21 @@ saved turn belonging to that user, and use its saved award/token. Do not build a
 arbitrary forwarding proxy or accept browser-selected prices or recipients:
 
 ```js
+import {validateReceiptResult} from '@axp001/publisher-sdk/receipt';
+
 // After authentication, CSRF validation and loading the user's saved turn:
-if (savedTurn.ad.status !== 'awarded') throw new Error('no_award');
+if (savedTurn.ad?.status !== 'awarded') throw new Error('no_award');
 if (body.deliveryToken !== savedTurn.ad.deliveryToken) throw new Error('wrong_token');
 const receipt = await axp.acknowledgeRender({
   awardId: savedTurn.ad.award.id,
   deliveryToken: savedTurn.ad.deliveryToken,
   observation: body.observation,
+});
+const award = savedTurn.ad.award;
+validateReceiptResult(receipt, {
+  awardId: award.id, creativeHash: award.creativeHash,
+  priceBaseUnits: award.priceBaseUnits,
+  financialMode: award.financialMode ?? award.mode,
 });
 await saveReceipt(savedTurn.id, receipt);
 return receipt;
@@ -174,6 +183,48 @@ const opportunity = await axp.lookupOpportunity({sessionId, turnId});
 const delivery = await axp.lookupDelivery({awardId, deliveryToken});
 ```
 
+Core acknowledgement and lookup methods validate response structure and award
+identity. They do not retain your original award's price/hash/mode. Bind accepted
+receipts to that durable award with `validateReceiptResult`, as above, before
+recording acceptance in your app. The browser acknowledger performs these extra
+bindings itself; server-side recovery must also do them.
+
+For a saved turn whose original request or acknowledgement response was lost:
+
+```js
+// Server route: authenticate and load savedTurn for this user first.
+const status = await axp.lookupOpportunity(savedTurn.input);
+if (status.status !== 'resolved') return status; // Wait; no new POST.
+if (status.result.status !== 'awarded') return status;
+
+if (savedTurn.ad?.status === 'awarded') {
+  const old = savedTurn.ad;
+  const next = status.result;
+  if (old.award.id !== next.award.id || old.deliveryToken !== next.deliveryToken ||
+      old.award.creativeHash !== next.award.creativeHash ||
+      old.award.priceBaseUnits !== next.award.priceBaseUnits ||
+      (old.award.financialMode ?? old.award.mode) !==
+        (next.award.financialMode ?? next.award.mode)) {
+    throw new Error('opportunity_binding_conflict');
+  }
+} else {
+  // Restore the original exchange result, not a newly requested opportunity.
+  await saveAdResult({...savedTurn.input, ad: status.result});
+  savedTurn.ad = status.result;
+}
+const {award, deliveryToken} = savedTurn.ad;
+const delivery = await axp.lookupDelivery({awardId: award.id, deliveryToken});
+if (delivery.status === 'accepted') {
+  validateReceiptResult(delivery.result, {
+    awardId: award.id, creativeHash: award.creativeHash,
+    priceBaseUnits: award.priceBaseUnits,
+    financialMode: award.financialMode ?? award.mode,
+  });
+  await saveReceipt(savedTurn.id, delivery.result);
+}
+return delivery;
+```
+
 These authenticated lookups are read-only. An opportunity can be `not_found`,
 `pending`, `unknown` or `resolved`; a delivery can be `reserved`, `expired`,
 `failed` or `accepted`. Preserve the original IDs, result and delivery token.
@@ -199,6 +250,37 @@ authorizations. This SDK does not create a wallet or sign transactions for you.
 Use `@axp001/publisher-sdk/financial` for presentation, and
 `@axp001/publisher-sdk/receipt` for structural receipt validation. Structural
 validation is not independent cryptographic signature verification.
+
+## Transport reference
+
+Ordinary integrations use the methods above, not direct HTTP calls. For adapters
+and mock servers, paths are relative to the configured base URL:
+
+| Method | Path | Request |
+| --- | --- | --- |
+| POST | `/opportunities` | `OpportunityInput` JSON |
+| GET | `/publisher/opportunities?sessionId=…&turnId=…` | No body |
+| GET | `/awards/:awardId/status` | Original delivery token, no body |
+| POST | `/awards/:awardId/render` | `RenderObservation` JSON only |
+| POST | `/awards/:awardId/fail` | Failure reason JSON |
+
+Every request sends `x-axp-publisher-key` from the server. Delivery lookup, render
+and failure also send `x-axp-delivery-token`. IDs are URL-encoded. POSTs use
+`application/json`; redirects are rejected. Non-2xx responses may contain a safe
+`{"error":"lowercase_underscore_code"}`; arbitrary response text is not exposed.
+
+Public declarations describe response unions. Awarded responses require an
+opportunity ID, non-empty award ID/token, 64-character lowercase hexadecimal
+creative hash, approved text, HTTPS destination without embedded credentials,
+canonical decimal uint64 `priceBaseUnits`, and safe integer epoch-millisecond
+`expiresAt`. No-fill responses must omit award and token.
+
+Lookup schema identifiers are `publisher-opportunity-status.v1` and
+`publisher-award-status.v1`. Accepted responses require an award-bound receipt
+with a creative hash, charge ID/uint64 amount, 64-character hexadecimal receipt
+hash, non-empty signature and boolean `replayed`. Supplied mode/charge/receipt
+bindings must agree. A mock's signature strings do not establish authenticity.
+Use the packaged validators rather than treating HTTP 200 alone as acceptance.
 
 ## References
 

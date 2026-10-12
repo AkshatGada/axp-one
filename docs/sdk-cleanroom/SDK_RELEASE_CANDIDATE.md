@@ -52,6 +52,13 @@ Candidate verification on 12 October 2026:
 - Product UI TypeScript check and 35 projection/verification tests passed. The
   UI tests require generating the read-only recorded-run projection first with
   `node apps/product-ui/scripts/project-run.mjs` in a fresh checkout.
+- An independent consumer installed the tarball without backend/test context
+  and passed 13 local real-HTTP mock-exchange checks, including original-turn
+  recovery after lost request/acknowledgement responses and one synthetic charge.
+  Mock authoring required inspecting packaged modules; the guide was then
+  expanded with transport details, saved-award receipt bindings and persisted-turn
+  recovery. This is not hosted AXP, real DOM visibility or native settlement
+  evidence. The subsequent guide changes do not change SDK runtime behavior.
 
 The regression requires loopback HTTP listeners. Optional SDK/provider-dependent
 checks remain explicit skips; they are not counted as successful integrations.
