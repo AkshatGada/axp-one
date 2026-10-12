@@ -12,13 +12,12 @@ import { Ad, Split, Stage } from "../kit";
 import { FILM } from "../copy";
 import { ADVERTISER, ANSWER, QUESTION } from "../story";
 import { AnswerMark, Bar, Composer, Others, Reader, SendMark } from "./parts";
-import { Receipt } from "./Receipt";
 import { camera, keys, type Box, type Key } from "./camera";
-import { frame } from "./timeline";
+import { END, frame } from "./timeline";
 import s from "./film.module.css";
 
-// Five beats over 2.6 screens of travel.
-const LENGTH = 3.6;
+// Four beats over 2.1 screens of travel.
+const LENGTH = 3.1;
 const COMPACT = "(max-width: 999px)";
 const vars = (o: Record<string, string>) => o as CSSProperties;
 
@@ -58,7 +57,7 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
       const f = frame(p);
       for (const k in f.vars) put(k, f.vars[k]!.toFixed(4));
       if (ks.length) {
-        const c = camera(ks, p);
+        const c = camera(ks, p * END);
         const t = `translate(${(size.w / 2 - c.cx * c.s).toFixed(2)}px, ${(size.h / 2 - c.cy * c.s).toFixed(2)}px) scale(${c.s.toFixed(4)})`;
         if (last.cam !== t) {
           last.cam = t;
@@ -173,14 +172,11 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
                 </div>
                 <Others innerRef={others} />
               </div>
-              <div className={s.rz} ref={receipt}>
-                <Receipt className={s.rc} />
-              </div>
             </div>
           </div>
         </div>
 
-        {/* A plain progress mark: five steps that fill as the film plays. Not a control. */}
+        {/* A plain progress mark: four steps that fill as the film plays. Not a control. */}
         <div className={s.steps} aria-hidden>
           {FILM.beats.map((b, k) => (
             <span key={b.k} className={s.step} style={vars({ "--s": `var(--s${k})` })} data-now={beat === k ? "" : undefined}>
@@ -194,7 +190,7 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
   );
 }
 
-/** Motion off, and the server render: the same story as five composed stills in normal flow. */
+/** Motion off, and the server render: the same story as four composed stills in normal flow. */
 function Stills() {
   const cap = (k: number) => (
     <div className={s.stillCap}>
@@ -252,14 +248,6 @@ function Stills() {
                   <div className={s.slot}><Ad className={s.card} name={ADVERTISER.name} text={ADVERTISER.creative} /></div>
                 </div>
               </div>
-            </div>
-          </div>
-        </li>
-        <li className={s.still}>
-          {cap(4)}
-          <div className={s.stillPlate}>
-            <div className={s.stillSide}>
-              <Receipt className={s.rc} />
             </div>
           </div>
         </li>

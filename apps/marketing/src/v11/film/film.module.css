@@ -91,8 +91,8 @@
 .readerSlot { font-size: 1.5em; }
 .rz { position: absolute; left: -71em; top: var(--rz-top, 15em); width: 26em; }
 
-/* The strip: five steps that fill as the film plays. A progress mark, not a control. */
-.steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: var(--x-col-gap); }
+/* The strip: four steps that fill as the film plays. A progress mark, not a control. */
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--x-col-gap); }
 .step { position: relative; display: flex; align-items: baseline; gap: 9px; padding: 12px 0 4px; font-size: 13.5px; font-weight: 500; line-height: 1; letter-spacing: .04em; text-transform: uppercase; color: var(--x-quiet); transition: color var(--x-d1) var(--x-ease); }
 .step::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 1px; background: var(--x-hair); }
 .step > i { position: absolute; inset: -.5px 0 auto 0; height: 2px; background: var(--x-ink); transform-origin: 0 50%; transform: scaleX(var(--s)); }
@@ -185,7 +185,7 @@
   .rc { font-size: 1.7em; }
 }
 
-/* ---------- Motion off: five composed stills in normal flow ---------- */
+/* ---------- Motion off: four composed stills in normal flow ---------- */
 .capK { margin: 0 0 clamp(12px, 1.5vw, 22px); font-size: 13.5px; font-weight: 500; line-height: 1; letter-spacing: .04em; text-transform: uppercase; }
 .stillList { margin: 0; padding: 0; list-style: none; }
 .still { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--x-col-gap); align-items: start; padding: clamp(30px, 4.2vw, 64px) 0; border-top: 1px solid var(--x-hair); }

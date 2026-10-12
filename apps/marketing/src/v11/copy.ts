@@ -48,7 +48,6 @@ export const FILM = {
     { k: "Answered", line: "The app answers, in its own words." },
     { k: "Judged", line: "Each advertiser's agent reads the moment." },
     { k: "Placed", line: "One card appears. Below the answer. Labelled." },
-    { k: "Recorded", line: "A receipt is written." },
   ],
 };
 

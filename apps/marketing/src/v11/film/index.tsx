@@ -1,5 +1,5 @@
 // 02 One question. The centrepiece: one question followed from the moment it is asked, as a
-// scroll-driven film in five beats, ending on the receipt. The stage (client) is server-rendered in its still
+// scroll-driven film in four beats, ending on the placed card. The stage (client) is server-rendered in its still
 // form first, so every caption and all story text is in the HTML.
 import { Chapter } from "../kit";
 import { FILM } from "../copy";
