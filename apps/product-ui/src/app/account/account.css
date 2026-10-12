@@ -166,3 +166,101 @@
 /* Keep a wallet step's legend inside its card instead of on the border. */
 .account-console .account-wallet-step > legend { float: left; width: 100%; margin: 0; }
 .account-console .account-wallet-step > legend + * { clear: both; }
+
+/* ---------- Refinement, October 2026: role first, one next action, tabs ---------- */
+.account-console .ld-nav-foot strong { color: var(--ld-text-2); font-weight: 500; }
+.account-console .ld-nav-foot p { margin: 6px 0 0; }
+.account-console .account-start { display: grid; gap: 20px; padding: 12px 8px; max-width: 760px; }
+.account-console .account-start h2 { margin: 0; font-weight: 500; font-size: 22px; line-height: 1.25; letter-spacing: -.012em; }
+.account-console .account-start-next { max-width: 420px; padding-top: 4px; }
+.account-console .account-role-row { display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; padding: 18px var(--ld-panel-pad); border-bottom: 1px solid var(--ld-border); }
+.account-console .account-role-row h3, .account-console .account-role-row p { margin: 0; }
+.account-console .account-role-row > div:first-child { display: grid; gap: 2px; min-width: 0; flex: 1 1 220px; }
+.account-console .account-role-next { display: flex; align-items: center; gap: 16px; flex: 0 1 auto; }
+.account-console .account-role-next > span { display: grid; gap: 1px; text-align: right; }
+.account-console .account-also { margin: 0; padding: 14px var(--ld-panel-pad); font-size: 13px; color: var(--ld-text-2); }
+.account-console .ld-steps { padding: 0 2px; }
+
+/* Saved profile shown as one line with an edit disclosure */
+.account-console .account-summary-bar { border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-panel); box-shadow: var(--ld-shadow-1); }
+.account-console .account-summary-bar > summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px var(--ld-panel-pad); cursor: pointer; list-style: none; border-radius: var(--ld-r-md); }
+.account-console .account-summary-bar > summary::-webkit-details-marker { display: none; }
+.account-console .account-summary-bar > summary > span:first-child { display: flex; align-items: baseline; gap: 4px 12px; flex-wrap: wrap; min-width: 0; font-size: 14px; }
+.account-console .account-summary-bar b { font-weight: 500; }
+.account-console .account-summary-bar .ld-secondary { overflow-wrap: anywhere; }
+.account-console .account-summary-edit { flex: none; font-size: 13px; font-weight: 500; color: var(--ld-accent); }
+.account-console .account-summary-bar[open] .account-summary-edit { color: var(--ld-text-3); }
+.account-console .account-summary-body { padding: 4px var(--ld-panel-pad) var(--ld-panel-pad); border-top: 1px solid var(--ld-border); padding-top: 16px; }
+
+/* Campaign list and workspace */
+.account-console .account-list-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px var(--ld-panel-pad); border-bottom: 1px solid var(--ld-border); }
+.account-console .account-list-head h3 { margin: 0; display: flex; gap: 8px; align-items: baseline; }
+.account-console .account-campaign-row { grid-template-columns: minmax(0, 1fr) auto auto; min-height: 48px; }
+.account-console .account-campaign-row b { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-console .account-campaign-row[disabled] { cursor: default; opacity: .7; }
+.account-console .account-campaign { display: grid; gap: 20px; min-width: 0; }
+.account-console .account-campaign-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 16px var(--ld-panel-pad) 12px; }
+.account-console .account-campaign-head h3 { margin: 0; }
+.account-console .account-campaign-head > div:first-child { display: grid; gap: 2px; min-width: 0; }
+.account-console .account-campaign .ld-tabbar { padding: 0 var(--ld-panel-pad); }
+.account-console .account-campaign-body { padding: 20px var(--ld-panel-pad); }
+.account-console .account-campaign-body[hidden] { display: none; }
+.account-console .account-campaign:not([data-tab="golive"]) #campaign-serving { display: none; }
+.account-console .account-campaign:not([data-tab="results"]) #campaign-activity { display: none; }
+.account-console .account-aside { align-content: start; }
+.account-console .account-aside > p { margin: 0; }
+.account-console .account-amount { position: relative; display: flex; align-items: center; }
+.account-console .account-amount input { padding-right: 96px; font-variant-numeric: tabular-nums; }
+.account-console .account-amount > span { position: absolute; right: 12px; font-size: 12px; color: var(--ld-text-3); pointer-events: none; }
+.account-console .account-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.account-console .account-chip { position: relative; display: inline-flex; cursor: pointer; }
+.account-console .account-chip input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.account-console .account-chip span { display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border: 1px solid var(--ld-border-2); border-radius: var(--ld-r-full); background: var(--ld-panel); font-size: 13px; color: var(--ld-text-2); text-transform: capitalize; }
+.account-console .account-chip:hover span { border-color: var(--ld-text-3); }
+.account-console .account-chip input:checked + span { border-color: var(--ld-accent); background: var(--ld-accent-wash); color: var(--brand-deep); font-weight: 500; }
+.account-console .account-chip input:checked + span::before { content: "✓"; margin-right: 6px; font-size: 12px; }
+.account-console .account-chip input:focus-visible + span { outline: 2px solid var(--ld-accent); outline-offset: 2px; }
+.account-console .account-inline-action { border: 0; background: none; padding: 0; font: inherit; font-weight: 500; color: inherit; text-decoration: underline; cursor: pointer; }
+
+/* Report */
+.account-console .account-report { display: grid; gap: 0; }
+.account-console .account-report .ld-statstrip { border-bottom: 1px solid var(--ld-border); }
+.account-console .account-report-note { display: grid; gap: 6px; padding: 12px var(--ld-panel-pad); border-bottom: 1px solid var(--ld-border); }
+.account-console .account-report-note p { margin: 0; }
+.account-console .account-report-section { display: grid; gap: 0; border-bottom: 1px solid var(--ld-border); }
+.account-console .account-report-section:last-child { border-bottom: 0; }
+.account-console .account-report-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 14px var(--ld-panel-pad) 10px; }
+.account-console .account-table-note { padding: 10px var(--ld-panel-pad) 14px; margin: 0; }
+
+/* AI app */
+.account-console .account-app-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.account-console .account-app-id { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+.account-console .account-app-id h2 { margin: 0; }
+.account-console [role="tabpanel"][hidden] { display: none; }
+.account-console .account-connect { margin: 0 0 16px; padding: 0; list-style: none; counter-reset: connect; display: grid; gap: 18px; }
+.account-console .account-connect li { counter-increment: connect; position: relative; display: grid; gap: 8px; padding-left: 34px; min-width: 0; }
+.account-console .account-connect li::before { content: counter(connect); position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 22px; height: 22px; border-radius: var(--ld-r-full); border: 1px solid var(--ld-border-2); font-size: 12px; font-weight: 500; color: var(--ld-text-2); }
+.account-console .account-connect code { font-family: var(--font-mono); font-size: 12.5px; }
+
+/* Wallet */
+.account-console .account-pay-actions { margin: 0; padding: 0; list-style: none; border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); }
+.account-console .account-pay-actions li { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 14px 16px; border-bottom: 1px solid var(--ld-border); }
+.account-console .account-pay-actions li:last-child { border-bottom: 0; }
+.account-console .account-pay-actions li > span { display: grid; gap: 2px; }
+.account-console .account-pay-actions b { font-weight: 500; font-size: 14px; }
+.account-console .account-settings-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 4px 2px; }
+
+@media (max-width: 700px) {
+  .account-console .account-role-next { width: 100%; justify-content: space-between; }
+  .account-console .account-role-next > span { text-align: left; }
+  .account-console .account-campaign-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .account-console .account-campaign-row .account-pick-meta { grid-column: 1 / -1; grid-row: 2; }
+  .account-console .account-summary-bar > summary { flex-wrap: wrap; }
+  .account-console .account-who { display: none; }
+}
+@media (max-width: 700px) {
+  .account-console .account-report-section { overflow-x: auto; }
+  .account-console .account-report-section .ld-table td, .account-console .account-report-section .ld-table th { padding-left: 10px; padding-right: 10px; }
+  /* The amount already says simulated and the panel says test balance; drop the repeated status pill on phones. */
+  .account-console .account-report-section[aria-label="Receipts"] .ld-table th:nth-child(3), .account-console .account-report-section[aria-label="Receipts"] .ld-table td:nth-child(3) { display: none; }
+}

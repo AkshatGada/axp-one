@@ -23,35 +23,35 @@ export function AppIntegration({client, organizationId, appId, busy, ready, onUn
   useEffect(() => { onReadyKnown?.(state ? state.ready : null); }, [state, onReadyKnown]);
   const simulated = state?.financialMode === 'synthetic';
   const blockers = state ? Object.entries(state.gates).filter(([, passed]) => !passed) : [];
-  return <Ld.Panel id="app-readiness" title="Integration readiness" sub="A read-only check of this app's setup"
+  return <Ld.Panel id="app-readiness" title="Is your app ready?" sub="Checks your saved setup. It requests no ad."
     actions={<>
-      {state && <span className="ld-tag" data-tone={state.ready ? 'success' : 'warning'} role="status">{state.ready ? 'Ready for an ad request' : 'Setup needs attention'}</span>}
-      {!ready && <span className="ld-tag" data-tone="outline">Unavailable</span>}
+      {state && <span className="ld-tag" data-tone={state.ready ? 'success' : 'warning'} role="status">{state.ready ? 'Ready to request ads' : 'Not ready yet'}</span>}
+      {!ready && <span className="ld-tag" data-tone="outline">Not available yet</span>}
       <Ld.Button variant="secondary" size="sm" disabled={busy || loading || !ready} onClick={() => refresh(value => value + 1)}>Check again</Ld.Button>
     </>}>
     <section className="ld-stack" aria-label="App integration readiness">
-      {loading && <p className="ld-secondary" role="status">Checking this app…</p>}
-      {!ready && <Ld.Callout tone="warning" title="Ad serving is not connected on this server">Your key and rules are saved, but no ad can be requested from here yet. Requests are never routed to the shared demonstration instead.</Ld.Callout>}
+      {loading && <p className="ld-secondary" role="status">Checking your app…</p>}
+      {!ready && <Ld.Notice tone="blocked" title="Ads are not available for your app yet.">Your key and rules are saved. Requests are never sent to the shared example chat instead.</Ld.Notice>}
       {error && <p className="account-error" role="alert">{error}</p>}
       {state && <>
+        {state.ready && <p className="ld-body">Everything on our side is set. Send a request from your server to see your first delivery.</p>}
         {blockers.length > 0 && <dl className="account-readiness" aria-label="Setup to complete">
           {blockers.map(([name]) => <div key={name}><dt>{gateLabel[name] ?? name}</dt><dd><span className="ld-tag" data-tone="warning">Needs attention</span></dd></div>)}
         </dl>}
-        <p className="ld-secondary">{simulated ? 'Simulated accounting. Receipts are not paid earnings.' : 'An accepted charge is not a finalized payout.'} This check makes no model call or payment.</p>
-        <details className="account-more"><summary>All checks and runtime details</summary>
+        <p className="ld-secondary">{simulated ? 'Earnings are a test balance. No real money.' : 'An accepted charge is not a finalized payout.'} This cannot see whether your own server has the key installed.</p>
+        <details className="account-more"><summary>All checks</summary>
         <dl className="account-readiness">
           {Object.entries(state.gates).map(([name, passed]) => {
             const skipped = simulated && ['funding', 'broadcasts'].includes(name);
             return <div key={name}><dt>{gateLabel[name] ?? name}</dt><dd>
-              <span className="ld-tag" data-tone={skipped ? 'outline' : passed ? 'success' : 'warning'}>{skipped ? 'Not needed with simulated accounting' : passed ? 'Ready' : 'Needs attention'}</span>
+              <span className="ld-tag" data-tone={skipped ? 'outline' : passed ? 'success' : 'warning'}>{skipped ? 'Not needed for test balances' : passed ? 'Ready' : 'Needs attention'}</span>
             </dd></div>;
           })}
-          <div><dt>Active server keys</dt><dd>{state.activeCredentialCount}</dd></div>
-          <div><dt>Accounting on this server</dt><dd>{modeName(state.financialMode)}</dd></div>
+          <div><dt>Active API keys</dt><dd>{state.activeCredentialCount}</dd></div>
+          <div><dt>Balance type</dt><dd>{modeName(state.financialMode)}</dd></div>
           <div><dt>Bidding decisions</dt><dd>{executionLabel(state.execution)}</dd></div>
-          <div><dt>Server broadcast gate</dt><dd>{state.broadcastEnabled ? 'Enabled' : 'Disabled'}</dd></div>
         </dl>
-        <p className="ld-secondary">This check reads your saved setup only. It sends no key from this browser, requests no ad and makes no model call or payment. It cannot see whether your own server has installed the key, and a ready result does not guarantee that a campaign will bid. {simulated ? 'Simulated receipts are not paid earnings.' : 'An accepted charge is not a finalized payout.'}</p>
+        <p className="ld-secondary">A ready result does not guarantee that a campaign will bid on a given question.</p>
         </details>
       </>}
     </section>

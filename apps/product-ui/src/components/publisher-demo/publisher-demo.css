@@ -41,3 +41,9 @@
 /* Tempo reuses Ledger ultramarine; Solana proof retains its established accent. */
 .pub-payment-story[data-network="tempo-testnet"]{--pub-sol:var(--ld-accent);--pub-sol-wash:var(--ld-accent-wash);--pub-sol-line:var(--ld-accent-line)}
 @media(min-width:601px) and (max-width:760px){.pub-payment-flow{grid-template-columns:minmax(0,1fr) 16px minmax(0,1fr)}.pub-payment-flow>.pub-payment-arrow:nth-child(4){display:none}}
+/* Refinement: shared demo identity and consistent destinations */
+.pub-chat-top .ld-context{flex:none}.pub-chat-top .ld-context b{font-size:12px}
+.pub-settings-links{display:flex;flex-wrap:wrap;gap:8px 20px;padding-top:12px;border-top:1px solid var(--ld-border);font-size:13px}.pub-settings-links a{color:var(--ld-accent);text-decoration:none}.pub-settings-links a:hover{text-decoration:underline}
+.pub-chat-app a:focus-visible,.pub-chat-app button:focus-visible,.pub-chat-app summary:focus-visible,.pub-dialog a:focus-visible,.pub-dialog button:focus-visible,.pub-dialog summary:focus-visible{outline:2px solid var(--ld-accent);outline-offset:2px;border-radius:var(--ld-r-xs)}
+@media(max-width:600px){.pub-chat-top .ld-context{padding:0 4px}.pub-chat-top .ld-context span{display:none}.pub-chat-top h1{font-size:16px}}
+@media(max-width:600px){.pub-chat-top>.ld-context{display:inline-flex}.pub-chat-top{gap:6px;padding:0 12px}.pub-chat-top button{padding:8px 6px}}

@@ -25,17 +25,17 @@ export interface AccountFinancialResourcesProps {
   onConflict?: () => void;
 }
 const messages: Record<string, string> = {
-  account_payment_broadcast_disabled: 'The server broadcast gate is disabled. No successful broadcast is confirmed. Reload the saved channel before continuing.',
+  account_payment_broadcast_disabled: 'Payments are not available yet, so nothing was sent. Reload the saved channel before continuing.',
   wallet_challenge_expired: 'The ownership challenge expired. Explicitly request a new challenge.',
   verified_wallet_required: 'Both campaign funding and app payout addresses need separate verified ownership proofs.',
   own_wallet_network_unavailable: 'Own-wallet payments support Solana Devnet only. Tempo is unavailable here.',
   close_not_drained: 'Close is blocked by outstanding reservations or accepted charges awaiting authorization. Pause serving, authorize saved charges and inspect again.',
   campaign_version_conflict: 'The campaign version changed. Reload resources and review the current version; frozen channels never follow edits.',
   reconcile_existing_attempt: 'A saved attempt already exists. Reload and explicitly reconcile it; do not sign a replacement.',
-  no_reconcilable_attempt: 'No signed attempt can be reconciled. The saved state needs operator inspection; do not replace it.',
+  no_reconcilable_attempt: 'There is no signed attempt to check. Contact support before doing anything else; do not replace it.',
   unsigned_plan_expired: 'The unsigned plan expired. Reload saved records, then explicitly prepare this same frozen operation again. Signed unknown attempts must only be reconciled.',
-  account_funding_not_connected: 'Account-owned funding is unavailable on this server.',
-  invalid_financial_response: 'The financial response did not match the expected Devnet account contract. Reload before continuing.',
+  account_funding_not_connected: 'Payments are not available yet.',
+  invalid_financial_response: 'The payment details could not be read. Reload before continuing.',
 };
 function safeError(error: unknown) {
   if (error instanceof WalletStandardError) return error.message;
@@ -84,7 +84,7 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
   const [acknowledged, setAcknowledged] = useState(false);
   const [blocked, setBlocked] = useState(false);
   const [working, setWorking] = useState(false);
-  const [status, setStatus] = useState('Choose a resource, then explicitly load its saved wallet proof and channels.');
+  const [status, setStatus] = useState('Choose a campaign or AI app to begin.');
   const [error, setError] = useState('');
   const busy = parentBusy || working || !ready;
   const role = kind === 'campaigns' ? 'payer' as const : 'payee' as const;
@@ -147,7 +147,7 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
   }, true); }
   function sign() { if (channel && signing) void run('Waiting for your explicit wallet signature…', async current => {
     const connected = requireWallet();
-    if (signing.kind !== 'voucher' && (!broadcastEnabled || !acknowledged)) throw new WalletStandardError('Broadcast permission is required for transaction signature submission.');
+    if (signing.kind !== 'voucher' && (!broadcastEnabled || !acknowledged)) throw new WalletStandardError('Payments are not available yet, so this transaction cannot be submitted.');
     const signed = signing.kind === 'voucher'
       ? await signWalletMessage(connected.wallet, connected.account, channel.payer, bytesFromBase64(signing.messageBase64))
       : await signWalletTransaction(connected.wallet, connected.account, signerAddress, signing.wireBase64);
@@ -175,36 +175,36 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
   return <section className="account-wallet" aria-label="Account-owned wallet funding">
     <div className="ld-stack">
       <div className="ld-row">
-        <span className="ld-tag" data-tone="brand">Solana Devnet · test USDC</span>
-        <span className="ld-tag" data-tone={broadcastEnabled ? 'warning' : 'outline'}>Server broadcast gate: {broadcastEnabled ? 'enabled for explicit transaction signature submissions' : 'disabled'}</span>
+        <span className="ld-tag" data-tone="outline">Solana Devnet · test USDC · no real money</span>
+        <span className="ld-tag" data-tone={broadcastEnabled ? 'success' : 'warning'}>{broadcastEnabled ? 'Payments on: each one needs your signature' : 'Payments are not available yet'}</span>
       </div>
       <p className="ld-body">{broadcastEnabled
-        ? 'Deposit and close transactions can be submitted from this server, but only after you prepare one, tick the authorization box and sign it in your wallet.'
-        : 'Broadcasts disabled. You can prove ownership and inspect channels, but cannot submit deposits, payouts or refunds.'}</p>
-      <details className="account-more"><summary>Test network and signing limits</summary>
-        <p className="ld-secondary">Test USDC only. 1 test USDC equals 1,000,000 base units. SOL network fees and rent are separate. Tempo and mainnet are unavailable here. Nothing connects, signs, funds, activates or broadcasts automatically, and this panel makes no provider or model calls.</p>
+        ? 'A deposit or a close is sent only after you prepare it, tick the authorization box and sign it in your wallet.'
+        : 'You can verify your wallet and review your channels. Deposits, payouts and refunds are switched off.'}</p>
+      <details className="account-more"><summary>Limits to know</summary>
+        <p className="ld-secondary">Test USDC only. 1 test USDC equals 1,000,000 base units. SOL network fees and rent are separate. Nothing connects, signs, funds or sends on its own.</p>
       </details>
-      {!ready && <p role="status" className="account-error">Account wallet bindings are unavailable on this server.</p>}
+      {!ready && <p role="status" className="account-error">Wallet verification is not available yet.</p>}
       <p className="account-wallet-status" role="status" aria-live="polite">{status}</p>
       {error && <p className="account-error" role="alert">{error}</p>}
     </div>
     <fieldset className="account-fields account-wallet-step" disabled={busy}>
       <legend>1. Choose what the wallet is for</legend>
-      <p className="ld-secondary">Choose campaign funding or AI app payouts. Each ownership proof belongs to that resource only.</p>
+      <p className="ld-secondary">A wallet is verified for one campaign (to fund it) or one AI app (to be paid).</p>
       <div className="account-pair">
         <div className="ld-field">
           <label className="ld-field-l" htmlFor={`${prefix}-kind`}>Wallet purpose</label>
           <select className="ld-select" id={`${prefix}-kind`} value={kind} onChange={e => { clearResource(); setKind(e.target.value as FinancialResource); setResourceId(''); }}>
-            <option value="campaigns">Campaign funding · payer</option><option value="apps">AI app payout · payee</option>
+            <option value="campaigns">Fund a campaign</option><option value="apps">Receive payouts for an AI app</option>
           </select>
         </div>
         <div className="ld-field">
           <label className="ld-field-l" htmlFor={`${prefix}-resource`}>{kind === 'campaigns' ? 'Campaign' : 'AI app'}</label>
           <select className="ld-select" id={`${prefix}-resource`} value={resourceId} onChange={e => { clearResource(); setResourceId(e.target.value); }}>
-            <option value="">Choose a saved resource</option>
+            <option value="">Choose one</option>
             {resources.map(resource => <option key={resource.id} value={resource.id}>{'input' in resource ? resource.input.name : resource.name}</option>)}
           </select>
-          {!resources.length && <span className="ld-field-h">None loaded yet. Select Reload campaigns and apps to read your saved {kind === 'campaigns' ? 'campaigns' : 'AI apps'}.</span>}
+          {!resources.length && <span className="ld-field-h">None loaded yet. Select Reload campaigns and apps.</span>}
         </div>
       </div>
       <div className="ld-row">
@@ -213,23 +213,23 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
       </div>
     </fieldset>
     <fieldset className="account-fields account-wallet-step" disabled={busy}>
-      <legend>2. Prove you control the wallet</legend>
-      <p className="ld-secondary">An ownership proof is a signed text message. It moves no funds, it is not a deposit, and it cannot open a channel or authorize spending.</p>
+      <legend>2. Verify your wallet</legend>
+      <p className="ld-secondary">This signature verifies your wallet and does not send funds. It is not a deposit and cannot authorize spending.</p>
       <div className="ld-row">
-        <span className="ld-tag" data-tone={binding ? 'success' : 'outline'}>{binding ? 'Ownership verified' : 'No ownership proof loaded'}</span>
+        <span className="ld-tag" data-tone={binding ? 'success' : 'outline'}>{binding ? 'Wallet verified' : 'Not verified yet'}</span>
         <span className="ld-tag" data-tone="outline">{account ? 'Wallet connected' : 'No wallet connected'}</span>
       </div>
-      <p className="ld-secondary account-break">{binding ? `Verified ${binding.purpose} address: ${binding.address}` : 'No verified proof loaded for this resource. Profile payout declarations do not prove ownership.'}</p>
+      <p className="ld-secondary account-break">{binding ? `Verified ${binding.purpose} address: ${binding.address}` : 'No verified wallet loaded. A payout address saved in app settings does not verify a wallet.'}</p>
       <div className="account-pair">
         <div className="ld-field">
-          <label className="ld-field-l" htmlFor={`${prefix}-wallet`}>Wallet Standard wallet</label>
+          <label className="ld-field-l" htmlFor={`${prefix}-wallet`}>Wallet</label>
           <select className="ld-select" id={`${prefix}-wallet`} value={wallet && wallets.includes(wallet) ? String(wallets.indexOf(wallet)) : ''} onChange={e => {
             setWallet(e.target.value === '' ? null : wallets[Number(e.target.value)]); setAccount(null); setChallenge(null);
           }}><option value="">Choose a wallet</option>{wallets.map((candidate, i) => <option key={i} value={String(i)}>{candidate.name}</option>)}</select>
-          {!wallets.length && <span className="ld-field-h">Install or unlock a Solana Devnet wallet with message signing. Connecting always requires your action.</span>}
+          {!wallets.length && <span className="ld-field-h">No wallet found in this browser. Install or unlock a Solana wallet set to Devnet.</span>}
         </div>
         <div className="ld-field">
-          <label className="ld-field-l" htmlFor={`${prefix}-address`}>Expected wallet address (must match the wallet account)</label>
+          <label className="ld-field-l" htmlFor={`${prefix}-address`}>Wallet address (must match the wallet you connect)</label>
           <input className="ld-input" id={`${prefix}-address`} value={expectedAddress} autoComplete="off" spellCheck={false} onChange={e => { setExpectedAddress(e.target.value); setAccount(null); setChallenge(null); }} />
         </div>
       </div>
@@ -255,17 +255,17 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
       {challenge && <details open><summary>Review ownership challenge · expires {new Date(challenge.expiresAt).toISOString()}</summary><pre className="account-break">{challenge.message}</pre></details>}
     </fieldset>
     {kind === 'campaigns' && <fieldset className="account-fields account-wallet-step" disabled={busy || blocked || !campaign}>
-      <legend>3. Fix the channel terms for one AI app</legend>
-      <p className="ld-secondary">Bind this approved campaign version to one app and its verified payout wallet. Freezing does not sign, deposit or start serving.</p>
-      <details className="account-more"><summary>What freezing terms means</summary><p className="ld-secondary">This runs a read-only network check. The app, wallets and amounts remain fixed even if profiles change later.</p></details>
+      <legend>3. Set the terms with one AI app</legend>
+      <p className="ld-secondary">Link this approved campaign version to one app and its verified payout wallet. Freezing the terms sends nothing and does not start the campaign.</p>
+      <details className="account-more"><summary>What freezing terms means</summary><p className="ld-secondary">The app, both wallets and the amounts stay fixed from then on, even if profiles change later.</p></details>
       <div className="account-pair">
         <div className="ld-field">
-          <label className="ld-field-l" htmlFor={`${prefix}-app`}>Counterparty payout app ID (including an app owned by another organization)</label>
+          <label className="ld-field-l" htmlFor={`${prefix}-app`}>AI app ID to pay (it can belong to another organization)</label>
           <input className="ld-input" id={`${prefix}-app`} list={`${prefix}-apps`} value={appId} onChange={e => setAppId(e.target.value)} autoComplete="off" />
           <datalist id={`${prefix}-apps`}>{apps.map(app => <option key={app.id} value={app.id}>{app.name}</option>)}</datalist>
         </div>
         <div className="ld-field">
-          <label className="ld-field-l" htmlFor={`${prefix}-deposit`}>Deposit · integer test-USDC base units (maximum 200000)</label>
+          <label className="ld-field-l" htmlFor={`${prefix}-deposit`}>Deposit in test-USDC base units (maximum 200000)</label>
           <input className="ld-input" id={`${prefix}-deposit`} inputMode="numeric" value={deposit} onChange={e => setDeposit(e.target.value)} autoComplete="off" />
           <span className="ld-field-h">{/^[1-9][0-9]{0,5}$/.test(deposit) ? `Equals ${units(deposit)} test USDC. ` : ''}The deposit is only made later, by a transaction you sign.</span>
         </div>
@@ -280,12 +280,12 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
       </div>
     </fieldset>}
     <fieldset className="account-fields account-wallet-step" disabled={busy}>
-      <legend>{kind === 'campaigns' ? '4' : '3'}. Channels · {role}</legend>
-      <p className="ld-secondary">Deposits, charge authorizations, finalized payouts and refunds are tracked separately.</p>
+      <legend>{kind === 'campaigns' ? '4' : '3'}. Channels</legend>
+      <p className="ld-secondary">A channel holds the deposit for one campaign and one app. Deposits, authorized charges, payouts and refunds are shown separately. You are the {role === 'payer' ? 'payer' : 'recipient'}.</p>
       <div className="ld-field">
         <label className="ld-field-l" htmlFor={`${prefix}-channel`}>Saved channel</label>
         <select className="ld-select" id={`${prefix}-channel`} value={channelId} onChange={e => { setChannelId(e.target.value); setSigning(null); setAcknowledged(false); setError(''); }}>
-          <option value="">Choose a loaded channel</option>{channels.map(c => <option key={c.id} value={c.id}>{c.id} · {c.phase}</option>)}
+          <option value="">Choose a loaded channel</option>{channels.map((c, i) => <option key={c.id} value={c.id}>Channel {i + 1} · {plain(c.phase)}</option>)}
         </select>
         {!channels.length && <span className="ld-field-h">No channels loaded. Use Load wallet proof and own channels in step 1 to inspect saved state.</span>}
       </div>
@@ -302,7 +302,7 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
           <li><b>Refunded to the advertiser</b><span>{units(channel.refundBaseUnits)} test USDC{channel.phase === 'finalized' ? '' : '. Unused deposit returns at close.'}</span></li>
         </ul>
         <details className="account-more">
-          <summary>Channel record</summary>
+          <summary>Full channel record</summary>
           <dl className="account-readiness account-break">
             <div><dt>Phase / open / close</dt><dd>{channel.phase} / {channel.openStatus} / {channel.closeStatus}</dd></div>
             <div><dt>Pending authorization</dt><dd>{channel.pendingAuthorizationStatus ?? 'None'}</dd></div>
@@ -316,7 +316,7 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
             <div><dt>Close transaction</dt><dd>{channel.closeTransaction ?? 'None recorded'}</dd></div>
           </dl>
         </details>
-        {(blocked || channel.requiresReconciliation) && <p role="alert" className="account-error">An operation is uncertain or needs reconciliation. Do not create replacement terms or repeat a signature submission. Reload saved records and reconcile explicitly; unresolved preparation may need operator recovery.</p>}
+        {(blocked || channel.requiresReconciliation) && <p role="alert" className="account-error">The outcome of an earlier action is unknown. Do not create new terms or sign again. Reload saved records and select Reconcile saved attempt. If it stays unresolved, contact support.</p>}
         {role === 'payer' && <div className="ld-stack">
           <h4 className="account-part-title">Serving on this channel</h4>
           <div className="ld-row">
@@ -344,9 +344,9 @@ function FinancialPanel({ client, organizationId, campaigns: initialCampaigns = 
         {signing && <div className="account-secret">
           <span className="ld-card-title">Ready for your wallet: {signing.kind}</span>
           <p className="ld-secondary account-break">Prepared {signing.kind} · terms {signing.termsHash}. Required wallet: {signerAddress}.</p>
-          {signing.kind === 'voucher' ? <p className="ld-secondary">Accepted charge {signing.chargeId} · cumulative authorization {signing.previousAmountBaseUnits} → {signing.cumulativeAmountBaseUnits} base units. Only the payer receives the unsigned native message; no signed private voucher is displayed or persisted.</p>
+          {signing.kind === 'voucher' ? <p className="ld-secondary">Accepted charge {signing.chargeId} · cumulative authorization {signing.previousAmountBaseUnits} → {signing.cumulativeAmountBaseUnits} base units. Your signed voucher is never displayed or stored in this browser.</p>
             : <><p className="ld-secondary">Estimated fee/rent bound: {signing.estimatedFeeAndRentLamports} lamports. {signing.kind === 'close' && 'Cooperative close requires both frozen wallets. A partial signature is not payout or finality.'}</p>
-              {!broadcastEnabled && <p className="ld-secondary">The server broadcast gate is disabled, so this transaction cannot be authorized or submitted here.</p>}
+              {!broadcastEnabled && <p className="ld-secondary">Payments are not available yet, so this transaction cannot be authorized or submitted.</p>}
               <label className="ld-secondary"><input type="checkbox" checked={acknowledged} disabled={!broadcastEnabled} onChange={e => setAcknowledged(e.target.checked)} /> I authorize this explicit transaction signature submission to broadcast on Solana Devnet when all required signatures are present.</label></>}
           {account?.address !== signerAddress && <p className="ld-secondary">Waiting for the frozen {role} wallet. Connect the exact required address above; no wallet prompt is opened automatically.</p>}
           <div className="ld-row">

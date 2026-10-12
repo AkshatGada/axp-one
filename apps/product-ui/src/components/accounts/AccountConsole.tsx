@@ -5,50 +5,53 @@ import { Ld } from '@axp/design-system/ledger';
 import { AccountApiError, AccountsClient, isConfigured } from './client';
 import { consumeConfirmationLink } from './forms';
 import { AccountForm, AdvertiserForm, AppForm, AuthForm, Input, type RunAction } from './AccountForms';
-import { AppCredentials, CampaignResources, JourneySteps, type AppSummary, type CampaignSummary } from './newResourceForms';
+import { AppCredentials, CampaignResources, type AppSummary, type AppTab, type CampaignSummary } from './newResourceForms';
 import { OwnerReport } from './servingResources';
 import { AccountFinancialResources } from './financialResources';
 import type { AccountHealth, AccountSession, AppCredential, IssuedAppCredential, OrganizationDetails } from './types';
-import { modeName, modeSentence } from './format';
+import { modeName } from './format';
+import { destinations } from '../shared/mode';
 import { campaignCapabilities } from './resourceForms';
 import { accountViews as views, accountViewForFragment, type AccountView as View } from './navigation';
 
 const pages: Record<View, { nav: string; title: string; sub: string }> = {
-  overview: { nav: 'Overview', title: 'Your account', sub: 'Advertise in AI conversations, or show Sponsored cards in your own AI app.' },
-  advertiser: { nav: 'Advertise', title: 'Advertise', sub: 'Reach people in AI conversations with a clearly labelled Sponsored card below the answer.' },
-  app: { nav: 'AI app', title: 'AI app', sub: 'Show a clearly labelled Sponsored card below your own answers and track every accepted placement.' },
-  wallet: { nav: 'Wallet', title: 'Wallet', sub: 'Wallet ownership, deposits, accepted charges, payouts and refunds, each kept separate.' },
-  settings: { nav: 'Settings', title: 'Settings', sub: 'Your profile, your organizations and what this server can do.' },
+  overview: { nav: 'Home', title: 'Home', sub: 'Pick up where you left off.' },
+  advertiser: { nav: 'Your campaigns', title: 'Your campaigns', sub: 'Reach people in AI conversations with a labelled Sponsored card below the answer.' },
+  app: { nav: 'Your AI apps', title: 'Your AI apps', sub: 'Show a labelled Sponsored card below your own answers and see every accepted placement.' },
+  wallet: { nav: 'Wallet', title: 'Wallet', sub: 'Verify your wallet and review deposits, charges, payouts and refunds.' },
+  settings: { nav: 'Settings', title: 'Settings', sub: 'Your profile and organizations.' },
 };
+const unavailable = 'Account sign in is unavailable right now. Try again in a few minutes.';
+const appTabForSection: Record<string, AppTab> = { 'ai-apps': 'settings', 'app-credentials': 'keys', 'app-integrate': 'connect', 'app-readiness': 'connect', 'app-report': 'deliveries' };
+const appTabs: Array<{ key: AppTab; label: string }> = [{ key: 'connect', label: 'Connect' }, { key: 'keys', label: 'API keys' }, { key: 'deliveries', label: 'Deliveries' }, { key: 'settings', label: 'App settings' }];
 
 type Step = { label: string; done: boolean; action: string };
-/** One role, its saved progress and a single next step. Nothing here is inferred beyond saved account data. */
-function RoleCard({ title, sub, steps, href, unavailable, doneAction }: { title: string; sub: string; steps: Step[]; href: string; unavailable?: string; doneAction: string }) {
-  const next = steps.findIndex(step => !step.done);
-  const done = steps.filter(step => step.done).length;
-  return <Ld.Panel title={title} sub={sub} actions={<span className="ld-tag" data-tone={done ? 'brand' : 'outline'}>{done} of {steps.length} steps done</span>}>
-    <div className="account-role">
-      <ol className="account-checklist">
-        {steps.map((step, index) => <li key={step.label} data-state={step.done ? 'done' : index === next ? 'next' : 'todo'}>{step.label}</li>)}
-      </ol>
-      {unavailable ? <Ld.Callout tone="warning" title="Not available on this server">{unavailable}</Ld.Callout> : <div className="account-next">
-        <div>
-          <span className="ld-label">Next step</span>
-          <span className="ld-body ld-strong">{next === -1 ? doneAction : steps[next].action}</span>
-        </div>
-        <Ld.Button href={href}>{next === -1 ? 'Open →' : next === 0 ? 'Get started →' : 'Continue →'}</Ld.Button>
-      </div>}
+/** One role the person already uses: where it stands and its single next action. */
+function RoleRow({ title, status, steps, href, doneAction, primary, unavailable: blocked }: { title: string; status: string; steps: Step[]; href: string; doneAction: string; primary: boolean; unavailable?: string }) {
+  const next = steps.find(step => !step.done);
+  return <div className="account-role-row">
+    <div>
+      <h3 className="ld-card-title">{title}</h3>
+      <p className="ld-secondary">{status}</p>
     </div>
-  </Ld.Panel>;
+    {blocked ? <span className="ld-secondary">{blocked}</span> : <div className="account-role-next">
+      <span><span className="ld-caption">{next ? 'Next' : 'All set'}</span><span className="ld-body ld-strong">{next ? next.action : doneAction}</span></span>
+      <Ld.Button variant={primary ? 'primary' : 'secondary'} href={href}>{next ? 'Continue →' : 'Open →'}</Ld.Button>
+    </div>}
+  </div>;
+}
+function progress(steps: Step[]) {
+  const next = steps.findIndex(step => !step.done);
+  return steps.map((step, index) => ({ title: step.label, state: step.done ? 'done' as const : index === next ? 'current' as const : 'todo' as const }));
 }
 
 /** The four money facts that must never be confused with one another. */
 function MoneyTerms() {
   return <ul className="account-money">
-    <li><b>Ownership proof</b><span>A signed message showing you control a wallet. It moves no funds and is not a payment or a deposit.</span></li>
-    <li><b>Deposit</b><span>Test funds an advertiser locks for one AI app by signing a transaction. Collateral, not spend.</span></li>
-    <li><b>Accepted charge</b><span>Added when an AI app's receipt confirms a Sponsored card was inserted. Owed, not yet paid out.</span></li>
-    <li><b>Payout and refund</b><span>At close the app is paid the accepted total and the advertiser gets the unused deposit back. Two separate amounts.</span></li>
+    <li><b>Wallet verification</b><span>A signed message that shows you control a wallet. It sends no funds.</span></li>
+    <li><b>Deposit</b><span>Test funds an advertiser sets aside for one AI app. Not spend.</span></li>
+    <li><b>Accepted charge</b><span>Added when an AI app confirms a Sponsored card was shown. Owed, not yet paid out.</span></li>
+    <li><b>Payout and refund</b><span>When a channel closes, the app is paid the accepted total and the advertiser gets the rest back. Two separate amounts.</span></li>
   </ul>;
 }
 
@@ -68,6 +71,10 @@ export function AccountConsole() {
   const [view, setView] = useState<View>('overview');
   const [campaignSummary, setCampaignSummary] = useState<CampaignSummary | null>(null);
   const [appSummary, setAppSummary] = useState<AppSummary | null>(null);
+  const [intent, setIntent] = useState<'advertiser' | 'app' | null>(null);
+  const [appTab, setAppTab] = useState<AppTab>('connect');
+  const [section, setSection] = useState('');
+  const chosenAppTab = useRef('');
   const secretEpoch = useRef(0);
   const lock = useRef(false);
   const initialized = useRef(false);
@@ -176,6 +183,9 @@ export function AccountConsole() {
     // Section deep links select their owning view on reload as well as clicks.
     const syncView = () => {
       const name = window.location.hash.slice(1);
+      if (name === 'create') setAuthMode('signup');
+      setSection(name);
+      if (appTabForSection[name]) { chosenAppTab.current = '*'; setAppTab(appTabForSection[name]); }
       const next = accountViewForFragment(window.location.hash);
       if (next) {
         setView(next); setNotice('');
@@ -227,45 +237,68 @@ export function AccountConsole() {
   }, [view, signedIn, busy, appId]);
   const unenforceable = selectedApp?.blockedCategories.filter(entry => !(campaignCapabilities as readonly string[]).includes(entry)) ?? [];
   const advertiserSteps: Step[] = [
-    { label: 'Save your business profile', done: Boolean(details?.advertiser), action: 'Add your business profile' },
-    { label: 'Create a campaign and its Sponsored creative', done: Boolean(campaignFacts?.total), action: 'Create your first campaign' },
-    { label: 'Approve the exact version you reviewed', done: Boolean(campaignFacts?.approved), action: 'Review and approve your campaign' },
-    { label: 'Turn serving on', done: Boolean(campaignFacts?.serving), action: 'Turn serving on for an approved campaign' },
+    { label: 'Business profile', done: Boolean(details?.advertiser), action: 'Create your business profile' },
+    { label: 'Campaign', done: Boolean(campaignFacts?.total), action: 'Create your first campaign' },
+    { label: 'Approve', done: Boolean(campaignFacts?.approved), action: 'Review and approve your campaign' },
+    { label: 'Go live', done: Boolean(campaignFacts?.serving), action: 'Turn on an approved campaign' },
   ];
   const appSteps: Step[] = [
-    { label: 'Create your AI app profile', done: Boolean(details?.apps.length), action: 'Add your AI app' },
-    { label: 'Save allowed origins and category rules', done: Boolean(selectedApp?.allowedOrigins.length) && !unenforceable.length, action: unenforceable.length ? 'Remove category rules that cannot be enforced' : 'Save the origins your app runs on' },
-    { label: 'Issue a server key', done: Boolean(appFacts?.activeKeys), action: 'Issue a server key and copy it once' },
-    { label: 'Connect your server and pass the readiness check', done: appFacts?.ready === true, action: 'Connect your server and check readiness' },
+    { label: 'Add your app', done: Boolean(details?.apps.length), action: 'Add your AI app' },
+    { label: 'Get your API key', done: Boolean(appFacts?.activeKeys), action: 'Get your API key' },
+    { label: 'Connect your app', done: appFacts?.ready === true, action: unenforceable.length ? 'Fix the ad rules for your app' : 'Connect your app' },
   ];
+  // Open the tab that holds this app's next step, once per app, unless the person already chose one.
+  const appFactsKnown = Boolean(appFacts && appFacts.activeKeys !== null && (appFacts.ready !== null || !servingReady || appFacts.activeKeys === 0));
+  useEffect(() => {
+    if (!selectedApp || !appFacts || !appFactsKnown || chosenAppTab.current === '*' || chosenAppTab.current === selectedApp.id) return;
+    chosenAppTab.current = selectedApp.id;
+    setAppTab(!appFacts.activeKeys ? 'keys' : appFacts.ready === true ? 'deliveries' : 'connect');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedApp?.id, appFactsKnown]);
+  const advertiserInUse = Boolean(details?.advertiser || campaignFacts?.total);
+  const appInUse = Boolean(details?.apps.length);
+  const advertiserNext = advertiserSteps.some(step => !step.done), appNext = appSteps.some(step => !step.done);
+  const balance = financialMode === 'devnet' ? 'Solana Devnet · test USDC · no real money' : 'Test balance · no real money';
+  const createOrganization = (name: string, then?: 'advertiser' | 'app' | null) => run('Creating organization', async () => {
+    const { organization } = await client.createOrganization(name);
+    setSession(current => current?.authenticated ? { ...current, organizations: [...current.organizations, organization] } : current);
+    setOrganizationId(organization.id); setAppId('');
+    setDetails({ organization, advertiser: null, apps: [] });
+    if (then) window.location.hash = then;
+  }, 'Organization created.');
+  const signOut = () => void run('Signing out', async () => {
+    await client.signout();
+    clearOwnedState();
+    setSession({ authenticated: false });
+  }, 'Signed out.');
   const selectedCampaign = campaignFacts?.selected ?? null;
   return <div className="account-console"
     onClickCapture={event => { if (event.target instanceof Element && event.target.closest('button, a, summary')) clearResourceSecret(); }}
     onSubmitCapture={clearResourceSecret} onChangeCapture={clearResourceSecret}>
     <Ld.Shell
-      top={<Ld.TopBar brand={<Ld.Wordmark />} chips={<>
-          <Ld.Tag tone="outline">Account</Ld.Tag>
-          {ready && <Ld.Tag tone={financialMode === 'devnet' ? 'brand' : 'outline'}>{modeName(financialMode)}</Ld.Tag>}
-        </>}
+      top={<Ld.TopBar brand={<Ld.Wordmark />}
+        run={<Ld.Context kind="account" label="Your account" detail={signedIn ? details?.organization.name ?? authenticated?.user.email : 'Private to you'} />}
+        chips={ready ? <Ld.Tag tone="outline">{balance}</Ld.Tag> : undefined}
         actions={<>
           {authenticated && <span className="account-who" title={authenticated.user.email}>{authenticated.user.displayName || authenticated.user.email}</span>}
-          <Ld.Button variant="secondary" disabled={busy} onClick={() => void run('Refreshing account', refresh)}>Refresh account</Ld.Button>
-          {authenticated && <Ld.Button variant="secondary" disabled={busy} onClick={() => void run('Signing out', async () => {
-            await client.signout();
-            clearOwnedState();
-            setSession({ authenticated: false });
-          }, 'Signed out.')}>Sign out</Ld.Button>}
+          {authenticated ? <Ld.Button variant="secondary" disabled={busy} onClick={signOut}>Sign out</Ld.Button>
+            : <Ld.Button variant="ghost" href={destinations.demoDashboard.href}>View the shared demo →</Ld.Button>}
         </>} />}
-      side={<Ld.SideNav groups={signedIn ? [
-        { label: 'Account', items: [{ href: '#overview', label: pages.overview.nav, current: view === 'overview' }] },
-        { label: 'Advertiser', items: [{ href: '#advertiser', label: 'Campaigns', current: view === 'advertiser', meta: campaignFacts ? String(campaignFacts.total) : undefined }] },
-        { label: 'AI app owner', items: [{ href: '#app', label: 'Apps and integration', current: view === 'app', meta: details ? String(details.apps.length) : undefined }] },
-        { label: 'Money', items: [{ href: '#wallet', label: pages.wallet.nav, current: view === 'wallet' }] },
-        { label: 'Settings', items: [{ href: '#settings', label: 'Profile and status', current: view === 'settings' }] },
-      ] : [{ label: 'Account', items: [{ href: '#overview', label: 'Sign in', current: true }] }]}
-        foot={ready ? `${modeName(financialMode)}. Your account data is separate from the shared demonstration.` : 'Your account data is separate from the shared demonstration.'} />}>
-      <Ld.PageBar title={signedIn ? page.title : authMode === 'signup' ? 'Create account' : 'Sign in'} sub={signedIn ? page.sub : 'Manage your campaigns and AI apps.'}
-        meta={signedIn && details ? <Ld.Tag tone="outline">{details.organization.name}</Ld.Tag> : undefined}
+      side={<Ld.SideNav groups={[
+        { label: 'Your account', items: signedIn ? [
+          { href: '#overview', label: pages.overview.nav, current: view === 'overview' },
+          { href: '#advertiser', label: pages.advertiser.nav, current: view === 'advertiser', meta: campaignFacts ? String(campaignFacts.total) : undefined },
+          { href: '#app', label: pages.app.nav, current: view === 'app', meta: details ? String(details.apps.length) : undefined },
+          { href: '#wallet', label: pages.wallet.nav, current: view === 'wallet' },
+          { href: '#settings', label: pages.settings.nav, current: view === 'settings' },
+        ] : [{ href: '#overview', label: 'Sign in', current: true }] },
+        { label: 'Shared demo', items: [
+          { href: destinations.demoDashboard.href, label: `${destinations.demoDashboard.label} →` },
+          { href: destinations.exampleChat.href, label: `${destinations.exampleChat.label} →` },
+          { href: destinations.sdkGuide.href, label: `${destinations.sdkGuide.label} →` },
+        ] },
+      ]} foot={<><strong>Your account</strong><p>{ready ? `${balance}.` : 'Private to you.'}</p></>} />}>
+      <Ld.PageBar title={signedIn ? page.title : authMode === 'signup' ? 'Create your account' : 'Sign in'} sub={signedIn ? page.sub : 'Your campaigns and AI apps, private to you.'}
         actions={signedIn && authenticated && authenticated.organizations.length > 1 ? <div className="account-org">
           <label htmlFor="account-organization">Organization</label>
           <select id="account-organization" className="ld-select" value={organizationId} disabled={busy || !profiles}
@@ -281,29 +314,24 @@ export function AccountConsole() {
       <div className="account-feedback" data-kind={busy ? 'busy' : notice ? 'done' : undefined} aria-live="polite" aria-atomic="true" role="status">
         {busy ? `${busyLabel}…` : notice}
       </div>
-      {error && <div className="account-error" role="alert" tabIndex={-1} ref={errorNode}>{error}</div>}
+      {error && <div className="account-error" role="alert" tabIndex={-1} ref={errorNode}>{error}{signedIn && /Refresh account/.test(error) && <> <button type="button" className="account-inline-action" disabled={busy} onClick={() => void run('Refreshing account', refresh)}>Refresh account</button></>}</div>}
 
-      {!health && !busy && <Ld.Callout tone="danger" title="Account service unavailable">
-        The account service could not be reached or returned an invalid response. No signed-in state has been assumed. Check the server, then select Refresh account.
-      </Ld.Callout>}
-      {health && !ready && <Ld.Callout tone="warning" title={!isConfigured(health) ? 'Accounts are not configured on this server' : 'Accounts are switched off on this server'}>
-        {!isConfigured(health) ? 'The account origin, identity provider or private profile store is not configured.' : 'The account service has not been enabled.'} Sign-up, sign-in and profile changes are unavailable. No demo identity or simulated sign-in is provided.
-      </Ld.Callout>}
-      {ready && !session && !busy && <Ld.Callout tone="warning" title="Your session could not be checked">
-        Select Refresh account to check your session before continuing.
-      </Ld.Callout>}
+      {((!health && !busy) || (health && !ready)) && <Ld.Notice tone="blocked" title={unavailable}
+        actions={<Ld.Button variant="secondary" disabled={busy} onClick={() => void run('Checking again', refresh)}>Try again</Ld.Button>} />}
+      {ready && !session && !busy && <Ld.Notice tone="blocked" title="We could not check whether you are signed in."
+        actions={<Ld.Button variant="secondary" onClick={() => void run('Checking again', refresh)}>Try again</Ld.Button>} />}
 
       {tokenHash && <Ld.Panel title="Confirm your email">
         <div className="ld-stack">
-          <p className="ld-body">An email-confirmation link was opened. Nothing has been submitted. Confirming will sign you into the account associated with this link{authenticated ? ' and replace your current session' : ''}.</p>
-          <p className="ld-secondary">The link parameters have been removed from the address bar. Reloading discards this pending confirmation; reopen the email link if needed.</p>
+          <p className="ld-body">You opened an email confirmation link. Nothing has been submitted. Confirming signs you in to the account for this link{authenticated ? ' and signs you out of the current one' : ''}.</p>
+          <p className="ld-secondary">If you reload this page, open the link from your email again.</p>
           <div className="ld-row">
             <Ld.Button disabled={busy || !ready} onClick={() => void run('Confirming email', async () => {
               await client.confirm(tokenHash);
               setTokenHash(null);
               clearOwnedState();
               await readSession();
-            }, 'Email confirmed and session checked. Nothing is served or funded until you choose to.')}>Confirm email</Ld.Button>
+            }, 'Email confirmed. You are signed in.')}>Confirm email</Ld.Button>
             <Ld.Button variant="secondary" disabled={busy} onClick={() => { setTokenHash(null); setError(''); }}>Discard link</Ld.Button>
           </div>
         </div>
@@ -317,10 +345,11 @@ export function AccountConsole() {
               <p className="ld-secondary">Your campaigns and AI apps, in one place.</p>
             </div>
             <ul className="account-plain-list account-welcome-roles">
-              <li><span className="ld-body ld-strong">For advertisers</span><span className="ld-secondary">Create campaigns and track placements.</span></li>
-              <li><span className="ld-body ld-strong">For AI apps</span><span className="ld-secondary">Connect your app and track accepted deliveries.</span></li>
+              <li><span className="ld-body ld-strong">For advertisers</span><span className="ld-secondary">Create campaigns and see where they appear.</span></li>
+              <li><span className="ld-body ld-strong">For AI apps</span><span className="ld-secondary">Connect your app and see every accepted placement.</span></li>
             </ul>
-            <p className="account-mode-note">{financialMode === 'synthetic' ? 'Simulated accounting. No money moves on this server.' : 'Solana Devnet only. Every payment needs your explicit signature.'}</p>
+            <p className="account-mode-note">{financialMode === 'synthetic' ? 'Test balances only. No real money moves.' : 'Solana Devnet test tokens only. Every payment needs your own signature.'}</p>
+            <p className="account-mode-note">Looking for the public example? <a className="ld-link" href={destinations.demoDashboard.href}>View the shared demo →</a></p>
           </div>
           <div className="account-auth">
             <div className="ld-seg" role="group" aria-label="Account access">
@@ -337,133 +366,153 @@ export function AccountConsole() {
 
       {authenticated && !tokenHash && <>
         <div className="account-view" hidden={view !== 'overview'}>
-          {!authenticated.organizations.length && <Ld.Panel title="Start by naming your organization" sub="Your business profile, campaigns and AI apps belong to an organization you own.">
-            <AccountForm label="Create organization" busy={busy || !profiles} submit="Create organization"
-              onSubmit={(data, form) => run('Creating organization', async () => {
-                const { organization } = await client.createOrganization(String(data.get('name') ?? '').trim());
-                setSession(current => current?.authenticated ? { ...current, organizations: [...current.organizations, organization] } : current);
-                setOrganizationId(organization.id); setAppId('');
-                setDetails({ organization, advertiser: null, apps: [] });
-                form.reset();
-              }, 'Organization created. You are its owner. Choose a role below to continue.')}>
-              <Input label="Organization name" name="name" autoComplete="organization" maxLength={120} />
-            </AccountForm>
-          </Ld.Panel>}
-          {!profiles && <Ld.Callout tone="warning" title="Profiles are not available">Profiles are switched off for this server or session, so campaigns and AI apps cannot be managed here.</Ld.Callout>}
-          {organizationId && !details && !busy && <Ld.Callout tone="warning" title="Your organization did not load" actions={<Ld.Button variant="secondary" size="sm" onClick={() => void run('Loading organization', async () => setDetails(await client.organization(organizationId)))}>Reload organization</Ld.Button>}>
-            Nothing was changed. Reload to continue.
-          </Ld.Callout>}
-          {details && profiles && <>
-            <div className="account-columns">
-              <RoleCard title="Advertise in AI conversations" sub="For businesses" steps={advertiserSteps} href="#advertiser" doneAction="Review activity and spend"
-                unavailable={campaignDrafts ? undefined : 'Campaigns are not enabled for this server or session.'} />
-              <RoleCard title="Show Sponsored cards in your AI app" sub="For AI app owners" steps={appSteps} href="#app" doneAction="Review deliveries, receipts and earnings"
-                unavailable={appCredentials ? undefined : 'Server keys are not enabled for this server or session.'} />
-            </div>
-            <Ld.Panel title="How money works here" sub={modeName(financialMode)} actions={<Ld.Button variant="secondary" size="sm" href="#wallet">Open wallet →</Ld.Button>}>
-              <div className="ld-stack">
-                <p className="ld-body">{financialMode === 'synthetic' ? 'Simulated accounting. No money moves.' : 'Solana Devnet · test USDC.'} {walletBindings
-                  ? health?.serving?.broadcastEnabled ? 'Payments require your explicit wallet signature.' : 'Ownership proofs are available; transaction broadcasts are disabled.'
-                  : 'Wallet funding is not connected.'}</p>
-                <details className="account-more"><summary>How ownership, charges and payments differ</summary><MoneyTerms /></details>
+          {!profiles && <Ld.Notice tone="blocked" title="Campaigns and AI apps are not available yet." />}
+          {organizationId && !details && !busy && <Ld.Notice tone="blocked" title="Your organization did not load. Nothing was changed."
+            actions={<Ld.Button variant="secondary" onClick={() => void run('Loading organization', async () => setDetails(await client.organization(organizationId)))}>Reload</Ld.Button>} />}
+          {profiles && (!authenticated.organizations.length || (details && !advertiserInUse && !appInUse)) && <Ld.Panel>
+            <div className="account-start">
+              <div className="account-intro">
+                <h2>What would you like to do?</h2>
+                <p className="ld-secondary">Pick one to start. You can add the other at any time.</p>
               </div>
-            </Ld.Panel>
-          </>}
+              <div className="ld-choices" role="group" aria-label="Choose how you will use AXP">
+                {details ? <>
+                  <a className="ld-choice" href="#advertiser"><b>Advertise in AI conversations</b><span>Show your offer as a labelled Sponsored card below relevant answers.</span><em>Create your business profile →</em></a>
+                  <a className="ld-choice" href="#app"><b>Earn from my AI app</b><span>Show a Sponsored card below your own answers and track each placement.</span><em>Add your AI app →</em></a>
+                </> : <>
+                  <button type="button" className="ld-choice" aria-pressed={intent === 'advertiser'} onClick={() => setIntent('advertiser')}><b>Advertise in AI conversations</b><span>Show your offer as a labelled Sponsored card below relevant answers.</span></button>
+                  <button type="button" className="ld-choice" aria-pressed={intent === 'app'} onClick={() => setIntent('app')}><b>Earn from my AI app</b><span>Show a Sponsored card below your own answers and track each placement.</span></button>
+                </>}
+              </div>
+              {!details && intent && <div className="account-start-next">
+                <AccountForm label="Name your organization" busy={busy} submit="Continue →"
+                  onSubmit={data => createOrganization(String(data.get('name') ?? '').trim(), intent)}>
+                  <Input label="Name your organization" name="name" autoComplete="organization" maxLength={120}
+                    hint={intent === 'advertiser' ? 'Usually your company. Your campaigns belong to it.' : 'Usually your company. Your AI apps belong to it.'} />
+                </AccountForm>
+              </div>}
+            </div>
+          </Ld.Panel>}
+          {details && profiles && (advertiserInUse || appInUse) && <Ld.Panel flush>
+            {advertiserInUse && <RoleRow title="Advertising" href="#advertiser" steps={advertiserSteps} doneAction="See results"
+              primary={advertiserNext || !appNext || !appInUse}
+              status={campaignFacts ? `${campaignFacts.total} campaign${campaignFacts.total === 1 ? '' : 's'} · ${campaignFacts.serving} live` : details.advertiser?.name ?? 'Business profile saved'}
+              unavailable={campaignDrafts ? undefined : 'Campaigns are not available yet.'} />}
+            {appInUse && <RoleRow title="AI apps" href="#app" steps={appSteps} doneAction="See deliveries"
+              primary={!advertiserInUse || (!advertiserNext && appNext)}
+              status={`${details.apps.length} app${details.apps.length === 1 ? '' : 's'}${appFacts?.activeKeys ? ` · ${appFacts.activeKeys} active API key${appFacts.activeKeys === 1 ? '' : 's'}` : ''}`}
+              unavailable={appCredentials ? undefined : 'API keys are not available yet.'} />}
+            <p className="account-also">{!advertiserInUse ? <>Also want to advertise? <a className="ld-link" href="#advertiser">Create your business profile →</a></>
+              : !appInUse ? <>Also have an AI app? <a className="ld-link" href="#app">Add your AI app →</a></>
+                : <>Balances here are {financialMode === 'devnet' ? 'test tokens' : 'test balances'}. No real money moves. <a className="ld-link" href="#wallet">Wallet →</a></>}</p>
+          </Ld.Panel>}
         </div>
 
         <div className="account-view" hidden={view !== 'advertiser'}>
-          {!details && <Ld.Empty title="No organization selected" action={<Ld.Button variant="secondary" href="#overview">Go to overview →</Ld.Button>}>Create or choose an organization first.</Ld.Empty>}
+          {!details && <Ld.Empty title="Start from Home" action={<Ld.Button variant="secondary" href="#overview">Go to Home →</Ld.Button>}>Name your organization first.</Ld.Empty>}
           {details && profiles && <>
-            <JourneySteps label="Advertiser steps" steps={[
-              { href: '#advertiser-profile', title: 'Business profile', note: 'who is advertising', done: Boolean(details.advertiser) },
-              { href: '#campaign-editor', title: 'Campaign and creative', note: 'offer, conversations, text', done: Boolean(selectedCampaign) },
-              { href: '#campaign-approve', title: 'Approve', note: 'this exact version', done: Boolean(selectedCampaign?.approved) },
-              { href: '#campaign-serving', title: 'Turn serving on', note: 'your own switch', done: selectedCampaign?.serving === true },
-              { href: '#campaign-activity', title: 'Activity and spend', note: 'placements and receipts', done: false },
-            ]} />
-            <Ld.Panel id="advertiser-profile" title="Business profile" sub="Who is advertising"
-              actions={<span className="ld-tag" data-tone={details.advertiser ? 'success' : 'warning'}>{details.advertiser ? 'Saved' : 'Needed first'}</span>}>
-              {details.advertiser ? <div className="ld-stack" key={details.organization.id}>
-                <p className="ld-body"><span className="ld-strong">{details.advertiser.name}</span> · {details.advertiser.website}</p>
-                {details.advertiser.description && <p className="ld-secondary">{details.advertiser.description}</p>}
-                <details className="account-more">
-                  <summary>Edit business profile</summary>
-                  <AdvertiserForm key={details.advertiser.updatedAt} profile={details.advertiser} busy={busy} run={run}
-                    save={async input => {
-                      const result = await client.advertiser(details.organization.id, input);
-                      setDetails(current => current ? { ...current, advertiser: result.advertiser } : current);
-                    }} />
-                </details>
-              </div> : <AdvertiserForm key={`new-advertiser:${details.organization.id}`} profile={null} busy={busy} run={run}
+            {advertiserNext && <Ld.Steps label="Advertiser progress" steps={progress(advertiserSteps)} />}
+            {!details.advertiser ? <Ld.Panel id="advertiser-profile" title="Create your business profile" sub="Your name and website appear on your Sponsored card.">
+              <AdvertiserForm key={`new-advertiser:${details.organization.id}`} profile={null} busy={busy} run={run}
                 save={async input => {
                   const result = await client.advertiser(details.organization.id, input);
                   setDetails(current => current ? { ...current, advertiser: result.advertiser } : current);
-                }} />}
-            </Ld.Panel>
-            {campaignDrafts ? <CampaignResources key={`campaigns:${authenticated.user.id}:${details.organization.id}`}
+                }} />
+            </Ld.Panel> : <details className="account-summary-bar" id="advertiser-profile" key={details.organization.id}>
+              <summary><span><b>{details.advertiser.name}</b><span className="ld-secondary">{details.advertiser.website}</span></span><span className="account-summary-edit">Edit business profile</span></summary>
+              <div className="account-summary-body">
+                <AdvertiserForm key={details.advertiser.updatedAt} profile={details.advertiser} busy={busy} run={run}
+                  save={async input => {
+                    const result = await client.advertiser(details.organization.id, input);
+                    setDetails(current => current ? { ...current, advertiser: result.advertiser } : current);
+                  }} />
+              </div>
+            </details>}
+            {details.advertiser && (campaignDrafts ? <CampaignResources key={`campaigns:${authenticated.user.id}:${details.organization.id}`}
               client={client} organizationId={details.organization.id} advertiserReady={Boolean(details.advertiser)} busy={busy} run={run}
-              onUnauthorized={expireOwnedSession} servingReady={servingReady} financialMode={financialMode}
+              onUnauthorized={expireOwnedSession} servingReady={servingReady} financialMode={financialMode} section={section}
               brand={details.advertiser ? { name: details.advertiser.name, website: details.advertiser.website } : null} onSummary={setCampaignSummary} />
-              : <Ld.Callout tone="warning" title="Campaigns are not available">Campaigns are not enabled for this server or session. Your business profile is saved and nothing else can be created here.</Ld.Callout>}
+              : <Ld.Notice tone="blocked" title="Campaigns are not available yet.">Your business profile is saved.</Ld.Notice>)}
           </>}
         </div>
 
         <div className="account-view" hidden={view !== 'app'}>
-          {!details && <Ld.Empty title="No organization selected" action={<Ld.Button variant="secondary" href="#overview">Go to overview →</Ld.Button>}>Create or choose an organization first.</Ld.Empty>}
+          {!details && <Ld.Empty title="Start from Home" action={<Ld.Button variant="secondary" href="#overview">Go to Home →</Ld.Button>}>Name your organization first.</Ld.Empty>}
           {details && profiles && <>
-            <JourneySteps label="AI app steps" steps={[
-              { href: '#ai-apps', title: 'App profile and rules', note: 'origins and categories', done: Boolean(selectedApp) },
-              { href: '#app-credentials', title: 'Server key', note: 'shown once', done: Boolean(appFacts?.activeKeys) },
-              { href: '#app-integrate', title: 'Connect and check', note: 'API base and readiness', done: appFacts?.ready === true },
-              { href: '#app-report', title: 'Deliveries and earnings', note: 'receipts per placement', done: false },
-            ]} />
-            <Ld.Panel id="ai-apps" title={selectedApp ? selectedApp.name : 'New AI app'} sub="App profile and ad rules"
-              actions={<div className="account-org">
-                <label htmlFor="account-app">AI app</label>
-                <select className="ld-select" id="account-app" value={appId} disabled={busy} onChange={event => { setAppId(event.target.value); setError(''); }}>
-                  {details.apps.map(app => <option key={app.id} value={app.id}>{app.name}</option>)}
-                  <option value="">Create a new AI app</option>
-                </select>
-              </div>}>
-              <AppForm key={`${selectedApp?.id ?? 'new'}:${selectedApp?.updatedAt ?? ''}`} app={selectedApp} busy={busy} run={run}
+            {appNext && <Ld.Steps label="AI app progress" steps={progress(appSteps)} />}
+            {!selectedApp ? <Ld.Panel id="ai-apps" title="Add your AI app" sub="Tell us where your app runs. You get an API key next."
+              actions={details.apps.length ? <Ld.Button variant="ghost" size="sm" disabled={busy} onClick={() => setAppId(details.apps[0].id)}>Cancel</Ld.Button> : undefined}>
+              <AppForm key="new" app={undefined} busy={busy} run={run}
                 save={async input => {
-                  const { app } = await client.app(details.organization.id, input, selectedApp?.id);
-                  setDetails(current => current ? { ...current, apps: current.apps.some(existing => existing.id === app.id) ? current.apps.map(existing => existing.id === app.id ? app : existing) : [...current.apps, app] } : current);
+                  const { app } = await client.app(details.organization.id, input);
+                  setDetails(current => current ? { ...current, apps: [...current.apps, app] } : current);
                   setAppId(app.id);
                 }} />
-            </Ld.Panel>
-            {unenforceable.length > 0 && <Ld.Callout tone="warning" title="Some category rules cannot be enforced">
-              {unenforceable.join(', ')}: AXP can only enforce the listed product categories. Ad serving for this app stays off until you remove {unenforceable.length === 1 ? 'this entry' : 'these entries'} and save.
-            </Ld.Callout>}
-            {!selectedApp && <Ld.Empty title="Save the app profile to continue">The server key, the integration example, the readiness check and your deliveries appear here once the app exists.</Ld.Empty>}
-            {selectedApp && (appCredentials ? <AppCredentials key={`credentials:${authenticated.user.id}:${details.organization.id}:${selectedApp.id}`}
-              client={client} organizationId={details.organization.id} app={selectedApp} busy={busy} run={run}
-              issue={showIssuedCredential} dismissKey={clearResourceSecret} onUnauthorized={expireOwnedSession} servingReady={servingReady} financialMode={financialMode} onSummary={setAppSummary}
-              rawKey={issuedKey?.organizationId === details.organization.id && issuedKey.appId === selectedApp.id ? issuedKey.apiKey : null} />
-              : <Ld.Callout tone="warning" title="Server keys are not available">Server keys are not enabled for this server or session, so this app cannot be connected from here.</Ld.Callout>)}
-            {selectedApp && <OwnerReport key={`report:${authenticated.user.id}:${details.organization.id}:${selectedApp.id}`} client={client}
-              organizationId={details.organization.id} resourceId={selectedApp.id} kind="app" ready={servingReady} busy={busy}
-              onUnauthorized={expireOwnedSession} />}
+            </Ld.Panel> : <>
+              <div className="account-app-head">
+                <div className="account-app-id">
+                  {details.apps.length > 1 ? <div className="account-org">
+                    <label htmlFor="account-app">AI app</label>
+                    <select className="ld-select" id="account-app" value={appId} disabled={busy} onChange={event => { chosenAppTab.current = ''; setAppId(event.target.value); setError(''); }}>
+                      {details.apps.map(app => <option key={app.id} value={app.id}>{app.name}</option>)}
+                    </select>
+                  </div> : <h2 className="ld-section-title">{selectedApp.name}</h2>}
+                  <span className="ld-secondary">{selectedApp.website}</span>
+                </div>
+                <Ld.Button variant="ghost" size="sm" disabled={busy} onClick={() => { setAppId(''); setError(''); }}>Add another app</Ld.Button>
+              </div>
+              {unenforceable.length > 0 && <Ld.Notice tone="blocked" title="Some ad rules cannot be applied, so ads stay off for this app."
+                actions={<Ld.Button variant="secondary" onClick={() => { chosenAppTab.current = '*'; setAppTab('settings'); }}>Fix ad rules</Ld.Button>}>
+                Remove {unenforceable.join(', ')} from the categories you will not show, then save.
+              </Ld.Notice>}
+              <Ld.TabBar label={`${selectedApp.name} sections`} idBase="app" tabs={appTabs} value={appTab} onChange={tab => { chosenAppTab.current = '*'; setAppTab(tab); }} />
+              {appCredentials ? <AppCredentials key={`credentials:${authenticated.user.id}:${details.organization.id}:${selectedApp.id}`}
+                client={client} organizationId={details.organization.id} app={selectedApp} busy={busy} run={run} tab={appTab}
+                issue={showIssuedCredential} dismissKey={clearResourceSecret} onUnauthorized={expireOwnedSession} servingReady={servingReady} financialMode={financialMode} onSummary={setAppSummary}
+                rawKey={issuedKey?.organizationId === details.organization.id && issuedKey.appId === selectedApp.id ? issuedKey.apiKey : null} />
+                : (appTab === 'keys' || appTab === 'connect') && <Ld.Notice tone="blocked" title="API keys are not available yet.">Your app is saved. You can connect it once keys are available.</Ld.Notice>}
+              <div role="tabpanel" id="app-panel-deliveries" aria-labelledby="app-tab-deliveries" hidden={appTab !== 'deliveries'}>
+                <OwnerReport key={`report:${authenticated.user.id}:${details.organization.id}:${selectedApp.id}`} client={client}
+                  organizationId={details.organization.id} resourceId={selectedApp.id} kind="app" ready={servingReady} busy={busy}
+                  onUnauthorized={expireOwnedSession} />
+              </div>
+              <div role="tabpanel" id="app-panel-settings" aria-labelledby="app-tab-settings" hidden={appTab !== 'settings'}>
+                <Ld.Panel id="ai-apps" title="App settings" sub="Where your app runs and which ads it will not show">
+                  <AppForm key={`${selectedApp.id}:${selectedApp.updatedAt}`} app={selectedApp} busy={busy} run={run}
+                    save={async input => {
+                      const { app } = await client.app(details.organization.id, input, selectedApp.id);
+                      setDetails(current => current ? { ...current, apps: current.apps.map(existing => existing.id === app.id ? app : existing) } : current);
+                      setAppId(app.id);
+                    }} />
+                </Ld.Panel>
+              </div>
+            </>}
           </>}
         </div>
 
         <div className="account-view" hidden={view !== 'wallet'}>
-          <details className="account-disclosure">
-            <summary>How wallet ownership and payments work <span>{modeName(financialMode)}</span></summary>
+          {!details && <Ld.Empty title="Start from Home" action={<Ld.Button variant="secondary" href="#overview">Go to Home →</Ld.Button>}>Name your organization first.</Ld.Empty>}
+          {details && !walletBindings && <Ld.Panel title="Payments are not available yet" sub={balance}>
             <div className="ld-stack">
-              <MoneyTerms />
-              <p className="ld-secondary">A receipt proves an accepted insertion with the Sponsored label. It does not prove attention, clicks or conversion, and by itself it is not a payment.</p>
+              <p className="ld-body">Spend and earnings in your reports are {financialMode === 'devnet' ? 'accepted charges in test tokens. Nothing has been paid out' : 'test balances. No real money moves'}.</p>
+              <ul className="account-pay-actions">
+                <li><span><b>Advertiser deposits</b><span className="ld-secondary">Set funds aside for a campaign.</span></span><Ld.Button variant="secondary" disabled>Add funds</Ld.Button></li>
+                <li><span><b>AI app payouts</b><span className="ld-secondary">Receive what your app has earned.</span></span><Ld.Button variant="secondary" disabled>Withdraw earnings</Ld.Button></li>
+              </ul>
             </div>
-          </details>
-          {!details && <Ld.Empty title="No organization selected" action={<Ld.Button variant="secondary" href="#overview">Go to overview →</Ld.Button>}>Create or choose an organization first.</Ld.Empty>}
-          {details && !walletBindings && <Ld.Callout tone="warning" title="Own-wallet funding is not enabled on this server">
-            {modeSentence(financialMode)} Wallet ownership proofs, deposits, payouts and refunds cannot be made here. The spend and earnings in your reports are {financialMode === 'devnet' ? 'accepted charges that have not been paid out from this page' : 'simulated ledger entries'}.
-          </Ld.Callout>}
-          {details && walletBindings && <Ld.Panel id="own-wallet-funding" title="Your wallets and channels" sub="Each step needs your own explicit action">
+          </Ld.Panel>}
+          {details && walletBindings && <Ld.Panel id="own-wallet-funding" title="Your wallets and channels" sub={balance}>
             <AccountFinancialResources key={`finance:${authenticated.user.id}:${details.organization.id}`} client={client}
               organizationId={details.organization.id} apps={details.apps} ready={walletBindings}
               broadcastEnabled={health?.serving?.broadcastEnabled === true} busy={busy} onUnauthorized={expireOwnedSession} />
           </Ld.Panel>}
+          {details && <details className="account-disclosure">
+            <summary>What each money term means</summary>
+            <div className="ld-stack">
+              <MoneyTerms />
+              <p className="ld-secondary">A receipt shows that a Sponsored card was shown with its label. It does not show attention, clicks or sales, and it is not a payment.</p>
+            </div>
+          </details>}
         </div>
 
         <div className="account-view" hidden={view !== 'settings'}>
@@ -481,41 +530,24 @@ export function AccountConsole() {
               <div className="ld-stack-lg">
                 {authenticated.organizations.length ? <ul className="account-plain-list">
                   {authenticated.organizations.map(org => <li key={org.id}><span className="ld-body ld-strong">{org.name}</span><span className="ld-secondary">{org.id === organizationId ? 'Selected. ' : ''}Owner</span></li>)}
-                </ul> : <p className="ld-secondary">No organizations yet. Create one to add a business profile or an AI app.</p>}
-                <AccountForm label="Create another organization" busy={busy || !profiles} submit="Create organization" variant="secondary"
-                  onSubmit={(data, form) => run('Creating organization', async () => {
-                    const { organization } = await client.createOrganization(String(data.get('name') ?? '').trim());
-                    setSession(current => current?.authenticated ? { ...current, organizations: [...current.organizations, organization] } : current);
-                    setOrganizationId(organization.id); setAppId('');
-                    setDetails({ organization, advertiser: null, apps: [] });
-                    form.reset();
-                  }, 'Organization created and selected. You are its owner.')}>
-                  <Input label="New organization name" name="name" autoComplete="organization" maxLength={120} />
-                </AccountForm>
+                </ul> : <p className="ld-secondary">No organizations yet.</p>}
+                <details className="account-more">
+                  <summary>Add another organization</summary>
+                  <AccountForm label="Create another organization" busy={busy || !profiles} submit="Create organization" variant="secondary"
+                    onSubmit={(data, form) => createOrganization(String(data.get('name') ?? '').trim()).then(() => form.reset())}>
+                    <Input label="New organization name" name="name" autoComplete="organization" maxLength={120} />
+                  </AccountForm>
+                </details>
               </div>
             </Ld.Panel>
           </div>
+          <div className="account-settings-foot">
+            <span className="ld-secondary">Something look out of date?</span>
+            <Ld.Button variant="secondary" disabled={busy} onClick={() => void run('Refreshing account', refresh)}>Refresh account</Ld.Button>
+            <Ld.Button variant="secondary" disabled={busy} onClick={signOut}>Sign out</Ld.Button>
+          </div>
         </div>
       </>}
-
-      {(!signedIn || view === 'settings') && health && <details id="account-readiness" className="account-disclosure" open={!ready}>
-        <summary>Service status <span>{ready ? 'Connected' : 'Needs attention'}</span></summary>
-        <Ld.Panel title="What this server can do" sub="Read from the server, not assumed">
-        <div className="ld-stack">
-          <dl className="account-readiness">
-            <div><dt>Account service</dt><dd>{!isConfigured(health) ? 'Not configured' : !health.enabled ? 'Switched off' : 'Running'}</dd></div>
-            <div><dt>Profile storage</dt><dd>{health.profileStore === 'supabase' ? 'AXP Supabase PostgreSQL' : health.profileStore === 'sqlite-fixture' ? 'Local fixture store (test data only)' : 'Not verified'}</dd></div>
-            <div><dt>Profiles</dt><dd>{!ready ? 'Unavailable' : !health.capabilities.profiles ? 'Switched off by the server' : !authenticated ? 'Sign in required' : profiles ? 'Available' : 'Switched off for this session'}</dd></div>
-            <div><dt>Campaigns</dt><dd>{campaignDrafts ? 'Available. Approval never starts serving.' : !authenticated ? 'Sign in required' : 'Not enabled for this server or session'}</dd></div>
-            <div><dt>Server keys for AI apps</dt><dd>{appCredentials ? 'Available' : !authenticated ? 'Sign in required' : 'Not enabled for this server or session'}</dd></div>
-            <div><dt>Ad serving</dt><dd>{!ready ? 'Unavailable' : !health.capabilities.campaignServing ? 'Not connected' : !authenticated ? `Connected (${modeName(financialMode).toLowerCase()}). Sign in required.` : `Connected (${modeName(financialMode).toLowerCase()}). Each campaign must be turned on by its owner.`}</dd></div>
-            <div><dt>Wallet ownership proofs</dt><dd>{walletBindings ? 'Available for each campaign and AI app' : 'Not enabled on this server or session'}</dd></div>
-            <div><dt>Deposits, payouts and refunds</dt><dd>{financialMode === 'devnet' && walletBindings ? health.serving?.broadcastEnabled ? 'Own-wallet signatures on Solana Devnet, by explicit action only' : 'Unavailable: transaction broadcast is disabled on this server' : 'Not connected. Nothing here can move funds.'}</dd></div>
-          </dl>
-          <p className="ld-secondary">Allowed origins, blocked categories and payout addresses saved in a profile are declarations. They do not prove wallet ownership or authorize a payment. Server keys never sign transactions. Creating an account gives no ownership of the shared demonstration, its campaigns, wallets or records.</p>
-        </div>
-        </Ld.Panel>
-      </details>}
     </Ld.Shell>
   </div>;
 }

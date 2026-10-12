@@ -115,7 +115,7 @@ function fixture(overrides = {}) {
 }
 test('panel render, discovery and resource reads never connect, sign, broadcast or auto-activate', async () => {
   const f = fixture();
-  assert.match(f.ui.text(), /Solana Devnet/); assert.match(f.ui.text(), /broadcast gate: disabled/);
+  assert.match(f.ui.text(), /Solana Devnet/); assert.match(f.ui.text(), /Payments are not available yet/);
   assert.equal(f.requests.length, 0); assert.equal(f.walletCalls.length, 0);
   await f.select(); assert.equal(f.requests.length, 2); assert.ok(f.requests.every(r => r.body === undefined));
   await f.ui.click('Prepare opening'); assert.equal(f.walletCalls.length, 0);

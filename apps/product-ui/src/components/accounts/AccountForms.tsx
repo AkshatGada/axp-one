@@ -70,7 +70,7 @@ export function AuthForm({ mode, busy, run, authenticate }: {
       const field = form.elements.namedItem('password');
       if (field instanceof HTMLInputElement) field.value = '';
       return run(signup ? 'Creating account' : 'Signing in', () => authenticate(input),
-        signup ? 'Check your email for a confirmation link. Open it, then select Confirm email. You are not signed in yet.' : 'Signed in.');
+        signup ? 'Check your email for a confirmation link. Open it, then select Confirm email.' : 'Signed in.');
     }}>
     <Input label="Email" name="email" type="email" autoComplete="username" maxLength={254} />
     <div className="ld-field">
@@ -79,7 +79,7 @@ export function AuthForm({ mode, busy, run, authenticate }: {
         minLength={12} maxLength={256}
         autoComplete={signup ? 'new-password' : 'current-password'}
         aria-describedby={signup ? `${passwordId}-hint` : undefined} />
-      {signup && <span className="ld-field-h" id={`${passwordId}-hint`}>12 to 256 characters. Email confirmation is required.</span>}
+      {signup && <span className="ld-field-h" id={`${passwordId}-hint`}>At least 12 characters. We email you a link to confirm.</span>}
     </div>
   </AccountForm>;
 }
@@ -93,14 +93,14 @@ export function AdvertiserForm({ profile, busy, run, save }: {
       const description = text(data, 'description');
       if (/[\u0000-\u001f\u007f]/u.test(description)) throw new Error('Business descriptions must be a single paragraph without line breaks or control characters.');
       await save({ name: text(data, 'name'), website: validateWebsite(text(data, 'website')), description });
-    }, 'Business profile saved. Next, create a campaign. Nothing was funded or switched on.')}>
+    }, 'Business profile saved. Next, create your first campaign.')}>
     <div className="account-pair">
       <Input label="Business name" name="name" value={profile?.name} autoComplete="organization" maxLength={120}
         hint="Shown on your Sponsored card." />
       <Input label="Business website" name="website" type="url" value={profile?.website} maxLength={2048}
-        hint="The destination of your Sponsored card. HTTPS required." />
+        hint="Where your Sponsored card sends people. Starts with https://" />
     </div>
-    <Textarea label="What your business offers" name="description" value={profile?.description} maxLength={2000} rows={2} hint="One paragraph, up to 2,000 characters." />
+    <Textarea label="What your business offers" name="description" value={profile?.description} maxLength={2000} rows={2} hint="One short paragraph." />
   </AccountForm>;
 }
 
@@ -110,13 +110,13 @@ export function AppForm({ app, busy, run, save }: {
 }) {
   const payoutId = useId();
   return <AccountForm label={app ? 'Edit AI app' : 'Create AI app'} busy={busy}
-    submit={app ? 'Save app profile and rules' : 'Create AI app'}
+    submit={app ? 'Save app settings' : 'Add your AI app'}
     onSubmit={data => run('Saving AI app', async () => {
       const network = text(data, 'network');
       const address = text(data, 'address');
-      if (network && !['solana-devnet', 'tempo-testnet'].includes(network)) throw new Error('Select a supported payout declaration network.');
-      if (network && !address) throw new Error('Enter an address for the payout declaration, or select No payout declaration.');
-      if (!network && address) throw new Error('Select a network for this address, or clear the address to save without a declaration.');
+      if (network && !['solana-devnet', 'tempo-testnet'].includes(network)) throw new Error('Select a supported payout network.');
+      if (network && !address) throw new Error('Enter a payout address, or select No payout address.');
+      if (!network && address) throw new Error('Select a network for this address, or clear the address.');
       if (network === 'solana-devnet' && !/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)) {
         throw new Error('Enter a Solana address using 32 to 44 base58 characters.');
       }
@@ -125,42 +125,36 @@ export function AppForm({ app, busy, run, save }: {
         allowedOrigins: origins(text(data, 'allowedOrigins')),
         blockedCategories: categories(text(data, 'blockedCategories')),
         payout: network ? { network: network as PayoutNetwork, address } : null });
-    }, 'AI app saved. No key was issued and no payout was enabled.')}>
-    <div className="account-part">
-      <h4 className="account-part-title">App profile</h4>
-      <div className="account-pair">
-        <Input label="App name" name="name" value={app?.name} maxLength={120} />
-        <Input label="App website" name="website" type="url" value={app?.website} maxLength={2048}
-          hint="HTTPS, or a loopback HTTP URL during development." />
-      </div>
+    }, app ? 'App settings saved.' : 'AI app added. Next, get your API key.')}>
+    <div className="account-pair">
+      <Input label="App name" name="name" value={app?.name} maxLength={120} />
+      <Input label="App website" name="website" type="url" value={app?.website} maxLength={2048}
+        hint="Starts with https://" />
     </div>
-    <div className="account-part">
-      <h4 className="account-part-title">Ad rules for this app</h4>
-      <p className="ld-secondary">These rules are saved with the app. A server key cannot override them or act for a different app.</p>
-      <div className="account-pair">
-        <Textarea label="Allowed origins" name="allowedOrigins" value={app?.allowedOrigins.join('\n')} rows={4}
-          hint="One origin per line, e.g. https://app.example.com. No paths or wildcards." />
-        <Textarea label="Ad categories you will not show" name="blockedCategories" value={app?.blockedCategories.join('\n')} rows={4}
-          hint="One supported category per line. Unsupported entries block ad serving." />
-      </div>
-      <details className="account-more"><summary>Supported ad categories</summary>
+    <Textarea label="Where your app runs" name="allowedOrigins" value={app?.allowedOrigins.join('\n')} rows={2}
+      hint="One web address per line, for example https://app.example.com. No paths or wildcards." />
+    <details className="account-more" open={Boolean(app?.blockedCategories.length)}>
+      <summary>Ads you will not show (optional)</summary>
+      <Textarea label="Ad categories you will not show" name="blockedCategories" value={app?.blockedCategories.join('\n')} rows={3}
+        hint="One supported category per line. Unsupported entries block ad serving." />
+      <details className="account-more-inline"><summary>Supported ad categories</summary>
         <ul className="account-category-list">{campaignCapabilities.map(category => <li key={category}>{category}</li>)}</ul>
       </details>
-    </div>
-    <details className="account-more">
-      <summary>Payout address declaration (optional, does not prove ownership)</summary>
+    </details>
+    <details className="account-more" open={Boolean(app?.payout)}>
+      <summary>Payout address (optional)</summary>
       <div className="account-pair">
         <div className="ld-field">
-          <label className="ld-field-l" htmlFor={payoutId}>Payout declaration network</label>
+          <label className="ld-field-l" htmlFor={payoutId}>Network</label>
           <select className="ld-select" id={payoutId} name="network" defaultValue={app?.payout?.network ?? ''}
             aria-describedby={`${payoutId}-hint`}>
-            <option value="">No payout declaration</option>
+            <option value="">No payout address</option>
             <option value="solana-devnet">Solana Devnet</option>
             <option value="tempo-testnet">Tempo Testnet</option>
           </select>
-          <span className="ld-field-h" id={`${payoutId}-hint`}>A declaration only. It connects no wallet and routes no payout. Prove wallet ownership separately under Wallet.</span>
+          <span className="ld-field-h" id={`${payoutId}-hint`}>Saving an address does not verify it and sends nothing. Verify your wallet under Wallet.</span>
         </div>
-        <Input label="Payout address (optional)" name="address" required={false} value={app?.payout?.address} maxLength={128} />
+        <Input label="Payout address" name="address" required={false} value={app?.payout?.address} maxLength={128} />
       </div>
     </details>
   </AccountForm>;

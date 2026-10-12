@@ -112,3 +112,57 @@ export function RevealOnView({ children, label = "Replay", caption }: { children
     </div>
   );
 }
+
+/** Controlled tab bar. The caller renders the panels and hides inactive ones, so form state survives a tab change. */
+export function TabBar<K extends string>({ tabs, value, onChange, label, idBase }: { tabs: Array<{ key: K; label: ReactNode; count?: ReactNode }>; value: K; onChange: (key: K) => void; label: string; idBase: string }) {
+  return (
+    <div className="ld-tabbar" role="tablist" aria-label={label} onKeyDown={(event) => {
+      if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const at = tabs.findIndex((tab) => tab.key === value);
+      const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : (at + (event.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length;
+      onChange(tabs[next].key);
+      event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus();
+    }}>
+      {tabs.map((tab) => (
+        <button key={tab.key} type="button" role="tab" id={`${idBase}-tab-${tab.key}`} aria-controls={`${idBase}-panel-${tab.key}`} aria-selected={tab.key === value} tabIndex={tab.key === value ? 0 : -1} onClick={() => onChange(tab.key)}>
+          {tab.label}
+          {tab.count !== undefined && tab.count !== null ? <small>{tab.count}</small> : null}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function useCopy(text: string) {
+  const [done, setDone] = useState(false);
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(text); setDone(true); setTimeout(() => setDone(false), 1600); } catch { setDone(false); }
+  };
+  return { done, copy };
+}
+
+/** Literal code with one copy action. Never pass a secret: examples and endpoints only. */
+export function CodeBlock({ title, code, label = "Copy" }: { title: ReactNode; code: string; label?: string }) {
+  const { done, copy } = useCopy(code);
+  return (
+    <figure className="ld-code" style={{ margin: 0 }}>
+      <figcaption className="ld-code-head">
+        <span>{title}</span>
+        <button type="button" className="ld-copy" data-done={done || undefined} onClick={() => void copy()} aria-live="polite">{done ? "Copied" : label}</button>
+      </figcaption>
+      <pre tabIndex={0}><code>{code}</code></pre>
+    </figure>
+  );
+}
+
+/** One line of literal text (an endpoint or identifier) with a copy action. Never a secret. */
+export function CopyLine({ value, label = "Copy" }: { value: string; label?: string }) {
+  const { done, copy } = useCopy(value);
+  return (
+    <span className="ld-copyline">
+      <code>{value}</code>
+      <button type="button" className="ld-copy" data-done={done || undefined} onClick={() => void copy()} aria-live="polite">{done ? "Copied" : label}</button>
+    </span>
+  );
+}

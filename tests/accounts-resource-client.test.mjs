@@ -300,7 +300,7 @@ test('console source keeps the one-time secret in component memory with action/n
   assert.ok(resources.includes('client.approveCampaign(organizationId, selected.id, selected.version)'));
   assert.ok(resources.includes("failure.code === 'campaign_version_conflict'"));
   assert.ok(!resources.includes('client.campaign(organizationId, selected.id)'));
-  assert.ok(resources.includes('Serving: not connected'));
+  assert.ok(resources.includes('Ads: not available yet'));
   assert.ok(resources.includes('credential.scopes.join'));
   for (const code of [source, resources]) assert.doesNotMatch(code, /localStorage|sessionStorage|indexedDB|console\.(log|debug|info)|navigator\.clipboard|URLSearchParams/);
 });

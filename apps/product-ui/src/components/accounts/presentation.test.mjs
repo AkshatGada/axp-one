@@ -5,14 +5,14 @@ import {AccountApiError, AccountsClient} from './client.ts';
 
 const source = name => readFileSync(new URL(name, import.meta.url), 'utf8');
 
-test('account sign-in keeps its action and financial mode visible, with service detail collapsed', () => {
+test('account sign-in keeps its action and financial mode visible, with no service diagnostics', () => {
   const ui = source('AccountConsole.tsx');
   const welcome = ui.slice(ui.indexOf('className="account-welcome"'), ui.indexOf('{authenticated && !tokenHash && <>'));
   assert.match(welcome, /Welcome to AXP/);
-  assert.match(welcome, /Simulated accounting\. No money moves on this server\./);
+  assert.match(welcome, /Test balances only\. No real money moves\./);
   assert.match(welcome, /<AuthForm/);
   assert.doesNotMatch(welcome, /Write a Sponsored card, choose the conversations/);
-  assert.match(ui, /<details id="account-readiness"[^>]*open=\{!ready\}/);
+  assert.doesNotMatch(ui, /account-readiness|What this server can do|Service status/); // Diagnostics are not customer UI.
   assert.match(ui, /disclosure\.open = true/); // Saved section links still reveal their target.
 });
 

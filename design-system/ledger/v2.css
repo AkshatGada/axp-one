@@ -541,3 +541,131 @@ a.ld-kpi:hover { border-color: var(--ld-border-2); box-shadow: var(--ld-shadow-2
 .ld .lg-inspector-body { grid-auto-rows: max-content; }
 a.ld-menu-item { color: inherit; text-decoration: none; } a.ld-menu-item:hover { background: var(--ld-hover); }
 .ld .ld-chart-knock { paint-order: stroke; stroke: var(--ld-panel); stroke-width: 4px; stroke-linejoin: round; }
+
+/* ============================================================
+   Product refinement primitives (October 2026). Same tokens, radii and type.
+   Context identity, notice, stat strip, progress steps, tab bar, disclosure,
+   code block, skeleton and reflowing list rows.
+   ============================================================ */
+/* Which product am I in: the public shared demo or my own account. Always in the top bar. */
+.ld-context { display: inline-flex; align-items: center; gap: 8px; min-width: 0; height: 30px; padding: 0 10px 0 4px; border-radius: var(--ld-r-full); border: 1px solid var(--ld-border); background: var(--ld-canvas); font-size: 13px; color: var(--ld-text-2); white-space: nowrap; }
+.ld-context b { display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: var(--ld-r-full); font-weight: 500; font-size: 12px; }
+.ld-context[data-kind="demo"] b { background: var(--ld-warning-wash); color: var(--ld-warning); }
+.ld-context[data-kind="account"] b { background: var(--ld-accent-wash); color: var(--brand-deep); }
+.ld-context span { overflow: hidden; text-overflow: ellipsis; max-width: 30ch; }
+.ld-top-fill { flex: 1; min-width: 0; }
+
+/* Page notice: one sentence and at most one action. */
+.ld-notice { display: flex; align-items: center; gap: 12px 16px; flex-wrap: wrap; padding: 10px 14px; border-radius: var(--ld-r-md); border: 1px solid var(--ld-border); background: var(--ld-panel); font-size: 14px; line-height: 1.45; color: var(--ld-text); overflow-wrap: anywhere; }
+.ld-notice > div:first-child { flex: 1 1 260px; min-width: 0; display: grid; gap: 2px; }
+.ld-notice strong { font-weight: 500; }
+.ld-notice p { margin: 0; color: var(--ld-text-2); font-size: 13px; }
+.ld-notice-actions { display: flex; gap: 8px; flex-wrap: wrap; flex: none; }
+.ld-notice[data-tone="demo"] { background: var(--ld-warning-wash); border-color: #efd9a5; }
+.ld-notice[data-tone="done"] { background: var(--ld-success-wash); border-color: #bfe0cf; }
+.ld-notice[data-tone="working"] { background: var(--ld-sunken); }
+.ld-notice[data-tone="info"] { background: var(--ld-accent-wash); border-color: var(--ld-accent-line); }
+.ld-notice[data-tone="error"] { background: var(--ld-danger-wash); border-color: #efc2bd; }
+.ld-notice[data-tone="error"] strong { color: var(--ld-danger); }
+.ld-notice[data-tone="blocked"] { background: var(--ld-warning-wash); border-color: #efd9a5; }
+
+/* Stat strip: several facts in one quiet surface instead of a grid of cards. */
+.ld-statstrip { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); margin: 0; background: var(--ld-panel); border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); box-shadow: var(--ld-shadow-1); }
+.ld-statstrip > div { display: grid; gap: 4px; align-content: start; padding: 14px 16px; min-width: 0; border-left: 1px solid var(--ld-border); }
+.ld-statstrip > div:first-child { border-left: 0; }
+.ld-statstrip dt { font-size: 12px; font-weight: 500; color: var(--ld-text-2); }
+.ld-statstrip dd { margin: 0; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; font-family: var(--font-display); font-size: 22px; line-height: 1.15; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.ld-statstrip dd small { font-family: var(--font-sans); font-size: 12px; letter-spacing: 0; color: var(--ld-text-3); }
+.ld-statstrip .ld-statstrip-note { font-size: 12px; color: var(--ld-text-3); }
+.ld-panel .ld-statstrip { border: 0; box-shadow: none; border-radius: 0; }
+
+/* Light progress: where I am on a short path. Not a wall of steps. */
+.ld-steps { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--ld-text-3); }
+.ld-steps li { display: inline-flex; align-items: center; gap: 6px; }
+.ld-steps li + li::before { content: ""; width: 18px; height: 1px; background: var(--ld-border-2); margin-right: 2px; }
+.ld-steps i { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: var(--ld-r-full); border: 1px solid var(--ld-border-2); font-style: normal; font-size: 11px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--ld-text-3); background: var(--ld-panel); }
+.ld-steps li[data-state="done"] { color: var(--ld-text-2); }
+.ld-steps li[data-state="done"] i { border-color: var(--ld-success); background: var(--ld-success-wash); color: var(--ld-success); }
+.ld-steps li[data-state="current"] { color: var(--ld-text); font-weight: 500; }
+.ld-steps li[data-state="current"] i { border-color: var(--ld-accent); background: var(--ld-accent); color: var(--ld-on-brand); }
+.ld-steps a, .ld-steps button { display: inline-flex; align-items: center; gap: 6px; color: inherit; text-decoration: none; background: none; border: 0; padding: 0; font: inherit; cursor: pointer; border-radius: var(--ld-r-xs); }
+.ld-steps a:hover, .ld-steps button:hover:not([disabled]) { color: var(--ld-accent); }
+.ld-steps button[disabled] { cursor: default; }
+
+/* Controlled tab bar. Scrolls inside itself on narrow screens. */
+.ld-tabbar { display: flex; gap: 20px; border-bottom: 1px solid var(--ld-border); overflow-x: auto; scrollbar-width: none; }
+.ld-tabbar::-webkit-scrollbar { display: none; }
+.ld-tabbar button { position: relative; flex: none; height: 40px; padding: 0 2px; border: 0; background: none; font: inherit; font-size: 14px; color: var(--ld-text-2); cursor: pointer; white-space: nowrap; }
+.ld-tabbar button:hover { color: var(--ld-text); }
+.ld-tabbar button[aria-selected="true"] { color: var(--ld-text); font-weight: 500; }
+.ld-tabbar button[aria-selected="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px 2px 0 0; background: var(--ld-accent); }
+.ld-tabbar button:focus-visible { outline-offset: -2px; }
+.ld-tabbar small { margin-left: 6px; font-size: 12px; color: var(--ld-text-3); font-variant-numeric: tabular-nums; }
+.ld-panel > .ld-tabbar { padding: 0 var(--ld-panel-pad); }
+
+/* Disclosure: optional explanation, opened deliberately. */
+.ld-disclosure { border-top: 1px solid var(--ld-border); }
+.ld-disclosure > summary { display: flex; align-items: center; gap: 8px; padding: 10px 0; font-size: 13px; font-weight: 500; color: var(--ld-text-2); cursor: pointer; list-style: none; border-radius: var(--ld-r-xs); }
+.ld-disclosure > summary::-webkit-details-marker { display: none; }
+.ld-disclosure > summary::before { content: "+"; display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: var(--ld-r-xs); border: 1px solid var(--ld-border-2); font-size: 12px; line-height: 1; color: var(--ld-text-3); flex: none; }
+.ld-disclosure[open] > summary::before { content: "−"; }
+.ld-disclosure > summary:hover { color: var(--ld-text); }
+.ld-disclosure-body { display: grid; gap: 12px; padding: 2px 0 14px; font-size: 13px; line-height: 1.6; color: var(--ld-text-2); }
+.ld-disclosure-body > p { margin: 0; }
+.ld-disclosure[data-plain] { border-top: 0; }
+
+/* Code block with a copy action. Mono is correct here: it is literal code. */
+.ld-code { border: 1px solid var(--ld-border); border-radius: var(--ld-r-md); background: var(--ld-sunken); overflow: hidden; min-width: 0; }
+.ld-code-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 36px; padding: 4px 6px 4px 12px; border-bottom: 1px solid var(--ld-border); background: var(--ld-panel); font-size: 12px; font-weight: 500; color: var(--ld-text-2); }
+.ld-code pre { margin: 0; padding: 14px 16px; font-family: var(--font-mono); font-size: 12px; line-height: 1.7; color: var(--ld-text); white-space: pre-wrap; overflow-wrap: anywhere; max-height: 460px; overflow: auto; }
+.ld-code pre code { font: inherit; }
+.ld-copy { height: 26px; padding: 0 10px; border: 1px solid var(--ld-border-2); border-radius: var(--ld-r-sm); background: var(--ld-panel); font: inherit; font-size: 12px; font-weight: 500; color: var(--ld-text); cursor: pointer; }
+.ld-copy:hover { background: var(--ld-hover); }
+.ld-copy[data-done] { color: var(--ld-success); border-color: var(--ld-success); }
+.ld-copyline { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 4px 4px 4px 12px; border: 1px solid var(--ld-border); border-radius: var(--ld-r-sm); background: var(--ld-sunken); }
+.ld-copyline code { flex: 1; min-width: 0; font-family: var(--font-mono); font-size: 12.5px; overflow-wrap: anywhere; }
+
+/* Loading placeholder rows. Static: no shimmer, nothing imitates execution. */
+.ld-skeleton { display: grid; gap: 0; }
+.ld-skeleton > div { display: flex; align-items: center; gap: 16px; padding: 16px var(--ld-panel-pad); border-top: 1px solid var(--ld-border); }
+.ld-skeleton > div:first-child { border-top: 0; }
+.ld-skeleton i { display: block; height: 10px; border-radius: var(--ld-r-full); background: var(--ld-sunken); box-shadow: inset 0 0 0 1px var(--ld-border); }
+
+/* Record rows that reflow instead of scrolling sideways. */
+.ld-rows { margin: 0; padding: 0; list-style: none; }
+.ld-rows > li { border-top: 1px solid var(--ld-border); }
+.ld-rows > li:first-child { border-top: 0; }
+.ld-rowhead { display: grid; align-items: center; gap: 16px; padding: 9px var(--ld-panel-pad); background: var(--ld-sunken); border-bottom: 1px solid var(--ld-border); font-size: 12px; font-weight: 500; color: var(--ld-text-2); }
+.ld-rowitem { display: grid; align-items: center; gap: 16px; width: 100%; padding: 12px var(--ld-panel-pad); border: 0; background: transparent; font: inherit; color: var(--ld-text); text-align: left; text-decoration: none; cursor: pointer; transition: background var(--ld-fast) var(--ld-ease); }
+.ld-rowitem:hover { background: var(--ld-hover); }
+.ld-rowitem[aria-pressed="true"], .ld-rowitem[aria-current="true"] { background: var(--ld-selected); }
+.ld-rowitem:focus-visible { outline-offset: -2px; }
+.ld-num { text-align: right; font-variant-numeric: tabular-nums; }
+.ld-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* Choice cards: pick one path. */
+.ld-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.ld-choice { display: grid; gap: 6px; align-content: start; padding: 18px; border: 1px solid var(--ld-border-2); border-radius: var(--ld-r-md); background: var(--ld-panel); box-shadow: var(--ld-shadow-1); font: inherit; color: var(--ld-text); text-align: left; text-decoration: none; cursor: pointer; transition: border-color var(--ld-fast) var(--ld-ease), box-shadow var(--ld-fast) var(--ld-ease); }
+.ld-choice:hover { border-color: var(--ld-accent); }
+.ld-choice[aria-pressed="true"] { border-color: var(--ld-accent); box-shadow: 0 0 0 3px var(--ld-accent-wash); }
+.ld-choice b { font-weight: 500; font-size: 16px; line-height: 1.3; }
+.ld-choice span { font-size: 13px; line-height: 1.5; color: var(--ld-text-2); }
+.ld-choice em { font-style: normal; font-size: 13px; font-weight: 500; color: var(--ld-accent); margin-top: 6px; }
+
+@media (max-width: 899px) {
+  .ld-context span { display: none; }
+  .ld-context { padding: 0 4px; }
+  .ld-statstrip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ld-statstrip > div:nth-child(odd) { border-left: 0; }
+  .ld-statstrip > div:nth-child(n + 3) { border-top: 1px solid var(--ld-border); }
+  .ld-top-actions .ld-btn { padding: 0 10px; }
+}
+@media (max-width: 560px) {
+  .ld-choices { grid-template-columns: minmax(0, 1fr); }
+  .ld-notice-actions, .ld-notice-actions .ld-btn { width: 100%; }
+  .ld-steps li + li::before { width: 8px; }
+  .ld-steps { font-size: 12px; gap: 4px; }
+}
+@media (max-width: 899px) {
+  .ld-statstrip > div:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}

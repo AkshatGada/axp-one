@@ -68,6 +68,10 @@ popover, modal, inspector drawer, empty state, no-fill note, toasts, keyboard ke
 bar chart, cumulative step chart, sparkline, progress meter, activity swimlane chart, event timeline, channel balance
 bar, chat specimen with Sponsored card, receipt card with live checks, evidence card with similarity bar, campaign header.
 
+Product refinement additions (October 2026): context identity (`Ld.Context`, shared demo or your account), notice
+(`Ld.Notice`: working, done, error, blocked), stat strip, light progress steps, controlled tab bar, disclosure, code
+block and copy line (never for secrets), skeleton rows, reflowing record rows (`ld-rows`) and choice cards.
+
 Glyphs: no icon set. Allowed: provenance glyphs, ✓ and ✕ in status, → for navigation, ▾ for menus, keyboard keys.
 
 ## 7. Data visualization

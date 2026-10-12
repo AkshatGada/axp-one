@@ -3,7 +3,15 @@ import { useEffect, useRef, useState } from 'react';
 import { Ld } from '@axp/design-system/ledger';
 import { api, blankDraft, draftFields, decimal, toBaseUnits, type Bootstrap, type Campaign, type Draft, type Preview } from './model';
 import { currencyUnit, nativePayments, networkLabel, paymentReadiness } from './payment';
-const STEPS = ['Offer', 'Context', 'Creative', 'Spend', 'Review'];
+const STEPS = ['Offer', 'Audience', 'Ad text', 'Budget', 'Review'];
+const STEP_TITLES = ['What are you advertising?', 'Who should see it?', 'Write your Sponsored card', 'Set your limits', 'Review and launch'];
+const STEP_HELP = [
+  'The campaign name stays private. The brand and website appear on the card.',
+  'Describe the conversations where your offer helps. Your buying agent uses this to decide when to bid.',
+  'This exact text is shown if your campaign wins a placement. The app’s answer stays independent of it.',
+  'You never spend more than these limits.',
+  'Check everything once. After launch the campaign can compete in the example chat.',
+];
 type Props = { initial?: Campaign; bootstrap: Bootstrap; account: { name: string; websiteURL: string }; onSaved: () => Promise<void>; onClose: () => void; onLaunched: (campaign: Campaign) => void; onDirtyChange: (dirty: boolean) => void };
 export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, onLaunched, onDirtyChange }: Props) {
   const native = nativePayments(bootstrap);
@@ -11,9 +19,10 @@ export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, 
   const network = draft.settlementNetwork ?? 'solana-devnet', unit = currencyUnit(native, network), readiness = paymentReadiness(bootstrap, network);
   const [step, setStep] = useState(0), [hints, setHints] = useState(initial?.contextHints.join('\n') ?? '');
   const [money, setMoney] = useState({ maxBidBaseUnits: decimal(draft.maxBidBaseUnits), budgetCapBaseUnits: decimal(draft.budgetCapBaseUnits), depositBaseUnits: decimal(draft.depositBaseUnits) });
-  const [errors, setErrors] = useState<Record<string, string>>({}), [busy, setBusy] = useState(false), [notice, setNotice] = useState(''), [dirty, setDirty] = useState(!initial);
+  const [errors, setErrors] = useState<Record<string, string>>({}), [busy, setBusy] = useState(false), [notice, setNoticeText] = useState(''), [noticeTone, setNoticeTone] = useState<'done' | 'error' | 'blocked'>('done'), [dirty, setDirty] = useState(!initial);
   const [question, setQuestion] = useState(''), [preview, setPreview] = useState<Preview | null>(null), [previewBusy, setPreviewBusy] = useState(false);
   const form = useRef<HTMLFormElement>(null);
+  const setNotice = (text: string, tone: 'done' | 'error' | 'blocked' = 'error') => { setNoticeText(text); setNoticeTone(tone); };
   const [capQuery, setCapQuery] = useState('');
   useEffect(() => { onDirtyChange(dirty); }, [dirty, onDirtyChange]);
   useEffect(() => { const warn = (event: BeforeUnloadEvent) => { if (dirty) { event.preventDefault(); event.returnValue = ''; } }; window.addEventListener('beforeunload', warn); return () => window.removeEventListener('beforeunload', warn); }, [dirty]);
@@ -26,15 +35,15 @@ export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, 
     if (until >= 0) {
       if (!draft.name.trim()) e.name = 'Give this campaign a name.';
       if (!draft.brandName.trim()) e.brandName = 'Add the brand shown on the Sponsored card.';
-      try { const url = new URL(draft.websiteURL); if (url.protocol !== 'https:' || url.username || url.password) throw new Error(); } catch { e.websiteURL = 'Use a complete https website URL with no embedded credentials.'; }
-      if (!draft.productDescription.trim()) e.productDescription = 'Describe the offer so contextual matching has something to work with.';
+      try { const url = new URL(draft.websiteURL); if (url.protocol !== 'https:' || url.username || url.password) throw new Error(); } catch { e.websiteURL = 'Use a complete https website address.'; }
+      if (!draft.productDescription.trim()) e.productDescription = 'Describe what you are offering.';
     }
     if (until >= 1) {
       const values = hints.split(/\n/).map(v => v.trim()).filter(Boolean);
-      if (!values.length) e.contextHints = 'Add at least one hint to guide Jev.';
+      if (!values.length) e.contextHints = 'Add at least one hint.';
       else if (values.length > 6 || values.some(v => v.length > 400)) e.contextHints = 'Use up to 6 hints, with at most 400 characters each.';
-      if (draft.declaredCapabilities.length > 12) e.declaredCapabilities = 'Declare up to 12 relevant capabilities.';
-      else if (!draft.declaredCapabilities.length) e.declaredCapabilities = 'Declare at least one capability your offer supports.';
+      if (draft.declaredCapabilities.length > 12) e.declaredCapabilities = 'Choose up to 12 features.';
+      else if (!draft.declaredCapabilities.length) e.declaredCapabilities = 'Choose at least one feature your product offers.';
     }
     if (until >= 2 && !draft.approvedText.trim()) e.approvedText = 'Add the exact text approved for the Sponsored card.';
     if (until >= 3) {
@@ -46,8 +55,8 @@ export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, 
           if (bid > BigInt(bootstrap.limits.maxBidBaseUnits)) e.maxBidBaseUnits = `Maximum bid is ${decimal(bootstrap.limits.maxBidBaseUnits)} ${unit}.`;
           for (const key of ['budgetCapBaseUnits', 'depositBaseUnits'] as const) { const ceiling = key === 'depositBaseUnits' ? readiness?.limits?.maxDepositBaseUnits ?? bootstrap.limits.maxBudgetBaseUnits : bootstrap.limits.maxBudgetBaseUnits; if (BigInt(toBaseUnits(money[key])!) > BigInt(ceiling)) e[key] = `Maximum amount is ${decimal(ceiling)} ${unit}.`; }
         }
-        if (BigInt(toBaseUnits(money.maxBidBaseUnits)!) > BigInt(toBaseUnits(money.budgetCapBaseUnits)!)) e.maxBidBaseUnits = 'Maximum bid must fit within the campaign cap.';
-        if (BigInt(toBaseUnits(money.budgetCapBaseUnits)!) > BigInt(toBaseUnits(money.depositBaseUnits)!)) e.depositBaseUnits = `${native ? 'Channel deposit' : 'Test-credit allocation'} must cover the campaign cap.`;
+        if (BigInt(toBaseUnits(money.maxBidBaseUnits)!) > BigInt(toBaseUnits(money.budgetCapBaseUnits)!)) e.maxBidBaseUnits = 'The maximum bid must fit within the spending limit.';
+        if (BigInt(toBaseUnits(money.budgetCapBaseUnits)!) > BigInt(toBaseUnits(money.depositBaseUnits)!)) e.depositBaseUnits = `${native ? 'The channel deposit' : 'The amount set aside'} must cover the spending limit.`;
       }
     }
     setErrors(e);
@@ -62,7 +71,7 @@ export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, 
   }
   async function save(launch = false) {
     if (launch && !validate(4)) return;
-    if (launch && !reviewed) { setNotice('Review the campaign and acknowledge the approved creative before launching.'); return; }
+    if (launch && !reviewed) { setNotice('Tick the review box before launching.', 'blocked'); return; }
     // Drafts may be incomplete; malformed monetary text cannot be silently saved as zero.
     const badMoney = Object.entries(money).find(([, v]) => Boolean(v.trim()) && toBaseUnits(v) === null);
     if (badMoney) { setErrors({ [badMoney[0]]: 'Use up to 6 decimal places.' }); setStep(3); return; }
@@ -73,7 +82,7 @@ export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, 
       const saved = 'campaign' in result ? result.campaign : result;
       setDraft(d => ({ ...d, id: saved.id })); setDirty(false);
       if (launch) { await api(`/campaigns/${encodeURIComponent(saved.id)}/approve`, bootstrap.csrf, {}); launchAttempted = saved; const launched = await api<{campaign: Campaign}>(`/campaigns/${encodeURIComponent(saved.id)}/launch`, bootstrap.csrf, {}); await onSaved(); onLaunched(launched.campaign); }
-      else { await onSaved(); setNotice('Draft saved. You can return to it from Campaigns.'); }
+      else { await onSaved(); setNotice('Draft saved. You can come back to it from Campaigns.', 'done'); }
     } catch (error) { if (native && launchAttempted) { await onSaved().catch(() => {}); onLaunched({...launchAttempted, payment: {...launchAttempted.payment, phase: 'unknown', reason: error instanceof Error ? error.message : 'Launch response unavailable'}}); } else setNotice(error instanceof Error ? error.message : 'Could not save the campaign.'); }
     finally { setBusy(false); }
   }
@@ -97,47 +106,75 @@ export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, 
     setDraft(value); setHints(value.contextHints.join('\n')); setMoney({ maxBidBaseUnits: decimal(value.maxBidBaseUnits), budgetCapBaseUnits: decimal(value.budgetCapBaseUnits), depositBaseUnits: decimal(value.depositBaseUnits) }); setQuestion(p.exampleQuestion ?? ''); markDirty(); setPreview(null); setErrors({});
   }
   const input = (name: 'name' | 'brandName' | 'websiteURL', label: string, hint?: string) => <Ld.Field label={label} hint={hint} error={errors[name]}><input className="ld-input" name={name} value={draft[name]} onChange={e => patch(name, e.target.value)} maxLength={name === 'websiteURL' ? 500 : 120} type={name === 'websiteURL' ? 'url' : 'text'} aria-invalid={Boolean(errors[name])} autoComplete={name === 'brandName' ? 'organization' : 'off'} /></Ld.Field>;
+  const leave = () => { if (!dirty || window.confirm('Leave this editor? Unsaved changes will be lost. Save your draft first to keep them.')) onClose(); };
+  const goTo = (i: number) => { if (i <= step || validate(i - 1)) setStep(i); };
+  const shownCaps = bootstrap.capabilities.filter(cap => `${cap.label} ${cap.description ?? ''}`.toLowerCase().includes(capQuery.toLowerCase()));
+  const launchBlocked = native && readiness?.ready !== true;
   return <div className="ad-editor">
-    <Ld.PageBar title={initial ? 'Continue your campaign' : 'Create advertiser & campaign'} sub={`Managed by ${account.name}. A distinct brand and website identify the advertiser behind this campaign.`} meta={<Ld.Tag tone="outline">{dirty ? 'Unsaved changes' : 'Saved draft'}</Ld.Tag>} actions={<Ld.Button variant="ghost" disabled={busy || previewBusy} onClick={() => { if (!dirty || window.confirm('Leave this editor? Unsaved changes will be lost. Save your draft first to keep them.')) onClose(); }}>Back to campaigns</Ld.Button>} />
-    <div className="ad-steps" aria-label="Campaign setup steps">{STEPS.map((label, i) => <button key={label} type="button" aria-current={i === step ? 'step' : undefined} onClick={() => { if (i <= step || validate(i - 1)) setStep(i); }}><span>{i < step ? '✓' : i + 1}</span>{label}</button>)}</div>
+    <Ld.PageBar title={initial ? draft.name || 'Continue your campaign' : 'New campaign'} sub={`Shared demo campaign in ${account.name}`}
+      crumbs={<button type="button" className="ad-text-button" disabled={busy || previewBusy} onClick={leave}>← Campaigns</button>}
+      meta={<Ld.Tag tone={dirty ? 'warning' : 'success'}>{busy ? 'Saving…' : dirty ? 'Unsaved changes' : 'Draft saved'}</Ld.Tag>} />
+    <Ld.Steps label="Campaign setup steps" steps={STEPS.map((label, i) => ({ title: label, state: i < step ? 'done' as const : i === step ? 'current' as const : 'todo' as const, onClick: () => goTo(i) }))} />
     <div className="ad-editor-grid">
       <form ref={form} onSubmit={e => { e.preventDefault(); if (step < 4) { if (validate()) setStep(s => s + 1); } else void save(true); }} noValidate>
-        <Ld.Panel title={['Tell us about the offer', 'Guide your buying agent', 'Approve your Sponsored card', 'Set clear spending limits', 'Ready for review'][step]} sub={`Step ${step + 1} of 5`}>
+        <Ld.Panel>
+          <div className="ad-step-head">
+            <span className="ld-caption">Step {step + 1} of 5</span>
+            <h2 className="ld-section-title">{STEP_TITLES[step]}</h2>
+            <p className="ld-secondary">{STEP_HELP[step]}</p>
+          </div>
           <div className="ad-form-fields">
           {step === 0 && <>
-            {!initial && bootstrap.presets.length > 0 && <Ld.Field label="Start with an example" hint="Examples are editable. Your campaign is saved separately."><select className="ld-select" defaultValue="" onChange={e => { if (e.target.value !== '') preset(Number(e.target.value)); }}><option value="">Start from scratch</option>{bootstrap.presets.map((p, i) => <option key={p.id ?? i} value={i}>{p.label ?? p.name ?? 'Example campaign'}</option>)}</select></Ld.Field>}
-            {input('name', 'Campaign name', 'An internal name to help you find this campaign.')}
-            <div className="ad-field-pair">{input('brandName', 'Brand name')}{input('websiteURL', 'Destination website')}</div>
-            <Ld.Field label="What are you offering?" error={errors.productDescription} hint="Describe the product, who it helps, and what makes it useful."><textarea className="ld-textarea" name="productDescription" rows={4} maxLength={1200} value={draft.productDescription} onChange={e => patch('productDescription', e.target.value)} aria-invalid={Boolean(errors.productDescription)} /></Ld.Field>
+            {!initial && bootstrap.presets.length > 0 && <Ld.Field label="Start with an example" hint="Fills every step with editable sample content."><select className="ld-select" defaultValue="" onChange={e => { if (e.target.value !== '') preset(Number(e.target.value)); }}><option value="">Start from scratch</option>{bootstrap.presets.map((p, i) => <option key={p.id ?? i} value={i}>{p.label ?? p.name ?? 'Example campaign'}</option>)}</select></Ld.Field>}
+            {input('name', 'Campaign name', 'Only you see this.')}
+            <div className="ad-field-pair">{input('brandName', 'Brand name', 'Shown on the card.')}{input('websiteURL', 'Destination website', 'Starts with https://')}</div>
+            <Ld.Field label="What are you offering?" error={errors.productDescription} hint="The product, who it helps and why it is useful."><textarea className="ld-textarea" name="productDescription" rows={4} maxLength={1200} value={draft.productDescription} onChange={e => patch('productDescription', e.target.value)} aria-invalid={Boolean(errors.productDescription)} /></Ld.Field>
           </>}
           {step === 1 && <>
-            <Ld.Field label="Advertiser context hints" hint="One hint per line, up to 6. Tell Jev when your offer fits, when to skip, and which needs matter. These hints stay separate from the Sponsored text." error={errors.contextHints}><textarea className="ld-textarea" name="contextHints" rows={5} value={hints} onChange={e => { setHints(e.target.value); markDirty(); setPreview(null); }} aria-invalid={Boolean(errors.contextHints)} /></Ld.Field>
-            <fieldset className="ad-capabilities" tabIndex={-1} name="declaredCapabilities"><legend className="ld-label">Capabilities your offer supports</legend><p className="ld-secondary">Declare only features your offer actually provides. Publisher requirements can exclude a campaign.</p><input className="ld-input ad-cap-search" aria-label="Find a capability" placeholder="Find a capability" value={capQuery} onChange={e => setCapQuery(e.target.value)} /><div className="ad-capability-list">{bootstrap.capabilities.filter(cap => `${cap.label} ${cap.description ?? ''}`.toLowerCase().includes(capQuery.toLowerCase())).map(cap => <label key={cap.id} className="ad-capability"><input type="checkbox" checked={draft.declaredCapabilities.includes(cap.id)} onChange={e => patch('declaredCapabilities', e.target.checked ? [...draft.declaredCapabilities, cap.id] : draft.declaredCapabilities.filter(v => v !== cap.id))} /><span><strong>{cap.label}</strong>{cap.description && <small>{cap.description}</small>}</span></label>)}</div><span className="ld-caption">{draft.declaredCapabilities.length} capabilities declared</span>{errors.declaredCapabilities && <span className="ld-field-e">{errors.declaredCapabilities}</span>}</fieldset>
-            <Ld.Callout>Jev reads your hints when evaluating a publisher opportunity. Capability declarations remain hard eligibility rules. ContextHint historical evidence, when available, has separate provenance.</Ld.Callout>
+            <Ld.Field label="When should your ad appear?" hint="One line per hint, up to 6. Say when the offer fits and when to skip." error={errors.contextHints}><textarea className="ld-textarea" name="contextHints" rows={5} value={hints} onChange={e => { setHints(e.target.value); markDirty(); setPreview(null); }} aria-invalid={Boolean(errors.contextHints)} /></Ld.Field>
+            <fieldset className="ad-capabilities" tabIndex={-1} name="declaredCapabilities">
+              <legend className="ld-label">What your product does</legend>
+              <p className="ld-field-h">Tick only what the product really offers. An app can require a feature, and campaigns without it are left out.</p>
+              {bootstrap.capabilities.length > 8 && <input type="search" className="ld-input ad-cap-search" aria-label="Find a feature" placeholder="Find a feature" value={capQuery} onChange={e => setCapQuery(e.target.value)} />}
+              <div className="ad-chips">{shownCaps.map(cap => <label key={cap.id} className="ad-chip" title={cap.description}><input type="checkbox" checked={draft.declaredCapabilities.includes(cap.id)} onChange={e => patch('declaredCapabilities', e.target.checked ? [...draft.declaredCapabilities, cap.id] : draft.declaredCapabilities.filter(v => v !== cap.id))} /><span>{cap.label}</span></label>)}</div>
+              <span className="ld-caption">{draft.declaredCapabilities.length} selected</span>
+              {errors.declaredCapabilities && <span className="ld-field-e" role="alert">{errors.declaredCapabilities}</span>}
+            </fieldset>
+            <Ld.Disclosure summary="How matching works">
+              <p>Your buying agent, Jev, reads your hints each time an app has a placement and decides whether to bid. The features you tick are firm rules: they are checked before any bid. Past ad examples from ContextHint, when available, are shown separately from your hints.</p>
+            </Ld.Disclosure>
           </>}
           {step === 2 && <>
-            <Ld.Field label="Approved Sponsored text" error={errors.approvedText} hint="This exact text is shown if your campaign wins a placement."><textarea className="ld-textarea" name="approvedText" rows={5} maxLength={800} value={draft.approvedText} onChange={e => patch('approvedText', e.target.value)} aria-invalid={Boolean(errors.approvedText)} /><span className="ld-caption ad-character-count">{draft.approvedText.length}/800</span></Ld.Field>
-            <div className="ad-preview-test"><Ld.Field label="Test a conversation question" hint="Saves this draft and checks eligibility and copy without calling Jev. It does not predict a win or record delivery or spend."><textarea className="ld-textarea" rows={2} value={question} onChange={e => { setQuestion(e.target.value); setPreview(null); }} placeholder="What might a customer ask an AI app?" /></Ld.Field><Ld.Button variant="secondary" disabled={previewBusy || busy || !question.trim()} onClick={() => void testPreview()}>{previewBusy ? 'Checking question…' : 'Test question'}</Ld.Button>{preview && <Ld.Callout title={preview.eligible === false ? 'Preview: not eligible' : 'Eligibility preview checked'} tone={preview.eligible === false ? 'warning' : 'brand'}>{preview.reason?.replaceAll('_', ' ') ?? 'The preview checked this question against draft eligibility rules. Actual buying judgment happens with Jev at a publisher opportunity.'}{preview.matchedHints?.length ? <p>Matched contexts: {preview.matchedHints.join(', ')}</p> : null}</Ld.Callout>}</div>
+            <Ld.Field label="Sponsored text" error={errors.approvedText} hint="Shown exactly as written, always labelled Sponsored."><textarea className="ld-textarea" name="approvedText" rows={5} maxLength={800} value={draft.approvedText} onChange={e => patch('approvedText', e.target.value)} aria-invalid={Boolean(errors.approvedText)} /><span className="ld-caption ad-character-count">{draft.approvedText.length}/800</span></Ld.Field>
+            <Ld.Disclosure summary="Check it against a sample question">
+              <div className="ad-preview-test"><Ld.Field label="A question a customer might ask" hint="Saves this draft and checks your rules and text. It does not predict a win, and it records no delivery or spend."><textarea className="ld-textarea" rows={2} value={question} onChange={e => { setQuestion(e.target.value); setPreview(null); }} placeholder="What might a customer ask an AI app?" /></Ld.Field><Ld.Button variant="secondary" disabled={previewBusy || busy || !question.trim()} onClick={() => void testPreview()}>{previewBusy ? 'Checking…' : 'Check question'}</Ld.Button>{preview && <Ld.Notice tone={preview.eligible === false ? 'blocked' : 'info'} title={preview.eligible === false ? 'This campaign would be left out' : 'This campaign could compete'}>{preview.reason?.replaceAll('_', ' ') ?? 'Your rules allow this question. Whether it bids is decided when a real placement comes up.'}{preview.matchedHints?.length ? ` Matched hints: ${preview.matchedHints.join(', ')}` : ''}</Ld.Notice>}</div>
+            </Ld.Disclosure>
           </>}
           {step === 3 && <>
-            {native && <Ld.Field label="Settlement network" hint="This choice is approved with your campaign and stays fixed after funding."><select className="ld-select" name="settlementNetwork" value={network} onChange={e => patch('settlementNetwork', e.target.value as Draft['settlementNetwork'])}><option value="solana-devnet">Solana Devnet · Test USDC</option><option value="tempo-testnet" disabled={!bootstrap.payments?.networks?.['tempo-testnet']}>Tempo Testnet · test PathUSD</option></select></Ld.Field>}
-            <Ld.Callout title={native ? `${networkLabel(network)} · ${unit}` : "Synthetic test credits"} tone="brand">{native ? network === 'tempo-testnet' ? 'The shared demo sponsor funds your channel. Pay out accepted deliveries while the campaign stays open, then close to return unused funds.' : 'The shared demo sponsor funds your channel. Closing pays accepted deliveries and returns unused funds.' : 'Spending uses simulated credits. No tokens are transferred.'}</Ld.Callout>
-            {([['maxBidBaseUnits', 'Maximum bid per delivered card', 'The highest amount this campaign may bid for one placement.'], ['budgetCapBaseUnits', 'Total campaign spending cap', 'Accepted delivery charges cannot exceed this campaign cap.'], ['depositBaseUnits', native ? 'Channel deposit' : 'Test-credit allocation', native ? `${unit} locked at launch. The deposit must cover the campaign cap. Network fees are separate.` : 'Simulated credit available to this campaign. It must cover the spending cap.']] as const).map(([key, label, hint]) => <Ld.Field key={key} label={label} hint={hint} error={errors[key]}><div className="ad-money-input"><input className="ld-input" name={key} inputMode="decimal" value={money[key]} onChange={e => { setMoney(v => ({ ...v, [key]: e.target.value })); markDirty(); setErrors(v => ({ ...v, [key]: '' })); }} aria-invalid={Boolean(errors[key])} /><span>{unit}</span></div></Ld.Field>)}
+            {native && <Ld.Field label="Payment network" hint="Fixed once the campaign is funded."><select className="ld-select" name="settlementNetwork" value={network} onChange={e => patch('settlementNetwork', e.target.value as Draft['settlementNetwork'])}><option value="solana-devnet">Solana Devnet · Test USDC</option><option value="tempo-testnet" disabled={!bootstrap.payments?.networks?.['tempo-testnet']}>Tempo Testnet · test PathUSD</option></select></Ld.Field>}
+            <p className="ad-money-note"><Ld.Tag tone="outline">{native ? `${networkLabel(network)} · ${unit}` : 'Test credits · no real money'}</Ld.Tag><span className="ld-secondary">{native ? network === 'tempo-testnet' ? 'The shared demo funds your channel with test tokens. Pay out while the campaign runs, then close to return what is unused.' : 'The shared demo funds your channel with test tokens. Closing pays accepted deliveries and returns what is unused.' : 'A bid is a ceiling, not a charge. You only spend when your card is shown.'}</span></p>
+            {([['maxBidBaseUnits', 'Maximum bid per card', 'The most this campaign may bid for one placement.'], ['budgetCapBaseUnits', 'Spending limit', 'Total spend can never pass this.'], ['depositBaseUnits', native ? 'Channel deposit' : 'Test credits to set aside', native ? `${unit} locked at launch. Must cover the spending limit. Network fees are separate.` : 'Must cover the spending limit.']] as const).map(([key, label, hint]) => <Ld.Field key={key} label={label} hint={hint} error={errors[key]}><div className="ad-money-input"><input className="ld-input" name={key} inputMode="decimal" value={money[key]} onChange={e => { setMoney(v => ({ ...v, [key]: e.target.value })); markDirty(); setErrors(v => ({ ...v, [key]: '' })); }} aria-invalid={Boolean(errors[key])} /><span>{unit}</span></div></Ld.Field>)}
           </>}
           {step === 4 && <>
-            <p className="ld-secondary">{native ? `Your campaign becomes eligible after its channel opening is finalized on ${networkLabel(network)}.` : "Launching makes this campaign eligible to compete in the publisher demo. The backend applies your declarations and spending limits."}</p>
-            <dl className="ad-review">{native && <div><dt>Settlement</dt><dd>{networkLabel(network)} · {unit}</dd></div>}<div><dt>Advertiser</dt><dd>{draft.brandName} · {draft.websiteURL}</dd></div><div><dt>Campaign</dt><dd>{draft.name}</dd></div><div><dt>Offer</dt><dd>{draft.productDescription}</dd></div><div><dt>Contexts</dt><dd>{complete().contextHints.join(' · ')}</dd></div><div><dt>Capabilities</dt><dd>{draft.declaredCapabilities.map(id => bootstrap.capabilities.find(c => c.id === id)?.label ?? id).join(', ') || 'None declared'}</dd></div><div><dt>Maximum bid</dt><dd>{money.maxBidBaseUnits} {unit}</dd></div><div><dt>Campaign cap</dt><dd>{money.budgetCapBaseUnits} {unit}</dd></div><div><dt>{native ? 'Channel deposit' : 'Allocation'}</dt><dd>{money.depositBaseUnits} {unit}</dd></div></dl>
-            {native && readiness?.ready !== true && <Ld.Callout tone="warning" title={`${networkLabel(network)} unavailable`}>{readiness?.reason ?? "The backend has not confirmed payment readiness. Save the draft and retry once the channel worker is ready."}</Ld.Callout>}
-            <label className="ad-review-check"><input type="checkbox" checked={reviewed} onChange={e => setReviewed(e.target.checked)} /><span>I reviewed the exact Sponsored text, my declarations and the spending limits. {native ? `I approve this campaign and its ${unit} channel deposit for launch.` : 'I approve this campaign for launch.'}</span></label>
-            <Ld.Callout>Charges follow accepted Sponsored card insertion. They do not prove human attention, clicks or conversions.</Ld.Callout>
+            <dl className="ad-review">{native && <div><dt>Payment network</dt><dd>{networkLabel(network)} · {unit}</dd></div>}<div><dt>Advertiser</dt><dd>{draft.brandName} · {draft.websiteURL}</dd></div><div><dt>Campaign</dt><dd>{draft.name}</dd></div><div><dt>Offer</dt><dd>{draft.productDescription}</dd></div><div><dt>Appears when</dt><dd>{complete().contextHints.join(' · ')}</dd></div><div><dt>Product features</dt><dd>{draft.declaredCapabilities.map(id => bootstrap.capabilities.find(c => c.id === id)?.label ?? id).join(', ') || 'None declared'}</dd></div><div><dt>Maximum bid</dt><dd>{money.maxBidBaseUnits} {unit}</dd></div><div><dt>Spending limit</dt><dd>{money.budgetCapBaseUnits} {unit}</dd></div><div><dt>{native ? 'Channel deposit' : 'Set aside'}</dt><dd>{money.depositBaseUnits} {unit}</dd></div></dl>
+            {launchBlocked && <Ld.Notice tone="blocked" title={`${networkLabel(network)} is unavailable right now`}>{readiness?.reason ?? 'This campaign cannot be funded yet.'} Save the draft and launch later.</Ld.Notice>}
+            <label className="ad-review-check"><input type="checkbox" checked={reviewed} onChange={e => setReviewed(e.target.checked)} /><span>I reviewed the exact Sponsored text, the product features and the spending limits. {native ? `I approve this campaign and its ${unit} channel deposit for launch.` : 'I approve this campaign for launch.'}</span></label>
+            <p className="ld-caption">You are charged when your Sponsored card is shown. That does not prove attention, clicks or sales.</p>
           </>}
-          {busy && native && step === 4 && <div className="ad-notice" role="status">Waiting for the backend’s saved channel-opening operation. Network confirmation may take up to a minute.</div>}
-          {notice && <div className="ad-notice" role="status">{notice}</div>}
+          {busy && native && step === 4 && <Ld.Notice tone="working">Opening the payment channel. Network confirmation can take up to a minute.</Ld.Notice>}
+          {notice && <Ld.Notice tone={noticeTone}>{notice}</Ld.Notice>}
           </div>
-          <div className="ad-editor-actions"><Ld.Button variant="ghost" disabled={step === 0 || busy} onClick={() => setStep(s => s - 1)}>Back</Ld.Button><div className="ld-row"><Ld.Button variant="secondary" disabled={busy || previewBusy} onClick={() => void save()}>{busy ? 'Saving…' : 'Save draft'}</Ld.Button><Ld.Button type="submit" disabled={busy || previewBusy || (step === 4 && (!reviewed || (native && readiness?.ready !== true)))}>{busy ? native && step === 4 ? 'Opening channel…' : 'Saving…' : step === 4 ? native ? 'Fund channel & launch' : 'Launch campaign' : 'Continue →'}</Ld.Button></div></div>
+          <div className="ad-editor-actions"><Ld.Button variant="ghost" disabled={step === 0 || busy} onClick={() => setStep(s => s - 1)}>← Back</Ld.Button><div className="ld-row"><Ld.Button variant="secondary" disabled={busy || previewBusy} onClick={() => void save()}>{busy ? 'Saving…' : 'Save draft'}</Ld.Button><Ld.Button type="submit" disabled={busy || previewBusy || (step === 4 && (!reviewed || launchBlocked))}>{busy ? native && step === 4 ? 'Opening channel…' : 'Saving…' : step === 4 ? native ? 'Fund channel & launch' : 'Launch campaign' : `Continue to ${STEPS[step + 1].toLowerCase()} →`}</Ld.Button></div></div>
         </Ld.Panel>
       </form>
-      <aside className="ad-preview-column"><Ld.Panel title="Sponsored card preview" sub="Your approved creative, as a separate placement"><div className="ad-chat-preview"><div className="ad-chat-lines" aria-hidden="true"><span /><span /><span /></div><div className="ad-preview-label ld-caption">Shown beneath the publisher’s answer</div><Ld.SponsoredCard advertiser={draft.brandName || 'Your brand'} text={draft.approvedText || 'Your approved Sponsored text will appear here. Keep it clear, useful and specific to the offer.'} url={draft.websiteURL} /></div><div className="ad-preview-foot"><Ld.Tag tone="outline">Preview only</Ld.Tag><p className="ld-caption">Always labelled Sponsored. Previewing a card does not count as delivery.</p></div></Ld.Panel><div className="ad-editor-help"><span className="ld-label">{['A useful offer starts here', 'Meet the moment', 'Clear words earn trust', 'Your limits stay in control', 'Your next step'][step]}</span><p className="ld-secondary">{['Give your buying agent a precise offer. The campaign name stays internal; the brand and approved text appear on the card.', 'Write instructions for Jev about relevant conversations and reasons to skip. These advertiser hints are distinct from historical ContextHint evidence. Capabilities are factual eligibility declarations.', 'Write an offer that can stand on its own. The publisher’s answer stays independent of your Sponsored card.', 'Bids are spending ceilings, not charges. Only accepted delivery adds to campaign spend.', 'Open the publisher demo after launch to see your campaign compete in a real application flow.'][step]}</p></div></aside>
+      <aside className="ad-preview-column" aria-label="Sponsored card preview">
+        <div className="ad-chat-preview">
+          <div className="ad-preview-label"><span className="ld-label">Preview</span><span className="ld-caption">How your card appears in an AI app</span></div>
+          <div className="ad-chat-answer"><span className="ld-caption">The app’s own answer</span><div className="ad-chat-lines" aria-hidden="true"><span /><span /><span /></div></div>
+          <Ld.SponsoredCard advertiser={draft.brandName || 'Your brand'} text={draft.approvedText || 'Your Sponsored text appears here.'} url={draft.websiteURL} />
+        </div>
+        <p className="ld-caption ad-preview-foot">Always a separate card below the answer, labelled Sponsored. A preview is not a delivery.</p>
+      </aside>
     </div>
   </div>;
 }

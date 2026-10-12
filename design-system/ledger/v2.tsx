@@ -5,7 +5,7 @@ import { Provenance } from "../foundation/marks";
 import type { ProvenanceKind, MoneyState } from "../foundation/provenance";
 import { MONEY_STATE } from "../foundation/provenance";
 
-export { Pipeline, Segmented, Tabs, Toggle, Checkbox, RevealOnView } from "./v2-client";
+export { Pipeline, Segmented, Tabs, Toggle, Checkbox, RevealOnView, TabBar, CodeBlock, CopyLine } from "./v2-client";
 export type { PipeStage } from "./v2-client";
 
 export type LinkC = ComponentType<{ href: string; className?: string; children?: ReactNode; "aria-current"?: "page" | undefined; title?: string }>;
@@ -804,6 +804,79 @@ export function FlowTile({ step, title, state, value, children }: { step: ReactN
       {state}
       {value ? <span className="ld-kpi-num">{value}</span> : null}
       {children}
+    </div>
+  );
+}
+
+// ---------- Product refinement primitives ----------
+/** Which product the person is in. `demo` is the public shared demonstration; `account` is their own data. */
+export function Context({ kind, label, detail }: { kind: "demo" | "account"; label: ReactNode; detail?: ReactNode }) {
+  return (
+    <span className="ld-context" data-kind={kind}>
+      <b>{label}</b>
+      {detail ? <span>{detail}</span> : null}
+    </span>
+  );
+}
+
+/** One sentence of feedback with at most one or two actions. `error` is announced assertively. */
+export function Notice({ tone, title, children, actions }: { tone?: "demo" | "done" | "working" | "info" | "error" | "blocked"; title?: ReactNode; children?: ReactNode; actions?: ReactNode }) {
+  return (
+    <div className="ld-notice" data-tone={tone} role={tone === "error" ? "alert" : "status"}>
+      <div>
+        {title ? <strong>{title}</strong> : null}
+        {children ? (title ? <p>{children}</p> : <span>{children}</span>) : null}
+      </div>
+      {actions ? <div className="ld-notice-actions">{actions}</div> : null}
+    </div>
+  );
+}
+
+export function StatStrip({ items, label }: { items: Array<{ key?: string; label: ReactNode; value: ReactNode; unit?: ReactNode; note?: ReactNode }>; label?: string }) {
+  return (
+    <dl className="ld-statstrip" aria-label={label} style={{ ["--n" as string]: items.length }}>
+      {items.map((item, i) => (
+        <div key={item.key ?? i}>
+          <dt>{item.label}</dt>
+          <dd>{item.value}{item.unit ? <small>{item.unit}</small> : null}</dd>
+          {item.note ? <span className="ld-statstrip-note">{item.note}</span> : null}
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+/** Light progress along a short path. States come from saved data; the current step is the next action. */
+export function Steps({ steps, label }: { steps: Array<{ title: ReactNode; state: "done" | "current" | "todo"; href?: string; onClick?: () => void; disabled?: boolean }>; label: string }) {
+  return (
+    <ol className="ld-steps" aria-label={label}>
+      {steps.map((step, i) => {
+        const inner = <><i aria-hidden>{step.state === "done" ? "✓" : i + 1}</i>{step.title}<span className="ld-sr">{step.state === "done" ? ", done" : step.state === "current" ? ", current step" : ""}</span></>;
+        return (
+          <li key={i} data-state={step.state} aria-current={step.state === "current" ? "step" : undefined}>
+            {step.href ? <a href={step.href}>{inner}</a> : step.onClick ? <button type="button" disabled={step.disabled} onClick={step.onClick}>{inner}</button> : <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>{inner}</span>}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+export function Disclosure({ summary, children, open, plain, id }: { summary: ReactNode; children: ReactNode; open?: boolean; plain?: boolean; id?: string }) {
+  return (
+    <details className="ld-disclosure" open={open} data-plain={plain || undefined} id={id}>
+      <summary>{summary}</summary>
+      <div className="ld-disclosure-body">{children}</div>
+    </details>
+  );
+}
+
+export function Skeleton({ rows = 3, label = "Loading" }: { rows?: number; label?: string }) {
+  return (
+    <div className="ld-skeleton" role="status" aria-label={label}>
+      {Array.from({ length: rows }, (_, i) => (
+        <div key={i}><i style={{ width: 36, height: 36, borderRadius: 9 }} /><i style={{ width: `${32 - i * 5}%` }} /><i style={{ width: "12%", marginLeft: "auto" }} /></div>
+      ))}
     </div>
   );
 }

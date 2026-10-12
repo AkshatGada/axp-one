@@ -43,3 +43,30 @@
 .sdk-reference-note{margin:24px 0 0;font-size:12px;line-height:1.7;color:var(--ld-text-3)}
 @media(max-width:900px){.sdk-guide{padding:24px}.sdk-step{padding:20px}.sdk-code-preview{font-size:10px;padding:12px}.sdk-step p{min-height:63px}.sdk-step-head{align-items:flex-start}.sdk-step-head .ld-caption{text-align:right}}
 @media(max-width:700px){.sdk-guide{padding:24px 16px}.sdk-guide .ld-pagebar{margin-bottom:24px}.sdk-steps{grid-template-columns:1fr}.sdk-step+.sdk-step{border-left:0;border-top:1px solid var(--ld-border)}.sdk-step h2{margin-top:16px}.sdk-step p{min-height:0;margin-bottom:16px}.sdk-code-preview{font-size:12px;min-height:0;padding:16px}.sdk-answer-lane{padding:20px}.sdk-example{align-items:flex-start;flex-direction:column;gap:16px;padding:24px 0}.sdk-reference-heading{align-items:flex-start;flex-direction:column;gap:12px;padding:20px}.sdk-details summary{padding:20px;font-size:13px}.sdk-details summary>span{margin-right:8px}.sdk-detail-body{padding:4px 20px 20px}.sdk-code{padding:16px;font-size:11px}}
+
+/* Refinement: where to connect, copyable sections, troubleshooting */
+.sdk-guide .ld-pagebar>.ld-row{flex-wrap:wrap}
+.sdk-guide{display:flex;flex-direction:column;gap:32px}
+.sdk-guide .ld-pagebar{margin-bottom:0}
+.sdk-where,.sdk-section{display:grid;gap:14px;min-width:0}
+.sdk-where>p,.sdk-section>p,.sdk-where h2,.sdk-section h2{margin:0}
+.sdk-section>p{max-width:86ch;line-height:1.6}
+.sdk-where-grid,.sdk-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.sdk-where-card{display:grid;gap:16px;align-content:start;padding:20px;border:1px solid var(--ld-border);border-radius:var(--ld-r-md);background:var(--ld-panel);box-shadow:var(--ld-shadow-1);min-width:0}
+.sdk-where-card[data-kind="account"]{border-color:var(--ld-accent-line)}
+.sdk-where-card .ld-context{justify-self:start;max-width:100%}
+.sdk-where-card dl{margin:0;display:grid;gap:12px}
+.sdk-where-card dl>div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;align-items:center}
+.sdk-where-card dt{font-size:12px;font-weight:500;color:var(--ld-text-2)}
+.sdk-where-card dd{margin:0;font-size:13px;line-height:1.5;min-width:0}
+.sdk-step-number{font:500 12px/1.4 var(--font-sans);color:var(--ld-accent)}
+.sdk-example{display:none}
+.sdk-troubles{border:1px solid var(--ld-border);border-radius:var(--ld-r-md);background:var(--ld-panel);overflow:hidden}
+.sdk-troubles>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.3fr);gap:16px;padding:12px 16px;border-top:1px solid var(--ld-border);font-size:13px;line-height:1.5;color:var(--ld-text-2)}
+.sdk-troubles>div:first-child{border-top:0}
+.sdk-troubles b{font-weight:500;color:var(--ld-text)}
+.sdk-trouble-head{background:var(--ld-sunken);font-size:12px!important;font-weight:500}
+.sdk-details summary{list-style-position:inside}
+.sdk-section .ld-disclosure code,.sdk-detail-body code{font-family:var(--font-mono);font-size:12px;color:var(--ld-text)}
+.sdk-guide a:focus-visible,.sdk-guide button:focus-visible,.sdk-guide summary:focus-visible,.pub-header a:focus-visible{outline:2px solid var(--ld-accent);outline-offset:2px;border-radius:var(--ld-r-xs)}
+@media(max-width:800px){.sdk-where-grid,.sdk-two{grid-template-columns:minmax(0,1fr)}.sdk-troubles>div{grid-template-columns:minmax(0,1fr);gap:4px}.sdk-trouble-head{display:none!important}.sdk-where-card dl>div{grid-template-columns:minmax(0,1fr);gap:4px}.sdk-guide .ld-pagebar>.ld-row,.sdk-guide .ld-pagebar>.ld-row .ld-btn{width:100%}}

@@ -23,12 +23,12 @@ export function formatUnits(base: string | null | undefined): string {
 
 export type FinancialMode = 'synthetic' | 'devnet';
 export function modeName(mode: FinancialMode) {
-  return mode === 'devnet' ? 'Solana Devnet, test USDC' : 'Simulated accounting';
+  return mode === 'devnet' ? 'Solana Devnet · test USDC' : 'Test balance · no real money';
 }
 export function modeSentence(mode: FinancialMode) {
   return mode === 'devnet'
-    ? 'This server uses the Solana Devnet test network with test USDC. Nothing here is real money.'
-    : 'This server uses simulated accounting. Charges and earnings are ledger entries only; no deposit, payout or refund takes place.';
+    ? 'Amounts here are test USDC on the Solana Devnet test network. No real money.'
+    : 'Amounts here are test balances. No real money moves.';
 }
 /** Unit shown next to an amount. Simulated amounts are never labelled as a test-network balance. */
 export function amountUnit(mode: FinancialMode, network: string) {
@@ -44,32 +44,32 @@ export function formatWhen(ms: number): string {
 }
 
 export const dispositionLabel: Record<AccountActivity['disposition'], string> = {
-  won: 'Won the placement',
+  won: 'Won',
   lost: 'Outbid',
   skipped: 'Chose not to bid',
   unavailable: 'Decision unavailable',
-  abstained: 'Abstained',
+  abstained: 'Chose not to bid',
   excluded: 'Not eligible',
   no_fill: 'No ad shown',
 };
 export const deliveryLabel: Record<AccountActivity['deliveryStatus'], string> = {
   not_awarded: 'No placement',
-  accepted: 'Insertion accepted',
+  accepted: 'Shown and accepted',
   failed: 'Delivery failed',
   expired: 'Expired before delivery',
-  reserved: 'Reserved, awaiting receipt',
+  reserved: 'Awaiting receipt',
 };
 export function executionLabel(execution: AccountActivity['execution']) {
-  return execution === 'actual-api-model' ? 'Live model decision'
-    : execution === 'fixture' ? 'Fixture decision (test data)'
-      : execution === 'unavailable' ? 'Model unavailable' : 'No model decision reported';
+  return execution === 'actual-api-model' ? 'Live decision'
+    : execution === 'fixture' ? 'Test decision'
+      : execution === 'unavailable' ? 'Decision unavailable' : 'No decision reported';
 }
 export const gateLabel: Record<string, string> = {
-  credential: 'Active server key',
-  restrictions: 'Category rules can be enforced',
-  catalogue: 'Campaign catalogue available',
-  inventory: 'Eligible campaigns enrolled',
-  provider: 'Bidding service reachable',
-  funding: 'Funded channel for this app',
-  broadcasts: 'Broadcasts available for funding',
+  credential: 'Active API key',
+  restrictions: 'Ad rules can be applied',
+  catalogue: 'Campaigns available',
+  inventory: 'At least one live campaign',
+  provider: 'Bidding available',
+  funding: 'Funded for this app',
+  broadcasts: 'Payments available',
 };
