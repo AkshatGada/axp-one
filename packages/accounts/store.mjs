@@ -115,6 +115,13 @@ export function validateAccountInput(operation, input) {
   fail('invalid_input');
 }
 
+export function validateCampaignServingInput(input) {
+  exact(input, ['expectedVersion', 'enabled']);
+  if (!Number.isSafeInteger(input.expectedVersion) || input.expectedVersion < 1 ||
+      typeof input.enabled !== 'boolean') fail('invalid_input');
+  return {expectedVersion: input.expectedVersion, enabled: input.enabled};
+}
+
 export function createAccountStore({dir, now = Date.now} = {}) {
   if (typeof dir !== 'string' || !dir || typeof now !== 'function') fail('invalid_input');
   const directory = resolve(dir);
@@ -180,6 +187,20 @@ export function createAccountStore({dir, now = Date.now} = {}) {
           (status='approved' AND length(approvedContentHash)=64))
       ) STRICT;
       CREATE INDEX IF NOT EXISTS account_campaigns_org ON account_campaigns(organizationId,createdAt,id);
+      CREATE UNIQUE INDEX IF NOT EXISTS account_campaigns_binding ON account_campaigns(id,organizationId);
+      CREATE TABLE IF NOT EXISTS account_campaign_serving (
+        campaignId TEXT PRIMARY KEY, organizationId TEXT NOT NULL,
+        version INTEGER NOT NULL CHECK(version>0), approvedContentHash TEXT,
+        enabled INTEGER NOT NULL CHECK(enabled IN (0,1)),
+        financialMode TEXT NOT NULL CHECK(financialMode='synthetic'), updatedAt INTEGER NOT NULL,
+        advertiserId TEXT NOT NULL, advertiserName TEXT, advertiserWebsite TEXT,
+        FOREIGN KEY(campaignId,organizationId) REFERENCES account_campaigns(id,organizationId),
+        FOREIGN KEY(advertiserId,organizationId) REFERENCES advertisers(id,organizationId),
+        CHECK(enabled=0 OR (length(approvedContentHash)=64 AND advertiserName IS NOT NULL AND advertiserWebsite IS NOT NULL))
+      ) STRICT;
+      CREATE TRIGGER IF NOT EXISTS account_campaign_serving_invalidate AFTER UPDATE ON account_campaigns
+      WHEN NEW.version<>OLD.version OR NEW.status<>'approved' OR NEW.approvedContentHash IS NOT OLD.approvedContentHash
+      BEGIN UPDATE account_campaign_serving SET enabled=0,updatedAt=NEW.updatedAt WHERE campaignId=NEW.id; END;
       CREATE TABLE IF NOT EXISTS account_app_credentials (
         id TEXT PRIMARY KEY, organizationId TEXT NOT NULL REFERENCES organizations(id),
         appId TEXT NOT NULL, label TEXT NOT NULL, keyHash TEXT NOT NULL UNIQUE
@@ -233,6 +254,10 @@ export function createAccountStore({dir, now = Date.now} = {}) {
   const appRecord = row => row ? {...row, allowedOrigins: JSON.parse(row.allowedOrigins),
     blockedCategories: JSON.parse(row.blockedCategories), payout: JSON.parse(row.payout)} : null;
   const campaignRecord = row => row ? {...row, input: JSON.parse(row.input), servingStatus: 'not_connected'} : null;
+  // Frozen enrollment DTO: advertiser snapshots are only for trusted matching.
+  const servingRecord = row => row ? {campaignId: row.campaignId, organizationId: row.organizationId,
+    version: row.version, approvedContentHash: row.approvedContentHash, enabled: !!row.enabled,
+    financialMode: row.financialMode, updatedAt: row.updatedAt} : null;
   const credentialRecord = row => row ? {id: row.id, organizationId: row.organizationId,
     appId: row.appId, publisherId: `app:${row.appId}`, label: row.label, scopes: [...APP_SCOPES],
     createdAt: row.createdAt, expiresAt: row.expiresAt, revokedAt: row.revokedAt} : null;
@@ -396,6 +421,51 @@ export function createAccountStore({dir, now = Date.now} = {}) {
   // adapter's key enumeration contract. This factory is explicitly an offline
   // SQLite fixture; real-provider wiring must install the Supabase repository.
   const resources = {
+    campaignServing: safe((userId, orgId, campaignId) => {
+      ownedCampaign(userId, orgId, campaignId);
+      return servingRecord(get('SELECT * FROM account_campaign_serving WHERE campaignId=? AND organizationId=?', campaignId, orgId));
+    }),
+    setCampaignServing: safe((userId, orgId, campaignId, input) => transaction(() => {
+      const row = ownedCampaign(userId, orgId, campaignId);
+      const {expectedVersion, enabled} = validateCampaignServingInput(input);
+      if (expectedVersion !== row.version) fail('campaign_version_conflict', 409);
+      if (enabled && (row.status !== 'approved' || row.approvedContentHash !== contentHash(JSON.parse(row.input))))
+        fail('campaign_approval_required', 409);
+      const advertiser = get('SELECT * FROM advertisers WHERE id=? AND organizationId=?', row.advertiserId, orgId);
+      if (!advertiser) fail('not_found', 404);
+      const previous = get('SELECT * FROM account_campaign_serving WHERE campaignId=?', row.id);
+      const keepSnapshot = previous?.enabled && enabled && previous.version === row.version &&
+        previous.approvedContentHash === row.approvedContentHash;
+      // Profiles may use loopback development URLs, delivered ad destinations
+      // may not. Reject opt-in before one owner's record can poison inventory.
+      if (enabled && !(keepSnapshot ? previous.advertiserWebsite : advertiser.website).startsWith('https://'))
+        fail('campaign_destination_invalid', 409);
+      run(`INSERT INTO account_campaign_serving VALUES(?,?,?,?,?,'synthetic',?,?,?,?)
+        ON CONFLICT(campaignId) DO UPDATE SET version=excluded.version,approvedContentHash=excluded.approvedContentHash,
+        enabled=excluded.enabled,updatedAt=excluded.updatedAt,advertiserName=excluded.advertiserName,
+        advertiserWebsite=excluded.advertiserWebsite`, row.id, orgId, row.version, row.approvedContentHash,
+      Number(enabled), timestamp(), advertiser.id,
+      enabled && !keepSnapshot ? advertiser.name : previous?.advertiserName ?? null,
+      enabled && !keepSnapshot ? advertiser.website : previous?.advertiserWebsite ?? null);
+      return servingRecord(get('SELECT * FROM account_campaign_serving WHERE campaignId=?', row.id));
+    })),
+    // Explicit offline fixture capability only; real owner stores intentionally
+    // have no catalogue method or privileged credential.
+    networkCampaigns: safe(() => all(`SELECT c.*,s.advertiserName,s.advertiserWebsite,
+      s.updatedAt AS servingUpdatedAt FROM account_campaigns c
+      JOIN account_campaign_serving s ON s.campaignId=c.id AND s.organizationId=c.organizationId
+      JOIN advertisers a ON a.id=c.advertiserId AND a.organizationId=c.organizationId
+      WHERE s.enabled=1 AND c.status='approved' AND s.version=c.version
+        AND s.approvedContentHash=c.approvedContentHash AND s.advertiserId=c.advertiserId
+      ORDER BY c.createdAt,c.id LIMIT 100`).filter(row => row.approvedContentHash === contentHash(JSON.parse(row.input)))
+      .map(row => {
+        const {advertiserName, advertiserWebsite, servingUpdatedAt, ...campaign} = row;
+        return {campaign: campaignRecord(campaign),
+          advertiser: {id: campaign.advertiserId, name: advertiserName, website: advertiserWebsite},
+          enrollment: servingRecord({campaignId: campaign.id, organizationId: campaign.organizationId,
+            version: campaign.version, approvedContentHash: campaign.approvedContentHash, enabled: 1,
+            financialMode: 'synthetic', updatedAt: servingUpdatedAt})};
+      })),
     campaigns: safe((userId, orgId) => {
       owned(userId, orgId);
       return all('SELECT * FROM account_campaigns WHERE organizationId=? ORDER BY createdAt,id', orgId).map(campaignRecord);

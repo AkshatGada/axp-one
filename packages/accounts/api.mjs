@@ -21,12 +21,12 @@ async function readBody(req) {
 }
 const credentials=body=>{only(body,['email','password']);if(typeof body.email!=='string'||body.email.length>254||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)||typeof body.password!=='string'||body.password.length<12||body.password.length>256)fail('credentials_invalid');return {email:body.email.trim().toLowerCase(),password:body.password};};
 
-export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=true}={}) {
+export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=true,network=null}={}) {
   let configured=false,secure=false;
   try {const u=new URL(origin);secure=u.protocol==='https:';configured=u.origin===origin&&(secure||(u.protocol==='http:'&&['localhost','127.0.0.1','[::1]'].includes(u.hostname)));}catch{}
   const ready=enabled&&configured&&!!provider&&!!store;
   const resources=!!store&&(store.resourceRepository===true||typeof store.saveCampaign==='function');
-  const capabilities={...ACCOUNT_CAPABILITIES,campaignDrafts:resources,appCredentials:resources};
+  const capabilities={...ACCOUNT_CAPABILITIES,campaignDrafts:resources,appCredentials:resources,campaignServing:network?.ready===true};
   const cookie=(value,age=604800)=>`axp_session=${value}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${age}${secure?'; Secure':''}`;
   async function issue(data,oldHash) {
     store.bindIdentity?.(data.user,data.accessToken);
@@ -62,7 +62,10 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
     try {
       const url=new URL(req.url,'http://local'),path=url.pathname.replace(/\/$/,'').replace(/^\/api\/accounts(?=\/|$)/,'');
       if(!url.pathname.startsWith('/api/accounts/'))fail('not_found',404);
-      if(req.method==='GET'&&path==='/health')return send(res,200,{enabled:ready,provider:'supabase',profileStore:store?.profileStore??'sqlite-fixture',configured:{origin:configured,provider:!!provider,store:!!store},capabilities});
+      if(req.method==='GET'&&path==='/health'){
+        const serving=network?.readiness?await network.readiness():{ready:network?.ready===true,reason:network?.reason??'account_serving_not_connected'};
+        return send(res,200,{enabled:ready,provider:'supabase',profileStore:store?.profileStore??'sqlite-fixture',configured:{origin:configured,provider:!!provider,store:!!store},capabilities:{...capabilities,campaignServing:serving.ready},serving});
+      }
       if(!ready)fail('accounts_configuration_required',503);
       if(!['GET','POST'].includes(req.method))fail('method_not_allowed',405);
       if(path==='/sdk'||path.startsWith('/sdk/')) {
@@ -76,14 +79,31 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
         const scope=req.method==='GET'?(path.includes('/awards/')?'delivery:read':'opportunities:read'):(path==='/sdk/opportunities'?'opportunities:write':'delivery:write');
         if(!resolved.credential.scopes.includes(scope))fail('publisher_key_invalid',401);
         if(req.method==='GET'&&path==='/sdk/publisher/config'&&!url.search) {
+          if(network?.ready)return send(res,200,await network.withService(service=>service.config(resolved.app)));
           return send(res,200,{schemaVersion:'publisher-config.v2',contractVersion:'0.2.0',publisherId:resolved.credential.publisherId,appId:resolved.app.id,
             app:{name:resolved.app.name,website:resolved.app.website},allowedOrigins:resolved.app.allowedOrigins,blockedCategories:resolved.app.blockedCategories,
             expiresAtUnit:'unix_epoch_milliseconds',maxQuestionCharacters:1200,restrictionLimit:17,placementId:'chat-sponsored-card',apiBasePath:'/api/accounts/sdk',
             financialMode:'unfunded',mode:'unfunded',servingEnabled:false,recoverySupported:false,keyConfigured:true,
             capabilities:{configuration:true,campaignServing:false,nativeFunding:false},reason:'account_serving_not_connected'});
         }
-        if((req.method==='POST'&&(path==='/sdk/opportunities'||/^\/sdk\/awards\/[-\w]+\/(render|fail)$/.test(path)))||
-          (req.method==='GET'&&(path==='/sdk/publisher/opportunities'||/^\/sdk\/awards\/[-\w]+\/status$/.test(path))))fail('account_serving_not_connected',503);
+        const delivery=path.match(/^\/sdk\/awards\/([-\w]+)\/(render|fail|status)$/);
+        if(path==='/sdk/opportunities'&&req.method==='POST'||path==='/sdk/publisher/opportunities'&&req.method==='GET'||delivery) {
+          if(!network?.ready)fail('account_serving_not_connected',503);
+          const app=resolved.app;
+          if(path==='/sdk/opportunities'&&req.method==='POST'&&!url.search){const input=await readBody(req);return send(res,200,await network.withService(service=>service.opportunity(app,input)));}
+          if(path==='/sdk/publisher/opportunities'&&req.method==='GET'){
+            if([...url.searchParams.keys()].length!==2||url.searchParams.getAll('sessionId').length!==1||url.searchParams.getAll('turnId').length!==1)fail('invalid_input');
+            return send(res,200,await network.withService(service=>service.lookupOpportunity(app,{sessionId:url.searchParams.get('sessionId'),turnId:url.searchParams.get('turnId')})));
+          }
+          if(delivery&&!url.search){
+            const [,awardId,action]=delivery,token=req.headers['x-axp-delivery-token'];
+            if(action==='status'&&req.method==='GET')return send(res,200,await network.withService(service=>service.lookupDelivery(app,awardId,token)));
+            if(['render','fail'].includes(action)&&req.method==='POST'){
+              const input=await readBody(req);
+              return send(res,200,await network.withService(service=>action==='render'?service.render(app,awardId,input,token):service.failAward(app,awardId,input,token)));
+            }
+          }
+        }
         fail('not_found',404);
       }
       if(req.headers['sec-fetch-site']==='cross-site')fail('origin_invalid',403);
@@ -109,6 +129,33 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
       }
       if(req.method==='POST'&&path==='/profile')return send(res,200,{user:await store.updateProfile(s.userId,body)});
       if(req.method==='POST'&&path==='/organizations')return send(res,201,{organization:await store.createOrganization(s.userId,body)});
+      const serving=path.match(/^\/organizations\/([a-zA-Z0-9-]+)\/campaigns\/([a-zA-Z0-9-]+)\/(serving|report)$/);
+      if(serving){
+        const [,orgId,campaignId,action]=serving;
+        const ownedCampaign=await store.campaign(s.userId,orgId,campaignId); // Verified owner, not a ledger ID supplied by caller.
+        if(action==='serving'){
+          if(req.method==='GET')return send(res,200,{enrollment:await store.campaignServing(s.userId,orgId,campaignId)});
+          exactResource(body,['expectedVersion','enabled']);
+          if(!Number.isSafeInteger(body.expectedVersion)||body.expectedVersion<1||typeof body.enabled!=='boolean')fail('invalid_input');
+          if(!network?.ready)fail('account_serving_not_connected',503);
+          return send(res,200,{enrollment:await network.withService(service=>{
+            if(body.enabled)service.checkEnrollment(ownedCampaign);
+            return store.setCampaignServing(s.userId,orgId,campaignId,body);
+          })});
+        }
+        if(req.method==='GET'){
+          if(!network?.ready)fail('account_serving_not_connected',503);
+          return send(res,200,await network.withService(service=>service.report({campaignId})));
+        }
+        fail('not_found',404);
+      }
+      const appReport=path.match(/^\/organizations\/([a-zA-Z0-9-]+)\/apps\/([a-zA-Z0-9-]+)\/report$/);
+      if(appReport&&req.method==='GET'){
+        const [,orgId,appId]=appReport,details=await store.details(s.userId,orgId);
+        if(!details.apps.some(app=>app.id===appId))fail('not_found',404);
+        if(!network?.ready)fail('account_serving_not_connected',503);
+        return send(res,200,await network.withService(service=>service.report({appId})));
+      }
       const campaigns=path.match(/^\/organizations\/([a-zA-Z0-9-]+)\/campaigns(?:\/([a-zA-Z0-9-]+)(?:\/(approve))?)?$/);
       if(campaigns) {
         if(!resources)fail('account_resources_unavailable',503);

@@ -62,7 +62,7 @@ export function credentialStatus(credential: { revokedAt: number | null; expires
 export function accountSDKBaseURL(origin: string) { return `${new URL(origin).origin}/api/accounts/sdk`; }
 
 /** No actual key is interpolated into examples, copied snippets, URLs or logs. */
-export function accountSDKExample(origin: string) {
+export function accountSDKExample(origin: string, servingReady = false) {
   const baseURL = accountSDKBaseURL(origin);
   return `// Your Node.js server only. Install the local @axp/publisher-sdk 0.2.0 tarball.
 import { AXPPublisher } from '@axp/publisher-sdk';
@@ -78,8 +78,8 @@ const response = await fetch(baseURL + '/publisher/config', {
 });
 if (!response.ok) throw new Error('Account SDK configuration unavailable');
 const config = await response.json();
-// config.financialMode === 'unfunded'; config.servingEnabled === false.
+${servingReady ? "// financialMode must be 'synthetic'; inspect config.servingEnabled and recovery readiness.\n// Synthetic receipts are not native payment; configuration does not execute an ad request." : "// config.financialMode === 'unfunded'; config.servingEnabled === false."}
 const axp = new AXPPublisher({ apiKey, baseURL });
-// Do not call requestAd yet: serving/recovery returns account_serving_not_connected (503).
+${servingReady ? '// Only explicitly enabled, approved inventory participates. No native funding is connected.' : '// Do not call requestAd yet: serving/recovery returns account_serving_not_connected (503).'}
 // Never expose the publisher key in browser code, NEXT_PUBLIC_* or model input.`;
 }

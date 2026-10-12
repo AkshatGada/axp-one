@@ -28,7 +28,7 @@ try {
     await new Promise(r=>setTimeout(r,250));
   }
   if(!ready)throw Error('isolated_postgres_not_ready');
-  for(const path of ['tests/support/accounts-auth-stub.sql','supabase/migrations/20261012_axp_account_profiles.sql','supabase/migrations/20261012_axp_account_resources.sql','supabase/tests/account_profiles.sql','supabase/tests/account_resources.sql']) {
+  for(const path of ['tests/support/accounts-auth-stub.sql','supabase/migrations/20261012_axp_account_profiles.sql','supabase/migrations/20261012_axp_account_resources.sql','supabase/migrations/20261012_axp_account_serving.sql','supabase/tests/account_profiles.sql','supabase/tests/account_resources.sql','supabase/tests/account_serving.sql']) {
     let source=readFileSync(resolve(root,path),'utf8');
     // Optional diagnostics affect this disposable fixture copy only. There are
     // no customer records or credentials in the isolated database.

@@ -1,26 +1,28 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { Ld } from '@axp/design-system/ledger';
 import { AccountApiError, type AccountsClient } from './client';
 import { AccountForm, Input, Textarea, type RunAction } from './AccountForms';
 import { accountSDKExample, campaignCapabilities, campaignFormInput, credentialStatus } from './resourceForms';
 import type { AIApp, AppCredential, Campaign, CampaignInput, IssuedAppCredential } from './types';
+import { CampaignServing } from './servingResources';
 
 function safeError(error: unknown) {
   return error instanceof AccountApiError ? error.message : 'The resource request could not be completed. Refresh and try again.';
 }
 
-export function CampaignForm({ campaign, busy, run, save, approve }: {
+export function CampaignForm({ campaign, busy, run, save, approve, renderServing }: {
   campaign?: Campaign; busy: boolean; run: RunAction;
   save: (input: CampaignInput) => Promise<void>; approve: () => Promise<void>;
+  renderServing?: (dirty: boolean) => ReactNode;
 }) {
   const [dirty, setDirty] = useState(false);
   const networkId = useId();
   const input = campaign?.input;
   return <div className="ld-stack-lg">
     {campaign && <div className="ld-stack">
-      <p className="ld-body">Saved version {campaign.version} · {campaign.status} · Serving: not connected</p>
+      <p className="ld-body">Saved version {campaign.version} · {campaign.status}</p>
       <p className="ld-secondary account-break">Campaign ID: {campaign.id}</p>
       {campaign.approvedContentHash && <p className="ld-secondary account-break">Approved saved-content hash: {campaign.approvedContentHash}</p>}
       <p className="ld-secondary">{campaign.status === 'approved' ? 'This exact saved version is approved. Every edit increments its version and clears approval.' : 'Review the saved text below. Approval applies only to the current saved version; it does not launch or fund a campaign.'}</p>
@@ -29,7 +31,7 @@ export function CampaignForm({ campaign, busy, run, save, approve }: {
       <AccountForm label={campaign ? 'Edit owned campaign' : 'Create owned campaign'} busy={busy}
         submit={campaign ? 'Save new draft version' : 'Create draft'}
         hint="Amounts are configuration caps, not deposits or spending authority. No funding or launch occurs."
-        onSubmit={data => run('Saving campaign draft', () => save(campaignFormInput(data)), 'Draft saved. Approval is required for the exact saved content; serving remains disconnected.')}>
+        onSubmit={data => run('Saving campaign draft', () => save(campaignFormInput(data)), 'Draft saved. Approval and explicit enrollment are required for this new version; no funding occurred.')}>
         <Input label="Campaign name" name="name" value={input?.name} maxLength={120} />
         <Textarea label="Product description" name="productDescription" value={input?.productDescription} maxLength={1200} hint="Required, single paragraph. Up to 1,200 characters." />
         <Textarea label="Sponsored text for approval" name="approvedText" value={input?.approvedText} maxLength={800} hint="Required, plain text, single paragraph. Up to 800 characters. This is separate from an independent answer." />
@@ -59,11 +61,12 @@ export function CampaignForm({ campaign, busy, run, save, approve }: {
         {campaign.status === 'approved' ? `Version ${campaign.version} approved` : `Approve saved version ${campaign.version}`}
       </Ld.Button>
     </div>}
+    {renderServing?.(dirty)}
   </div>;
 }
 
-export function CampaignResources({ client, organizationId, advertiserReady, busy, run, onUnauthorized }: {
-  client: AccountsClient; organizationId: string; advertiserReady: boolean; busy: boolean; run: RunAction; onUnauthorized: () => void;
+export function CampaignResources({ client, organizationId, advertiserReady, busy, run, onUnauthorized, servingReady = false }: {
+  client: AccountsClient; organizationId: string; advertiserReady: boolean; busy: boolean; run: RunAction; onUnauthorized: () => void; servingReady?: boolean;
 }) {
   const [campaigns, setCampaigns] = useState<Campaign[] | null>(null);
   const [selectedId, setSelectedId] = useState('');
@@ -107,6 +110,9 @@ export function CampaignResources({ client, organizationId, advertiserReady, bus
         </div>
         <CampaignForm key={`${selected?.id ?? 'new'}:${selected?.version ?? 0}:${selected?.status ?? ''}`} campaign={selected}
           busy={busy || !advertiserReady} run={run}
+          renderServing={selected ? dirty => <CampaignServing client={client} organizationId={organizationId} campaign={selected}
+            ready={servingReady} busy={busy} dirty={dirty} run={run} onUnauthorized={onUnauthorized}
+            onConflict={() => setRevision(value => value + 1)} /> : undefined}
           save={async input => upsert((await client.saveCampaign(organizationId, input, selected?.id)).campaign)}
           approve={async () => {
             if (!selected) return;
@@ -133,10 +139,11 @@ function useResourceAlive() {
   return alive;
 }
 
-export function AppCredentials({ client, organizationId, app, busy, run, issue, rawKey, dismissKey, onUnauthorized }: {
+export function AppCredentials({ client, organizationId, app, busy, run, issue, rawKey, dismissKey, onUnauthorized, servingReady = false }: {
   client: AccountsClient; organizationId: string; app: AIApp; busy: boolean; run: RunAction;
   issue: (action: () => Promise<IssuedAppCredential>) => Promise<AppCredential | null>;
   rawKey: string | null; dismissKey: () => void; onUnauthorized: () => void;
+  servingReady?: boolean;
 }) {
   const [credentials, setCredentials] = useState<AppCredential[] | null>(null);
   const [error, setError] = useState('');
@@ -144,7 +151,7 @@ export function AppCredentials({ client, organizationId, app, busy, run, issue, 
   const [revision, setRevision] = useState(0);
   const [example, setExample] = useState('');
   const alive = useResourceAlive();
-  useEffect(() => { setExample(accountSDKExample(window.location.origin)); }, []);
+  useEffect(() => { setExample(accountSDKExample(window.location.origin, servingReady)); }, [servingReady]);
   useEffect(() => {
     let active = true;
     setLoading(true); setError(''); setCredentials(null);
@@ -164,7 +171,7 @@ export function AppCredentials({ client, organizationId, app, busy, run, issue, 
   const activeCount = credentials?.filter(credential => credentialStatus(credential) === 'Active').length ?? 0;
   return <Ld.Panel id="app-credentials" title="Server-side SDK credentials" sub={app.name}>
     <div className="ld-stack-lg">
-      <p className="ld-body">Configuration metadata ready when a valid key is installed on your server. Serving: not connected. Financial mode: unfunded. No native funding or payout routing is enabled.</p>
+      <p className="ld-body">{servingReady ? 'Shared account serving is available in synthetic mode. Install a valid app key on your server; actual SDK readiness is returned by its configuration endpoint.' : 'Configuration metadata ready when a valid key is installed on your server. Serving: not connected.'} No native funding or payout routing is enabled.</p>
       <p className="ld-secondary account-break">Publisher identity: app:{app.id}. Configuration uses this app’s saved allowed origins and prohibited categories; a key cannot select a different publisher.</p>
       <p className="ld-secondary">Keys expire after 30 days; at most 10 active keys per app. Revocation is irreversible. Rotation atomically revokes the old key and returns a replacement once; update your server environment after rotating.</p>
       {rawKey && <div className="ld-stack" role="region" aria-label="New server credential shown once">
@@ -181,7 +188,7 @@ export function AppCredentials({ client, organizationId, app, busy, run, issue, 
           onSubmit={(data, form) => run('Issuing server credential', async () => {
             const credential = await issue(() => client.issueAppCredential(organizationId, app.id, String(data.get('label') ?? '')));
             if (credential && alive.current) { upsert(credential); form.reset(); }
-          }, 'Server key issued. Save it now; serving remains disconnected.')}>
+          }, 'Server key issued. Save it now in your private server environment. Issuance does not fund or enroll a campaign.')}>
           <Input label="New credential label" name="label" maxLength={120} hint="For example, staging backend. Do not put a secret in the label." />
         </AccountForm>
         {!credentials.length && <p className="ld-secondary">No credentials have been issued for this app.</p>}
@@ -211,11 +218,11 @@ export function AppCredentials({ client, organizationId, app, busy, run, issue, 
         })}
       </>}
       <details>
-        <summary>Server-only SDK configuration example (not ad serving)</summary>
+        <summary>Server-only SDK configuration example (read only)</summary>
         <div className="ld-stack">
           <p className="ld-secondary">Install the local SDK 0.2.0 tarball on your backend, set AXP_PUBLISHER_API_KEY privately, and use this account endpoint. Do not use /api/product or send this key to a browser, model, logs or URL. A successful config read proves configuration access, not funding or serving.</p>
           <pre className="account-break"><code>{example}</code></pre>
-          <p className="ld-secondary">Serving and recovery reject valid keys with account_serving_not_connected (503); invalid, expired or revoked keys receive 401. requestAd fails open with an explicit error; no ad is served.</p>
+          <p className="ld-secondary">{servingReady ? 'Shared serving uses explicitly enrolled approved inventory and synthetic accounting only. Check the SDK configuration for actual serving and recovery readiness; a key or saved payout declaration does not authorize native payment.' : 'Serving is unavailable until the shared account network is ready; do not route to the shared demo as a fallback.'} Invalid, expired or revoked keys receive 401.</p>
         </div>
       </details>
     </div>

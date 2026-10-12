@@ -18,9 +18,12 @@ conditional on passing isolated tests; this does not authorize any other project
 Dedicated AXP Supabase is the real account-resource source of truth. SQLite is
 explicit offline fixture evidence only, never a silent real-provider fallback.
 
-Current result: phases 1–3 implemented and verified; approved additive Supabase
-migration applied. Shared serving and financial bindings remain gated. See
-`NETWORK_CONNECTION_RESULT.md` for test evidence and exact release status.
+Current result: phases 1–3 and shared synthetic serving (phase 4) implemented and
+verified in the isolated worktree. Approved additive Supabase migrations applied.
+Financial bindings (phase 5), merge and deployment remain gated. See
+`SHARED_SERVING_RESULT.md` for the current result and `NETWORK_CONNECTION_RESULT.md`
+for the earlier resource slice. Frozen phase 2/3 contracts below are historical;
+`SHARED_SERVING_PLAN.md` documents their additive serving extension.
 
 ## Phases and completion loop
 

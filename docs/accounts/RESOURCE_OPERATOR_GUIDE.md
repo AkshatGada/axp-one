@@ -1,5 +1,11 @@
 # Account-owned campaigns and app credentials
 
+This document records the phase 1–3 resource slice. Phase 4 now adds separately
+enabled shared synthetic serving; use [the shared-serving runbook](SHARED_SERVING_RUNBOOK.md)
+and [result](SHARED_SERVING_RESULT.md) for current configuration and behavior.
+The `not_connected` campaign DTO below is retained for compatibility; enrollment
+and actual SDK readiness are separate interfaces, not inferred from that field.
+
 This slice adds resources to the existing account console. It does not launch
 campaigns, serve ads from those campaigns, fund channels or change the shared demo.
 See [the phased plan](NETWORK_CONNECTION_PLAN.md) for the next serving/payment gates.

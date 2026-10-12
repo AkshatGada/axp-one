@@ -2,6 +2,7 @@ import type {
   AccountHealth, AccountSession, AccountUser, AdvertiserInput, AdvertiserProfile,
   AIApp, AppInput, Credentials, Organization, OrganizationDetails,
   AppCredential, Campaign, CampaignInput, IssuedAppCredential,
+  CampaignEnrollment, CampaignServingInput, CampaignReport, AppReport, AccountReport, AccountReportSummary, AccountReportDelivery, PayoutNetwork,
 } from './types.ts';
 import { campaignPayload, credentialLabel, publisherScopes } from './resourceForms.ts';
 
@@ -35,8 +36,14 @@ const messages: Record<string, string> = {
   private_content: 'Remove private contact details or credentials from campaign content.',
   credential_limit_exceeded: 'This app has 10 active credentials. Revoke an unused key before issuing another.',
   credential_not_active: 'This credential is revoked or expired. Reload metadata and issue a new key if needed.',
-  campaign_version_conflict: 'This campaign changed since you reviewed it. Reload the campaign list and review the latest saved version before approving again. Nothing was approved by this request.',
-  invalid_expected_version: 'Approval requires the positive integer version you reviewed. Reload the campaign list before approving.',
+  campaign_version_conflict: 'This campaign changed since you reviewed it. Reload the campaign list and review the latest saved version before approving or changing serving again. Nothing was approved or changed for serving by this request.',
+  invalid_expected_version: 'This action requires the positive integer campaign version you reviewed. Reload the campaign list before continuing.',
+  campaign_approval_required: 'Approve the current saved campaign version before enabling synthetic serving.',
+  campaign_not_approved: 'Approve the current saved campaign version before enabling synthetic serving.',
+  campaign_destination_invalid: 'Use an HTTPS advertiser website before enabling a campaign. Loopback URLs are profile-only development declarations.',
+  campaign_network_locked: 'This campaign already has shared-serving history on another network. Create a separate campaign for a different currency.',
+  cap_below_obligations: 'The new campaign cap is below existing accepted charges and outstanding reservations. Increase the cap before enabling this version.',
+  account_network_unavailable: 'Shared account serving is unavailable. No native payment is connected. Refresh readiness before trying again.',
   account_resources_unavailable: 'Account resources are not installed on this server. Profiles remain separate.',
   account_serving_not_connected: 'Account SDK configuration is available, but serving and recovery are not connected.',
   resource_repository_required: 'Account resources are not installed on this server. Profiles remain separate.',
@@ -97,6 +104,48 @@ function credentialDTO(value: unknown, organizationId: string, appId: string, ke
   return { id: value.id, organizationId, appId, publisherId: `app:${appId}`, label: value.label,
     scopes: [...value.scopes] as string[], createdAt: Number(value.createdAt), expiresAt: Number(value.expiresAt),
     revokedAt: value.revokedAt as number | null };
+}
+function enrollmentDTO(value: unknown, organizationId: string, campaignId: string): CampaignEnrollment {
+  if (!record(value) || value.organizationId !== organizationId || value.campaignId !== campaignId ||
+      !Number.isSafeInteger(value.version) || Number(value.version) < 1 || typeof value.enabled !== 'boolean' ||
+      value.financialMode !== 'synthetic' || !timestamp(value.updatedAt) ||
+      (value.approvedContentHash !== null && (typeof value.approvedContentHash !== 'string' || !/^[a-f0-9]{64}$/.test(value.approvedContentHash))) ||
+      (value.enabled && value.approvedContentHash === null)) invalidResponse();
+  return { campaignId, organizationId, version: Number(value.version), approvedContentHash: value.approvedContentHash as string | null,
+    enabled: value.enabled, financialMode: 'synthetic', updatedAt: Number(value.updatedAt) };
+}
+const baseUnits = (value: unknown): value is string => typeof value === 'string' && /^(0|[1-9][0-9]{0,29})$/.test(value);
+const resourceId = (value: unknown): value is string => typeof value === 'string' && value.length > 0 && value.length <= 256 && !/[\u0000-\u001f\u007f]/u.test(value);
+function reportSummaryDTO(value: unknown): AccountReportSummary {
+  if (!record(value) || !baseUnits(value.acceptedBaseUnits) || !baseUnits(value.reservedBaseUnits) ||
+      !Number.isSafeInteger(value.deliveryCount) || Number(value.deliveryCount) < 0) invalidResponse();
+  return { acceptedBaseUnits: value.acceptedBaseUnits, reservedBaseUnits: value.reservedBaseUnits, deliveryCount: Number(value.deliveryCount) };
+}
+function reportDTO(value: unknown, kind: 'campaign' | 'app', id: string): AccountReport {
+  if (!record(value) || value.schemaVersion !== `account-${kind}-report.v1` || value[`${kind}Id`] !== id ||
+      value.financialMode !== 'synthetic' || !record(value.bySettlementNetwork) ||
+      !Array.isArray(value.deliveries) || value.deliveries.length > 100) invalidResponse();
+  const summary = reportSummaryDTO(value.summary);
+  const bySettlementNetwork: AccountReport['bySettlementNetwork'] = {};
+  for (const [network, totals] of Object.entries(value.bySettlementNetwork)) {
+    if (!['solana-devnet', 'tempo-testnet'].includes(network)) invalidResponse();
+    bySettlementNetwork[network as PayoutNetwork] = reportSummaryDTO(totals);
+  }
+  const deliveries: AccountReportDelivery[] = value.deliveries.map((entry: unknown) => {
+    if (!record(entry) || !['awardId', 'opportunityId', 'campaignId', 'campaignVersionId', 'appId'].every(key => resourceId(entry[key])) ||
+        entry[`${kind}Id`] !== id || !baseUnits(entry.amountBaseUnits) || entry.amountBaseUnits === '0' ||
+        typeof entry.receiptHash !== 'string' || !/^[a-f0-9]{64}$/.test(entry.receiptHash) || !timestamp(entry.acceptedAt) ||
+        !['solana-devnet', 'tempo-testnet'].includes(String(entry.settlementNetwork)) || !bySettlementNetwork[entry.settlementNetwork as PayoutNetwork]) invalidResponse();
+    return { awardId: String(entry.awardId), opportunityId: String(entry.opportunityId), campaignId: String(entry.campaignId),
+      campaignVersionId: String(entry.campaignVersionId), appId: String(entry.appId), amountBaseUnits: entry.amountBaseUnits,
+      receiptHash: entry.receiptHash, acceptedAt: Number(entry.acceptedAt), settlementNetwork: entry.settlementNetwork as PayoutNetwork };
+  });
+  if (new Set(deliveries.map(delivery => delivery.awardId)).size !== deliveries.length) invalidResponse();
+  for (const [network, totals] of Object.entries(bySettlementNetwork)) {
+    if (totals.deliveryCount < deliveries.filter(delivery => delivery.settlementNetwork === network).length) invalidResponse();
+  }
+  // Explicit projection also drops optional delivered creative metadata; never retain a raw report.
+  return { financialMode: 'synthetic', summary, bySettlementNetwork, deliveries };
 }
 export function isConfigured(health: AccountHealth): boolean {
   return health.configured.origin && health.configured.provider && health.configured.store;
@@ -232,6 +281,27 @@ export class AccountsClient {
     const result = await this.request<{ credentials: unknown[] }>(`/organizations/${encodeURIComponent(orgId)}/apps/${encodeURIComponent(appId)}/credentials`, undefined, false, true);
     if (!Array.isArray(result.credentials)) invalidResponse();
     return { credentials: result.credentials.map(value => credentialDTO(value, orgId, appId)) };
+  }
+  async campaignServing(orgId: string, campaignId: string): Promise<{ enrollment: CampaignEnrollment | null }> {
+    const result = await this.request<{ enrollment: unknown }>(`/organizations/${encodeURIComponent(orgId)}/campaigns/${encodeURIComponent(campaignId)}/serving`, undefined, false, true);
+    return { enrollment: result.enrollment === null ? null : enrollmentDTO(result.enrollment, orgId, campaignId) };
+  }
+  async setCampaignServing(orgId: string, campaignId: string, input: CampaignServingInput): Promise<{ enrollment: CampaignEnrollment }> {
+    if (!input || !Number.isSafeInteger(input.expectedVersion) || input.expectedVersion < 1) throw new AccountApiError(400, 'invalid_expected_version');
+    if (typeof input.enabled !== 'boolean') throw new AccountApiError(400, 'invalid_input');
+    const { expectedVersion, enabled } = input;
+    const result = await this.request<{ enrollment: unknown }>(`/organizations/${encodeURIComponent(orgId)}/campaigns/${encodeURIComponent(campaignId)}/serving`, { expectedVersion, enabled }, true);
+    const enrollment = enrollmentDTO(result.enrollment, orgId, campaignId);
+    if (enrollment.version !== expectedVersion || enrollment.enabled !== enabled) invalidResponse();
+    return { enrollment };
+  }
+  async campaignReport(orgId: string, campaignId: string): Promise<CampaignReport> {
+    const result = await this.request<unknown>(`/organizations/${encodeURIComponent(orgId)}/campaigns/${encodeURIComponent(campaignId)}/report`, undefined, false, true);
+    return { ...reportDTO(result, 'campaign', campaignId), schemaVersion: 'account-campaign-report.v1', campaignId };
+  }
+  async appReport(orgId: string, appId: string): Promise<AppReport> {
+    const result = await this.request<unknown>(`/organizations/${encodeURIComponent(orgId)}/apps/${encodeURIComponent(appId)}/report`, undefined, false, true);
+    return { ...reportDTO(result, 'app', appId), schemaVersion: 'account-app-report.v1', appId };
   }
   async issueAppCredential(orgId: string, appId: string, label: string): Promise<IssuedAppCredential> {
     const result = await this.request<IssuedAppCredential>(`/organizations/${encodeURIComponent(orgId)}/apps/${encodeURIComponent(appId)}/credentials`, { label: credentialLabel(label) }, true);

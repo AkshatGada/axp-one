@@ -1,10 +1,11 @@
-import {validateAccountInput} from './store.mjs';
+import {validateAccountInput, validateCampaignServingInput} from './store.mjs';
 import {APP_SCOPES, validateCampaignInput, validateCredentialInput} from './resources.mjs';
+import {campaignServingDTO} from './network-catalog.mjs';
 
 const fail=(code,status=503)=>{throw Object.assign(new Error(code),{code,status});};
 const safeDatabaseErrors={not_found:404,invalid_input:400,unknown_field:400,missing_field:400,
   invalid_url:400,invalid_payout:400,limit_exceeded:409,authentication_required:401,confirmed_email_required:401,
-  unauthorized:401,private_content:400,spend_limit_exceeded:400,credential_not_active:409,credential_hash_conflict:409,campaign_version_conflict:409};
+  unauthorized:401,private_content:400,spend_limit_exceeded:400,credential_not_active:409,credential_hash_conflict:409,campaign_version_conflict:409,campaign_approval_required:409,campaign_destination_invalid:409};
 const uuid=value=>{
   if(typeof value!=='string'||!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value))fail('not_found',404);
   return value;
@@ -43,6 +44,13 @@ export function createSupabaseAccountStore({sessions,url,key,fetchImpl=fetch}={}
   }
   const rpc=(operation,payload={})=>request('axp_account_operation',{operation,payload});
   const resourceRpc=(operation,payload)=>request('axp_account_resource_operation',{operation,payload});
+  const servingRpc=(operation,payload)=>request('axp_account_serving_operation',{operation,payload});
+  const servingDTO=(row,orgId,campaignId)=>{
+    let dto;
+    try {dto=campaignServingDTO(row);}catch{fail('profile_database_invalid');}
+    if(dto.organizationId.toLowerCase()!==orgId.toLowerCase()||dto.campaignId.toLowerCase()!==campaignId.toLowerCase())fail('profile_database_invalid');
+    return dto;
+  };
   // Explicit projections also fail closed if a misconfigured server returns a
   // table record. Never propagate hashes or unknown fields to API callers.
   const pick=(row,fields)=>{
@@ -84,6 +92,15 @@ export function createSupabaseAccountStore({sessions,url,key,fetchImpl=fetch}={}
     details(userId,orgId){bound(userId);return rpc('details',{orgId:uuid(orgId)});},
     saveAdvertiser(userId,orgId,input){bound(userId);return rpc('saveAdvertiser',{orgId:uuid(orgId),input:validateAccountInput('saveAdvertiser',input)});},
     saveApp(userId,orgId,input,appId=null){bound(userId);return rpc('saveApp',{orgId:uuid(orgId),input:validateAccountInput('saveApp',input),appId:appId===null?null:uuid(appId)});},
+    campaignServing(userId,orgId,campaignId){bound(userId);return servingRpc('campaignServing',{orgId:uuid(orgId),campaignId:uuid(campaignId)}).then(row=>row===null?null:servingDTO(row,orgId,campaignId));},
+    setCampaignServing(userId,orgId,campaignId,input){
+      bound(userId);const org=uuid(orgId),campaign=uuid(campaignId),validated=validateCampaignServingInput(input);
+      return servingRpc('setCampaignServing',{orgId:org,campaignId:campaign,...validated}).then(row=>{
+        const dto=servingDTO(row,org,campaign);
+        if(dto.version!==validated.expectedVersion||dto.enabled!==validated.enabled)fail('profile_database_invalid');
+        return dto;
+      });
+    },
     campaigns(userId,orgId){bound(userId);return resourceRpc('campaigns',{orgId:uuid(orgId)}).then(data=>rows(data,campaignDTO));},
     campaign(userId,orgId,campaignId){bound(userId);return resourceRpc('campaign',{orgId:uuid(orgId),campaignId:uuid(campaignId)}).then(campaignDTO);},
     saveCampaign(userId,orgId,input,campaignId=null){bound(userId);return resourceRpc('saveCampaign',{orgId:uuid(orgId),input:validateCampaignInput(input),campaignId:campaignId===null?null:uuid(campaignId)}).then(campaignDTO);},

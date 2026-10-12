@@ -3,6 +3,7 @@
 -- It does not prove Supabase Auth, email delivery or hosted session acceptance.
 create role anon nologin;
 create role authenticated nologin;
+create role service_role nologin;
 create schema auth;
 create table auth.users (
  id uuid primary key, aud text, role text, email text,

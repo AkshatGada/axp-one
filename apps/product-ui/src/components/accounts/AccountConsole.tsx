@@ -6,6 +6,7 @@ import { AccountApiError, AccountsClient, isConfigured } from './client';
 import { consumeConfirmationLink } from './forms';
 import { AccountForm, AdvertiserForm, AppForm, AuthForm, Input, type RunAction } from './AccountForms';
 import { AppCredentials, CampaignResources } from './newResourceForms';
+import { OwnerReport } from './servingResources';
 import type { AccountHealth, AccountSession, AppCredential, IssuedAppCredential, OrganizationDetails } from './types';
 
 export function AccountConsole() {
@@ -32,6 +33,8 @@ export function AccountConsole() {
   const profiles = Boolean(authenticated?.capabilities.profiles && health?.capabilities.profiles);
   const campaignDrafts = Boolean(profiles && authenticated?.capabilities.campaignDrafts && health?.capabilities.campaignDrafts);
   const appCredentials = Boolean(profiles && authenticated?.capabilities.appCredentials && health?.capabilities.appCredentials);
+  // Health reflects actual shared-network readiness; legacy campaign/session DTOs do not.
+  const servingReady = Boolean(ready && authenticated && health?.capabilities.campaignServing);
 
   const clearResourceSecret = useCallback(() => {
     secretEpoch.current++;
@@ -149,7 +152,7 @@ export function AccountConsole() {
       top={<Ld.TopBar brand={<Ld.Wordmark />} chips={<Ld.Tag tone="outline">Account · owned resources</Ld.Tag>}
         actions={<>
           <Ld.Button variant="secondary" disabled={busy} onClick={() => void run('Refreshing account', refresh)}>Refresh account</Ld.Button>
-          {authenticated && <Ld.Button variant="ghost" disabled={busy} onClick={() => void run('Signing out', async () => {
+          {authenticated && <Ld.Button variant="secondary" disabled={busy} onClick={() => void run('Signing out', async () => {
             await client.signout();
             clearOwnedState();
             setSession({ authenticated: false });
@@ -161,9 +164,10 @@ export function AccountConsole() {
         ...(details && profiles ? [{ href: '#advertiser-profile', label: 'Advertiser profile' }, { href: '#ai-apps', label: 'AI apps' }] : []),
         ...(details && campaignDrafts ? [{ href: '#owned-campaigns', label: 'Campaign drafts' }] : []),
         ...(selectedApp && appCredentials ? [{ href: '#app-credentials', label: 'SDK credentials' }] : []),
+        ...(details && profiles && selectedApp ? [{ href: '#app-report', label: 'AI-app report' }] : []),
         { href: '#account-readiness', label: 'Capabilities' },
       ] }]} foot="Your organizations and profiles are separate from the shared product demo." />}>
-      <Ld.PageBar title="Your account" sub="Manage your identity, organizations, private campaign drafts and server-side app credentials. Serving and funding are not connected." />
+      <Ld.PageBar title="Your account" sub="Manage owned profiles, campaigns, server-side app credentials and synthetic serving. Native funding and payments are not connected." />
 
       <div className="account-feedback" aria-live="polite" aria-atomic="true" role="status">
         {busy ? `${busyLabel}…` : notice}
@@ -190,7 +194,7 @@ export function AccountConsole() {
               setTokenHash(null);
               clearOwnedState();
               await readSession();
-            }, 'Email confirmed. Session checked. Serving and funding remain unavailable.')}>Confirm email</Ld.Button>
+            }, 'Email confirmed. Session checked. Consult server readiness before enabling synthetic serving; native funding remains unavailable.')}>Confirm email</Ld.Button>
             <Ld.Button variant="secondary" disabled={busy} onClick={() => { setTokenHash(null); setError(''); }}>Discard link</Ld.Button>
           </div>
         </div>
@@ -279,12 +283,17 @@ export function AccountConsole() {
         </div>}
         {details && campaignDrafts && <CampaignResources key={`campaigns:${authenticated.user.id}:${details.organization.id}`}
           client={client} organizationId={details.organization.id} advertiserReady={Boolean(details.advertiser)} busy={busy} run={run}
-          onUnauthorized={expireOwnedSession} />}
+          onUnauthorized={expireOwnedSession} servingReady={servingReady} />}
+        {details && profiles && selectedApp && <Ld.Panel id="app-report" title="AI-app delivery report" sub={selectedApp.name}>
+          <OwnerReport key={`report:${authenticated.user.id}:${details.organization.id}:${selectedApp.id}`} client={client}
+            organizationId={details.organization.id} resourceId={selectedApp.id} kind="app" ready={servingReady} busy={busy}
+            onUnauthorized={expireOwnedSession} />
+        </Ld.Panel>}
         {details && appCredentials && (selectedApp ? <AppCredentials key={`credentials:${authenticated.user.id}:${details.organization.id}:${selectedApp.id}`}
           client={client} organizationId={details.organization.id} app={selectedApp} busy={busy} run={run}
-          issue={showIssuedCredential} dismissKey={clearResourceSecret} onUnauthorized={expireOwnedSession}
+          issue={showIssuedCredential} dismissKey={clearResourceSecret} onUnauthorized={expireOwnedSession} servingReady={servingReady}
           rawKey={issuedKey?.organizationId === details.organization.id && issuedKey.appId === selectedApp.id ? issuedKey.apiKey : null} /> :
-          <Ld.Panel id="app-credentials" title="Server-side SDK credentials"><p className="ld-body">Create or select an AI-app profile above to manage its own server credentials. Serving and funding are not connected.</p></Ld.Panel>)}
+          <Ld.Panel id="app-credentials" title="Server-side SDK credentials"><p className="ld-body">Create or select an AI-app profile above to manage its own server credentials. Keys do not grant native funding or payment authority.</p></Ld.Panel>)}
       </>}
 
       <Ld.Panel id="account-readiness" title="Capabilities and readiness">
@@ -295,11 +304,11 @@ export function AccountConsole() {
             <div><dt>Profile database</dt><dd>{health?.profileStore === 'supabase' ? 'AXP Supabase PostgreSQL' : health?.profileStore === 'sqlite-fixture' ? 'Local fixture store' : 'Not verified'}</dd></div>
             <div><dt>Profiles</dt><dd>{!ready ? 'Unavailable' : !health?.capabilities.profiles ? 'Disabled by server' : !authenticated ? 'Sign in required' : profiles ? 'Available' : 'Disabled for this session'}</dd></div>
             <div><dt>Campaign drafts</dt><dd>{campaignDrafts ? 'Available · approval does not activate serving' : !authenticated ? 'Sign in required; server capability not assumed' : 'Not enabled for this server/session'}</dd></div>
-            <div><dt>App credentials</dt><dd>{appCredentials ? 'Available · configuration access only' : !authenticated ? 'Sign in required; server capability not assumed' : 'Not enabled for this server/session'}</dd></div>
-            <div><dt>Campaign serving</dt><dd>Not connected</dd></div>
+            <div><dt>App credentials</dt><dd>{appCredentials ? 'Available · server-side app identity' : !authenticated ? 'Sign in required; server capability not assumed' : 'Not enabled for this server/session'}</dd></div>
+            <div><dt>Campaign serving</dt><dd>{!ready ? 'Unavailable' : !health?.capabilities.campaignServing ? 'Not connected' : !authenticated ? 'Synthetic network ready · sign in required' : 'Available · synthetic only · explicit campaign enrollment required'}</dd></div>
             <div><dt>Native funding</dt><dd>Not connected · no financial authority</dd></div>
           </dl>
-          <p className="ld-secondary">Allowed origins, prohibited categories and payout addresses are declarations. SDK configuration reads saved app metadata, not serving readiness. These declarations do not verify wallet ownership or authorize payments. Shared account serving and app-bound settlement remain separate integration gates.</p>
+          <p className="ld-secondary">Allowed origins, prohibited categories and payout addresses are declarations. SDK configuration reports actual app restrictions and network readiness without making a model call. These declarations do not verify wallet ownership or authorize payments. Shared account serving is synthetic only; app-bound native settlement remains a separate integration gate.</p>
         </div>
       </Ld.Panel>
     </Ld.Shell>

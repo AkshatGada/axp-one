@@ -78,6 +78,50 @@ export interface Campaign {
   updatedAt: number;
   servingStatus: 'not_connected';
 }
+/** Separate from the legacy campaign DTO; approval alone never enrolls inventory. */
+export interface CampaignEnrollment {
+  campaignId: string;
+  organizationId: string;
+  version: number;
+  approvedContentHash: string | null;
+  enabled: boolean;
+  financialMode: 'synthetic';
+  updatedAt: number;
+}
+export interface CampaignServingInput { expectedVersion: number; enabled: boolean }
+export interface AccountReportSummary {
+  acceptedBaseUnits: string;
+  reservedBaseUnits: string;
+  deliveryCount: number;
+}
+/** Allowlisted receipt identity only, never questions, capabilities or private campaign inputs. */
+export interface AccountReportDelivery {
+  awardId: string;
+  opportunityId: string;
+  campaignId: string;
+  campaignVersionId: string;
+  appId: string;
+  amountBaseUnits: string;
+  receiptHash: string;
+  acceptedAt: number;
+  settlementNetwork: PayoutNetwork;
+}
+export interface AccountReport {
+  financialMode: 'synthetic';
+  /** Compatibility summary, not a cross-currency total. Use per-network summaries in the UI. */
+  summary: AccountReportSummary;
+  bySettlementNetwork: Partial<Record<PayoutNetwork, AccountReportSummary>>;
+  /** At most 100 records; summaries are not recomputed from this bounded window. */
+  deliveries: AccountReportDelivery[];
+}
+export interface CampaignReport extends AccountReport {
+  schemaVersion: 'account-campaign-report.v1';
+  campaignId: string;
+}
+export interface AppReport extends AccountReport {
+  schemaVersion: 'account-app-report.v1';
+  appId: string;
+}
 /** Public credential metadata only: no persisted key or hash. */
 export interface AppCredential {
   id: string;
