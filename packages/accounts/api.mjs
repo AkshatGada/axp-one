@@ -29,6 +29,7 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
   const capabilities={...ACCOUNT_CAPABILITIES,campaignDrafts:resources,appCredentials:resources,campaignServing:network?.ready===true,
     ...(network?.financialBindings?{walletBindings:true,nativeFunding:network.financialMode==='devnet'&&network.broadcastEnabled===true}:{})};
   const cookie=(value,age=604800)=>`axp_session=${value}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${age}${secure?'; Secure':''}`;
+  const readNetwork=fn=>network.readService?network.readService(fn):network.withService(fn);
   async function issue(data,oldHash) {
     store.bindIdentity?.(data.user,data.accessToken);
     const user=await store.ensureUser(data.user),secret=randomBytes(32).toString('hex');
@@ -80,7 +81,7 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
         const scope=req.method==='GET'?(path.includes('/awards/')?'delivery:read':'opportunities:read'):(path==='/sdk/opportunities'?'opportunities:write':'delivery:write');
         if(!resolved.credential.scopes.includes(scope))fail('publisher_key_invalid',401);
         if(req.method==='GET'&&path==='/sdk/publisher/config'&&!url.search) {
-          if(network?.ready)return send(res,200,await network.withService(service=>service.config(resolved.app)));
+          if(network?.ready)return send(res,200,await readNetwork(service=>service.config(resolved.app)));
           return send(res,200,{schemaVersion:'publisher-config.v2',contractVersion:'0.2.0',publisherId:resolved.credential.publisherId,appId:resolved.app.id,
             app:{name:resolved.app.name,website:resolved.app.website},allowedOrigins:resolved.app.allowedOrigins,blockedCategories:resolved.app.blockedCategories,
             expiresAtUnit:'unix_epoch_milliseconds',maxQuestionCharacters:1200,restrictionLimit:17,placementId:'chat-sponsored-card',apiBasePath:'/api/accounts/sdk',
@@ -94,11 +95,11 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
           if(path==='/sdk/opportunities'&&req.method==='POST'&&!url.search){const input=await readBody(req);return send(res,200,await network.withService(service=>service.opportunity(app,input)));}
           if(path==='/sdk/publisher/opportunities'&&req.method==='GET'){
             if([...url.searchParams.keys()].length!==2||url.searchParams.getAll('sessionId').length!==1||url.searchParams.getAll('turnId').length!==1)fail('invalid_input');
-            return send(res,200,await network.withService(service=>service.lookupOpportunity(app,{sessionId:url.searchParams.get('sessionId'),turnId:url.searchParams.get('turnId')})));
+            return send(res,200,await readNetwork(service=>service.lookupOpportunity(app,{sessionId:url.searchParams.get('sessionId'),turnId:url.searchParams.get('turnId')})));
           }
           if(delivery&&!url.search){
             const [,awardId,action]=delivery,token=req.headers['x-axp-delivery-token'];
-            if(action==='status'&&req.method==='GET')return send(res,200,await network.withService(service=>service.lookupDelivery(app,awardId,token)));
+            if(action==='status'&&req.method==='GET')return send(res,200,await readNetwork(service=>service.lookupDelivery(app,awardId,token)));
             if(['render','fail'].includes(action)&&req.method==='POST'){
               const input=await readBody(req);
               return send(res,200,await network.withService(service=>action==='render'?service.render(app,awardId,input,token):service.failAward(app,awardId,input,token)));
@@ -167,7 +168,7 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
         }
         if(req.method==='GET'){
           if(!network?.ready)fail('account_serving_not_connected',503);
-          return send(res,200,await network.withService(service=>service.report({campaignId})));
+          return send(res,200,await readNetwork(service=>service.report({campaignId})));
         }
         fail('not_found',404);
       }
@@ -179,7 +180,7 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
         if(!network?.ready)fail('account_serving_not_connected',503);
         if(action==='integration'){
           if(url.search)fail('invalid_input');
-          const config=await network.withService(service=>service.config(app));
+          const config=await readNetwork(service=>service.config(app));
           const credentials=await store.appCredentials(s.userId,orgId,appId);
           const activeCredentialCount=credentials.filter(c=>c.revokedAt===null&&c.expiresAt>now()).length;
           const gates={credential:activeCredentialCount>0,restrictions:config.unsupportedCategories.length===0,
@@ -190,7 +191,7 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
             apiBasePath:'/api/accounts/sdk',activeCredentialCount,gates,ready:Object.values(gates).every(Boolean),
             execution:config.engine.execution,recoverySupported:config.recoverySupported,broadcastEnabled:network.broadcastEnabled===true});
         }
-        return send(res,200,await network.withService(service=>service.report({appId})));
+        return send(res,200,await readNetwork(service=>service.report({appId})));
       }
       const campaigns=path.match(/^\/organizations\/([a-zA-Z0-9-]+)\/campaigns(?:\/([a-zA-Z0-9-]+)(?:\/(approve))?)?$/);
       if(campaigns) {

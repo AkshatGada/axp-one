@@ -98,6 +98,29 @@ does not authorize them or production activation.
 
 ## Offline verification
 
+### Account-only Preview bundle
+
+After a root-base-path product UI export, `node scripts/accounts/build-preview.mjs`
+creates an account-only Vercel Build Output API bundle. It refuses to overwrite an
+existing output tree. Account HTML and its static assets are included; landing and
+demo pages are not published, and unmatched paths return 404. The function routes
+only `/api/accounts/` and independently requires the explicit disabled-broadcast
+flag and synthetic financial mode. Funding, open, voucher, close and reconciliation
+actions are rejected before initializing the account backend. Wallet message-proof
+routes remain available; this bundle is not a funded-channel release.
+
+The bundle test uses disposable static exports and an injected backend, not real
+accounts, model providers, wallets or cloud credentials. It verifies excluded
+pages/private input files, overwrite refusal, safety gates and route rejection:
+
+```sh
+node --test tests/accounts-preview-package.test.mjs
+```
+
+This packaging verification does not prove hosted sign-in, email delivery,
+owner-scoped serving or browser wallet signing. Those still require the exact
+hosted callback allowlist and the separate account journey acceptance run.
+
 ```sh
 node --test tests/accounts-release-preflight.test.mjs
 node --test tests/accounts-*.test.mjs

@@ -53,7 +53,31 @@ The public product requires no local installation. The guide connects to
 provisioned by the workspace operator. Configuration endpoints do not issue keys.
 The SDK is repository source, not a published npm package.
 
-### Local SDK pilot improvements (not deployed)
+### Account-owned advertiser and AI-app journey
+
+The account integration adds dedicated Supabase Auth and PostgreSQL profiles,
+organization-owned campaign versions and approvals, and app-scoped server SDK
+credentials. Approved campaigns explicitly opt into account serving; apps request
+through `/api/accounts/sdk`, not the shared demonstration's `/api/product`.
+Accepted Sponsored insertions produce matching receipt-linked advertiser spend
+and app earnings reports. SDK reads recover committed outcomes without competing
+with auctions for the serving writer lease; mutations remain fenced.
+
+[Hosted acceptance](docs/accounts/HOSTED_ACCOUNT_ACCEPTANCE.md) exercised separate
+confirmed owners and a standalone SDK consumer with synthetic accounting, one
+actual Jev evaluation and no native funds movement. Own-wallet Solana Devnet
+bindings are implemented and cryptographic ownership was verified. Real browser
+wallet prompts and an account-owned funded lifecycle remain separate release
+gates, not implied by the synthetic receipt. See [account contracts](docs/accounts/CONTRACTS.md),
+[connected verification](docs/accounts/CONNECTED_JOURNEY_RESULT.md) and
+[release verification](docs/accounts/FINAL_ROLLOUT_CHECKLIST.md).
+
+The packaged SDK candidate is `@axp001/publisher-sdk@0.2.1`; npm publication is
+pending. Use its [installation and integration guide](packages/publisher-sdk/README.md).
+Account candidate verification does not activate the public deployment or change
+the existing shared demo.
+
+### Earlier local SDK pilot
 
 The `codex/sdk-cleanroom-integration` branch adds SDK 0.2.0 as an installable local
 tarball, authenticated read-only opportunity/receipt recovery, validated receipt
@@ -79,9 +103,9 @@ No package publication, mainnet readiness or public deployment is implied.
 ## What the data contributes
 
 We are the founders of [ContextHint](https://contexthint.com), an advertising
-intelligence platform specifically for **ChatGPT ads**. More than 1,000 marketers
-use ContextHint daily (founder-reported usage of ContextHint, not AXP adoption).
-It collects observed ChatGPT ad placements and derives context intelligence.
+intelligence platform specifically for **ChatGPT ads**. It serves marketers
+researching AI advertising, collects observed ChatGPT ad placements and derives
+context intelligence.
 AXP uses embeddings and inferred context from that data to retrieve relevant
 examples for advertiser buying decisions. The committed screened crypto-storage
 snapshot is bounded and versioned; AXP does not collect new ChatGPT ads at runtime.
@@ -194,9 +218,11 @@ The hosted product allows at most eight channels, 2 test USDC aggregate deposits
 a 0.1 Devnet SOL fee/rent reserve, 20 organic admissions per UTC day and the
 configured Jev admission cap (50 by default). One campaign is bounded to a
 0.2 deposit, 0.1 spending cap and 0.004 maximum bid. See HOSTING.md and the native
-backend for enforcement. No independent advertiser wallet onboarding, multi-tenant
-authentication, mainnet payments, impression/click/conversion billing or fleet-scale
-benchmark is claimed. A receipt authenticates insertion and disclosure, not attention.
+backend for enforcement. This shared public workspace is distinct from the
+account-owned integration described above. Its historical payment evidence does
+not establish independently funded account channels, mainnet payments,
+impression/click/conversion billing or fleet-scale capacity. A receipt
+authenticates insertion and disclosure, not attention.
 
 ## Historical planning and research
 

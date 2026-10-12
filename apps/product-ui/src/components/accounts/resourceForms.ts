@@ -64,8 +64,9 @@ export function accountSDKBaseURL(origin: string) { return `${new URL(origin).or
 /** No actual key is interpolated into examples, copied snippets, URLs or logs. */
 export function accountSDKExample(origin: string, servingReady = false) {
   const baseURL = accountSDKBaseURL(origin);
-  return `// Your Node.js server only. Install the local @axp/publisher-sdk 0.2.0 tarball.
-import { AXPPublisher } from '@axp/publisher-sdk';
+  return `// Your Node.js server only. npm publication is pending: install a locally packed
+// copy of @axp001/publisher-sdk 0.2.1 (see the SDK README), not a registry package.
+import { AXPPublisher } from '@axp001/publisher-sdk';
 
 const baseURL = ${JSON.stringify(baseURL)};
 const apiKey = process.env.AXP_PUBLISHER_API_KEY; // private server environment only

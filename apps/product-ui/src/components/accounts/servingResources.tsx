@@ -4,17 +4,19 @@ import { useEffect, useRef, useState } from 'react';
 import { Ld } from '@axp/design-system/ledger';
 import { AccountApiError, type AccountsClient } from './client';
 import type { RunAction } from './AccountForms';
-import type { AccountReport, Campaign, CampaignEnrollment } from './types';
+import type { AccountActivity, AccountReport, AccountReportDelivery, AccountReportSummary, Campaign, CampaignEnrollment } from './types';
+import { amountUnit, deliveryLabel, dispositionLabel, executionLabel, formatUnits, formatWhen, modeName, networkName } from './format';
 
 function safeError(failure: unknown) {
   return failure instanceof AccountApiError ? failure.message : 'The account request could not be completed. Reload before continuing.';
 }
 
-export function CampaignServing({ client, organizationId, campaign, ready, busy, dirty, run, onUnauthorized, onConflict, financialMode = 'synthetic' }: {
+export function CampaignServing({ client, organizationId, campaign, ready, busy, dirty, run, onUnauthorized, onConflict, financialMode = 'synthetic', onEnabledKnown }: {
   client: AccountsClient; organizationId: string; campaign: Campaign; ready: boolean; busy: boolean; dirty: boolean;
   run: RunAction; onUnauthorized: () => void; onConflict: () => void; financialMode?: 'synthetic' | 'devnet';
+  onEnabledKnown?: (campaignId: string, enabled: boolean) => void;
 }) {
-  const native = financialMode === 'devnet', label = native ? 'catalogue' : 'synthetic serving';
+  const native = financialMode === 'devnet', label = native ? 'catalogue eligibility' : 'serving';
   const [enrollment, setEnrollment] = useState<CampaignEnrollment | null>(null);
   const [known, setKnown] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,8 +39,9 @@ export function CampaignServing({ client, organizationId, campaign, ready, busy,
 
   const current = enrollment?.version === campaign.version && enrollment.approvedContentHash === campaign.approvedContentHash;
   const enabled = Boolean(current && enrollment?.enabled && campaign.status === 'approved');
+  useEffect(() => { if (known) onEnabledKnown?.(campaign.id, enabled); }, [known, enabled, campaign.id, onEnabledKnown]);
   async function changeServing(nextEnabled: boolean) {
-    await run(nextEnabled ? `Enabling ${label}` : `Pausing ${label}`, async () => {
+    await run(nextEnabled ? `Turning on ${label}` : `Pausing ${label}`, async () => {
       setError('');
       try {
         const result = await client.setCampaignServing(organizationId, campaign.id, { expectedVersion: campaign.version, enabled: nextEnabled });
@@ -52,29 +55,41 @@ export function CampaignServing({ client, organizationId, campaign, ready, busy,
         }
         throw failure;
       }
-    }, nextEnabled ? `Saved version ${campaign.version} opted into ${label}. No funding or native payment was authorized.` : 'New matching paused. Existing awards and receipts remain unchanged.');
+    }, nextEnabled ? `Version ${campaign.version} is now on for ${label}. No funding or payment was authorized.` : 'Paused. No new matching. Placements already awarded and receipts already accepted are unchanged.');
   }
-  return <section className="ld-stack-lg" aria-label="Campaign synthetic serving">
-    <h3 className="ld-body">Shared account serving · {native ? 'Devnet catalogue eligibility' : 'synthetic'}</h3>
-    <p className="ld-secondary">{native ? 'Catalogue opt-in is only an eligibility declaration. This version also needs a finalized deposit and separate channel activation under Own-wallet funding before it can bid.' : 'Explicit opt-in uses the reviewed saved version. Accepted receipts accrue synthetic base-unit charges only; no deposit, voucher authorization, payout or refund is connected.'} Pausing stops new matching, not existing awards or receipts.</p>
-    {!ready ? <p className="ld-body">Account serving is unavailable on this server. Approval is not enrollment.</p> : <>
-      <p className="ld-body" role="status">{loading ? 'Checking enrollment…' : !known ? 'Enrollment not verified' : enabled ? `Version ${campaign.version} enabled · ${native ? 'catalogue only' : 'synthetic'}` : enrollment?.enabled ? 'Stale enrollment · current saved version is not eligible' : enrollment ? `Paused · ${label}` : `Not enrolled · ${label}`}</p>
-      {enrollment && <p className="ld-secondary">Enrollment version {enrollment.version} · updated {new Date(enrollment.updatedAt).toISOString()}</p>}
-      {error && <p className="account-error" role="alert">{error}</p>}
-      {dirty && <p className="ld-secondary">Save and review your changes before changing serving.</p>}
-      <div className="ld-row">
-        <Ld.Button variant="secondary" disabled={busy || loading} onClick={() => setRevision(value => value + 1)}>Reload enrollment</Ld.Button>
-        <Ld.Button disabled={busy || loading || !known || dirty || campaign.status !== 'approved' || enabled}
-          onClick={() => void changeServing(true)}>Enable {label} · version {campaign.version}</Ld.Button>
-        <Ld.Button variant="secondary" disabled={busy || loading || !known || dirty || !enrollment?.enabled}
-          onClick={() => void changeServing(false)}>Pause {label} · version {campaign.version}</Ld.Button>
-      </div>
-      {campaign.status !== 'approved' && <p className="ld-secondary">Approve the exact saved version before enabling it.</p>}
-    </>}
+  const stale = Boolean(enrollment?.enabled && !enabled);
+  const state = loading ? 'Checking' : !known ? 'Not verified' : enabled ? (native ? 'Eligible' : 'Serving on') : stale ? 'Needs approval again' : enrollment ? 'Paused' : 'Off';
+  return <>
+    <Ld.Panel id="campaign-serving" title={native ? 'Serving · catalogue eligibility' : 'Serving'}
+      sub={native ? 'Solana Devnet test network' : 'Simulated accounting on this server'}
+      actions={ready ? <span className="ld-tag" data-tone={enabled ? 'success' : stale ? 'warning' : 'outline'} role="status">{state}</span> : <span className="ld-tag" data-tone="outline">Unavailable</span>}>
+      <section className="ld-stack" aria-label="Campaign serving">
+        <p className="ld-body">{native
+          ? 'Turning this on only makes the approved version eligible. It can bid once it also has a finalized deposit and an activated channel under Wallet.'
+          : 'Turning serving on lets this approved version compete for placements in AI apps on this network. Accepted placements add simulated ledger charges only. No deposit, payout or refund takes place.'}</p>
+        {!ready ? <Ld.Callout tone="warning" title="Serving is not available on this server">Approving a campaign never starts serving, and nothing is served from here until the account network is connected.</Ld.Callout> : <>
+          {enrollment && <p className="ld-secondary">{enabled ? `Version ${campaign.version} is on.` : stale ? `Version ${enrollment.version} was on. The current saved version is not eligible until you approve it and turn serving on again.` : `Version ${enrollment.version} is paused.`} Last changed {formatWhen(enrollment.updatedAt)}.</p>}
+          {known && !enrollment && <p className="ld-secondary">This campaign has never been turned on.</p>}
+          {error && <p className="account-error" role="alert">{error}</p>}
+          {dirty && <p className="ld-secondary">Save and approve your edits before changing serving.</p>}
+          {campaign.status !== 'approved' && <p className="ld-secondary">Approve the saved version first. Only an approved version can be turned on.</p>}
+          <div className="ld-row">
+            <Ld.Button disabled={busy || loading || !known || dirty || campaign.status !== 'approved' || enabled}
+              onClick={() => void changeServing(true)}>{native ? 'Make eligible' : 'Turn serving on'} · version {campaign.version}</Ld.Button>
+            <Ld.Button variant="secondary" disabled={busy || loading || !known || dirty || !enrollment?.enabled}
+              onClick={() => void changeServing(false)}>Pause {native ? 'eligibility' : 'serving'}</Ld.Button>
+            <Ld.Button variant="ghost" disabled={busy || loading} onClick={() => setRevision(value => value + 1)}>Check status again</Ld.Button>
+          </div>
+          <p className="ld-secondary">Pausing stops new matching only. It does not undo placements already awarded or receipts already accepted.</p>
+        </>}
+      </section>
+    </Ld.Panel>
     <OwnerReport key={`report:${revision}`} client={client} organizationId={organizationId} resourceId={campaign.id}
       kind="campaign" ready={ready} busy={busy} onUnauthorized={onUnauthorized} />
-  </section>;
+  </>;
 }
+
+type NetworkRow = { network: string; summary: AccountReportSummary };
 
 export function OwnerReport({ client, organizationId, resourceId, kind, ready, busy, onUnauthorized }: {
   client: AccountsClient; organizationId: string; resourceId: string; kind: 'campaign' | 'app';
@@ -96,53 +111,80 @@ export function OwnerReport({ client, organizationId, resourceId, kind, ready, b
     }).finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
   }, [client, organizationId, resourceId, kind, ready, revision, onUnauthorized]);
-  return <section className="ld-stack" aria-label={`Private ${kind} report`}>
-    <h3 className="ld-body">Private {kind} report · {report?.financialMode ?? 'mode not verified'}</h3>
-    <p className="ld-secondary">{report?.financialMode === 'devnet' ? 'Accepted is receipt-linked accrual and reserved is outstanding budget. Neither means a payout has finalized; inspect channel authorization and settlement separately.' : 'Accepted is synthetic receipt accrual, reserved is outstanding synthetic budget, neither is a native payment.'} Receipts assert insertion and Sponsored disclosure, not attention or conversion.</p>
-    {!ready ? <p className="ld-secondary">Reports are unavailable until shared account serving is ready.</p> : <>
-      <Ld.Button variant="secondary" disabled={busy || loading} onClick={() => setRevision(value => value + 1)}>Reload {kind} report</Ld.Button>
-      {loading && <p className="ld-secondary" role="status">Loading private report…</p>}
-      {error && <p className="account-error" role="alert">{error}</p>}
-      {report && <>
-        <p className="ld-body">Accepted deliveries and {report.financialMode} amounts by settlement network. Never combine currencies.</p>
-        {Object.entries(report.bySettlementNetwork).map(([network, summary]) => <div className="ld-stack" key={network}>
-          <p className="ld-body">{network} · {report.financialMode} base units</p>
-          <dl className="account-readiness">
-            <div><dt>Accepted {report.financialMode} base units</dt><dd>{summary.acceptedBaseUnits}</dd></div>
-            <div><dt>Reserved {report.financialMode} base units</dt><dd>{summary.reservedBaseUnits}</dd></div>
-            <div><dt>Accepted deliveries</dt><dd>{summary.deliveryCount}</dd></div>
-          </dl>
-        </div>)}
+  const campaign = kind === 'campaign';
+  const mode = report?.financialMode ?? 'synthetic';
+  const money = campaign ? 'Accepted spend' : 'Accrued earnings';
+  const rows: NetworkRow[] = report ? Object.entries(report.bySettlementNetwork).map(([network, summary]) => ({ network, summary: summary! })) : [];
+  return <Ld.Panel id={campaign ? 'campaign-activity' : 'app-report'} title={campaign ? 'Activity and spend' : 'Deliveries, receipts and earnings'}
+    sub={report ? modeName(report.financialMode) : 'Private to your organization'} flush={Boolean(report)}
+    actions={ready ? <Ld.Button variant="secondary" size="sm" disabled={busy || loading} onClick={() => setRevision(value => value + 1)}>Refresh</Ld.Button> : undefined}>
+    <section aria-label={`Private ${kind} report`}>
+      {!ready && <Ld.Empty title="Reports are not available on this server">Reports appear once the account network is connected. Nothing is shown from the shared demonstration.</Ld.Empty>}
+      {ready && loading && <p className="ld-secondary account-table-note" role="status">Loading your private report…</p>}
+      {ready && error && <div className="account-table-note"><p className="account-error" role="alert">{error}</p></div>}
+      {report && <div className="ld-stack-lg" style={{ padding: 'var(--ld-panel-pad) 0 0' }}>
+        <div className="ld-stack" style={{ padding: '0 var(--ld-panel-pad)' }}>
+          <p className="ld-body">{report.financialMode === 'devnet'
+            ? `${money} is the total of accepted receipts. Reserved is budget held for placements still in progress. Neither is a payout: see Wallet for what was authorized, paid and refunded.`
+            : `${money} is the simulated total of accepted receipts. Reserved is simulated budget held for placements still in progress. Neither is a payment.`}</p>
+          <p className="ld-secondary">A receipt proves an accepted insertion with the Sponsored label. It does not prove attention, clicks or conversion.</p>
+        </div>
+        <Ld.Table<NetworkRow> caption="Totals by network. Currencies are never combined." rows={rows} columns={[
+          { key: 'network', head: 'Network', cell: row => <span className="ld-strong">{networkName(row.network)}</span> },
+          { key: 'count', head: campaign ? 'Accepted placements' : 'Accepted deliveries', num: true, cell: row => row.summary.deliveryCount },
+          { key: 'accepted', head: money, num: true, cell: row => `${formatUnits(row.summary.acceptedBaseUnits)} ${amountUnit(report.financialMode, row.network)}` },
+          { key: 'reserved', head: 'Reserved', num: true, cell: row => `${formatUnits(row.summary.reservedBaseUnits)} ${amountUnit(report.financialMode, row.network)}` },
+        ]} />
         {report.activity && <section className="ld-stack" aria-label="Saved opportunity activity">
-          <h4 className="ld-body">Saved opportunity activity</h4>
-          <p className="ld-secondary">Showing {report.activity.length} of {report.activityTotal} saved entries. No question text or private targeting inputs are included. A policy exclusion is not a model skip; unavailable is not a negative fit judgment.</p>
-          {!report.activity.length && <p>No saved activity yet.</p>}
-          {report.activity.map((entry, index) => <details key={`${entry.opportunityId}:${entry.campaignId}:${index}`}>
-            <summary>{entry.disposition.replaceAll('_', ' ')} · {entry.deliveryStatus.replaceAll('_', ' ')} · {entry.execution ?? 'No model decision reported'}</summary>
-            <dl className="account-readiness account-break">
-              <div><dt>Opportunity</dt><dd>{entry.opportunityId}</dd></div>
-              <div><dt>Decision</dt><dd>{entry.decision.replaceAll('_', ' ')}</dd></div>
-              <div><dt>Reason codes</dt><dd>{entry.reasonCodes.join(', ') || 'None recorded'}</dd></div>
-              <div><dt>Bid · {entry.settlementNetwork} base units</dt><dd>{entry.bidBaseUnits ?? 'No bid'}</dd></div>
-              {entry.campaignVersionId && <div><dt>Saved version</dt><dd>{entry.campaignVersionId}</dd></div>}
-              {entry.awardId && <div><dt>Award</dt><dd>{entry.awardId}</dd></div>}
-            </dl>
-          </details>)}
+          <div className="ld-stack" style={{ padding: '0 var(--ld-panel-pad)', gap: 2 }}>
+            <h4 className="account-part-title">Auction activity</h4>
+            <p className="ld-secondary">Showing {report.activity.length} of {report.activityTotal} saved entries. Question text and private campaign inputs are never included.</p>
+          </div>
+          {!report.activity.length ? <div className="account-table-note"><Ld.Empty title="No activity yet">{campaign ? 'Activity appears here when this campaign is considered for a conversation.' : 'Activity appears here when your app requests an ad.'}</Ld.Empty></div>
+            : <Ld.Table<AccountActivity> caption="Auction activity" rows={report.activity} columns={[
+              { key: 'outcome', head: 'Outcome', cell: entry => <span className="ld-tag" data-tone={entry.disposition === 'won' ? 'success' : 'outline'}>{dispositionLabel[entry.disposition]}</span> },
+              { key: 'delivery', head: 'Delivery', cell: entry => deliveryLabel[entry.deliveryStatus] },
+              { key: 'bid', head: 'Bid', num: true, cell: entry => entry.bidBaseUnits === null ? 'No bid' : `${formatUnits(entry.bidBaseUnits)} ${amountUnit(report.financialMode, entry.settlementNetwork)}` },
+              { key: 'source', head: 'Decision source', cell: entry => executionLabel(entry.execution) },
+              { key: 'more', head: 'Record', cell: entry => <details className="account-more-inline">
+                <summary>Details</summary>
+                <dl className="account-readiness account-break">
+                  <div><dt>Decision</dt><dd>{entry.decision.replaceAll('_', ' ')}</dd></div>
+                  <div><dt>Reason codes</dt><dd>{entry.reasonCodes.join(', ') || 'None recorded'}</dd></div>
+                  <div><dt>Network</dt><dd>{networkName(entry.settlementNetwork)}</dd></div>
+                  <div><dt>Opportunity</dt><dd className="account-idline">{entry.opportunityId}</dd></div>
+                  {entry.campaignVersionId && <div><dt>Saved version</dt><dd className="account-idline">{entry.campaignVersionId}</dd></div>}
+                  {entry.awardId && <div><dt>Award</dt><dd className="account-idline">{entry.awardId}</dd></div>}
+                </dl>
+              </details> },
+            ]} />}
+          <p className="ld-secondary" style={{ padding: '0 var(--ld-panel-pad)' }}>Not eligible is a policy rule, not a model decision. Decision unavailable is not a judgment that the campaign was a poor fit.</p>
         </section>}
-        <p className="ld-secondary">Showing {report.deliveries.length} receipt records (at most 100). Summary totals may cover more deliveries than this bounded list.</p>
-        {!report.deliveries.length && <p className="ld-secondary">No accepted deliveries in this report window. Outstanding reservations, if any, are shown separately above.</p>}
-        {report.deliveries.map(delivery => <details key={delivery.awardId}>
-          <summary>{delivery.settlementNetwork} · {delivery.amountBaseUnits} {report.financialMode} base units · {new Date(delivery.acceptedAt).toISOString()}</summary>
-          <dl className="account-readiness account-break">
-            <div><dt>Award</dt><dd>{delivery.awardId}</dd></div>
-            <div><dt>Opportunity</dt><dd>{delivery.opportunityId}</dd></div>
-            <div><dt>Campaign</dt><dd>{delivery.campaignId}</dd></div>
-            <div><dt>Saved campaign version</dt><dd>{delivery.campaignVersionId}</dd></div>
-            <div><dt>AI app</dt><dd>{delivery.appId}</dd></div>
-            <div><dt>Receipt hash</dt><dd>{delivery.receiptHash}</dd></div>
-          </dl>
-        </details>)}
-      </>}
-    </>}
-  </section>;
+        <section className="ld-stack" aria-label="Receipts">
+          <div className="ld-stack" style={{ padding: '0 var(--ld-panel-pad)', gap: 2 }}>
+            <h4 className="account-part-title">Receipts</h4>
+            <p className="ld-secondary">Showing {report.deliveries.length} receipt records (at most 100). The totals above may cover more deliveries than this list.</p>
+          </div>
+          {!report.deliveries.length ? <div className="account-table-note" style={{ paddingBottom: 16 }}><Ld.Empty title="No receipts yet">{campaign ? 'A receipt appears when an AI app confirms your Sponsored card was inserted below its answer.' : 'A receipt appears when your app confirms a Sponsored card was inserted below its answer.'} Reserved amounts, if any, are in the totals above.</Ld.Empty></div>
+            : <Ld.Table<AccountReportDelivery> caption="Receipts" rows={report.deliveries} columns={[
+              { key: 'when', head: 'Accepted', cell: delivery => formatWhen(delivery.acceptedAt) },
+              { key: 'network', head: 'Network', cell: delivery => networkName(delivery.settlementNetwork) },
+              { key: 'amount', head: campaign ? 'Charge' : 'Earning', num: true, cell: delivery => `${formatUnits(delivery.amountBaseUnits)} ${amountUnit(report.financialMode, delivery.settlementNetwork)}` },
+              { key: 'state', head: 'Status', cell: () => <span className="ld-tag" data-tone="outline">{report.financialMode === 'devnet' ? 'Accepted charge, payout tracked under Wallet' : 'Simulated, no payment'}</span> },
+              { key: 'more', head: 'Record', cell: delivery => <details className="account-more-inline">
+                <summary>Receipt details</summary>
+                <dl className="account-readiness account-break">
+                  <div><dt>Receipt hash</dt><dd className="account-idline">{delivery.receiptHash}</dd></div>
+                  <div><dt>Award</dt><dd className="account-idline">{delivery.awardId}</dd></div>
+                  <div><dt>Opportunity</dt><dd className="account-idline">{delivery.opportunityId}</dd></div>
+                  <div><dt>Campaign</dt><dd className="account-idline">{delivery.campaignId}</dd></div>
+                  <div><dt>Saved campaign version</dt><dd className="account-idline">{delivery.campaignVersionId}</dd></div>
+                  <div><dt>AI app</dt><dd className="account-idline">{delivery.appId}</dd></div>
+                </dl>
+              </details> },
+            ]} />}
+        </section>
+      </div>}
+    </section>
+  </Ld.Panel>;
 }
