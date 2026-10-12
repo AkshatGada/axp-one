@@ -86,13 +86,29 @@
 /* With motion off no card is ever waiting: every one is in place. */
 :global(html:not([data-px-motion="on"])) .ad { opacity: 1; }
 
-/* A placement: the card settles in below the answer, stays a good while, and later the
-   conversation moves on. Nothing else moves. */
-.tile[data-run] .ad { animation: adFill 17s var(--x-out) both; }
+/* A placement. Three thin ultramarine beams fly in over the wall and meet at the slot (the
+   advertisers' agents reaching for this conversation), the slot answers with one ring, and the
+   card settles in below the answer. It stays a good while; later the conversation moves on. */
+.tile[data-tile] { transform-style: preserve-3d; }
+.slot { position: relative; transform-style: preserve-3d; }
+.slot::after { content: ""; position: absolute; inset: -5px; border: 2px solid var(--x-blue); border-radius: 15px; opacity: 0; pointer-events: none; }
+.beam { position: absolute; top: 50%; width: 170px; height: 3px; margin-top: -1.5px; border-radius: 2px; opacity: 0; pointer-events: none; box-shadow: 0 0 10px color-mix(in oklab, var(--x-blue) 45%, transparent); }
+.bl { right: 100%; background: linear-gradient(90deg, transparent, var(--x-blue) 82%); }
+.br { left: 100%; background: linear-gradient(270deg, transparent, var(--x-blue) 82%); }
+.bb { top: 100%; left: 50%; width: 3px; height: 140px; margin: 0 0 0 -1.5px; background: linear-gradient(0deg, transparent, var(--x-blue) 82%); }
+.tile[data-run] .bl { animation: beamL 1s cubic-bezier(.55, 0, .25, 1) both; }
+.tile[data-run] .br { animation: beamR 1s cubic-bezier(.55, 0, .25, 1) .18s both; }
+.tile[data-run] .bb { animation: beamB 1s cubic-bezier(.55, 0, .25, 1) .34s both; }
+.tile[data-run] .slot::after { animation: slotRing 900ms var(--x-out) 1150ms both; }
+.tile[data-run] .ad { animation: adFill 10.8s var(--x-out) 1250ms both; }
+@keyframes beamL { 0% { opacity: 0; transform: translate3d(-640px, 0, 260px); } 14% { opacity: 1; } 82% { opacity: 1; transform: translate3d(0, 0, 0); } 100% { opacity: 0; transform: translate3d(0, 0, 0); } }
+@keyframes beamR { 0% { opacity: 0; transform: translate3d(640px, 0, 260px); } 14% { opacity: 1; } 82% { opacity: 1; transform: translate3d(0, 0, 0); } 100% { opacity: 0; transform: translate3d(0, 0, 0); } }
+@keyframes beamB { 0% { opacity: 0; transform: translate3d(0, 520px, 260px); } 14% { opacity: 1; } 82% { opacity: 1; transform: translate3d(0, 0, 0); } 100% { opacity: 0; transform: translate3d(0, 0, 0); } }
+@keyframes slotRing { 0% { opacity: 0; transform: scale(.97); } 18% { opacity: 1; transform: none; } 100% { opacity: 0; transform: none; } }
 @keyframes adFill {
   0% { opacity: 0; transform: translate3d(0, 8px, 0) scale(.96); }
-  5% { opacity: 1; transform: none; }
-  93% { opacity: 1; transform: none; }
+  7% { opacity: 1; transform: none; }
+  92% { opacity: 1; transform: none; }
   100% { opacity: 0; transform: none; }
 }
 

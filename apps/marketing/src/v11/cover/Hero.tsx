@@ -2,8 +2,9 @@
 
 // 00 Cover: the wall. One screen, no pin.
 // A tilted wall of AI conversations (illustrative questions) drifts slowly. Some of them carry a
-// Sponsored card, attached below the answer inside the same tile; every couple of seconds one more
-// settles into place. Nothing is lifted off the wall: the wall is the picture.
+// Sponsored card, attached below the answer inside the same tile; every second or two advertisers'
+// agents reach for one more conversation (three ultramarine beams fly in over the wall and meet at
+// the slot) and its card settles into place. Nothing is lifted off the wall: the wall is the picture.
 // The headline, deck and the two actions sit bottom left on clean paper and are readable in the
 // first painted frame. The bottom edge is plain paper: the next movement opens with its own rule.
 // Motion off: the same composition as a still, with every card in place.
@@ -23,7 +24,7 @@ const LIFT = [-6, 4, -10, 1, -7, 6, -3];
  *  have a readable line (in `questions.ts`); the rest are quiet bars under the tag. */
 const SLOTS = new Set(["0-1", "0-3", "1-0", "1-3", "2-1", "2-4", "3-0", "3-2", "4-1", "4-3", "5-0", "5-3", "6-2", "6-4"]);
 /** The cards already in place at first paint (and in the still). The rest arrive in turn. */
-const PLACED = new Set(["0-3", "1-0", "2-1", "2-4", "3-0", "3-2", "4-1", "4-3", "5-0", "5-3", "6-2"]);
+const PLACED = new Set(["0-3", "1-0", "2-4", "3-2", "4-1", "5-3", "6-2"]);
 const cols = Array.from({ length: COLS }, (_, c) => Array.from({ length: PER }, (_, r) => PROMPTS[(c * PER + r * 7 + c) % PROMPTS.length]!));
 
 /** One conversation: the question, the answer as quiet lines and, on some, the Sponsored card
@@ -40,9 +41,14 @@ function Tile({ q, c, r }: { q: string; c: number; r: number }) {
         {Array.from({ length: rows }, (_, n) => <i key={n} style={{ "--w": `${54 + ((c * 17 + r * 29 + n * 23) % 42)}%` } as CSSProperties} />)}
       </div>
       {ad ? (
-        <div className={s.ad} data-line={line ? "" : undefined}>
-          <span className={s.adTag}>Sponsored</span>
-          {line ? <p className={s.adText}>{line}</p> : <><i className={s.adBar} /><i className={s.adBar} /></>}
+        <div className={s.slot}>
+          <div className={s.ad} data-line={line ? "" : undefined}>
+            <span className={s.adTag}>Sponsored</span>
+            {line ? <p className={s.adText}>{line}</p> : <><i className={s.adBar} /><i className={s.adBar} /></>}
+          </div>
+          <i className={`${s.beam} ${s.bl}`} />
+          <i className={`${s.beam} ${s.br}`} />
+          <i className={`${s.beam} ${s.bb}`} />
         </div>
       ) : null}
     </div>
@@ -123,11 +129,11 @@ export default function Cover() {
       const id = window.setTimeout(() => {
         delete t.dataset.run;
         ends.delete(id);
-      }, 17300);
+      }, 12300);
       ends.add(id);
     };
     const tick = () => {
-      timer = window.setTimeout(tick, 1700 + Math.random() * 1300);
+      timer = window.setTimeout(tick, 1100 + Math.random() * 900);
       if (root.dataset.paused === "1") return;
       clear();
     };
