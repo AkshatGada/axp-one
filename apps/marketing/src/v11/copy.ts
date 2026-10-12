@@ -100,8 +100,8 @@ export const PAY = {
   /** Why each half is so. A question in plain language cannot be matched by static code; money can
    *  and must be. */
   why: [
-    { k: "Why an agent", line: "A question arrives in plain language. No keyword list or fixed rule can read it. It takes an agent to judge it." },
-    { k: "Why fixed rules", line: "Money is the opposite. The ceiling and the budget are exact, so code enforces them, not a judgment." },
+    { k: "Why an agent", short: "Plain language. Only an agent can read it.", line: "A question arrives in plain language. No keyword list or fixed rule can read it. It takes an agent to judge it." },
+    { k: "Why fixed rules", short: "Exact limits. Code enforces them.", line: "Money is the opposite. The ceiling and the budget are exact, so code enforces them, not a judgment." },
   ],
   sides: [
     { who: "Advertiser", state: "Charge accepted" },
