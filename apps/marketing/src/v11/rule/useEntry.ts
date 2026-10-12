@@ -10,7 +10,8 @@ import { useEffect, useRef, useState } from "react";
 
 export type Entry = "wait" | "play" | undefined;
 
-export function useEntry<T extends HTMLElement>(amount = 0.3) {
+/** `linger`: how long a part of the element may sit on screen, short of `amount`, before it plays anyway. */
+export function useEntry<T extends HTMLElement>(amount = 0.3, linger = 700) {
   const ref = useRef<T>(null);
   const [entry, setEntry] = useState<Entry>(undefined);
   useEffect(() => {
@@ -41,7 +42,7 @@ export function useEntry<T extends HTMLElement>(amount = 0.3) {
         if (e.boundingClientRect.top < 0) return finish(undefined);
         // Arrived well inside the screen in one step (a jump, not a scroll): simply whole.
         if (e.intersectionRatio >= share) return finish(e.boundingClientRect.top < window.innerHeight * 0.5 ? undefined : "play");
-        if (e.isIntersecting && !timer) timer = window.setTimeout(() => finish("play"), 700);
+        if (e.isIntersecting && !timer) timer = window.setTimeout(() => finish("play"), linger);
       },
       { threshold: [0, share, 1] },
     );
@@ -53,6 +54,6 @@ export function useEntry<T extends HTMLElement>(amount = 0.3) {
       window.clearTimeout(timer);
       window.removeEventListener("scroll", passed);
     };
-  }, [amount]);
+  }, [amount, linger]);
   return [ref, entry] as const;
 }

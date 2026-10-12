@@ -1,21 +1,22 @@
 /* The doors: the V3 design on the V5 foundation. One ultramarine object on the paper: the wall
    returns, quiet, in its head; a perforation crosses it; its two sides are doors that open. */
 
+
 .close { position: relative; margin-top: clamp(56px, 7.5vw, 112px); padding: 0 0 clamp(24px, 3vw, 48px); scroll-margin-top: 16px; }
 .panel { --padx: clamp(28px, 4.4vw, 68px); --deep: var(--brand-ink, #0b1470); --leaf-open: var(--white, #fbfaf6); position: relative; border-radius: var(--x-r-xl); background: var(--x-blue); color: #fff; box-shadow: var(--x-shadow-blue); isolation: isolate; }
 
 /* ---------- The head: the wall, and the line ---------- */
-.top { position: relative; display: grid; align-items: end; min-height: clamp(300px, min(30vw, 47vh), 450px); padding: var(--padx); padding-bottom: clamp(36px, 4.2vw, 64px); border-radius: var(--x-r-xl) var(--x-r-xl) 0 0; overflow: hidden; }
-.h2 { position: relative; margin: 0; max-width: 8ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(44px, min(7.4vw, 15vh), 132px); line-height: .92; letter-spacing: -.045em; text-wrap: balance; }
+.top { position: relative; display: grid; align-items: end; min-height: clamp(300px, min(29vw, 46vh), 430px); padding: var(--padx); padding-bottom: clamp(36px, 4.2vw, 64px); border-radius: var(--x-r-xl) var(--x-r-xl) 0 0; overflow: hidden; }
+.h2 { position: relative; margin: 0; max-width: 8ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(34px, 4.6vw, 76px); line-height: .98; letter-spacing: -.036em; text-wrap: balance; }
 
 .wall {
   position: absolute; inset: 0; overflow: hidden; pointer-events: none; perspective: 1500px; perspective-origin: 62% 26%;
-  -webkit-mask-image: linear-gradient(96deg, transparent 24%, #000 57%), linear-gradient(180deg, #000 70%, transparent 100%);
-  mask-image: linear-gradient(96deg, transparent 24%, #000 57%), linear-gradient(180deg, #000 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(96deg, transparent 22%, #000 46%), linear-gradient(180deg, #000 80%, transparent 100%);
+  mask-image: linear-gradient(96deg, transparent 22%, #000 46%), linear-gradient(180deg, #000 80%, transparent 100%);
   -webkit-mask-composite: source-in; mask-composite: intersect;
 }
-.plane { position: absolute; left: 71%; top: calc(50% + 76px); display: flex; gap: 20px; width: max-content; transform: translate(-50%, -50%) rotateX(26deg) rotateY(7deg) rotateZ(-11deg) scale(.86); transform-origin: center; }
-.col { flex: none; display: grid; align-content: start; gap: 20px; width: 264px; transform: translateY(var(--y, 0px)); }
+.plane { position: absolute; left: 66%; top: calc(50% + 88px); display: flex; gap: 22px; width: max-content; transform: translate(-50%, -50%) rotateX(26deg) rotateY(7deg) rotateZ(-11deg) scale(1.04); transform-origin: center; }
+.col { flex: none; display: grid; align-content: start; gap: 22px; width: 292px; transform: translateY(var(--y, 0px)); }
 /* A conversation tile, drawn small: the question, the answer as lines, and (in the lit one only)
    the Sponsored card below the answer. */
 .tile { position: relative; display: grid; gap: 12px; padding: 15px 15px 16px; border-radius: 16px; background: #fff; color: var(--x-ink); }
@@ -28,7 +29,7 @@
 .dimWrap { opacity: .17; }
 .col:nth-child(even) .dimWrap { opacity: .12; }
 .lit { padding-inline: 12px; box-shadow: 10px 10px 0 rgba(11, 20, 112, .42); }
-.litAd p { font-size: 12.5px; }
+.litAd p { font-size: 15.5px; line-height: 1.38; }
 
 /* ---------- The perforation ---------- */
 .perf { position: relative; z-index: 2; display: block; height: 0; border-top: 2px dashed rgba(255, 255, 255, .5); }
@@ -40,45 +41,33 @@
 .doors { list-style: none; display: grid; grid-template-columns: 1fr 1fr; margin: 0; padding: 0; }
 .doors li { position: relative; display: grid; }
 .doors li + li::before { content: ""; position: absolute; z-index: 3; left: -.5px; top: 0; bottom: 0; width: 1px; background: rgba(255, 255, 255, .34); pointer-events: none; }
-.door { position: relative; display: grid; grid-template-rows: 1fr auto; gap: clamp(20px, 2.6vw, 40px); min-height: clamp(210px, min(19vw, 31vh), 280px); padding: clamp(46px, 4.4vw, 68px) var(--padx) clamp(28px, 3.2vw, 48px); color: #fff; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: color 0s linear 60ms; }
-/* The frame is what is behind the door; the leaf is the door. Hinges on the outer edges. */
-.frame { position: absolute; inset: 0; overflow: hidden; perspective: 1100px; perspective-origin: 0% 50%; background: transparent; transition: background 0s 560ms; }
-.leaf { position: absolute; inset: 0; background: var(--x-blue); transform-origin: left center; transition: transform 520ms var(--x-ease); backface-visibility: hidden; }
-.leaf::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, var(--deep)); opacity: 0; transition: opacity 520ms var(--x-ease); }
-.doors li + li .leaf { transform-origin: right center; }
-.doors li + li .frame { perspective-origin: 100% 50%; }
-.doors li + li .leaf::after { background: linear-gradient(270deg, transparent, var(--deep)); }
-.who, .line, .go { position: relative; }
+.door { --slide: -101%; position: relative; display: grid; min-height: clamp(210px, min(19vw, 31vh), 280px); color: #fff; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+.doors li + li .door { --slide: 101%; }
+.face, .openIn { display: grid; grid-template-rows: 1fr auto; gap: clamp(20px, 2.6vw, 40px); padding: clamp(46px, 4.4vw, 68px) var(--padx) clamp(28px, 3.2vw, 48px); }
+.face { position: relative; }
+/* The white beyond the door. It slides in flat from the door's outer edge and carries an ink copy
+   of the words, held still by an equal and opposite slide, so the words read at every frame. */
+.open { position: absolute; inset: 0; overflow: hidden; transform: translateX(var(--slide)); transition: transform 300ms var(--x-out); }
+.openIn { position: absolute; inset: 0; background: var(--leaf-open); color: var(--deep); transform: translateX(calc(-1 * var(--slide))); transition: transform 300ms var(--x-out); }
+.openIn .go > span::after { transform: none; }
 /* The label: a receipt half that has landed on the perforation. */
-.who { position: absolute; z-index: 4; left: var(--padx); top: -15px; height: 30px; padding: 0 12px; border-radius: 8px; background: #fff; color: var(--x-ink); font-size: 13.5px; font-weight: 500; line-height: 30px; letter-spacing: .01em; box-shadow: 4px 4px 0 rgba(11, 20, 112, .38); transition: transform 320ms var(--x-out); }
-.line { align-self: start; max-width: 16ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(28px, 3.25vw, 50px); line-height: 1.02; letter-spacing: -.034em; text-wrap: balance; }
+.who { position: absolute; z-index: 4; left: var(--padx); top: -15px; height: 30px; padding: 0 12px; border-radius: 8px; background: #fff; color: var(--x-ink); font-size: 13.5px; font-weight: 500; line-height: 30px; letter-spacing: .01em; box-shadow: 4px 4px 0 rgba(11, 20, 112, .38); }
+.line { position: relative; align-self: start; max-width: 16ch; font-family: var(--font-display); font-weight: 300; font-size: clamp(28px, 3.25vw, 50px); line-height: 1.02; letter-spacing: -.034em; text-wrap: balance; }
 .sentence { display: inline-block; }
-.go { display: inline-flex; align-items: center; gap: 16px; justify-self: start; font-size: 17px; font-weight: 500; line-height: 1.3; }
+.go { position: relative; display: inline-flex; align-items: center; gap: 16px; justify-self: start; font-size: 17px; font-weight: 500; line-height: 1.3; }
 .go > span { position: relative; padding-bottom: 4px; }
-.go > span::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px; background: currentColor; transform: scaleX(0); transform-origin: 0 50%; transition: transform 420ms var(--x-out); }
-.go svg { transition: transform 420ms var(--x-out); }
+.go > span::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px; background: currentColor; transform: scaleX(0); transform-origin: 0 50%; }
+.go svg { transition: transform 300ms var(--x-out); }
 
-/* Open: hover and keyboard focus. The leaf swings inward and light comes through. */
-.door:hover, .panel .door:focus-visible { color: var(--deep); }
-.door:hover .frame, .door:focus-visible .frame { background: var(--leaf-open); transition-delay: 0s; }
-.door:hover .leaf, .door:focus-visible .leaf { transform: rotateY(83deg); transition: transform 680ms var(--x-out); }
-.doors li + li .door:hover .leaf, .doors li + li .door:focus-visible .leaf { transform: rotateY(-83deg); }
-.door:hover .leaf::after, .door:focus-visible .leaf::after { opacity: .5; }
-.door:hover .who, .door:focus-visible .who { background: var(--x-blue); color: #fff; transform: translateY(-2px); box-shadow: 4px 6px 0 rgba(11, 20, 112, .2); }
-.door:hover .go > span::after, .door:focus-visible .go > span::after { transform: none; }
+/* Open: hover, keyboard focus and press. On the opened door the label turns to ink, so it reads
+   on the ultramarine above the perforation and on the white below it. */
+.door:hover .open, .door:hover .openIn, .door:focus-visible .open, .door:focus-visible .openIn, .door:active .open, .door:active .openIn { transform: none; }
+.door:hover .who, .door:focus-visible .who, .door:active .who { background: var(--x-ink); color: #fff; }
 .door:hover .go svg, .door:focus-visible .go svg { transform: translateX(8px); }
-/* Pressed: pushed fully open. */
-.door:active { color: var(--deep); }
-.door:active .frame { background: var(--leaf-open); transition-delay: 0s; }
-.door:active .leaf { transform: rotateY(88deg); transition-duration: 120ms; }
-.doors li + li .door:active .leaf { transform: rotateY(-88deg); }
-.door:active .leaf::after { opacity: .5; }
-.door:active .line, .door:active .go { transform: translateY(1px); }
-.door:active .who { background: var(--x-blue); color: #fff; transform: none; box-shadow: 2px 2px 0 rgba(11, 20, 112, .2); }
-.door:active .go > span::after { transform: none; }
-/* The focus ring is drawn above the frame, in ink on the opened white. */
+.door:active .go svg { transform: translateX(12px); }
+/* Focus: the page's 2px ring, in ultramarine on the opened white. */
 .panel .door:focus-visible { outline: none; }
-.door:focus-visible::after { content: ""; position: absolute; z-index: 5; inset: 9px; border: 3px solid var(--x-ink); border-radius: 6px; pointer-events: none; }
+.door:focus-visible::after { content: ""; position: absolute; z-index: 5; inset: 8px; border: 2px solid var(--x-blue); border-radius: 6px; pointer-events: none; }
 
 .also { position: relative; z-index: 3; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 26px; margin: 0; padding: 17px var(--padx) 19px; border-top: 1px solid rgba(255, 255, 255, .34); font-size: 15px; line-height: 1.4; }
 .also a { color: #fff; font-weight: 500; text-decoration: none; }
@@ -87,22 +76,19 @@
 .also a > span::after { height: 3px; background: #fff; transform: scaleX(0); transform-origin: 0 50%; transition: transform 320ms var(--x-out); }
 .also a:hover > span::after { transform: none; }
 .also a:active { opacity: .78; }
-.panel .also a:focus-visible { outline: 2px solid #fff; outline-offset: 5px; border-radius: 3px; }
+.panel .also a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; border-radius: 3px; }
 
 @media (max-width: 899px) {
   .close { margin-top: 56px; }
-  .top { min-height: 400px; }
+  .top { min-height: 430px; }
   .wall { -webkit-mask-image: linear-gradient(180deg, #000 58%, transparent 88%); mask-image: linear-gradient(180deg, #000 58%, transparent 88%); -webkit-mask-composite: source-over; mask-composite: add; }
-  .plane { left: 60%; top: calc(26% + 104px); gap: 14px; transform: translate(-50%, -50%) rotateX(26deg) rotateY(7deg) rotateZ(-11deg) scale(.78); }
+  .plane { left: 58%; top: calc(26% + 128px); gap: 14px; transform: translate(-50%, -50%) rotateX(26deg) rotateY(7deg) rotateZ(-11deg) scale(.98); }
   .col { gap: 14px; }
   .doors { grid-template-columns: 1fr; }
   .doors li + li::before { left: 0; right: 0; top: -.5px; bottom: auto; width: auto; height: 1px; }
-  .doors li + li .leaf { transform-origin: left center; }
-  .doors li + li .frame { perspective-origin: 0% 50%; }
-  .doors li + li .leaf::after { background: linear-gradient(90deg, transparent, var(--deep)); }
-  .doors li + li .door:hover .leaf, .doors li + li .door:focus-visible .leaf { transform: rotateY(83deg); }
-  .doors li + li .door:active .leaf { transform: rotateY(88deg); }
-  .door { min-height: 0; gap: 22px; padding-top: 44px; padding-bottom: 40px; }
+  .doors li + li .door { --slide: -101%; }
+  .door { min-height: 0; }
+  .face, .openIn { gap: 22px; padding-top: 44px; padding-bottom: 40px; }
   .line { max-width: 18ch; }
   .perf::before, .perf::after { top: -13px; width: 24px; height: 24px; }
   .perf::before { left: -13px; }

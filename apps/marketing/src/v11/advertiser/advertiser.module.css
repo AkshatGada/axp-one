@@ -1,8 +1,9 @@
 /* 03 For advertisers. A calm section: heading, four equal parts under hairline rules, one action.
    The still state is the default. Motion is armed only under html[data-px-motion="on"], and only
-   until a part is [data-seen]; then each figure plays once and rests. Transform and opacity only. */
+   while a part waits below the screen ([data-entry]); on a normal downward scroll each figure plays once
+   and rests. Reached abruptly, a part is simply whole. Transform and opacity only. */
 
-.root { --fig-h: 156px; --step: 110ms; }
+.root { --fig-h: 196px; --step: 110ms; }
 
 .head { margin-top: clamp(40px, 5.6vw, 88px); }
 .head .h { grid-column: 1 / span 9; }
@@ -13,71 +14,77 @@
 .part { position: relative; display: grid; grid-row: span 3; grid-template-rows: subgrid; align-content: start; min-width: 0; padding-top: 18px; --d: calc(var(--p) * var(--step)); }
 .part::before { content: ""; position: absolute; inset: 0 0 auto; height: 1px; background: var(--x-ink); transform-origin: 0 50%; }
 .part .line { margin-top: 8px; font-size: 16px; line-height: 1.45; text-wrap: balance; }
-.part .fig { position: relative; height: var(--fig-h); margin-top: clamp(24px, 2.6vw, 38px); }
+.part .fig { position: relative; height: var(--fig-h); margin-top: clamp(26px, 3vw, 44px); }
 
-.root .note { margin-top: 20px; }
 .end { margin-top: clamp(40px, 5vw, 76px); }
 
 /* Describe: the offer on a sheet; what was listed, as ink tokens below it. */
 .describe { display: grid; gap: 12px; align-content: start; }
-.offer { position: relative; z-index: 1; margin: 0; padding: 12px 14px 13px; border: 1px solid var(--x-hair); border-radius: var(--x-r-s); background: var(--x-sheet); font-size: 14.5px; line-height: 1.4; letter-spacing: -.005em; color: var(--x-ink); text-wrap: pretty; }
+.offer { position: relative; z-index: 1; margin: 0; padding: 14px 16px 15px; border: 1px solid var(--x-hair); border-radius: var(--x-r-s); background: var(--x-sheet); font-size: 15.5px; line-height: 1.4; letter-spacing: -.005em; color: var(--x-ink); text-wrap: pretty; }
 .tokens { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.token { padding: 5px 10px 6px; border-radius: 6px; background: var(--x-ink); color: #fff; font-size: 12.5px; font-weight: 500; line-height: 1.25; letter-spacing: .005em; white-space: nowrap; }
+.token { padding: 6px 11px 7px; border-radius: 6px; background: var(--x-ink); color: #fff; font-size: 13.5px; font-weight: 500; line-height: 1.25; white-space: nowrap; }
 
 /* Approve: the kit card, and the seal across its lower edge. */
 .approve { position: relative; }
+.approve .card p { font-size: 13.5px; }
 .seal { position: absolute; right: 16px; bottom: -17px; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--x-ink); color: #fff; box-shadow: 0 0 0 3px var(--x-paper); transform: rotate(-8deg); }
 .seal::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(255, 255, 255, .5); border-radius: 50%; }
 
-/* Limit: a ceiling and a wall in ink. Two soft bodies are cut flat where they meet them. */
-.limit { display: grid; grid-template-rows: auto 1fr auto; gap: 7px; height: 100%; }
-.bound { margin: 0; font-size: 12.5px; font-weight: 500; line-height: 1.25; letter-spacing: .005em; color: var(--x-ink); }
-.bound[data-side] { justify-self: end; padding-right: 8px; }
-.room { position: relative; min-height: 0; border-top: 2px solid var(--x-ink); border-right: 2px solid var(--x-ink); overflow: hidden; }
-.rise, .reach { position: absolute; display: block; border-radius: 50%; background: radial-gradient(closest-side, rgba(43, 59, 255, .86), rgba(43, 59, 255, .66) 44%, rgba(43, 59, 255, .2) 80%, rgba(43, 59, 255, 0)); }
-.rise { left: 8%; top: -62px; width: 136px; height: 136px; }
-.reach { right: -48px; top: 12px; width: 94px; height: 94px; }
+/* Limit: the money figure of section 05, small. An ink baseline carries the deliveries; a bracket
+   over the newest is the most one placement may cost; a wall is the total budget. */
+.limit { container-type: inline-size; --tile: 50px; }
+.track { position: relative; height: calc(var(--tile) + 36px); border-bottom: 2px solid var(--x-ink); }
+.track::before { content: ""; position: absolute; left: 0; bottom: 0; width: 2px; height: calc(var(--tile) + 8px); background: var(--x-ink); }
+.row { position: absolute; left: 6px; bottom: 0; display: flex; gap: 3px; height: var(--tile); }
+.block { display: block; flex: none; width: calc(var(--w) * 1cqw); background: var(--x-blue); transform-origin: 0 50%; }
+.block[data-new] { width: 7.5cqw; }
+.gate { position: absolute; left: calc(100% - 7.5cqw - 2.5px); bottom: 0; width: calc(11cqw + 3px); height: calc(var(--tile) + 12px); border: 2px solid var(--x-ink); border-bottom: 0; }
+.gateLabel { position: absolute; left: calc(24.5px + 54cqw); bottom: calc(var(--tile) + 21px); transform: translateX(-100%); font-size: 13.5px; font-weight: 500; line-height: 1; white-space: nowrap; color: var(--x-ink); }
+.pause { position: absolute; left: calc(100% + 3.5cqw + 14px); top: 50%; display: flex; gap: 5px; margin-top: -10px; }
+.pause i { display: block; width: 5px; height: 20px; background: var(--x-ink); }
+.wall { position: absolute; right: 0; bottom: -2px; width: 6px; height: calc(var(--tile) + 24px); background: var(--x-ink); }
+.wallLabel { position: absolute; right: 0; top: calc(100% + 12px); font-size: 13.5px; font-weight: 500; line-height: 1; white-space: nowrap; color: var(--x-ink); }
 
 /* See why: a small page (question, answer, the card below it) and the reason beside the card. */
-.see { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 14px; align-items: end; }
-.thumb { display: grid; gap: 7px; align-content: start; padding: 12px; border: 1px solid var(--x-hair); border-radius: var(--x-r-s); background: var(--x-sheet); }
+.see { display: grid; grid-template-columns: 124px minmax(0, 1fr); gap: 14px; align-items: end; }
+.thumb { display: grid; gap: 9px; align-content: start; padding: 14px; border: 1px solid var(--x-hair); border-radius: var(--x-r-s); background: var(--x-sheet); }
 .thumb i { display: block; height: 5px; border-radius: 3px; background: var(--x-hair); }
 .thumb .ask { justify-self: end; width: 62%; height: 14px; margin-bottom: 5px; border-radius: 7px; background: var(--x-hair-soft); }
 .thumb .bar:nth-of-type(3) { width: 86%; }
 .thumb .bar:nth-of-type(4) { width: 58%; }
-.mini { display: grid; gap: 6px; margin-top: 6px; padding: 8px; border: 1.5px solid var(--x-blue); border-radius: 6px; }
+.mini { display: grid; gap: 7px; margin-top: 8px; padding: 10px; border: 1.5px solid var(--x-blue); border-radius: 6px; }
 .mini i:first-child { width: 26px; height: 7px; border-radius: 2px; background: var(--x-blue); }
 .mini i:last-child { width: 88%; }
 .reason { position: relative; padding: 0 0 4px 16px; }
-.reason::before { content: ""; position: absolute; left: -27px; top: 10px; width: 35px; height: 1.5px; background: var(--x-blue); transform-origin: 0 50%; }
+.reason::before { content: ""; position: absolute; left: -29px; top: 10px; width: 37px; height: 1.5px; background: var(--x-blue); transform-origin: 0 50%; }
 .out { margin: 0; font-size: 15px; font-weight: 500; line-height: 1.3; color: var(--x-blue); }
 .why { margin: 4px 0 0; font-size: 14.5px; line-height: 1.38; color: var(--x-ink); text-wrap: pretty; }
 
 /* Entry: armed until the part is seen, then played once. */
-:global(html[data-px-motion="on"]) .part:not([data-seen])::before { transform: scaleX(0); }
-:global(html[data-px-motion="on"]) .part:not([data-seen]) :is(.verb, .line, .offer, .token, .card, .seal, .bound, .room, .rise, .reach, .thumb, .mini, .out, .why) { opacity: 0; }
-:global(html[data-px-motion="on"]) .part:not([data-seen]) .reason::before { transform: scaleX(0); }
+:global(html[data-px-motion="on"]) .part[data-entry="wait"]::before { transform: scaleX(0); }
+:global(html[data-px-motion="on"]) .part[data-entry="wait"] :is(.verb, .line, .offer, .token, .card, .seal, .track, .block, .gate, .pause, .thumb, .mini, .out, .why) { opacity: 0; }
+:global(html[data-px-motion="on"]) .part[data-entry="wait"] .reason::before { transform: scaleX(0); }
 
-:global(html[data-px-motion="on"]) .part[data-seen]::before { animation: adv-rule 900ms var(--x-out) var(--d) backwards; }
-:global(html[data-px-motion="on"]) .part[data-seen] .verb { animation: adv-up 620ms var(--x-out) calc(var(--d) + 80ms) backwards; }
-:global(html[data-px-motion="on"]) .part[data-seen] .line { animation: adv-up 620ms var(--x-out) calc(var(--d) + 150ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"]::before { animation: adv-rule 900ms var(--x-out) var(--d) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .verb { animation: adv-up 620ms var(--x-out) calc(var(--d) + 80ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .line { animation: adv-up 620ms var(--x-out) calc(var(--d) + 150ms) backwards; }
 
-:global(html[data-px-motion="on"]) .part[data-seen] .offer { animation: adv-up 620ms var(--x-out) calc(var(--d) + 260ms) backwards; }
-:global(html[data-px-motion="on"]) .part[data-seen] .token { animation: adv-settle 760ms var(--x-out) calc(var(--d) + 620ms + var(--t) * 90ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .offer { animation: adv-up 620ms var(--x-out) calc(var(--d) + 260ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .token { animation: adv-settle 760ms var(--x-out) calc(var(--d) + 620ms + var(--t) * 90ms) backwards; }
 
-:global(html[data-px-motion="on"]) .part[data-seen] .card { animation: adv-up 620ms var(--x-out) calc(var(--d) + 260ms) backwards, adv-press 420ms var(--x-ease) calc(var(--d) + 1040ms); }
-:global(html[data-px-motion="on"]) .part[data-seen] .seal { animation: adv-seal 520ms var(--x-ease) calc(var(--d) + 820ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .card { animation: adv-up 620ms var(--x-out) calc(var(--d) + 260ms) backwards, adv-press 420ms var(--x-ease) calc(var(--d) + 1040ms); }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .seal { animation: adv-seal 520ms var(--x-ease) calc(var(--d) + 820ms) backwards; }
 
-:global(html[data-px-motion="on"]) .part[data-seen] .room { animation: adv-fade 520ms var(--x-ease) calc(var(--d) + 260ms) backwards; }
-:global(html[data-px-motion="on"]) .part[data-seen] .bound { animation: adv-fade 520ms var(--x-ease) calc(var(--d) + 260ms) backwards; }
-:global(html[data-px-motion="on"]) .part[data-seen] .rise { animation: adv-rise 1300ms var(--x-out) calc(var(--d) + 420ms) backwards; }
-:global(html[data-px-motion="on"]) .part[data-seen] .reach { animation: adv-reach 1300ms var(--x-out) calc(var(--d) + 640ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .track { animation: adv-fade 520ms var(--x-ease) calc(var(--d) + 260ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .block { animation: adv-grow 420ms var(--x-out) calc(var(--d) + 520ms + var(--t) * 80ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .gate { animation: adv-gate 620ms var(--x-out) calc(var(--d) + 900ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .pause { animation: adv-fade 420ms var(--x-ease) calc(var(--d) + 1500ms) backwards; }
 
-:global(html[data-px-motion="on"]) .part[data-seen] .thumb { animation: adv-up 620ms var(--x-out) calc(var(--d) + 260ms) backwards; }
-:global(html[data-px-motion="on"]) .part[data-seen] .mini { animation: adv-drop 620ms var(--x-out) calc(var(--d) + 640ms) backwards; }
-:global(html[data-px-motion="on"]) .part[data-seen] .reason::before { animation: adv-rule 480ms var(--x-out) calc(var(--d) + 1040ms) backwards; }
-:global(html[data-px-motion="on"]) .part[data-seen] .out { animation: adv-up 520ms var(--x-out) calc(var(--d) + 1180ms) backwards; }
-:global(html[data-px-motion="on"]) .part[data-seen] .why { animation: adv-up 520ms var(--x-out) calc(var(--d) + 1280ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .thumb { animation: adv-up 620ms var(--x-out) calc(var(--d) + 260ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .mini { animation: adv-drop 620ms var(--x-out) calc(var(--d) + 640ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .reason::before { animation: adv-rule 480ms var(--x-out) calc(var(--d) + 1040ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .out { animation: adv-up 520ms var(--x-out) calc(var(--d) + 1180ms) backwards; }
+:global(html[data-px-motion="on"]) .part[data-entry="play"] .why { animation: adv-up 520ms var(--x-out) calc(var(--d) + 1280ms) backwards; }
 
 @keyframes adv-rule { from { transform: scaleX(0); } }
 @keyframes adv-fade { from { opacity: 0; } }
@@ -86,8 +93,8 @@
 @keyframes adv-settle { 0% { opacity: 0; transform: translateY(-20px); } 62% { opacity: 1; transform: translateY(1.5px); } 100% { opacity: 1; transform: none; } }
 @keyframes adv-seal { 0% { opacity: 0; transform: translateY(-14px) rotate(-22deg) scale(1.28); } 58% { opacity: 1; transform: rotate(-8deg) scale(.95); } 100% { opacity: 1; transform: rotate(-8deg); } }
 @keyframes adv-press { 40% { transform: translateY(1.5px); } }
-@keyframes adv-rise { from { opacity: 0; transform: translateY(64px); } }
-@keyframes adv-reach { from { opacity: 0; transform: translateX(-72px); } }
+@keyframes adv-grow { from { opacity: 0; transform: scaleX(0); } }
+@keyframes adv-gate { from { opacity: 0; transform: translateX(-9cqw); } }
 
 /* Two by two between a tablet and a small laptop. */
 @media (max-width: 1040px) {
@@ -102,8 +109,9 @@
   .parts { grid-template-columns: minmax(0, 1fr); row-gap: 34px; margin-top: 32px; }
   .part { padding-top: 14px; }
   .part .line { margin-top: 5px; }
-  .part .fig { height: auto; margin-top: 18px; }
-  .limit { height: 156px; }
+  .part .fig { height: auto; margin-top: 20px; }
+  .parts { row-gap: 40px; }
+  .limit { padding-bottom: 30px; }
   .approve { padding-bottom: 20px; }
-  .end { margin-top: 30px; }
+  .end { margin-top: 44px; }
 }

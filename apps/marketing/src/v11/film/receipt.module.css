@@ -1,0 +1,13 @@
+/* The page's one receipt: square, ink, a rule. One statement line and two states, each with a
+   filled mark. Every size is in em, so whoever uses it sets one font-size: the smallest text shown
+   by default is 1.5em (the optional label and small print are 1.05em and 1.1em). */
+.receipt { padding: 1.5em 1.5em 1.2em; border: 1px solid var(--x-ink); border-radius: .2em; background: var(--x-sheet); color: var(--x-ink); text-align: left; }
+.title { margin: 0 0 .3em; font-family: var(--font-display); font-weight: 500; font-size: 2.4em; letter-spacing: -.028em; line-height: 1.05; }
+.confirms { margin: 0 0 1em; font-size: 1.5em; line-height: 1.34; text-wrap: balance; }
+.sides { display: grid; grid-template-columns: minmax(0, 1fr); margin: 0; padding: 0; list-style: none; border-top: 1px dashed var(--x-quiet); }
+.side { padding: 1.05em 0 1.1em; }
+.side + .side { border-top: 1px dashed var(--x-quiet); }
+.label { display: block; margin: 0 0 .6em; font-size: 1.05em; font-weight: 500; line-height: 1; letter-spacing: .05em; text-transform: uppercase; color: var(--x-quiet); }
+.state { display: flex; align-items: center; gap: .5em; font-family: var(--font-display); font-weight: 500; font-size: 1.6em; letter-spacing: -.02em; line-height: 1.1; }
+.done { flex: none; width: .62em; height: .62em; border-radius: 2px; background: var(--x-ink); }
+.small { margin: .2em 0 .3em; padding-top: 1em; border-top: 1px dashed var(--x-quiet); font-size: 1.1em; line-height: 1.4; color: var(--x-quiet); }

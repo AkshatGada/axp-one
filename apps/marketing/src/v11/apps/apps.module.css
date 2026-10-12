@@ -9,17 +9,16 @@
 .h { white-space: nowrap; }
 
 /* The figure. The wrapper is the container the margins are measured from. */
-.figWrap { container-type: inline-size; margin-top: clamp(16px, 3.2svh, 44px); }
-.fig { position: relative; }
+.figWrap { container-type: inline-size; margin-top: clamp(18px, 3.8svh, 48px); }
+.fig { position: relative; margin: 0; }
 .stage {
   --col: calc((100cqw - 11 * var(--x-col-gap)) / 12);
   --mw: calc(2 * var(--col) + var(--x-col-gap));        /* a margin: two columns */
   --px: clamp(96px, 11cqw, 156px);                       /* the app column's inset inside the sheet */
   --reach: calc(var(--px) + 1px + var(--x-col-gap));     /* from the app column to the margin */
-  --gy: clamp(13px, 2.3svh, 26px);
+  --gy: clamp(14px, 2.9svh, 32px);
   display: grid; grid-template-columns: var(--mw) minmax(0, 1fr) var(--mw); column-gap: var(--x-col-gap);
 }
-.fig figcaption { margin-top: 22px; margin-left: calc((100cqw - 11 * var(--x-col-gap)) / 6 + 2 * var(--x-col-gap)); }
 
 /* The sheet: white stock on the paper, with a second leaf under it. */
 .sheet { grid-column: 2; grid-row: 1; position: relative; isolation: isolate; border-radius: var(--x-r-l); }
@@ -28,7 +27,7 @@
 .plate { grid-column: 2; grid-row: 1; position: relative; border: 1px solid transparent; }
 
 /* Tidewater's header. */
-.bar { position: relative; display: flex; align-items: center; height: clamp(46px, 6.2svh, 58px); padding: 0 18px 0 24px; border-bottom: 1px solid var(--x-hair-soft); }
+.bar { position: relative; display: flex; align-items: center; height: clamp(48px, 6.6svh, 62px); padding: 0 18px 0 24px; border-bottom: 1px solid var(--x-hair-soft); }
 .brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 500; font-size: 16.5px; letter-spacing: -.02em; }
 .barRight { display: inline-flex; align-items: center; gap: 10px; margin-left: auto; }
 .ghost { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 13px 0 11px; border: 1px solid var(--x-hair); border-radius: 10px; font-size: 13.5px; color: var(--muted); }
@@ -60,6 +59,9 @@
 .cardWrap { position: relative; transition: opacity 420ms var(--x-ease), transform 680ms var(--x-out), visibility 0s; }
 .stage[data-card="off"] .cardWrap { opacity: 0; visibility: hidden; transform: translateY(10px); transition: none; }
 .card { box-shadow: 0 16px 34px -26px rgba(43, 59, 255, .38); }
+/* Text floor: nothing readable in this movement is set below 13.5px, the kit card's label and
+   address included (they are 12.5px and 13px in the kit). */
+.card > span, .card > div > span:first-child { font-size: 13.5px; }
 
 /* Tidewater's composer. */
 .composer { position: relative; display: flex; align-items: center; height: 52px; margin-top: var(--gy); padding: 0 9px 0 9px; border: 1px solid var(--x-hair); border-radius: 16px; background: var(--x-sheet); box-shadow: 0 1px 0 rgba(14, 18, 32, .03), 0 10px 20px -16px rgba(14, 18, 32, .3); font-size: 15.5px; color: var(--x-quiet); }
@@ -72,7 +74,7 @@
 .noteR { left: calc(100% + var(--reach)); }
 .k { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 15.5px; line-height: 1.25; letter-spacing: -.012em; color: var(--x-ink); }
 .line { margin: 3px 0 0; font-size: 14px; line-height: 1.36; color: var(--muted); text-wrap: pretty; }
-.claim { margin: 10px 0 0; font-size: 12.5px; line-height: 1.42; color: var(--x-quiet); text-wrap: pretty; }
+.claim { margin: 9px 0 0; font-size: 13.5px; line-height: 1.38; color: var(--x-ink); text-wrap: pretty; }
 .lead { position: absolute; height: 1px; width: calc(var(--reach) + var(--mw)); background: var(--x-ink); transition: transform 760ms var(--x-out); }
 .leadL { right: 100%; transform-origin: 100% 50%; }
 .leadR { left: 100%; transform-origin: 0 50%; }
@@ -98,7 +100,6 @@
 .mark { display: grid; grid-template-columns: 13px minmax(0, 1fr); column-gap: 8px; margin: 10px 0 0; color: var(--x-ink); }
 .mark i { display: grid; place-items: center; height: 18px; }
 .mark b { font-size: 14px; font-weight: 500; line-height: 18px; }
-.mark span { grid-column: 2; font-size: 12.5px; line-height: 1.3; color: var(--x-quiet); }
 
 /* The accrual. The card is confirmed (an ink tick lands on its foot), a small token runs the
    leader, and the ink tab at the leader's end appears. Words only: an accrual, never a payout. */
@@ -116,7 +117,7 @@
 .stage[data-instant] :is(.cardWrap, .lead, .brace, .chip, .tag), .stage[data-instant] .answer :global(.x-w) { transition: none !important; animation: none !important; }
 
 /* The close: one line for builders, and the one action. */
-.close { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 20px 40px; margin-top: clamp(40px, 7svh, 84px); margin-inline: calc((100% - 11 * var(--x-col-gap)) / 6 + 2 * var(--x-col-gap)); padding-top: clamp(22px, 3.4svh, 36px); border-top: 1px solid var(--x-ink); }
+.close { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 20px 40px; margin-top: clamp(48px, 8svh, 96px); margin-inline: calc((100% - 11 * var(--x-col-gap)) / 6 + 2 * var(--x-col-gap)); padding-top: clamp(22px, 3.4svh, 36px); border-top: 1px solid var(--x-ink); }
 .code { font-weight: 300; text-wrap: balance; }
 
 /* Narrow screens and phones: the same plate and the same notes, recomposed. The plate's parts and
@@ -128,7 +129,6 @@
   .head { padding-top: 16px; }
   .figWrap { margin-top: 18px; }
   .stage { --px: clamp(16px, 5.2cqw, 44px); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); max-width: 720px; }
-  .fig figcaption { margin-left: 0; margin-top: 4px; padding-top: 12px; border-top: 1px solid var(--x-hair); }
   .plate, .col, .a, .slot { display: contents; }
   .sheet { grid-column: 1 / -1; grid-row: 1 / span 6; border-radius: 18px; }
   .sheet::after { inset: 14px 14px -7px; }
@@ -138,14 +138,14 @@
   .me { width: 26px; height: 26px; }
   .me::before { top: 5px; width: 8px; height: 8px; margin-left: -4px; }
   .me i { top: 15px; }
-  .q { grid-row: 2; max-width: calc(100% - 2 * var(--px) - 36px); margin: 14px var(--px) 0; font-size: 15px; padding: 10px 14px 11px; }
-  .aLabel { grid-row: 3; margin: 14px var(--px) 6px; }
+  .q { grid-row: 2; max-width: calc(100% - 2 * var(--px) - 36px); margin: 18px var(--px) 0; font-size: 15px; padding: 10px 14px 11px; }
+  .aLabel { grid-row: 3; margin: 18px var(--px) 6px; }
   .answer { grid-row: 4; margin-inline: var(--px); font-size: 15.5px; line-height: 1.5; }
-  .slotIn { grid-row: 5; margin: 14px var(--px) 0; }
+  .slotIn { grid-row: 5; margin: 18px var(--px) 0; }
   .card { padding: 13px 15px 14px; gap: 7px; }
   .card p { font-size: 15px; line-height: 1.4; }
   .chip { display: none; }
-  .composer { grid-row: 6; height: 44px; margin: 12px var(--px) 12px; padding: 0 6px; border-radius: 14px; font-size: 15px; }
+  .composer { grid-row: 6; height: 44px; margin: 16px var(--px) 16px; padding: 0 6px; border-radius: 14px; font-size: 15px; }
   .plus { width: 28px; height: 28px; margin-right: 9px; }
   .send { width: 30px; height: 30px; border-radius: 9px; }
   .note { position: relative; left: auto; right: auto; top: auto; width: auto; padding: 11px 0 14px; border-top: 1px solid var(--x-hair); }
@@ -154,6 +154,7 @@
   .note1, .note3 { grid-column: 1; }
   .note2, .note4 { grid-column: 2; }
   .note4 .tag { position: static; margin-top: 10px; }
+  .stage[data-stage="card"][data-confirmed] .tag { transition-delay: 160ms; }
   .claim { margin-top: 8px; }
   .close { grid-template-columns: minmax(0, 1fr); justify-items: start; margin-inline: 0; margin-top: 40px; }
 }

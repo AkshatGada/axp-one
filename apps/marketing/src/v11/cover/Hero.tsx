@@ -1,16 +1,15 @@
 "use client";
 
 // 00 Cover: the wall. One screen, no pin.
-// A tilted wall of AI conversations (illustrative questions) drifts slowly. Every second or two a
-// placement clears on one of them: two thin ultramarine lines run in the gutters beside the tile,
-// a Sponsored card arrives below its answer, and a small tick confirms it. Nothing is lifted off
-// the wall: the wall is the picture.
+// A tilted wall of AI conversations (illustrative questions) drifts slowly. Some of them carry a
+// Sponsored card, attached below the answer inside the same tile; every couple of seconds one more
+// settles into place. Nothing is lifted off the wall: the wall is the picture.
 // The headline, deck and the two actions sit bottom left on clean paper and are readable in the
-// first painted frame. The bottom edge is a hairline and the note.
-// Motion off: the same composition as a still, with the cards the wall holds at first paint.
+// first painted frame. The bottom edge is plain paper: the next movement opens with its own rule.
+// Motion off: the same composition as a still, with every card in place.
 import { useEffect, useRef, type CSSProperties, type PointerEvent as RPointerEvent } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
-import { WALL_QUESTIONS as PROMPTS } from "./questions";
+import { WALL_AD_LINES, WALL_QUESTIONS as PROMPTS } from "./questions";
 import { Action, TextLink, useReduced } from "../kit";
 import { COVER } from "../copy";
 import s from "./hero.module.css";
@@ -20,33 +19,30 @@ const PER = 5;
 const DURS = [132, 158, 124, 166, 140, 150, 128];
 const DEPTH = [-110, 30, -40, 70, -80, 10, -60];
 const LIFT = [-6, 4, -10, 1, -7, 6, -3];
-/** Which conversations can receive a card (column-row), and which already hold one at first paint. */
-const SLOTS = new Set(["0-1", "0-3", "1-0", "1-2", "1-4", "2-1", "2-3", "3-0", "3-2", "3-4", "4-1", "4-3", "5-0", "5-2", "5-4", "6-1", "6-3"]);
-const PLACED = new Set(["0-3", "1-4", "2-1", "3-4", "4-3", "5-0", "6-1"]);
+/** The conversations that carry a Sponsored card (column-row). Three of them, near the reader,
+ *  have a readable line (in `questions.ts`); the rest are quiet bars under the tag. */
+const SLOTS = new Set(["0-1", "0-3", "1-0", "1-3", "2-1", "2-4", "3-0", "3-2", "4-1", "4-3", "5-0", "5-3", "6-2", "6-4"]);
+/** The cards already in place at first paint (and in the still). The rest arrive in turn. */
+const PLACED = new Set(["0-3", "1-0", "2-1", "2-4", "3-0", "3-2", "4-1", "4-3", "5-0", "5-3", "6-2"]);
 const cols = Array.from({ length: COLS }, (_, c) => Array.from({ length: PER }, (_, r) => PROMPTS[(c * PER + r * 7 + c) % PROMPTS.length]!));
 
+/** One conversation: the question, the answer as quiet lines and, on some, the Sponsored card
+ *  attached below the answer inside the same tile. */
 function Tile({ q, c, r }: { q: string; c: number; r: number }) {
   const k = `${c}-${r}`;
-  const slot = SLOTS.has(k);
-  const rows = 2 + ((c * 2 + r) % 3);
+  const ad = SLOTS.has(k);
+  const line = WALL_AD_LINES[q];
+  const rows = ad ? 2 : 2 + ((c * 2 + r) % 3);
   return (
-    <div className={s.tile} data-tile={slot ? "" : undefined} data-on={PLACED.has(k) ? "" : undefined}>
-      <div className={s.sheet}>
-        <p className={s.q}>{q}</p>
-        <div className={s.ans}>
-          {Array.from({ length: rows }, (_, n) => <i key={n} style={{ "--w": `${54 + ((c * 17 + r * 29 + n * 23) % 42)}%` } as CSSProperties} />)}
-        </div>
+    <div className={s.tile} data-tile={ad ? "" : undefined} data-on={PLACED.has(k) ? "" : undefined}>
+      <p className={s.q}>{q}</p>
+      <div className={s.ans}>
+        {Array.from({ length: rows }, (_, n) => <i key={n} style={{ "--w": `${54 + ((c * 17 + r * 29 + n * 23) % 42)}%` } as CSSProperties} />)}
       </div>
-      {slot ? (
-        <div className={s.slot}>
-          <div className={s.ad}>
-            <span className={s.adTag}>Sponsored</span>
-            <i className={s.adLine} />
-            <i className={s.adLine2} />
-          </div>
-          <i className={`${s.pulse} ${s.pl}`} />
-          <i className={`${s.pulse} ${s.pr}`} />
-          <i className={s.tick} />
+      {ad ? (
+        <div className={s.ad} data-line={line ? "" : undefined}>
+          <span className={s.adTag}>Sponsored</span>
+          {line ? <p className={s.adText}>{line}</p> : <><i className={s.adBar} /><i className={s.adBar} /></>}
         </div>
       ) : null}
     </div>
@@ -85,7 +81,7 @@ export default function Cover() {
   }
 
   // The wall's life. Every second or two, one conversation in clear view (away from the headline,
-  // the masthead and the foot) receives a card. CSS plays it. Everything stops
+  // the masthead and the bottom edge) receives a card. CSS plays it. Everything stops
   // when the cover is off screen or the tab is hidden.
   useEffect(() => {
     const root = ref.current;
@@ -115,10 +111,10 @@ export default function Cover() {
         if (t.dataset.run !== undefined || t.dataset.on !== undefined) continue;
         const b = t.getBoundingClientRect();
         const x = b.left + b.width / 2;
-        const y = b.bottom - 20;
+        const y = b.bottom - 40;
         if (x < vw * 0.04 || x > vw * 0.97) continue;
-        if (y < view.top + (wide ? 150 : 60) || y > view.bottom - (wide ? 110 : 50)) continue;
-        if (near(copy, x, y, 120)) continue;
+        if (y < view.top + (wide ? 96 : 50) || y > view.bottom - (wide ? 110 : 50)) continue;
+        if (near(copy, x, y, 170)) continue;
         picks.push(t);
       }
       const t = picks[Math.floor(Math.random() * picks.length)];
@@ -127,11 +123,11 @@ export default function Cover() {
       const id = window.setTimeout(() => {
         delete t.dataset.run;
         ends.delete(id);
-      }, 11200);
+      }, 17300);
       ends.add(id);
     };
     const tick = () => {
-      timer = window.setTimeout(tick, 1300 + Math.random() * 1100);
+      timer = window.setTimeout(tick, 1700 + Math.random() * 1300);
       if (root.dataset.paused === "1") return;
       clear();
     };
@@ -173,10 +169,6 @@ export default function Cover() {
           </div>
         </div>
         <div className={s.fog} aria-hidden />
-      </div>
-
-      <div className={`x-wrap ${s.foot}`}>
-        <p className={`x-cap ${s.note}`}>{COVER.note}</p>
       </div>
     </section>
   );

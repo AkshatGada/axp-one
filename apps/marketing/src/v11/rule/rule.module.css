@@ -2,92 +2,84 @@
    (rigid, exact). The doors panel that follows (../doors) is the page's one large blue object.
    Owner: the payments builder. */
 
-.root { --u: 1px; --ty: 78px; --rb: 26px; --pad: 84px; --tile: 26px; --snap: 90ms linear; scroll-margin-top: 16px; }
+.root { --u: 1.15px; --ty: 88px; --rb: 46px; --pad: 56px; --tile: 30px; --shift: 0ms; --snap: 90ms linear; scroll-margin-top: 16px; }
 
 /* ---------- The heading and the deck ---------- */
-.head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--x-col-gap); align-items: end; padding-top: clamp(14px, 2.8svh, 40px); }
+.head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--x-col-gap); align-items: end; padding-top: clamp(10px, 2svh, 30px); }
 .h { grid-column: 1 / span 8; }
 .h > span { display: block; }
-.root .deck { grid-column: 9 / span 4; padding-bottom: .16em; font-size: clamp(19px, 1.6vw, 25px); }
+.root .deck { grid-column: 9 / span 4; padding-bottom: .16em; font-size: clamp(18px, 1.5vw, 23px); }
 
 /* ---------- The figure ---------- */
-.figure { margin-top: clamp(40px, 7vh, 76px); }
-.board { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto auto auto auto; column-gap: var(--x-col-gap); }
+.figure { margin: clamp(30px, 5.4vh, 56px) 0 0; }
+.board { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto auto auto; column-gap: var(--x-col-gap); }
 .steps, .step { display: contents; }
 .steps { margin: 0; padding: 0; list-style: none; }
 
-/* The principle, as a matched pair down the left: each half beside what it describes. */
+/* The principle, as a matched pair down the left: each half beside what it describes, with its
+   reason in one line. */
 .half { grid-column: 1 / span 3; padding-right: clamp(8px, 1.4vw, 24px); }
-.half[data-kind="soft"] { grid-row: 1 / span 2; padding-top: 14px; border-top: 1px solid var(--x-blue); }
-.half[data-kind="hard"] { grid-row: 3 / span 2; align-self: start; margin-top: calc(var(--pad) - 34px); padding-top: 14px; border-top: 2px solid var(--x-ink); }
-.say { margin: 0; font-size: clamp(25px, 2.25vw, 35px); line-height: 1.04; text-wrap: balance; }
+.half[data-kind="soft"] { grid-row: 1 / span 2; padding-top: 12px; border-top: 1px solid var(--x-blue); }
+.half[data-kind="hard"] { grid-row: 3; align-self: end; padding-top: 12px; border-top: 2px solid var(--x-ink); }
+.say { margin: 0; font-size: clamp(24px, 2.2vw, 33px); line-height: 1.04; text-wrap: balance; }
 .half[data-kind="soft"] .say { font-family: var(--font-display); font-weight: 300; letter-spacing: -.034em; color: var(--x-blue); }
 .half[data-kind="hard"] .say { font-family: var(--font-body); font-weight: 700; letter-spacing: -.028em; color: var(--x-ink); }
-.whyK { margin: clamp(14px, 2.2vh, 22px) 0 0; font-size: 13.5px; font-weight: 500; line-height: 1; letter-spacing: .04em; text-transform: uppercase; }
-.half[data-kind="soft"] .whyK { color: var(--x-blue-deep); }
-.whyLine { margin: 8px 0 0; font-size: clamp(15px, 1.16vw, 16.5px); line-height: 1.46; color: var(--muted); text-wrap: pretty; }
+.why { margin: 12px 0 0; font-size: clamp(15.5px, 1.2vw, 17.5px); line-height: 1.38; color: var(--muted); text-wrap: balance; }
 
 /* The three captions that head the line of events. */
-.cap { grid-row: 1; padding: 14px 0 0; border-top: 1px solid var(--x-hair); }
+.cap { grid-row: 1; margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(17px, 1.4vw, 21px); line-height: 1; letter-spacing: -.02em; color: var(--x-ink); }
 .step[data-k="decide"] > :is(.cap, .pic) { grid-column: 4 / span 3; }
 .step[data-k="deliver"] > :is(.cap, .pic) { grid-column: 7 / span 3; }
 .step[data-k="pay"] > :is(.cap, .pic) { grid-column: 10 / span 3; }
-.k { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(21px, 1.8vw, 27px); line-height: 1.06; letter-spacing: -.024em; }
-.line { margin: 7px 0 0; max-width: 30ch; font-size: clamp(14.5px, 1.1vw, 16px); line-height: 1.42; color: var(--muted); text-wrap: pretty; }
 
-.pic { grid-row: 2; position: relative; display: grid; align-content: end; min-height: 250px; padding-top: clamp(20px, 3vh, 30px); }
+.pic { grid-row: 2; position: relative; display: grid; align-content: end; padding-top: clamp(18px, 3vh, 30px); }
 
 /* Decide. The question in plain language: the keyword match is two rigid ink frames; the agent's
    reading is a soft wash over the whole sentence, which resolves into the round mark below. */
-.step[data-k="decide"] .pic { align-content: end; padding-right: clamp(10px, 1.6vw, 26px); padding-bottom: calc(var(--ty) + 58px); }
-.q { position: relative; margin: 0; font-size: clamp(16px, 1.3vw, 18.5px); line-height: 1.72; letter-spacing: -.008em; color: var(--x-ink); }
+.step[data-k="decide"] .pic { padding-right: clamp(10px, 1.6vw, 26px); padding-bottom: calc(var(--ty) + 44px); }
+.q { position: relative; margin: 0; font-size: clamp(18px, 1.56vw, 23px); line-height: 1.6; letter-spacing: -.012em; color: var(--x-ink); }
 .qWash { position: absolute; inset: 0; color: transparent; }
-.qWash > span { padding: .2em .34em; margin: 0 -.34em; border-radius: .5em; background: rgba(43, 59, 255, .13); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.qWash > span { padding: .16em .34em; margin: 0 -.34em; border-radius: .5em; background: rgba(43, 59, 255, .13); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .qText { position: relative; }
-.caught { position: relative; margin: 0 .14em; white-space: nowrap; }
+.caught, .gap { margin: 0 .14em; white-space: nowrap; }
+.caught { position: relative; }
 .caught::after { content: ""; position: absolute; inset: -.02em -.24em -.06em; border: 1.5px solid var(--x-ink); }
 
-.orb { position: absolute; left: -8px; bottom: calc(var(--ty) - 34px); width: 68px; height: 68px; }
+.orb { position: absolute; left: -8px; bottom: calc(var(--ty) - 36px); width: 72px; height: 72px; }
 .orb i { position: absolute; border-radius: 50%; }
 .halo { inset: 0; background: radial-gradient(circle, rgba(43, 59, 255, .34) 0%, rgba(43, 59, 255, .15) 42%, rgba(43, 59, 255, 0) 70%); }
-.core { inset: 23px; background: var(--x-blue); }
-.ring { inset: 17px; border: 1.5px solid var(--x-blue); opacity: 0; }
-.verdict { position: absolute; left: 66px; bottom: calc(var(--ty) + 9px); margin: 0; font-size: 14.5px; line-height: 1.2; color: var(--x-ink); white-space: nowrap; }
+.core { inset: 24px; background: var(--x-blue); }
+.ring { inset: 18px; border: 1.5px solid var(--x-blue); opacity: 0; }
+.verdict { position: absolute; left: 70px; bottom: calc(var(--ty) + 10px); margin: 0; font-size: clamp(15px, 1.2vw, 17px); line-height: 1.2; color: var(--x-ink); white-space: nowrap; }
 .verdict b { font-weight: 500; color: var(--x-blue); }
 
 /* The thread: the payment simply follows the decision. */
 .thread { position: absolute; bottom: calc(var(--ty) - 4px); height: 9px; overflow: hidden; transform-origin: 0 50%; }
 .thread::before { content: ""; position: absolute; left: 0; right: 0; top: 3.75px; height: 1.5px; background: var(--x-blue); }
-.thread[data-seg="a"] { left: 40px; right: calc(-1 * var(--x-col-gap)); }
+.thread[data-seg="a"] { left: 42px; right: calc(-1 * var(--x-col-gap)); }
 .thread[data-seg="b"] { left: 50%; right: calc(-1 * var(--x-col-gap)); }
 .run { position: absolute; inset: 0; opacity: 0; }
 .run::after { content: ""; position: absolute; right: 0; top: 1px; width: 7px; height: 7px; border-radius: 50%; background: var(--x-blue); }
 
 /* Deliver. The app's own answer, then the card below it. */
 .step[data-k="deliver"] .pic { padding-right: clamp(22px, 2.6vw, 44px); }
-.chat { position: relative; z-index: 1; display: grid; gap: 10px; }
-.app { margin: 0; font-size: 13.5px; font-weight: 500; line-height: 1; color: var(--x-quiet); }
-.answer { display: grid; gap: 7px; padding-bottom: 4px; }
-.answer i { height: 7px; border-radius: 4px; background: var(--x-hair); }
+.chat { position: relative; z-index: 1; display: grid; gap: 12px; }
+.answer { display: grid; gap: 7px; }
+.answer i { height: 8px; border-radius: 4px; background: var(--x-hair); }
 .answer i:nth-child(2) { width: 88%; }
 .answer i:nth-child(3) { width: 54%; }
 .cardBox { display: grid; }
-.chat .ad[data-size] { gap: 8px; padding: 14px 16px 15px; box-shadow: var(--x-shadow); }
-.chat .ad[data-size] p { font-size: 15px; line-height: 1.42; }
+.chat .ad[data-size] { box-shadow: var(--x-shadow); }
 
 /* Pay. The receipt: a charge accepted, and an accrual. Words, never money moving. */
-.receipt { position: relative; z-index: 1; margin-bottom: var(--rb); border: 1px solid var(--x-hair); border-radius: 12px; background: var(--x-sheet); box-shadow: 0 1px 3px rgba(14, 18, 32, .05), 0 18px 40px -22px rgba(14, 18, 32, .22); }
-.rTitle { margin: 0; padding: 10px 14px 9px; border-bottom: 1px solid var(--x-hair-soft); font-size: 12.5px; font-weight: 500; line-height: 1; letter-spacing: .04em; text-transform: uppercase; color: var(--x-quiet); }
-.rSides { display: grid; grid-template-columns: 1fr 1fr; }
-.rSide { display: grid; align-content: start; gap: 7px; margin: 0; padding: 12px 14px 15px; }
+.receipt { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; margin-bottom: var(--rb); border: 1px solid var(--x-hair); border-radius: 14px; background: var(--x-sheet); box-shadow: 0 1px 3px rgba(14, 18, 32, .05), 0 22px 48px -24px rgba(14, 18, 32, .26); }
+.rSide { margin: 0; padding: 18px 12px 20px 16px; }
 .rSide + .rSide { border-left: 1.5px dashed var(--x-hair); }
-.rWho { font-size: 12.5px; line-height: 1; color: var(--muted); }
-.rState { position: relative; padding-left: 15px; font-family: var(--font-display); font-weight: 400; font-size: clamp(16px, 1.36vw, 20px); line-height: 1.1; letter-spacing: -.02em; }
-.rState i { position: absolute; left: 0; top: .32em; width: 8px; height: 8px; background: var(--x-ink); }
-.rSide[data-side="app"] .rState i { border: 1.5px solid var(--x-ink); background: transparent; }
+.rState { position: relative; display: block; padding-left: 17px; font-family: var(--font-display); font-weight: 400; font-size: clamp(17px, 1.42vw, 22px); line-height: 1.08; letter-spacing: -.022em; }
+.rState i { position: absolute; left: 0; top: .3em; width: 9px; height: 9px; background: var(--x-ink); }
 
-/* Settle. The running total, on an ink rail between two ink bounds. */
-.rail { grid-row: 3; grid-column: 4 / span 9; position: relative; padding-top: var(--pad); }
+/* The running total, on an ink rail between two ink bounds. */
+.rail { grid-row: 3; grid-column: 4 / span 9; position: relative; padding: var(--pad) 0 24px; }
 .track { position: relative; height: calc(var(--tile) + 2px); border-bottom: 2px solid var(--x-ink); }
 .track::before { content: ""; position: absolute; left: 0; bottom: 0; width: 2px; height: calc(var(--tile) + 8px); background: var(--x-ink); }
 .total { position: relative; display: flex; gap: 3px; height: var(--tile); margin-left: 4px; width: calc(66.667% + .667 * var(--x-col-gap) + 12px + 76 * var(--u) + 9px); }
@@ -97,61 +89,58 @@
 
 /* The ceiling: a rigid bracket exactly as wide as the most one placement may cost. Each charge
    lands under it and is narrower than it. */
-.gate { position: absolute; z-index: 2; left: calc(100% - 18 * var(--u) - 2.5px); bottom: 0; width: calc(28 * var(--u) + 3px); height: calc(var(--tile) + 12px); border: 2px solid var(--x-ink); border-bottom: 0; }
-.drop { position: absolute; left: calc(50% - 1px); bottom: 100%; width: 2px; height: calc(var(--pad) + var(--rb) - 12px); background: var(--x-blue); transform-origin: 50% 0; }
-.gateLabel { position: absolute; right: calc(100% + 10px); top: -4px; font-size: 13.5px; font-weight: 500; line-height: 1; white-space: nowrap; color: var(--x-ink); }
+.gate { position: absolute; z-index: 2; left: calc(100% - 18 * var(--u) - 2.5px); bottom: 0; width: calc(28 * var(--u) + 3px); height: calc(var(--tile) + 10px); border: 2px solid var(--x-ink); border-bottom: 0; }
+.drop { position: absolute; left: calc(50% - 1px); bottom: 100%; width: 2px; height: calc(var(--pad) + var(--rb) - 10px); background: var(--x-blue); transform-origin: 50% 0; }
+.gateLabel { position: absolute; right: calc(100% + 10px); top: -5px; font-size: 14px; font-weight: 500; line-height: 1; white-space: nowrap; color: var(--x-ink); }
 /* The budget: a wall. */
-.wall { position: absolute; right: 0; bottom: -2px; width: 6px; height: calc(var(--tile) + 24px); background: var(--x-ink); }
-.wallLabel { position: absolute; right: 16px; bottom: calc(var(--tile) + 10px); font-size: 13.5px; font-weight: 500; line-height: 1; white-space: nowrap; color: var(--x-ink); }
+.wall { position: absolute; right: 0; bottom: -2px; width: 6px; height: calc(var(--tile) + 22px); background: var(--x-ink); }
+.wallLabel { position: absolute; right: 16px; bottom: calc(var(--tile) + 8px); font-size: 14px; font-weight: 500; line-height: 1; white-space: nowrap; color: var(--x-ink); }
 /* Later: the total is closed, the way a sum is closed in a ledger. */
-.closed { position: absolute; left: -4px; right: 0; top: calc(100% + 13px); height: 6px; border-top: 1.5px solid var(--x-ink); border-bottom: 1.5px solid var(--x-ink); transform-origin: 0 50%; }
+.closed { position: absolute; left: -4px; right: 0; top: calc(100% + 12px); height: 7px; border-top: 1.5px solid var(--x-ink); border-bottom: 1.5px solid var(--x-ink); transform-origin: 0 50%; }
 
-.step[data-k="settle"] > .cap { grid-row: 4; grid-column: 4 / span 3; margin-top: 44px; padding-top: 0; border-top: 0; }
-.board .limit { grid-row: 4; grid-column: 7 / span 3; margin-top: 48px; padding-right: clamp(22px, 2.6vw, 44px); }
-.proof { grid-row: 4; grid-column: 10 / span 3; justify-self: start; align-self: start; display: grid; gap: 5px; margin-top: 44px; color: var(--x-blue-deep); text-decoration: none; }
-.proofText { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 500; }
-.proofText > span { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
-.proofText svg { flex: none; transition: transform var(--x-d2) var(--x-out); }
-.proof:hover .proofText svg { transform: translateX(5px); }
-.proof:hover .proofText > span { text-decoration-thickness: 2.5px; }
-.proofLabel { font-size: 13.5px; line-height: 1.3; color: var(--muted); }
+/* Settle: a label at the end of the double rule. */
+.settle { position: absolute; left: calc(100% + 16px); top: calc(100% + 10px); white-space: nowrap; }
 
 /* ---------- The entrance: once, on the way in (armed pages only) ---------- */
-/* Waiting (below the screen): the rail and its bounds are already there, fixed in advance. */
-:global(html[data-px-motion="on"]) .board[data-entry="wait"] :is(.qWash, .halo, .core, .verdict, .thread, .app, .answer, .cardBox, .receipt, .drop, .charge, .closed) { opacity: 0; }
-:global(html[data-px-motion="on"]) .board[data-entry="wait"] .gate { transform: translateX(calc(-58 * var(--u) - 9px)); }
-
+/* Waiting (below the screen): the question, the rail and its bounds are already there. The early
+   parts follow data-entry; the receipt and the rail follow data-late (the same moment on laptops,
+   their own arrival on phones). */
+:global(html[data-px-motion="on"]) .board[data-entry="wait"] :is(.qWash, .halo, .core, .verdict, .thread, .answer, .cardBox) { opacity: 0; }
 :global(html[data-px-motion="on"]) .board[data-entry="wait"] .caught::after { opacity: 0; }
+:global(html[data-px-motion="on"]) .board[data-late="wait"] :is(.receipt, .drop, .charge, .closed, .settle) { opacity: 0; }
+:global(html[data-px-motion="on"]) .board[data-late="wait"] .gate { transform: translateX(calc(-58 * var(--u) - 9px)); }
+
 /* Decide: the keyword match catches two words, hard. The agent's reading takes the sentence, soft,
    and resolves. */
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .caught::after { animation: fade var(--snap) 150ms both; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .caught ~ .caught::after { animation-delay: 330ms; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .qWash { animation: fade 800ms var(--x-ease) 560ms both; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .halo { animation: resolve 900ms var(--x-out) 900ms both; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .core { animation: swell 700ms var(--x-out) 1060ms both; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .verdict { animation: soft 600ms var(--x-out) 1240ms both; }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .caught::after { animation: fade var(--snap) 100ms both; }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .caught ~ .caught::after { animation-delay: 230ms; }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .qWash { animation: fade 560ms var(--x-ease) 340ms both; }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .halo { animation: resolve 760ms var(--x-out) 580ms both; }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .core { animation: swell 600ms var(--x-out) 700ms both; }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .verdict { animation: soft 500ms var(--x-out) 840ms both; }
 /* Deliver: the thread runs to the answer, and the card arrives below it. */
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .thread[data-seg="a"] { animation: draw 460ms var(--x-inout) 1300ms both; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] :is(.app, .answer) { animation: fade 400ms var(--x-ease) 1420ms both; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .cardBox { animation: arrive 700ms var(--x-out) 1700ms both; }
-/* Pay: the thread reaches the receipt, and the charge drops under the ceiling. */
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .thread[data-seg="b"] { animation: draw 300ms var(--x-inout) 2080ms both; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .receipt { animation: sheet 520ms var(--x-out) 2260ms both; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .rState i { animation: latch var(--snap) 2560ms both; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .rSide + .rSide .rState i { animation-delay: 2660ms; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .drop { animation: fall 220ms var(--x-inout) 2620ms both; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .charge { animation: add 240ms var(--x-out) both; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .charge:nth-of-type(1) { animation-delay: 2820ms; }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .thread[data-seg="a"] { animation: draw 380ms var(--x-inout) 900ms both; }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .answer { animation: fade 360ms var(--x-ease) 1000ms both; }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .cardBox { animation: arrive 620ms var(--x-out) 1200ms both; }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .thread[data-seg="b"] { animation: draw 250ms var(--x-inout) 1500ms both; }
+/* Pay: the receipt, and the charge drops under the ceiling. */
+:global(html[data-px-motion="on"]) .board[data-late="play"] .receipt { animation: sheet 460ms var(--x-out) calc(1650ms - var(--shift)) both; }
+:global(html[data-px-motion="on"]) .board[data-late="play"] .rState i { animation: latch var(--snap) calc(1900ms - var(--shift)) both; }
+:global(html[data-px-motion="on"]) .board[data-late="play"] .rSide + .rSide .rState i { animation-delay: calc(1990ms - var(--shift)); }
+:global(html[data-px-motion="on"]) .board[data-late="play"] .drop { animation: fall 200ms var(--x-inout) calc(1950ms - var(--shift)) both; }
+:global(html[data-px-motion="on"]) .board[data-late="play"] .charge { animation: add 220ms var(--x-out) both; }
+:global(html[data-px-motion="on"]) .board[data-late="play"] .charge:nth-of-type(1) { animation-delay: calc(2120ms - var(--shift)); }
 /* And again, and again: nobody approves them. The bracket steps (a rule: it cuts), the charge lands. */
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .gate { animation: walk 840ms linear 3140ms both; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .charge:nth-of-type(2) { animation-delay: 3440ms; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .charge:nth-of-type(3) { animation-delay: 3720ms; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .charge:nth-of-type(4) { animation-delay: 4000ms; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .ring { animation: ripple 560ms var(--x-out) 3080ms, ripple 560ms var(--x-out) 3360ms, ripple 560ms var(--x-out) 3640ms; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .thread[data-seg="a"] .run { animation: travel 300ms linear 3120ms, travel 300ms linear 3400ms, travel 300ms linear 3680ms; }
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .thread[data-seg="b"] .run { animation: travel 140ms linear 3300ms, travel 140ms linear 3580ms, travel 140ms linear 3860ms; }
+:global(html[data-px-motion="on"]) .board[data-late="play"] .gate { animation: walk 660ms linear calc(2350ms - var(--shift)) both; }
+:global(html[data-px-motion="on"]) .board[data-late="play"] .charge:nth-of-type(2) { animation-delay: calc(2590ms - var(--shift)); }
+:global(html[data-px-motion="on"]) .board[data-late="play"] .charge:nth-of-type(3) { animation-delay: calc(2810ms - var(--shift)); }
+:global(html[data-px-motion="on"]) .board[data-late="play"] .charge:nth-of-type(4) { animation-delay: calc(3030ms - var(--shift)); }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .ring { animation: ripple 500ms var(--x-out) 2300ms, ripple 500ms var(--x-out) 2520ms, ripple 500ms var(--x-out) 2740ms; }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .thread[data-seg="a"] .run { animation: travel 220ms linear 2330ms, travel 220ms linear 2550ms, travel 220ms linear 2770ms; }
+:global(html[data-px-motion="on"]) .board[data-entry="play"] .thread[data-seg="b"] .run { animation: travel 100ms linear 2470ms, travel 100ms linear 2690ms, travel 100ms linear 2910ms; }
 /* Settle: later, the total is closed. */
-:global(html[data-px-motion="on"]) .board[data-entry="play"] .closed { animation: ruled 360ms linear 4420ms both; }
+:global(html[data-px-motion="on"]) .board[data-late="play"] .settle { animation: soft 420ms var(--x-out) calc(3400ms - var(--shift)) both; }
+:global(html[data-px-motion="on"]) .board[data-late="play"] .closed { animation: ruled 300ms linear calc(3250ms - var(--shift)) both; }
 
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes soft { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
@@ -159,7 +148,7 @@
 @keyframes swell { from { opacity: 1; transform: scale(0); } to { opacity: 1; transform: none; } }
 @keyframes draw { from { opacity: 1; transform: scaleX(0); } to { opacity: 1; transform: none; } }
 @keyframes fall { from { opacity: 1; transform: scaleY(0); } to { opacity: 1; transform: none; } }
-@keyframes arrive { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: none; } }
+@keyframes arrive { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
 @keyframes sheet { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes latch { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: none; } }
 @keyframes add { from { opacity: 1; transform: scaleX(0); } to { opacity: 1; transform: none; } }
@@ -176,55 +165,62 @@
 /* ---------- Laptops at the narrow end ---------- */
 @media (min-width: 900px) and (max-width: 1180px) {
   .root { --u: .8px; }
-  .rTitle { padding-inline: 10px; }
-  .rSide { padding: 10px 8px 12px 10px; }
-  .rState { padding-left: 13px; font-size: 14.5px; }
+  .rSide { padding: 14px 8px 15px 11px; }
+  .rState { padding-left: 14px; font-size: 16px; }
   .rState i { width: 7px; height: 7px; }
+  .step[data-k="deliver"] .pic { padding-right: 14px; }
+  .cardBox { min-width: 0; }
+  .chat .ad[data-size] { padding: 12px 12px 13px; }
+  .chat .ad[data-size] p { font-size: 15px; }
+  .chat .ad[data-size] > div { flex-wrap: wrap; gap: 4px 8px; }
 }
 
 /* ---------- Phones: the same line, read downward ---------- */
 @media (max-width: 899px) {
-  .root { --u: .7px; --rb: 0px; --pad: 54px; --tile: 22px; }
+  .root { --u: .7px; --rb: 0px; --pad: 50px; --tile: 24px; --shift: 1650ms; }
   .head { display: block; padding-top: 16px; }
-  .root .deck { margin-top: 16px; }
+  .root .deck { margin-top: 14px; font-size: 19px; }
   .figure { margin-top: 30px; }
   .board { display: block; }
   .half { padding-right: 0; }
   .half[data-kind="soft"] { margin-bottom: 30px; }
-  .half[data-kind="hard"] { margin-top: 30px; }
+  .half[data-kind="hard"] { margin-top: 34px; }
   .say { font-size: 27px; }
+  .why { font-size: 16px; }
   .steps { display: block; }
-  .step { display: block; position: relative; padding: 0 0 26px 38px; }
-  .step::before { content: ""; position: absolute; left: 12px; top: 12px; bottom: -12px; width: 1.5px; background: var(--x-blue); transform-origin: 50% 0; }
-  .step[data-k="deliver"]::after, .step[data-k="pay"]::after { content: ""; position: absolute; left: 8.25px; top: 8px; width: 9px; height: 9px; border-radius: 50%; background: var(--x-blue); }
+  /* One thread down the left, a node at every step. */
+  .step { display: block; position: relative; padding: 0 0 30px 38px; }
+  .step::before { content: ""; position: absolute; left: 12px; top: 11px; bottom: -11px; width: 1.5px; background: var(--x-blue); transform-origin: 50% 0; }
+  .step[data-k="deliver"]::after, .step[data-k="pay"]::after { content: ""; position: absolute; z-index: 1; left: 7.75px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--x-blue); }
   .step[data-k="pay"] { padding-bottom: 0; }
-  .step[data-k="pay"]::before { bottom: 44px; }
+  .step[data-k="pay"]::before { bottom: 38px; }
+  .step[data-k="pay"] .receipt::before { content: ""; position: absolute; left: -27px; bottom: 37px; width: 27px; height: 1.5px; background: var(--x-blue); }
   .step[data-k="settle"] { padding: 0; }
   .step[data-k="settle"]::before { content: none; }
-  .cap { padding-top: 0; border-top: 0; }
-  .line { max-width: none; font-size: 15px; }
-  .pic { display: block; position: static; min-height: 0; padding-top: 14px; }
+  .cap { font-size: 21px; line-height: 1.05; }
+  .pic { display: block; position: static; padding-top: 14px; }
+  .step[data-k="pay"] .pic { position: relative; }
   .step[data-k="decide"] .pic, .step[data-k="deliver"] .pic { padding-right: 0; padding-bottom: 0; }
-  .q { font-size: 16px; }
-  .orb { left: -9px; top: -8px; bottom: auto; width: 44px; height: 44px; }
+  .q { font-size: 19px; }
+  .orb { left: -9px; top: -11px; bottom: auto; width: 44px; height: 44px; }
   .core { inset: 14px; }
   .ring { inset: 10px; }
-  .verdict { position: static; margin-top: 12px; }
+  .verdict { position: static; margin-top: 12px; font-size: 15.5px; }
   .thread { display: none; }
+  .rState { font-size: 20px; }
+  .rail { padding-bottom: 62px; }
   .total { width: calc(38px + 150px); }
   .earlier i:nth-child(n + 9) { display: none; }
   .gateLabel { right: auto; left: calc(100% + 10px); }
   .wallLabel { bottom: auto; top: calc(100% + 12px); right: 0; }
-  .step[data-k="settle"] > .cap { margin-top: 46px; }
-  .board .limit { margin-top: 26px; padding-right: 0; }
-  .proof { margin-top: 20px; }
+  .settle { left: -4px; top: calc(100% + 34px); font-size: 21px; }
 
   :global(html[data-px-motion="on"]) .board[data-entry="wait"] .step::before, :global(html[data-px-motion="on"]) .board[data-entry="wait"] .step::after { opacity: 0; }
-  :global(html[data-px-motion="on"]) .board[data-entry="play"] .step::before { animation: fall 460ms var(--x-inout) 1300ms both; }
-  :global(html[data-px-motion="on"]) .board[data-entry="play"] .step[data-k="deliver"]::before { animation-delay: 1900ms; }
-  :global(html[data-px-motion="on"]) .board[data-entry="play"] .step[data-k="pay"]::before { animation-delay: 2260ms; }
-  :global(html[data-px-motion="on"]) .board[data-entry="play"] .step::after { animation: swell 400ms var(--x-out) 1700ms both; }
-  :global(html[data-px-motion="on"]) .board[data-entry="play"] .step[data-k="pay"]::after { animation-delay: 2260ms; }
+  :global(html[data-px-motion="on"]) .board[data-entry="play"] .step::before { animation: fall 420ms var(--x-inout) 900ms both; }
+  :global(html[data-px-motion="on"]) .board[data-entry="play"] .step[data-k="deliver"]::before { animation-delay: 1320ms; }
+  :global(html[data-px-motion="on"]) .board[data-entry="play"] .step[data-k="pay"]::before { animation-delay: 1740ms; }
+  :global(html[data-px-motion="on"]) .board[data-entry="play"] .step::after { animation: swell 360ms var(--x-out) 1280ms both; }
+  :global(html[data-px-motion="on"]) .board[data-entry="play"] .step[data-k="pay"]::after { animation-delay: 1700ms; }
 }
 
 /* Motion off: a complete still. */

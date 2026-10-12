@@ -1,16 +1,24 @@
-// The film's props: Tidewater's furniture, a reader (an advertiser's agent), the receipt. Shared by
+// The film's props: Tidewater's furniture and the reader (the agent that fits). The receipt is its
+// own file (Receipt.tsx), so the rest of the page can use the same one. Shared by
 // the pinned film and by the still sequence, so both draw the same objects.
 import type { CSSProperties, ReactNode, Ref } from "react";
-import { AGENTS, APP, QUESTION, RECEIPT } from "../story";
+import { AGENTS, APP, QUESTION } from "../story";
 import s from "./film.module.css";
 
-/** The words of the question each reader's reason rests on. For the fit, one phrase per reason, in
- *  the order of its reasons; for the others, the phrase that rules them out. See NOTES.md. */
-const CARES: Record<string, string[]> = {
-  HarborKey: ["hardware wallet", "keys offline", "Solana"],
-  ClearVault: ["hardware wallet"],
-  ColdNest: ["Solana"],
-};
+/** The agent that fits, and the words of the question its three reasons rest on (one phrase per
+ *  reason, in the order of its reasons; see NOTES.md). */
+export const FIT = AGENTS.find((a) => a.verdict === "fits") ?? AGENTS[0]!;
+const PHRASES = ["hardware wallet", "keys offline", "Solana"];
+/** The others: one muted line each (a name and its verdict). No sheets of their own, no reasons. */
+export function Others({ className, innerRef }: { className?: string; innerRef?: Ref<HTMLUListElement> }) {
+  return (
+    <ul className={`${s.others}${className ? ` ${className}` : ""}`} ref={innerRef}>
+      {AGENTS.filter((a) => a.verdict !== "fits").map((a) => (
+        <li key={a.name}><b>{a.name}</b><span>{cap(a.verdict)}</span></li>
+      ))}
+    </ul>
+  );
+}
 
 const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
 const vars = (o: Record<string, string | number>) => o as CSSProperties;
@@ -30,7 +38,6 @@ export function Bar() {
     <div className={s.bar}>
       <Tide className={s.barMark} />
       <span className={s.barName}>{APP.name}</span>
-      <span className={s.barKind}>{APP.kind}</span>
     </div>
   );
 }
@@ -59,7 +66,6 @@ export function SendMark() {
 export function Composer() {
   return (
     <div className={s.composer} aria-hidden>
-      <span className={s.placeholder}>Ask anything</span>
       <SendMark />
     </div>
   );
@@ -80,59 +86,29 @@ function Marked({ text, phrases }: { text: string; phrases: string[] }) {
   return <>{out}</>;
 }
 
-/** One advertiser's agent, as a reader: its name, the question it is reading (the words it cares
- *  about marked), its judgment (round, ultramarine when it fits) and its verdict in words. */
-export function Reader({ index, on, style, innerRef }: { index: number; on?: boolean; style?: CSSProperties; innerRef?: Ref<HTMLDivElement> }) {
-  const a = AGENTS[index]!;
-  const fits = a.verdict === "fits";
-  const phrases = CARES[a.name] ?? [];
-  const reasons = fits ? a.why.split(", ") : [a.why];
+/** The agent that fits, as a reader: its name, the question it is reading (the three phrases its
+ *  judgment rests on marked), a round mark with the word Fits, and its three reasons. Every word is
+ *  on the sheet whenever the sheet is; the film only lights what is already there. */
+export function Reader() {
+  const reasons = FIT.why.split(", ");
   return (
-    <div className={s.reader} data-fit={fits ? "" : undefined} style={{ ...style, ...vars({ "--nh": phrases.length }) }} ref={innerRef}>
-      <div className={s.rdHead}>
-        <span className={s.rdName}>{a.name}</span>
-        <span className={`x-sw ${s.rdSw}`} data-kind="judgment" data-on={on ? "" : undefined} aria-hidden />
-      </div>
+    <div className={s.reader} style={vars({ "--nh": PHRASES.length })}>
+      <p className={s.rdName}>{FIT.name}</p>
       <div className={s.rdQs}>
-        <p className={s.rdQ}><Marked text={QUESTION} phrases={phrases} /></p>
+        <p className={s.rdQ}><Marked text={QUESTION} phrases={PHRASES} /></p>
         <i className={s.beam} aria-hidden />
       </div>
       <div className={s.rdOuts}>
-        <p className={s.rdOut}>
-          <b>{cap(a.verdict)}</b>
+        <p className={s.rdVerdict}>
+          <i className={s.mark} aria-hidden />
+          <b>{cap(FIT.verdict)}</b>
+        </p>
+        <p className={s.rdWhy}>
           {reasons.map((r, k) => (
             <span key={r} className={s.reason} style={vars({ "--k": k })}>{r}</span>
           ))}
         </p>
       </div>
-    </div>
-  );
-}
-
-/** The receipt: it confirms the insertion; on one side an accepted charge, on the other an accrual,
- *  in the story's exact words. Two statements side by side. Never a payment. */
-export function Receipt({ r0 = true, r1 = true }: { r0?: boolean; r1?: boolean }) {
-  return (
-    <div className={s.receipt}>
-      <p className={s.rTitle}>{RECEIPT.title}</p>
-      <p className={s.rConfirms}>{RECEIPT.confirms}</p>
-      <dl className={s.rSides}>
-        <div className={s.rSide}>
-          <dt>{RECEIPT.advertiser.label}</dt>
-          <dd>
-            <i className={s.latch} data-on={r0 ? "" : undefined} aria-hidden />
-            {RECEIPT.advertiser.state}
-          </dd>
-        </div>
-        <div className={s.rSide}>
-          <dt>{RECEIPT.app.label}</dt>
-          <dd>
-            <i className={s.latch} data-on={r1 ? "" : undefined} aria-hidden />
-            {RECEIPT.app.state}
-          </dd>
-        </div>
-      </dl>
-      <p className={s.rLater}>{RECEIPT.later}</p>
     </div>
   );
 }

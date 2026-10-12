@@ -8,17 +8,17 @@
 //   Pay      a two-sided receipt (a charge accepted, earnings accrued) and, straight beneath it, the
 //            charge joining a running total. The total sits on an ink rail between two ink bounds:
 //            a bracket the width of the most a placement may cost, and a wall at the total budget.
-//   Settle   later, the total is closed with a bookkeeper's double rule.
+//   Settle   later, the total is closed with a bookkeeper's double rule (a caption under the rail).
 // The principle is set down the left as a matched pair, each half beside what it describes and
 // carrying its reason: the judgment (soft, ultramarine) beside the reading, the rule (rigid, ink)
 // beside the bounds. Several deliveries follow the first, each one a small block under the bracket, with nobody
 // approving them. Nothing moves toward the app: its side is an accrual, in words. It plays once as
-// it enters view (about four seconds) and rests. Nothing to operate: the only focusable thing is
-// the proof link.
-import type { CSSProperties } from "react";
-import { Ad, Arrow, Fig } from "../kit";
-import { PAY, PROOF } from "../copy";
-import { ADVERTISER, AGENTS, APP, QUESTION, RECEIPT, SHIFT } from "../story";
+// it enters view (about three and a half seconds) and rests. It is a picture with one-word labels:
+// nothing to operate, nothing focusable.
+import { useEffect, useState, type CSSProperties } from "react";
+import { Ad } from "../kit";
+import { PAY } from "../copy";
+import { ADVERTISER, AGENTS, QUESTION, SHIFT } from "../story";
 import { useEntry } from "./useEntry";
 import s from "./rule.module.css";
 
@@ -39,12 +39,7 @@ function Half({ n, kind }: { n: 0 | 1; kind: "soft" | "hard" }) {
   return (
     <div className={s.half} data-kind={kind}>
       <p className={s.say}>{PAY.principle[n]}</p>
-      {why ? (
-        <>
-          <h3 className={s.whyK}>{why.k}</h3>
-          <p className={s.whyLine}>{why.line}</p>
-        </>
-      ) : null}
+      {why && kind === "soft" ? <p className={s.why}>{why.short}</p> : null}
     </div>
   );
 }
@@ -52,25 +47,33 @@ function Half({ n, kind }: { n: 0 | 1; kind: "soft" | "hard" }) {
 function Cap({ step }: { step: { k: string; line: string } | undefined }) {
   if (!step) return null;
   return (
-    <div className={s.cap}>
-      <h3 className={s.k}>{step.k}</h3>
-      <p className={s.line}>{step.line}</p>
-    </div>
+    <h3 className={s.cap}>{step.k}</h3>
   );
 }
 
 export default function Figure() {
-  const [ref, entry] = useEntry<HTMLDivElement>(0.34);
+  const [ref, entry] = useEntry<HTMLDivElement>(0.34, 1800);
+  // On phones the column is long: the receipt and the rail wait for their own arrival, so they do
+  // not finish before they are scrolled to. On laptops everything is one performance.
+  const [railRef, railEntry] = useEntry<HTMLDivElement>(0.7);
+  const [phone, setPhone] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 899px)");
+    const update = () => setPhone(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
   return (
-    <Fig className={s.figure}>
-      <div ref={ref} className={s.board} data-entry={entry}>
+    <figure className={s.figure}>
+      <div ref={ref} className={s.board} data-entry={entry} data-late={phone ? railEntry : entry}>
         <Half n={0} kind="soft" />
         <ol className={s.steps}>
           <li className={s.step} data-k="decide">
             <Cap step={decide} />
             <div className={s.pic}>
               <p className={s.q}>
-                <span className={s.qWash} aria-hidden><span>{QUESTION}</span></span>
+                <span className={s.qWash} aria-hidden><span>{PARTS.map((part, n) => (n % 2 ? <span key={n} className={s.gap}>{part}</span> : part))}</span></span>
                 <span className={s.qText}>
                   {PARTS.map((part, n) => (n % 2 ? <span key={n} className={s.caught}>{part}</span> : part))}
                 </span>
@@ -88,10 +91,9 @@ export default function Figure() {
             <div className={s.pic}>
               <span className={s.thread} data-seg="b" aria-hidden><i className={s.run} /></span>
               <div className={s.chat}>
-                <p className={s.app}>{APP.name}</p>
                 <span className={s.answer} aria-hidden><i /><i /><i /></span>
                 <div className={s.cardBox}>
-                  <Ad name={ADVERTISER.name} text={ADVERTISER.creative} domain={ADVERTISER.domain} size="m" className={s.ad} />
+                  <Ad name={ADVERTISER.name} text={ADVERTISER.creative} size="m" className={s.ad} />
                 </div>
               </div>
             </div>
@@ -100,16 +102,12 @@ export default function Figure() {
           <li className={s.step} data-k="pay">
             <Cap step={pay} />
             <div className={s.pic}>
-              <div className={s.receipt}>
-                <p className={s.rTitle}>{RECEIPT.title}</p>
-                <div className={s.rSides}>
-                  {PAY.sides.map((side, n) => (
-                    <p key={side.who} className={s.rSide} data-side={n ? "app" : "advertiser"}>
-                      <span className={s.rWho}>{side.who}</span>{" "}
-                      <span className={s.rState}><i aria-hidden />{side.state}</span>
-                    </p>
-                  ))}
-                </div>
+              <div ref={railRef} className={s.receipt}>
+                {PAY.sides.map((side, n) => (
+                  <p key={side.who} className={s.rSide} data-side={n ? "app" : "advertiser"}>
+                    <span className={s.rState}><i aria-hidden />{side.state}</span>
+                  </p>
+                ))}
               </div>
             </div>
           </li>
@@ -127,25 +125,18 @@ export default function Figure() {
                     <span className={s.gateLabel}>{ADVERTISER.limits[0]}</span>
                   </span>
                   <i className={s.closed} aria-hidden />
+                  {settle ? <h3 className={`${s.cap} ${s.settle}`}>{settle.k}</h3> : null}
                 </div>
                 <i className={s.wall} aria-hidden />
                 <span className={s.wallLabel}>{ADVERTISER.limits[1]}</span>
               </div>
             </div>
-            <Cap step={settle} />
           </li>
         </ol>
 
         <Half n={1} kind="hard" />
 
-        <p className={`x-cap ${s.limit}`}>{PAY.limit}</p>
-        {PROOF.href ? (
-          <a className={s.proof} href={PROOF.href} target="_blank" rel="noopener noreferrer">
-            <span className={s.proofText}><span>{PROOF.text}</span><Arrow width={20} /></span>{" "}
-            <span className={s.proofLabel}>{PROOF.label}</span>
-          </a>
-        ) : null}
       </div>
-    </Fig>
+    </figure>
   );
 }

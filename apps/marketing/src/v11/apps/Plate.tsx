@@ -10,7 +10,7 @@
 // writes in) > "card" (the card arrives below the answer, is confirmed, the accrual lands; rest).
 import { useCallback, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { Ad, Fig, Split, useInView } from "../kit";
+import { Ad, Split, useInView } from "../kit";
 import { ADVERTISER, ANSWER, APP, APP_RULES, INDEPENDENCE, QUESTION, RECEIPT } from "../story";
 import { APPS } from "../copy";
 import s from "./apps.module.css";
@@ -38,6 +38,9 @@ export default function Plate() {
   const motion = useRef(false);
   const timers = useRef<number[]>([]);
   const enteredRef = useRef(false);
+  const tagRef = useRef<HTMLParagraphElement>(null);
+  const tagSeen = useRef(false);   // the accrual tab is on screen
+  const cardDone = useRef(false);  // the card has arrived and may be confirmed
 
   const cardOn = stage === "card" || stage === "still";
 
@@ -64,7 +67,12 @@ export default function Plate() {
     setEntered(true);
     at(T.write, () => setStage("write"));
     at(T.card, () => setStage("card"));
-    at(T.confirm, () => setConfirmed(true));
+    // On a laptop the accrual is beside the card, so it lands with it. On narrow screens the tab
+    // sits in the notes under the plate: there it lands when the reader reaches it.
+    at(T.confirm, () => {
+      cardDone.current = true;
+      if (tagSeen.current || !window.matchMedia("(max-width: 1179px)").matches) setConfirmed(true);
+    });
   }, []);
 
   // Arm, only when the visitor allows motion. The server render is the whole plate; it is only
@@ -72,7 +80,8 @@ export default function Plate() {
   useEffect(() => {
     motion.current = document.documentElement.dataset.pxMotion === "on";
     if (!motion.current) return;
-    const reset = () => { timers.current.forEach((t) => window.clearTimeout(t)); timers.current = []; enteredRef.current = false; };
+    let io: IntersectionObserver | null = null;
+    const reset = () => { timers.current.forEach((t) => window.clearTimeout(t)); timers.current = []; enteredRef.current = false; cardDone.current = false; tagSeen.current = false; io?.disconnect(); };
     const first = measure();
     if (first.ratio >= 0.2 || first.above) { enteredRef.current = true; setEntered(true); return reset; }
     setConfirmed(false);
@@ -85,6 +94,16 @@ export default function Plate() {
       if (m.ratio < 0.28 && !m.above) return;
       enter(m.above || m.ratio > 0.62);
     };
+    // The accrual tab: seen once most of it is on screen (or it has been passed).
+    if (tagRef.current) {
+      io = new IntersectionObserver(([e]) => {
+        if (!e || !(e.intersectionRatio >= 0.9 || e.boundingClientRect.top < 0)) return;
+        tagSeen.current = true;
+        io?.disconnect();
+        if (cardDone.current) setConfirmed(true);
+      }, { threshold: [0, 0.9], rootMargin: "0px 0px -8% 0px" });
+      io.observe(tagRef.current);
+    }
     window.addEventListener("scroll", check, { passive: true });
     window.addEventListener("resize", check);
     return () => { reset(); window.removeEventListener("scroll", check); window.removeEventListener("resize", check); };
@@ -103,7 +122,7 @@ export default function Plate() {
 
   return (
     <div className={s.figWrap}>
-      <Fig caption={`${APP.name}, a fictional assistant`} className={s.fig}>
+      <figure className={s.fig}>
         <div className={s.stage} data-stage={stage} data-card={cardOn ? "on" : "off"} data-confirmed={confirmed ? "" : undefined} data-instant={instant ? "" : undefined}>
           {/* The sheet itself (its material and depth). The plate's parts are laid over it. */}
           <div ref={ref} className={s.sheet} aria-hidden />
@@ -149,8 +168,8 @@ export default function Plate() {
                 <div className={`${s.note} ${s.noteL} ${s.note3}`}>
                   <p className={s.k}>{rules.k}</p>
                   <p className={s.line}>{rules.line}</p>
-                  {/* A plain statement of the allowed category: an ink mark and words. Not a control. */}
-                  <p className={s.mark}><i aria-hidden><Tick size={13} /></i><b>{APP_RULES.allow}</b><span>Allowed</span></p>
+                  {/* A plain statement of the allowed category: one small ink tick and its name. Not a control. */}
+                  <p className={s.mark}><i aria-hidden><Tick size={13} /></i><b>{APP_RULES.allow}</b></p>
                 </div>
 
                 <i className={`${s.lead} ${s.leadR} ${s.lead2} ${s.dk}`} aria-hidden />
@@ -164,7 +183,7 @@ export default function Plate() {
                   <p className={s.k}>{earn.k}</p>
                   <p className={s.line}>{earn.line}</p>
                   {/* The accrual: an ink tab on the leader's end. Words only, never a figure. */}
-                  <p className={s.tag} aria-hidden={!confirmed}><Tick /><span>{RECEIPT.app.state}</span></p>
+                  <p ref={tagRef} className={s.tag} aria-hidden={!confirmed}><Tick /><span>{RECEIPT.app.state}</span></p>
                 </div>
               </div>
 
@@ -180,7 +199,7 @@ export default function Plate() {
             </div>
           </div>
         </div>
-      </Fig>
+      </figure>
     </div>
   );
 }

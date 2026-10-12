@@ -38,3 +38,11 @@ export const WALL_QUESTIONS: string[] = [
   "Best platform to connect an AI model to internal tools?",
   "Which skincare routine suits dry skin in winter?",
 ];
+
+/** The few Sponsored cards near the reader that carry a readable line: one short generic line of
+ *  ad text per question. No brand names. Every other card on the wall is quiet bars. */
+export const WALL_AD_LINES: Record<string, string> = {
+  "Which bike lock is hardest to cut?": "A bike lock built to resist cutting.",
+  "Best booking software for a small tour operator?": "Booking software for tour operators.",
+  "Do I need a hardware wallet or is a wallet app enough?": "A hardware wallet that keeps keys offline.",
+};

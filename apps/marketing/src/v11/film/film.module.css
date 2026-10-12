@@ -2,7 +2,8 @@
    still sequence uses). Inside .frame the same objects are driven by custom properties that
    timeline.ts writes from scroll progress (transforms and opacity only), and the world they stand
    in is framed by the camera. Sizes inside the world are in em: the plate is 38em wide and
-   everything else is set from that, so the whole world is sized by one font-size. */
+   everything else is set from that, so the whole world is sized by one font-size.
+   Nothing that is meant to be read is drawn below 13.5px at any size. */
 
 .film { padding-top: var(--x-space-s); }
 .head { padding: clamp(22px, 2.6vw, 40px) 0 clamp(36px, 5vw, 80px); }
@@ -14,7 +15,6 @@
 .bar { display: flex; align-items: center; gap: .5em; padding: .85em 1.7em .8em; border-bottom: 1px solid var(--x-hair-soft); }
 .barMark { flex: none; font-size: 1.2em; }
 .barName { font-family: var(--font-display); font-weight: 500; font-size: 1.05em; letter-spacing: -.012em; }
-.barKind { margin-left: auto; font-size: .8em; color: var(--x-quiet); }
 .threads { position: relative; z-index: 2; display: grid; padding: 1.7em 1.7em 1.5em; }
 .thread { grid-area: 1 / 1; align-self: start; display: flex; flex-direction: column; align-items: stretch; gap: 1.5em; min-width: 0; }
 .qWrap { position: relative; z-index: 3; align-self: flex-end; max-width: 87%; }
@@ -22,84 +22,81 @@
 .q { position: relative; isolation: isolate; margin: 0; padding: .4em .58em .46em; font-family: var(--font-display); font-weight: 300; font-size: 2.3em; line-height: 1.07; letter-spacing: -.036em; }
 .q::before { content: ""; position: absolute; z-index: -1; inset: 0; border-radius: .5em .5em .16em .5em; background: var(--x-paper); }
 .a { min-width: 0; }
-.aMark { display: flex; align-items: center; gap: .45em; margin: 0 0 .5em; font-size: .8em; font-weight: 500; letter-spacing: .01em; color: var(--x-quiet); }
+.aMark { display: flex; align-items: center; gap: .45em; margin: 0 0 .5em; font-size: 1em; font-weight: 500; letter-spacing: .01em; color: var(--x-quiet); }
 .aMark svg { font-size: 1.15em; color: var(--x-ink); }
 .aText { margin: 0; font-size: 1.3em; line-height: 1.46; letter-spacing: -.006em; }
 .slot { position: relative; }
-.slotLine { position: absolute; inset: 0; border: 1.5px dashed #b9bac6; border-radius: .7em; }
 /* The kit card, set in step with the conversation's type. */
 .slot .card { gap: .6em; padding: 1.1em 1.3em 1.2em; border-width: 2.5px; border-radius: .7em; }
 .slot .card > div { gap: .7em; }
-.slot .card > div > span:first-child { height: 1.75em; padding: 0 .65em; border-radius: .35em; font-size: .8em; line-height: 1.75em; }
+.slot .card > div > span:first-child { height: 1.75em; padding: 0 .65em; border-radius: .35em; font-size: .9em; line-height: 1.75em; }
 .slot .card > div > span:last-child { font-size: 1.1em; }
 .slot .card > p { font-size: 1.12em; line-height: 1.4; }
 .composer { position: relative; z-index: 1; display: flex; align-items: center; height: 3em; margin: 0 1.5em 1.5em; padding: 0 .5em 0 1.1em; border: 1px solid var(--x-hair); border-radius: .9em; }
-.placeholder { font-size: .95em; color: var(--x-quiet); }
 .send { display: grid; place-items: center; flex: none; width: 2em; height: 2em; margin-left: auto; border-radius: 50%; background: var(--x-ink); color: #fff; }
 .send svg { width: .95em; height: .95em; }
-.tall, .trunk, .beam, .flyShadow { display: none; }
+.tall, .trunk, .beam { display: none; }
 .fly { position: relative; }
 
-/* ---------- A reader: one advertiser's agent ---------- */
+/* ---------- The reader: the agent that fits ---------- */
 .readerSlot { position: relative; }
-.reader { position: relative; display: grid; grid-template-rows: auto 1fr auto; gap: .9em; height: 100%; padding: 1.3em 1.4em 1.35em; border: 1px solid var(--x-hair); border-radius: .9em; background: var(--x-sheet); box-shadow: 0 1px 3px rgba(14, 18, 32, .05), 0 14px 34px -18px rgba(14, 18, 32, .22); color: var(--x-ink); }
-.rdHead { display: flex; align-items: center; justify-content: space-between; gap: 1em; }
-.rdName { font-family: var(--font-display); font-weight: 500; font-size: 1.7em; letter-spacing: -.022em; }
-.rdQs { position: relative; isolation: isolate; display: grid; align-content: start; overflow: hidden; margin: 0 -.3em; padding: .1em .3em; border-radius: .3em; }
-.rdQ { grid-area: 1 / 1; margin: 0; font-size: 1.5em; line-height: 1.32; letter-spacing: -.008em; }
-/* The words a reader's judgment rests on. Soft and ultramarine for a fit; quiet for the rest. */
+.reader { position: relative; display: grid; gap: .9em; padding: 1.4em 1.6em 1.5em; border: 1px solid var(--x-hair); border-radius: .9em; background: var(--x-sheet); box-shadow: 0 1px 3px rgba(14, 18, 32, .05), 0 14px 34px -18px rgba(14, 18, 32, .22); color: var(--x-ink); }
+.rdName { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 1.7em; line-height: 1.1; letter-spacing: -.022em; }
+.rdQs { position: relative; isolation: isolate; overflow: hidden; margin: 0 -.3em; padding: .1em .3em; border-radius: .3em; }
+.rdQ { margin: 0; font-size: 1.5em; line-height: 1.32; letter-spacing: -.008em; }
+/* The words the judgment rests on. */
 .hit { position: relative; white-space: nowrap; }
-.hit::before { content: ""; position: absolute; z-index: -1; inset: .12em -.16em .08em; border-radius: .3em; background: #e4e4ea; transform-origin: 0 50%; }
-.reader[data-fit] .hit::before { background: #d5d9ff; }
-.rdOuts { display: grid; min-height: 6.4em; padding-top: .8em; border-top: 1px solid var(--x-hair-soft); }
-.rdOut { grid-area: 1 / 1; align-self: start; display: flex; flex-wrap: wrap; align-items: center; gap: .3em .4em; margin: 0; }
-.rdOut b { flex-basis: 100%; margin-bottom: .2em; font-size: 1.6em; font-weight: 500; letter-spacing: -.014em; }
-.reader[data-fit] .rdOut b { color: var(--x-blue); }
-.reason { font-size: 1.14em; color: var(--x-quiet); }
-.reader[data-fit] .rdOut .reason { font-size: 1em; }
-.reader[data-fit] .rdOut .reason { padding: .18em .6em .22em; border: 1.5px solid var(--x-blue); border-radius: 999px; color: var(--x-blue-deep); }
-
-/* ---------- The receipt: square, ink, a rule. Two statements side by side. ---------- */
-.receipt { padding: 1.5em 1.5em 1.35em; border: 1px solid var(--x-ink); border-radius: .2em; background: var(--x-sheet); color: var(--x-ink); }
-.rTitle { margin: 0 0 .35em; font-family: var(--font-display); font-weight: 500; font-size: 2.6em; letter-spacing: -.028em; line-height: 1.05; }
-.rConfirms { margin: 0 0 1em; font-size: 1.55em; line-height: 1.38; }
-.rSides { display: grid; grid-template-columns: 1fr; margin: 0; border-top: 1px dashed var(--x-quiet); border-bottom: 1px dashed var(--x-quiet); }
-.rSide { padding: 1.05em 0 1.15em; }
-.rSide + .rSide { border-top: 1px dashed var(--x-quiet); }
-.rSide dt { margin: 0 0 .75em; font-size: .86em; font-weight: 500; line-height: 1; letter-spacing: .05em; text-transform: uppercase; color: var(--x-quiet); }
-.rSide dd { display: flex; align-items: center; gap: .5em; margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 1.62em; letter-spacing: -.02em; line-height: 1.1; white-space: nowrap; }
-.latch { flex: none; width: .68em; height: .68em; border: 1.5px solid var(--x-quiet); border-radius: 2px; transition: background 80ms linear, border-color 80ms linear; }
-.latch[data-on] { border-color: var(--x-ink); background: var(--x-ink); }
-.rLater { margin: 1em 0 0; font-size: 1em; line-height: 1.4; color: var(--x-quiet); }
+.hit::before { content: ""; position: absolute; z-index: -1; inset: .12em -.16em .08em; border-radius: .3em; background: #d5d9ff; transform-origin: 0 50%; }
+.rdOuts { display: grid; gap: .7em; padding-top: .9em; border-top: 1px solid var(--x-hair-soft); }
+/* The verdict: a round mark and a word. A mark, not a control: nothing here is switch shaped. */
+.rdVerdict { display: flex; align-items: center; gap: .42em; margin: 0; font-size: 1.5em; line-height: 1.1; letter-spacing: -.014em; color: var(--x-blue); }
+.rdVerdict b { font-weight: 500; }
+.mark { position: relative; flex: none; width: .56em; height: .56em; border-radius: 50%; background: var(--x-blue); }
+.rdWhy { display: flex; flex-wrap: wrap; gap: .4em .4em; margin: 0; }
+.reason { padding: .18em .6em .22em; border: 1.5px solid var(--x-blue); border-radius: 999px; font-size: .9em; line-height: 1.25; white-space: nowrap; color: var(--x-blue-deep); }
+/* The others: one muted line each. */
+.others { display: grid; row-gap: .5em; margin: 1.1em 0 0; padding: 0 0 0 .15em; list-style: none; font-size: 1.15em; line-height: 1.2; color: var(--x-quiet); }
+.others li { display: flex; align-items: baseline; gap: .7em; }
+.others b { min-width: 6.2em; font-weight: 500; }
+/* The receipt is Receipt.tsx; here it only gets its size. */
+.rc { font-size: 1.3em; }
 
 /* ---------- The pinned film ---------- */
-.frame { position: relative; height: 100%; padding: 88px 0 16px; }
+.frame { position: relative; height: 100%; padding: 84px 0 16px; }
 .frame[data-measure] * { transform: none !important; }
-.inner { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; row-gap: clamp(12px, 2.2vh, 24px); height: 100%; }
+.inner { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; row-gap: clamp(10px, 1.9vh, 20px); height: 100%; }
 
-/* The caption: one headline per beat, changing by word. */
-.caps { display: grid; height: 1.04em; margin: 0; padding: 0; list-style: none; font-size: clamp(30px, 3.9vw, 68px); }
+/* The chapter's mark, repeated quietly while the stage is pinned. */
+.railMark { margin: 0; font-size: 13.5px; font-weight: 500; line-height: 1; letter-spacing: .04em; text-transform: uppercase; font-variant-numeric: tabular-nums; color: var(--x-quiet); }
+.railMark b { margin-right: 10px; font-weight: 700; }
+/* It comes in as the film starts: until then the chapter's own mark is still on screen above. */
+.frame .railMark { opacity: var(--xh); }
+
+/* The caption: one headline per beat, changing by word. The title (the movement's heading, at the
+   same size it has in normal flow) holds its place until the film starts. */
+.caps { display: grid; align-items: end; height: 1.04em; margin: 0; padding: 0; list-style: none; font-size: clamp(30px, 3.9vw, 68px); }
 .cap { grid-area: 1 / 1; }
 .capLine { display: block; font-family: var(--font-display); font-weight: 300; line-height: 1; letter-spacing: -.042em; white-space: nowrap; }
+.capTitle { display: block; white-space: nowrap; }
 .frame .capTitle :global(.x-w) { opacity: calc(1 - var(--xh)); transform: translate3d(0, calc(var(--xh) * -.28em), 0); }
-.frame .capLine:not(.capTitle) :global(.x-w) { --t: clamp(0, calc(var(--e) * (var(--n) * .3 + 1) - var(--i) * .3), 1); opacity: calc(var(--t) * (1 - var(--x))); transform: translate3d(0, calc((1 - var(--t)) * .5em - var(--x) * .28em), 0); }
+.frame .capLine :global(.x-w) { --t: clamp(0, calc(var(--e) * (var(--n) * .3 + 1) - var(--i) * .3), 1); opacity: calc(var(--t) * (1 - var(--x))); transform: translate3d(0, calc((1 - var(--t)) * .5em - var(--x) * .28em), 0); }
 
 /* The screen: a framed stage. Inside it, one world; the camera moves, the frame stays. */
 .screen { position: relative; overflow: hidden; border: 1px solid var(--x-hair); border-radius: var(--x-r-l); background: var(--paper-2); font-size: calc(min(100vw - 2 * var(--x-gutter), var(--x-max)) * .9 / 38); }
-.world { position: absolute; left: 0; top: 0; width: 104em; transform-origin: 0 0; }
+.world { position: absolute; left: 0; top: 0; width: 72em; transform-origin: 0 0; }
 .plate { position: absolute; left: 0; top: 0; z-index: 1; width: 38em; }
-.readers { position: absolute; left: 41.5em; top: var(--rd-top, 10em); z-index: 2; width: 62em; }
-.row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 1em; }
+/* On either side of the conversation, never in it: on the right the agent's sheet, as tall as the
+   question and the answer; on the left, beside the answer and its card, the receipt's place. */
+.readers { position: absolute; left: 41.5em; top: 0; z-index: 2; width: 31em; }
+.readerSlot { font-size: 1.5em; }
+.rz { position: absolute; left: -71em; top: var(--rz-top, 15em); width: 26em; }
 
 /* The strip: five steps that fill as the film plays. A progress mark, not a control. */
-.strip { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--x-col-gap); align-items: start; }
-.steps { grid-column: 1 / span 10; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: var(--x-col-gap); }
-.step { position: relative; display: flex; align-items: baseline; gap: 9px; padding: 12px 0 4px; font-size: 13px; font-weight: 500; line-height: 1; letter-spacing: .04em; text-transform: uppercase; color: var(--x-quiet); transition: color var(--x-d1) var(--x-ease); }
+.steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: var(--x-col-gap); }
+.step { position: relative; display: flex; align-items: baseline; gap: 9px; padding: 12px 0 4px; font-size: 13.5px; font-weight: 500; line-height: 1; letter-spacing: .04em; text-transform: uppercase; color: var(--x-quiet); transition: color var(--x-d1) var(--x-ease); }
 .step::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 1px; background: var(--x-hair); }
 .step > i { position: absolute; inset: -.5px 0 auto 0; height: 2px; background: var(--x-ink); transform-origin: 0 50%; transform: scaleX(var(--s)); }
-.step b { font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0; }
 .step[data-now] { color: var(--x-ink); }
-.note { grid-column: 11 / span 2; margin: 0; padding-top: 12px; border-top: 1px solid var(--x-hair); font-size: 13px; line-height: 1; text-align: right; color: var(--x-quiet); }
 
 /* 1. Asked: the question is typed in the box, large; sent, it takes its place in the conversation. */
 .frame .tall { display: block; position: absolute; z-index: 0; left: 1.1em; right: 1.1em; top: 1.2em; height: calc(var(--q-h) + 1em); border: 1px solid var(--x-ink); border-radius: .9em; background: var(--x-sheet); opacity: var(--tall); }
@@ -109,115 +106,95 @@
 .frame [data-q="1"] :global(.x-w) { opacity: clamp(0, calc((var(--ty) * (var(--n) + 1) - var(--i)) * 2), 1); }
 
 /* 2. Answered: the answer writes itself, word by word. Its layout never changes afterwards. */
-.frame [data-t="1"] .aMark { opacity: var(--al); }
-.frame [data-t="1"] .aText :global(.x-w) { opacity: clamp(0, calc((var(--an) * (var(--n) + 3) - var(--i)) / 3), 1); }
+.frame .aMark { opacity: var(--al); }
+.frame .aText :global(.x-w) { opacity: clamp(0, calc((var(--an) * (var(--n) + 3) - var(--i)) / 3), 1); }
 
-/* 3. Judged: a line leaves the question; three readers; a pass of light; the words that matter. */
-.frame .trunk { display: block; position: absolute; left: -3.5em; top: -1.4em; width: 55.5em; height: 1px; background: var(--x-ink); transform-origin: 0 50%; transform: scaleX(var(--wr)); }
-.frame .readerSlot { opacity: calc(var(--g) * var(--o)); transform: translate3d(0, calc((1 - var(--g)) * 1.2em), 0); }
-.frame .readerSlot::before { content: ""; position: absolute; left: 50%; top: -1.4em; width: 1px; height: 1.4em; background: var(--x-ink); transform-origin: 50% 0; transform: scaleY(var(--g)); }
+/* 3. Judged: a line leaves the question; the agent's sheet arrives whole, with every word on it.
+   A pass of light crosses the question; the three phrases light one at a time and each reason
+   comes up to full strength with its phrase; the mark fills and the word Fits appears. */
+.frame .trunk { display: block; position: absolute; left: -3.5em; top: var(--qy, 8em); width: 3.5em; height: 1px; background: var(--x-ink); transform-origin: 0 50%; transform: scaleX(var(--wr)); }
+.frame .readerSlot { opacity: var(--g); transform: translate3d(0, calc((1 - var(--g)) * 1.2em), 0); }
 .frame .beam { display: block; position: absolute; top: 0; bottom: 0; left: 0; width: 36%; background: linear-gradient(90deg, rgba(43, 59, 255, 0), rgba(43, 59, 255, .16) 50%, rgba(43, 59, 255, 0)); opacity: var(--bo); transform: translate3d(calc(-100% + var(--rd) * 380%), 0, 0); pointer-events: none; }
 .frame .hit::before { transform: scaleX(clamp(0, calc(var(--h) * var(--nh) - var(--k)), 1)); }
-.frame .rdOut b, .frame .rdOut .reason { opacity: var(--v); }
-.frame .reader[data-fit] .rdOut .reason { opacity: clamp(0, calc(var(--h) * var(--nh) - var(--k)), 1); }
+.frame .reason { opacity: calc(.34 + .66 * clamp(0, calc(var(--h) * var(--nh) - var(--k)), 1)); }
+.frame .mark { background: none; box-shadow: inset 0 0 0 1.5px #a9aab8; }
+.frame .mark::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--x-blue); opacity: var(--v); transform: scale(calc(.5 + .5 * var(--v))); }
+.frame .rdVerdict b { opacity: var(--v); }
+.frame .others { opacity: var(--ot); }
 
-/* 4. Placed: the card comes out from under the reader that fits, crosses the gap, and lands in the
-   slot below the answer. The slot is its own box in the column: the answer above it is never
-   moved or reflowed. */
-.frame [data-t="1"] .slotLine { opacity: var(--so); }
-.frame [data-t="1"] .slotLine::after { content: ""; position: absolute; inset: -3px; border: 2.5px solid var(--x-blue); border-radius: .78em; opacity: var(--sg); }
-.frame .fly { z-index: 5; opacity: var(--co); transform: translate3d(calc(var(--card-x) * (1 - var(--fx))), calc((var(--card-y0) + (var(--card-y1) - var(--card-y0)) * var(--emg)) * (1 - var(--fx))), 0) scale(var(--fk)); }
-/* While it travels the card carries a soft shadow; it sets the shadow down when it lands. */
-.frame .flyShadow { display: block; position: absolute; inset: 0; border-radius: .7em; box-shadow: 0 10px 26px -12px rgba(14, 18, 32, .34); opacity: var(--lift); }
+/* 4. Placed: once the camera has settled, the card comes up into its own place below the answer,
+   at its own size. The slot is its own box in the column: the answer above it is never moved or
+   reflowed, and the card never passes over it. */
+.frame .fly { opacity: var(--co); transform: translate3d(0, calc((1 - var(--cr)) * 1.1em), 0); }
 
-/* 5. Recorded: the receipt comes down out of its slot, below the reader that fits, beside the card. */
-.rz { position: absolute; left: 0; top: calc(var(--rz-top, 30em) - var(--rd-top, 10em)); display: grid; width: 20.33em; }
-.rPrint { grid-area: 1 / 1; }
-.printSlot { position: relative; z-index: 1; display: block; height: .24em; margin: 0 -.5em; border-radius: .2em; background: var(--x-ink); transform: scaleX(var(--ps)); }
-.rClip { overflow: hidden; padding: 0 0 .3em; }
-.frame .receipt { border-top: 0; border-radius: 0 0 .2em .2em; transform: translate3d(0, calc((var(--rc) - 1) * 102%), 0); }
-.frame .rLater { opacity: var(--lt); }
+/* 5. Recorded: once the camera has settled, the receipt comes up into the place kept clear for it,
+   whole and at its own size, the same way the card did. Beside the answer and its card, it stands
+   as tall as they do. */
+.frame .rz { opacity: var(--ro); transform: translate3d(0, calc((1 - var(--rc)) * 1.1em), 0); }
+.frame .rc { min-height: var(--rz-h, 0px); }
 
 /* Narrow frames: the same film and the same camera in a tall screen. The plate is laid out a
    little narrower than the screen, so every framing is drawn at its laid-out size (scale 1): the
    sizes below are the sizes read. On a 390 wide phone one em is about 8.6px, so nothing that is
-   meant to be read is set below 1.56em (13.4px), and the readers and the receipt are set well
-   above that, since the tall screen has the room. The two readers that sit out are short sheets
-   (a name, a verdict, one reason); only the reader that fits holds the question. */
+   meant to be read is set below 1.6em (13.8px), and the agent and the receipt are set well above
+   that, since the tall screen has the room. */
 @media (max-width: 999px) {
-  .frame { padding: 74px 0 12px; }
-  .inner { row-gap: clamp(10px, 1.6vh, 16px); }
+  .frame { padding: 72px 0 12px; }
+  .inner { row-gap: clamp(9px, 1.4vh, 14px); }
   .caps { height: 2.06em; font-size: clamp(25px, min(7.2vw, 3.6vh), 44px); }
   .capLine { line-height: 1.02; white-space: normal; text-wrap: balance; }
+  .capTitle { white-space: normal; }
   .screen { font-size: calc(min(100vw - 2 * var(--x-gutter), 520px) * .945 / 38); }
   .world { width: 82em; }
-  .readers { left: 43em; top: 0; width: 38em; }
-  .row { grid-template-columns: minmax(0, 1fr); row-gap: 1.5em; }
-  .readerSlot[data-fit] { order: 3; }
-  .rz { position: static; width: auto; margin-top: 1.5em; }
-  .frame .trunk { left: -1.75em; top: var(--tr-top); width: 1px; height: var(--tr-h); transform-origin: 50% 0; transform: scaleY(var(--wr)); }
-  .frame .readerSlot { transform: translate3d(calc((1 - var(--g)) * 1.5em), 0, 0); }
-  .frame .readerSlot::before { left: -1.75em; top: 50%; width: 1.75em; height: 1px; transform-origin: 0 50%; transform: scaleX(var(--g)); }
+  /* One column: the agent's sheet stands above the conversation and the receipt below it, so the
+     camera only ever travels up and down, the way a phone's own screen does. */
+  .world { width: 38em; }
+  .readers { left: 0; top: 0; width: 38em; }
+  .col { position: absolute; left: 0; right: 0; bottom: 3em; }
+  .readerSlot { font-size: 1.14em; }
+  .frame .trunk { display: none; }
+  .rz { left: 0; width: 100%; }
+  .frame .rc { min-height: 0; }
+  .frame .readerSlot { transform: translate3d(0, calc((1 - var(--g)) * 1.5em), 0); }
 
-  .steps { grid-column: 1 / -1; column-gap: 5px; }
-  .step { gap: 0; padding: 9px 0 2px; font-size: 13px; letter-spacing: -.01em; text-transform: none; }
-  .step b { display: none; }
-  .note { grid-column: 1 / -1; padding: 4px 0 0; border: 0; font-size: 13px; }
+  .steps { column-gap: 5px; }
+  .step { gap: 0; padding: 9px 0 2px; font-size: 13.5px; letter-spacing: -.012em; text-transform: none; }
   .bar { padding: 1.2em 1.9em 1.1em; }
   .barMark { font-size: 1.9em; }
   .barName { font-size: 1.8em; }
-  .barKind { font-size: 1.56em; }
   .threads { padding: 2em 1.9em 1.8em; }
   .thread { gap: 2em; }
   .qWrap { max-width: 92%; }
   .q { font-size: 2.95em; }
-  .aMark { font-size: 1.56em; }
+  .aMark { font-size: 1.6em; }
   .aText { font-size: 1.95em; line-height: 1.44; }
   .slot .card { padding: 1.6em 1.8em 1.7em; }
-  .slot .card > div > span:first-child { font-size: 1.56em; }
+  .slot .card > div > span:first-child { font-size: 1.6em; }
   .slot .card > div > span:last-child { font-size: 1.9em; }
   .slot .card > p { font-size: 1.8em; }
   .composer { height: 4.6em; margin: 0 1.9em 1.9em; padding: 0 .8em 0 1.5em; }
-  .placeholder { font-size: 1.6em; }
   .send { width: 2.9em; height: 2.9em; }
   .send svg { width: 1.3em; height: 1.3em; }
-  .reader { gap: 1em; padding: 1.6em 1.9em 1.7em; }
-  .rdName { font-size: 2.4em; }
-  .rdQ { font-size: 2.1em; line-height: 1.34; }
-  .readerSlot:not([data-fit]) .rdQs { display: none; }
-  .readerSlot:not([data-fit]) .reader { grid-template-rows: auto auto; gap: .9em; }
-  .rdOuts { min-height: 0; padding-top: 1em; }
-  .rdSw { transform: scale(.86); }
-  .rdOut { gap: .5em .6em; align-items: baseline; }
-  .rdOut b { flex-basis: auto; margin: 0 .2em 0 0; font-size: 2.1em; }
-  .reader[data-fit] .rdOut b { flex-basis: 100%; margin: 0; }
-  .reason { font-size: 1.8em; }
-  .reader[data-fit] .rdOut .reason { font-size: 1.7em; }
-  .receipt { padding: 1.9em 1.9em 1.7em; }
-  .rTitle { font-size: 3.3em; }
-  .rConfirms { font-size: 2.15em; }
-  .rSide { padding: 1.5em 0 1.6em; }
-  .rSide dt { margin-bottom: .7em; font-size: 1.56em; letter-spacing: .04em; }
-  .rSide dd { font-size: 2.2em; }
-  .rLater { font-size: 1.7em; }
+  .reader { gap: 1.2em; padding: 1.9em 1.9em 2em; }
+  .rdName { font-size: 2.6em; }
+  .rdQ { font-size: 2.3em; line-height: 1.34; }
+  .rdOuts { gap: 1em; padding-top: 1.2em; }
+  .rdVerdict { font-size: 2.3em; }
+  .reason { font-size: 1.7em; }
+  .others { margin-top: 1.4em; font-size: 1.75em; }
+  .rc { font-size: 1.7em; }
 }
 
 /* ---------- Motion off: five composed stills in normal flow ---------- */
-.capK { display: flex; align-items: baseline; gap: 10px; margin: 0 0 clamp(12px, 1.5vw, 22px); font-size: 13.5px; font-weight: 500; line-height: 1; letter-spacing: .04em; text-transform: uppercase; }
-.capK b { font-family: var(--font-body); font-weight: 700; font-size: 15px; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.capK { margin: 0 0 clamp(12px, 1.5vw, 22px); font-size: 13.5px; font-weight: 500; line-height: 1; letter-spacing: .04em; text-transform: uppercase; }
 .stillList { margin: 0; padding: 0; list-style: none; }
 .still { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--x-col-gap); align-items: start; padding: clamp(30px, 4.2vw, 64px) 0; border-top: 1px solid var(--x-hair); }
 .stillCap { grid-column: 1 / span 5; }
 .stillLine { margin: 0; max-width: 11em; font-family: var(--font-display); font-weight: 300; font-size: clamp(30px, 3.6vw, 60px); line-height: 1; letter-spacing: -.04em; text-wrap: balance; }
 .stillPlate { grid-column: 6 / span 7; font-size: calc(min(100vw - 2 * var(--x-gutter), var(--x-max)) * .56 / 38); }
-.stillReaders { display: grid; row-gap: 1em; width: min(100%, 22em); }
-.stillRow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: .8em; font-size: .7em; }
-.stills .reader[data-fit] .rdOut .reason { font-size: 1.14em; }
-.rdSw { flex: none; transform: scale(1.3); transform-origin: 100% 50%; }
+.stillSide { width: min(100%, 26em); }
 @media (max-width: 999px) {
   .stillCap, .stillPlate { grid-column: 1 / -1; }
   .stillPlate { margin-top: 22px; font-size: calc(min(100vw - 2 * var(--x-gutter), 520px) / 38); }
-  .stillReaders { width: min(100%, 38em); }
-  .stillRow { grid-template-columns: minmax(0, 1fr); row-gap: 1.4em; font-size: 1em; }
-  .stills .reader[data-fit] .rdOut .reason { font-size: 1.7em; }
+  .stillSide { width: 100%; }
 }

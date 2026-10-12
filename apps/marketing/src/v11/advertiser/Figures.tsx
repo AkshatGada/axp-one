@@ -1,8 +1,8 @@
 // The four small figures. Server-rendered and complete as written: the entry performance is CSS
-// only (advertiser.module.css), armed by the part's [data-seen]. Nothing here can be pressed.
+// only (advertiser.module.css), armed by the part's [data-entry]. Nothing here can be pressed.
 import type { CSSProperties } from "react";
 import { Ad } from "../kit";
-import { ADVERTISER, MOMENTS } from "../story";
+import { ADVERTISER, AGENTS } from "../story";
 import c from "./advertiser.module.css";
 
 /** Describe: the offer as written, and the listed things settling out of it. */
@@ -33,24 +33,34 @@ export function Approve() {
   );
 }
 
-/** Limit: two named ink bounds. Something soft meets each and does not pass. */
+/** Limit: the page's figure for money, small. Deliveries add up along an ink baseline; an ink
+ *  bracket over the newest is the most one placement may cost; an ink wall is the total budget,
+ *  and the row stops short of it. Two ink bars mark the pause. A mark, not a control. */
+const ROW = [8, 5, 9.5, 6.5, 9, 5];
 export function Limit() {
   const [each, total] = ADVERTISER.limits;
   return (
     <div className={c.limit}>
-      <p className={c.bound}>{each}</p>
-      <div className={c.room} aria-hidden>
-        <i className={c.rise} />
-        <i className={c.reach} />
+      <div className={c.track}>
+        <div className={c.row} aria-hidden>
+          {ROW.map((w, i) => (
+            <i key={i} className={c.block} style={{ "--w": w, "--t": i } as CSSProperties} />
+          ))}
+          <i className={c.block} data-new style={{ "--t": ROW.length } as CSSProperties} />
+          <i className={c.gate} />
+          <span className={c.pause}><i /><i /></span>
+        </div>
+        <span className={c.gateLabel}>{each}</span>
+        <i className={c.wall} aria-hidden />
+        <span className={c.wallLabel}>{total}</span>
       </div>
-      <p className={c.bound} data-side>{total}</p>
     </div>
   );
 }
 
-/** See why: one placement (a card below an answer) and its reason. */
+/** See why: one placement (a card below an answer), its outcome and its reasons, in the film's words. */
 export function See() {
-  const m = MOMENTS.find((x) => x.outcome === "appears");
+  const a = AGENTS[0];
   return (
     <div className={c.see}>
       <div className={c.thumb} aria-hidden>
@@ -61,8 +71,8 @@ export function See() {
         <span className={c.mini}><i /><i /></span>
       </div>
       <div className={c.reason}>
-        <p className={c.out}>Appears</p>
-        <p className={c.why}>{m?.why}</p>
+        <p className={c.out}>Fits</p>
+        <p className={c.why}>{a?.why}</p>
       </div>
     </div>
   );

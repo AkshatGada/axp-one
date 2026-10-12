@@ -54,7 +54,7 @@ export default function Wall() {
             {Array.from({ length: PER }, (_, r) =>
               c === LIT[0] && r === LIT[1] ? (
                 <Tile key={r} className={s.lit} question={QUESTION}>
-                  <Ad size="s" name={ADVERTISER.name} text={keep(ADVERTISER.creative)} className={s.litAd} />
+                  <Ad size="m" name={ADVERTISER.name} text={keep(ADVERTISER.creative)} className={s.litAd} />
                 </Tile>
               ) : (
                 <div key={r} className={s.dimWrap}>

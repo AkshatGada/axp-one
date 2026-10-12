@@ -1,6 +1,6 @@
 /* 00 Cover: the wall. One screen. Paper, ink and one ultramarine. Everything that moves, moves by
-   transform or opacity. With motion off the same rules draw the composed still: the wall at rest, with the cards
-   it holds at first paint. */
+   transform or opacity. With motion off the same rules draw the composed still: the wall at rest, every card in
+   place. */
 
 .cover {
   /* The fixed masthead sits over the top of the cover. */
@@ -48,13 +48,14 @@
 @keyframes camIn { from { transform: translate3d(0, 26px, -110px); } to { transform: translate3d(0, 0, 0); } }
 
 /* A conversation: a question, and the answer as quiet lines, on a sheet with a hard edge and a
-   soft cast shadow so the wall has thickness. Some conversations receive a Sponsored card, which
-   sits below the answer as its own small sheet. */
-.tile { position: relative; margin-bottom: 22px; transform-style: preserve-3d; }
-.sheet {
+   soft cast shadow so the wall has thickness. Some conversations carry a Sponsored card, inside
+   the same sheet, below the answer. */
+.tile {
+  position: relative;
   display: grid;
   gap: 12px;
-  padding: 15px 15px 17px;
+  margin-bottom: 22px;
+  padding: 15px 15px 16px;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: linear-gradient(180deg, #fffefb, var(--white));
@@ -64,86 +65,57 @@
 .ans { display: grid; gap: 7px; padding: 2px 8px 0 0; }
 .ans i { display: block; width: var(--w, 80%); height: 7px; border-radius: 4px; background: var(--paper-2); }
 
-.slot { position: relative; height: 58px; margin-top: 8px; transform-style: preserve-3d; }
+/* The Sponsored card: part of the same tile, attached below the answer. A small tag and quiet
+   bars; on the few near the reader, a readable tag and one line of ad text. It keeps its place in the tile whether or not it is showing. */
 .ad {
-  position: absolute;
-  inset: 0;
   display: grid;
-  align-content: center;
-  gap: 7px;
-  padding: 0 13px;
+  gap: 6px;
+  margin-top: 2px;
+  padding: 10px 12px 11px;
   border: 1.5px solid var(--x-blue);
-  border-radius: 12px;
+  border-radius: 11px;
   background: var(--x-sheet);
-  box-shadow: 5px 5px 0 var(--x-blue-wash);
   opacity: 0;
 }
 .adTag { justify-self: start; height: 17px; padding: 0 6px; border-radius: 4px; background: var(--x-blue); color: #fff; font-size: 10px; font-weight: 500; line-height: 17px; letter-spacing: .03em; }
-.adLine, .adLine2 { display: block; height: 6px; border-radius: 3px; }
-.adLine { width: 72%; background: color-mix(in oklab, var(--x-ink) 62%, transparent); }
-.adLine2 { width: 48%; background: var(--silver); }
+.ad[data-line] .adTag { height: 20px; padding: 0 7px; font-size: 12px; line-height: 20px; letter-spacing: .02em; }
+.adBar { display: block; height: 6px; border-radius: 3px; width: 70%; background: color-mix(in oklab, var(--x-ink) 56%, transparent); }
+.adBar + .adBar { width: 46%; background: var(--silver); }
+.adText { margin: 0; font-size: 12.5px; line-height: 1.36; color: var(--x-ink); text-wrap: pretty; }
 .tile[data-on] .ad { opacity: 1; }
+/* With motion off no card is ever waiting: every one is in place. */
+:global(html:not([data-px-motion="on"])) .ad { opacity: 1; }
 
-/* The small tick that confirms a placement: an ink disc with a white check. No words. */
-.tick { position: absolute; border-radius: 50%; background: var(--x-ink); opacity: 0; }
-.tick { right: -7px; top: -8px; width: 18px; height: 18px; transform: translateZ(1px); }
-.tick::after { content: ""; position: absolute; left: 50%; top: 46%; width: 28%; height: 52%; border: solid #fff; border-width: 0 1.5px 1.5px 0; transform: translate(-50%, -50%) rotate(42deg); }
-
-/* Bid lines: thin ultramarine lines run in the gutters beside the tile (never over anyone's
-   words) and meet at the card's place. */
-.pulse { position: absolute; width: 2px; height: 110px; border-radius: 2px; opacity: 0; pointer-events: none; }
-.pl { left: -12px; bottom: 50%; background: linear-gradient(180deg, transparent, var(--x-blue) 85%); }
-.pr { right: -12px; top: 50%; background: linear-gradient(0deg, transparent, var(--x-blue) 85%); }
-
-/* A placement clears: the lines arrive, the card settles in, the tick confirms; much later the
-   conversation moves on. */
-.tile[data-run] .pl { animation: pulseL 1150ms cubic-bezier(.55, 0, .25, 1) both; }
-.tile[data-run] .pr { animation: pulseR 1150ms cubic-bezier(.55, 0, .25, 1) 160ms both; }
-.tile[data-run] .ad { animation: adFill 11s var(--x-out) both; }
-.tile[data-run] .tick { animation: tickIn 11s var(--x-out) both; }
-@keyframes pulseL {
-  0% { opacity: 0; transform: translate3d(0, -230px, 0); }
-  16% { opacity: .9; }
-  80% { opacity: .9; transform: translate3d(0, 0, 0); }
-  100% { opacity: 0; transform: translate3d(0, 0, 0); }
-}
-@keyframes pulseR {
-  0% { opacity: 0; transform: translate3d(0, 230px, 0); }
-  16% { opacity: .9; }
-  80% { opacity: .9; transform: translate3d(0, 0, 0); }
-  100% { opacity: 0; transform: translate3d(0, 0, 0); }
-}
+/* A placement: the card settles in below the answer, stays a good while, and later the
+   conversation moves on. Nothing else moves. */
+.tile[data-run] .ad { animation: adFill 17s var(--x-out) both; }
 @keyframes adFill {
-  0%, 10% { opacity: 0; transform: translate3d(0, 6px, 0) scale(.95); }
-  16% { opacity: 1; transform: none; }
-  90% { opacity: 1; transform: none; }
+  0% { opacity: 0; transform: translate3d(0, 8px, 0) scale(.96); }
+  5% { opacity: 1; transform: none; }
+  93% { opacity: 1; transform: none; }
   100% { opacity: 0; transform: none; }
-}
-@keyframes tickIn {
-  0%, 16% { opacity: 0; transform: translateZ(1px) scale(.6); }
-  19% { opacity: 1; transform: translateZ(1px) scale(1); }
-  36% { opacity: 1; transform: translateZ(1px) scale(1); }
-  42%, 100% { opacity: 0; transform: translateZ(1px) scale(1); }
 }
 
 /* Paper fog: the far edges fade into the paper, the top clears for the masthead, and the bottom is
-   clean paper for the headline and the foot. */
+   clean paper for the headline and the hand-off to the next movement. */
 .fog {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
   background:
-    linear-gradient(180deg, color-mix(in oklab, var(--x-paper) 86%, transparent) 0%, color-mix(in oklab, var(--x-paper) 40%, transparent) 8%, transparent 17%, transparent 74%, color-mix(in oklab, var(--x-paper) 62%, transparent) 86%, var(--x-paper) 93%),
+    linear-gradient(180deg, color-mix(in oklab, var(--x-paper) 96%, transparent) 0%, color-mix(in oklab, var(--x-paper) 90%, transparent) 5%, color-mix(in oklab, var(--x-paper) 62%, transparent) 9%, transparent 19%, transparent 74%, color-mix(in oklab, var(--x-paper) 62%, transparent) 86%, var(--x-paper) 93%),
     linear-gradient(90deg, color-mix(in oklab, var(--x-paper) 38%, transparent) 0%, transparent 12%, transparent 92%, color-mix(in oklab, var(--x-paper) 36%, transparent) 100%),
     radial-gradient(78% 84% at 8% 88%, var(--x-paper) 0%, var(--x-paper) 56%, color-mix(in oklab, var(--x-paper) 88%, transparent) 64%, color-mix(in oklab, var(--x-paper) 46%, transparent) 73%, transparent 86%);
 }
 
 /* ---------- the copy ---------- */
-.copy { position: relative; z-index: 3; padding-bottom: clamp(22px, 3.8vh, 44px); pointer-events: none; }
+.copy { position: relative; z-index: 3; padding-bottom: clamp(40px, 7.4vh, 76px); pointer-events: none; }
 .copyIn { position: relative; isolation: isolate; display: grid; justify-items: start; gap: clamp(16px, 2.5vh, 28px); width: fit-content; max-width: 100%; pointer-events: auto; }
 /* A paper field exactly behind the copy, whatever its size, so no tile shows through the words. */
-.copyIn::before { content: ""; position: absolute; z-index: -1; inset: -22px -40px -40px -140px; border-radius: 60px; background: var(--x-paper); box-shadow: 0 0 56px 44px var(--x-paper); pointer-events: none; }
+.copyIn::before { content: ""; position: absolute; z-index: -1; inset: -58px -84px -40px -140px; border-radius: 60px; background: var(--x-paper); box-shadow: 0 0 56px 44px var(--x-paper); pointer-events: none; }
+/* On short laptops the wall comes close to the headline: widen the clear zone up and to the right. */
+@media (min-width: 900px) and (max-height: 820px) { .copyIn::before { inset: -78px -110px -40px -140px; box-shadow: 0 0 60px 50px var(--x-paper); } }
 .cover .h1 { max-width: 13.5ch; font-size: clamp(44px, min(5.9vw, 10.4vh), 112px); line-height: .94; }
 .cover .deck { max-width: 38ch; font-size: clamp(18px, 1.5vw, 24px); line-height: 1.34; }
 .actions { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 30px; margin-top: 2px; }
@@ -151,17 +123,12 @@
 :global(html[data-px-motion="on"]) .h1 { animation: headRise 900ms var(--x-out) both; }
 :global(html[data-px-motion="on"]) .deck { animation: softIn 820ms var(--x-out) 260ms both; }
 :global(html[data-px-motion="on"]) .actions { animation: softIn 820ms var(--x-out) 380ms both; }
-:global(html[data-px-motion="on"]) .foot { animation: fadeIn 900ms linear 900ms both; }
 @keyframes headRise { from { transform: translate3d(0, 16px, 0); } }
 @keyframes softIn { from { opacity: 0; transform: translate3d(0, 12px, 0); } }
-@keyframes fadeIn { from { opacity: 0; } }
 
-/* The bottom edge: a hairline and the note. The next movement begins under it. */
-.foot { position: relative; z-index: 3; flex: none; border-top: 1px solid var(--x-hair); padding: 13px 0 15px; }
-.note { margin: 0; }
 
 /* ---------- below 900px: the same cover, upright ---------- */
-/* The copy first, then a band of the wall, then the foot. */
+/* The copy first, then a band of the wall that fades into the paper. */
 @media (max-width: 899px) {
   .cover { --mh: 60px; height: auto; min-height: 100vh; min-height: 100svh; justify-content: flex-start; padding-top: var(--mh); }
   .copy { flex: none; padding-top: clamp(14px, 2.6vh, 26px); padding-bottom: 0; }
@@ -176,16 +143,14 @@
   .col { width: 228px; }
   .plane { gap: 16px; }
   .tile { margin-bottom: 16px; }
-  .pl { left: -9px; }
-  .pr { right: -9px; }
   .fog {
     background:
       linear-gradient(180deg, var(--x-paper) 0%, transparent 16%, transparent 80%, var(--x-paper) 100%),
       linear-gradient(90deg, color-mix(in oklab, var(--x-paper) 60%, transparent) 0%, transparent 22%);
   }
-  .foot { padding: 11px 0 13px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .view, .camIn, .track, .tile *, .h1, .deck, .actions, .foot { animation: none !important; }
+  .view, .camIn, .track, .tile *, .h1, .deck, .actions { animation: none !important; }
+  .ad { opacity: 1; }
 }

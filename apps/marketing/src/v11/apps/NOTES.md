@@ -78,7 +78,25 @@ the tick on the card's foot are desktop only.
 - At 1366x768 the heading, plate and caption fit one view with about 11px to spare when the section's
   top rule is at the top of the screen and the masthead is hidden (it hides on scroll down). After an
   anchor jump the masthead is shown and covers the chapter mark (a page matter, not this folder).
-- On a phone the accrual tab is in the "You earn" note under the plate, below the first view, so its
-  arrival is usually not seen; the note is complete by the time the reader reaches it.
 - While sibling folders were being edited the dev server returned 500 at times and once swapped
   fonts mid run (hot reload). Not reproduced in later runs; not caused by this folder.
+
+## Review fixes (orchestrator)
+- Text floor: nothing readable in the movement is below 13.5px at any size. The scoped claim is now
+  13.5px in ink (was 12.5px grey); "Allowed" is 13.5px; the kit card's "Sponsored" label and address
+  are raised to 13.5px inside this plate only (12.5px and 13px in the kit). Checked by script.
+- Narrow screens: the accrual tab now lands when the reader reaches it (an observer on the tab, once
+  the card has arrived), not on the plate's entry. On a laptop it still lands with the card. A jump,
+  motion off and reduced motion show it complete as before.
+
+## Owner feedback: less text, no disclosures
+- The figure caption is removed, and with it every disclosure label (earlier notes above that mention
+  the caption or "Allowed" under the category no longer apply). The plate is a plain `figure`; the
+  kit `Fig` is not used because it always prints a caption.
+- Each note is its title and its one line. The scoped claim stays once, exactly, under "Your model".
+  The allowed category is one small ink tick with "Hardware wallets". "Earnings accrued" stays as
+  the tab.
+- Words outside the plate: 58 (chapter mark 4, heading 4, four notes 27, claim 10, category 2,
+  tab 2, builders' line 5, action 4).
+- The freed space went to the plate: more air between its parts (`--gy`), a taller header, more room
+  above the plate and above the closing line; on a phone more room around each part.

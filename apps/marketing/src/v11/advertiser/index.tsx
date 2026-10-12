@@ -31,8 +31,6 @@ export default function Advertiser() {
           ))}
         </div>
 
-        <p className={`x-cap ${c.note}`}>Illustration.</p>
-
         <div className={c.end}>
           <Action href={ADVERTISERS.action.href}>{ADVERTISERS.action.label}</Action>
         </div>
