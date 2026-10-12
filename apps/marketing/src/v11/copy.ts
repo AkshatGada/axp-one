@@ -54,6 +54,9 @@ export const USERS: { label: string; logos: { name: string; src: string; h: numb
     { name: "FTI Consulting", src: "/customers/fti.svg", h: 30 },
     { name: "Tinuiti", src: "/customers/tinuiti.svg", h: 32 },
     { name: "Branch", src: "/customers/branch.svg", h: 22 },
+    { name: "Bybit", src: "/customers/bybit.svg", h: 24 },
+    { name: "Infinity", src: "/customers/infinity.png", h: 26 },
+    { name: "Merlin AI", src: "/customers/merlin.svg", h: 22 },
   ],
 };
 

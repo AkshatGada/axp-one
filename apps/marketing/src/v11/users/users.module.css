@@ -10,7 +10,7 @@
    A mark that needs its inner shading keeps it, in grey. */
 .track img { display: block; width: auto; max-width: none; filter: brightness(0); }
 .track img[data-tone="grey"] { filter: grayscale(1) contrast(1.15) brightness(.55); }
-:global(html[data-px-motion="on"]) .track { animation: usersRun 76s linear infinite; }
+:global(html[data-px-motion="on"]) .track { animation: usersRun 88s linear infinite; }
 .view:hover .track { animation-play-state: paused; }
 @keyframes usersRun { to { transform: translate3d(-50%, 0, 0); } }
 
