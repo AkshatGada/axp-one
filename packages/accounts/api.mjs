@@ -26,7 +26,8 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
   try {const u=new URL(origin);secure=u.protocol==='https:';configured=u.origin===origin&&(secure||(u.protocol==='http:'&&['localhost','127.0.0.1','[::1]'].includes(u.hostname)));}catch{}
   const ready=enabled&&configured&&!!provider&&!!store;
   const resources=!!store&&(store.resourceRepository===true||typeof store.saveCampaign==='function');
-  const capabilities={...ACCOUNT_CAPABILITIES,campaignDrafts:resources,appCredentials:resources,campaignServing:network?.ready===true};
+  const capabilities={...ACCOUNT_CAPABILITIES,campaignDrafts:resources,appCredentials:resources,campaignServing:network?.ready===true,
+    ...(network?.financialBindings?{walletBindings:true,nativeFunding:network.financialMode==='devnet'&&network.broadcastEnabled===true}:{})};
   const cookie=(value,age=604800)=>`axp_session=${value}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${age}${secure?'; Secure':''}`;
   async function issue(data,oldHash) {
     store.bindIdentity?.(data.user,data.accessToken);
@@ -64,7 +65,7 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
       if(!url.pathname.startsWith('/api/accounts/'))fail('not_found',404);
       if(req.method==='GET'&&path==='/health'){
         const serving=network?.readiness?await network.readiness():{ready:network?.ready===true,reason:network?.reason??'account_serving_not_connected'};
-        return send(res,200,{enabled:ready,provider:'supabase',profileStore:store?.profileStore??'sqlite-fixture',configured:{origin:configured,provider:!!provider,store:!!store},capabilities:{...capabilities,campaignServing:serving.ready},serving});
+        return send(res,200,{enabled:ready,provider:'supabase',profileStore:store?.profileStore??'sqlite-fixture',configured:{origin:configured,provider:!!provider,store:!!store},capabilities:{...capabilities,campaignServing:serving.ready,...(network?.financialBindings?{walletBindings:serving.walletBindings===true,nativeFunding:serving.ready&&serving.broadcastEnabled===true}:{})},serving});
       }
       if(!ready)fail('accounts_configuration_required',503);
       if(!['GET','POST'].includes(req.method))fail('method_not_allowed',405);
@@ -129,6 +130,27 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
       }
       if(req.method==='POST'&&path==='/profile')return send(res,200,{user:await store.updateProfile(s.userId,body)});
       if(req.method==='POST'&&path==='/organizations')return send(res,201,{organization:await store.createOrganization(s.userId,body)});
+      const financeResource=path.match(/^\/organizations\/([a-zA-Z0-9-]+)\/(campaigns|apps)\/([a-zA-Z0-9-]+)\/(wallet(?:\/(challenge|verify))?|funding|channels)$/);
+      const financeChannel=path.match(/^\/organizations\/([a-zA-Z0-9-]+)\/channels\/([a-zA-Z0-9-]+)\/(open\/prepare|open\/sign|voucher\/prepare|voucher\/sign|close\/prepare|close\/sign|reconcile|serving)$/);
+      if(financeResource||financeChannel){
+        if(url.search)fail('invalid_input');
+        if(!network?.ready)fail('account_funding_not_connected',503);
+        const result=await network.withService(async service=>{
+          if(!service.financial)fail('account_funding_not_connected',503);
+          const f=service.financial(store);
+          if(financeChannel){
+            if(req.method!=='POST')fail('not_found',404);
+            const [,orgId,channelId,action]=financeChannel;return f.execute(s.userId,orgId,channelId,action,body);
+          }
+          const [,orgId,kind,resourceId,action,walletAction]=financeResource,purpose=kind==='campaigns'?'funding':'payout';
+          if(action==='wallet'&&req.method==='GET')return {wallet:await f.wallet(s.userId,orgId,resourceId,purpose)};
+          if(walletAction&&req.method==='POST')return walletAction==='challenge'?f.challenge(s.userId,orgId,resourceId,purpose,body):{wallet:await f.verifyWallet(s.userId,orgId,resourceId,purpose,body)};
+          if(action==='channels'&&req.method==='GET')return f.list(s.userId,orgId,resourceId,purpose);
+          if(action==='funding'&&kind==='campaigns'&&req.method==='POST')return {channel:await f.freeze(s.userId,orgId,resourceId,body)};
+          fail('not_found',404);
+        });
+        return send(res,200,result);
+      }
       const serving=path.match(/^\/organizations\/([a-zA-Z0-9-]+)\/campaigns\/([a-zA-Z0-9-]+)\/(serving|report)$/);
       if(serving){
         const [,orgId,campaignId,action]=serving;

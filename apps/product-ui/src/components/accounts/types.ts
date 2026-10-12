@@ -5,6 +5,7 @@ export interface Capabilities {
   nativeFunding: boolean;
   campaignDrafts?: boolean;
   appCredentials?: boolean;
+  walletBindings?: boolean;
 }
 export interface AccountHealth {
   enabled: boolean;
@@ -12,6 +13,7 @@ export interface AccountHealth {
   profileStore?: 'supabase' | 'sqlite-fixture';
   configured: { origin: boolean; provider: boolean; store: boolean };
   capabilities: Capabilities;
+  serving?: {ready: boolean;financialMode?: 'synthetic' | 'devnet';walletBindings?: boolean;broadcastEnabled?: boolean;reason?: string | null};
 }
 export interface AccountUser { id: string; email: string; displayName: string }
 export interface Organization {
@@ -107,7 +109,7 @@ export interface AccountReportDelivery {
   settlementNetwork: PayoutNetwork;
 }
 export interface AccountReport {
-  financialMode: 'synthetic';
+  financialMode: 'synthetic' | 'devnet';
   /** Compatibility summary, not a cross-currency total. Use per-network summaries in the UI. */
   summary: AccountReportSummary;
   bySettlementNetwork: Partial<Record<PayoutNetwork, AccountReportSummary>>;

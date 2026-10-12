@@ -117,9 +117,9 @@ test('report projections keep only frozen public fields, including for competito
   }
 });
 
-test('report schema, owner identity, synthetic mode and per-delivery owner bindings fail closed', async () => {
+test('report schema, owner identity, unsupported mode and per-delivery owner bindings fail closed', async () => {
   for (const [kind, report, idField] of [['campaign', campaignReport, 'campaignId'], ['app', appReport, 'appId']]) {
-    for (const patch of [{ schemaVersion: 'axp.product-state.v1' }, { financialMode: 'devnet' }, { [idField]: 'foreign' },
+    for (const patch of [{ schemaVersion: 'axp.product-state.v1' }, { financialMode: 'mainnet' }, { [idField]: 'foreign' },
       { deliveries: [{ ...delivery, [idField]: 'foreign' }] }]) {
       const { client } = fixture([session, { ...report, ...patch }]); await client.session();
       await assert.rejects(kind === 'app' ? client.appReport(org, app) : client.campaignReport(org, campaign), { status: 502 });

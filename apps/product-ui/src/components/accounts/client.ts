@@ -38,12 +38,27 @@ const messages: Record<string, string> = {
   credential_not_active: 'This credential is revoked or expired. Reload metadata and issue a new key if needed.',
   campaign_version_conflict: 'This campaign changed since you reviewed it. Reload the campaign list and review the latest saved version before approving or changing serving again. Nothing was approved or changed for serving by this request.',
   invalid_expected_version: 'This action requires the positive integer campaign version you reviewed. Reload the campaign list before continuing.',
-  campaign_approval_required: 'Approve the current saved campaign version before enabling synthetic serving.',
-  campaign_not_approved: 'Approve the current saved campaign version before enabling synthetic serving.',
+  campaign_approval_required: 'Approve the current saved campaign version before funding or enabling serving.',
+  campaign_not_approved: 'Approve the current saved campaign version before enabling serving.',
   campaign_destination_invalid: 'Use an HTTPS advertiser website before enabling a campaign. Loopback URLs are profile-only development declarations.',
   campaign_network_locked: 'This campaign already has shared-serving history on another network. Create a separate campaign for a different currency.',
   cap_below_obligations: 'The new campaign cap is below existing accepted charges and outstanding reservations. Increase the cap before enabling this version.',
-  account_network_unavailable: 'Shared account serving is unavailable. No native payment is connected. Refresh readiness before trying again.',
+  account_network_unavailable: 'Shared account serving is unavailable. Refresh readiness before trying again.',
+  verified_wallet_required: 'Verify the campaign funding wallet and the AI app payout wallet before freezing a channel.',
+  own_wallet_network_unavailable: 'Own-wallet channels currently support Solana Devnet only.',
+  account_payment_broadcast_disabled: 'Transaction broadcast is disabled on this server. No transaction was submitted.',
+  financial_repository_unavailable: 'The private financial database is unavailable. No fallback wallet or ledger is used.',
+  channel_state_conflict: 'The channel cannot perform this action in its current state. Reload its status.',
+  reconcile_existing_attempt: 'An existing signed attempt must be reconciled. Do not sign a replacement.',
+  unsigned_plan_expired: 'The unsigned request expired. Prepare it again and review the refreshed wallet request.',
+  close_not_drained: 'Wait for outstanding placements and authorize all accepted charges before closing.',
+  wallet_challenge_expired: 'The wallet verification request expired. Request a new proof.',
+  wallet_challenge_used: 'This verification request has already been consumed.',
+  channel_binding_exists: 'This campaign already has a channel for this app. Reuse and reconcile that channel.',
+  app_payout_route_conflict: 'Existing app channels use a different payout wallet. They cannot be redirected.',
+  payment_compatibility_unavailable: 'Native payment compatibility could not be verified. No funding was attempted.',
+  aggregate_fee_cap_exceeded: 'The campaign-wide fee and rent allowance would be exceeded.',
+  deposit_below_campaign_cap: 'The deposit must cover the campaign charge cap.',
   account_resources_unavailable: 'Account resources are not installed on this server. Profiles remain separate.',
   account_serving_not_connected: 'Account SDK configuration is available, but serving and recovery are not connected.',
   resource_repository_required: 'Account resources are not installed on this server. Profiles remain separate.',
@@ -123,7 +138,7 @@ function reportSummaryDTO(value: unknown): AccountReportSummary {
 }
 function reportDTO(value: unknown, kind: 'campaign' | 'app', id: string): AccountReport {
   if (!record(value) || value.schemaVersion !== `account-${kind}-report.v1` || value[`${kind}Id`] !== id ||
-      value.financialMode !== 'synthetic' || !record(value.bySettlementNetwork) ||
+      !['synthetic','devnet'].includes(String(value.financialMode)) || !record(value.bySettlementNetwork) ||
       !Array.isArray(value.deliveries) || value.deliveries.length > 100) invalidResponse();
   const summary = reportSummaryDTO(value.summary);
   const bySettlementNetwork: AccountReport['bySettlementNetwork'] = {};
@@ -145,7 +160,7 @@ function reportDTO(value: unknown, kind: 'campaign' | 'app', id: string): Accoun
     if (totals.deliveryCount < deliveries.filter(delivery => delivery.settlementNetwork === network).length) invalidResponse();
   }
   // Explicit projection also drops optional delivered creative metadata; never retain a raw report.
-  return { financialMode: 'synthetic', summary, bySettlementNetwork, deliveries };
+  return { financialMode: value.financialMode as AccountReport['financialMode'], summary, bySettlementNetwork, deliveries };
 }
 export function isConfigured(health: AccountHealth): boolean {
   return health.configured.origin && health.configured.provider && health.configured.store;
@@ -159,6 +174,12 @@ export class AccountsClient {
   constructor(transport: typeof fetch = (...args) => fetch(...args)) { this.transport = transport; }
 
   clearSession() { this.csrf = null; this.sessionEpoch++; }
+
+  /** Session/CSRF-bound financial transport; no SDK key, wallet key or retries. */
+  financeRequest(path: string, body?: object): Promise<unknown> {
+    if (!/^\/organizations\/[^/]+\//.test(path)) throw new AccountApiError(400, 'invalid_input');
+    return this.request(path, body, body !== undefined, true);
+  }
 
   private async request<T>(path: string, body?: object, authenticated = false, sessionBound = authenticated): Promise<T> {
     if ((authenticated || sessionBound) && !this.csrf) throw new AccountApiError(401, 'session_required');

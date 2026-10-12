@@ -53,6 +53,17 @@ redirect settings, documented in `EMAIL_SETUP.md`.
 
 ## Remaining gates
 
+### Later account-network work (isolated branch, not merged/deployed)
+
+`NETWORK_CONNECTION_RESULT.md` and `SHARED_SERVING_RESULT.md` supersede the
+historical resource/serving gaps below. Account-owned campaigns and app SDK keys
+are connected to the shared synthetic exchange on `codex/account-owned-network`.
+The next own-wallet payment slice is locally implemented; see
+`ACCOUNT_PAYMENTS_RESULT.md`, `ACCOUNT_PAYMENTS_RUNBOOK.md` and
+`FINAL_ROLLOUT_CHECKLIST.md`. Its private finance migration is tested locally but
+not cloud-applied; real wallet/native/hosted acceptance remains open. None of
+these sidecar changes silently enables native payment in the existing demo.
+
 Dedicated Supabase profile migration and real signed-in read acceptance now pass;
 see `SUPABASE_DATABASE_RESULT.md` for cloud evidence, hashes and SQL rollback
 acceptance. The local console uses Supabase profiles, not the fixture store.

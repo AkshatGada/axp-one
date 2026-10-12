@@ -7,6 +7,7 @@ import { consumeConfirmationLink } from './forms';
 import { AccountForm, AdvertiserForm, AppForm, AuthForm, Input, type RunAction } from './AccountForms';
 import { AppCredentials, CampaignResources } from './newResourceForms';
 import { OwnerReport } from './servingResources';
+import { AccountFinancialResources } from './financialResources';
 import type { AccountHealth, AccountSession, AppCredential, IssuedAppCredential, OrganizationDetails } from './types';
 
 export function AccountConsole() {
@@ -35,6 +36,8 @@ export function AccountConsole() {
   const appCredentials = Boolean(profiles && authenticated?.capabilities.appCredentials && health?.capabilities.appCredentials);
   // Health reflects actual shared-network readiness; legacy campaign/session DTOs do not.
   const servingReady = Boolean(ready && authenticated && health?.capabilities.campaignServing);
+  const financialMode = health?.serving?.financialMode === 'devnet' ? 'devnet' : 'synthetic';
+  const walletBindings = Boolean(ready && authenticated && health?.capabilities.walletBindings);
 
   const clearResourceSecret = useCallback(() => {
     secretEpoch.current++;
@@ -165,9 +168,10 @@ export function AccountConsole() {
         ...(details && campaignDrafts ? [{ href: '#owned-campaigns', label: 'Campaign drafts' }] : []),
         ...(selectedApp && appCredentials ? [{ href: '#app-credentials', label: 'SDK credentials' }] : []),
         ...(details && profiles && selectedApp ? [{ href: '#app-report', label: 'AI-app report' }] : []),
+        ...(details && walletBindings ? [{ href: '#own-wallet-funding', label: 'Own-wallet funding' }] : []),
         { href: '#account-readiness', label: 'Capabilities' },
       ] }]} foot="Your organizations and profiles are separate from the shared product demo." />}>
-      <Ld.PageBar title="Your account" sub="Manage owned profiles, campaigns, server-side app credentials and synthetic serving. Native funding and payments are not connected." />
+      <Ld.PageBar title="Your account" sub={`Manage owned profiles, campaigns and server-side app credentials. ${financialMode === 'devnet' ? 'Own-wallet Solana Devnet channels require verified owners and explicit signatures.' : 'Shared serving uses synthetic accounting; native payments are not enabled on this server.'}`} />
 
       <div className="account-feedback" aria-live="polite" aria-atomic="true" role="status">
         {busy ? `${busyLabel}…` : notice}
@@ -194,7 +198,7 @@ export function AccountConsole() {
               setTokenHash(null);
               clearOwnedState();
               await readSession();
-            }, 'Email confirmed. Session checked. Consult server readiness before enabling synthetic serving; native funding remains unavailable.')}>Confirm email</Ld.Button>
+            }, 'Email confirmed. Session checked. Consult server readiness before enabling serving or funding.')}>Confirm email</Ld.Button>
             <Ld.Button variant="secondary" disabled={busy} onClick={() => { setTokenHash(null); setError(''); }}>Discard link</Ld.Button>
           </div>
         </div>
@@ -283,7 +287,12 @@ export function AccountConsole() {
         </div>}
         {details && campaignDrafts && <CampaignResources key={`campaigns:${authenticated.user.id}:${details.organization.id}`}
           client={client} organizationId={details.organization.id} advertiserReady={Boolean(details.advertiser)} busy={busy} run={run}
-          onUnauthorized={expireOwnedSession} servingReady={servingReady} />}
+          onUnauthorized={expireOwnedSession} servingReady={servingReady} financialMode={financialMode} />}
+        {details && walletBindings && <Ld.Panel id="own-wallet-funding" title="Account-owned funding and payouts">
+          <AccountFinancialResources key={`finance:${authenticated.user.id}:${details.organization.id}`} client={client}
+            organizationId={details.organization.id} apps={details.apps} ready={walletBindings}
+            broadcastEnabled={health?.serving?.broadcastEnabled === true} busy={busy} onUnauthorized={expireOwnedSession} />
+        </Ld.Panel>}
         {details && profiles && selectedApp && <Ld.Panel id="app-report" title="AI-app delivery report" sub={selectedApp.name}>
           <OwnerReport key={`report:${authenticated.user.id}:${details.organization.id}:${selectedApp.id}`} client={client}
             organizationId={details.organization.id} resourceId={selectedApp.id} kind="app" ready={servingReady} busy={busy}
@@ -291,7 +300,7 @@ export function AccountConsole() {
         </Ld.Panel>}
         {details && appCredentials && (selectedApp ? <AppCredentials key={`credentials:${authenticated.user.id}:${details.organization.id}:${selectedApp.id}`}
           client={client} organizationId={details.organization.id} app={selectedApp} busy={busy} run={run}
-          issue={showIssuedCredential} dismissKey={clearResourceSecret} onUnauthorized={expireOwnedSession} servingReady={servingReady}
+          issue={showIssuedCredential} dismissKey={clearResourceSecret} onUnauthorized={expireOwnedSession} servingReady={servingReady} financialMode={financialMode}
           rawKey={issuedKey?.organizationId === details.organization.id && issuedKey.appId === selectedApp.id ? issuedKey.apiKey : null} /> :
           <Ld.Panel id="app-credentials" title="Server-side SDK credentials"><p className="ld-body">Create or select an AI-app profile above to manage its own server credentials. Keys do not grant native funding or payment authority.</p></Ld.Panel>)}
       </>}
@@ -305,10 +314,11 @@ export function AccountConsole() {
             <div><dt>Profiles</dt><dd>{!ready ? 'Unavailable' : !health?.capabilities.profiles ? 'Disabled by server' : !authenticated ? 'Sign in required' : profiles ? 'Available' : 'Disabled for this session'}</dd></div>
             <div><dt>Campaign drafts</dt><dd>{campaignDrafts ? 'Available · approval does not activate serving' : !authenticated ? 'Sign in required; server capability not assumed' : 'Not enabled for this server/session'}</dd></div>
             <div><dt>App credentials</dt><dd>{appCredentials ? 'Available · server-side app identity' : !authenticated ? 'Sign in required; server capability not assumed' : 'Not enabled for this server/session'}</dd></div>
-            <div><dt>Campaign serving</dt><dd>{!ready ? 'Unavailable' : !health?.capabilities.campaignServing ? 'Not connected' : !authenticated ? 'Synthetic network ready · sign in required' : 'Available · synthetic only · explicit campaign enrollment required'}</dd></div>
-            <div><dt>Native funding</dt><dd>Not connected · no financial authority</dd></div>
+            <div><dt>Campaign serving</dt><dd>{!ready ? 'Unavailable' : !health?.capabilities.campaignServing ? 'Not connected' : !authenticated ? `${financialMode} network ready · sign in required` : `Available · ${financialMode} · explicit campaign enrollment required`}</dd></div>
+            <div><dt>Wallet ownership</dt><dd>{walletBindings ? 'Resource-bound signed proofs available' : 'Not enabled on this server/session'}</dd></div>
+            <div><dt>Native funding</dt><dd>{financialMode === 'devnet' && walletBindings ? health?.serving?.broadcastEnabled ? 'Own-wallet signatures · Solana Devnet · explicit action only' : 'Bindings enabled · transaction broadcast disabled' : 'Not connected · no financial authority'}</dd></div>
           </dl>
-          <p className="ld-secondary">Allowed origins, prohibited categories and payout addresses are declarations. SDK configuration reports actual app restrictions and network readiness without making a model call. These declarations do not verify wallet ownership or authorize payments. Shared account serving is synthetic only; app-bound native settlement remains a separate integration gate.</p>
+          <p className="ld-secondary">Allowed origins, prohibited categories and profile payout addresses are declarations. They do not verify wallet ownership or authorize payments. SDK keys never sign; own-wallet channels use separate resource-bound proofs and explicit owner signatures. Inspect this server’s mode and broadcast gate before proceeding.</p>
         </div>
       </Ld.Panel>
     </Ld.Shell>

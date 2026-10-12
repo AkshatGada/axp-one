@@ -10,10 +10,11 @@ function safeError(failure: unknown) {
   return failure instanceof AccountApiError ? failure.message : 'The account request could not be completed. Reload before continuing.';
 }
 
-export function CampaignServing({ client, organizationId, campaign, ready, busy, dirty, run, onUnauthorized, onConflict }: {
+export function CampaignServing({ client, organizationId, campaign, ready, busy, dirty, run, onUnauthorized, onConflict, financialMode = 'synthetic' }: {
   client: AccountsClient; organizationId: string; campaign: Campaign; ready: boolean; busy: boolean; dirty: boolean;
-  run: RunAction; onUnauthorized: () => void; onConflict: () => void;
+  run: RunAction; onUnauthorized: () => void; onConflict: () => void; financialMode?: 'synthetic' | 'devnet';
 }) {
+  const native = financialMode === 'devnet', label = native ? 'catalogue' : 'synthetic serving';
   const [enrollment, setEnrollment] = useState<CampaignEnrollment | null>(null);
   const [known, setKnown] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,7 +38,7 @@ export function CampaignServing({ client, organizationId, campaign, ready, busy,
   const current = enrollment?.version === campaign.version && enrollment.approvedContentHash === campaign.approvedContentHash;
   const enabled = Boolean(current && enrollment?.enabled && campaign.status === 'approved');
   async function changeServing(nextEnabled: boolean) {
-    await run(nextEnabled ? 'Enabling synthetic serving' : 'Pausing synthetic serving', async () => {
+    await run(nextEnabled ? `Enabling ${label}` : `Pausing ${label}`, async () => {
       setError('');
       try {
         const result = await client.setCampaignServing(organizationId, campaign.id, { expectedVersion: campaign.version, enabled: nextEnabled });
@@ -51,22 +52,22 @@ export function CampaignServing({ client, organizationId, campaign, ready, busy,
         }
         throw failure;
       }
-    }, nextEnabled ? `Saved version ${campaign.version} opted into synthetic serving. No funding or native payment was authorized.` : 'Synthetic serving paused for new matching. Existing awards and receipts remain unchanged.');
+    }, nextEnabled ? `Saved version ${campaign.version} opted into ${label}. No funding or native payment was authorized.` : 'New matching paused. Existing awards and receipts remain unchanged.');
   }
   return <section className="ld-stack-lg" aria-label="Campaign synthetic serving">
-    <h3 className="ld-body">Shared account serving · synthetic</h3>
-    <p className="ld-secondary">Explicit opt-in uses the reviewed saved version. Accepted receipts accrue synthetic base-unit charges only; no deposit, voucher authorization, payout or refund is connected. Pausing stops new matching, not existing awards or receipts.</p>
+    <h3 className="ld-body">Shared account serving · {native ? 'Devnet catalogue eligibility' : 'synthetic'}</h3>
+    <p className="ld-secondary">{native ? 'Catalogue opt-in is only an eligibility declaration. This version also needs a finalized deposit and separate channel activation under Own-wallet funding before it can bid.' : 'Explicit opt-in uses the reviewed saved version. Accepted receipts accrue synthetic base-unit charges only; no deposit, voucher authorization, payout or refund is connected.'} Pausing stops new matching, not existing awards or receipts.</p>
     {!ready ? <p className="ld-body">Synthetic serving is unavailable on this server. Approval is not enrollment.</p> : <>
-      <p className="ld-body" role="status">{loading ? 'Checking enrollment…' : !known ? 'Enrollment not verified' : enabled ? `Version ${campaign.version} enabled · synthetic` : enrollment?.enabled ? 'Stale enrollment · current saved version is not eligible' : enrollment ? 'Paused · synthetic' : 'Not enrolled · synthetic'}</p>
+      <p className="ld-body" role="status">{loading ? 'Checking enrollment…' : !known ? 'Enrollment not verified' : enabled ? `Version ${campaign.version} enabled · ${native ? 'catalogue only' : 'synthetic'}` : enrollment?.enabled ? 'Stale enrollment · current saved version is not eligible' : enrollment ? `Paused · ${label}` : `Not enrolled · ${label}`}</p>
       {enrollment && <p className="ld-secondary">Enrollment version {enrollment.version} · updated {new Date(enrollment.updatedAt).toISOString()}</p>}
       {error && <p className="account-error" role="alert">{error}</p>}
       {dirty && <p className="ld-secondary">Save and review your changes before changing serving.</p>}
       <div className="ld-row">
         <Ld.Button variant="secondary" disabled={busy || loading} onClick={() => setRevision(value => value + 1)}>Reload enrollment</Ld.Button>
         <Ld.Button disabled={busy || loading || !known || dirty || campaign.status !== 'approved' || enabled}
-          onClick={() => void changeServing(true)}>Enable synthetic serving · version {campaign.version}</Ld.Button>
+          onClick={() => void changeServing(true)}>Enable {label} · version {campaign.version}</Ld.Button>
         <Ld.Button variant="secondary" disabled={busy || loading || !known || dirty || !enrollment?.enabled}
-          onClick={() => void changeServing(false)}>Pause synthetic serving · version {campaign.version}</Ld.Button>
+          onClick={() => void changeServing(false)}>Pause {label} · version {campaign.version}</Ld.Button>
       </div>
       {campaign.status !== 'approved' && <p className="ld-secondary">Approve the exact saved version before enabling it.</p>}
     </>}
@@ -96,26 +97,26 @@ export function OwnerReport({ client, organizationId, resourceId, kind, ready, b
     return () => { active = false; };
   }, [client, organizationId, resourceId, kind, ready, revision, onUnauthorized]);
   return <section className="ld-stack" aria-label={`Private ${kind} report`}>
-    <h3 className="ld-body">Private {kind} report · synthetic</h3>
-    <p className="ld-secondary">Accepted is synthetic receipt accrual, reserved is outstanding synthetic budget, neither is a native payment. Receipts assert insertion and Sponsored disclosure, not attention or conversion.</p>
+    <h3 className="ld-body">Private {kind} report · {report?.financialMode ?? 'mode not verified'}</h3>
+    <p className="ld-secondary">{report?.financialMode === 'devnet' ? 'Accepted is receipt-linked accrual and reserved is outstanding budget. Neither means a payout has finalized; inspect channel authorization and settlement separately.' : 'Accepted is synthetic receipt accrual, reserved is outstanding synthetic budget, neither is a native payment.'} Receipts assert insertion and Sponsored disclosure, not attention or conversion.</p>
     {!ready ? <p className="ld-secondary">Reports are unavailable until shared account serving is ready.</p> : <>
       <Ld.Button variant="secondary" disabled={busy || loading} onClick={() => setRevision(value => value + 1)}>Reload {kind} report</Ld.Button>
       {loading && <p className="ld-secondary" role="status">Loading private report…</p>}
       {error && <p className="account-error" role="alert">{error}</p>}
       {report && <>
-        <p className="ld-body">Accepted deliveries and synthetic amounts by settlement network. Never combine currencies.</p>
+        <p className="ld-body">Accepted deliveries and {report.financialMode} amounts by settlement network. Never combine currencies.</p>
         {Object.entries(report.bySettlementNetwork).map(([network, summary]) => <div className="ld-stack" key={network}>
-          <p className="ld-body">{network} · synthetic base units</p>
+          <p className="ld-body">{network} · {report.financialMode} base units</p>
           <dl className="account-readiness">
-            <div><dt>Accepted synthetic base units</dt><dd>{summary.acceptedBaseUnits}</dd></div>
-            <div><dt>Reserved synthetic base units</dt><dd>{summary.reservedBaseUnits}</dd></div>
+            <div><dt>Accepted {report.financialMode} base units</dt><dd>{summary.acceptedBaseUnits}</dd></div>
+            <div><dt>Reserved {report.financialMode} base units</dt><dd>{summary.reservedBaseUnits}</dd></div>
             <div><dt>Accepted deliveries</dt><dd>{summary.deliveryCount}</dd></div>
           </dl>
         </div>)}
         <p className="ld-secondary">Showing {report.deliveries.length} receipt records (at most 100). Summary totals may cover more deliveries than this bounded list.</p>
         {!report.deliveries.length && <p className="ld-secondary">No accepted deliveries in this report window. Outstanding reservations, if any, are shown separately above.</p>}
         {report.deliveries.map(delivery => <details key={delivery.awardId}>
-          <summary>{delivery.settlementNetwork} · {delivery.amountBaseUnits} synthetic base units · {new Date(delivery.acceptedAt).toISOString()}</summary>
+          <summary>{delivery.settlementNetwork} · {delivery.amountBaseUnits} {report.financialMode} base units · {new Date(delivery.acceptedAt).toISOString()}</summary>
           <dl className="account-readiness account-break">
             <div><dt>Award</dt><dd>{delivery.awardId}</dd></div>
             <div><dt>Opportunity</dt><dd>{delivery.opportunityId}</dd></div>

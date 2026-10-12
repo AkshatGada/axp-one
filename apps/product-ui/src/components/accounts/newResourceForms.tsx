@@ -65,8 +65,8 @@ export function CampaignForm({ campaign, busy, run, save, approve, renderServing
   </div>;
 }
 
-export function CampaignResources({ client, organizationId, advertiserReady, busy, run, onUnauthorized, servingReady = false }: {
-  client: AccountsClient; organizationId: string; advertiserReady: boolean; busy: boolean; run: RunAction; onUnauthorized: () => void; servingReady?: boolean;
+export function CampaignResources({ client, organizationId, advertiserReady, busy, run, onUnauthorized, servingReady = false, financialMode = 'synthetic' }: {
+  client: AccountsClient; organizationId: string; advertiserReady: boolean; busy: boolean; run: RunAction; onUnauthorized: () => void; servingReady?: boolean; financialMode?: 'synthetic' | 'devnet';
 }) {
   const [campaigns, setCampaigns] = useState<Campaign[] | null>(null);
   const [selectedId, setSelectedId] = useState('');
@@ -111,7 +111,7 @@ export function CampaignResources({ client, organizationId, advertiserReady, bus
         <CampaignForm key={`${selected?.id ?? 'new'}:${selected?.version ?? 0}:${selected?.status ?? ''}`} campaign={selected}
           busy={busy || !advertiserReady} run={run}
           renderServing={selected ? dirty => <CampaignServing client={client} organizationId={organizationId} campaign={selected}
-            ready={servingReady} busy={busy} dirty={dirty} run={run} onUnauthorized={onUnauthorized}
+            ready={servingReady} busy={busy} dirty={dirty} run={run} onUnauthorized={onUnauthorized} financialMode={financialMode}
             onConflict={() => setRevision(value => value + 1)} /> : undefined}
           save={async input => upsert((await client.saveCampaign(organizationId, input, selected?.id)).campaign)}
           approve={async () => {
@@ -139,11 +139,11 @@ function useResourceAlive() {
   return alive;
 }
 
-export function AppCredentials({ client, organizationId, app, busy, run, issue, rawKey, dismissKey, onUnauthorized, servingReady = false }: {
+export function AppCredentials({ client, organizationId, app, busy, run, issue, rawKey, dismissKey, onUnauthorized, servingReady = false, financialMode = 'synthetic' }: {
   client: AccountsClient; organizationId: string; app: AIApp; busy: boolean; run: RunAction;
   issue: (action: () => Promise<IssuedAppCredential>) => Promise<AppCredential | null>;
   rawKey: string | null; dismissKey: () => void; onUnauthorized: () => void;
-  servingReady?: boolean;
+  servingReady?: boolean; financialMode?: 'synthetic' | 'devnet';
 }) {
   const [credentials, setCredentials] = useState<AppCredential[] | null>(null);
   const [error, setError] = useState('');
@@ -171,7 +171,7 @@ export function AppCredentials({ client, organizationId, app, busy, run, issue, 
   const activeCount = credentials?.filter(credential => credentialStatus(credential) === 'Active').length ?? 0;
   return <Ld.Panel id="app-credentials" title="Server-side SDK credentials" sub={app.name}>
     <div className="ld-stack-lg">
-      <p className="ld-body">{servingReady ? 'Shared account serving is available in synthetic mode. Install a valid app key on your server; actual SDK readiness is returned by its configuration endpoint.' : 'Configuration metadata ready when a valid key is installed on your server. Serving: not connected.'} No native funding or payout routing is enabled.</p>
+      <p className="ld-body">{servingReady ? `Shared account serving is available in ${financialMode} mode. Install a valid app key on your server; actual SDK readiness is returned by its configuration endpoint.` : 'Configuration metadata ready when a valid key is installed on your server. Serving: not connected.'} SDK keys never grant funding, wallet signing or payout-change authority.</p>
       <p className="ld-secondary account-break">Publisher identity: app:{app.id}. Configuration uses this app’s saved allowed origins and prohibited categories; a key cannot select a different publisher.</p>
       <p className="ld-secondary">Keys expire after 30 days; at most 10 active keys per app. Revocation is irreversible. Rotation atomically revokes the old key and returns a replacement once; update your server environment after rotating.</p>
       {rawKey && <div className="ld-stack" role="region" aria-label="New server credential shown once">
@@ -222,7 +222,7 @@ export function AppCredentials({ client, organizationId, app, busy, run, issue, 
         <div className="ld-stack">
           <p className="ld-secondary">Install the local SDK 0.2.0 tarball on your backend, set AXP_PUBLISHER_API_KEY privately, and use this account endpoint. Do not use /api/product or send this key to a browser, model, logs or URL. A successful config read proves configuration access, not funding or serving.</p>
           <pre className="account-break"><code>{example}</code></pre>
-          <p className="ld-secondary">{servingReady ? 'Shared serving uses explicitly enrolled approved inventory and synthetic accounting only. Check the SDK configuration for actual serving and recovery readiness; a key or saved payout declaration does not authorize native payment.' : 'Serving is unavailable until the shared account network is ready; do not route to the shared demo as a fallback.'} Invalid, expired or revoked keys receive 401.</p>
+          <p className="ld-secondary">{servingReady ? `Shared serving uses explicitly enrolled approved inventory in ${financialMode} mode. Check SDK configuration for actual readiness; a key or saved payout declaration does not authorize native payment.` : 'Serving is unavailable until the shared account network is ready; do not route to the shared demo as a fallback.'} Invalid, expired or revoked keys receive 401.</p>
         </div>
       </details>
     </div>
