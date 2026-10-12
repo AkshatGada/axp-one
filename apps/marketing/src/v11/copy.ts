@@ -15,7 +15,7 @@ export const CONTEXTHINT = { href: "https://contexthint.com", label: "ContextHin
 
 export const NAV = [
   { href: "#advertisers", label: "For advertisers" },
-  { href: "#apps", label: "For AI apps" },
+  { href: "#apps", label: "For conversational AI apps" },
   { href: "#payments", label: "Payments" },
 ];
 
@@ -23,10 +23,10 @@ export const NAV = [
 export const COVER = {
   h1: "The advertising network for the agentic internet.",
   accent: "agentic internet.",
-  deck: "People now ask AI what to buy. axp.one places one labelled ad below the answer, only when it fits.",
+  deck: "People now ask conversational AI apps what to buy. axp.one places one labelled ad below the answer, only when it fits.",
   primary: { label: "Open the advertiser dashboard", href: ADVERTISER_URL },
   secondary: { label: "Read the integration guide", href: GUIDE_URL },
-  note: "Illustrative questions.",
+  note: "Illustrative prompts.",
 };
 
 /** 01 The shift. */
@@ -35,17 +35,17 @@ export const SHIFT_COPY = {
   title: "The shift",
   before: "People used to search.",
   after: "Now they ask.",
-  close: "A question says what a keyword never could.",
+  close: "A prompt says what a keyword never could.",
 };
 
-/** 02 One question: the film. One line per beat. */
+/** 02 One prompt: the film. One line per beat. */
 export const FILM = {
   no: "02",
-  title: "One question",
-  h: "Follow one question.",
+  title: "One prompt",
+  h: "Follow one prompt.",
   beats: [
     { k: "Asked", line: "Someone asks." },
-    { k: "Answered", line: "The app answers, in its own words." },
+    { k: "Answered", line: "The conversational AI app answers, in its own words." },
     { k: "Judged", line: "Each advertiser's agent reads the moment." },
     { k: "Placed", line: "One card appears. Below the answer. Labelled." },
   ],
@@ -65,10 +65,10 @@ export const ADVERTISERS = {
   action: { label: "Open the advertiser dashboard", href: ADVERTISER_URL },
 };
 
-/** 04 For AI apps. */
+/** 04 For conversational AI apps. */
 export const APPS = {
   no: "04",
-  title: "For AI apps",
+  title: "For conversational AI apps",
   h: "Your answer stays yours.",
   points: [
     { k: "Your model", line: "It writes the answer." },
@@ -96,15 +96,15 @@ export const PAY = {
     { k: "Settle", line: "Charges add up, then settle in stablecoin when the campaign closes." },
   ],
   principle: ["Agents judge fit.", "Fixed rules decide money."],
-  /** Why each half is so. A question in plain language cannot be matched by static code; money can
+  /** Why each half is so. A prompt in plain language cannot be matched by static code; money can
    *  and must be. */
   why: [
-    { k: "Why an agent", short: "Plain language. Only an agent can read it.", line: "A question arrives in plain language. No keyword list or fixed rule can read it. It takes an agent to judge it." },
+    { k: "Why an agent", short: "Plain language. Only an agent can read it.", line: "A prompt arrives in plain language. No keyword list or fixed rule can read it. It takes an agent to judge it." },
     { k: "Why fixed rules", short: "Exact limits. Code enforces them.", line: "Money is the opposite. The ceiling and the budget are exact, so code enforces them, not a judgment." },
   ],
   sides: [
     { who: "Advertiser", state: "Charge accepted" },
-    { who: "AI app", state: "Earnings accrued" },
+    { who: "Conversational AI app", state: "Earnings accrued" },
   ],
   limit: "A receipt confirms insertion. It does not measure attention or conversions.", // claim-ok: limit
 };
@@ -113,7 +113,7 @@ export const DOORS = {
   h: "Start from your side.",
   doors: [
     { who: "Advertisers", line: "Describe your offer. Approve your ad.", action: "Open the advertiser dashboard", href: ADVERTISER_URL },
-    { who: "AI apps", line: "Add one slot below your answer.", action: "Read the integration guide", href: GUIDE_URL },
+    { who: "Conversational AI apps", line: "Add one slot below your answer.", action: "Read the integration guide", href: GUIDE_URL },
   ],
   also: [
     { label: "Try the example chat", href: CHAT_URL },

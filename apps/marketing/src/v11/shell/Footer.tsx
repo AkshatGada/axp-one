@@ -5,7 +5,7 @@ import s from "./shell.module.css";
 
 const COLS = [
   { head: "Advertisers", links: [{ label: "Advertiser dashboard", href: ADVERTISER_URL }] },
-  { head: "AI apps", links: [{ label: "Integration guide", href: GUIDE_URL }, { label: "Example chat", href: CHAT_URL }] },
+  { head: "Conversational AI apps", links: [{ label: "Integration guide", href: GUIDE_URL }, { label: "Example chat", href: CHAT_URL }] },
   { head: "See it", links: [{ label: "Walkthrough", href: VIDEO_URL }, { label: "Technical evidence", href: MVP_URL }] },
 ];
 

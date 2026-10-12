@@ -132,14 +132,14 @@ export default function Plate() {
               <span className={s.barRight} aria-hidden>
                 <span className={s.ghost}>
                   <svg viewBox="0 0 14 14" width="12" height="12" fill="none"><path d="M7 1.5v11M1.5 7h11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" /></svg>
-                  New question
+                  New prompt
                 </span>
                 <i className={s.me}><i /></i>
               </span>
             </div>
 
             <div className={s.col}>
-              <p className={s.q}><span className={s.sr}>The question: </span>{QUESTION}</p>
+              <p className={s.q}><span className={s.sr}>The prompt: </span>{QUESTION}</p>
 
               <div className={s.a}>
                 <p className={s.aLabel}>

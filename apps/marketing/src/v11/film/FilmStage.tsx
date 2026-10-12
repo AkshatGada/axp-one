@@ -122,9 +122,6 @@ function Pinned({ progress }: { progress: MotionValue<number> }) {
   return (
     <div ref={root} className={s.frame} data-beat={beat}>
       <div className={`x-wrap ${s.inner}`}>
-        {/* The chapter's mark, repeated quietly while the stage is pinned. */}
-        <p className={s.railMark} aria-hidden><b>{FILM.no}</b>{FILM.title}</p>
-
         <ol className={s.caps}>
           <li className={s.cap} aria-hidden>
             <Split className={`x-h2 ${s.capTitle}`} text={FILM.h} />

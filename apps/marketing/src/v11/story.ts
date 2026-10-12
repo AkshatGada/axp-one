@@ -28,7 +28,7 @@ export const SHIFT = {
 };
 
 /** The AI app: a fictional assistant. */
-export const APP = { name: "Tidewater", kind: "A fictional AI assistant" };
+export const APP = { name: "Conversational AI app", kind: "An AI assistant" };
 
 /** The app's own answer. Identical in every state. */
 export const ANSWER =
@@ -86,7 +86,7 @@ export const RECEIPT = {
   title: "Receipt",
   confirms: "The labelled card was inserted below the answer.",
   advertiser: { label: "Advertiser", state: "Charge accepted" },
-  app: { label: "AI app", state: "Earnings accrued" },
+  app: { label: "Conversational AI app", state: "Earnings accrued" },
   later: "Charges add up. Settlement comes later, when the campaign closes.",
   limit: "A receipt confirms insertion. It does not measure attention or conversions.", // claim-ok: limit
 } as const;

@@ -64,17 +64,14 @@
 /* ---------- The pinned film ---------- */
 .frame { position: relative; height: 100%; padding: 84px 0 16px; }
 .frame[data-measure] * { transform: none !important; }
-.inner { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; row-gap: clamp(10px, 1.9vh, 20px); height: 100%; }
+.inner { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; row-gap: clamp(10px, 1.9vh, 20px); height: 100%; }
 
 /* The chapter's mark, repeated quietly while the stage is pinned. */
-.railMark { margin: 0; font-size: 13.5px; font-weight: 500; line-height: 1; letter-spacing: .04em; text-transform: uppercase; font-variant-numeric: tabular-nums; color: var(--x-quiet); }
-.railMark b { margin-right: 10px; font-weight: 700; }
 /* It comes in as the film starts: until then the chapter's own mark is still on screen above. */
-.frame .railMark { opacity: var(--xh); }
 
 /* The caption: one headline per beat, changing by word. The title (the movement's heading, at the
    same size it has in normal flow) holds its place until the film starts. */
-.caps { display: grid; align-items: end; height: 1.04em; margin: 0; padding: 0; list-style: none; font-size: clamp(30px, 3.9vw, 68px); }
+.caps { display: grid; align-items: end; height: 1.04em; margin: 0; padding: 0; list-style: none; font-size: clamp(28px, 3.2vw, 58px); }
 .cap { grid-area: 1 / 1; }
 .capLine { display: block; font-family: var(--font-display); font-weight: 300; line-height: 1; letter-spacing: -.042em; white-space: nowrap; }
 .capTitle { display: block; white-space: nowrap; }

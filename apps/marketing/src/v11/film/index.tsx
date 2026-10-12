@@ -8,7 +8,7 @@ import s from "./film.module.css";
 
 export default function Film() {
   return (
-    <Chapter id="question" no={FILM.no} title={FILM.title} labelledBy="film-h" className={s.film}>
+    <Chapter id="prompt" no={FILM.no} title={FILM.title} labelledBy="film-h" className={s.film}>
       <div className={`x-wrap ${s.head}`}>
         <h2 id="film-h" className="x-h2">{FILM.h}</h2>
       </div>
