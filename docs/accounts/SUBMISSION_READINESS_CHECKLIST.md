@@ -63,10 +63,12 @@ conversion lift.
 
 ## Product and evidence scope
 
-The account-owned network implementation is merged into the primary local checkout;
-see [integration verification](NETWORK_MERGE_RESULT.md). It is not yet deployed by
-this integration.
-Public-product behavior must be assessed against the identified deployed revision.
+The account-owned network implementation is deployed at
+[axp.one/account](https://axp.one/account/), using synthetic accounting with
+account transaction broadcasts disabled. See [live release status](STATUS.md)
+for the identified runtime revision and non-spending verification, and
+[integration verification](NETWORK_MERGE_RESULT.md) for earlier local regressions.
+Public-product behavior must be assessed against its identified deployed revision.
 Real account-owned wallet-extension and funded lifecycle acceptance remain
 separate from the verified migration and offline tests.
 

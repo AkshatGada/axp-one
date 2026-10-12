@@ -4,8 +4,9 @@ Scope: one advertiser owns an approved campaign; a separately owned AI app uses
 its own SDK credential, displays a disclosed card and sees the same accepted
 receipt in its earnings that the advertiser sees in spending.
 
-The account-network candidate is separate from the public deployment. This list
-distinguishes implementation, non-spending acceptance and funded release evidence.
+The account network is deployed at [axp.one/account](https://axp.one/account/)
+with synthetic accounting and account broadcasts disabled. This list distinguishes
+implementation, non-spending acceptance and funded release evidence.
 Landing pages, shared demonstrations and historical recordings are preserved.
 
 ## Phase 1 — Owned setup and integration readiness
@@ -66,9 +67,9 @@ separate evidence. See [finance verification](accounts/FINANCE_CLOUD_ACCEPTANCE.
 
 ## Phase 5 — Submission package
 
-- [x] Merge only approved candidate changes locally while preserving specialist
-  frontend work. See [merge verification](accounts/NETWORK_MERGE_RESULT.md);
-  push, deployment and activation remain separate.
+- [x] Merge, push and deploy the approved account candidate while preserving
+  specialist frontend work and the shared demo. Live runtime: `9ab99f0`;
+  see [release status](accounts/STATUS.md) for the verified non-spending scope.
 - [ ] Pin the revision, SDK artifact, configuration instructions and evidence hashes.
 - [ ] Verify public links and a concise captioned connected walkthrough; retain
   credential-free, mutation-rejecting offline replay.

@@ -35,12 +35,29 @@ local source checks, not hosted deployment evidence.
 See [finance architecture and verification](FINANCE_CLOUD_ACCEPTANCE.md) for the
 commands and evidence scope.
 
-Real user-selected wallet-extension and account-owned funded lifecycle acceptance
-are separate release checks. Broadcasts remain disabled for the current
-non-spending verification. The account-network source is merged locally into the
-primary checkout's `frontend` branch. It has not been pushed, deployed or activated
-by this merge. See [integration verification](NETWORK_MERGE_RESULT.md) for the
-merged revision, regression results and preservation checks.
+## Live account release
+
+Account runtime revision `9ab99f02e69762d65f868febdd4a81622e4c03eb` was
+pushed to `main` and deployed at [axp.one/account](https://axp.one/account/)
+on 13 October 2026. Live checks verified separate confirmed Supabase owners,
+persisted advertiser/app profiles, same-value profile save/readback, an approved
+campaign remaining paused, cross-owner denial, scoped SDK configuration and
+saved-opportunity lookup, temporary-key revocation and session invalidation.
+Existing owner-bound funding/payout wallet proofs remained readable. Production
+account reports started at zero; Preview receipts were not copied into this ledger.
+
+Accounts use synthetic accounting with transaction broadcasts disabled. No fresh
+auction, model call, delivery acknowledgement or funds movement was performed in
+this release check. Real user-selected wallet-extension prompts and account-owned
+funded lifecycle acceptance remain separate checks; persisted cryptographic
+bindings do not establish those outcomes.
+
+The latest landing and shared-demo source was preserved. Public page content and
+referenced assets passed checks; the shared demo's health, publisher configuration
+and state responses were byte-identical before and after the account deployment.
+Existing shared-demo payment configuration was preserved rather than replaced by
+account settings. See [integration verification](NETWORK_MERGE_RESULT.md) for the
+earlier local merge and regression evidence.
 
 ## Documentation
 
