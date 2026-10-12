@@ -3,6 +3,9 @@
 // a configuration problem turns live runs off and the API still answers.
 import {createHostedAPI} from './api.mjs';
 import {createHostedProductAPI} from '../product/hosted.mjs';
+import {createHostedAccountsAPI} from '../accounts/hosted.mjs';
+
+let accountsAPI=null;
 
 let productAPI = null;
 async function productInstance() {
@@ -22,6 +25,10 @@ function instance() {
 }
 export default async function handler(req,res) {
   const path=new URL(req.url,'http://local').pathname;
+  if(path==='/api/accounts'||path.startsWith('/api/accounts/')) {
+    accountsAPI??=createHostedAccountsAPI();
+    return accountsAPI.handler(req,res);
+  }
   if(path==='/api/product'||path.startsWith('/api/product/')) {
     try { return await (await productInstance()).handler(req,res); }
     catch(error) {

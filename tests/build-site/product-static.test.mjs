@@ -14,7 +14,7 @@ function fixture(t) {
 
 test('root products share root asset URLs without replacing landing or exposing recorded pages', t => {
   const {dir, put} = fixture(t);
-  for (const page of ['advertiser-dashboard', 'publisher-demo', 'publisher-demo/integration']) {
+  for (const page of ['advertiser-dashboard', 'publisher-demo', 'publisher-demo/integration', 'account']) {
     put(`product/${page}/index.html`, '<script src="/_next/static/chunks/product-123.js"></script>');
     put(`product/${page}/index.txt`, `rsc:${page}`);
   }
@@ -29,6 +29,7 @@ test('root products share root asset URLs without replacing landing or exposing 
   assert.equal(readFileSync(join(dir, 'static/index.html'), 'utf8'), 'landing');
   assert.equal(readFileSync(join(dir, 'static/mvp/index.html'), 'utf8'), 'MVP replay');
   assert.equal(readFileSync(join(dir, 'static/publisher-demo/integration/index.txt'), 'utf8'), 'rsc:publisher-demo/integration');
+  assert.equal(readFileSync(join(dir, 'static/account/index.txt'), 'utf8'), 'rsc:account');
   assert.ok(existsSync(join(dir, 'static/_next/static/chunks/product-123.js')));
   assert.ok(!existsSync(join(dir, 'static/settlement')));
 });
@@ -49,7 +50,7 @@ test('a recorded base-path export cannot masquerade as the root product export',
 test('missing product and SDK guide exports fail the production build', t => {
   const {dir, put} = fixture(t);
   assert.throws(() => publishProductStatic(join(dir, 'product'), join(dir, 'static')), /missing_product_export/);
-  for (const page of ['advertiser-dashboard', 'publisher-demo']) put(`product/${page}/index.html`, '<script src="/_next/static/chunks/a.js"></script>');
+  for (const page of ['advertiser-dashboard', 'publisher-demo', 'account']) put(`product/${page}/index.html`, '<script src="/_next/static/chunks/a.js"></script>');
   assert.throws(() => publishProductStatic(join(dir, 'product'), join(dir, 'static')), /missing_product_sdk_guide/);
 });
 
