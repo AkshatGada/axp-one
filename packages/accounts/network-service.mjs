@@ -8,6 +8,7 @@ import {taskContext,CAPABILITIES,secretMatches} from '../product/service.mjs';
 import {createProductDecisions} from '../product/decisions.mjs';
 import {validateCampaignInput} from './resources.mjs';
 import {createAccountFinancialService} from './financial-service.mjs';
+import {ownerActivity} from './owner-activity.mjs';
 
 const RUN='account-network-v1',fail=(code,status=400)=>{throw new ContractError(code,code,status);};
 const id=value=>{if(typeof value!=='string'||!/^[-\w]{1,120}$/.test(value))fail('invalid_id');return value;};
@@ -108,7 +109,7 @@ export function createAccountNetworkService({stateDir,catalog,apiKey,transport,r
   publicKeyPEM,publisherKeyId:keyId(app),expiresAtUnit:'unix_epoch_milliseconds',maxQuestionCharacters:1200,restrictionLimit:17,
   placementId:'chat-sponsored-card',apiBasePath:'/api/accounts/sdk',financialMode,mode:financialMode,servingEnabled:restrictionsReady&&catalogueReady&&fundingReady,recoverySupported:true,keyConfigured:true,
   capabilities:CAPABILITIES,payments:{mode:financialMode,signingEnabled:false,ready:financialMode==='devnet'&&catalogueReady&&fundingReady,signingMode:financialMode==='devnet'?'own_wallet':null,...(financialMode==='devnet'?{fundedRoutes}:{})},engine:buyers.status(),
-  catalogue:{ready:catalogueReady,reason:catalogueReason},unsupportedCategories:app.blockedCategories.filter(v=>!knownRestriction(v)),
+  catalogue:{ready:catalogueReady,inventoryAvailable:rows.length>0,reason:catalogueReason},unsupportedCategories:app.blockedCategories.filter(v=>!knownRestriction(v)),
   ...(!restrictionsReady?{reason:'profile_restriction_unsupported'}:!catalogueReady?{reason:catalogueReason}:!fundingReady?{reason:'app_funding_not_ready'}:{})};}
  async function sync(rows,app){
   let routes=[];
@@ -221,7 +222,7 @@ export function createAccountNetworkService({stateDir,catalog,apiKey,transport,r
   const summary=(cs,as)=>({acceptedBaseUnits:String(cs.reduce((n,c)=>n+baseUnits(c.amountBaseUnits),0n)),reservedBaseUnits:String(as.reduce((n,a)=>n+baseUnits(a.priceBaseUnits),0n)),deliveryCount:cs.length});
   const rail=c=>exchange.require('network_versions',c.campaignVersionId).input.settlementNetwork;
   const bySettlementNetwork=Object.fromEntries(['solana-devnet','tempo-testnet'].map(r=>[r,summary(charges.filter(c=>rail(c)===r),awards.filter(a=>rail(a)===r))]));
-  return {schemaVersion:campaignId?'account-campaign-report.v1':'account-app-report.v1',financialMode,...(campaignId?{campaignId}:{appId}),
+  return {schemaVersion:campaignId?'account-campaign-report.v1':'account-app-report.v1',financialMode,...(campaignId?{campaignId}:{appId}),...ownerActivity(exchange,bindings,{campaignId,appId},now()),
    // Legacy summary is Solana-only. Never sum USDC and PathUSD units.
    summary:bySettlementNetwork['solana-devnet'],bySettlementNetwork,deliveries:charges.slice(-100).map(c=>{const b=bindings.get(c.campaignId),v=exchange.require('network_versions',c.campaignVersionId);return {awardId:c.awardId,opportunityId:exchange.require('awards',c.awardId).opportunityId,campaignId:b.campaignId,campaignVersionId:v.publicVersionId,appId:b.appId,amountBaseUnits:c.amountBaseUnits,receiptHash:c.receiptHash,acceptedAt:c.acceptedAt,settlementNetwork:v.input.settlementNetwork};})};
  }

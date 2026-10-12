@@ -1,7 +1,10 @@
 # Account-owned payment implementation result
 
-12 October 2026 · isolated `codex/account-owned-network` worktree.
-Baseline `0e00aac0d27a5a1eacbf7877b565439cdcfecb31`.
+12 October 2026 · implementation and offline native verification.
+
+Cloud follow-up: the finance migration and backend reads are now verified with
+broadcasts disabled. See [finance verification](FINANCE_CLOUD_ACCEPTANCE.md).
+The test totals below describe the original implementation check, not a new run.
 
 ## Outcome
 
@@ -39,7 +42,7 @@ their campaign funding and app payout addresses and sign their own requests.
 
 ## Recovery fixes and independent review
 
-One fresh Sol6.1-high review identified interrupted/expired unsigned preparation
+One fresh independent review identified interrupted/expired unsigned preparation
 and hosted native-state rollback hazards. Substantive fixes and bounded rechecks:
 
 1. Interrupted unsigned open/close preparation retries the same frozen
@@ -67,25 +70,17 @@ offline correctness evidence, not real wallet/network lifecycle evidence.
 | Isolated SQL | Migration + ownership/RLS/ACL/CAS/immutability acceptance passed in network-disabled disposable PostgreSQL. Test transaction rolled back to zero financial records; container/volume removed. |
 | Product UI | TypeScript passed and final Next optimized static build passed, including account/dashboard/publisher routes. No deployment. |
 | Browser | Fictional advertiser A saw only Campaign A; app A saw only Chat 2 and payee controls. Broadcast disabled, no wallet registered, waiting/unavailable states visible. Resource reads and both sign-outs worked. No signing/funding was attempted. |
-| Scope | Main tracked checkout remained unchanged at `ddba8fabc8a2f8776cd5f8545aad80bad17d3e11`. No marketing, existing demo, shared payment adapter, provider configuration or private environment edits. Other agents' untracked files were preserved. |
-| Disk | Approximately 71 GiB available; above the requested 40 GiB floor. |
 
 Finance migration SHA-256:
 `d2beb9f1e99efa274ad3bdf2f6488d6519e412ec60f70d97d424698dbb70ccd6`.
-It has **not** been applied to the dedicated AXP cloud project.
-
-Local QA logs:
-`/private/tmp/axp-account-finance-final-suite.log` and
-`/private/tmp/axp-account-finance-ui-build.log`.
-Temporary build output was retained outside the checkout under
-`/private/tmp/axp-finance-qa.TxDdQx`. Borrowed dependency symlinks were removed;
-they are not runtime dependencies or committed files.
+Its subsequent dedicated-cloud application is recorded in
+[finance verification](FINANCE_CLOUD_ACCEPTANCE.md).
 
 ## Still open — do not claim complete production rollout
 
-- Cloud finance migration/configuration, real wallet extension compatibility,
-  real Devnet deposits/authorizations/settlement, and hosted independent-owner
-  acceptance. Each needs its appropriate explicit approval.
+- Real participant wallet-extension compatibility, own-wallet Devnet funding/
+  authorization/settlement and hosted independent-owner acceptance remain open.
+  Cloud schema application alone does not satisfy those gates.
 - Advertiser must sign cumulative increments; there is no unattended delegated
   spending authority. Cooperative closure requires both frozen wallet owners.
 - Signed expired/failed/unknown transactions are not automatically replaced.
@@ -98,9 +93,8 @@ they are not runtime dependencies or committed files.
   onboarding, exact release artifact verification and submission assets remain
   the next functional work. See `FINAL_ROLLOUT_CHECKLIST.md`.
 
-No live models, airdrops, wallet funding, transfers, signatures, broadcasts,
-cloud apply, merge, push or deployment were performed. Existing synthetic and
-historical native runs remain separate; nothing converts their accounting mode.
+The original implementation verification made no live model call or native
+broadcast. Existing synthetic and historical native runs retain their modes.
 
 ## Reproduce
 

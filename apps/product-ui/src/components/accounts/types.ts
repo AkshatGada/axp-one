@@ -115,6 +115,24 @@ export interface AccountReport {
   bySettlementNetwork: Partial<Record<PayoutNetwork, AccountReportSummary>>;
   /** At most 100 records; summaries are not recomputed from this bounded window. */
   deliveries: AccountReportDelivery[];
+  activity?: AccountActivity[];
+  activityTotal?: number;
+}
+export interface AccountActivity {
+  opportunityId: string; appId: string; campaignId: string | null; campaignVersionId: string | null;
+  settlementNetwork: PayoutNetwork;
+  disposition: 'won' | 'lost' | 'skipped' | 'unavailable' | 'abstained' | 'excluded' | 'no_fill';
+  decision: 'bid' | 'skip' | 'abstain' | 'not_called' | 'not_reported';
+  execution: 'actual-api-model' | 'fixture' | 'unavailable' | null;
+  reasonCodes: string[]; bidBaseUnits: string | null; awardId: string | null;
+  deliveryStatus: 'not_awarded' | 'accepted' | 'failed' | 'expired' | 'reserved';
+}
+export interface AppIntegration {
+  schemaVersion: 'account-app-integration.v1'; appId: string;
+  financialMode: 'synthetic' | 'devnet'; apiBasePath: '/api/accounts/sdk';
+  activeCredentialCount: number; ready: boolean; recoverySupported: boolean; broadcastEnabled: boolean;
+  execution: 'actual-api-model' | 'fixture' | 'unavailable';
+  gates: Record<'credential' | 'restrictions' | 'catalogue' | 'inventory' | 'provider' | 'funding' | 'broadcasts', boolean>;
 }
 export interface CampaignReport extends AccountReport {
   schemaVersion: 'account-campaign-report.v1';

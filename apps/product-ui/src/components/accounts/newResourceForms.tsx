@@ -7,6 +7,7 @@ import { AccountForm, Input, Textarea, type RunAction } from './AccountForms';
 import { accountSDKExample, campaignCapabilities, campaignFormInput, credentialStatus } from './resourceForms';
 import type { AIApp, AppCredential, Campaign, CampaignInput, IssuedAppCredential } from './types';
 import { CampaignServing } from './servingResources';
+import { AppIntegration } from './AppIntegration';
 
 function safeError(error: unknown) {
   return error instanceof AccountApiError ? error.message : 'The resource request could not be completed. Refresh and try again.';
@@ -217,6 +218,8 @@ export function AppCredentials({ client, organizationId, app, busy, run, issue, 
           </section>;
         })}
       </>}
+      <AppIntegration key={`integration:${revision}:${activeCount}:${app.updatedAt}`} client={client} organizationId={organizationId} appId={app.id}
+        busy={busy} ready={servingReady} onUnauthorized={onUnauthorized} />
       <details>
         <summary>Server-only SDK configuration example (read only)</summary>
         <div className="ld-stack">

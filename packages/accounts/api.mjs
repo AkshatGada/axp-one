@@ -171,11 +171,25 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
         }
         fail('not_found',404);
       }
-      const appReport=path.match(/^\/organizations\/([a-zA-Z0-9-]+)\/apps\/([a-zA-Z0-9-]+)\/report$/);
+      const appReport=path.match(/^\/organizations\/([a-zA-Z0-9-]+)\/apps\/([a-zA-Z0-9-]+)\/(report|integration)$/);
       if(appReport&&req.method==='GET'){
-        const [,orgId,appId]=appReport,details=await store.details(s.userId,orgId);
-        if(!details.apps.some(app=>app.id===appId))fail('not_found',404);
+        const [,orgId,appId,action]=appReport,details=await store.details(s.userId,orgId);
+        const app=details.apps.find(app=>app.id===appId);
+        if(!app)fail('not_found',404);
         if(!network?.ready)fail('account_serving_not_connected',503);
+        if(action==='integration'){
+          if(url.search)fail('invalid_input');
+          const config=await network.withService(service=>service.config(app));
+          const credentials=await store.appCredentials(s.userId,orgId,appId);
+          const activeCredentialCount=credentials.filter(c=>c.revokedAt===null&&c.expiresAt>now()).length;
+          const gates={credential:activeCredentialCount>0,restrictions:config.unsupportedCategories.length===0,
+            catalogue:config.catalogue.ready,inventory:config.catalogue.inventoryAvailable===true,
+            provider:config.engine.ready&&config.engine.usedToday<config.engine.dailyCap,funding:config.financialMode==='synthetic'||config.payments.ready,
+            broadcasts:config.financialMode==='synthetic'||network.broadcastEnabled===true};
+          return send(res,200,{schemaVersion:'account-app-integration.v1',appId,financialMode:config.financialMode,
+            apiBasePath:'/api/accounts/sdk',activeCredentialCount,gates,ready:Object.values(gates).every(Boolean),
+            execution:config.engine.execution,recoverySupported:config.recoverySupported,broadcastEnabled:network.broadcastEnabled===true});
+        }
         return send(res,200,await network.withService(service=>service.report({appId})));
       }
       const campaigns=path.match(/^\/organizations\/([a-zA-Z0-9-]+)\/campaigns(?:\/([a-zA-Z0-9-]+)(?:\/(approve))?)?$/);

@@ -119,6 +119,9 @@ test('shared network: catalogue pause/edit during model await invalidates stale 
  const f=fixture(t,{transport:async packet=>{if(change){const fn=change;change=null;await fn();}return providerFixture(packets)(packet);}}),s=await setup(f.api);
  change=()=>{for(let i=0;i<2;i++)f.store.setCampaignServing(users[i].id,s.orgs[i],s.campaigns[i].id,{expectedVersion:1,enabled:false});};
  assert.equal((await s.sdks[0].requestAd(input('mid-pause'))).status,'no_fill');
+ const pausedActivity=f.service.report({campaignId:s.campaigns[0].id}).activity[0];
+ assert.equal(pausedActivity.disposition,'excluded');assert.equal(pausedActivity.decision,'bid');
+ assert.ok(pausedActivity.reasonCodes.includes('campaign_paused'));
  for(let i=0;i<2;i++)f.store.setCampaignServing(users[i].id,s.orgs[i],s.campaigns[i].id,{expectedVersion:1,enabled:true});
  change=()=>{for(let i=0;i<2;i++){f.store.saveCampaign(users[i].id,s.orgs[i],campaignInput(i?'B':'A'),s.campaigns[i].id);f.store.approveCampaign(users[i].id,s.orgs[i],s.campaigns[i].id,2);f.store.setCampaignServing(users[i].id,s.orgs[i],s.campaigns[i].id,{expectedVersion:2,enabled:true});}};
  assert.equal((await s.sdks[0].requestAd(input('mid-edit'))).status,'no_fill');

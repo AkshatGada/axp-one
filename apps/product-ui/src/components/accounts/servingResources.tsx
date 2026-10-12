@@ -57,7 +57,7 @@ export function CampaignServing({ client, organizationId, campaign, ready, busy,
   return <section className="ld-stack-lg" aria-label="Campaign synthetic serving">
     <h3 className="ld-body">Shared account serving · {native ? 'Devnet catalogue eligibility' : 'synthetic'}</h3>
     <p className="ld-secondary">{native ? 'Catalogue opt-in is only an eligibility declaration. This version also needs a finalized deposit and separate channel activation under Own-wallet funding before it can bid.' : 'Explicit opt-in uses the reviewed saved version. Accepted receipts accrue synthetic base-unit charges only; no deposit, voucher authorization, payout or refund is connected.'} Pausing stops new matching, not existing awards or receipts.</p>
-    {!ready ? <p className="ld-body">Synthetic serving is unavailable on this server. Approval is not enrollment.</p> : <>
+    {!ready ? <p className="ld-body">Account serving is unavailable on this server. Approval is not enrollment.</p> : <>
       <p className="ld-body" role="status">{loading ? 'Checking enrollment…' : !known ? 'Enrollment not verified' : enabled ? `Version ${campaign.version} enabled · ${native ? 'catalogue only' : 'synthetic'}` : enrollment?.enabled ? 'Stale enrollment · current saved version is not eligible' : enrollment ? `Paused · ${label}` : `Not enrolled · ${label}`}</p>
       {enrollment && <p className="ld-secondary">Enrollment version {enrollment.version} · updated {new Date(enrollment.updatedAt).toISOString()}</p>}
       {error && <p className="account-error" role="alert">{error}</p>}
@@ -113,6 +113,22 @@ export function OwnerReport({ client, organizationId, resourceId, kind, ready, b
             <div><dt>Accepted deliveries</dt><dd>{summary.deliveryCount}</dd></div>
           </dl>
         </div>)}
+        {report.activity && <section className="ld-stack" aria-label="Saved opportunity activity">
+          <h4 className="ld-body">Saved opportunity activity</h4>
+          <p className="ld-secondary">Showing {report.activity.length} of {report.activityTotal} saved entries. No question text or private targeting inputs are included. A policy exclusion is not a model skip; unavailable is not a negative fit judgment.</p>
+          {!report.activity.length && <p>No saved activity yet.</p>}
+          {report.activity.map((entry, index) => <details key={`${entry.opportunityId}:${entry.campaignId}:${index}`}>
+            <summary>{entry.disposition.replaceAll('_', ' ')} · {entry.deliveryStatus.replaceAll('_', ' ')} · {entry.execution ?? 'No model decision reported'}</summary>
+            <dl className="account-readiness account-break">
+              <div><dt>Opportunity</dt><dd>{entry.opportunityId}</dd></div>
+              <div><dt>Decision</dt><dd>{entry.decision.replaceAll('_', ' ')}</dd></div>
+              <div><dt>Reason codes</dt><dd>{entry.reasonCodes.join(', ') || 'None recorded'}</dd></div>
+              <div><dt>Bid · {entry.settlementNetwork} base units</dt><dd>{entry.bidBaseUnits ?? 'No bid'}</dd></div>
+              {entry.campaignVersionId && <div><dt>Saved version</dt><dd>{entry.campaignVersionId}</dd></div>}
+              {entry.awardId && <div><dt>Award</dt><dd>{entry.awardId}</dd></div>}
+            </dl>
+          </details>)}
+        </section>}
         <p className="ld-secondary">Showing {report.deliveries.length} receipt records (at most 100). Summary totals may cover more deliveries than this bounded list.</p>
         {!report.deliveries.length && <p className="ld-secondary">No accepted deliveries in this report window. Outstanding reservations, if any, are shown separately above.</p>}
         {report.deliveries.map(delivery => <details key={delivery.awardId}>

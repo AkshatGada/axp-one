@@ -1,7 +1,7 @@
 # Account-connected shared serving — operator runbook
 
-12 October 2026. Isolated `codex/account-owned-network` worktree. This is the
-phase 4 **synthetic accounting** integration, not account-bound native payments.
+This guide describes the **synthetic accounting** serving configuration.
+Account-owned native finance has its own guide and acceptance gates.
 Keep `/api/accounts/sdk` separate from the shared `/api/product` demo.
 
 ## Configuration and startup
@@ -10,17 +10,14 @@ Use the repository's supported Node runtime and workspace dependencies. From
 the repository root, `npm run dev:accounts` starts the isolated account console.
 `node scripts/accounts/dev-server.mjs --api-only` starts just its API.
 
-The current worktree has an ignored, owner-readable `.env.local` configured with
-the dedicated AXP Supabase project and ports 3505/3506. No model keys were copied.
-The UI address is `http://127.0.0.1:3505/account/` when the full launcher runs.
-Verification servers are stopped at handoff; the user's earlier 3495 server is
-not replaced or restarted. Port 3505 configuration does not automatically change
-Supabase's email-confirmation redirect allowlist.
+Configure the account origin and ports explicitly, with the same exact origin in
+Supabase's email-confirmation allowlist. Store environment values in ignored
+private configuration; never copy model or backend secrets to browser bundles.
 
 Required server settings (placeholders, never real secrets in Git):
 
 ```dotenv
-AXP_SUPABASE_URL=https://qcejmyhaakoedjaqmcub.supabase.co
+AXP_SUPABASE_URL=https://<project-ref>.supabase.co
 AXP_SUPABASE_PUBLISHABLE_KEY=<dedicated-project-publishable-key>
 AXP_NETWORK_SUPABASE_SECRET_KEY=<dedicated-project-backend-secret>
 AXP_ACCOUNTS_PROFILE_STORE=supabase
@@ -39,8 +36,8 @@ put that credential on the owner repository or forward it to clients. See
 
 Apply migrations once, in order: profiles, resources, then
 `supabase/migrations/20261012_axp_account_serving.sql`. They are not automatically
-applied by startup. These three are already applied to the dedicated project;
-do not rerun the non-idempotent DDL there. Missing migration or catalogue access
+applied by startup. Check the project's migration history before applying non-idempotent DDL;
+the dedicated-project application is documented in the dated verification records. Missing migration or catalogue access
 must show unavailable readiness, never route to a fixture/demo database.
 
 Local session and shared exchange snapshots are encrypted and have different
@@ -162,10 +159,10 @@ The whole cloud acceptance file `supabase/tests/account_serving.sql` ends in
 ROLLBACK. It creates only disposable transaction-scoped users/resources and
 temporary helper functions. SQL role/JWT fixtures are not fresh real sign-ins.
 
-## Next phase
+## Native account finance
 
-Review/merge this branch separately, then design account-owned funding and
-publisher payout/channel bindings. Reuse existing native adapters but do not
-redirect fixed-payee channels or imply synthetic receipts were paid. A bounded
-hosted four-account/live-provider/native acceptance and deployment require
-separate authority. Landing, shared demo and existing native runs stay untouched.
+Own-wallet funding/payee bindings and native recovery are documented in
+[the finance guide](ACCOUNT_PAYMENTS_RUNBOOK.md) and
+[verification record](FINANCE_CLOUD_ACCEPTANCE.md). Do not relabel synthetic
+receipts as paid. Real owner-wallet/hosted funded acceptance is separate from
+this serving configuration; broadcasts stay disabled for non-spending checks.

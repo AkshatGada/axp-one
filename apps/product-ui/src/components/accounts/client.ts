@@ -2,7 +2,7 @@ import type {
   AccountHealth, AccountSession, AccountUser, AdvertiserInput, AdvertiserProfile,
   AIApp, AppInput, Credentials, Organization, OrganizationDetails,
   AppCredential, Campaign, CampaignInput, IssuedAppCredential,
-  CampaignEnrollment, CampaignServingInput, CampaignReport, AppReport, AccountReport, AccountReportSummary, AccountReportDelivery, PayoutNetwork,
+  CampaignEnrollment, CampaignServingInput, CampaignReport, AppReport, AccountReport, AccountReportSummary, AccountReportDelivery, PayoutNetwork, AccountActivity, AppIntegration,
 } from './types.ts';
 import { campaignPayload, credentialLabel, publisherScopes } from './resourceForms.ts';
 
@@ -160,7 +160,26 @@ function reportDTO(value: unknown, kind: 'campaign' | 'app', id: string): Accoun
     if (totals.deliveryCount < deliveries.filter(delivery => delivery.settlementNetwork === network).length) invalidResponse();
   }
   // Explicit projection also drops optional delivered creative metadata; never retain a raw report.
-  return { financialMode: value.financialMode as AccountReport['financialMode'], summary, bySettlementNetwork, deliveries };
+  let activity: AccountActivity[] | undefined;
+  if (value.activity !== undefined || value.activityTotal !== undefined) {
+    if (!Array.isArray(value.activity) || value.activity.length > 100 || !Number.isSafeInteger(value.activityTotal) || Number(value.activityTotal) < value.activity.length) invalidResponse();
+    activity = value.activity.map((entry: unknown) => {
+      if (!record(entry) || !resourceId(entry.opportunityId) || !resourceId(entry.appId) ||
+          (entry.campaignId !== null && !resourceId(entry.campaignId)) || (entry.campaignVersionId !== null && !resourceId(entry.campaignVersionId)) ||
+          entry[`${kind}Id`] !== id || !['solana-devnet','tempo-testnet'].includes(String(entry.settlementNetwork)) ||
+          !['won','lost','skipped','unavailable','abstained','excluded','no_fill'].includes(String(entry.disposition)) ||
+          !['bid','skip','abstain','not_called','not_reported'].includes(String(entry.decision)) ||
+          (entry.execution !== null && !['actual-api-model','fixture','unavailable'].includes(String(entry.execution))) ||
+          !Array.isArray(entry.reasonCodes) || entry.reasonCodes.length > 16 || entry.reasonCodes.some(code => typeof code !== 'string' || !/^[a-z_0-9]{1,100}$/.test(code)) ||
+          (entry.bidBaseUnits !== null && !baseUnits(entry.bidBaseUnits)) || (entry.awardId !== null && !resourceId(entry.awardId)) ||
+          !['not_awarded','accepted','failed','expired','reserved'].includes(String(entry.deliveryStatus))) invalidResponse();
+      return { opportunityId: entry.opportunityId, appId: entry.appId, campaignId: entry.campaignId, campaignVersionId: entry.campaignVersionId,
+        settlementNetwork: entry.settlementNetwork, disposition: entry.disposition, decision: entry.decision, execution: entry.execution,
+        reasonCodes: [...entry.reasonCodes], bidBaseUnits: entry.bidBaseUnits, awardId: entry.awardId, deliveryStatus: entry.deliveryStatus } as AccountActivity;
+    });
+  }
+  return { financialMode: value.financialMode as AccountReport['financialMode'], summary, bySettlementNetwork, deliveries,
+    ...(activity ? {activity, activityTotal: Number(value.activityTotal)} : {}) };
 }
 export function isConfigured(health: AccountHealth): boolean {
   return health.configured.origin && health.configured.provider && health.configured.store;
@@ -170,6 +189,7 @@ export function isConfigured(health: AccountHealth): boolean {
 export class AccountsClient {
   private csrf: string | null = null;
   private sessionEpoch = 0;
+  private requestTail: Promise<void> | null = null;
   private readonly transport: typeof fetch;
   constructor(transport: typeof fetch = (...args) => fetch(...args)) { this.transport = transport; }
 
@@ -184,6 +204,21 @@ export class AccountsClient {
   private async request<T>(path: string, body?: object, authenticated = false, sessionBound = authenticated): Promise<T> {
     if ((authenticated || sessionBound) && !this.csrf) throw new AccountApiError(401, 'session_required');
     const epoch = this.sessionEpoch;
+    const csrf = this.csrf;
+    // Account panels share a fenced backend workspace. Order this client's calls
+    // rather than racing its lease or retrying a possibly completed mutation.
+    const execute = () => {
+      if (sessionBound && epoch !== this.sessionEpoch) return Promise.reject<T>(new AccountApiError(401, 'session_changed'));
+      return this.send<T>(path, body, authenticated, sessionBound, epoch, csrf);
+    };
+    const result = this.requestTail ? this.requestTail.then(execute) : execute();
+    const tail = result.then(() => undefined, () => undefined);
+    this.requestTail = tail;
+    void tail.then(() => { if (this.requestTail === tail) this.requestTail = null; });
+    return result;
+  }
+
+  private async send<T>(path: string, body: object | undefined, authenticated: boolean, sessionBound: boolean, epoch: number, csrf: string | null): Promise<T> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
     try {
@@ -193,7 +228,7 @@ export class AccountsClient {
         headers: {
           Accept: 'application/json',
           ...(body === undefined ? {} : { 'Content-Type': 'application/json' }),
-          ...(authenticated ? { 'x-axp-csrf': this.csrf! } : {}),
+          ...(authenticated ? { 'x-axp-csrf': csrf! } : {}),
         },
         ...(body === undefined ? {} : { body: JSON.stringify(body) }),
         signal: controller.signal,
@@ -258,9 +293,12 @@ export class AccountsClient {
     return result;
   }
   async signout() {
-    const result = await this.request<{ signedOut: true }>('/auth/signout', {}, Boolean(this.csrf));
-    if (result.signedOut !== true) throw new AccountApiError(502, 'invalid_response');
+    const pending = this.request<{ signedOut: true }>('/auth/signout', {}, Boolean(this.csrf), false);
+    // Invalidate queued owner requests immediately, using only the captured CSRF
+    // for this explicit sign-out. A failed sign-out must not retain local authority.
     this.clearSession();
+    const result = await pending;
+    if (result.signedOut !== true) throw new AccountApiError(502, 'invalid_response');
     return result;
   }
   profile(displayName: string) {
@@ -323,6 +361,20 @@ export class AccountsClient {
   async appReport(orgId: string, appId: string): Promise<AppReport> {
     const result = await this.request<unknown>(`/organizations/${encodeURIComponent(orgId)}/apps/${encodeURIComponent(appId)}/report`, undefined, false, true);
     return { ...reportDTO(result, 'app', appId), schemaVersion: 'account-app-report.v1', appId };
+  }
+  async appIntegration(orgId: string, appId: string): Promise<AppIntegration> {
+    const value = await this.request<unknown>(`/organizations/${encodeURIComponent(orgId)}/apps/${encodeURIComponent(appId)}/integration`, undefined, false, true);
+    const gateNames = ['credential','restrictions','catalogue','inventory','provider','funding','broadcasts'] as const;
+    if (!record(value) || value.schemaVersion !== 'account-app-integration.v1' || value.appId !== appId || value.apiBasePath !== '/api/accounts/sdk' ||
+        !['synthetic','devnet'].includes(String(value.financialMode)) || !['actual-api-model','fixture','unavailable'].includes(String(value.execution)) ||
+        !Number.isSafeInteger(value.activeCredentialCount) || Number(value.activeCredentialCount) < 0 || Number(value.activeCredentialCount) > 10 ||
+        !record(value.gates) || gateNames.some(name => typeof (value.gates as Record<string, unknown>)[name] !== 'boolean') ||
+        typeof value.ready !== 'boolean' || typeof value.recoverySupported !== 'boolean' || typeof value.broadcastEnabled !== 'boolean') invalidResponse();
+    const gates = Object.fromEntries(gateNames.map(name => [name, (value.gates as Record<string, boolean>)[name]])) as AppIntegration['gates'];
+    if (value.ready !== Object.values(gates).every(Boolean) || gates.credential !== (Number(value.activeCredentialCount) > 0)) invalidResponse();
+    return { schemaVersion: 'account-app-integration.v1', appId, apiBasePath: '/api/accounts/sdk', financialMode: value.financialMode as AppIntegration['financialMode'],
+      activeCredentialCount: Number(value.activeCredentialCount), ready: value.ready, recoverySupported: value.recoverySupported,
+      broadcastEnabled: value.broadcastEnabled, execution: value.execution as AppIntegration['execution'], gates };
   }
   async issueAppCredential(orgId: string, appId: string, label: string): Promise<IssuedAppCredential> {
     const result = await this.request<IssuedAppCredential>(`/organizations/${encodeURIComponent(orgId)}/apps/${encodeURIComponent(appId)}/credentials`, { label: credentialLabel(label) }, true);

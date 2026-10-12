@@ -78,8 +78,13 @@ const response = await fetch(baseURL + '/publisher/config', {
 });
 if (!response.ok) throw new Error('Account SDK configuration unavailable');
 const config = await response.json();
-${servingReady ? "// financialMode must be 'synthetic'; inspect config.servingEnabled and recovery readiness.\n// Synthetic receipts are not native payment; configuration does not execute an ad request." : "// config.financialMode === 'unfunded'; config.servingEnabled === false."}
+// Inspect config.financialMode, config.servingEnabled, config.engine and recovery readiness.
+// synthetic: receipt accrual only, no native payment.
+// devnet: requires finalized own-wallet funding and separate explicit authorization.
+// unfunded or unavailable: leave the independent answer usable without an ad.
+${servingReady ? '// This server has account serving connected; app-specific readiness may still be blocked.' : '// Account serving is not connected on this server.'}
 const axp = new AXPPublisher({ apiKey, baseURL });
-${servingReady ? '// Only explicitly enabled, approved inventory participates. No native funding is connected.' : '// Do not call requestAd yet: serving/recovery returns account_serving_not_connected (503).'}
+// Only explicitly enabled, approved, eligible inventory participates.
+// This configuration check requests no ad and authorizes no payment.
 // Never expose the publisher key in browser code, NEXT_PUBLIC_* or model input.`;
 }

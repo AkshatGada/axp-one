@@ -275,9 +275,10 @@ test('server examples use current origin/account SDK, authenticated fetch and no
     assert.ok(example.includes("process.env.AXP_PUBLISHER_API_KEY"));
     assert.ok(example.includes("'x-axp-publisher-key': apiKey"));
     assert.ok(example.includes('new AXPPublisher({ apiKey, baseURL })'));
-    assert.ok(example.includes('account_serving_not_connected (503)'));
-    assert.ok(example.includes("config.financialMode === 'unfunded'"));
-    assert.ok(example.includes('config.servingEnabled === false'));
+    assert.ok(example.includes('Account serving is not connected on this server.'));
+    assert.ok(example.includes('config.financialMode'));
+    assert.ok(example.includes('config.servingEnabled'));
+    assert.ok(example.includes('app-specific readiness may still be blocked.') === false);
     assert.ok(!example.includes(apiKey)); assert.ok(!example.includes('/api/product'));
     assert.ok(!example.includes('console.')); assert.ok(!example.includes('NEXT_PUBLIC_AXP'));
   }

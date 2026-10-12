@@ -1,14 +1,11 @@
 # Account-owned campaigns and app credentials
 
-This document records the phase 1–3 resource slice. Phase 4 now adds separately
-enabled shared synthetic serving; use [the shared-serving runbook](SHARED_SERVING_RUNBOOK.md)
-and [result](SHARED_SERVING_RESULT.md) for current configuration and behavior.
-The `not_connected` campaign DTO below is retained for compatibility; enrollment
-and actual SDK readiness are separate interfaces, not inferred from that field.
-
-This slice adds resources to the existing account console. It does not launch
-campaigns, serve ads from those campaigns, fund channels or change the shared demo.
-See [the phased plan](NETWORK_CONNECTION_PLAN.md) for the next serving/payment gates.
+This guide describes owned campaign and credential operations. Approval, serving
+enrollment and confirmed financial readiness are separate transitions.
+Use [shared serving](SHARED_SERVING_RUNBOOK.md) and
+[own-wallet finance](ACCOUNT_PAYMENTS_RUNBOOK.md) for those connections.
+The legacy resource DTO's `not_connected` field does not override actual serving
+or funding readiness.
 
 ## Storage and setup
 
@@ -40,7 +37,8 @@ there or describe those tests as real Supabase sign-ins.
    atomically checks that the version you reviewed is still current. A concurrent
    edit returns a conflict; reload and review the new version before approving.
 4. Editing creates a new version and removes approval. Approve that version again
-   if desired. Approval is not activation: serving remains `not_connected`.
+   if desired. Approval is not activation: explicitly enroll the approved version
+   through the separate serving interface and inspect actual readiness.
 
 All owner operations use the verified session identity. A client cannot assign an
 owner, advertiser, approval hash or version. Another owner's resource ID is treated
@@ -68,13 +66,15 @@ const response = await fetch(`${process.env.AXP_ORIGIN}/api/accounts/sdk/publish
   headers: { 'x-axp-publisher-key': process.env.AXP_APP_KEY }
 });
 const config = await response.json();
-// config.servingEnabled === false in this slice.
+// Inspect servingEnabled, financialMode, engine and catalogue readiness.
 ```
 
 The existing publisher SDK may be initialized server-side with base URL
-`${AXP_ORIGIN}/api/accounts/sdk`. Valid-key ad requests currently return
-`503 account_serving_not_connected`; the SDK's normal request failure behavior
-preserves the app's answer. Do not interpret this as a completed hosted integration.
+`${AXP_ORIGIN}/api/accounts/sdk`. With serving disabled, valid-key requests return
+`503 account_serving_not_connected`. Enabled serving additionally requires
+catalogue/provider readiness and the configured financial conditions. The SDK
+preserves the independent answer on failure. These contracts alone are not proof
+of completed hosted native acceptance.
 No request is routed to the shared demo as a fallback. Browser-origin key requests
 are rejected. Never expose private raw keys to inspect the public configuration.
 

@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Isolated account SDK acceptance</title>
+<style>body{font:16px system-ui;max-width:720px;margin:40px auto;padding:20px;color:#202030;background:#f7f6f2}textarea{display:block;width:100%;min-height:80px}button{padding:12px;margin:10px 10px 10px 0}aside,article{padding:20px;margin:20px 0;background:white;border:1px solid #ccc}aside{border-color:#3030ff}[data-sponsored-label]{color:#3030ff;font-weight:bold}pre{white-space:pre-wrap;overflow-wrap:anywhere}</style></head>
+<body><h1>Independent chat app · SDK acceptance</h1><p>Local fixture only. Synthetic accrual, injected advertiser decisions, deterministic organic answer. No cloud, real model or funds movement.</p>
+<form><label>Question<textarea name="question" required>Compare hardware wallets for Ethereum and Solana with offline key storage.</textarea></label>
+<label><input type="checkbox" name="consent" required> Share this question for ad matching</label><br><button disabled>Ask question</button></form>
+<article aria-label="Independent answer"><h2>Independent answer</h2><p id="answer">Waiting for your question.</p></article>
+<section id="slot" aria-label="Separate ad slot"></section><p id="status" role="status"></p>
+<button id="retry" disabled>Retry same turn</button><button id="repeat" disabled>Acknowledge again</button>
+<pre id="receipt" aria-label="Receipt identity"></pre><a href="/account/#app-report">Inspect your private account report</a>
+<script type="module">
+import {createSponsoredCard,createRenderAcknowledger} from '/fixture-sdk/browser.mjs';
+const form=document.querySelector('form'),answer=document.querySelector('#answer'),slot=document.querySelector('#slot'),status=document.querySelector('#status'),receipt=document.querySelector('#receipt'),retry=document.querySelector('#retry'),repeat=document.querySelector('#repeat');
+let lastInput,lastResult,lastNode;
+// This function receives the question only. No ad request, campaign or award
+// enters its input or history. It is explicitly deterministic fixture guidance.
+function organic(question){return question.toLowerCase().includes('mobile-only')?'Compare mobile wallet recovery, network support and device security.':'Compare network support, offline signing, recovery and usability before choosing a wallet.';}
+async function post(path,body){const r=await fetch('/api/fixture-chat'+path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});const value=await r.json();if(!r.ok)throw Error('Fixture request unavailable');return value;}
+const acknowledge=createRenderAcknowledger({post:(path,observation,deliveryToken)=>post(path,{observation,deliveryToken})});
+async function accept(){const r=await acknowledge({node:lastNode,award:lastResult.award,deliveryToken:lastResult.deliveryToken});receipt.textContent=JSON.stringify({status:r.status,financialMode:r.financialMode,awardId:r.receipt.awardId,receiptHash:r.charge.receiptHash,amountBaseUnits:r.charge.amountBaseUnits},null,2);status.textContent='Accepted disclosed insertion · synthetic only';repeat.disabled=false;}
+async function request(){const r=await post('/opportunities',lastInput);lastResult=r;retry.disabled=false;
+ if(r.status!=='awarded'){slot.replaceChildren();status.textContent='No ad · '+r.status;receipt.textContent='No accepted charge';repeat.disabled=true;return;}
+ lastNode=createSponsoredCard({document,award:r.award});slot.replaceChildren(lastNode);await accept();}
+form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const question=new FormData(form).get('question');answer.textContent=organic(question);lastInput={question,sessionId:'isolated-browser-chat',turnId:crypto.randomUUID()};status.textContent='Matching…';try{await request();}catch{status.textContent='Ad unavailable · independent answer remains';}});
+retry.addEventListener('click',async()=>{try{await request();}catch{status.textContent='Retry unavailable';}});
+repeat.addEventListener('click',async()=>{try{await accept();}catch{status.textContent='Acknowledgement unavailable';}});
+form.querySelector('button').disabled=false;
+</script></body></html>

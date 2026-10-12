@@ -30,6 +30,7 @@ function fixture(responses = []) {
   return { client, calls };
 }
 const operations = client => [
+  () => client.appIntegration(org, app),
   () => client.campaignServing(org, campaign),
   () => client.setCampaignServing(org, campaign, { expectedVersion: 3, enabled: true }),
   () => client.campaignReport(org, campaign), () => client.appReport(org, app),
@@ -209,11 +210,13 @@ test('logout invalidates in-flight report and enrollment responses', async () =>
   }
 });
 
-test('readiness accepts actual health campaignServing and SDK examples remain read-only and synthetic', async () => {
+test('readiness accepts actual health campaignServing and SDK examples cover modes without requesting an ad', async () => {
   const health = { enabled: true, provider: 'supabase', configured: { origin: true, provider: true, store: true }, capabilities };
   assert.equal((await fixture([health]).client.health()).capabilities.campaignServing, true);
   const example = accountSDKExample('https://fixture.example.test', true);
-  assert.match(example, /financialMode must be 'synthetic'/);
+  assert.match(example, /config.financialMode/); assert.match(example, /synthetic: receipt accrual/);
+  assert.match(example, /devnet: requires finalized own-wallet funding/);
+  assert.doesNotMatch(example, /must be 'synthetic'|No native funding is connected/);
   assert.match(example, /config.servingEnabled/); assert.match(example, /recovery readiness/);
   assert.doesNotMatch(example, /requestAd\(|renderAd\(|\/api\/product|axp_app_[a-f0-9]{64}/);
 });
@@ -237,4 +240,31 @@ test('account UI source gates by health, preserves secret guards and handles ser
   const types = read('types.ts');
   assert.match(types, /servingStatus: 'not_connected'/);
   assert.match(types, /schemaVersion: 'account-campaign-report.v1'/); assert.match(types, /schemaVersion: 'account-app-report.v1'/);
+});
+
+test('owner integration readiness is session-bound, projected and validates gates without an SDK key', async () => {
+  const gates = {credential:true,restrictions:true,catalogue:true,inventory:true,provider:true,funding:true,broadcasts:true};
+  const readiness = {schemaVersion:'account-app-integration.v1',appId:app,financialMode:'synthetic',apiBasePath:'/api/accounts/sdk',
+    activeCredentialCount:1,gates,ready:true,execution:'fixture',recoverySupported:true,broadcastEnabled:false};
+  const {client,calls} = fixture([session,{...readiness,apiKey:'PRIVATE',packet:'PRIVATE',gates:{...gates,extra:'PRIVATE'}}]);
+  await client.session();assert.deepEqual(await client.appIntegration(org,app),readiness);
+  assert.equal(new Headers(calls[1].headers).has('x-axp-publisher-key'),false);
+  for(const patch of [{appId:'foreign'},{activeCredentialCount:0},{ready:false},{financialMode:'mainnet'},{gates:{...gates,provider:'yes'}}]){
+    const f=fixture([session,{...readiness,...patch}]);await f.client.session();await assert.rejects(f.client.appIntegration(org,app),{status:502});
+  }
+  let resolve;const pending=fixture([session,()=>new Promise(done=>{resolve=done;})]);await pending.client.session();
+  const result=pending.client.appIntegration(org,app);pending.client.clearSession();resolve(json(readiness));await assert.rejects(result,{code:'session_changed'});
+});
+
+test('activity DTOs are bounded, owner-bound and drop private additions',async()=>{
+  const entry={opportunityId:delivery.opportunityId,appId:app,campaignId:campaign,campaignVersionId:delivery.campaignVersionId,
+    settlementNetwork:'solana-devnet',disposition:'won',decision:'bid',execution:'fixture',reasonCodes:['declared_fit_supported'],
+    bidBaseUnits:'3000',awardId:delivery.awardId,deliveryStatus:'accepted'};
+  const report={...campaignReport,activity:[entry],activityTotal:1};
+  const f=fixture([session,{...report,activity:[{...entry,question:'PRIVATE',packet:'PRIVATE',deliveryToken:'PRIVATE'}]}]);await f.client.session();
+  assert.deepEqual(await f.client.campaignReport(org,campaign),report);
+  for(const patch of [{activityTotal:0},{activity:Array(101).fill(entry)},{activity:[{...entry,campaignId:'foreign'}]},
+    {activity:[{...entry,execution:'live'}]},{activity:[{...entry,reasonCodes:['<private text>']}]},{activity:[{...entry,bidBaseUnits:3000}]}]){
+    const invalid=fixture([session,{...report,...patch}]);await invalid.client.session();await assert.rejects(invalid.client.campaignReport(org,campaign),{status:502});
+  }
 });

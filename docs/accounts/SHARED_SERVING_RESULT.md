@@ -1,7 +1,8 @@
 # Shared account serving — phase 4 result
 
-12 October 2026. Branch `codex/account-owned-network`, resource base `bcb13db`.
-Implemented in the same isolated worktree; not merged, pushed or deployed.
+12 October 2026 · historical synthetic-serving acceptance.
+[Account finance](FINANCE_CLOUD_ACCEPTANCE.md) is a subsequent additive slice.
+This result does not establish native settlement or current deployment.
 
 ## Delivered
 
@@ -20,8 +21,7 @@ Implemented in the same isolated worktree; not merged, pushed or deployed.
 
 This is **synthetic financial accounting**, including when the intended rail is
 Solana Devnet or Tempo testnet. It performs no native funding, spending-voucher
-authorization, settlement, payout or refund. Those remain account financial
-bindings phase 5. Existing demo native payment evidence is unchanged and does not
+authorization, settlement, payout or refund. Those are covered by the separate account-finance implementation and acceptance gates. Existing demo native payment evidence is unchanged and does not
 constitute settlement of this phase's account-owned placements.
 
 ## Verification
@@ -37,7 +37,7 @@ constitute settlement of this phase's account-owned placements.
 | Model provenance | Immutable cached-vector/uncached-lexical ContextHint packets reached the injected Jev transport; no external provider calls |
 | Uncertainty | Checkpointed admissions survived restart without repeat invocation; pending/unknown was not presented as success |
 | Browser | Advertiser A privately inspected its campaign/report, paused/re-enabled version 1, reloaded and signed out; App A saw its own app/report and no campaigns, then signed out |
-| Fresh review | One independent Sol6.1-high review and bounded recheck; substantive findings fixed with targeted regressions |
+| Fresh review | One independent independent review and bounded recheck; substantive findings fixed with targeted regressions |
 
 Browser accounts, keys, decisions and receipt amounts above are explicit local
 fixtures, **not** four real Supabase signups or a hosted live-provider acceptance.
@@ -58,10 +58,9 @@ No emails, fresh Jev/organic calls, wallets or funds were used.
 6. Kept historical advertiser snapshots immutable on explicit pause/re-enable;
    checked cross-app obligations before cap reductions and rail changes.
 
-## Approved dedicated Supabase setup
+## Dedicated Supabase verification
 
-Applied **only** to AXP project `qcejmyhaakoedjaqmcub`, following the user's explicit
-approval after isolated tests passed:
+The additive migration was applied to the dedicated AXP project after isolated tests:
 
 - Migration `20261012_axp_account_serving.sql` SHA-256
   `167d225c69c56d680e791dd7c8bf4fce73d7ff836c85e121d885db2f654d6e92`.
@@ -71,30 +70,13 @@ approval after isolated tests passed:
   match: profiles/orgs/advertisers/apps each 1 row, campaigns/credentials each 0.
 - Enrollment table remains empty. Catalogue returns `[]`. New owner RLS and
   service-only catalogue permissions verified. No customer inventory enrolled.
-- Saved existing project backend key only to ignored mode-0600 `.env.local`;
-  no new key created, no secret committed/logged or forwarded to a browser client.
+- Privileged catalogue access is backend-only; credentials are not part of the public client.
 - The real backend catalogue reader successfully queried Supabase: zero enrolled
   campaigns. The isolated API health at port 3505 returned
   `profileStore:supabase`, `campaignServing:true`, `nativeFunding:false` and
   `serving.ready:true`. Test servers were stopped afterward.
 
-Verification query:
-[dedicated project SQL checks](https://supabase.com/dashboard/project/qcejmyhaakoedjaqmcub/sql/49f48597-72b9-4072-b64f-8ab9c91faef3).
-Local private evidence is outside the repository in the worktree parent:
-`supabase-serving-checks.png`, `shared-serving-suite-final.log`,
-`shared-serving-focused.log`, `shared-serving-build.log` and account screenshots.
-Do not treat a saved SQL editor result as a substitute for rerunning checks after
-later database changes.
-
-## Preservation and next gate
-
-Primary checkout remained `frontend` at `ddba8fabc8a2f8776cd5f8545aad80bad17d3e11`,
-with only its existing untracked research handoff observed. Landing, design
-system, shared dashboard/publisher demo, native payment packages and historical
-artifacts have no changes in this phase. Disk remained about 70 GiB free.
-
-Next: review/merge this account branch without landing changes, then implement
-advertiser spending authority and app-specific native payout/channel bindings,
-followed by separately approved bounded hosted acceptance. Missing broad safety
-classification deliberately suppresses affected serving; it is not claimed as
-implemented. See [operator runbook](SHARED_SERVING_RUNBOOK.md).
+Current source/schema contracts and remaining release gates are documented in
+[serving integration](SHARED_SERVING_RUNBOOK.md), [status](STATUS.md) and
+[finance verification](FINANCE_CLOUD_ACCEPTANCE.md). Missing unsupported safety
+classification suppresses affected serving; it is not claimed implemented.
