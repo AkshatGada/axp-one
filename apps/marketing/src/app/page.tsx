@@ -1,36 +1,32 @@
-// axp.one: the product landing page. One story on one paper ground: the Exchange Wall, the
-// exploded Sponsored card, the five stages, then what each side gets (advertisers, AI apps),
-// trust and billing, where it stands, and a door per audience. Every word is server-rendered and
-// visible without JS; motion layers on top. Copy: src/data/copy.ts. Technical evidence (the
-// original MVP, benchmark, payment proof) is linked from the footer, not told here.
-import Header from "@/v7/Header";
+// axp.one: the product landing page (V5). The 3D wall cover, one question followed through, what
+// each side gets, agentic payments, and the doors. One flow, no controls. Copy: src/v11/copy.ts.
+import "@/v11/v11.css";
 import MotionRoot from "@/motion/MotionRoot";
-import FilmMode from "@/motion/FilmMode";
-import Hero from "@/v7/Hero";
-import How from "@/v7/How";
-import Advertisers from "@/v7/Advertisers";
-import Publishers from "@/v7/Publishers";
-import Billing from "@/v7/Billing";
-import Status from "@/v7/Status";
-import Closing from "@/v7/Closing";
-import Footer from "@/v7/Footer";
+import Masthead from "@/v11/shell/Masthead";
+import Footer from "@/v11/shell/Footer";
+import Rises from "@/v11/shell/Rises";
+import Cover from "@/v11/cover";
+import Shift from "@/v11/shift";
+import Film from "@/v11/film";
+import Advertiser from "@/v11/advertiser";
+import Apps from "@/v11/apps";
+import Rule from "@/v11/rule";
 
 export default function Home() {
   return (
-    <>
+    <div className="v10">
       <MotionRoot />
-      <FilmMode />
-      <Header />
-      <main id="main" className="pg-main">
-        <Hero />
-        <How />
-        <Advertisers />
-        <Publishers />
-        <Billing />
-        <Status />
-        <Closing />
+      <Rises />
+      <Masthead />
+      <main id="main">
+        <Cover />
+        <Shift />
+        <Film />
+        <Advertiser />
+        <Apps />
+        <Rule />
+        <Footer />
       </main>
-      <Footer />
-    </>
+    </div>
   );
 }
