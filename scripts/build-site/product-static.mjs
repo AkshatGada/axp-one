@@ -3,7 +3,7 @@
 import {cpSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync} from 'node:fs';
 import {join, dirname, resolve, sep} from 'node:path';
 
-export const PRODUCT_PAGES = ['advertiser-dashboard', 'publisher-demo'];
+export const PRODUCT_PAGES = ['advertiser-dashboard', 'publisher-demo', 'account'];
 
 export function mergeStaticTree(source, destination) {
   mkdirSync(destination, {recursive: true});
