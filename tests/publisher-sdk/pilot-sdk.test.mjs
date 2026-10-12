@@ -235,25 +235,26 @@ test('lookup deadline aborts transport, never purchases/retries or treats timeou
   await assert.rejects(sdk.lookupOpportunity(input), errorCode('timeout')); assert.equal(signal.aborted, true); assert.equal(calls, 1);
 });
 
-test('0.2.0 local npm tarball allowlist installs offline with all public runtime entry points and declarations', t => {
+test('0.2.1 scoped npm tarball installs offline without React and includes compiled entry points', t => {
   const root = mkdtempSync(join(tmpdir(), 'axp-sdk-pack-'));
   t.after(() => rmSync(root, {recursive: true, force: true}));
   const cache = join(root, 'cache');
   const pack = spawnSync('npm', ['pack', './packages/publisher-sdk', '--json', '--ignore-scripts', '--offline', '--cache', cache, '--pack-destination', root],
     {cwd: new URL('../../', import.meta.url), encoding: 'utf8'});
   assert.equal(pack.status, 0, pack.stderr);
-  const [manifest] = JSON.parse(pack.stdout); assert.equal(manifest.version, '0.2.0');
-  const expected = ['README.md', 'browser.d.mts', 'browser.mjs', 'errors.mjs', 'financial.d.mts', 'financial.mjs', 'index.d.mts', 'index.mjs', 'package.json', 'react.tsx', 'receipt.d.mts', 'receipt.mjs'];
+  const [manifest] = JSON.parse(pack.stdout); assert.equal(manifest.version, '0.2.1');
+  assert.equal(manifest.name, '@axp001/publisher-sdk');
+  const expected = ['LICENSE', 'README.md', 'browser.d.mts', 'browser.mjs', 'errors.mjs', 'financial.d.mts', 'financial.mjs', 'index.d.mts', 'index.mjs', 'package.json', 'react.mjs', 'react.d.mts', 'receipt.d.mts', 'receipt.mjs'];
   assert.deepEqual(manifest.files.map(file => file.path).sort(), expected.sort());
   const app = join(root, 'app');
   const install = spawnSync('npm', ['install', join(root, manifest.filename), '--prefix', app, '--no-save', '--package-lock=false', '--ignore-scripts', '--offline', '--no-audit', '--no-fund', '--cache', cache], {encoding: 'utf8'});
   assert.equal(install.status, 0, install.stderr);
   const smoke = spawnSync(process.execPath, ['--input-type=module', '-e', `
     import assert from 'node:assert/strict';
-    import {AXPPublisher, PublisherSDKError} from '@axp/publisher-sdk';
-    import {createRenderAcknowledger} from '@axp/publisher-sdk/browser';
-    import {moneyUnit} from '@axp/publisher-sdk/financial';
-    import {validateReceiptResult} from '@axp/publisher-sdk/receipt';
+    import {AXPPublisher, PublisherSDKError} from '@axp001/publisher-sdk';
+    import {createRenderAcknowledger} from '@axp001/publisher-sdk/browser';
+    import {moneyUnit} from '@axp001/publisher-sdk/financial';
+    import {validateReceiptResult} from '@axp001/publisher-sdk/receipt';
     assert.equal(typeof AXPPublisher.prototype.lookupOpportunity, 'function');
     assert.equal(typeof AXPPublisher.prototype.lookupDelivery, 'function');
     assert.equal(typeof createRenderAcknowledger, 'function');
