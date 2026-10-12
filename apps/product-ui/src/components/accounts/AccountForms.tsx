@@ -43,7 +43,7 @@ export function Input({ label, name, value = '', required = true, type = 'text',
   </div>;
 }
 
-function Textarea({ label, name, value = '', hint, maxLength = 4000 }: {
+export function Textarea({ label, name, value = '', hint, maxLength = 4000 }: {
   label: string; name: string; value?: string; hint?: string; maxLength?: number;
 }) {
   const id = useId();

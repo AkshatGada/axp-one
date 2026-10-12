@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Ld } from '@axp/design-system/ledger';
 import { AccountApiError, AccountsClient, isConfigured } from './client';
 import { consumeConfirmationLink } from './forms';
 import { AccountForm, AdvertiserForm, AppForm, AuthForm, Input, type RunAction } from './AccountForms';
-import type { AccountHealth, AccountSession, OrganizationDetails } from './types';
+import { AppCredentials, CampaignResources } from './newResourceForms';
+import type { AccountHealth, AccountSession, AppCredential, IssuedAppCredential, OrganizationDetails } from './types';
 
 export function AccountConsole() {
   const client = useMemo(() => new AccountsClient(), []);
@@ -19,6 +20,8 @@ export function AccountConsole() {
   const [busyLabel, setBusyLabel] = useState('Loading account');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [issuedKey, setIssuedKey] = useState<{ apiKey: string; organizationId: string; appId: string } | null>(null);
+  const secretEpoch = useRef(0);
   const lock = useRef(false);
   const initialized = useRef(false);
   const errorNode = useRef<HTMLDivElement>(null);
@@ -27,8 +30,16 @@ export function AccountConsole() {
   const authenticated = session?.authenticated === true ? session : null;
   const ready = Boolean(health?.enabled && isConfigured(health));
   const profiles = Boolean(authenticated?.capabilities.profiles && health?.capabilities.profiles);
+  const campaignDrafts = Boolean(profiles && authenticated?.capabilities.campaignDrafts && health?.capabilities.campaignDrafts);
+  const appCredentials = Boolean(profiles && authenticated?.capabilities.appCredentials && health?.capabilities.appCredentials);
+
+  const clearResourceSecret = useCallback(() => {
+    secretEpoch.current++;
+    setIssuedKey(null);
+  }, []);
 
   function clearOwnedState() {
+    clearResourceSecret();
     client.clearSession();
     setSession(null);
     setDetails(null);
@@ -38,6 +49,8 @@ export function AccountConsole() {
 
   // Only known local validation errors are displayed; API errors have safe mapped text.
   const run: RunAction = async (label, action, success) => {
+    // Invalidate the prior display and any pending key response before the first await.
+    clearResourceSecret();
     if (lock.current) return;
     lock.current = true;
     setBusyLabel(label);
@@ -59,7 +72,23 @@ export function AccountConsole() {
     }
   };
 
+  const expireOwnedSession = useCallback(() => {
+    client.clearSession(); clearResourceSecret();
+    setSession({ authenticated: false }); setDetails(null); setOrganizationId(''); setAppId('');
+  }, [client, clearResourceSecret]);
+
+  async function showIssuedCredential(action: () => Promise<IssuedAppCredential>): Promise<AppCredential | null> {
+    const epoch = secretEpoch.current;
+    const result = await action();
+    if (!mounted.current || epoch !== secretEpoch.current) {
+      throw new Error('The credential response was discarded after navigation or an account action. Reload credential metadata, then revoke or rotate the new credential if you did not save it. Issuance is not retried automatically.');
+    }
+    setIssuedKey({ apiKey: result.apiKey, organizationId, appId });
+    return result.credential;
+  }
+
   async function readSession(preferredId = '') {
+    clearResourceSecret();
     const current = await client.session();
     if (!mounted.current) return;
     setSession(current);
@@ -92,7 +121,20 @@ export function AccountConsole() {
       setTokenHash(link.tokenHash);
       void run('Loading account', refresh, link.invalid ? 'This is not a supported email-confirmation link. Sign in or request a new sign-up email.' : undefined);
     }
-    return () => { mounted.current = false; };
+    const clearOnNavigation = () => clearResourceSecret();
+    window.addEventListener('popstate', clearOnNavigation);
+    window.addEventListener('hashchange', clearOnNavigation);
+    window.addEventListener('pagehide', clearOnNavigation);
+    window.addEventListener('beforeunload', clearOnNavigation);
+    return () => {
+      mounted.current = false;
+      secretEpoch.current++;
+      setIssuedKey(null);
+      window.removeEventListener('popstate', clearOnNavigation);
+      window.removeEventListener('hashchange', clearOnNavigation);
+      window.removeEventListener('pagehide', clearOnNavigation);
+      window.removeEventListener('beforeunload', clearOnNavigation);
+    };
     // Initial reads only. All mutations require an explicit form or button action.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -100,9 +142,11 @@ export function AccountConsole() {
   useEffect(() => { if (error) errorNode.current?.focus(); }, [error]);
 
   const selectedApp = details?.apps.find(app => app.id === appId);
-  return <div className="account-console">
+  return <div className="account-console"
+    onClickCapture={event => { if (event.target instanceof Element && event.target.closest('button, a, summary')) clearResourceSecret(); }}
+    onSubmitCapture={clearResourceSecret} onChangeCapture={clearResourceSecret}>
     <Ld.Shell
-      top={<Ld.TopBar brand={<Ld.Wordmark />} chips={<Ld.Tag tone="outline">Account · profiles only</Ld.Tag>}
+      top={<Ld.TopBar brand={<Ld.Wordmark />} chips={<Ld.Tag tone="outline">Account · owned resources</Ld.Tag>}
         actions={<>
           <Ld.Button variant="secondary" disabled={busy} onClick={() => void run('Refreshing account', refresh)}>Refresh account</Ld.Button>
           {authenticated && <Ld.Button variant="ghost" disabled={busy} onClick={() => void run('Signing out', async () => {
@@ -115,9 +159,11 @@ export function AccountConsole() {
         { href: '#main', label: 'Overview' },
         ...(authenticated ? [{ href: '#personal-profile', label: 'Personal profile' }, { href: '#organizations', label: 'Organizations' }] : []),
         ...(details && profiles ? [{ href: '#advertiser-profile', label: 'Advertiser profile' }, { href: '#ai-apps', label: 'AI apps' }] : []),
+        ...(details && campaignDrafts ? [{ href: '#owned-campaigns', label: 'Campaign drafts' }] : []),
+        ...(selectedApp && appCredentials ? [{ href: '#app-credentials', label: 'SDK credentials' }] : []),
         { href: '#account-readiness', label: 'Capabilities' },
       ] }]} foot="Your organizations and profiles are separate from the shared product demo." />}>
-      <Ld.PageBar title="Your account" sub="Manage your identity, organizations and profiles. One account can be both an advertiser and an AI-app operator." />
+      <Ld.PageBar title="Your account" sub="Manage your identity, organizations, private campaign drafts and server-side app credentials. Serving and funding are not connected." />
 
       <div className="account-feedback" aria-live="polite" aria-atomic="true" role="status">
         {busy ? `${busyLabel}…` : notice}
@@ -144,7 +190,7 @@ export function AccountConsole() {
               setTokenHash(null);
               clearOwnedState();
               await readSession();
-            }, 'Email confirmed. Session checked. Profile features only are available.')}>Confirm email</Ld.Button>
+            }, 'Email confirmed. Session checked. Serving and funding remain unavailable.')}>Confirm email</Ld.Button>
             <Ld.Button variant="secondary" disabled={busy} onClick={() => { setTokenHash(null); setError(''); }}>Discard link</Ld.Button>
           </div>
         </div>
@@ -231,20 +277,29 @@ export function AccountConsole() {
             </div>
           </Ld.Panel>
         </div>}
+        {details && campaignDrafts && <CampaignResources key={`campaigns:${authenticated.user.id}:${details.organization.id}`}
+          client={client} organizationId={details.organization.id} advertiserReady={Boolean(details.advertiser)} busy={busy} run={run}
+          onUnauthorized={expireOwnedSession} />}
+        {details && appCredentials && (selectedApp ? <AppCredentials key={`credentials:${authenticated.user.id}:${details.organization.id}:${selectedApp.id}`}
+          client={client} organizationId={details.organization.id} app={selectedApp} busy={busy} run={run}
+          issue={showIssuedCredential} dismissKey={clearResourceSecret} onUnauthorized={expireOwnedSession}
+          rawKey={issuedKey?.organizationId === details.organization.id && issuedKey.appId === selectedApp.id ? issuedKey.apiKey : null} /> :
+          <Ld.Panel id="app-credentials" title="Server-side SDK credentials"><p className="ld-body">Create or select an AI-app profile above to manage its own server credentials. Serving and funding are not connected.</p></Ld.Panel>)}
       </>}
 
       <Ld.Panel id="account-readiness" title="Capabilities and readiness">
         <div className="ld-stack">
-          <p className="ld-body">Account creation enables owned profiles only. It does not grant ownership of the shared demo, its campaigns, wallets or records.</p>
+          <p className="ld-body">Owned resources stay in your signed-in organization. Account creation does not grant ownership of the shared demo, its campaigns, wallets or records.</p>
           <dl className="account-readiness">
             <div><dt>Account service</dt><dd>{!health ? 'Not verified' : !isConfigured(health) ? 'Unconfigured' : !health.enabled ? 'Disabled' : 'Configured'}</dd></div>
             <div><dt>Profile database</dt><dd>{health?.profileStore === 'supabase' ? 'AXP Supabase PostgreSQL' : health?.profileStore === 'sqlite-fixture' ? 'Local fixture store' : 'Not verified'}</dd></div>
             <div><dt>Profiles</dt><dd>{!ready ? 'Unavailable' : !health?.capabilities.profiles ? 'Disabled by server' : !authenticated ? 'Sign in required' : profiles ? 'Available' : 'Disabled for this session'}</dd></div>
-            <div><dt>Campaign serving</dt><dd>Not available in this profile slice</dd></div>
-            <div><dt>Native funding</dt><dd>Not available in this profile slice</dd></div>
-            <div><dt>App credentials</dt><dd>Not issued in this profile slice</dd></div>
+            <div><dt>Campaign drafts</dt><dd>{campaignDrafts ? 'Available · approval does not activate serving' : !authenticated ? 'Sign in required; server capability not assumed' : 'Not enabled for this server/session'}</dd></div>
+            <div><dt>App credentials</dt><dd>{appCredentials ? 'Available · configuration access only' : !authenticated ? 'Sign in required; server capability not assumed' : 'Not enabled for this server/session'}</dd></div>
+            <div><dt>Campaign serving</dt><dd>Not connected</dd></div>
+            <div><dt>Native funding</dt><dd>Not connected · no financial authority</dd></div>
           </dl>
-          <p className="ld-secondary">Allowed origins, prohibited categories and payout addresses are declarations. They do not enable serving, verify wallet ownership or authorize payments. Organization-scoped campaigns, app credentials and app-bound settlement are separate integration gates.</p>
+          <p className="ld-secondary">Allowed origins, prohibited categories and payout addresses are declarations. SDK configuration reads saved app metadata, not serving readiness. These declarations do not verify wallet ownership or authorize payments. Shared account serving and app-bound settlement remain separate integration gates.</p>
         </div>
       </Ld.Panel>
     </Ld.Shell>

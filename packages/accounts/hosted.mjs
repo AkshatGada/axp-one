@@ -24,7 +24,7 @@ export function createHostedAccountsAPI({config=process.env,root=repositoryRoot,
   async function handler(req,res) {
     const health=new URL(req.url,'http://local').pathname.replace(/\/$/,'')==='/api/accounts/health';
     if(health||!workspace||initError||!enabled) {
-      return createAccountsAPI({enabled:enabled&&!initError,provider,origin,store:workspace?{profileStore}:null}).handler(req,res);
+      return createAccountsAPI({enabled:enabled&&!initError,provider,origin,store:workspace?{profileStore,resourceRepository:true}:null}).handler(req,res);
     }
     try {
       const buffer=await workspace.withState(async({dir})=>{

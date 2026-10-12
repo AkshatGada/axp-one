@@ -3,7 +3,8 @@ export interface Capabilities {
   profiles: boolean;
   campaignServing: boolean;
   nativeFunding: boolean;
-  appCredentials: boolean;
+  campaignDrafts?: boolean;
+  appCredentials?: boolean;
 }
 export interface AccountHealth {
   enabled: boolean;
@@ -54,3 +55,40 @@ export interface OrganizationDetails {
   apps: AIApp[];
 }
 export interface Credentials { email: string; password: string }
+
+export interface CampaignInput {
+  name: string;
+  productDescription: string;
+  approvedText: string;
+  contextHints: string[];
+  declaredCapabilities: string[];
+  maxBidBaseUnits: string;
+  budgetCapBaseUnits: string;
+  settlementNetwork: PayoutNetwork;
+}
+export interface Campaign {
+  id: string;
+  organizationId: string;
+  advertiserId: string;
+  version: number;
+  status: 'draft' | 'approved';
+  input: CampaignInput;
+  approvedContentHash: string | null;
+  createdAt: number;
+  updatedAt: number;
+  servingStatus: 'not_connected';
+}
+/** Public credential metadata only: no persisted key or hash. */
+export interface AppCredential {
+  id: string;
+  organizationId: string;
+  appId: string;
+  publisherId: string;
+  label: string;
+  scopes: string[];
+  createdAt: number;
+  expiresAt: number;
+  revokedAt: number | null;
+}
+/** A mutation result, never a list item or persisted client state. */
+export interface IssuedAppCredential { credential: AppCredential; apiKey: string }

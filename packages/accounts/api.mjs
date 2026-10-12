@@ -1,4 +1,5 @@
 import {randomBytes,createHash,timingSafeEqual} from 'node:crypto';
+import {createAppKey,validAppKey,appKeyHash,validateCampaignInput,validateCredentialInput,exactResource} from './resources.mjs';
 
 export const ACCOUNT_CAPABILITIES=Object.freeze({profiles:true,campaignServing:false,nativeFunding:false,appCredentials:false});
 const fail=(code,status=400)=>{throw Object.assign(new Error(code),{code,status});};
@@ -24,6 +25,8 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
   let configured=false,secure=false;
   try {const u=new URL(origin);secure=u.protocol==='https:';configured=u.origin===origin&&(secure||(u.protocol==='http:'&&['localhost','127.0.0.1','[::1]'].includes(u.hostname)));}catch{}
   const ready=enabled&&configured&&!!provider&&!!store;
+  const resources=!!store&&(store.resourceRepository===true||typeof store.saveCampaign==='function');
+  const capabilities={...ACCOUNT_CAPABILITIES,campaignDrafts:resources,appCredentials:resources};
   const cookie=(value,age=604800)=>`axp_session=${value}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${age}${secure?'; Secure':''}`;
   async function issue(data,oldHash) {
     store.bindIdentity?.(data.user,data.accessToken);
@@ -59,9 +62,30 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
     try {
       const url=new URL(req.url,'http://local'),path=url.pathname.replace(/\/$/,'').replace(/^\/api\/accounts(?=\/|$)/,'');
       if(!url.pathname.startsWith('/api/accounts/'))fail('not_found',404);
-      if(req.method==='GET'&&path==='/health')return send(res,200,{enabled:ready,provider:'supabase',profileStore:store?.profileStore??'sqlite-fixture',configured:{origin:configured,provider:!!provider,store:!!store},capabilities:ACCOUNT_CAPABILITIES});
+      if(req.method==='GET'&&path==='/health')return send(res,200,{enabled:ready,provider:'supabase',profileStore:store?.profileStore??'sqlite-fixture',configured:{origin:configured,provider:!!provider,store:!!store},capabilities});
       if(!ready)fail('accounts_configuration_required',503);
       if(!['GET','POST'].includes(req.method))fail('method_not_allowed',405);
+      if(path==='/sdk'||path.startsWith('/sdk/')) {
+        // Server-to-server SDK authority is distinct from a human's session.
+        // Never fall back to the public shared-demo publisher or ledger.
+        if(req.headers.origin||req.headers['sec-fetch-site']==='cross-site')fail('server_credentials_only',403);
+        const key=req.headers['x-axp-publisher-key'];
+        if(!resources||!validAppKey(key))fail('publisher_key_invalid',401);
+        const resolved=await store.resolveAppCredential(appKeyHash(key));
+        if(!resolved)fail('publisher_key_invalid',401);
+        const scope=req.method==='GET'?(path.includes('/awards/')?'delivery:read':'opportunities:read'):(path==='/sdk/opportunities'?'opportunities:write':'delivery:write');
+        if(!resolved.credential.scopes.includes(scope))fail('publisher_key_invalid',401);
+        if(req.method==='GET'&&path==='/sdk/publisher/config'&&!url.search) {
+          return send(res,200,{schemaVersion:'publisher-config.v2',contractVersion:'0.2.0',publisherId:resolved.credential.publisherId,appId:resolved.app.id,
+            app:{name:resolved.app.name,website:resolved.app.website},allowedOrigins:resolved.app.allowedOrigins,blockedCategories:resolved.app.blockedCategories,
+            expiresAtUnit:'unix_epoch_milliseconds',maxQuestionCharacters:1200,restrictionLimit:17,placementId:'chat-sponsored-card',apiBasePath:'/api/accounts/sdk',
+            financialMode:'unfunded',mode:'unfunded',servingEnabled:false,recoverySupported:false,keyConfigured:true,
+            capabilities:{configuration:true,campaignServing:false,nativeFunding:false},reason:'account_serving_not_connected'});
+        }
+        if((req.method==='POST'&&(path==='/sdk/opportunities'||/^\/sdk\/awards\/[-\w]+\/(render|fail)$/.test(path)))||
+          (req.method==='GET'&&(path==='/sdk/publisher/opportunities'||/^\/sdk\/awards\/[-\w]+\/status$/.test(path))))fail('account_serving_not_connected',503);
+        fail('not_found',404);
+      }
       if(req.headers['sec-fetch-site']==='cross-site')fail('origin_invalid',403);
       if(req.method==='POST'&&req.headers.origin!==origin)fail('origin_invalid',403);
       const body=req.method==='POST'?await readBody(req):null;
@@ -76,7 +100,7 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
       // Local logout must still work during provider downtime. Revoke best-effort;
       // always invalidate this AXP session before returning.
       const s=await session(req,{verify:path!=='/auth/signout'});
-      if(req.method==='GET'&&path==='/session')return send(res,200,s?{authenticated:true,user:await store.user(s.userId),csrf:s.csrf,organizations:await store.organizations(s.userId),capabilities:ACCOUNT_CAPABILITIES}:{authenticated:false});
+      if(req.method==='GET'&&path==='/session')return send(res,200,s?{authenticated:true,user:await store.user(s.userId),csrf:s.csrf,organizations:await store.organizations(s.userId),capabilities}:{authenticated:false});
       if(!s)fail('authentication_required',401);
       if(req.method==='POST'&&!equal(req.headers['x-axp-csrf'],s.csrf))fail('csrf_invalid',403);
       if(req.method==='POST'&&path==='/auth/signout') {
@@ -85,6 +109,32 @@ export function createAccountsAPI({store,provider,origin,now=Date.now,enabled=tr
       }
       if(req.method==='POST'&&path==='/profile')return send(res,200,{user:await store.updateProfile(s.userId,body)});
       if(req.method==='POST'&&path==='/organizations')return send(res,201,{organization:await store.createOrganization(s.userId,body)});
+      const campaigns=path.match(/^\/organizations\/([a-zA-Z0-9-]+)\/campaigns(?:\/([a-zA-Z0-9-]+)(?:\/(approve))?)?$/);
+      if(campaigns) {
+        if(!resources)fail('account_resources_unavailable',503);
+        const [,orgId,campaignId,action]=campaigns;
+        if(req.method==='GET'&&!action)return send(res,200,campaignId?{campaign:await store.campaign(s.userId,orgId,campaignId)}:{campaigns:await store.campaigns(s.userId,orgId)});
+        if(req.method==='POST') {
+          if(action){
+            exactResource(body,['expectedVersion']);
+            if(!Number.isSafeInteger(body.expectedVersion)||body.expectedVersion<1||body.expectedVersion>2147483647)fail('invalid_input');
+            return send(res,200,{campaign:await store.approveCampaign(s.userId,orgId,campaignId,body.expectedVersion)});
+          }
+          return send(res,campaignId?200:201,{campaign:await store.saveCampaign(s.userId,orgId,validateCampaignInput(body),campaignId??null)});
+        }
+      }
+      const keys=path.match(/^\/organizations\/([a-zA-Z0-9-]+)\/apps\/([a-zA-Z0-9-]+)\/credentials(?:\/([a-zA-Z0-9-]+)\/(revoke|rotate))?$/);
+      if(keys) {
+        if(!resources)fail('account_resources_unavailable',503);
+        const [,orgId,appId,keyId,action]=keys;
+        if(req.method==='GET'&&!keyId)return send(res,200,{credentials:await store.appCredentials(s.userId,orgId,appId)});
+        if(req.method==='POST') {
+          if(action==='revoke'){exactResource(body,[]);return send(res,200,{credential:await store.revokeAppCredential(s.userId,orgId,appId,keyId)});}
+          const input=validateCredentialInput(body),{apiKey,keyHash}=createAppKey();
+          const credential=action==='rotate'?await store.rotateAppCredential(s.userId,orgId,appId,keyId,{...input,keyHash}):await store.issueAppCredential(s.userId,orgId,appId,{...input,keyHash});
+          return send(res,action?200:201,{credential,apiKey});
+        }
+      }
       const match=path.match(/^\/organizations\/([a-zA-Z0-9-]+)(?:\/(advertiser|apps)(?:\/([a-zA-Z0-9-]+))?)?$/);
       if(match) {
         const [,orgId,kind,appId]=match;
