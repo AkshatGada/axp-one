@@ -18,6 +18,9 @@ export function useEntry<T extends HTMLElement>(amount = 0.3) {
     if (!el || document.documentElement.dataset.pxMotion !== "on") return;
     if (el.getBoundingClientRect().top <= window.innerHeight * 0.88) return;
     setEntry("wait");
+    // A tall element (a phone's long column) can never show `amount` of itself while its top is
+    // still in the lower half of the screen, so the share asked for is capped to what can be.
+    const share = Math.min(amount, (window.innerHeight * 0.42) / Math.max(1, el.getBoundingClientRect().height));
     let timer = 0;
     let over = false;
     const finish = (to: Entry) => {
@@ -37,10 +40,10 @@ export function useEntry<T extends HTMLElement>(amount = 0.3) {
         if (!e) return;
         if (e.boundingClientRect.top < 0) return finish(undefined);
         // Arrived well inside the screen in one step (a jump, not a scroll): simply whole.
-        if (e.intersectionRatio >= amount) return finish(e.boundingClientRect.top < window.innerHeight * 0.5 ? undefined : "play");
+        if (e.intersectionRatio >= share) return finish(e.boundingClientRect.top < window.innerHeight * 0.5 ? undefined : "play");
         if (e.isIntersecting && !timer) timer = window.setTimeout(() => finish("play"), 700);
       },
-      { threshold: [0, amount, 1] },
+      { threshold: [0, share, 1] },
     );
     io.observe(el);
     window.addEventListener("scroll", passed, { passive: true });

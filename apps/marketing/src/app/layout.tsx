@@ -12,11 +12,11 @@ export const metadata: Metadata = {
   applicationName: "axp.one",
   title: "axp.one: the advertising network for the agentic internet",
   description:
-    "The advertising network for the agentic internet. Advertisers reach people when they ask; AI apps earn from clearly labelled ads beside their own answers.",
+    "The advertising network for the agentic internet. Advertisers reach people when they ask; AI apps earn from clearly labelled ads below their own answers.",
   robots: { index: false, follow: false },
   openGraph: {
     title: "axp.one: the advertising network for the agentic internet",
-    description: "Reach people when they ask. AI apps earn from clearly labelled ads. Explore the advertiser dashboard, integration guide and example chat in a test workspace.",
+    description: "Reach people when they ask. AI apps earn from clearly labelled ads. Explore the advertiser dashboard, the integration guide and the example chat.",
     images: [{ url: "/og.png", width: 1200, height: 630 }],
     type: "website",
   },

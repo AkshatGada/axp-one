@@ -26,7 +26,7 @@ export const COVER = {
   deck: "People now ask AI what to buy. axp.one places one labelled ad below the answer, only when it fits.",
   primary: { label: "Open the advertiser dashboard", href: ADVERTISER_URL },
   secondary: { label: "Read the integration guide", href: GUIDE_URL },
-  note: "Illustrative questions and bidding.",
+  note: "Illustrative questions.",
 };
 
 /** 01 The shift. */
@@ -123,15 +123,3 @@ export const DOORS = {
 };
 
 export const FOOTER = { line: "The advertising network for the agentic internet" };
-
-/** Kept only so the previous section 05 compiles while it is being replaced. Do not use. */
-export const RULE = {
-  no: "05",
-  title: "The rule",
-  lines: ["Agents judge fit.", "Fixed rules decide money."],
-  agree: [
-    { k: "The advertiser's limits", kind: "rule" as const, state: "Within limits" },
-    { k: "The app's rules", kind: "rule" as const, state: "Allowed" },
-    { k: "The fit", kind: "judgment" as const, state: "Judged a fit" },
-  ],
-};
