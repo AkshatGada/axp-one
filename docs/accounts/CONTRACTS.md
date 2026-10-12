@@ -92,6 +92,24 @@ transactions protect multi-row operations; no untrusted table/key construction.
 Errors `{code,status}` with stable safe codes. Sessions expire after at most seven
 days absolute; provider access refresh serialized through durable snapshot lease.
 
+### Hosted read and mutation boundaries
+
+SDK routes resolve an app credential independently of a human session. They read
+the committed account snapshot without acquiring its session writer lease.
+Configuration, saved-opportunity and receipt lookups, and owner report/integration
+projections read a committed serving snapshot without acquiring or renewing its
+writer lease. These projections expose no mutation or signing methods. Initial
+network identity creation is persisted once before exposing configuration.
+
+Auctions, render acknowledgements, enrollment and native actions still use the
+fenced serving writer. Competing writes return `product_busy_retry` (429); there
+is no automatic fresh opportunity retry. Readers may observe pending/unknown
+admissions from the latest checkpoint, not an invented completed result. A failed
+lease release does not authorize a reset: committed outcomes remain readable,
+and a later invocation can reclaim an expired lease while preserving identities.
+An active retained lease still blocks writes. These guarantees do not identify
+the root cause of any particular hosted storage failure or prove fleet capacity.
+
 ## Readiness boundary
 
 The `/api/product` namespace serves the shared demonstration. Account-owned

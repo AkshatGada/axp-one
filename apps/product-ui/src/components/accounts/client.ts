@@ -16,7 +16,7 @@ const messages: Record<string, string> = {
   validation_error: 'Check the field values and try again.',
   invalid_input: 'Check the field values and try again.',
   input_invalid: 'Check the field values and try again.',
-  credentials_invalid: 'Enter a valid email and a password of 12–256 characters.',
+  credentials_invalid: 'Enter a valid email and a password of 12 to 256 characters.',
   auth_rejected: 'Authentication was not accepted. Check your credentials or confirmation link.',
   confirmed_email_required: 'Confirm your email before signing in.',
   auth_rate_limited: 'Too many authentication requests. Wait before trying again.',

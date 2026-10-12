@@ -29,14 +29,24 @@ export function createHostedAccountsAPI({config=process.env,root=repositoryRoot,
       return createAccountsAPI({enabled:enabled&&!initError,provider,origin,network,store:workspace?{profileStore,resourceRepository:true}:null}).handler(req,res);
     }
     try {
-      const buffer=await workspace.withState(async({dir})=>{
+      const operate=async({dir})=>{
         const sessions=createAccountStore({dir,now});
         const store=profileStore==='supabase'?createSupabaseAccountStore({sessions,url:config.AXP_SUPABASE_URL,key:config.AXP_SUPABASE_PUBLISHABLE_KEY}):sessions;
         const out={status:200,headers:{},body:null,writeHead(status,headers){this.status=status;this.headers=headers;},end(body){this.body=body;}};
         const requestNetwork=network??createHostedAccountNetwork({config,kv,stateKey,now,...(profileStore==='sqlite-fixture'?{catalog:sessions}:{}),...networkOptions});
         try {await createAccountsAPI({store,provider,origin,now,network:requestNetwork}).handler(req,out);return out;}
         finally{store.close();}
-      });
+      };
+      const path=new URL(req.url,'http://local').pathname.replace(/\/$/,'');
+      const sdk=path==='/api/accounts/sdk'||path.startsWith('/api/accounts/sdk/');
+      let buffer;
+      if(sdk){
+        // SDK authority resolves its own app key, never a human session. A
+        // separate serving writer still checkpoints every auction/receipt.
+        // Fixture profiles read this committed session/catalogue snapshot too.
+        try{buffer=await workspace.withSnapshot(operate);}
+        catch(e){if(e.code!=='product_not_initialized')throw e;buffer=await workspace.withState(operate);}
+      }else buffer=await workspace.withState(operate);
       // Session cookies are sent only after the fenced encrypted save succeeds.
       res.writeHead(buffer.status,buffer.headers);res.end(buffer.body);
     } catch(e) {

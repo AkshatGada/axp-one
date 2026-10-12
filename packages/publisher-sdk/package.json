@@ -1,16 +1,24 @@
 {
-  "name": "@axp/publisher-sdk",
-  "version": "0.2.0",
+  "name": "@axp001/publisher-sdk",
+  "version": "0.2.1",
   "type": "module",
   "description": "Server ad requests and observed native Sponsored rendering for AXP",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/AkshatGada/axp-one.git", "directory": "packages/publisher-sdk" },
+  "homepage": "https://github.com/AkshatGada/axp-one/tree/main/packages/publisher-sdk",
+  "bugs": { "url": "https://github.com/AkshatGada/axp-one/issues" },
+  "keywords": ["axp", "advertising", "conversational-ai", "publisher", "sdk"],
+  "publishConfig": { "access": "public", "registry": "https://registry.npmjs.org/" },
   "exports": {
     ".": { "types": "./index.d.mts", "import": "./index.mjs" },
     "./browser": { "types": "./browser.d.mts", "import": "./browser.mjs" },
     "./financial": { "types": "./financial.d.mts", "import": "./financial.mjs" },
     "./receipt": { "types": "./receipt.d.mts", "import": "./receipt.mjs" },
-    "./react": "./react.tsx"
+    "./react": { "types": "./react.d.mts", "import": "./react.mjs" }
   },
-  "files": ["*.mjs", "*.d.mts", "react.tsx", "README.md"],
-  "scripts": { "prepublishOnly": "node -e \"throw new Error('Local pilot tarball only; publication is not authorized')\"" },
+  "files": ["index.mjs", "index.d.mts", "browser.mjs", "browser.d.mts", "errors.mjs", "financial.mjs", "financial.d.mts", "receipt.mjs", "receipt.d.mts", "react.mjs", "react.d.mts", "README.md", "LICENSE"],
+  "peerDependencies": { "react": "^19.0.0" },
+  "peerDependenciesMeta": { "react": { "optional": true } },
+  "scripts": { "prepublishOnly": "node -e \"throw new Error('Publication pending npm authentication and final release verification')\"" },
   "engines": { "node": ">=22.18.0" }
 }
