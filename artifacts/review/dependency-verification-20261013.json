@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-13",
+  "scope": "PostCSS dependency and current release documentation follow-up",
+  "baseRevision": "3f54535448cbc5551662ed65e73cb942f690395a",
+  "dependency": {
+    "selector": "next>postcss",
+    "version": "8.5.23",
+    "nextAndReactUnchanged": true,
+    "frozenInstall": "passed",
+    "installedResolutionChecks": 3
+  },
+  "reviewChecks": {
+    "command": "npm run verify:review",
+    "repositoryPassed": 814,
+    "repositoryOptionalSkipped": 23,
+    "repositoryFailed": 0,
+    "componentsPassed": 90,
+    "componentsSkipped": 0,
+    "componentsFailed": 0,
+    "uiTypechecks": "passed",
+    "reactSdkParity": "passed",
+    "reviewerDocumentLinks": "passed",
+    "repositoryHygiene": "passed"
+  },
+  "registryAudit": {
+    "command": "pnpm audit --prod",
+    "reportedVulnerabilities": 0,
+    "scope": "Registry advisory snapshot, not a comprehensive security audit"
+  },
+  "boundaries": {
+    "landingAndDemoSourceChanged": false,
+    "financialActions": false,
+    "freshModelCalls": false,
+    "deploymentProvenByThisRecord": false
+  }
+}

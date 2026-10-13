@@ -16,7 +16,7 @@ to shared ad serving and a separate own-wallet financial lifecycle.
 | Own-wallet transport | Solana native channel preparation, cumulative authorization, cooperative closure and reconciliation |
 | Interface | Functional account, campaign, app credential and Wallet Standard controls |
 
-## Current verification
+## Database and ownership acceptance
 
 The additive finance migration is applied to the dedicated Supabase database.
 Actual backend REST reads, RLS/ACL checks and unowned-binding rejection pass.
@@ -25,38 +25,52 @@ Existing profiles/resources are unchanged.
 Two separate real Supabase Auth test identities saved funding and payout ownership
 proofs using existing operator-controlled disposable Devnet keys. Both bindings
 persisted after backend restart; wrong-key, altered-message and cross-owner
-requests were rejected. The database contained two challenges, two bindings and
-zero channels. No funds moved. This is not a wallet-extension prompt test.
+requests were rejected. That ownership-only checkpoint contained two challenges,
+two bindings and zero channels. No funds moved in that checkpoint. This is not a
+wallet-extension prompt test; the later funded result is identified below.
 
-The merged primary checkout's repository regression passed 748 tests with eight
-optional skips and zero failures. Connected account/SDK/ownership checks passed
-64 tests; account-client and Wallet Standard/panel checks passed 49. These are
-local source checks, not hosted deployment evidence.
+The [verification matrix](../VERIFICATION.md) records the functional release's
+811 passing repository tests and the PostCSS follow-up's 814 passing tests,
+both with 23 optional skips and 90 passing component checks, plus separate
+SDK/native adapter checks. These are source checks, not hosted
+deployment evidence. Historical acceptance documents retain their original counts.
 See [finance architecture and verification](FINANCE_CLOUD_ACCEPTANCE.md) for the
 commands and evidence scope.
 
-## Live account release
+## Verified account release checkpoint — 13 October 2026
 
-The current documentation baseline is source `030e5b6c4bd1339da44c7b2c4726d88ea31ec784`,
-which adds desktop/mobile Sign in entry points, a shared-dashboard account link
-and account presentation improvements on top of the live runtime below.
+Release `3f54535448cbc5551662ed65e73cb942f690395a` was pushed to `main`, deployed
+at [axp.one/account](https://axp.one/account/) and matched against production Git
+metadata. It includes the customer UI and Sign in entry points, the published
+SDK release and the native account terms' six-decimal regression fix.
 The [reviewer guide](../REVIEWER_GUIDE.md) and
 [verification matrix](../VERIFICATION.md) provide current source checks.
 
-Account runtime revision `9ab99f02e69762d65f868febdd4a81622e4c03eb` was
-pushed to `main` and deployed at [axp.one/account](https://axp.one/account/)
-on 13 October 2026. Live checks verified separate confirmed Supabase owners,
+Earlier live account acceptance verified separate confirmed Supabase owners,
 persisted advertiser/app profiles, same-value profile save/readback, an approved
 campaign remaining paused, cross-owner denial, scoped SDK configuration and
 saved-opportunity lookup, temporary-key revocation and session invalidation.
 Existing owner-bound funding/payout wallet proofs remained readable. Production
 account reports started at zero; Preview receipts were not copied into this ledger.
 
-Accounts use synthetic accounting with transaction broadcasts disabled. No fresh
-auction, model call, delivery acknowledgement or funds movement was performed in
-this release check. Real user-selected wallet-extension prompts and account-owned
-funded lifecycle acceptance remain separate checks; persisted cryptographic
-bindings do not establish those outcomes.
+Accounts use synthetic accounting with transaction broadcasts disabled. The
+3f54535 post-deploy GET checks verified signed-out session/owned-resource denial,
+public pages/assets and the account safety gates without a fresh auction, model
+call, delivery acknowledgement or funds movement. Persisted cryptographic bindings
+alone do not establish wallet-extension prompts or settlement.
+
+## Published SDK and isolated account-owned settlement
+
+[`@axp001/publisher-sdk@0.2.1`](../sdk-cleanroom/NPM_RELEASE.md) is public on npm,
+with ESM/browser/optional React exports and SDK-only MIT licensing. Account-issued
+keys require `/api/accounts/sdk` explicitly and remain server-only.
+
+The [isolated account-owned Devnet acceptance](DEVNET_ACCEPTANCE.md) completed
+one channel with separate confirmed owners and fresh disposable signers:
+0.020 test USDC deposited, two accepted Sponsored placements, 0.008 paid and
+0.012 refunded. The channel finalized and closed; read-only RPC verification
+passed. This used a local account runtime and fixture ad decisions/answer, not
+production payment activation or participant wallet-extension signing.
 
 The latest landing and shared-demo source was preserved. Public page content and
 referenced assets passed checks; the shared demo's health, publisher configuration
@@ -73,6 +87,8 @@ earlier local merge and regression evidence.
 - [Account finance architecture](FINANCE_CLOUD_ACCEPTANCE.md)
 - [Own-wallet integration](ACCOUNT_PAYMENTS_RUNBOOK.md)
 - [Functional release checks](FINAL_ROLLOUT_CHECKLIST.md)
+- [Published SDK verification](../sdk-cleanroom/NPM_RELEASE.md)
+- [Account-owned Solana Devnet acceptance](DEVNET_ACCEPTANCE.md)
 
 The existing shared demonstration and its historical Solana/Tempo records remain
 separate from account-owned financial state.

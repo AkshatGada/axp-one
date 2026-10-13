@@ -166,3 +166,11 @@ use explicit injected fixtures. These demonstrate the bounded product flow, not
 mainnet readiness, independent advertiser wallets, production multi-tenancy,
 conversion lift or fleet throughput. ContextHint embeddings and inferred context
 inform retrieval; no newly trained AXP model or reconstructed ChatGPT auction is claimed.
+
+The separate [hosted account acceptance](accounts/HOSTED_ACCOUNT_ACCEPTANCE.md)
+verifies confirmed account owners, scoped app integration and synthetic receipts.
+The [isolated account-owned Solana lifecycle](accounts/DEVNET_ACCEPTANCE.md)
+verifies deposit, payout and refund in a local runtime using the public npm SDK,
+disposable test signers and fixture ad decisions/answer. These later account
+results do not alter the original shared-demo records or enable production cash
+payments; participant wallet-extension acceptance remains a distinct scope.

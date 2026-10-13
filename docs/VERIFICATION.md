@@ -17,8 +17,8 @@ identified evidence. Each result below describes its own environment and run.
 | Wallet ownership | Exact-message signatures, nonce/expiry/resource/origin binding, replay and invalid-signature rejection | `tests/accounts-wallet-ownership.test.mjs`, [cloud persistence](accounts/FINANCE_CLOUD_ACCEPTANCE.md) |
 | Account finance | Frozen channel terms, broadcast gate, authorizations and reconciliation using injected transport | `tests/accounts-financial-service.test.mjs`, `tests/accounts-external-solana.test.mjs` |
 | Database permissions | RLS/ACL ownership, fixed RPCs, immutable bindings, CAS and rollback | `supabase/tests/`, [database verification](accounts/SUPABASE_DATABASE_RESULT.md) |
-| Native settlement | Saved finalized Solana/Tempo records, recipient/token deltas, payout/refund conservation | [Solana benchmark](../BENCHMARK.md), [Tempo lifecycle](product/TEMPO_VERIFICATION.md) |
-| Interfaces and packaging | Account/dashboard/chat component contracts, TypeScript, SDK tarball imports, React SSR and NodeNext/Bundler types | Component tests, `tests/publisher-sdk/release.test.mjs`, `tests/accounts-preview-package.test.mjs` |
+| Native settlement | Saved finalized Solana/Tempo records, recipient/token deltas, payout/refund conservation | [Account-owned Solana acceptance](accounts/DEVNET_ACCEPTANCE.md), [Solana benchmark](../BENCHMARK.md), [Tempo lifecycle](product/TEMPO_VERIFICATION.md) |
+| Interfaces and packaging | Account/dashboard/chat component contracts, TypeScript, SDK tarball imports, React SSR and NodeNext/Bundler types | [Public npm release](sdk-cleanroom/NPM_RELEASE.md), component tests, `tests/publisher-sdk/release.test.mjs`, `tests/accounts-preview-package.test.mjs` |
 
 ## Reproduce the current source checks
 
@@ -50,16 +50,18 @@ vendor-integrity and staged-file guard, not a comprehensive security audit.
 
 ### Verification checkpoint
 
-On 13 October 2026, the baseline source `030e5b6c4bd1339da44c7b2c4726d88ea31ec784`
-passed **806 repository tests**, with **23 optional skips** and zero failures,
-and **90 account/dashboard/chat component checks**, with zero failures or skips.
-These are freshly rerun offline checks, not another hosted or funded execution.
-The review entry-point addition passed **811 repository tests**, with **23 optional
-skips**, and **90 component checks**, with zero failures. Both UI typechecks,
-generated React SDK parity, review-document links and repository hygiene passed.
+On 13 October 2026, merged release source
+`3f54535448cbc5551662ed65e73cb942f690395a` passed **811 repository tests**, with
+**23 optional skips** and zero failures, and **90 account/dashboard/chat component
+checks**, with zero failures or skips. Both UI typechecks, generated React SDK
+parity, review-document links and repository hygiene passed. The separate SDK
+release gate passed **47 tests**; the explicit pinned native account adapter run
+passed **25 tests** without RPC or skips. These check sets overlap and must not be
+summed as unique cases. Source checks are not another hosted or funded execution.
 The command's terminal totals remain authoritative for the revision being reviewed.
 The [sanitized source-verification record](../artifacts/review/source-verification-20261013.json)
-pins this review's base revision, runner/test/lockfile hashes and per-check results.
+preserves the earlier review's original base revision, runner/test/lockfile hashes
+and per-check results; it is not rewritten to describe a later release.
 
 Separate checks also passed the product and marketing production static exports,
 referenced assets on all six account/dashboard/chat/SDK/landing/recording entry
@@ -68,6 +70,26 @@ pages, and both isolated PostgreSQL fixture scripts. Read-only live checks retur
 organization access returned 401. Live account health reported synthetic mode,
 native funding unavailable and broadcasts disabled. These GETs performed no new
 sign-in, auction, acknowledgement or payment action.
+
+### Dependency verification
+
+The [dependency follow-up record](../artifacts/review/dependency-verification-20261013.json)
+records **814 passing repository tests**, **23 optional skips**, **90 passing
+component checks** and zero failures after the dependency patch, with both UI
+typechecks, SDK parity, reviewer links and repository hygiene passing. It is a
+source-check record, not another hosted acceptance run.
+
+The workspace override pins Next's transitive PostCSS to **8.5.23**, retaining the
+existing framework and React versions. The committed lockfile preserves that
+resolution for both UI apps. After locked installation, run:
+
+```sh
+pnpm audit --prod
+```
+
+This queries the registry's current advisory data without changing dependencies.
+It is distinct from `verify:review`'s offline source checks; a clean advisory result
+is not a comprehensive security audit.
 
 Optional checks include pinned native SDK/codec prerequisites and explicitly
 opt-in source-data integration. The clean-checkout command does not enable live
@@ -95,12 +117,20 @@ and synthetic delivery accounting. Its receipt/report reconciliation and saved
 cryptographic wallet bindings are verified. Account broadcasts are disabled;
 this result is not an account-owned deposit or payout.
 
-Recorded Solana and Tempo executions establish their identified testnet payment
-outcomes. Participant-selected wallet-extension prompts and a funded account-owned
-lifecycle are separate from those results. Historical acceptance reports retain
-their original dates and counts. Local accounting fixtures, hosted model calls
-and finalized chain transactions are never combined into one performance claim.
+The [isolated account-owned Solana run](accounts/DEVNET_ACCEPTANCE.md) used real
+confirmed owners, the public SDK and disposable test signers: 0.020 test USDC
+deposited, two accepted placements, 0.008 paid and 0.012 refunded, with the channel
+finalized and closed. Its runtime was local and its ad decisions/answer were
+fixtures. It is not hosted production payment or participant wallet-extension
+acceptance. Its read-only verifier is `node scripts/accounts/verify-devnet.mjs`.
 
-The SDK artifact is locally packable; registry publication is separate. A receipt
-authenticates accepted app-reported insertion and disclosure, not human attention,
-ad effectiveness or completed cash settlement.
+Recorded shared-demo Solana and Tempo executions retain their own identified
+testnet outcomes. Historical acceptance reports keep their original dates and
+counts. Local accounting fixtures, hosted model calls and finalized chain
+transactions are never combined into one performance claim.
+
+The [public SDK release](sdk-cleanroom/NPM_RELEASE.md) is
+`@axp001/publisher-sdk@0.2.1`, MIT licensed for the SDK only. A credential-free npm
+install and registry-integrity/source-file checks passed. A receipt authenticates
+accepted app-reported insertion and disclosure, not human attention, ad
+effectiveness or completed cash settlement.

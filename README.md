@@ -71,9 +71,11 @@ remain separate.
 
 Account-owned Solana funding/payee bindings and exact wallet-control proofs are
 implemented. Hosted acceptance verifies cryptographic ownership and persistence
-without moving funds. Participant wallet-extension prompts and an account-owned
-funded lifecycle have a different evidence scope from the recorded shared-demo
-settlements. See the [verification matrix](docs/VERIFICATION.md).
+without moving funds. A separate [isolated account-owned Solana run](docs/accounts/DEVNET_ACCEPTANCE.md)
+completed deposit, accepted delivery, cumulative authorization, payout and refund
+using disposable test signers and fixture ad decisions/answer. It does not enable
+production payments or establish participant wallet-extension signing.
+See the [verification matrix](docs/VERIFICATION.md).
 
 ## Evidence reviewers can inspect
 
@@ -81,6 +83,8 @@ settlements. See the [verification matrix](docs/VERIFICATION.md).
 | --- | --- | --- |
 | Hosted account/SDK acceptance | Separate confirmed owners, standalone consumer, one actual Jev evaluation, accepted synthetic receipt and matching reports | [Account acceptance](docs/accounts/HOSTED_ACCOUNT_ACCEPTANCE.md) |
 | Hosted recovery | Saved receipt/signature recovery, owner/app isolation, key revocation and sign-out without a new auction | [Recovery verification](docs/accounts/ACCOUNT_CONCURRENCY_VERIFICATION.md) |
+| Account-owned Solana Devnet lifecycle | One isolated channel, two placements; 0.020 test USDC deposited, 0.008 paid, 0.012 refunded; finalized and closed | [Acceptance and read-only verifier](docs/accounts/DEVNET_ACCEPTANCE.md) |
+| Public publisher SDK | Version 0.2.1 on npm; 47 SDK checks, credential-free installation and registry integrity verified | [Release verification](docs/sdk-cleanroom/NPM_RELEASE.md) |
 | Solana Devnet measured run | 125 funded channels, 250 verified transactions, 824 accepted deliveries; 6.25 test USDC deposited, 1.236 paid, 5.014 refunded | [Method and measured scope](BENCHMARK.md) |
 | Tempo isolated lifecycle | Two channels, six deliveries, five finalized transactions; 0.10 test PathUSD deposited, 0.018 paid, 0.082 refunded | [Lifecycle and public transactions](docs/product/TEMPO_VERIFICATION.md) |
 | Local accounting measurement | 1,052,672 fixture voucher updates across 16,448 simulated channels | [Fixture result](artifacts/network-scale/offline-million.json) |

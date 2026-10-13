@@ -30,9 +30,15 @@ revoked/wrong-app credentials are rejected.
 
 Account serving uses synthetic accounting with broadcasts disabled. Hosted wallet
 bindings verify exact cryptographic ownership and persistence without payment.
-Recorded Solana and Tempo testnet settlements are distinct identified runs, not
-account cash payouts. Participant wallet-extension prompts and an account-owned
-funded lifecycle have separate acceptance scope.
+The [isolated account-owned Solana acceptance](accounts/DEVNET_ACCEPTANCE.md)
+completed one finalized channel: 0.020 test USDC deposited, two placements,
+0.008 paid and 0.012 refunded. It used a local runtime, disposable test signers
+and fixture decisions/answer. Recorded shared-demo Solana and Tempo settlements
+remain distinct runs. None establishes live customer cash payouts or participant
+wallet-extension acceptance.
+
+The [publisher SDK 0.2.1 release](sdk-cleanroom/NPM_RELEASE.md) is public on npm
+under SDK-only MIT licensing; installation, exports and registry integrity passed.
 
 ## Review resources
 
@@ -40,6 +46,7 @@ funded lifecycle have separate acceptance scope.
 - [Verification matrix and executable checks](VERIFICATION.md)
 - [Hosted account/SDK acceptance](accounts/HOSTED_ACCOUNT_ACCEPTANCE.md)
 - [Recovery and concurrency verification](accounts/ACCOUNT_CONCURRENCY_VERIFICATION.md)
+- [Published SDK](sdk-cleanroom/NPM_RELEASE.md) and [account-owned Devnet acceptance](accounts/DEVNET_ACCEPTANCE.md)
 - [Current release](accounts/STATUS.md), [contracts](accounts/CONTRACTS.md) and [architecture](ARCHITECTURE.md)
 
 The guides identify implemented behavior and evidence scope so reviewers can

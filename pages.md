@@ -111,8 +111,8 @@ Base URL: `https://axp.one/api/product`. Implementation:
 | `POST /opportunities` | SDK ad request with stable session/turn identity | Server-only `x-axp-publisher-key` |
 | `POST /awards/:id/render` | Exact inserted/disclosed creative observation | Publisher key and `x-axp-delivery-token` |
 | `POST /awards/:id/fail` | Release an undelivered award | Same bound credentials |
-| `GET /publisher/opportunities?sessionId=...&turnId=...` | Read-only saved outcome or pending/unknown status (SDK 0.2 local branch) | Publisher key, `opportunities:read` |
-| `GET /awards/:id/status` | Read-only saved receipt or reservation/terminal status (SDK 0.2 local branch) | Publisher key `delivery:read` plus delivery token |
+| `GET /publisher/opportunities?sessionId=...&turnId=...` | Read-only saved outcome or pending/unknown status | Publisher key, `opportunities:read` |
+| `GET /awards/:id/status` | Read-only saved receipt or reservation/terminal status | Publisher key `delivery:read` plus delivery token |
 | `POST /account`, `/campaigns` | Dashboard account/draft writes | Same-origin `x-axp-csrf` |
 | `POST /campaigns/:id/approve`, `/launch` | Approve saved copy; fund and launch | Same-origin CSRF, empty JSON body |
 | `POST /campaigns/:id/pause`, `/resume`, `/duplicate`, `/preview` | Campaign operations | Same-origin CSRF |
@@ -122,13 +122,15 @@ Base URL: `https://axp.one/api/product`. Implementation:
 | `POST /demo/awards/:id/render`, `/fail` | Reference browser receipt/failure proxy | CSRF plus delivery token |
 
 If configured, `AXP_PRODUCT_PASSCODE` additionally protects every product POST.
-Do not invent public publisher signup or a key-download endpoint. This release
-has one operator-provisioned publisher/workspace rather than multi-tenant auth.
+These `/api/product` routes retain the operator-provisioned shared publisher and
+workspace; they do not issue account app credentials. The separate `/account/`
+and `/api/accounts` routes provide verified owner-scoped profiles and app keys.
 Provider sends and channel actions have side effects; browsing/configuration do not.
 Original MVP APIs remain under `/api/runs/*` with their existing contracts.
 
-SDK 0.2 pilot changes are local to the SDK integration branch; this is not a
-deployment statement. With `AXP_PRODUCT_PUBLISHER_ONLY=1`, only configuration and
+The [SDK 0.2.1 release](docs/sdk-cleanroom/NPM_RELEASE.md) is public on npm.
+Account-issued credentials require `/api/accounts/sdk` explicitly. With
+`AXP_PRODUCT_PUBLISHER_ONLY=1`, only configuration and
 authenticated SDK request/delivery/recovery routes are exposed by the product API.
 Public state/bootstrap and dashboard/example mutations are unavailable. Manually
 provision a separate endpoint/state per pilot publisher. See

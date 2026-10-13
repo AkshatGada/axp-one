@@ -21,10 +21,14 @@ the non-spending `npm run verify:review` command.
 | Native channel interfaces | [Payment integration](ACCOUNT_PAYMENTS_RUNBOOK.md) |
 | Real hosted account/SDK journey | [Hosted acceptance](HOSTED_ACCOUNT_ACCEPTANCE.md) |
 | Concurrent reads and receipt recovery | [Recovery verification](ACCOUNT_CONCURRENCY_VERIFICATION.md) |
+| Published npm SDK and consumer verification | [SDK release](../sdk-cleanroom/NPM_RELEASE.md) |
+| Isolated account-owned finalized Solana channel | [Devnet acceptance](DEVNET_ACCEPTANCE.md) |
 | Live release scope | [Status](STATUS.md) |
 
-Accounts use synthetic accounting with broadcasts disabled; historical testnet
-settlements remain separately identified evidence. ContextHint supplies screened
+Hosted accounts use synthetic accounting with broadcasts disabled. The isolated
+account-owned Devnet lifecycle used a local runtime, disposable test signers and
+fixture ad decisions/answer; shared-demo testnet settlements retain their own run
+identities. ContextHint supplies screened
 advertising intelligence and a distribution foundation, not automatically enrolled
 AXP advertisers or AXP-only traction. See the verification matrix for the precise
 scope of wallet, model, delivery and settlement checks.

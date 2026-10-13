@@ -38,6 +38,14 @@ Automated finance tests use injected native transports. Hosted ownership proof
 does not itself establish participant wallet-extension prompts or a finalized
 account-owned deposit/payout/refund lifecycle.
 
+The separate [isolated account-owned Solana acceptance](DEVNET_ACCEPTANCE.md)
+does establish its identified finalized lifecycle: 0.020 test USDC deposited,
+0.008 paid and 0.012 refunded. It used real confirmed owners, the public SDK,
+disposable signers and fixture decisions/answer in a local account runtime.
+It does not activate hosted production payments or verify participant wallet
+extension prompts. The [SDK release](../sdk-cleanroom/NPM_RELEASE.md) records
+public npm publication, SDK-only MIT licensing and consumer/integrity checks.
+
 Historical Solana and Tempo lifecycle records retain their own channel identities
 and currency. A receipt establishes accepted insertion, not attention, conversion
 or completed payment. Account synthetic earnings are not withdrawable cash.

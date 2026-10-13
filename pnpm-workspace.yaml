@@ -2,3 +2,7 @@ packages:
   - design-system
   - apps/marketing
   - apps/product-ui
+
+# Keep Next's CSS processor patched without changing the framework or UI.
+overrides:
+  'next>postcss': 8.5.23
