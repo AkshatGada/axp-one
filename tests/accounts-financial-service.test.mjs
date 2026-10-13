@@ -18,6 +18,7 @@ const wallet=()=>{const k=generateKeyPairSync('ed25519');return {...k,address:ba
 export function fakeExternalTransport(calls=[],states=new Map(),faults={}){
  const maybeLose=kind=>{if(faults[kind]){faults[kind]=false;throw Error('fixture_ack_lost');}};
  return async({terms:t})=>{
+  assert.equal(t.decimals,6,'account terms must match the native USDC adapter');
   let state=states.get(t.channelId);if(!state){state={authorized:'0',receipts:new Map()};states.set(t.channelId,state);}
   const signed=(kind,plan,wire)=>({wireBase64:wire,txSignature:`fixture-${kind}-${t.channelId}`,estimatedFeeAndRentLamports:plan.estimatedFeeAndRentLamports});
   const openReceipt=s=>({status:'finalized',finality:'finalized',txSignature:s.txSignature,protocolChannelId:`protocol-${t.channelId}`,depositBaseUnits:t.depositBaseUnits,evidence:{networkFeeLamports:'5000',newRentLamports:'1000'}});

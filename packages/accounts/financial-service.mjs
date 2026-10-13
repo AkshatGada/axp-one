@@ -96,7 +96,7 @@ export function createAccountFinancialService({repository,store,origin,stateDir,
   const inspected=await preflight({payer:payer.address,payee:payee.address,depositBaseUnits:body.depositBaseUnits,simulate:true});
   if(inspected.compatible!==true||!inspected.programAccountHash||!inspected.programDataHash)fail('payment_compatibility_unavailable',503);
   const latest=await resource(actor,orgId,campaignId,'funding');if(latest.version!==campaign.version||latest.approvedContentHash!==campaign.approvedContentHash)fail('campaign_version_conflict',409);
-  const id=randomUUID(),at=now(),terms={...network,channelId:id,runId:'account-network-native-v1',mode:'devnet',network:'solana-devnet',
+  const id=randomUUID(),at=now(),terms={...network,decimals:6,channelId:id,runId:'account-network-native-v1',mode:'devnet',network:'solana-devnet',
    advertiserId:campaign.advertiserId,campaignVersionId:`${campaign.id}-v${campaign.version}`,payer:payer.address,payee:payee.address,
    authorizedSigner:payer.address,depositBaseUnits:body.depositBaseUnits,chargeCapBaseUnits:campaign.input.budgetCapBaseUnits,
    maxBidBaseUnits:campaign.input.maxBidBaseUnits,openSalt:randomBytes(8).readBigUInt64LE().toString(),

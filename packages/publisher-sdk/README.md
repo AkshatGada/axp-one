@@ -6,20 +6,19 @@ model, answer generation and interface.
 
 ## Install
 
-The `@axp001/publisher-sdk@0.2.1` release candidate is prepared for npm;
-registry publication is pending. Until published, install a locally packed copy:
+Install the SDK in your AI app's server project:
+
+```sh
+npm install @axp001/publisher-sdk@0.2.1
+```
+
+For local source development, you can also install a packed copy:
 
 ```sh
 # From the AXP repository; the destination directory must exist:
 npm pack ./packages/publisher-sdk --pack-destination /absolute/path/to/packages
 # From your application's directory:
 npm install /absolute/path/to/packages/axp001-publisher-sdk-0.2.1.tgz
-```
-
-After registry publication, installation will be:
-
-```sh
-npm install @axp001/publisher-sdk
 ```
 
 Requires Node.js 22.18+ with built-in fetch and ESM imports. Core and browser

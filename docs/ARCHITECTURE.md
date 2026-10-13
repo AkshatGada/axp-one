@@ -99,8 +99,8 @@ See [account contracts](accounts/CONTRACTS.md) and the
 | `scripts/build-site.mjs`, `vercel.json` | One deployment with static clients and Node API |
 
 All clients use one backend authority. No frontend implements another auction,
-ledger or signer. The publisher SDK is packaged locally as ESM, browser helpers
-and an optional React adapter; registry publication is separate. The committed
+ledger or signer. The publisher SDK is published as `@axp001/publisher-sdk@0.2.1`
+with ESM, browser helpers and an optional React adapter. The committed
 screened evidence lives in `artifacts/v2/evidence`.
 The original recorded/live MVP remains in its own `/mvp/` and `/api/runs/*` namespace.
 

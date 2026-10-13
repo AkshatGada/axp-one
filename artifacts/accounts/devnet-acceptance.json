@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "axp.account-devnet-acceptance.v1",
+  "verifiedAt": "2026-10-13T00:23:32.200Z",
+  "execution": "isolated local account API + real Supabase profiles + Solana Devnet",
+  "decisions": "fixture; no paid model calls",
+  "sdk": "@axp001/publisher-sdk@0.2.1 from public npm registry",
+  "network": "solana-devnet",
+  "genesisHash": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+  "mint": "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+  "program": "CHNLxYvVA28MJP9PrFuDXccuoGXAx7jBacfLEkahyGsX",
+  "accountOwners": "distinct confirmed users",
+  "walletOwnership": "resource-bound Ed25519 proofs from two disposable test wallets; not browser-extension signing",
+  "payer": "ECN53xTuhKWy6oxNWC4sin2J1urV2KeftaiPwDaaiv1n",
+  "publisher": "9f9g9Qg1bumDXx5rC9ygaib5sdccVHW1VtbQtLwCThoP",
+  "campaignId": "eaac1598-c13b-487d-8cac-a1f7b060c4cc",
+  "appId": "dd5550c7-9703-4b8f-9e1a-f76f670cf8c3",
+  "channelId": "ffb7c9b1-4b2a-4952-992b-d32077f43ae7",
+  "protocolChannelId": "FPVsTvPRijAZb8pznezKgdXQLzyzpKjiZU4BYMcGtQjt",
+  "depositBaseUnits": "20000",
+  "acceptedPlacements": 2,
+  "acceptedBaseUnits": "8000",
+  "authorizedBaseUnits": "8000",
+  "paidBaseUnits": "8000",
+  "refundBaseUnits": "12000",
+  "feeAndRentLamports": "4947600",
+  "channelAccountClosed": true,
+  "temporarySDKKeyRevoked": true,
+  "testOwnersSignedOut": true,
+  "productionBroadcastEnabled": false,
+  "productionMode": "synthetic",
+  "transactions": [
+    {
+      "operation": "open",
+      "signature": "4gL9YAZzs3WV3WfmS4e3YSHt4ftWgLq93MQSEYqRK4MaYwHzpP1vN5tt276FXzWpT9iF1Xim9zrUUyVaR2PAhtY5",
+      "slot": 510441551,
+      "status": "finalized",
+      "networkFeeLamports": "5000",
+      "tokenDeltas": {"payer": "-20000", "publisher": "0", "treasury": "0"}
+    },
+    {
+      "operation": "close",
+      "signature": "562MDpxZsw8UDjRqEiEaknQX9SXyy2f1SrX9QEKwkGisiyrtKbLnkqziL9EW1rjRHeacgVuNgfw1ps5cW7eDe73J",
+      "slot": 510443083,
+      "status": "finalized",
+      "networkFeeLamports": "15000",
+      "tokenDeltas": {"payer": "12000", "publisher": "8000", "treasury": "0"}
+    }
+  ]
+}

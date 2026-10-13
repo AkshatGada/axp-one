@@ -19,6 +19,6 @@
   "files": ["index.mjs", "index.d.mts", "browser.mjs", "browser.d.mts", "errors.mjs", "financial.mjs", "financial.d.mts", "receipt.mjs", "receipt.d.mts", "react.mjs", "react.d.mts", "README.md", "LICENSE"],
   "peerDependencies": { "react": "^19.0.0" },
   "peerDependenciesMeta": { "react": { "optional": true } },
-  "scripts": { "prepublishOnly": "node -e \"throw new Error('Publication pending npm authentication and final release verification')\"" },
+  "scripts": { "prepublishOnly": "node ../../scripts/sdk/verify-release.mjs" },
   "engines": { "node": ">=22.18.0" }
 }

@@ -8,7 +8,7 @@ answer generation, user authentication, durable turn storage and interface.
 
 1. Sign in at [axp.one/account](https://axp.one/account/) and create an AI-app profile.
 2. Save supported origin/category restrictions and issue the app's server key.
-3. Install a locally packed `@axp001/publisher-sdk@0.2.1` artifact and configure
+3. Run `npm install @axp001/publisher-sdk@0.2.1` and configure
    `https://axp.one/api/accounts/sdk` explicitly as its base URL.
 4. Request alongside the independent answer, render the approved card below it,
    then forward its observed insertion through your own authenticated server route.
@@ -18,7 +18,9 @@ answer generation, user authentication, durable turn storage and interface.
 The [package README](../../packages/publisher-sdk/README.md) is the canonical
 installation and code guide. It includes ESM/browser/React exports, request/result
 contracts, same-origin acknowledgement, receipt binding and restart recovery.
-Registry publication is separate from the locally installable artifact.
+Version 0.2.1 is [published on npm](https://www.npmjs.com/package/@axp001/publisher-sdk)
+under the MIT license for the SDK only.
+See the [release verification](../sdk-cleanroom/NPM_RELEASE.md).
 
 ```js
 // Your application server only; never ship the key to a browser or answer model.

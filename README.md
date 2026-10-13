@@ -116,9 +116,10 @@ node scripts/demo/v3-replay-check.mjs artifacts/v3/replay
 ```
 
 For development, follow [standalone setup](docs/STANDALONE_SETUP.md).
-For AI-app installation, pack the [SDK](packages/publisher-sdk/README.md) locally;
-the `@axp001/publisher-sdk@0.2.1` artifact is prepared, with npm publication a
-separate distribution step.
+For AI-app installation, use `npm install @axp001/publisher-sdk@0.2.1`.
+The [published SDK](https://www.npmjs.com/package/@axp001/publisher-sdk) includes
+ESM, browser helpers and an optional React adapter; follow its
+[integration guide](packages/publisher-sdk/README.md).
 
 ## ContextHint and distribution
 
