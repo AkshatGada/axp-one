@@ -11,7 +11,6 @@ export const CHAT_URL = "/publisher-demo/";
 export const VIDEO_URL = "/demo/";
 /** A real recorded settlement. Wherever this link appears it carries PROOF.label inside the link. */
 export const PROOF = { href: latestSettlement.channels[0]?.closeUrl ?? null, text: "See a recorded settlement", label: "Solana Devnet, test USDC, 7 October 2026" };
-export const CONTEXTHINT = { href: "https://contexthint.com", label: "ContextHint", description: "The intelligence platform for running ChatGPT ads." };
 
 export const NAV = [
   { href: "#advertisers", label: "For advertisers" },
