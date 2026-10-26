@@ -39,3 +39,27 @@ This phase uses the original ledger/genesis/program, 8 initial Units, <=24 trade
 <=128 signed operations, ledger<=10GiB with9GiB stop inside20GiB total, free>=40GB,
 DB/log<=50MiB. The validator stays stopped until preparation/testing finish. Native
 results will be recorded separately; no Goal, additional agents, push or Devnet run.
+
+## Native continuation checkpoint
+
+Actual local HTTP recovery passed: both retries returned the original order, the
+carried reservation cancelled once, stale capture was refused, the separately named
+shared-balance pair admitted only one order, and all recovery holds reached zero.
+All three original request rows retained identical body and cached-result bytes.
+The original interrupted step stays Prepared and its stop record survives in history.
+See http-order-repair-actual-http.json; its HTTP proof is separate from fixture tests.
+
+The original Fund transaction finalized successfully before the exact replay probe
+stopped with REPLAY_PENDING_SETTLEMENT. The harness had assumed sendTransaction
+always returns the signature, and did not support its existing ReplaySendIntent on
+resume. The checked official Agave source returns simulation errors before broadcast.
+The repaired harness admits only a matching returned signature or exact -32002 /
+AlreadyProcessed preflight error, together with the unchanged finalized transaction/
+metadata and paired unchanged balances/data hashes. Other errors remain unresolved.
+It retains the earlier send intent and response history and never creates a signature.
+Two new replay checks plus the existing harness suite passed 23/23.
+
+Actual replay resume returned AlreadyProcessed; all paired account deltas/data changes
+were zero and the original finalized receipt matched. See native-exact-replay.json.
+The same run has continued into native trades and terminal settlement. These are
+intermediate checkpoints, not a complete T1–T9 or deadline-equality result.

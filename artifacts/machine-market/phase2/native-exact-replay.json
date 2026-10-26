@@ -1,0 +1,136 @@
+{
+  "evidence": [
+    {
+      "accounts": [
+        {
+          "address": "6wVvWqvqg7owgQGHmudHGQcKygG2qPXzebn5M4sCGE11",
+          "after": "4948328840",
+          "afterDataHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "before": "4948328840",
+          "beforeDataHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "delta": "0"
+        },
+        {
+          "address": "Hk7qWQamvWSeLRQt4zGrudLqJDR2YBTKghKpRoPywMnz",
+          "after": "999990000",
+          "afterDataHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "before": "999990000",
+          "beforeDataHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "delta": "0"
+        },
+        {
+          "address": "7hd9qdYDPsUgegiTfsKXGSfR4E1pRAvNCimVVGvQsrZn",
+          "after": "1000000000",
+          "afterDataHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "before": "1000000000",
+          "beforeDataHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "delta": "0"
+        },
+        {
+          "address": "EpjVPqE16axbaP2yxzMEUDC9uu12hGUf3TYSjRNzJ8yf",
+          "after": "1000000",
+          "afterDataHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "before": "1000000",
+          "beforeDataHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "delta": "0"
+        },
+        {
+          "address": "6myKSjmcgPtMDrfrFMp6zyAmsyz3GBTT79BRGrWKzRDC",
+          "after": "3626160",
+          "afterDataHash": "b62461bdf60a9d145cea8544a9a27ced01764b85ea70102c244e567799a49e81",
+          "before": "3626160",
+          "beforeDataHash": "b62461bdf60a9d145cea8544a9a27ced01764b85ea70102c244e567799a49e81",
+          "delta": "0"
+        },
+        {
+          "address": "Btum1uU9aPGMkPDcxY9a1PjAcZWdbY6o73xCqjCwcKP8",
+          "after": "3556560",
+          "afterDataHash": "bf729c6c9236a383f02bb20c6b870f8e61089b0e1df8d3ba45cefa7a0f38e789",
+          "before": "3556560",
+          "beforeDataHash": "bf729c6c9236a383f02bb20c6b870f8e61089b0e1df8d3ba45cefa7a0f38e789",
+          "delta": "0"
+        },
+        {
+          "address": "5jXxZqEATefzciCFEsqj1DXMxhHrw6h6THDsy34j2K4z",
+          "after": "5209120",
+          "afterDataHash": "77f2d8deefeeb2e63bfe2e104e91149f3ae082d2bfc771307711a92cce95f560",
+          "before": "5209120",
+          "beforeDataHash": "77f2d8deefeeb2e63bfe2e104e91149f3ae082d2bfc771307711a92cce95f560",
+          "delta": "0"
+        },
+        {
+          "address": "4xfVQGXY3dyiEX4d2nPWLtbtVMsmLokRrcNNjthmxHgi",
+          "after": "2129760",
+          "afterDataHash": "e11e1e2ad4570967f9a1e0ba1f153d5c84ee9e413e1e1f120a020ee690af6d3f",
+          "before": "2129760",
+          "beforeDataHash": "e11e1e2ad4570967f9a1e0ba1f153d5c84ee9e413e1e1f120a020ee690af6d3f",
+          "delta": "0"
+        },
+        {
+          "address": "BDTquyDN5qheeeKQh5W8uqaX8SP2DrJs3coqvhmUHde1",
+          "after": "2129760",
+          "afterDataHash": "57d3473127d9c63abd3fe14c8bb170131f6241d872d000d2627b77d2e4842057",
+          "before": "2129760",
+          "beforeDataHash": "57d3473127d9c63abd3fe14c8bb170131f6241d872d000d2627b77d2e4842057",
+          "delta": "0"
+        },
+        {
+          "address": "FDTCDZNuvzvfVd9ttjXCSqHoLbYdtyu9vCYEdBAdEd3L",
+          "after": "2484720",
+          "afterDataHash": "437f6cb99b0c48e2ed3eb166f79ae123e770692456cdb735866a658d7d6fe8f7",
+          "before": "2484720",
+          "beforeDataHash": "437f6cb99b0c48e2ed3eb166f79ae123e770692456cdb735866a658d7d6fe8f7",
+          "delta": "0"
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "after": "1",
+          "afterDataHash": "c94b792a6d8b25d3e53ea94d8b80111735ed80d6a7dc8deb937cd342707f5f03",
+          "before": "1",
+          "beforeDataHash": "c94b792a6d8b25d3e53ea94d8b80111735ed80d6a7dc8deb937cd342707f5f03",
+          "delta": "0"
+        },
+        {
+          "address": "9VzEiSEFVoDtE8ZxRNYvFrCdnzvQNoAbiPUxXquqYVcY",
+          "after": "1141440",
+          "afterDataHash": "95bfe18904398ac7d415c5afb3f1be5710216d1096c243592c31073aa751ce28",
+          "before": "1141440",
+          "beforeDataHash": "95bfe18904398ac7d415c5afb3f1be5710216d1096c243592c31073aa751ce28",
+          "delta": "0"
+        }
+      ],
+      "afterContextSlot": "2121",
+      "beforeContextSlot": "2121",
+      "kind": "native-exact-replay",
+      "operationId": "e17ff985284568bf081c0e943a1c5248cd7e26ddcdcdb7d6b908fec574b302e2",
+      "originalFeeLamports": "15000",
+      "repeatMarketFee": "0",
+      "repeatPrincipal": "0",
+      "replayDisposition": "already-processed",
+      "rpcResponse": {
+        "ok": true,
+        "responseSha256": "3578e95bf8412c6673823873f553e8d5942f8cf01ae8afdf31796710f33dd3b1",
+        "resultSignature": null,
+        "rpcCode": -32002,
+        "rpcError": "AlreadyProcessed"
+      },
+      "sameSignature": true,
+      "signature": "5frzKjogmTVNYc45ipEu7YF6rkDjT8XFBRL4f8SFzXK7s26GsMZV18urPCY7YbG1TtuunAwAcQRTERzhvFjXgFSv",
+      "slot": "2093",
+      "transactionSha256": "fe1b94ab6a002888e3bacbfc3176234d64ac651c7e564c695a76c92ea416ca43"
+    }
+  ],
+  "proofs": [
+    {
+      "assertions": [
+        "same-signed-bytes-and-original-signature",
+        "no-new-principal-market-fee-or-rent"
+      ],
+      "evidenceHashes": [
+        "2e9e41b37c6ecab3dd8505fe61df45eb684c972ad333675c9095f95fb9300062"
+      ],
+      "id": "T2:exact-native-replay",
+      "status": "passed"
+    }
+  ]
+}

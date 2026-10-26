@@ -1,0 +1,35 @@
+(node:95033) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ finite eight-unit schedule retains 46 signing slots and stays below trade ceiling (1.22025ms)
+✔ all bootstrap/negative/reserved attempts count and buckets cannot overflow (0.181833ms)
+✔ stable identities bind the run, case and step without signing material (0.322041ms)
+✔ journal persists exact prepared identity and bound operation before completion (80.942125ms)
+✔ journal refuses automatic restart, a competing writer and changed run identity (28.499ms)
+✔ unknown step prevents expansion while preserving original operation for explicit recovery (92.468333ms)
+✔ checkpoint and evidence refuse private paths/content/key objects (14.205375ms)
+✔ private checkpoint path cannot escape through parent or file symlinks (1.27ms)
+✔ account-only, pending and synthetic observations cannot be native transaction proof (0.219834ms)
+✔ no missing proof group is converted into an overall acceptance pass (0.199292ms)
+✔ allocated slots are distinct from actual known signed attempts (24.871459ms)
+✔ worker protocol has no generic method, private key or prototype dispatch (0.884416ms)
+✔ native probe catalog cannot authorize an arbitrary probe ID or unit (4.114875ms)
+✔ child crash wrapper kills only after durable method returns and records exact attempt hash (5.721375ms)
+✔ direct probe sender rejects changed bytes before fee quote, fence or signer (50.53075ms)
+✔ offline first late response uses native hash when there was no earlier read (0.225916ms)
+✔ offline race resume retains pre-effect cursor after native winner advances (0.155167ms)
+✔ offline fence input resumes after creation without overwrite or second namespace (6.196833ms)
+✔ offline crash-marker recovery retains required T8 identity and rejects replacement bytes (0.2055ms)
+✔ offline HTTP gates hold two requests before actual delegated business methods (0.416875ms)
+✔ offline deadline rejection cannot sign early or call after-boundary equality (0.086292ms)
+(node:95034) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ exact replay RPC classification admits only matching signature or specific AlreadyProcessed preflight (0.621625ms)
+✔ same-byte replay resumes its saved intent, retains response history and proves unchanged finalized receipt/accounts (199.788667ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 382.697708

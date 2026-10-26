@@ -1,0 +1,16 @@
+{
+  "tests": {
+    "passed": 23,
+    "failed": 0,
+    "skipped": 0,
+    "fixtureEvidenceOnly": true
+  },
+  "actualReplayDisposition": "AlreadyProcessed preflight rejection with unchanged exact finalized receipt and paired accounts",
+  "sourceAndEvidenceHashes": {
+    "scripts/machine-market/phase2-acceptance-probes.mjs": "408cd33f44abfa20497f753fd0bc4ba2b740cf9067dea2a131ed9717ae98c162",
+    "tests/machine-market/phase2-replay.test.mjs": "5b434addf17170114f23dbbb4ac3fa26a8eaf62276500d5b88f0570abb42a9d2",
+    "artifacts/machine-market/phase2/native-exact-replay.json": "37d863d35bdd64e9de71a80fd54e7647c8f26f778f223fc2c717ef413d29ecac",
+    "artifacts/machine-market/phase2/http-order-repair-actual-http.json": "3cfe6693f2b39a2ea9c18836be5d6170c8c0855efeeabd281e97eada54aeddd5",
+    "artifacts/machine-market/phase2/outputs/order-repair-replay-tests.txt": "1a49550447bc213f75489bb85545c11d4184437c25d683d2f23797ab262e084e"
+  }
+}

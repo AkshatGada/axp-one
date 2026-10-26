@@ -235,6 +235,14 @@ export function describeNegativeProbe(id, { config, unit, series, primary, sourc
         patches
     };
 }
+// Agave may reject exact finalized bytes in preflight as AlreadyProcessed.
+// This classification is usable only alongside the unchanged finalized receipt
+// and paired account observations below; other RPC failures remain unresolved.
+export function classifyReplayResponse({ok,value,signature}){
+ if(ok&&value?.jsonrpc==='2.0'&&value.id===2&&value.result===signature&&!value.error)return 'signature-returned';
+ if(ok&&value?.jsonrpc==='2.0'&&value.id===2&&value.error?.code===-32002&&value.error?.data?.err==='AlreadyProcessed'&&!value.result)return 'already-processed';
+ throw Error('REPLAY_PENDING_SETTLEMENT');
+}
 export function createDirectProbeRunner({ config, context, journal, filename, fetchImpl = globalThis.fetch }) {
     localEndpoint(config.endpoint);
     filename = containedPath(config.privateRoot, filename);
@@ -458,8 +466,7 @@ export function createDirectProbeRunner({ config, context, journal, filename, fe
             const id = 'replay:' + operation.id, prior = get(id);
             if (prior?.state === 'FinalizedReplay')
                 return prior.evidence;
-            if (prior)
-                throw Error('REPLAY_PENDING_SETTLEMENT');
+            if(prior)demand(prior.state==='ReplaySendIntent'&&prior.signature===parsed.signature&&prior.transaction===operation.attempt.transaction,'REPLAY_IDENTITY');
             await context.rpc.inspectRun();
             const original = await context.rpc.transaction(parsed.signature);
             demand(original?.meta?.err === null && original.transaction?.[0] === operation.attempt.transaction, 'REPLAY_TRANSACTION_REQUIRED');
@@ -470,7 +477,9 @@ export function createDirectProbeRunner({ config, context, journal, filename, fe
                 originalMetaHash: hash(original.meta),
                 instruction: operation.instruction
             };
-            save(id, 'ReplaySendIntent', record, hash(record));
+            if(prior)demand(prior.originalMetaHash===record.originalMetaHash&&prior.descriptorHash===hash(record),'REPLAY_IDENTITY');
+            const history=[...(prior?.sendObservations??(prior?[{phase:'earlier-send-intent',responseRecorded:false}]:[])),{phase:'paired-replay-send-intent',contextSlot:before.contextSlot,accounts:before.accounts.map(row=>({address:row.address,lamports:row.lamports,dataHash:row.dataHash??null}))}];
+            save(id, 'ReplaySendIntent', {...record,sendObservations:history}, hash(record));
             const response = await fetchImpl(config.endpoint, {
                 method: 'POST',
                 redirect: 'error',
@@ -484,13 +493,18 @@ export function createDirectProbeRunner({ config, context, journal, filename, fe
                 })
             });
             const value = await response.json();
-            demand(response.ok && value.result === parsed.signature && !value.error, 'REPLAY_PENDING_SETTLEMENT');
+            const responseProof={ok:response.ok,responseSha256:hash(value),rpcCode:value.error?.code??null,rpcError:typeof value.error?.data?.err==='string'?value.error.data.err:null,resultSignature:value.result??null};
+            history.at(-1).response=responseProof;save(id,'ReplaySendIntent',{...record,sendObservations:history},hash(record));
+            const replayDisposition=classifyReplayResponse({ok:response.ok,value,signature:parsed.signature});
             const after = await context.rpc.accounts(parsed.keys, { minContextSlot: before.contextSlot }), again = await context.rpc.transaction(parsed.signature);
             demand(again?.transaction?.[0] === record.transaction && hash(again.meta) === record.originalMetaHash, 'REPLAY_CHANGED_RECEIPT');
             for (let i = 0; i < before.accounts.length; i++)
                 demand(before.accounts[i].lamports === after.accounts[i].lamports && before.accounts[i].dataHash === after.accounts[i].dataHash, 'REPLAY_EXTRA_PAYMENT');
             const evidence = assertPublicEvidence({
                 kind: 'native-exact-replay',
+                replayDisposition,
+                rpcResponse:responseProof,
+                beforeContextSlot:before.contextSlot,afterContextSlot:after.contextSlot,
                 operationId: operation.id,
                 signature: parsed.signature,
                 slot: String(again.slot),
@@ -503,10 +517,10 @@ export function createDirectProbeRunner({ config, context, journal, filename, fe
                     address: row.address,
                     before: before.accounts[i].lamports,
                     after: row.lamports,
-                    delta: '0'
+                    delta: '0',beforeDataHash:before.accounts[i].dataHash??null,afterDataHash:row.dataHash??null
                 }))
             });
-            save(id, 'FinalizedReplay', { ...record, evidence }, hash(record));
+            save(id, 'FinalizedReplay', { ...record,sendObservations:history,evidence }, hash(record));
             return evidence;
         },
         get,
