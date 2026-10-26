@@ -200,6 +200,7 @@ export function openAcceptanceJournal({ path, privateRoot, identity, resume = fa
             },
             clearStopForExactRecovery() {
                 return mutate(next => {
+                    if(next.stopped){next.stopHistory??=[];next.stopHistory.push(structuredClone(next.stopped));}
                     next.stopped = null;
                     return true;
                 });

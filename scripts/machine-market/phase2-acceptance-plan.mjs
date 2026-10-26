@@ -1,5 +1,6 @@
 /** Concrete eight-unit probe intents/assertions, not caller-assigned proof labels. */
 import { join } from 'node:path';
+import { recoverHttpReservations } from './phase2-http-reservation-recovery.mjs';
 import { encodeAuthorization, decodeAuthorization, decodeInstruction, canonicalBase64, ACCOUNT_SCHEMAS, ZERO_KEY } from '../../packages/machine-market/native/codec.mjs';
 import { orderId, operationId, matchId, domainHash, sha256 } from '../../packages/machine-market/native/domain.mjs';
 import { validateNativeAccount } from '../../packages/machine-market/native/observations.mjs';
@@ -179,6 +180,7 @@ export function createConcreteAcceptancePlan({ config, context, journal, runtime
         }
     }
     async function httpReservations() {
+        if(context.httpReservationRecovery)return recoverHttpReservations({config,context,journal,runtime,recovery:context.httpReservationRecovery,bid});
         return runtime.step('concrete:http-reservations', { kind: 'http-concurrency-and-wallet-capture' }, async () => {
             const evidence = [], cleanup = [], before = await context.store.captureWallet(config.run.buyerA);
             demand(before.held === '0', 'UNEXPECTED_EXISTING_HOLD');

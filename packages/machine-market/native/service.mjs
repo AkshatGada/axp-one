@@ -13,6 +13,9 @@ function safeOperation(op){return {id:op.id,type:op.type,state:op.state,version:
 export function createNativeService({run,rpc,store,signers,operatorToken,repository,observer=createNativeObserver({rpc,run})}={}){
  const outbox=store?.native;if(!outbox||typeof outbox.get!=='function'||typeof operatorToken!=='string'||operatorToken.length<32||operatorToken.length>256)reject('INVALID_INPUT');
  const domain=domainHash(run);const actors=[run.issuer,run.buyerA,run.buyerB,run.sponsor];
+ // Only identical authenticated in-flight orders share admission. Every HTTP key
+ // still binds through the store; conflicting bytes never bypass its guards.
+ const orderAdmissions=new Map();
  function orderProjection(order){
   const match=order.matchId?store.getMatch(order.matchId):null;
   const reserved=order.state==='Open'?{ownerType:'order',ownerId:order.id,amount:order.side===0?order.limit:'0',unit:order.side===1?order.exactUnit:null}:order.state==='Reserved'&&match?{ownerType:'match',ownerId:match.id,amount:match.gross,unit:match.unit}:null;
@@ -97,7 +100,21 @@ export function createNativeService({run,rpc,store,signers,operatorToken,reposit
   getOperation(id){hex32(id);return operationProjection(maybeNative(id)??store.getOperation(id));},
   getUnit(address){publicKeyBytes(address);return store.getUnit(address);},
   book(series){publicKeyBytes(series);const all=actors.flatMap(actor=>store.projectActor(actor).orders);const orders=[...new Map(all.filter(o=>o.series===series&&o.state==='Open').map(o=>[o.id,o])).values()];orders.sort((a,b)=>a.side-b.side||(a.limit===b.limit?a.sequence-b.sequence:a.side===0?(BigInt(a.limit)>BigInt(b.limit)?-1:1):(BigInt(a.limit)<BigInt(b.limit)?-1:1)));return {mode:'local-solana-validator',genesis:run.genesis,series,orders:orders.map(orderProjection)};},
-  async orders(value){envelope(value);const auth=verifyAuthorization({...value,domain,allowedActors:actors,kind:'BookOrder'});const context=auth.value.side===0?await walletContext(auth.value.actor):undefined;const result=store.admitAuthorization(value,{currentSlot:await rpc.slot(),walletContext:context});const operationId=result.operationId??(result.matchId?store.getMatch(result.matchId).operationId:null);if(operationId)await executeOperation(operationId);return orderProjection(store.getOrder(result.id??result.orderId));},
+  async orders(value){
+   envelope(value);const auth=verifyAuthorization({...value,domain,allowedActors:actors,kind:'BookOrder'}),identity=auth.value.actor+':'+auth.value.nonce,existing=orderAdmissions.get(identity);
+   if(existing){
+    if(existing.authHash!==auth.authHash)reject('NONCE_CONFLICT');
+    await existing.promise;
+    // Admission is already durable. Re-authenticate/bind this HTTP key in the same
+    // store transaction; exact nonce reuse returns one order without another hold.
+    const result=store.admitAuthorization(value,{currentSlot:await rpc.slot()});
+    return orderProjection(store.getOrder(result.id??result.orderId));
+   }
+   const pending={authHash:auth.authHash,promise:null};
+   pending.promise=(async()=>{const context=auth.value.side===0?await walletContext(auth.value.actor):undefined;const result=store.admitAuthorization(value,{currentSlot:await rpc.slot(),walletContext:context});const operationId=result.operationId??(result.matchId?store.getMatch(result.matchId).operationId:null);if(operationId)await executeOperation(operationId);return orderProjection(store.getOrder(result.id??result.orderId));})();
+   orderAdmissions.set(identity,pending);
+   try{return await pending.promise;}finally{if(orderAdmissions.get(identity)===pending)orderAdmissions.delete(identity);}
+  },
   async cancel(value){envelope(value);return orderProjection(store.cancelUnsigned(value,{currentSlot:await rpc.slot()}));},
   async campaign(value){envelope(value);return store.admitCampaign(value,{currentSlot:await rpc.slot()});},
   async sponsored(value){strict(value,['consentEnvelope','issuerEnvelope']);envelope(value.consentEnvelope);envelope(value.issuerEnvelope);const auth=verifyAuthorization({...value.consentEnvelope,domain,kind:'SponsoredConsent',allowedActors:[run.buyerA,run.buyerB]});const result=store.sponsorAccess({...value,currentSlot:await rpc.slot(),walletContext:await walletContext(auth.value.sponsor)});const operationId=result.operationId??(result.matchId?store.getMatch(result.matchId).operationId:null);if(operationId)await executeOperation(operationId);return orderProjection(store.getOrder(result.id??result.orderId));},

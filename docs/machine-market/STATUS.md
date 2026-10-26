@@ -1,3 +1,20 @@
+## Duplicate-order repair and same-run continuation authorized
+
+Root forwarded user "continue" after cb3c20a. Identical authenticated in-flight orders
+now share admission while every HTTP key still binds in the store. Conflicting signed
+bytes, bad signatures, stale wallet versions and double reservations remain rejected.
+145 focused tests pass, including five new concurrency/recovery checks. The original
+stopped journal is archived privately without modification (SHA256
+`dbcef89d82a3b08280ca44e203c4d6d640ec6ad1d20cb606b24e098871f081ba`).
+Its three original request rows and 10000-lamport carried hold remain preserved.
+Checkpointed HTTP recovery will continue that exact order, cancel it once and run
+separately identified shared-balance/IOC checks. The original interrupted step stays
+Prepared as historical evidence, and stop history survives explicit resume.
+No new funded run, reset, pruning, replacement signature or Devnet action is authorized.
+Native continuation resumes only after same-ledger identity/listener verification.
+
+---
+
 ## Current native recovery result — stopped for correctness review
 
 26 October 2026. Same-ledger recovery resolved the original RegisterUnit signature
