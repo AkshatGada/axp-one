@@ -1,3 +1,35 @@
+## User update — Devnet next phase preparation; local Git only
+
+Root forwarded user authorization for Devnet testing with the existing funded key,
+and an explicit NO GITHUB PUSH instruction. Read-only public identity/balance evidence
+is recorded in DEVNET_PREFLIGHT.md. Finish the current localhost phase first; prepare
+a bounded Devnet program/fee/rent/case/cleanup plan for separate ROOT GO before any
+Devnet broadcast. Existing live programs/accounts/authorities remain untouched.
+This supersedes the old no-Devnet-preflight restriction only for this preparation;
+current localhost execution and approved20GiB prerequisite remain as below.
+
+---
+
+## Phase2 source closure; approved native prerequisite continuation
+
+26 October2026. Source owners/reviewer are idle. Lead final focused suite129/129
+passed;18 syntax checks;39 source/test hashes frozen. H1–H5 independently closed at
+source level. Final full repository run:1010passed,23skipped,1unchanged benchmark
+rolling-rate timing assertion failed. Remaining90component checks, typechecks,
+SDK parity and hygiene passed separately. Do NOT call all regression checks green.
+See [PHASE2_RESULT.md](PHASE2_RESULT.md) for exact evidence and residual gaps.
+
+Root has now forwarded explicit USER approval for the task-local official Rust1.97.1
+and Agave4.3.2 loopback rebuild. Combined tools/cache/build<=20GiB including existing
+use, free>=40GB, two jobs/serial heavy work. Ledger512MiB and DB/log50MiB unchanged.
+Apply only the documented three loopback substitutions, preserve original binary,
+verify ALL literal127.0.0.1 TCP/UDP listeners before any fixture funding. The prior
+prerequisite pause below is historical and superseded. No workaround has executed yet.
+Existing one-run Phase2 ceilings/Packet03 hash remain unchanged. No Goal or public
+network/assets/deployment. Complete approved native phase then stop for root review.
+
+---
+
 ## ROOT GO recorded — Implementation Phase 2 only
 
 26 October 2026. Root explicitly authorizes one complete end-to-end LOCAL Solana
@@ -28,6 +60,11 @@ wall-clock limiter assertion failed; isolated and repeat review checks passed wi
 no limiter/test edits. Full evidence and remaining native gaps are in
 [PHASE2_SOURCE_CHECKPOINT.md](PHASE2_SOURCE_CHECKPOINT.md). Earlier88-test intermediate
 output is retained. Acceptance harness work continues separately; Phase2 is NOT complete.
+Core/transport source is committed as86ee6ec. Follow-on independent source work is
+limited to the reproducible bootstrap helper and concrete acceptance/restart/probe
+harness. The transport worker's five-item read-only harness review is recorded in
+PHASE2_HARNESS_REVIEW.md; fixes require lead verification. No root-forwarded approval
+for the compiler/validator workaround has arrived.
 The isolated patched-validator/compiler prerequisite is paused pending approval
 through root; no workaround download/install/patch/build/start is authorized yet.
 

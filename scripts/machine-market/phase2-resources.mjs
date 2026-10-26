@@ -24,17 +24,21 @@ function allocated(path){
   return blocks*1024;
 }
 
-export function phase2Resources({runDirectory=resolve(state,'phase2-run')}={}){
-  const rel=relative(state,resolve(runDirectory));
-  if(rel==='..'||rel.startsWith('../')||isAbsolute(rel)||rel==='')throw Error('RESOURCE_PATH_OUTSIDE_TASK');
+export function phase2Resources({runDirectory=resolve(state,'phase2-run'),ledgerDirectory=resolve(runDirectory,'ledger')}={}){
+  for(const path of [runDirectory,ledgerDirectory]){
+    const rel=relative(state,resolve(path));
+    if(rel==='..'||rel.startsWith('../')||isAbsolute(rel)||rel==='')throw Error('RESOURCE_PATH_OUTSIDE_TASK');
+  }
   const fs=statfsSync(root,{bigint:true});
-  const ledgerBytes=allocated(resolve(runDirectory,'ledger'));
+  const ledgerBytes=allocated(ledgerDirectory);
   const totalRunBytes=allocated(runDirectory);
+  const ledgerRelative=relative(resolve(runDirectory),resolve(ledgerDirectory));
+  const ledgerInsideRun=ledgerRelative!== '..'&&!ledgerRelative.startsWith('../')&&!isAbsolute(ledgerRelative);
   return {
     measuredAt:new Date().toISOString(),freeBytes:Number(fs.bavail*fs.bsize),
     toolBytes:allocated(resolve(state,'toolchain')),
     buildBytes:allocated(resolve(state,'build')),
-    ledgerBytes,databaseAndLogBytes:Math.max(0,totalRunBytes-ledgerBytes)+allocated(resolve(state,'verification')),
+    ledgerBytes,databaseAndLogBytes:Math.max(0,totalRunBytes-(ledgerInsideRun?ledgerBytes:0))+allocated(resolve(state,'verification')),
     totalRunBytes,measurement:'allocated filesystem blocks; task paths only',
   };
 }

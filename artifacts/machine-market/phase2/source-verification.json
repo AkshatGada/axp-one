@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "axp.market.phase2-source-closure.v1",
+  "observedAt": "2026-10-26T12:22:02.142704+00:00",
+  "sourceCheckpoint": "complete-with-documented-repository-regression-failure",
+  "phase2NativeComplete": false,
+  "packetSha256": "d77ac0f699a29dd89812137007f3ccb1cbf1d271dbcb738c66fd63c3736a3f3c",
+  "focusedTests": {
+    "tests": 129,
+    "passed": 129,
+    "failed": 0,
+    "skipped": 0,
+    "originalJs": 59,
+    "core": 19,
+    "transport": 21,
+    "harness": 21,
+    "bootstrap": 9
+  },
+  "syntaxScripts": 18,
+  "sourceFilesFrozen": 39,
+  "reviewClosure": {
+    "findings": [
+      "H1",
+      "H2",
+      "H3",
+      "H4",
+      "H5"
+    ],
+    "status": "closed-at-source-level",
+    "independentOfflineTestsPassed": 21,
+    "nativeEvidence": false
+  },
+  "finalRepositoryReview": {
+    "tests": 1034,
+    "passed": 1010,
+    "failed": 1,
+    "skipped": 23,
+    "failure": "tests/network-scale/benchmark.test.mjs:40 global Jev rolling-rate timing assertion",
+    "limiterAndTestChanged": false,
+    "earlierIsolatedRun": "passed",
+    "remainingChecks": {
+      "componentsPassed": 90,
+      "typechecks": "both passed",
+      "sdkParity": "passed",
+      "hygiene": "passed before staging"
+    }
+  },
+  "actualDeclaredNativeRun": {
+    "started": false,
+    "fundingRequests": 0,
+    "signedTransactions": 0,
+    "deployedProgramHash": null,
+    "genesis": null,
+    "finalizedSignatures": []
+  },
+  "approval": {
+    "isolatedCompilerValidator": "approved-by-user-via-root",
+    "combinedToolCacheBuildLimitBytes": 21474836480,
+    "freeSpaceFloorBytes": 40000000000,
+    "workaroundExecuted": false
+  },
+  "resourcesAtSourceClosure": {
+    "passed": true,
+    "failures": [],
+    "limits": {
+      "freeBytes": 40000000000,
+      "toolBytes": 4294967296,
+      "buildBytes": 2147483648,
+      "ledgerBytes": 536870912,
+      "databaseAndLogBytes": 52428800
+    },
+    "reserveBytes": 0,
+    "snapshot": {
+      "measuredAt": "2026-10-26T12:22:02.072Z",
+      "freeBytes": 151640457216,
+      "toolBytes": 2305855488,
+      "buildBytes": 334790656,
+      "ledgerBytes": 0,
+      "databaseAndLogBytes": 847872,
+      "totalRunBytes": 0,
+      "measurement": "allocated filesystem blocks; task paths only"
+    }
+  },
+  "outputs": {
+    "phase2-source-pre-freeze": {
+      "path": "artifacts/machine-market/phase2/outputs/phase2-source-pre-freeze.txt",
+      "sha256": "a5167b18f5e66e73a29ee058a4c12290f8c7dd4034941c6f58aea61fc7997a81"
+    },
+    "phase2-source-final": {
+      "path": "artifacts/machine-market/phase2/outputs/phase2-source-final.txt",
+      "sha256": "e7ede2248cec33ecf0c8ae19f03a8fb8d368eb1283a81dd26dab0e81044d9539"
+    },
+    "phase2-final-review": {
+      "path": "artifacts/machine-market/phase2/outputs/phase2-final-review.txt",
+      "sha256": "153f223d2f94cd8c387e93d6fab18c46d9e64f20330295050fad993ad2a22dfc"
+    },
+    "phase2-final-review-remaining": {
+      "path": "artifacts/machine-market/phase2/outputs/phase2-final-review-remaining.txt",
+      "sha256": "1a3ebb1a63a36c3daaaf71f1af239512d576a2921940fd0f2e6a5019827dd860"
+    }
+  },
+  "outputSanitization": "absolute worktree path replaced and trailing whitespace normalized",
+  "sourceSha256": {
+    "packages/machine-market/native/codec.mjs": "29530e9be2b347b7f3ae801b5e784223159f8947c3230c6e0d2f4a1f367c3e17",
+    "packages/machine-market/native/delivery.mjs": "52b8a1f3be8e0b56eb6d95d516c7e33cef55dace8d2115d2962406b369679e76",
+    "packages/machine-market/native/domain.mjs": "e51019175186be47b66e49bc4823d93d7f86a2d4455a329c5b0b37a05b4a7704",
+    "packages/machine-market/native/golden.mjs": "fc95f7f615caa2a0409d326fefa559115fb7a26e633c8765c5d0c3089081e727",
+    "packages/machine-market/native/observations.mjs": "b026c2a9685504732960bdc733af455552f81fe9af76298b3ea66aa12fb1dd7d",
+    "packages/machine-market/native/outbox.mjs": "1f30333beedc7bcc5965f9b142f414c4022d6c306e7a4daaf07ca8cc7c91352e",
+    "packages/machine-market/native/phase2-transport-utils.mjs": "8fd1cd0de1ef445ec541ac604c4d3eae9f6370b58d2ee68f46fc388a45ff6606",
+    "packages/machine-market/native/rpc.mjs": "cdb9b0e2ca2fb9538bee338925c58165707ecaa802ef614e8584fc308503c28c",
+    "packages/machine-market/native/service.mjs": "fad9e34dd92c58d0d5e7fab58abd9caff4e69c0af0257ce39208bd6e7f500805",
+    "packages/machine-market/native/trading.mjs": "4e944d6c303db051cec140c9d3d89fdae2af3d3819a4b1a4bb8cad275422dc28",
+    "packages/machine-market/native/transaction.mjs": "869c1a11de0c4c6d65dd831e5a7827ec8e074d72997af2b19fc4fb709d64bd30",
+    "scripts/machine-market/phase2-acceptance-crash.mjs": "c36ba3cf8a2782b8d3d58f4007ede3e9d9f3867065e4a35882d99c3a614b9d66",
+    "scripts/machine-market/phase2-acceptance-evidence.mjs": "8759e57303f1c11cf436af4174256b9301f8965b297108800c1a066f6c103a5f",
+    "scripts/machine-market/phase2-acceptance-fence-child.mjs": "9047961e0b82b6c217914542363e6fd05f5deed95e02a6270e008a5187e7bf80",
+    "scripts/machine-market/phase2-acceptance-fence.mjs": "35d3bb2a75903fc132eedc7eb28f0cff325a66a40749cd1991e9a593260c4e2c",
+    "scripts/machine-market/phase2-acceptance-gates.mjs": "d75379962784cd91f458d5880d25b18456643a9f4b0468d740560348c6027630",
+    "scripts/machine-market/phase2-acceptance-journal.mjs": "cb553ba41fc58fc1fea86f16b61bc64452104757bf10543513e7f925ecfa1abb",
+    "scripts/machine-market/phase2-acceptance-plan.mjs": "adafd9bfe2b24fe186ab4f1d436fe7144565fdaced1426b8ab5e141c2b38027d",
+    "scripts/machine-market/phase2-acceptance-probes.mjs": "57c75f6f80aab26a0c6fe0c69e0544c09171907a414de8a815f825fbcb6eb13f",
+    "scripts/machine-market/phase2-acceptance-recovery.mjs": "d0a3e3dcb5586d89a7c36569ae21b325afc631a6609ae4615c778faf2a37efd4",
+    "scripts/machine-market/phase2-acceptance-repository.mjs": "0d8b8c5a2107f050b8faa52182a5a18898f4e9018d049fc4d77c0305423bbdcf",
+    "scripts/machine-market/phase2-acceptance-runtime.mjs": "e7ef54421458bc333cc906de52e6ea0d825e4f78aa964648efabd99c91269a58",
+    "scripts/machine-market/phase2-acceptance-schedule.mjs": "1ee667ae1b4f6ebac47d419d382f3d5d52769a1ec4c9165cb31545abc1073b57",
+    "scripts/machine-market/phase2-acceptance-sponsor.mjs": "15d056baeb6685898351d45d1e6997bd6a41d48f8e8102316798aebc0a9cbe78",
+    "scripts/machine-market/phase2-acceptance-verification.mjs": "99b7762e5d2a1fce1f7b97e98c43383e350cd8cde271e72ab68a97abc9f82d3b",
+    "scripts/machine-market/phase2-acceptance-worker.mjs": "3c49df8c2ff6f7b48806399d48a920d526eaf5d22cdb8cc974f91c838d39230e",
+    "scripts/machine-market/phase2-acceptance.mjs": "915ec85dd8368b62a5981270cd20990a022b7d034d6b990a52305331977bc98a",
+    "scripts/machine-market/phase2-bootstrap.mjs": "3ec91d1f932e353b6d3cd6eb7bf4e8624f93331da8de27600f3caf73e54095e6",
+    "scripts/machine-market/phase2-resources.mjs": "26603e142dc6c7762a0acce61cdcbae7009395d8468dd9b8fb7cf66684ced197",
+    "tests/machine-market/native-codec.test.mjs": "3bc50661c658c111a2972261fed64c24c914ea2d0dace6c8db32e37cc8293d60",
+    "tests/machine-market/native-domain.test.mjs": "321b8c0896b507b2878c8555ac6f2887aacfeab9a0ed877661796d6b8cf32cea",
+    "tests/machine-market/native-trading-fixtures.test.mjs": "8a0cd5b4be9c76ef67f1c9b00a1d493787c4f31f5bc64434f8f8e2fc2266cce9",
+    "tests/machine-market/native-trading.test.mjs": "5bec839911f416ee9f7574f493d3a13fede3db1fcca47e55934a852f523ec772",
+    "tests/machine-market/phase2-acceptance.test.mjs": "431dc1a9ace086939bfd68cb471a6f13ccd5245f5472f305f643c0b0932c8538",
+    "tests/machine-market/phase2-bootstrap.test.mjs": "13bd43da204a8cbd3cff1060e0e2e4de0805abe5dd48fb2773017876b2f68d3c",
+    "tests/machine-market/phase2-core-kill.mjs": "8b6304859ec8f3d01c2b5aa1d9ab140f8ad2b0a420afc1a3f0cea34c81d3e1c0",
+    "tests/machine-market/phase2-core.test.mjs": "cdfd6ee0a80d1b128ddb3a77ed2ad0c88aca0cf01f66a3a65aef416a6ec1f1ac",
+    "tests/machine-market/phase2-transport-integration.test.mjs": "dce71e76646f8a7d4af7b38509a96093cdcf1287f9c6ec32974217ac83d5067b",
+    "tests/machine-market/phase2-transport.test.mjs": "73365acb32a2fe9329b648fc1b65c57ca3af2cd183818e530080d6192c364fd0"
+  },
+  "residuals": [
+    "task-local compiler/validator build and literal-loopback listener verification",
+    "actual child launcher/IPC integration",
+    "native/HTTP T1-T9 runtime and funded recovery evidence",
+    "exact-slot/equality execution unverified",
+    "one unchanged full-suite timing assertion failure"
+  ],
+  "stagedHygiene": {
+    "status": "passed",
+    "stagedFiles": 32,
+    "runtimeFiles": 525,
+    "vendorFiles": 71,
+    "findings": []
+  }
+}

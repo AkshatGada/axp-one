@@ -1,0 +1,112 @@
+{"check":"product-components"}
+(node:38674) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ client consumes actual API health, signup, signin, session and signout shapes (35.1925ms)
+✔ actual profile and app DTO round trips preserve ownership and declarations (8.202ms)
+✔ actual API denies a second account access to another organization (4.913583ms)
+✔ actual confirmation endpoint is not called by health/session reads (2.743875ms)
+✔ unconfigured actual API health is visible, never fake authentication (0.344375ms)
+✔ reads are same-origin, cookie-only and no-store (23.472791ms)
+✔ concurrent owner and finance reads are ordered through body consumption (0.899334ms)
+✔ a rejected request releases the queue without retrying the mutation (0.5475ms)
+✔ a transport failure releases queued reads without a replacement send (0.407667ms)
+✔ session changes discard in-flight and queued owner requests before another send (0.275167ms)
+✔ signout fences queued owner actions immediately and uses its captured CSRF (0.25725ms)
+✔ accepts explicit health flags and keeps unconfigured health unavailable (0.083625ms)
+✔ authenticated writes fail closed before a session GET (0.0695ms)
+✔ profile, organization and app writes use only the session CSRF and exact DTOs (0.428792ms)
+✔ signup never creates local authentication; signin alone never supplies write authority (0.212042ms)
+✔ confirmation is a single explicit call with tokenHash only (0.120958ms)
+✔ signout invalidates the in-memory CSRF capability (0.1455ms)
+✔ 401 and unauthenticated session responses discard previous CSRF (0.203625ms)
+✔ a failed session refresh cannot retain stale write authority (0.133ms)
+✔ CSRF errors and rate limits do not retry an unsafe request (0.1715ms)
+✔ raw diagnostics and connection errors are not exposed to the UI (0.122292ms)
+✔ malformed health, session and auth success fail closed (0.432833ms)
+✔ confirmation-link consumption scrubs all URL credentials without posting (0.271417ms)
+✔ unsupported, expired-error, duplicate and fragment-token links are scrubbed and rejected (0.147375ms)
+✔ ordinary navigation is not rewritten (0.032542ms)
+✔ HTTPS and loopback app-development websites are accepted (0.178833ms)
+✔ origin lists reject paths, wildcards and normalized path tricks (0.256875ms)
+✔ declaration categories are bounded and lists trim/deduplicate (0.084ms)
+✔ financial callback makes no constructor requests; routes and proof bodies match the owner API (1.813666ms)
+✔ account-session callback retains cookie/CSRF protection without fetch fallback or retry (23.440708ms)
+✔ DTOs require actual devnet mode, exact network and canonical bounded integers; private fields are discarded (0.341375ms)
+✔ foreign resource lists, mismatched bindings and changed frozen recipients fail closed (0.391125ms)
+✔ prepare/sign/reconcile are separate explicit requests; partial cooperative close remains unsigned waiting state (0.43ms)
+✔ native voucher payload kind is normalized, payer-only and stripped to unsigned wallet message metadata (0.157834ms)
+✔ payer activation and pause are explicit version-bound requests, never funding side effects (0.127792ms)
+✔ bad deposit values and path injection make no requests; uncertain requests are never retried (0.339792ms)
+✔ scope invalidation fences pending signatures and late completion cannot unlock a newer operation (0.160834ms)
+✔ panel render, discovery and resource reads never connect, sign, broadcast or auto-activate (5.08775ms)
+✔ funding and activation require distinct clicks plus server broadcast gate and acknowledgement (3.96475ms)
+✔ app payout view has no activation/open/voucher controls or private voucher payload (1.532ms)
+✔ unsigned interrupted preparation can explicitly recover after load; signed unknown is reconcile-only (1.752833ms)
+✔ unknown prepare errors stop without retry and require explicit reload before re-preparation (1.354167ms)
+✔ interrupted unsigned voucher preparation can explicitly recover; signed unknown remains reconcile-only (1.544417ms)
+✔ an org change while a wallet signature waits clears private state and prevents submission (2.658167ms)
+✔ voucher authorization is payer-only, explicit and never renders private native voucher material (1.612334ms)
+✔ partial cooperative close stops and waits for the other frozen signer without retry (2.098083ms)
+✔ ownership proof and verification require separate explicit preparation/sign clicks (2.127875ms)
+✔ account view fragments preserve every sidebar destination (0.840542ms)
+✔ saved campaign and app section links restore their owning view after reload (0.088875ms)
+✔ unknown fragments and nonlocal values cannot select another account view (0.060833ms)
+✔ account sign-in keeps its action and financial mode visible, with no service diagnostics (1.37975ms)
+✔ technical setup is on demand without hiding unsupported-category or payment limits (0.6565ms)
+✔ busy account responses explain explicit recovery and never replay sign-in (23.404541ms)
+✔ public desktop/mobile navigation and the shared dashboard link to the account console (0.584917ms)
+✔ standard discovery catches app-ready and late registration without wallet calls, then disposes (1.498417ms)
+✔ connect requires exact expected returned address, Devnet and matching public key (0.956458ms)
+✔ signMessage uses raw exact bytes and base58; prefixed messages are rejected (0.262042ms)
+✔ account changes while a wallet prompt is pending fail before submission (0.108958ms)
+✔ transaction signing receives serialized Uint8Array and solana:devnet, never send (0.450917ms)
+✔ cooperative close retains the other wallet signature and rejects modified messages (0.353625ms)
+✔ missing features, foreign signers, invalid raw transactions and noncanonical base64 fail closed (0.259875ms)
+✔ six-decimal credits convert exactly without rounding or accepting scientific notation (0.924458ms)
+✔ resumed drafts submit only draft fields and cannot smuggle server-owned state (0.09775ms)
+✔ available cap excludes reservations; authorization and settlement do not add spend (0.075ms)
+✔ campaign state includes drafts once even when backend also provides a drafts collection (0.06475ms)
+✔ native financial labels require explicit financial metadata independently of model execution (0.067125ms)
+✔ opening or uncertain launch never claims a funded active campaign (0.133125ms)
+✔ native recovery actions use accepted ledger gaps and block advancement until uncertainty resolves (0.707334ms)
+✔ Devnet transaction links remain pinned to the correct network and reject untrusted URLs (0.08925ms)
+✔ explicit opening retries require a saved unsigned campaign and never replace an uncertain identity (0.111959ms)
+✔ unresolved bootstrap never presents the workspace as synthetic (0.092208ms)
+✔ native payout and refund remain unsettled until close finality is confirmed (0.112292ms)
+✔ campaign network survives draft saves and legacy drafts stay Solana (0.079208ms)
+✔ workspace money never aggregates Solana USDC with Tempo PathUSD (0.118125ms)
+✔ Tempo payout can keep a channel open; uncertainty and authorizations still gate actions (0.076333ms)
+✔ Tempo Explorer links require transaction hashes and never accept a Solana signature (0.070292ms)
+✔ Tempo publisher payout is shown before final close only with finalized evidence (0.085917ms)
+✔ payment API outcomes cannot produce success copy for blocked, failed or uncertain operations (0.103875ms)
+✔ workspace accepted deliveries span both rails while legacy summary and currency totals stay separate (0.146917ms)
+✔ settlement is restricted to the awarded campaign and original native channel (0.899167ms)
+✔ uncertainty, reservations, missing authorization and pending close disable settlement (0.107041ms)
+✔ a finalized label requires actual finalized close signature evidence (0.147666ms)
+✔ bound identity remains that of the turn receipt, not a later workspace projection (0.670958ms)
+✔ Tempo payment actions bind the turn rail and payout without closing (0.0815ms)
+✔ Tempo close proof requires its finalized hash and never a Solana signature (0.087917ms)
+✔ turn rail remains bound after the publisher changes chat settings (0.057167ms)
+✔ a safely retryable failed Tempo close obeys the backend capability and all identity guards (0.064917ms)
+✔ synthetic payment display only reports settlement after the ledger campaign is closed (0.073042ms)
+✔ chat suggestions match their labels when server presets start with developer tools (1.318292ms)
+✔ missing categories use matching defaults rather than unrelated server presets (0.142666ms)
+ℹ tests 90
+ℹ suites 0
+ℹ pass 90
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 362.058875
+{"check":"product-ui-typecheck"}
+{"check":"marketing-typecheck"}
+{"check":"react-sdk-parity"}
+{"check":"repository-hygiene"}
+{
+  "status": "passed",
+  "runtimeFiles": 525,
+  "vendorFiles": 71,
+  "stagedFiles": 0,
+  "findings": []
+}
