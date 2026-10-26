@@ -1,5 +1,11 @@
 # Devnet adapter and finite runner
 
+**Live outcome:** the approved run stopped after 172 upload writes because the
+remaining work could not fit its original sealed deadline. The original buffer
+was closed and its collateral fully returned; net spend was 0.000875 test SOL in
+fees. Program deployment and D0/D1/D2 remain incomplete. See
+[the actual execution record](DEVNET_EXECUTION.md).
+
 The offline implementation was committed as `e49dec9`; its historical verification
 record remains unchanged in `VERIFICATION.json`. The host binding and executable
 entrypoint are now implemented. Exactly seven approved test keypairs were prepared
@@ -17,7 +23,8 @@ mainnet action, paid model call, hosted change or GitHub push is authorized here
 ## MVP implementation and execution status
 
 The core implementation passed 179/179 focused offline/native regression checks
-(147 existing, 32 new). The host binding adds three passing checks. Fixture results
+(147 existing, 32 new). The host binding added three passing checks. After the direct RPC pacing/expired-unsent
+recovery correction, all 184 focused regression checks passed. Fixture results
 remain scripted Node evidence, not SBF execution or Devnet finality proof.
 
 The public prepared manifest contains real identities, nonces and source hashes.

@@ -16,3 +16,7 @@ D0/D1/D2 plan within its aggregate limits. See the execution record for its comm
 
 Preserve original loopback guards. Fixture results do not establish Devnet finality,
 network capacity or closure of the old local exact-slot gaps.
+
+The approved original run is now terminal: it stopped before deployment, and its
+buffer collateral was fully returned. Do not rerun or redeposit using that sealed
+manifest. The execution record preserves the incomplete outcome and actual fees.

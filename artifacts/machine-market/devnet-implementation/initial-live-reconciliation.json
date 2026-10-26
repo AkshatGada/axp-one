@@ -1,0 +1,63 @@
+{
+  "schema": "axp.market.devnet.initial-reconciliation.v1",
+  "signatureStatuses": [
+    {
+      "id": "buffer:create",
+      "signature": "4RLYuKTCDHSrdAdsPmShS3FouBHXLRcoMC4cSMmLJ8h5XD6jZPmkznT2mNPs6JUTsd27r6YyTVVAmrXihkdG8p1a",
+      "state": "FinalizedSuccess",
+      "sends": 1,
+      "status": {
+        "confirmationStatus": "finalized",
+        "confirmations": null,
+        "err": null,
+        "slot": 515430396,
+        "status": {
+          "Ok": null
+        }
+      }
+    },
+    {
+      "id": "write:000",
+      "signature": "zdNbt7KhoHWxMzoAnkbHhxi95gtXZbdmwamz4vQG92cib1tzm2Eb24vUPhCgkY38a7SxmfuYjEyH9DcrQWVGx8y",
+      "state": "Signed",
+      "sends": 0,
+      "status": null
+    },
+    {
+      "id": "write:001",
+      "signature": "5y9hfkALbCNhFKfZ47S58vSuzKh4ALtQ8NKiudeJo4UfRjXuFELgaMWdmio29fMfWwRrL6ZxcySGkBGvDqzZdTEu",
+      "state": "Signed",
+      "sends": 0,
+      "status": null
+    },
+    {
+      "id": "write:002",
+      "signature": "4H8X4gU5ZxPePRqb54NgcuEcetaXR8zchmKzzyPmqj3yTdwBiAqgyQ9LaTYHXEBWcEdkwXq4Lv541zLSNvNpr3wF",
+      "state": "Signed",
+      "sends": 0,
+      "status": null
+    }
+  ],
+  "contextSlot": 515431881,
+  "accounts": [
+    {
+      "role": "payer",
+      "address": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+      "lamports": 3150165520,
+      "owner": "11111111111111111111111111111111",
+      "executable": false,
+      "dataBytes": 0
+    },
+    {
+      "role": "buffer",
+      "address": "EUsYCitWzDsVA57oATGnxRrjN6y5QApM4EY4aouDkwcd",
+      "lamports": 1229385400,
+      "owner": "BPFLoaderUpgradeab1e11111111111111111111111",
+      "executable": false,
+      "dataBytes": 241869
+    }
+  ],
+  "actualFeeLamports": "10000",
+  "actualBufferRentLamports": "1229385400",
+  "newModelCalls": 0
+}
