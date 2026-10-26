@@ -1,3 +1,35 @@
+## ROOT GO recorded — Implementation Phase 2 only
+
+26 October 2026. Root explicitly authorizes one complete end-to-end LOCAL Solana
+phase, starting from 075af84ae2c99491d00d807c547a81e2a54bc79b against Packet03 manifest
+SHA256 d77ac0f699a29dd89812137007f3ccb1cbf1d271dbcb738c66fd63c3736a3f3c.
+Phase1 remains source/algorithm/host/SBF evidence, not native acceptance.
+
+First fix: durably commit immutable intent/message/reservations/signing fence BEFORE
+any real disposable signer call; verify all signatures and commit complete signed
+transaction before send. Process death never permits unsigned abort/new signature.
+Then complete native transport/observations, delivery response durability/recovery,
+finite T1–T9 native/HTTP coverage, evidence/reconciliation/runbook/local commits.
+
+One declared run only: initial8 units, max64 lifetime, max24 successful trades,
+max128 signed native operations including negatives. Operator <=10 LOCAL SOL;
+<=4 trading fixture keys, each <=10 LOCAL SOL. Literal127.0.0.1 validator/RPC only,
+new disposable fixtures, no public entrypoint/cloning/user wallet. No silent reset,
+extra funded run, external RPC/devnet/mainnet, push, hosted write, paid calls or uploads.
+Free disk >=40GB; tools/cache <=4GiB, builds <=2GiB, ledger <=512MiB, DB/logs <=50MiB.
+Lead owns all validator/heavy execution serially. No Goal mode. Only reused ordinary
+LOCAL Codex builder chats with explicit gpt-6.1-sol/high settings and this worktree.
+Stop after one complete phase deliverable or concrete blocker for root review.
+
+Runtime startup is blocked by the pinned CLI's unconditional wildcard faucet bind;
+see [PHASE2_PREFLIGHT.md](PHASE2_PREFLIGHT.md). No validator or funding has started.
+Source/unit work continues in the three verified local builder workdirs.
+Worker scopes and actual runtime evidence will be recorded in PHASE2_RESULT.md.
+Existing synthetic prototype/frontend and historical funded state remain preserved.
+Previous phase checkpoints follow as history.
+
+---
+
 ## Implementation Phase 1 complete — 26 October 2026
 
 Packet03 implementation and lead integration checks are complete locally. Frozen
