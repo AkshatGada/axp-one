@@ -46,7 +46,9 @@ const args=['--config',configPath,'--ledger',ledger,'--bind-address','127.0.0.1'
   '--dynamic-port-range','18001-18050','--mint',manifest.mintSink,'--faucet-sol','50',
   '--faucet-per-request-sol-cap','5','--faucet-per-time-sol-cap','10','--faucet-time-slice-secs','60',
   '--bpf-program',manifest.program,programFile,'--compute-unit-limit','200000',
-  '--limit-blockstore-size','800000','--inflation-fixed','0',
+  // The CLI defaults to800000 shreds even when omitted. u64::MAX prevents FIFO
+  // cleanup under our9GiB supervisor stop; no source/binary patch is needed.
+  '--limit-blockstore-size','18446744073709551615','--inflation-fixed','0',
   '--rpc-pubsub-worker-threads','1','--rpc-pubsub-notification-threads','1','--log'];
 const lockPath=join(state,'phase2-validator-running.lock'),lock=openSync(lockPath,'wx',0o600);writeFileSync(lock,String(process.pid));
 const log=join(state,'verification/phase2-validator-runtime.log'),fd=openSync(log,'a',0o600);

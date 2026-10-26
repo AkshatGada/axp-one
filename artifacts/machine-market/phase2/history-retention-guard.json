@@ -1,0 +1,17 @@
+{
+  "schema": "axp.market.history-retention-guard.v1",
+  "observedAt": "2026-10-26T16:27:11.177Z",
+  "explicitShredLimit": "18446744073709551615",
+  "processArgsVerified": true,
+  "firstAvailableBlock": "4099",
+  "ledgerSoftStopBytes": 9663676416,
+  "ledgerHardBytes": 10737418240,
+  "totalTaskHardBytes": 21474836480,
+  "additionalSignedTransactions": 0,
+  "source": {
+    "cliSha256": "586407c7c7777037f99dd09c68b74fb06956f11b99eba2985d33e9bfd75bc404",
+    "testValidatorSha256": "e2debd7e27836063a2f461c17cf143716a433f7d8c80a9cf08bc94224c684f97",
+    "cleanupServiceSha256": "e9fb44b78a8757d7f4e4001442719e40b5af52a5dbc9bc2b3012f57fdf854826"
+  },
+  "observation": "CLI omission restores800000; cleanup returns without purging when num_shreds<=max_num_shreds. Supervisor stops before a physically reachable shred count can approach u64::MAX."
+}

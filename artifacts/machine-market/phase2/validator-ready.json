@@ -2,8 +2,8 @@
   "schema": "axp.market.validator.readiness.v1",
   "verified": true,
   "loopbackOnly": true,
-  "observedAt": "2026-10-26T15:14:02.264Z",
-  "validatorPid": 78184,
+  "observedAt": "2026-10-26T16:26:56.166Z",
+  "validatorPid": 59252,
   "validatorBinarySha256": "1f135bb21bdd50df55e92f5254120e02e7e7118d428e668270ba8b98acf13dbf",
   "endpoint": "http://127.0.0.1:18899",
   "genesis": "bcdd92093056530795daa07254672cf3cc1794828ccb837abf362e0fc0cc84c3",
@@ -161,12 +161,6 @@
     {
       "protocol": "tcp",
       "address": "127.0.0.1",
-      "port": 18899,
-      "role": "rpc"
-    },
-    {
-      "protocol": "tcp",
-      "address": "127.0.0.1",
       "port": 18900,
       "role": "pubsub"
     },
@@ -175,21 +169,27 @@
       "address": "127.0.0.1",
       "port": 18007,
       "role": "validator"
+    },
+    {
+      "protocol": "tcp",
+      "address": "127.0.0.1",
+      "port": 18899,
+      "role": "rpc"
     }
   ],
   "socketRows": 27,
-  "rawSocketSha256": "fa60dbb454c1d013a55e2821868b1996aa582e441ae957d0ea5be7c19c41396a",
-  "finalizedContextSlot": "1636",
+  "rawSocketSha256": "3b178f4a467f68915708300a9118089baf087ff50f665f4f1ee3f975f720a8b7",
+  "finalizedContextSlot": "5349",
   "resource": {
-    "measuredAt": "2026-10-26T15:14:01.947Z",
-    "freeBytes": 146130485248,
+    "measuredAt": "2026-10-26T16:26:55.925Z",
+    "freeBytes": 146213982208,
     "toolBytes": 3901521920,
     "buildBytes": 3128479744,
     "combinedToolBuildBytes": 7030001664,
-    "totalTaskBytes": 8136065024,
-    "ledgerBytes": 1102852096,
-    "databaseAndLogBytes": 3088384,
-    "totalRunBytes": 798720,
+    "totalTaskBytes": 8047808512,
+    "ledgerBytes": 1010167808,
+    "databaseAndLogBytes": 6467584,
+    "totalRunBytes": 3448832,
     "measurement": "allocated filesystem blocks; task paths only",
     "recoveredMeasurementRaces": 0,
     "measurementNotes": []

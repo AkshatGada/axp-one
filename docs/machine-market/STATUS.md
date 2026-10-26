@@ -1,3 +1,29 @@
+## Current completed local execution — financial drain verified, acceptance partial
+
+26 October 2026. Repair/continuation execution finished on the original run. There
+are 16 successful trades, 65 known signed transactions (50 successful,15 expected
+rejections), and67 allocated signing slots including2 retained Reserved slots. The isolated SQLite
+fence separately retains1 slot with zero signer/RPC calls (68 combined conservative
+slots, below128). All
+8 Units are terminal:4 Consumed,3 Refunded,1 Expired. Primary escrow, active orders,
+principal/unit/campaign reservations and native fee holds are zero. The original
+9.001 LOCAL SOL fixture funding is unchanged; no reset, repeat funding, replacement
+signature or new funded run occurred. Original3 request rows and stopped journal
+snapshot are preserved. Full focused suite147/147 and26 script syntax checks pass.
+
+Harness proof checks:38 passed; use-by equality and lease equality remain pending.
+Actual rejection slots are5197+32 and3375+32, so exact equality/E-1 is not claimed.
+Historical RPC retention left first available block4099:2 transactions were freshly
+retrieved;63 are checked against retained signed bytes/execution-time finality proof.
+Current native accounts independently re-read from the SAME validator show zero
+primary escrow and exact fixture wallet+market-account balance conservation. This
+is not an independent-provider or fresh-RPC verification of all65 transactions.
+Automatic FIFO pruning is prevented with an explicit u64::MAX shred limit;10GiB ledger/9GiB stop,20GiB
+whole-task,40GB free and50MiB app DB/log caps remain. Validator/service stopped.
+No GitHub push or Devnet broadcast. See [PHASE2_NATIVE_ACCEPTANCE_RESULT.md](PHASE2_NATIVE_ACCEPTANCE_RESULT.md).
+
+---
+
 ## Duplicate-order repair and same-run continuation authorized
 
 Root forwarded user "continue" after cb3c20a. Identical authenticated in-flight orders

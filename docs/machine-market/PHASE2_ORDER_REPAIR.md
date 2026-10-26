@@ -63,3 +63,13 @@ Actual replay resume returned AlreadyProcessed; all paired account deltas/data c
 were zero and the original finalized receipt matched. See native-exact-replay.json.
 The same run has continued into native trades and terminal settlement. These are
 intermediate checkpoints, not a complete T1–T9 or deadline-equality result.
+
+## Final result
+
+The original run finished with16 trades and all8 Units terminal. Full acceptance is
+partial (38/40 proof checks;2 exact timing proofs pending). Actual65 signed transaction
+outcomes are retained; only2 are still available from fresh RPC, with63 older receipts
+classified as execution-time retained evidence. Current accounts prove zero escrow
+and exact fixture balance conservation. Automatic FIFO pruning is now prevented by explicit u64::MAX within the
+unchanged storage caps. See PHASE2_NATIVE_ACCEPTANCE_RESULT.md for limitations and all
+artifacts. Validator/service stopped; no push or Devnet phase follows automatically.

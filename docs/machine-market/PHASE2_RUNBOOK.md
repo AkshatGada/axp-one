@@ -1,3 +1,18 @@
+## Run ended — preserve current state
+
+26 October 2026: the original local run completed financial drain. Do not invoke the
+bootstrap-only recovery entry or continue this finalized acceptance as a fresh run.
+All8 Units are terminal;16 trades/65 signed transactions/67 allocated signing slots.
+The original interrupted HTTP step and2 Reserved slots remain as preserved evidence.
+See PHASE2_NATIVE_ACCEPTANCE_RESULT.md for partial timing proof and history limitations.
+Automatic FIFO pruning is prevented by explicit u64::MAX (the CLI default is800000). The supervisor still stops at9GiB ledger,
+19GiB total task and45MiB app DB/logs, before10GiB/20GiB/50MiB hard caps. Actual free
+space stays>=40GB plus the supervisor reserve. No history reset/pruning or new funded
+run is permitted. Future execution is outside this completed phase and needs its own
+bounded decision; no Devnet broadcast or push follows automatically.
+
+---
+
 ## Current authorized recovery limits
 
 26 October 2026: continue the original preserved localhost ledger and private run.

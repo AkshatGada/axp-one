@@ -1,3 +1,10 @@
+Latest execution result: [PHASE2_NATIVE_ACCEPTANCE_RESULT.md](PHASE2_NATIVE_ACCEPTANCE_RESULT.md).
+The original run is financially drained; full native acceptance remains partial on
+two timing proofs, with the historical RPC availability limitation recorded.
+Earlier recovery/source checkpoints below retain their original observations.
+
+---
+
 Current continuation result: [PHASE2_RECOVERY_RESULT.md](PHASE2_RECOVERY_RESULT.md)
 records completed native bootstrap and the unresolved HTTP acceptance blocker.
 The source-only closure below is retained as its historical checkpoint.
