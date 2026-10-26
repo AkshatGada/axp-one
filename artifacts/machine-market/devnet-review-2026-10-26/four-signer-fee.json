@@ -1,0 +1,62 @@
+{
+  "schema": "axp.market.devnet-preparation.four-signer-fee.v1",
+  "observedAt": "2026-10-26T16:46:12.877Z",
+  "requiredSignatures": 4,
+  "feeLamports": 20000,
+  "contextSlot": 515395740,
+  "syntheticUnsignedMessage": true,
+  "signingCalls": 0,
+  "broadcasts": 0,
+  "records": [
+    {
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "getLatestBlockhash",
+        "params": [
+          {
+            "commitment": "finalized"
+          }
+        ]
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "result": {
+          "context": {
+            "apiVersion": "4.4.0-beta.1",
+            "slot": 515395739
+          },
+          "value": {
+            "blockhash": "2gLdacGnc4Q752mAF7gUHuGj5Xx5ZvYJUYM79XrFFjsC",
+            "lastValidBlockHeight": 502594665
+          }
+        },
+        "id": 1
+      }
+    },
+    {
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "getFeeForMessage",
+        "params": [
+          "BAIBBbPnzw7EOJa3fyWtl/eFLg0CPyIq1nwufiM2B1wlH8Pwfkp5vGbOQIC31lpwjAT4m6nekSA5oi/4UXHVjYWC9lWV2ZS0ecuKp51SWjedwjg1vQnslw7BFI+v73u3ouP7QFXPq1Am1+T5O2eMRvefU4qPFh9HBDzqkjxcLH3enUsLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY74jzNmId9vsRObNda8q7ngwALoEO60LuTPBFT6N9dwEEAgABDAIAAAAAAAAAAAAAAA==",
+          {
+            "commitment": "finalized"
+          }
+        ]
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "result": {
+          "context": {
+            "apiVersion": "4.4.0-beta.1",
+            "slot": 515395740
+          },
+          "value": 20000
+        },
+        "id": 2
+      }
+    }
+  ]
+}

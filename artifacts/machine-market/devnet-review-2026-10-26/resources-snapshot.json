@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "failures": [],
+  "limits": {
+    "freeBytes": 40000000000,
+    "totalTaskBytes": 21474836480,
+    "ledgerBytes": 10737418240,
+    "databaseAndLogBytes": 52428800
+  },
+  "reserveBytes": 0,
+  "snapshot": {
+    "measuredAt": "2026-10-26T17:06:23.083Z",
+    "freeBytes": 146190995456,
+    "toolBytes": 3878785024,
+    "buildBytes": 3126177792,
+    "combinedToolBuildBytes": 7004962816,
+    "totalTaskBytes": 8048492544,
+    "ledgerBytes": 1037324288,
+    "databaseAndLogBytes": 6467584,
+    "totalRunBytes": 3448832,
+    "measurement": "allocated filesystem blocks; task paths only",
+    "recoveredMeasurementRaces": 0,
+    "measurementNotes": []
+  }
+}

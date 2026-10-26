@@ -1,0 +1,207 @@
+[
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "getGenesisHash",
+    "params": []
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "getVersion",
+    "params": []
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 3,
+    "method": "getBalance",
+    "params": [
+      "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 4,
+    "method": "getAccountInfo",
+    "params": [
+      "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+      {
+        "commitment": "finalized",
+        "encoding": "base64"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 5,
+    "method": "getMinimumBalanceForRentExemption",
+    "params": [
+      0,
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 6,
+    "method": "getMinimumBalanceForRentExemption",
+    "params": [
+      36,
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 7,
+    "method": "getMinimumBalanceForRentExemption",
+    "params": [
+      241869,
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 8,
+    "method": "getMinimumBalanceForRentExemption",
+    "params": [
+      241877,
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 9,
+    "method": "getMinimumBalanceForRentExemption",
+    "params": [
+      393,
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 10,
+    "method": "getMinimumBalanceForRentExemption",
+    "params": [
+      229,
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 11,
+    "method": "getMinimumBalanceForRentExemption",
+    "params": [
+      383,
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 12,
+    "method": "getMinimumBalanceForRentExemption",
+    "params": [
+      619,
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 13,
+    "method": "getMinimumBalanceForRentExemption",
+    "params": [
+      178,
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 14,
+    "method": "getMultipleAccounts",
+    "params": [
+      [
+        "JE86WkYvTrzW8HgNmrHY7dFYpCmSptUpKupbo2AdQ9cG",
+        "F6UVKh1ujTEFK3en2SyAL3cdVnqko1FVEXWhmdLRu6WP",
+        "5cC3foj77CWun58pC51ebHFUWavHWKarWyR5UUik7dnC",
+        "B8JJXCy5amZyWG9r7EnUYLwzXSXTxG7GZ1qZ1qggo83g"
+      ],
+      {
+        "commitment": "finalized",
+        "encoding": "base64"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 15,
+    "method": "getLatestBlockhash",
+    "params": [
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 16,
+    "method": "getFeeForMessage",
+    "params": [
+      "AQABA7Pnzw7EOJa3fyWtl/eFLg0CPyIq1nwufiM2B1wlH8Pwfkp5vGbOQIC31lpwjAT4m6nekSA5oi/4UXHVjYWC9lUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMnLsTqyooQ1VxH+1IF8hVVPEB7rn74ZbCn79frYjm9PAQICAAEMAgAAAAAAAAAAAAAA",
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 17,
+    "method": "getFeeForMessage",
+    "params": [
+      "AgEBA7Pnzw7EOJa3fyWtl/eFLg0CPyIq1nwufiM2B1wlH8Pwfkp5vGbOQIC31lpwjAT4m6nekSA5oi/4UXHVjYWC9lUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMnLsTqyooQ1VxH+1IF8hVVPEB7rn74ZbCn79frYjm9PAQICAAEMAgAAAAAAAAAAAAAA",
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 18,
+    "method": "getFeeForMessage",
+    "params": [
+      "AwIBBLPnzw7EOJa3fyWtl/eFLg0CPyIq1nwufiM2B1wlH8Pwfkp5vGbOQIC31lpwjAT4m6nekSA5oi/4UXHVjYWC9lWV2ZS0ecuKp51SWjedwjg1vQnslw7BFI+v73u3ouP7QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAycuxOrKihDVXEf7UgXyFVU8QHuufvhlsKfv1+tiOb08BAwMAAQIMAgAAAAAAAAAAAAAA",
+      {
+        "commitment": "finalized"
+      }
+    ]
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 19,
+    "method": "getFeeForMessage",
+    "params": [
+      "AQACBLPnzw7EOJa3fyWtl/eFLg0CPyIq1nwufiM2B1wlH8Pwfkp5vGbOQIC31lpwjAT4m6nekSA5oi/4UXHVjYWC9lUCqPaRToihsOIQFT73Y64rAMK5PRbBJNLAU3oQBIAAAAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAycuxOrKihDVXEf7UgXyFVU8QHuufvhlsKfv1+tiOb08DAgIBANAHAQAAAAAAAADAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMACQMAAAAAAAAAAAMABQLAXBUA",
+      {
+        "commitment": "finalized"
+      }
+    ]
+  }
+]

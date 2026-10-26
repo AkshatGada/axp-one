@@ -1,0 +1,39 @@
+{
+  "schema": "axp.market.devnet-preparation.readiness.v1",
+  "preparationComplete": true,
+  "readyForTransactions": false,
+  "allocationStatus": "APPROVED_UP_TO_1_40_TEST_SOL_FOR_THIS_RUN",
+  "requestedAllocationLamports": 1400000000,
+  "adapterImplementationAuthorized": false,
+  "adapterImplemented": false,
+  "rootFinancialGoReceived": false,
+  "newProgramOrTradingKeysGenerated": false,
+  "existingCredentialContentsRead": false,
+  "signingCalls": 0,
+  "simulations": 0,
+  "broadcasts": 0,
+  "actualElfBytesUploaded": 0,
+  "liveGenesisAndPublicBalanceVerified": true,
+  "sbpfV3FeatureActive": true,
+  "fullElfDeploymentCompatibilityVerified": false,
+  "unreservedCapitalVerified": false,
+  "localAcceptanceComplete": false,
+  "localPendingProofs": [
+    "T5:useby-equality",
+    "T5:lease-equality"
+  ],
+  "currentLocalRpcRecheckTransactions": 2,
+  "localRetainedEvidenceOnlyTransactions": 63,
+  "newTestsOrRuntimesLaunched": 0,
+  "newToolsInstalledOrBuilt": 0,
+  "nextAction": "Stop for ROOT review. Allocation is approved; separate adapter/key-preparation phase authorization and financial GO remain required.",
+  "allocationConfirmedByUser": true,
+  "allocationProvenance": {
+    "forwardedBy": "ROOT",
+    "directUserReply": "ys u can",
+    "scope": "up to1.40 test SOL from existing funded Devnet payer for this run",
+    "doesNotAuthorizeThisPreparationPhaseToSignOrDeploy": true
+  },
+  "runSpecificCapitalAllocationGateResolvedByUser": true,
+  "fullLegacyReservationLedgerAudited": false
+}

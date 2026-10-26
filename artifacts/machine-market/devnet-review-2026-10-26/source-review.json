@@ -1,0 +1,213 @@
+{
+  "schema": "axp.market.devnet-preparation.source-review.v1",
+  "agaveCommit": "a203300045b405f86c9c84308b2eae76af69ac3b",
+  "localReferences": [
+    {
+      "file": "local-state/machine-market/toolchain/agave-loopback-source/cli/src/program.rs",
+      "sha256": "76eaf59682a7f87afcd1c7cbdefe53b379c6c1b59c8d69589905ea4dfa01b686",
+      "lines": [
+        [
+          1259,
+          1276
+        ],
+        [
+          1430,
+          1454
+        ],
+        [
+          2541,
+          2553
+        ],
+        [
+          2579,
+          2649
+        ]
+      ],
+      "use": "Pinned deployment defaults, buffer funding, chunk sizing, legacy message construction and deploy layout"
+    },
+    {
+      "file": "local-state/machine-market/toolchain/agave-loopback-source/cli/src/compute_budget.rs",
+      "sha256": "6f985bc36e03641e16b9fb56a6122c009b98583f38fcb165124ef93be7f1d5db",
+      "lines": [
+        [
+          115,
+          147
+        ]
+      ],
+      "use": "Explicit price0 adds price and max-CU instructions; explains271-byte baseline"
+    },
+    {
+      "file": "local-state/machine-market/toolchain/agave-loopback-source/programs/bpf_loader/src/lib.rs",
+      "sha256": "5766e6dfac01a7603e04f9465625c0fe9d4d61ab4da813da0c30536d2325abce",
+      "lines": [
+        [
+          287,
+          310
+        ]
+      ],
+      "use": "Atomic buffer drain to payer before ProgramData allocation; no double permanent rent"
+    },
+    {
+      "file": "local-state/machine-market/toolchain/agave-loopback-source/feature-set/src/lib.rs",
+      "sha256": "c14c699522deca514c230ea458e24a59186daa3675e1d0a6ef5a5f7cb5798711",
+      "lines": [
+        [
+          1200,
+          1215
+        ]
+      ],
+      "use": "SBPF v3 feature identity used in public read-only query"
+    },
+    {
+      "file": "local-state/machine-market/toolchain/agave-loopback-source/program-test/src/lib.rs",
+      "sha256": "ae1df3f1304f6483b702460be1a350ecc8da6c5722ba0ddf519628d8e0dc4f7e",
+      "lines": [
+        [
+          711,
+          769
+        ],
+        [
+          1400,
+          1458
+        ]
+      ],
+      "use": "Future controlled-bank test possibility; no runtime launched here"
+    },
+    {
+      "file": "programs/machine-market/tests/processor.rs",
+      "sha256": "c6ea70033e1cf73f83e8220bca654df66c095b78b6c7269325bec2a5e8e5c40e",
+      "lines": [
+        [
+          1,
+          40
+        ],
+        [
+          302,
+          350
+        ],
+        [
+          350,
+          370
+        ],
+        [
+          427,
+          450
+        ]
+      ],
+      "use": "Existing host Clock/Rent predicate tests; not SBF bank/finality proof"
+    },
+    {
+      "file": "programs/machine-market/Cargo.toml",
+      "sha256": "a4e6dca96bfddc4a73ab0b0150c19fa00eb2e022400ca3af27924f8b8a694708",
+      "lines": [
+        [
+          1,
+          30
+        ]
+      ],
+      "use": "No program-test dependency in current market package"
+    },
+    {
+      "file": "programs/machine-market/Cargo.lock",
+      "sha256": "3936a0916964631c91f4e6046b50bd20683fbd02d38b5d08ca951a8c96984950",
+      "lines": [],
+      "use": "Current dependency lock inspected for program-test; no test build was launched"
+    },
+    {
+      "file": "packages/machine-market/native/domain.mjs",
+      "sha256": "e51019175186be47b66e49bc4823d93d7f86a2d4455a329c5b0b37a05b4a7704",
+      "lines": [
+        [
+          88,
+          106
+        ]
+      ],
+      "use": "Fund beneficiary signer flag and alias deduplication imply four distinct sponsored Fund signers"
+    },
+    {
+      "file": "packages/machine-market/native/rpc.mjs",
+      "sha256": "cdb9b0e2ca2fb9538bee338925c58165707ecaa802ef614e8584fc308503c28c",
+      "lines": [
+        [
+          1,
+          24
+        ]
+      ],
+      "use": "Existing loopback guard remains unchanged; requires separate Devnet adapter"
+    },
+    {
+      "file": "programs/machine-market/src/error.rs",
+      "sha256": "83d3da1a0b5baefbe1a989db27778533f5d392f2fae3c26314356e0dd4ec48f4",
+      "lines": [
+        [
+          1,
+          34
+        ]
+      ],
+      "use": "Frozen Custom2 InvalidAuth and Custom6 StaleCursor for proposed zero-principal probes"
+    },
+    {
+      "file": "docs/product/NETWORK_SCALE.md",
+      "sha256": "4e2f28de460c7ad3a9fe3ee32c997284c2499dd788bb65b3385045cc0eb74ef5",
+      "lines": [
+        [
+          9,
+          42
+        ]
+      ],
+      "use": "Historical liabilities separate from live demo; no releases inferred"
+    },
+    {
+      "file": "artifacts/network-scale/devnet-funded-acceptance.json",
+      "sha256": "77c6670b6565deb7fec95451efc3cd23f3bf38683c77fe66baaf529c36b3342e",
+      "lines": [],
+      "use": "Historical payer FvZ... and retained fee reservation; not attributed to D7"
+    },
+    {
+      "file": "artifacts/network-scale/devnet-funded-verification.json",
+      "sha256": "e8721afebe2527769d9d1ad4a2de0287a1bf0c49a25683c7a9daafda01c569fd",
+      "lines": [],
+      "use": "Historical250 final transactions; historical provider/closure limits"
+    },
+    {
+      "file": "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-03/SPEC_V2.md",
+      "sha256": "22ab0c74014ebef3ca0b5f753318736278dc5f3104cb4392d78084db865c064a",
+      "lines": [
+        [
+          245,
+          260
+        ]
+      ],
+      "use": "Negative assessment is opinion, not eligibility; consent/allowance binding"
+    },
+    {
+      "file": "docs/machine-market/DEVNET_PLAN_DRAFT.md",
+      "sha256": "ccad911a5b64a60a7a31a75b3e3660ae291ca70a3529440e75bb16b72bece3d1",
+      "lines": [],
+      "use": "Prior draft preserved unchanged as snapshot; new packet supersedes pending local/allocation status"
+    }
+  ],
+  "officialWebReferences": [
+    {
+      "url": "https://solana.com/docs/rpc/http/getfeeformessage",
+      "use": "Unsigned fee query semantics; null is unavailable, not zero"
+    },
+    {
+      "url": "https://solana.com/docs/rpc/http/getminimumbalanceforrentexemption",
+      "use": "Rent is queried by data length"
+    },
+    {
+      "url": "https://solana.com/docs/core/fees",
+      "use": "Base per-signature and priority fees; actual current quotes remain authoritative"
+    },
+    {
+      "url": "https://solana.com/docs/core/transactions",
+      "use": "Legacy1232-byte transaction limit, atomicity and failure fees"
+    },
+    {
+      "url": "https://solana.com/docs/programs/deploying",
+      "use": "ProgramData and authority/close implications; CLI automatic re-sign differs from proposed durable policy"
+    }
+  ],
+  "noNewTestsBuildsOrTools": true
+}
