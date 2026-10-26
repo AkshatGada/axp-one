@@ -1,0 +1,21 @@
+{
+  "schema": "axp.market.acceptance.blocker.v1",
+  "authority": "offline-copy-of-stopped-native-database",
+  "networkCalls": 0,
+  "signerCalls": 0,
+  "originalDatabaseModified": false,
+  "request": "same signed authorization, two concurrent HTTP idempotency keys",
+  "outcomes": [
+    {
+      "status": "success",
+      "state": "Open",
+      "orderId": "2086df6268c994890667e037ef96b8d8d6c371881e9a6d9fa1a7be9a8a81abac"
+    },
+    {
+      "status": "rejected",
+      "code": "STALE_CURSOR"
+    }
+  ],
+  "holdBefore": "10000",
+  "holdAfter": "10000"
+}

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {generateKeyPairSync,sign,verify,createPublicKey} from 'node:crypto';
-import {mkdtempSync,mkdirSync,writeFileSync,rmSync,readFileSync,existsSync,realpathSync,lstatSync,chmodSync,readdirSync} from 'node:fs';
+import {mkdtempSync,mkdirSync,writeFileSync,rmSync,unlinkSync,readFileSync,existsSync,realpathSync,lstatSync,chmodSync,readdirSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {DatabaseSync} from 'node:sqlite';
@@ -9,14 +9,14 @@ import {createBootstrapDriver,measureBootstrapResources,verifyFundingTransaction
 import {encodeAccount,decodeAccount,encodeAuthorization,ZERO_KEY,ZERO_HASH,base58Encode,fieldOffsets} from '../../packages/machine-market/native/codec.mjs';
 import {parseTransaction,buildLegacyMessage} from '../../packages/machine-market/native/transaction.mjs';
 import {base58,shortvec,parseLegacyTransaction} from '../../packages/machine-market/native/phase2-transport-utils.mjs';
-import {sha256,domainHash,orderId,unitId,operationId,seriesTermsHash} from '../../packages/machine-market/native/domain.mjs';
+import {sha256,domainHash,deliveryIdentity,deriveMatchPda,orderId,unitId,operationId,seriesTermsHash} from '../../packages/machine-market/native/domain.mjs';
 import {BPF_LOADER} from '../../packages/machine-market/native/rpc.mjs';
 import {validateRunConfiguration} from '../../scripts/machine-market/phase2-acceptance.mjs';
 import {negativeProbeCatalog} from '../../scripts/machine-market/phase2-acceptance-probes.mjs';
 import {stableIdentity,scheduleIdentity} from '../../scripts/machine-market/phase2-acceptance-schedule.mjs';
 import {canonical} from '../../packages/contracts/index.mjs';
 const hex=n=>Buffer.alloc(32,n).toString('hex'),key=n=>base58Encode(Buffer.alloc(32,n));
-const resources=()=>({freeBytes:'100000000000',toolBytes:'100',buildBytes:'100',ledgerBytes:'100',dbLogBytes:'100'});
+const resources=()=>({freeBytes:'100000000000',totalTaskBytes:'1000',toolBytes:'100',buildBytes:'100',ledgerBytes:'100',dbLogBytes:'100'});
 const golden=JSON.parse(readFileSync(new URL('../../artifacts/machine-market/phase1/golden-vectors.json',import.meta.url))),defaults=kind=>structuredClone(golden.vectors.find(v=>v.family==='account'&&v.name===kind).input);
 function fixture(t,{dropFundingResponse=false,pendingFirst=false,wrongGenesis=false,dropNativeResponse=false}={}){
  const parent=realpathSync(mkdtempSync(join(tmpdir(),'axp-bootstrap-unit-')));const sessions=[];t.after(()=>{for(const s of sessions.reverse())s.close();rmSync(parent,{recursive:true,force:true});});const directory=join(parent,'one-run'),programBytes=Buffer.alloc(80);programBytes.set([127,69,76,70]);
@@ -50,7 +50,7 @@ function fixture(t,{dropFundingResponse=false,pendingFirst=false,wrongGenesis=fa
   }else throw Error('Unexpected fixture method '+r.method);
   return new Response(JSON.stringify({jsonrpc:'2.0',id:r.id,result}),{headers:{'content-type':'application/json'}});
  };
- const baseDriver=createBootstrapDriver({privateParent:parent,provenance:'injected-unit-fixture',fetchImpl,measureResources:resources,maxPolls:1,pollDelayMs:0}),driver={async create(options){const s=await baseDriver.create(options);sessions.push(s);return s;},async resume(options){const s=await baseDriver.resume(options);sessions.push(s);return s;},openHandles:options=>baseDriver.openHandles(options),inspect:options=>baseDriver.inspect(options)};return {driver,options,parent,directory,transactions,fundingByKey,accounts,fetchImpl,get counts(){return {airdrops,sends,fetches};},setFinalized(){finalize=true;}};
+ const baseDriver=createBootstrapDriver({privateParent:parent,provenance:'injected-unit-fixture',fetchImpl,measureResources:resources,maxPolls:1,pollDelayMs:0}),driver={async create(options){const s=await baseDriver.create(options);sessions.push(s);return s;},async resume(options){const s=await baseDriver.resume(options);sessions.push(s);return s;},openHandles:options=>baseDriver.openHandles(options),inspect:options=>baseDriver.inspect(options)};return {driver,options,parent,directory,transactions,fundingByKey,accounts,fetchImpl,get counts(){return {airdrops,sends,fetches};},setFinalized(){finalize=true;},setSlot(value){slot=value;}};
 }
 
 test('import/help contract and explicit resource/path/execute gates precede keys or funding',async t=>{
@@ -95,4 +95,20 @@ test('parent-only handles rebind to reopened store; separate probe signatures re
 
 test('resource measurement includes sibling verification logs and separates the explicit ledger',t=>{
  const parent=realpathSync(mkdtempSync(join(tmpdir(),'axp-bootstrap-resources-')));t.after(()=>rmSync(parent,{recursive:true,force:true}));const resources={toolsDirectory:join(parent,'tools'),buildDirectory:join(parent,'build'),ledgerDirectory:join(parent,'ledger'),verificationDirectory:join(parent,'verification')};for(const path of Object.values(resources)){mkdirSync(path);writeFileSync(join(path,'sample'),Buffer.alloc(100));}const directory=join(parent,'app'),before=measureBootstrapResources({directory,resources});assert.ok(BigInt(before.dbLogBytes)>=BigInt(lstatSync(join(resources.verificationDirectory,'sample')).blocks)*512n);assert.ok(BigInt(before.ledgerBytes)>0n);mkdirSync(directory);writeFileSync(join(directory,'db-sample'),Buffer.alloc(8192));const after=measureBootstrapResources({directory,resources});assert.ok(BigInt(after.dbLogBytes)>=BigInt(before.dbLogBytes)+8192n);assert.equal(after.ledgerBytes,before.ledgerBytes);
+});
+
+test('completed bootstrap reopens advanced/expired run and recovers consumed bytes without setup or proof rewrite',async t=>{
+ const f=fixture(t),session=await f.driver.create(f.options),config=session.config,proof=structuredClone(session.bootstrapProof),unit=config.units.find(u=>u.id==='U0'),series=config.series.find(s=>s.id===unit.series),run=config.run,base=decodeAccount(Buffer.from(f.accounts.get(unit.address).data[0],'base64')),requestHash=hex(92),matchId=hex(93),primaryAddress=deriveMatchPda({...run,matchId}).address,primary={...defaults('Match'),kind:'Match',state:1,market:run.market,matchId,unit:unit.address,series:series.address,expectedCursor:'0',fundedCursor:'1',payer:run.buyerA,beneficiary:run.buyerA,seller:run.issuer,gross:'10000',fee:'100',tradeKind:0,primaryClaimFace:'10000',terminalOpHash:ZERO_HASH,terminalSlot:'0',terminalRecipient:ZERO_KEY,previousMatch:ZERO_KEY};
+ const locked={...base,state:2,owner:run.buyerA,cursor:'2',primaryMatch:primaryAddress,latestMatch:primaryAddress,refundFace:'10000',requestHash,lockStartCursor:'1',lockStartSlot:'9999',lockDeadlineSlot:'10149'};session.context.store.observeNativeUnit({address:unit.address,contextSlot:'9999',unit:locked,unitOwner:run.program,primaryMatch:primary,receiptOwner:run.program,verified:true});const response={schema:'axp.delivery.v2',domain:domainHash(run),unit:unit.address,owner:run.buyerA,requestHash,deliveryId:deliveryIdentity({domain:domainHash(run),unit:unit.address,requestHash}),resourceHash:series.resourceHash,versionHash:series.versionHash,contentType:'text/plain',content:'PRIVATE_SOURCE_main',sponsored:null},prepared=session.context.store.preparePrivateResponse({unit:unit.address,owner:run.buyerA,requestHash,response}),terminalOp=operationId({domain:domainHash(run),type:'FinalizeDelivery',unit:unit.address,requestHash}),consumed={...locked,state:3,cursor:'3',responseHash:prepared.responseHash,terminalOpHash:terminalOp,terminalSlot:'10000',terminalReason:1},settled={...primary,state:2,terminalOpHash:terminalOp,terminalSlot:'10000',terminalRecipient:run.issuer};session.context.store.observeNativeUnit({address:unit.address,contextSlot:'10000',unit:consumed,unitOwner:run.program,primaryMatch:settled,receiptOwner:run.program,verified:true});const original=session.context.store.getPrivateResponse({unit:unit.address,requestHash}).bytes;f.accounts.set(unit.address,{owner:run.program,executable:false,lamports:1000,data:[encodeAccount(consumed).toString('base64'),'base64']});const market=decodeAccount(Buffer.from(f.accounts.get(run.market).data[0],'base64'));market.fundedMatches=1;f.accounts.get(run.market).data=[encodeAccount(market).toString('base64'),'base64'];session.close();f.setSlot(15000);const before=f.counts,reopened=await f.driver.resume({directory:f.directory,execute:true});assert.equal(f.counts.airdrops,before.airdrops);assert.equal(f.counts.sends,before.sends);assert.deepEqual(reopened.bootstrapProof,proof);assert.deepEqual(reopened.config,config);const message=encodeAuthorization({kind:'ReadDelivery',domain:domainHash(run),actor:run.buyerA,nonce:hex(94),unit:unit.address,requestHash,consumedCursor:'3',validUntilSlot:'20000'}),signature=reopened.context.signAuthorization(run.buyerA,message);assert.equal(reopened.context.store.readPrivateResponse({authorization:message.toString('base64'),signature:signature.toString('base64'),idempotencyKey:hex(94)},{currentSlot:'15000'}).bytes,original);
+});
+
+test('missing current native database refuses resume without recreating it or making setup requests',async t=>{
+ const f=fixture(t),session=await f.driver.create(f.options);session.close();const filename=join(f.directory,'native.sqlite');unlinkSync(filename);const before=f.counts;await assert.rejects(f.driver.resume({directory:f.directory,execute:true}),{code:'CURRENT_DATABASE_REQUIRED'});assert.equal(existsSync(filename),false);assert.equal(f.counts.airdrops,before.airdrops);assert.equal(f.counts.sends,before.sends);
+});
+
+test('recovery resource guards stop before fixture creation for total storage, ledger and app limits',async t=>{
+ for(const override of [{totalTaskBytes:String(20n*1024n**3n+1n)},{ledgerBytes:String(10n*1024n**3n+1n)},{dbLogBytes:String(50n*1024n**2n+1n)}]){
+  const f=fixture(t),driver=createBootstrapDriver({privateParent:f.parent,provenance:'injected-unit-fixture',fetchImpl:f.fetchImpl,measureResources:()=>({...resources(),...override})});
+  await assert.rejects(driver.create(f.options),{code:'RESOURCE_CAP'});assert.equal(existsSync(f.directory),false);assert.equal(f.counts.airdrops,0);
+ }
 });

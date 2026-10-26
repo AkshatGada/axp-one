@@ -449,13 +449,14 @@ export function createConcreteAcceptancePlan({ config, context, journal, runtime
             const readout = context.resourceReadout ?? context.control?.measureResources;
             demand(typeof readout === 'function', 'RESOURCE_READOUT_REQUIRED');
             const measured = await readout(), db = await context.store.storageInfo();
-            demand(BigInt(measured.freeBytes) >= 40000000000n && Number.isSafeInteger(measured.toolsBytes) && measured.toolsBytes <= 4 * 1024 ** 3 && Number.isSafeInteger(measured.buildBytes) && measured.buildBytes <= 2 * 1024 ** 3 && Number.isSafeInteger(measured.ledgerBytes) && measured.ledgerBytes <= 512 * 1024 ** 2 && Number.isSafeInteger(measured.dbAndLogsBytes) && measured.dbAndLogsBytes <= 50 * 1024 ** 2, 'RESOURCE_CAP');
+            demand(BigInt(measured.freeBytes) >= 40000000000n && Number.isSafeInteger(measured.toolsBytes) && Number.isSafeInteger(measured.buildBytes) && Number.isSafeInteger(measured.totalTaskBytes) && measured.totalTaskBytes <= 20 * 1024 ** 3 && Number.isSafeInteger(measured.ledgerBytes) && measured.ledgerBytes <= 10 * 1024 ** 3 && Number.isSafeInteger(measured.dbAndLogsBytes) && measured.dbAndLogsBytes <= 50 * 1024 ** 2, 'RESOURCE_CAP');
             demand(db.synchronous === 2 && db.fullfsync === 1 && db.maximumPages * db.pageSize <= 24 * 1024 ** 2, 'SQLITE_FULL_CONFIG');
             const evidence = {
                 kind: 'resource-measurement',
                 freeBytes: String(measured.freeBytes),
                 toolsBytes: measured.toolsBytes,
                 buildBytes: measured.buildBytes,
+                totalTaskBytes: measured.totalTaskBytes,
                 ledgerBytes: measured.ledgerBytes,
                 dbAndLogsBytes: measured.dbAndLogsBytes,
                 sqlite: {

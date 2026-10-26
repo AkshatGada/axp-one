@@ -1,0 +1,8 @@
+{
+  "stoppedBeforeFixtureFunding": true,
+  "ledgerBytes": 475607040,
+  "oldSoftStopBytes": 469762048,
+  "oldHardLimitBytes": 536870912,
+  "genesisPreserved": true,
+  "validatorStopped": true
+}

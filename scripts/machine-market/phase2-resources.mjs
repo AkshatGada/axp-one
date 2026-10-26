@@ -8,23 +8,34 @@ import {reviewerEnvironment} from '../setup/verify-review.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 const state=resolve(root,'local-state/machine-market');
 const GiB=1024**3,MiB=1024**2;
+let recoveredMeasurementRaces=0;
+const measurementNotes=[];
 export const PHASE2_RESOURCE_LIMITS=Object.freeze({
-  freeBytes:40_000_000_000,toolBytes:4*GiB,buildBytes:2*GiB,
-  ledgerBytes:512*MiB,databaseAndLogBytes:50*MiB,
+  freeBytes:40_000_000_000,totalTaskBytes:20*GiB,
+  ledgerBytes:10*GiB,databaseAndLogBytes:50*MiB,
 });
 
 function allocated(path){
   if(!existsSync(path))return 0;
   const base=realpathSync(state),actual=realpathSync(path),part=relative(base,actual);
   if(part==='..'||part.startsWith('../')||isAbsolute(part))throw Error('RESOURCE_PATH_OUTSIDE_TASK');
-  const result=spawnSync('du',['-sk',actual],{encoding:'utf8',env:reviewerEnvironment()});
-  if(result.status!==0)throw Error('RESOURCE_MEASUREMENT_FAILED');
-  const blocks=Number(result.stdout.trim().split(/\s+/)[0]);
-  if(!Number.isSafeInteger(blocks)||blocks<0)throw Error('RESOURCE_MEASUREMENT_FAILED');
-  return blocks*1024;
+  for(let attempt=1;attempt<=3;attempt++){
+    const result=spawnSync('du',['-sk',actual],{encoding:'utf8',env:reviewerEnvironment(),timeout:2000});
+    const stderr=(result.stderr??'').trim();
+    const disappeared=stderr.length>0&&stderr.split('\n').every(line=>/^du: .+: No such file or directory$/.test(line));
+    if(result.status!==0){
+      const detail={path:relative(state,actual),attempt,status:result.status,signal:result.signal??null,
+        stderr:stderr.replaceAll(state,'<TASK>').slice(0,2000),error:result.error?.message??null};
+      if(disappeared&&attempt<3){recoveredMeasurementRaces++;measurementNotes.push(detail);if(measurementNotes.length>8)measurementNotes.shift();continue;}
+      throw Object.assign(Error('RESOURCE_MEASUREMENT_FAILED'),{code:'RESOURCE_MEASUREMENT_FAILED',detail});
+    }
+    const blocks=Number(result.stdout.trim().split(/\s+/)[0]);
+    if(!Number.isSafeInteger(blocks)||blocks<0)throw Object.assign(Error('INVALID_RESOURCE_MEASUREMENT'),{code:'INVALID_RESOURCE_MEASUREMENT'});
+    return blocks*1024;
+  }
 }
 
-export function phase2Resources({runDirectory=resolve(state,'phase2-run'),ledgerDirectory=resolve(runDirectory,'ledger')}={}){
+export function phase2Resources({runDirectory=resolve(state,'phase2-run'),ledgerDirectory=resolve(state,'phase2-ledger')}={}){
   for(const path of [runDirectory,ledgerDirectory]){
     const rel=relative(state,resolve(path));
     if(rel==='..'||rel.startsWith('../')||isAbsolute(rel)||rel==='')throw Error('RESOURCE_PATH_OUTSIDE_TASK');
@@ -34,12 +45,14 @@ export function phase2Resources({runDirectory=resolve(state,'phase2-run'),ledger
   const totalRunBytes=allocated(runDirectory);
   const ledgerRelative=relative(resolve(runDirectory),resolve(ledgerDirectory));
   const ledgerInsideRun=ledgerRelative!== '..'&&!ledgerRelative.startsWith('../')&&!isAbsolute(ledgerRelative);
+  const toolBytes=allocated(resolve(state,'toolchain'));
+  const buildBytes=allocated(resolve(state,'build'));
   return {
     measuredAt:new Date().toISOString(),freeBytes:Number(fs.bavail*fs.bsize),
-    toolBytes:allocated(resolve(state,'toolchain')),
-    buildBytes:allocated(resolve(state,'build')),
+    toolBytes,buildBytes,combinedToolBuildBytes:toolBytes+buildBytes,totalTaskBytes:allocated(state),
     ledgerBytes,databaseAndLogBytes:Math.max(0,totalRunBytes-(ledgerInsideRun?ledgerBytes:0))+allocated(resolve(state,'verification')),
     totalRunBytes,measurement:'allocated filesystem blocks; task paths only',
+    recoveredMeasurementRaces,measurementNotes:[...measurementNotes],
   };
 }
 

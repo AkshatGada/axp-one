@@ -1,0 +1,12 @@
+{
+  "schema": "axp.market.runtime-budget-adjustment.v2",
+  "authorization": "Root continuation of already authorized same-ledger local phase",
+  "ledgerHardBytes": 10737418240,
+  "ledgerSoftStopBytes": 9663676416,
+  "totalTaskBytes": 21474836480,
+  "freeBytesMinimum": 40000000000,
+  "databaseAndLogBytes": 52428800,
+  "previousLedgerHardBytes": 2147483648,
+  "financialCapsUnchanged": true,
+  "preserveHistoryAndSignedAttempts": true
+}

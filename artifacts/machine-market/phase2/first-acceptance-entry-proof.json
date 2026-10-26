@@ -1,0 +1,14 @@
+{
+  "sameRun": true,
+  "bootstrapOnlyOperations": 13,
+  "counts": {
+    "orders": 0,
+    "matches": 0,
+    "campaigns": 0,
+    "authorizations": 0,
+    "requests": 0
+  },
+  "nativeMarketFundedMatches": 0,
+  "firstAcceptance": true,
+  "observedAt": "2026-10-26T15:15:58.242Z"
+}

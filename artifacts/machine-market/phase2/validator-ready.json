@@ -1,0 +1,197 @@
+{
+  "schema": "axp.market.validator.readiness.v1",
+  "verified": true,
+  "loopbackOnly": true,
+  "observedAt": "2026-10-26T15:14:02.264Z",
+  "validatorPid": 78184,
+  "validatorBinarySha256": "1f135bb21bdd50df55e92f5254120e02e7e7118d428e668270ba8b98acf13dbf",
+  "endpoint": "http://127.0.0.1:18899",
+  "genesis": "bcdd92093056530795daa07254672cf3cc1794828ccb837abf362e0fc0cc84c3",
+  "genesisBase58": "DiFc6vsemLp95cTNHVEyzGBCKWpKUKR3qRNVLFyM5LQ2",
+  "program": "9VzEiSEFVoDtE8ZxRNYvFrCdnzvQNoAbiPUxXquqYVcY",
+  "programSha256": "3335158a895ac7f483c9cbbcc4470e95e65098c54c7da1b7be4733b0594fea1a",
+  "loader": "BPFLoaderUpgradeab1e11111111111111111111111",
+  "programData": "B5xBF5XBeRaVSsF6q9rdDpqqim1eWco6cjMD6A9VDk4f",
+  "upgradeAuthority": "11111111111111111111111111111111",
+  "listeners": [
+    {
+      "protocol": "tcp",
+      "address": "127.0.0.1",
+      "port": 19900,
+      "role": "faucet"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18000,
+      "role": "validator"
+    },
+    {
+      "protocol": "tcp",
+      "address": "127.0.0.1",
+      "port": 18000,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18001,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18002,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18003,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18004,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18005,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18006,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18007,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18008,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18009,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18009,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18009,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18009,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18010,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18011,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18012,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18013,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18014,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18016,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18017,
+      "role": "validator"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 8000,
+      "role": "validator"
+    },
+    {
+      "protocol": "tcp",
+      "address": "127.0.0.1",
+      "port": 18899,
+      "role": "rpc"
+    },
+    {
+      "protocol": "tcp",
+      "address": "127.0.0.1",
+      "port": 18899,
+      "role": "rpc"
+    },
+    {
+      "protocol": "tcp",
+      "address": "127.0.0.1",
+      "port": 18900,
+      "role": "pubsub"
+    },
+    {
+      "protocol": "udp",
+      "address": "127.0.0.1",
+      "port": 18007,
+      "role": "validator"
+    }
+  ],
+  "socketRows": 27,
+  "rawSocketSha256": "fa60dbb454c1d013a55e2821868b1996aa582e441ae957d0ea5be7c19c41396a",
+  "finalizedContextSlot": "1636",
+  "resource": {
+    "measuredAt": "2026-10-26T15:14:01.947Z",
+    "freeBytes": 146130485248,
+    "toolBytes": 3901521920,
+    "buildBytes": 3128479744,
+    "combinedToolBuildBytes": 7030001664,
+    "totalTaskBytes": 8136065024,
+    "ledgerBytes": 1102852096,
+    "databaseAndLogBytes": 3088384,
+    "totalRunBytes": 798720,
+    "measurement": "allocated filesystem blocks; task paths only",
+    "recoveredMeasurementRaces": 0,
+    "measurementNotes": []
+  }
+}

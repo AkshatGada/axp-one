@@ -1,3 +1,45 @@
+## Current native recovery result — stopped for correctness review
+
+26 October 2026. Same-ledger recovery resolved the original RegisterUnit signature
+as finalized success with known fees and no resend. All **19** original setup/funding
+attempts are finalized: six funding transfers plus Init, four Series and eight Unit
+registrations. No additional funding; 9.001 LOCAL SOL total fixture funding is unchanged.
+Acceptance entered once after a recorded empty-market guard, then stopped before
+any marketplace trade on HTTP_CASE_REJECTED in the concurrent duplicate-order case.
+An offline copy reproduces one success and one STALE_CURSOR from concurrent wallet
+observation before idempotency lookup. One 10000-lamport off-chain hold remains;
+it is not a native charge. Journals, request identities and all signatures remain.
+Validator/service stopped; no native outcome is unknown. **140 focused tests** and
+23 script syntax checks pass, but native T1–T9 acceptance is incomplete. The earlier
+unrelated full-repository benchmark timing failure remains recorded.
+See [PHASE2_RECOVERY_RESULT.md](PHASE2_RECOVERY_RESULT.md). No push or Devnet broadcast.
+
+---
+
+## Current recovery continuation — 10 GiB ledger allowance
+
+26 October 2026. Root explicitly continued the existing localhost recovery phase.
+Ledger hard cap is 10 GiB, supervisor stop at 9 GiB, INCLUDED within the unchanged
+20 GiB total task directory cap. Actual free space must remain at least 40 GB;
+application DB/logs remain capped at 50 MiB. All finite financial/operation caps
+remain unchanged. No reset, pruning, repeat funding or replacement signature.
+The same ledger contains 12 finalized setup transactions and one Unknown original
+RegisterUnit attempt. Reconcile that exact attempt before continuing bootstrap.
+No marketplace trades or acceptance harness steps have started yet.
+
+---
+
+## Current localhost runtime budget adjustment
+
+Root approved ledger<=2GiB, INCLUDED with tools/cache/build/runtime inside the
+existing20GiB overall cap; free space>=40GB and app DB/logs<=50MiB unchanged.
+Supervisor stops conservatively before2GiB. No reset, needed-history deletion or
+financial-cap increase. The same unfunded ledger/genesis/manifest are preserved.
+Current validator is stopped while execution inputs and checks are prepared.
+Four source loopback substitutions are root-approved; no extra dev features.
+
+---
+
 ## User update — Devnet next phase preparation; local Git only
 
 Root forwarded user authorization for Devnet testing with the existing funded key,

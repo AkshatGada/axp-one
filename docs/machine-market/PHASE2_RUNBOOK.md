@@ -1,3 +1,19 @@
+## Current authorized recovery limits
+
+26 October 2026: continue the original preserved localhost ledger and private run.
+The ledger hard limit is **10 GiB**, with supervisor stop at **9 GiB**, included
+inside **20 GiB total task storage**. Free space must stay at least **40 GB** and
+application database/logs at most **50 MiB**. This supersedes older storage figures
+below. No reset, pruning, repeat funding, replacement signature or new funded run.
+The original registration is reconciled before bootstrap continuation. First entry
+into acceptance after interrupted bootstrap is permitted only with no acceptance
+journal/probe database, all 13 native setup operations resolved, no off-chain orders,
+matches, campaigns, authorizations or requests, and native fundedMatches equal zero.
+The dedicated recovery entry records that proof before first acceptance execution.
+Every restart verifies all sockets and the exact genesis/program before execution.
+
+---
+
 # Phase2 acceptance runbook — lead only
 
 26 October2026. Source/unit checkpoint; no native acceptance has executed here.
@@ -184,3 +200,35 @@ no wallet read/generation, native signing, transaction or funding occurred here.
 Native exact-equality/E-1 execution traces remain unrun; after-boundary evidence
 cannot mark them passed. Lead owns the scoped H1–H5 verification, final regression,
 local commit and any later authorized runtime. No added feature/audit scope.
+
+## Executable parent/child entrypoint (source integration)
+
+`phase2-local-acceptance.mjs` composes bootstrap, private handles, the fixed worker
+IPC, acceptance scheduling gates and crash hooks. It never launches/builds a
+validator. Default/--help is read-only. Lead invokes only after actual OS listener
+verification for the already-running approved binary:
+
+```sh
+node scripts/machine-market/phase2-local-acceptance.mjs --execute --new-config /absolute/task/private-options.json --readiness /absolute/task/validator-ready.json
+node scripts/machine-market/phase2-local-acceptance.mjs --execute --resume /absolute/task/phase2-run --readiness /absolute/task/validator-ready.json
+```
+
+New private options schema `axp.market.local.options.v1` has `bootstrap` with the
+published bootstrap fields; JSON uses explicit `programFile` and each source's
+`file` instead of byte buffers. All files/directories are task-contained and private.
+Readiness schema `axp.market.validator.readiness.v1` binds endpoint, genesis, program,
+programSha256, validatorBinarySha256, validatorPid, loader, ledgerDirectory and
+`verified:true,loopbackOnly:true,listeners:[{role,protocol,address,port}]`. rpc,
+pubsub and faucet roles must all be present and every address literal127.0.0.1.
+This metadata records the lead's verified readiness; HTTP200 is not a substitute.
+
+Parent completes/reopens the SAME bootstrap, retains public config/private capability
+and read-only RPC references, closes its SQLite writer, then loads parent W2/probe
+handles via openHandles. Only the spawned child resumes/owns the current native DB,
+binds the actual gated HTTP handler on127.0.0.1 and attaches the fixed IPC protocol.
+Crash hooks are installed before service use. The parent uses remoteAcceptanceContext
+plus actual runAcceptance; direct probes retain their separate persisted fence/global
+journal guard. Child environment/arguments are sanitized, and no secret capability,
+key/source/packet bytes or raw error are emitted. Completion/error stops only the
+owned service child; ledger, database, manifests, signed bytes and evidence remain.
+No reset, automatic fresh namespace, signature refresh or validator shutdown exists.
