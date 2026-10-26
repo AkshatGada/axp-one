@@ -1,6 +1,29 @@
-/** Review/template entry only. Live signer preparation and approval binding are absent. */
-import {manifestTemplate} from '../../packages/machine-market/devnet/manifest.mjs';
-const args=process.argv.slice(2);
-if(args.length===1&&args[0]==='--manifest-template')process.stdout.write(JSON.stringify(manifestTemplate(),null,2)+'\n');
-else if(args.length===0||args.length===1&&args[0]==='--help')process.stdout.write('Devnet driver: offline verification/review phase only.\n--manifest-template prints explicit pending public identities; creates no key/file.\nNo live --execute route exists. A subsequent ROOT phase must prepare scoped opaque\nhandles, validate the public manifest and bind action-time approval before signing.\n');
-else{process.stderr.write('LIVE_KEY_PREPARATION_AND_ROOT_GO_REQUIRED\n');process.exitCode=2;}
+/** Minimal one-run launch/binding entry. --execute needs an explicit later ROOT GO. */
+import {existsSync,readFileSync,writeFileSync,realpathSync,openSync,fsyncSync,closeSync} from 'node:fs';
+import {resolve,join,relative} from 'node:path';
+import {manifestTemplate,hash,GENESIS,ENDPOINT} from '../../packages/machine-market/devnet/manifest.mjs';
+import {createDevnetPlan} from '../../packages/machine-market/devnet/plan.mjs';
+import {createDevnetRunner} from '../../packages/machine-market/devnet/runner.mjs';
+import {createDevnetResourceProbe} from '../../packages/machine-market/devnet/resources.mjs';
+import {canonicalOperatingFile,openScopedHostSigner} from '../../packages/machine-market/devnet/host-signer.mjs';
+import {demand} from '../../packages/machine-market/devnet/legacy.mjs';
+const root=resolve(import.meta.dirname,'../..'),out=join(root,'artifacts/machine-market/devnet-implementation'),args=process.argv.slice(2);
+let signer,runner;
+function publicJSON(file,value){writeFileSync(file,JSON.stringify(value,null,2)+'\n',{flag:'wx',mode:0o644});}
+function privateJSON(file,value){const fd=openSync(file,'wx',0o600);try{writeFileSync(fd,JSON.stringify(value,null,2)+'\n');fsyncSync(fd);}finally{closeSync(fd);}}
+function options(values){const o={};for(let n=0;n<values.length;n+=2){demand(['--manifest','--state-dir','--root-go'].includes(values[n])&&values[n+1]&&!o[values[n]],'CLI_ARGUMENTS');o[values[n]]=values[n+1];}return o;}
+try{
+ const command=args[0];if(args.length===0||command==='--help'){process.stdout.write('Devnet MVP: --manifest-template | --check-binding --manifest FILE --state-dir DIR | --execute --manifest FILE --state-dir DIR --root-go APPROVED_REFERENCE\nCheck binding signs/broadcasts nothing. Execute is forbidden until a separate financial ROOT GO.\n');process.exit(0);}if(command==='--manifest-template'){process.stdout.write(JSON.stringify(manifestTemplate(),null,2)+'\n');process.exit(0);}
+ demand(['--check-binding','--execute'].includes(command),'CLI_ARGUMENTS');const o=options(args.slice(1));if(command==='--execute')demand(typeof o['--root-go']==='string'&&o['--root-go'].length>0,'ROOT_FINANCIAL_GO_REQUIRED');demand(o['--manifest']&&o['--state-dir'],'CLI_ARGUMENTS');
+ const prepared=JSON.parse(readFileSync(resolve(o['--manifest']),'utf8')),state=realpathSync(resolve(o['--state-dir'])),marker=JSON.parse(readFileSync(join(root,'local-state/machine-market/devnet-execution/preparation.json')));demand(marker.status==='complete'&&marker.generatedCount===7&&marker.runId===prepared.runId&&state===resolve(root,marker.storageDirectoryRelative),'PREPARED_RUN_REQUIRED');
+ const operatingFile=canonicalOperatingFile(root);
+ if(command==='--check-binding'){signer=openScopedHostSigner({preparedManifest:prepared,stateDirectory:state,operatingFile,checkOnly:true});publicJSON(join(out,'host-binding-check.json'),signer.summary);console.log(JSON.stringify(signer.summary));}
+ else{
+  const seal=join(state,'execution-manifest.sealed.json');let manifest;
+  if(existsSync(seal)){manifest=JSON.parse(readFileSync(seal));demand(manifest.authorization.rootGoReference===o['--root-go'],'ROOT_GO_REFERENCE_CHANGED');}
+  else{const rpc=async(method)=>{const r=await fetch(ENDPOINT,{method:'POST',redirect:'error',signal:AbortSignal.timeout(10000),headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method,params:method==='getSlot'?[{commitment:'finalized'}]:[]})}),j=await r.json();demand(r.ok&&!j.error,'PREFLIGHT_UNAVAILABLE');return j.result;};demand(await rpc('getGenesisHash')===GENESIS,'DEVNET_GENESIS_REQUIRED');const slot=await rpc('getSlot');demand(Number.isSafeInteger(slot)&&slot>0,'SLOT_REQUIRED');manifest=structuredClone(prepared);manifest.useBySlot=String(slot+6000);manifest.readValidUntilSlot=String(slot+10000);manifest.authorization={...manifest.authorization,financialRootGo:true,keyPreparationPending:false,rootGoReference:o['--root-go']};privateJSON(seal,manifest);publicJSON(join(out,'execution-manifest.sealed.json'),manifest);}
+  const elf=readFileSync(join(root,'local-state/machine-market/build/sbf/sbpfv3-solana-solana/release/axp_machine_market_program.so')),content=readFileSync(join(state,'source.utf8')),plan=createDevnetPlan({manifest,elf,content});signer=openScopedHostSigner({preparedManifest:prepared,executionManifest:manifest,stateDirectory:state,operatingFile,plan,rootGoReference:o['--root-go']});
+  const executionGate={assertAllowed(request){return request.manifestHash===plan.manifestHash&&request.genesis===GENESIS&&request.endpoint===ENDPOINT&&(plan.actionIds.includes(request.operationId)||plan.authorizationIds.includes(request.operationId));}};
+  runner=createDevnetRunner({manifest,elf,content,filename:join(state,'devnet.sqlite'),measureResources:createDevnetResourceProbe({taskStateRoot:join(root,'local-state/machine-market'),runDirectory:state}),capabilities:signer,executionGate});const result=await runner.run();publicJSON(join(out,'live-result.json'),result);console.log(JSON.stringify({completedCases:result.completedCases,manifestHash:plan.manifestHash,summary:result.summary}));
+ }
+}catch(error){const code=/^[A-Z0-9_]+$/.test(error.code??'')?error.code:'DEVNET_MVP_STOPPED';process.stderr.write(JSON.stringify({stopped:true,code})+'\n');process.exitCode=1;}finally{try{runner?.close();}finally{signer?.close();}}

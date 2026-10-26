@@ -1,0 +1,44 @@
+{
+  "schema": "axp.market.devnet.public-key-preparation.v1",
+  "runId": "devnet-mvp-29fa8ffe-2206-4308-a29a-6547103eb962",
+  "generatedTestKeypairs": 7,
+  "operatingPublicKey": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+  "publicIdentities": {
+    "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+    "issuer": "H5JrwMmdspXT8NhAbFyxbaZnge4kMmgWUycqd8qnco6D",
+    "buyerA": "9NoaXoxFWkNYsYAJh6mBMgpuL4N3VemYJFUNCz1CoRP9",
+    "buyerB": "ETH5LiidF3vg83yDpurqGZwaeYhieUsMUD1MqFRkRYZr",
+    "sponsor": "BNcD12m1c5y6KsT69fw847xqrWQDPjbBYd9mcrJtfXR",
+    "collector": "6ZdWEkm8zdZuC5aTjqFVMBakVAbySNu48nJXqYxq5v9s",
+    "program": "13pUf2FAc5db74eBie9pPhikg891RGTRZpwYABAQz2fz",
+    "buffer": "EUsYCitWzDsVA57oATGnxRrjN6y5QApM4EY4aouDkwcd"
+  },
+  "programData": "8AiVc3Lta4BY8K6eBopb7j9wMsN6uc43Q3w2UTEfTCAE",
+  "market": "Ck29YSNx2AhgMkmdHPS8JBEgYh6DAPJmGTGyVBMTTvx6",
+  "series": "4kszMgko8yYTmJVLqDWcuSSiNSuaW3xzC79GNb5k9Xxw",
+  "units": [
+    {
+      "id": "D0",
+      "address": "EzP22PzrqdjFJUCShoLnYbyoHoM7ykzAHMFejyDwEX1c"
+    },
+    {
+      "id": "D1",
+      "address": "2n97tykNNzj6zDW9p3ZaR2PtExmhvcHoEriqJYefAjy5"
+    },
+    {
+      "id": "D2",
+      "address": "BhVc1sDK4Jc1zMGEfyeTY1kkP3Np5AdqwRaE3kFqdJmH"
+    }
+  ],
+  "storageDirectoryRelative": "local-state/machine-market/devnet-execution/devnet-mvp-29fa8ffe-2206-4308-a29a-6547103eb962",
+  "storageIgnored": true,
+  "directoryMode": "700",
+  "keyFileMode": "600",
+  "preparedManifestHash": "103bed71c26a9a9bad0ee208a2abc8f8508309d336d66b1addeb12671ea2e2d9",
+  "existingOperatingKeyAccessed": false,
+  "existingWalletChanged": false,
+  "signatures": 0,
+  "broadcasts": 0,
+  "deadlinesPendingFreshExecutionPreflight": true,
+  "financialRootGo": false
+}

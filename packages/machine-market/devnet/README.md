@@ -1,18 +1,18 @@
 # Explicit Devnet implementation
 
-Implementation and offline verification only. See
-[the handoff](../../../docs/machine-market/DEVNET_IMPLEMENTATION.md).
+See [the implementation and limits](../../../docs/machine-market/DEVNET_IMPLEMENTATION.md)
+and [the execution record](../../../docs/machine-market/DEVNET_EXECUTION.md).
 
-```js
-import { createDevnetRunner } from './runner.mjs';
-```
-
-The runner requires a resolved pinned manifest, exact ELF/owned content, one private
-journal path, resource measurements, scoped opaque capability set and action-time
-gate. There is no existing-wallet reader or key generator. Defaults do not authorize
-live signing. Test fixtures explicitly opt in and cannot use the approved live payer.
+The runner requires a pinned manifest, exact ELF/owned content, private journal,
+resource measurements, scoped host capabilities and an action-time execution gate.
+The one-run host adapter binds the existing wallet and exactly seven prepared keys;
+private bytes remain local and existing wallet files remain unchanged. Fixture mode
+is explicit and cannot use the approved live payer.
 
 `node scripts/machine-market/devnet-runner.mjs --manifest-template` is read-only.
-`--execute` is intentionally unavailable pending the next authorized key/gate phase.
-Do not replace the original loopback adapter or reinterpret fixture results as Devnet
-execution, network capacity or closure of the local exact-slot gaps.
+`--check-binding` checks public identities without signing or network access.
+`--execute` requires the explicit authorized execution reference and runs the fixed
+D0/D1/D2 plan within its aggregate limits. See the execution record for its command.
+
+Preserve original loopback guards. Fixture results do not establish Devnet finality,
+network capacity or closure of the old local exact-slot gaps.

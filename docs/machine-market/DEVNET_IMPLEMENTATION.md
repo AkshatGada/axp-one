@@ -1,29 +1,30 @@
-# Devnet adapter and finite runner — offline implementation
+# Devnet adapter and finite runner
 
-The ROOT-authorized implementation/offline-verification phase is complete. The new
-adapter, fixed loader/application plan, aggregate signing journal, evidence verifier
-and D0/D1/D2 runner are implemented. **No live operating key was loaded, persistent
-execution key created, Devnet simulation/broadcast/deployment performed, or GitHub
-push made.** Cryptographic tests used ephemeral fixture keys and injected RPC only.
-The fixture bank is a scripted Node model, not SBF execution or Devnet finality proof.
+The offline implementation was committed as `e49dec9`; its historical verification
+record remains unchanged in `VERIFICATION.json`. The host binding and executable
+entrypoint are now implemented. Exactly seven approved test keypairs were prepared
+in ignored owner-only local storage, and the nonbroadcast host check confirmed all
+eight public identities with the existing wallet unchanged: zero signatures and
+zero broadcasts. Private bytes remain inside the host process.
 
-The approved allocation remains **up to1.40 test SOL for this one run**. Allocation is
-not the next phase GO. The checked-in execution template has pending identities and
-financialRootGo:false; the CLI has no live execution route. A JSON approval flag alone
-cannot authorize a signer or submission.
+On 27 October 2026 the user explicitly authorized finishing the documentation,
+committing locally, and proceeding with this same bounded Devnet run without another
+approval request within the agreed limits. The execution reference is
+`user-2026-10-27-approved-bounded-devnet-run`. This is one run with the prepared
+identities, at most 1.40 test SOL, and the fixed D0/D1/D2 plan. No additional run,
+mainnet action, paid model call, hosted change or GitHub push is authorized here.
 
-## MVP closure: demo blockers and deferred work
+## MVP implementation and execution status
 
-The final code passed179/179 focused offline/native regression checks (147 existing,
-32 new). No code changes followed that pass; this closure adds documentation and the
-manifest/evidence inventory only. There is no known failing bounded-demo test.
+The core implementation passed 179/179 focused offline/native regression checks
+(147 existing, 32 new). The host binding adds three passing checks. Fixture results
+remain scripted Node evidence, not SBF execution or Devnet finality proof.
 
-**DEMO BLOCKERS:** the real existing operating key has not been opened/bound; seven
-execution identities do not exist yet; the public manifest needs their actual keys,
-nonces/content hashes/deadlines; a reviewed host-only signer capability and action-time
-execution gate must be bound; ROOT must issue the real execution phase GO. Allocation
-up to1.40 test SOL is already approved and must not be requested again. Refreshing the
-normal network/rent/fee/balance preflight is part of execution, not another broad audit.
+The public prepared manifest contains real identities, nonces and source hashes.
+The executable seals deadlines once from the fresh finalized slot, verifies the
+pinned Devnet genesis, then checks fresh accounts, balance, rent and fees before
+signing. Actual live status belongs in `DEVNET_EXECUTION.md` and its evidence;
+preparation and test success do not imply deployment or settlement.
 
 **DEFERRED PRODUCTION WORK:** independent-provider verification, exhaustive deployment
 failure/recovery drills, additional adversarial scenarios, production HTTP/UI integration
@@ -54,8 +55,9 @@ guard. The final179/179 run includes that correction and the rejected-receipt ar
 | `devnet/evidence.mjs` | Exact receipt bytes, signature/fee/CU/delta/loader authority checks; reuse of the existing native observer for marketplace effects |
 | `devnet/runner.mjs` | Finite workflow, four-write waves, cash/authority/order barriers, consent/disclosure, owner-before-cache access, explicit recovery and end-state conservation |
 | `devnet/resources.mjs` | Read-only canonical task/run storage measurement without following external symlinks |
+| `devnet/host-signer.mjs` | One-run local key binding, exact durable-fence signing and existing-wallet integrity check |
 
-All eight modules live in `packages/machine-market/devnet/`. Existing
+The core modules and host-only signer live in `packages/machine-market/devnet/`. Existing
 `native/rpc.mjs`, literal-loopback guards, ABI/domain rules, financial contracts and
 compiled program are unchanged. The plan uses the existing codec, native message
 builder, authorization verifier, response format and native observation/effect rules.
@@ -75,15 +77,17 @@ Production construction requires all of: a resolved immutable public manifest, e
 financial ROOT GO/reference with key preparation no longer pending, a manifest-bound
 local capability set covering exactly eight public keys, and an action-time gate. The
 gate separately approves authorization signing, native signing, sends and explicit
-same-byte resends. There is **no loader for the existing wallet/secret configuration**
-in this implementation. There is no generic raw-message signer or signer HTTP endpoint.
+same-byte resends. The host-only adapter reads the existing wallet without rewriting
+or copying it, derives its public identity, and binds the seven prepared keys.
+There is no generic raw-message signer or signer HTTP endpoint.
 Only declared action IDs compile, and persisted intent/signature bytes are revalidated.
 
 Fixture mode must be explicit, uses a synthetic ELF marker and an injected transport,
 and rejects the approved existing D7 payer. Fixture results are labeled
 `injected-offline-rpc`/liveEvidence:false. Production cannot select a fixture transport.
-Default missing approval denies signing/submission. `--execute` is rejected by the
-review/template CLI; it cannot create keys, open a wallet or contact an RPC.
+Default missing approval denies signing/submission. `--execute` requires the explicit
+authorization reference before any manifest, key or network access. The current
+user instruction supplies that authorization for this one bounded run.
 
 ## Durable boundaries and recovery
 
@@ -184,47 +188,27 @@ interpreter or cluster simulator, and its CU numbers are not real-program measur
 The focused regression command is recorded with counts/hashes in
 `artifacts/machine-market/devnet-implementation/`. The earlier full-repository benchmark
 wall-clock timing assertion failure remains recorded; this phase does not claim a full
-repository green run. No heavy dependency/tool install, live key loader, validator,
-public simulation, real transaction or paid provider was used.
+repository green run. The offline checkpoint used no heavy dependency/tool install,
+live key loader, validator, public simulation, real transaction or paid provider.
+The later host-binding check loaded identities locally without signing; live execution
+is recorded separately.
 
 The old local38/40 proof status, two exact-slot gaps and2-current-RPC/63-retained-history
 classification are unchanged. New offline tests do not close or relabel them. All
 previous native execution evidence and the Devnet review packet remain byte-for-byte
 unchanged. No source or private configuration upload occurred; all work stays local.
 
-## Concrete next secure preparation step — still gated
+## Prepared execution
 
-The checked-in [execution template](../../artifacts/machine-market/devnet-implementation/execution-manifest.template.json)
-contains seven pending public identities and pending nonce/source/deadline fields.
-Before a live caller can be constructed, a separately authorized Root phase must:
+See [the execution record](DEVNET_EXECUTION.md) for the exact command and public
+manifest. Key preparation and public binding are complete; do not regenerate keys.
+Deadlines are intentionally absent from the prepared manifest and sealed once from
+the fresh finalized Devnet slot. A resumed run retains the original sealed manifest,
+identities, journal, signed bytes and liabilities. Unknown outcomes stop expansion;
+reconciliation must resolve the original attempt before any dependent action.
 
-1. Approve preparation of the seven new opaque handles in one private owner-only run
-   directory. Do not overwrite/copy/convert the existing credential file or use CLI
-   ephemeral recovery-mnemonic defaults. Preserve existing routes, encryption and
-   hosted/key configuration.
-2. Through a reviewed local host-only adapter, derive/check the existing operating
-   public key D7 and all seven new public keys **before funding**. Do not trust metadata
-   labels alone. The model needs only public identities, hashes and permission status;
-   no seed, secret JSON, private-key export or generic signing capability is exposed.
-   The callback interface is synchronous Ed25519; confirm the existing opaque local
-   signer can supply it without persistent format conversion.
-3. Fill/pin the immutable public manifest, fresh Market nonce/Series ID, owned synthetic
-   content/packet hashes, deadlines and exact role/authority bindings. Verify target
-   accounts/PDAs are fresh. Review the full unsigned loader and native messages,
-   beneficiary's four-signature sponsored Fund and four precise probe exceptions.
-4. Bind `capabilities.assertManifestBinding` and `executionGate.assertAllowed` to the
-   actual action-time/root approval and a run-specific allocation/owner lease. Do not
-   copy the fixture's always-allow gate into live code. Bind the real task/run resource
-   probe and exclusive payer accounting. No live launch/key-binding helper is supplied
-   by this offline phase.
-5. Refresh public genesis, feature/ELF-loader compatibility, fee/rent and allocated
-   balance. Rent is queried again before signing/sending relevant commitments; live
-   loader acceptance and actual CU remain unverified until the authorized deployment.
-   No skip-feature-verify, mainnet, faucet/top-up, priority bump or endpoint fallback.
-6. ROOT separately reviews the actual prepared manifest/key capability and gives the
-   financial execution GO/reference before any real signature or deployment. Allocation
-   up to1.40 is already approved; do not ask for that same allocation again. Changed
-   scope/caps or incompatible credential access is a new decision, not a silent bypass.
-
-This phase stops at the local implementation/review checkpoint. There is no automatic
-key preparation, financial run or GitHub push after its tests finish.
+The existing wallet is loaded only by the host adapter and is checked unchanged on
+close. No private key is printed, committed, transmitted or persistently converted.
+Live loader compatibility and actual compute usage are established only by actual
+network receipts. No feature-verification bypass, faucet, endpoint fallback, priority
+bump or additional funded run is part of this command.

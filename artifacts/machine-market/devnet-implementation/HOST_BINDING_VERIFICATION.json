@@ -1,0 +1,25 @@
+{
+  "schema": "axp.market.devnet.host-binding-verification.v1",
+  "baseCommit": "e49dec9",
+  "tests": {
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "outputSha256": "9e929d69a537ffac1e1c3e5fec0ebd8ce94c1828f460eab7979fdb65ab03a48e"
+  },
+  "publicBindingCheck": {
+    "confirmedBindings": 8,
+    "signatures": 0,
+    "broadcasts": 0,
+    "existingWalletUnchanged": true
+  },
+  "persistentApprovedKeys": 7,
+  "sourceHashes": {
+    "packages/machine-market/devnet/host-signer.mjs": "769693de9938899708242964f2c0034f8c6d14b1da0b2a2a9dc984f2f8f0e2d5",
+    "scripts/machine-market/devnet-runner.mjs": "56dc602b3533c71454c14b660392924cb699bbf2e68cea0af6d6035fa94a0104",
+    "scripts/machine-market/devnet-prepare-keys.mjs": "4fb439fc06d4736f91f618224f7f2c770e5982face423d990c182c885d06b745",
+    "tests/machine-market/devnet-host.test.mjs": "c114554aaf7180de6639bf9588170a3d1f639949ee0542d6dc48fe0d2f5eb0e6"
+  },
+  "authorizationReference": "user-2026-10-27-approved-bounded-devnet-run",
+  "liveExecution": "Recorded separately after the actual attempt; this verification did not broadcast"
+}
