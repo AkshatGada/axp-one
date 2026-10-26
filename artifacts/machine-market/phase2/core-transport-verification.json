@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "axp.market.phase2-core-transport-verification.v1",
+  "observedAt": "2026-10-26T11:03:11.718306+00:00",
+  "status": "source-checkpoint-passed-runtime-blocked",
+  "packetSha256": "d77ac0f699a29dd89812137007f3ccb1cbf1d271dbcb738c66fd63c3736a3f3c",
+  "phaseComplete": false,
+  "nativeExecution": false,
+  "validatorStarted": false,
+  "fixtureFundingExecuted": false,
+  "declaredRunSignedOperations": 0,
+  "focusedTests": {
+    "passed": 99,
+    "failed": 0,
+    "skipped": 0,
+    "originalJs": 59,
+    "core": 19,
+    "transport": 21
+  },
+  "reviewer": {
+    "passed": 991,
+    "failed": 0,
+    "skipped": 23,
+    "componentsPassed": 90,
+    "typechecks": "both passed",
+    "sdkParity": "passed",
+    "firstRun": {
+      "passed": 990,
+      "failed": 1,
+      "skipped": 23,
+      "failure": "unchanged global Jev rolling-rate timing assertion"
+    },
+    "isolatedFailureRerun": "passed without limiter/test changes"
+  },
+  "resources": {
+    "passed": true,
+    "failures": [],
+    "limits": {
+      "freeBytes": 40000000000,
+      "toolBytes": 4294967296,
+      "buildBytes": 2147483648,
+      "ledgerBytes": 536870912,
+      "databaseAndLogBytes": 52428800
+    },
+    "reserveBytes": 0,
+    "snapshot": {
+      "measuredAt": "2026-10-26T11:03:11.651Z",
+      "freeBytes": 151738204160,
+      "toolBytes": 2313732096,
+      "buildBytes": 334790656,
+      "ledgerBytes": 0,
+      "databaseAndLogBytes": 696320,
+      "totalRunBytes": 0,
+      "measurement": "allocated filesystem blocks; task paths only"
+    }
+  },
+  "outputs": {
+    "phase2-core-transport-final": {
+      "path": "artifacts/machine-market/phase2/outputs/phase2-core-transport-final.txt",
+      "sha256": "c3ea661547eabdf9138a9fa905d784aaa2c116cf2a14d5b51116b1d85e3ee1e9"
+    },
+    "phase2-review-first": {
+      "path": "artifacts/machine-market/phase2/outputs/phase2-review-first.txt",
+      "sha256": "3268aa7ec64a7c0b4887ac2231ea124ba905cdb7e6f652b6b41daee3765101e6"
+    },
+    "phase2-existing-limiter-check": {
+      "path": "artifacts/machine-market/phase2/outputs/phase2-existing-limiter-check.txt",
+      "sha256": "c0de7ae04d6d7364a262970629214827b94f0a424aba28ec98ac88fffc3be446"
+    },
+    "phase2-review": {
+      "path": "artifacts/machine-market/phase2/outputs/phase2-review.txt",
+      "sha256": "b2462e82e7e5f30683112190b5356a9f69a6996783ec358cfa833a75fd6075f1"
+    }
+  },
+  "sourceSha256": {
+    "packages/machine-market/native/codec.mjs": "29530e9be2b347b7f3ae801b5e784223159f8947c3230c6e0d2f4a1f367c3e17",
+    "packages/machine-market/native/domain.mjs": "e51019175186be47b66e49bc4823d93d7f86a2d4455a329c5b0b37a05b4a7704",
+    "packages/machine-market/native/golden.mjs": "fc95f7f615caa2a0409d326fefa559115fb7a26e633c8765c5d0c3089081e727",
+    "packages/machine-market/native/trading.mjs": "4e944d6c303db051cec140c9d3d89fdae2af3d3819a4b1a4bb8cad275422dc28",
+    "packages/machine-market/native/transaction.mjs": "869c1a11de0c4c6d65dd831e5a7827ec8e074d72997af2b19fc4fb709d64bd30",
+    "packages/machine-market/native/outbox.mjs": "1f30333beedc7bcc5965f9b142f414c4022d6c306e7a4daaf07ca8cc7c91352e",
+    "packages/machine-market/native/rpc.mjs": "cdb9b0e2ca2fb9538bee338925c58165707ecaa802ef614e8584fc308503c28c",
+    "packages/machine-market/native/observations.mjs": "b026c2a9685504732960bdc733af455552f81fe9af76298b3ea66aa12fb1dd7d",
+    "packages/machine-market/native/delivery.mjs": "52b8a1f3be8e0b56eb6d95d516c7e33cef55dace8d2115d2962406b369679e76",
+    "packages/machine-market/native/service.mjs": "fad9e34dd92c58d0d5e7fab58abd9caff4e69c0af0257ce39208bd6e7f500805",
+    "packages/machine-market/native/phase2-transport-utils.mjs": "8fd1cd0de1ef445ec541ac604c4d3eae9f6370b58d2ee68f46fc388a45ff6606",
+    "tests/machine-market/native-codec.test.mjs": "3bc50661c658c111a2972261fed64c24c914ea2d0dace6c8db32e37cc8293d60",
+    "tests/machine-market/native-domain.test.mjs": "321b8c0896b507b2878c8555ac6f2887aacfeab9a0ed877661796d6b8cf32cea",
+    "tests/machine-market/native-trading.test.mjs": "5bec839911f416ee9f7574f493d3a13fede3db1fcca47e55934a852f523ec772",
+    "tests/machine-market/native-trading-fixtures.test.mjs": "8a0cd5b4be9c76ef67f1c9b00a1d493787c4f31f5bc64434f8f8e2fc2266cce9",
+    "tests/machine-market/phase2-core.test.mjs": "cdfd6ee0a80d1b128ddb3a77ed2ad0c88aca0cf01f66a3a65aef416a6ec1f1ac",
+    "tests/machine-market/phase2-core-kill.mjs": "8b6304859ec8f3d01c2b5aa1d9ab140f8ad2b0a420afc1a3f0cea34c81d3e1c0",
+    "tests/machine-market/phase2-transport.test.mjs": "73365acb32a2fe9329b648fc1b65c57ca3af2cd183818e530080d6192c364fd0",
+    "tests/machine-market/phase2-transport-integration.test.mjs": "dce71e76646f8a7d4af7b38509a96093cdcf1287f9c6ec32974217ac83d5067b",
+    "scripts/machine-market/phase2-resources.mjs": "bc226053c3c84e346369ab8b1b4059d455bb4f11d99e55177105659f90086b12"
+  },
+  "sourceHashTiming": "final core/transport owners idle before test run and hash capture; harness remains separate active work",
+  "warnings": [
+    "SQLite experimental warning",
+    "First broad review timing assertion failed; cause unproven; isolated and repeat checks passed"
+  ],
+  "runtimeGate": "root paused workaround pending user approval; do not start/install/build/download",
+  "outputSanitization": "absolute worktree path replaced; trailing whitespace normalized in first failing review output",
+  "stagedHygiene": {
+    "status": "passed",
+    "stagedFiles": 25,
+    "runtimeFiles": 521,
+    "vendorFiles": 71,
+    "findings": []
+  }
+}

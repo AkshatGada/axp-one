@@ -21,7 +21,17 @@ Lead owns all validator/heavy execution serially. No Goal mode. Only reused ordi
 LOCAL Codex builder chats with explicit gpt-6.1-sol/high settings and this worktree.
 Stop after one complete phase deliverable or concrete blocker for root review.
 
-Runtime startup is blocked by the pinned CLI's unconditional wildcard faucet bind;
+Final core/transport source checkpoint:99 focused tests passed, zero failures/skips
+(59 originalJS+19core+21transport). Both owners are idle. Reviewer checks passed
+991 tests/23skipped,90components, both typechecks and SDK parity. An initial unchanged
+wall-clock limiter assertion failed; isolated and repeat review checks passed with
+no limiter/test edits. Full evidence and remaining native gaps are in
+[PHASE2_SOURCE_CHECKPOINT.md](PHASE2_SOURCE_CHECKPOINT.md). Earlier88-test intermediate
+output is retained. Acceptance harness work continues separately; Phase2 is NOT complete.
+The isolated patched-validator/compiler prerequisite is paused pending approval
+through root; no workaround download/install/patch/build/start is authorized yet.
+
+Runtime startup is blocked by the pinned CLI's wildcard faucet/RPC/PubSub binds;
 see [PHASE2_PREFLIGHT.md](PHASE2_PREFLIGHT.md). No validator or funding has started.
 Source/unit work continues in the three verified local builder workdirs.
 Worker scopes and actual runtime evidence will be recorded in PHASE2_RESULT.md.
