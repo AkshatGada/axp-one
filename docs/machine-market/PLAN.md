@@ -1,3 +1,10 @@
+> SUPERSEDED COMPLETION TARGET / IMPLEMENTATION PAUSED — 26 October 2026.
+> User clarified backend/trading algorithms plus genuine localhost Solana SETTLEMENT.
+> Offchain book/inventory are allowed; keep UI minimal. See architecture/SPEC_V1.md.
+> Multi-round independent Astra audits AND explicit parent GO are required before
+> any further source edits, installs or builds. The older plan below is retained
+> as the reference prototype record, not authority to resume implementation.
+
 # AXP machine market — implementation plan
 
 26 October 2026. Lead research/architecture plan; local build and scoped local commits authorized. No push.
@@ -26,7 +33,7 @@ New branch `codex/axp-machine-market` is based on fetched main; those two fronte
 files are preserved verbatim to retain the user's current landing design.
 Original checkout, brand files, research notes, and all registered worktrees are
 untouched. No pruning of missing worktrees. Worktree location:
-`/Users/akshat/Documents/Codex/2026-10-26/task-3/axp-machine-market`.
+`/Users/akshat/agentic-dsp/.worktrees/axp-machine-market`.
 
 - `apps/marketing/src/v11`: current landing; preserve.
 - `apps/product-ui`: Next/React + PolySans, Ultramarine, Ledger/Prospectus surfaces.

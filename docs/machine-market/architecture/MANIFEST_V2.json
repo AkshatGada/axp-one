@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "packet_version": "v2-review-2026-10-26-01",
+  "status": "FROZEN FOR REVIEW ONLY",
+  "implementation_approval": false,
+  "workspace": "/Users/akshat/agentic-dsp/.worktrees/axp-machine-market",
+  "path_basis": "repository-relative to workspace",
+  "hash_algorithm": "SHA-256",
+  "documents": [
+    {
+      "path": "docs/machine-market/architecture/SELECTED_MODEL_V2.md",
+      "sha256": "7c0b4f79f21d4104c172d46bae372887060007c44cead591132124bbb7b76556"
+    },
+    {
+      "path": "docs/machine-market/architecture/SPEC_V2.md",
+      "sha256": "750a1a6ef6172ab972f218506e94f0af97a43a137cb6ffe5b4fef20797856d71"
+    },
+    {
+      "path": "docs/machine-market/architecture/WIRE_V2.md",
+      "sha256": "1974721e5e7a4c534048f7f6128ab7c8c667757c11e2b4f057f4460008fe16c5"
+    },
+    {
+      "path": "docs/machine-market/architecture/ACCEPTANCE_V2.md",
+      "sha256": "54f8dfa8bff1d3031fede600c98a9b40f4b668ae9110d18d4284c9e721faae07"
+    },
+    {
+      "path": "docs/machine-market/AUDIT_DISPOSITIONS.md",
+      "sha256": "23d8cdf323886737cb8d95b32e81e872521cb39cfa9e84d36d66c711a237fcf7"
+    }
+  ],
+  "review_gate": "Independent Round Two remains pending; all 21 dispositions are proposed, not independently closed.",
+  "implementation_gate": "Explicit GO from root parent 01a17200-435b-74c1-9fd0-24a82e3f60ee is absent and required.",
+  "freeze_rule": "Review these exact file bytes. Any document change invalidates this manifest and requires a new version; freezing is not approval."
+}

@@ -1,0 +1,376 @@
+--- Packet02/SELECTED_MODEL_V2.md
++++ Packet03/SELECTED_MODEL_V2.md
+@@ -1,4 +1,4 @@
+-# Selected v2 economic model — frozen review candidate 02
++# Selected v2 economic model — frozen review candidate 03
+ 
+ 26 October2026. Latest root direction ADOPTED; no correctness objection to its stated
+ terms. This replaces the former contingent full-chain model, which remains comparison
+@@ -16,6 +16,8 @@
+ 4. Delivery/unused-expiry pays issuer P-fee(P) and collector fee(P). Admitted failure/
+    timeout refunds P to current locked owner. Sponsored rights never transfer and
+    refund their recorded sponsor. Refund does not replenish campaign allowance.
++   Sponsored primary procurement has explicit fixed-price provenance; it is not a
++   competitive-book winner claim and shares the same atomic Unit availability guard.
+ 5. fee(x)=floor(x/100). Operator transaction fees/rent remain separate. Example:
+    P10000, secondary15000/8000 => immediately22770 seller proceeds+230fees; only10000
+    stays escrowed. Success adds issuer9900+fee100; failure instead refunds current
+@@ -26,6 +28,10 @@
+    alongside exact Series and minimum remaining transfers. This avoids treating
+    same-Series units with different primary prices as equivalent. Primary uses
+    a zero sentinel meaning claim face=actual primary execution, never a zero claim.
++   Issuance permits only (transferable,maxTransfers)=(0,0) or (1,1..3). Effective
++   resale rights are zero for nontransferable/sponsored units; otherwise subtract
++   post-fill transferCount. Both matching directions, signers and native Fund check
++   the ordinary primary/secondary buyer's signed minimum. Sponsored Fund minimum is0.
+ 7. Unit stores primaryMatch, immutable P, current owner/cursor and sponsor-refund
+    policy. Only primary Match contains refundable principal; secondary receipts are
+    permanent settled records. Terminal instructions touch only the primary escrow,
+@@ -33,6 +39,7 @@
+ 
+ Builders, installations, tests and validator work remain PAUSED. This planning
+ packet is complete for independent review; its manifest binds these exact bytes.
+-No Goal controls were used for this phase. Independent Round Two and explicit root
+-GO remain required. The planning handoff distinguishes proposed corrections from
++No Goal controls were used for this phase. The completed Round Two reports are
++preserved; focused verification of Packet03 corrections and explicit root GO remain
++required. The planning handoff distinguishes proposed corrections from
+ unexecuted validation; no implementation approval is implied.
+--- Packet02/SPEC_V2.md
++++ Packet03/SPEC_V2.md
+@@ -1,10 +1,11 @@
+ # AXP backend and Solana settlement — specification v2
+ 
+-26 October 2026. Frozen review candidate v2-review-2026-10-26-02; NOT implementation approval.
++26 October 2026. Frozen review candidate v2-review-2026-10-26-03; NOT implementation approval.
+ Normative bundle: this file, WIRE_V2.md and ACCEPTANCE_V2.md, identified together
+ by this snapshot's MANIFEST_V2.json. All must be read; no mutable prototype/PLAN defaults apply.
+ V1 and original round-one reports remain unchanged. Every original finding is
+-mapped in AUDIT_DISPOSITIONS.md; closure remains subject to independent round2.
++mapped in AUDIT_DISPOSITIONS.md. Round Two reports are preserved; the new Packet03
++corrections require focused independent verification and explicit root GO.
+ 
+ ## S1. Objective and binding gate
+ 
+@@ -43,7 +44,8 @@
+ v2 delivery/refund terms. A Unit is one indivisible right to START one delivery
+ request before useBySlot. Quantity is exactly1. N units require N authorizations.
+ It is not a copyright transfer, attention asset, subscription or future unspecified
+-capacity. Issuer must control the owned fixture material and opt into resale.
++capacity. Issuer must control the owned fixture material. Resale is available only
++where the issuer explicitly opts in under the canonical transfer policy below.
+ Native global run caps:16 series,64 lifetime units,256 executed matches; no recycling
+ expired/refunded/consumed units. At most3 secondary transfers/4 executed trade receipts per unit. Only the primary
+ trade holds refundable principal; secondary trades settle immediately.
+@@ -73,10 +75,29 @@
+ No heuristic finality margin supplies the guarantee. Gateway dishonesty or loss of
+ all durable content after payment remains a stated trusted-service risk.
+ 
+-A unit's remaining resale allowance is an economic property. Primary acquisition
+-leaves series.maxTransfers. A secondary fill increases transferCount by1, leaving
+-maxTransfers-transferCount. A generic bid signs minRemainingTransfersAfterFill
+-(0..3);0 explicitly accepts no future resale. Candidate asks must meet this predicate.
++A unit's EFFECTIVE remaining resale allowance is an economic property. The only
++valid issuance pairs (transferable,maxTransfers) are (0,0), (1,1), (1,2), (1,3).
++Reject every other pair at issuer admission and native IssueSeries, before creating
++Series state or advancing counters; never silently normalize signed terms. Ordinary
++nontransferable Series are supported for consumption, with zero resale entitlement.
++
++For a proposed fill, first validate the Series pair and the transition. Ordinary
++primary uses transferCountAfterFill=0; ordinary secondary uses current transferCount+1
++and requires transferable=1, Unit.sponsored=0 and current transferCount<maxTransfers.
++EffectiveRemainingAfterFill=0 if the Series is nontransferable, the Unit is sponsored,
++or the acquisition is sponsored; otherwise it is maxTransfers-transferCountAfterFill.
++Check count bounds before subtraction. A zero minimum never authorizes a forbidden
++secondary transition. Sponsored primary overrides even a transferable Series to zero
++rights and requires common Fund.minRemainingAfter=0.
++
++Every ordinary primary AND secondary bid signs minRemainingTransfersAfterFill in0..3.
++Require EffectiveRemainingAfterFill >= that signed minimum in candidate selection,
++match reservation, signer validation and native Fund BEFORE economic effects. For
++ordinary primary admission, the Series already fixes these rights: reject a minimum
++above them before creating an order hold. Secondary candidates still require their
++Unit-specific post-fill check before matching. Zero
++explicitly accepts no future resale. These are structural permissions, not promises
++of liquidity, price or time beyond useBy. WIRE W3/W4 fixes the same rule.
+ Bids have no exact unit cursor; asks MUST name exact unit and current cursor.
+ One matching algorithm operates on typed lanes. Primary lane uses Series plus
+ refundFace=0 sentinel, explicitly meaning the claim equals actual primary execution
+@@ -97,8 +118,11 @@
+ native cursor's current owner. Availability/depth is provisional until funding.
+ 
+ Bids: price descending then committed admission sequence. Asks: price ascending
+-then sequence. Matching considers only compatible and currently eligible asks,
+-including post-fill remaining resale allowance. IDs only break an impossible equal
++then sequence. In BOTH incoming directions, filter compatible candidates by the same
++S2 effective-rights predicate and exact claim face BEFORE price-time selection.
++Incoming bids filter asks; incoming asks filter resting bids against this Unit's
++post-fill rights. Skipping an ineligible higher bid is eligibility selection, not
++fallback after a reserved/native-failed match. IDs only break an impossible equal
+ sequence deterministically. Crossing incoming order executes at the RESTING order's
+ price, within both limits. One order fills one unit. Self-cross (buyer beneficiary
+ or payer equals current seller) rejects the incoming order; resting order remains.
+@@ -143,6 +167,16 @@
+ principal until native evidence resolves it. Mission/campaign committed-gross
+ allowances do not replenish on refund, although actual wallet cash does return.
+ 
++Maintain a walletStateVersion and finalized observation-slot watermark per payer.
++Increment the version atomically whenever an accepted wallet observation OR its
++hold set changes, including hold retirement. A context fetched outside the writer
++transaction carries the captured version. Admission/signing must recheck that version
++and require contextSlot>=the current wallet watermark; otherwise refuse the decision
++and refetch outside the transaction. A new operation ID cannot bypass this payer
++check. Commit coherent observed balance and hold retirement together. Never combine
++an older higher balance with a newer reduced hold set. This is a local version
++check, not a distributed lock or wallet-history service.
++
+ All admission/matching/cancellation decisions use relational SQLite transactions
+ and unique indexes for actor+nonce, orderId, active unit lane and match identity.
+ No RPC while holding the write transaction. Worker signatures are authorized from
+@@ -193,6 +227,16 @@
+ Series sponsoredPrice, no secondary asks and no auctions. The source is chosen
+ independently before a sponsor is considered. Sponsor and beneficiary cannot equal
+ issuer/seller or each other. Same-controller aliases remain out of scope.
++
++This is issuer-authorized fixed-price procurement, NOT competitive book price
++discovery or a claim that the highest ordinary bid won. It is not a second auction
++or sponsor book. Label regular trades pricingProvenance=book-maker-price and sponsored
++trades pricingProvenance=sponsored-fixed-price. Both paths use the SAME atomic Unit
++availability/reservation guard; sponsored admission also reserves campaign allowance
++in that transaction. If either path has already reserved/funded the exact Unit, the
++other cannot sell it or substitute another Unit under stale consent. The first
++successful reservation governs availability; no cross-route best-execution promise
++is made. Evidence must distinguish the two pricing sources.
+ 
+ A signed SponsorMandate binds domain, campaignId/nonce, sponsor, exact Series,
+ packetHash, maxGross, perGrantCap, maxGrants, at most4 eligible beneficiary keys,
+--- Packet02/WIRE_V2.md
++++ Packet03/WIRE_V2.md
+@@ -1,4 +1,4 @@
+-# AXP native MVP contract v2 — frozen review candidate 02
++# AXP native MVP contract v2 — frozen review candidate 03
+ 
+ Read with SPEC_V2 and ACCEPTANCE_V2. No implementation GO. This specifies the
+ supported single-backend/current-database fixture model, not production custody,
+@@ -48,7 +48,7 @@
+ 
+ | Kind | Append fields, ordered | Authority/semantic rule |
+ | --- | --- | --- |
+-| 1 BookOrder | orderId32,side:u8,lane:u8,series32,refundFace:u64,exactUnit32,expectedCursor:u64,limit:u64,validUntilSlot:u64,minRemainingAfter:u8,tif:u8,quantity:u8 | side0bid/1ask; lane0primary/1secondary; primaryface0meansactualprimarygross, secondaryfaceexactpositive; tif0GTC/1IOC; quantity1; bid unit/cursor0; ask exact; deadline>current; all v2 closed/failure rules apply |
++| 1 BookOrder | orderId32,side:u8,lane:u8,series32,refundFace:u64,exactUnit32,expectedCursor:u64,limit:u64,validUntilSlot:u64,minRemainingAfter:u8,tif:u8,quantity:u8 | side0bid/1ask; lane0primary/1secondary; primaryface0meansactualprimarygross, secondaryfaceexactpositive; tif0GTC/1IOC; quantity1; bid unit/cursor0; ask exact; deadline>current; bid minimum0..3 uses the W4 effective-rights predicate for both primary/secondary; all v2 closed/failure rules apply |
+ | 2 Cancel | originalOrderId32,originalNonce32,originalAuthHash32,expectedOrderVersion:u64 | Actor owns target; only unmatched with no signed attempt; Reserved returns PENDING_SETTLEMENT; sole-writer NeverSignedAbort handles both reserved orders; Signed/Unknown cannot cancel |
+ | 3 SponsorMandate | campaignId32,series32,packetHash32,budget:u64,perGrant:u64,maxGrants:u16,eligibleCount:u8,eligibleKeys:[4*32],validUntilSlot:u64,version:u16 | Sponsor;1..4 known buyer keys; version1 immutable; no budget replenishment |
+ | 4 SponsoredConsent | orderId32,campaignId32,campaignVersion:u16,series32,unit32,cursor:u64,amount:u64,sponsor32,packetHash32,validUntilSlot:u64,assessment:u8,nontransferable:u8 | Beneficiary; primary cursor0; exact price/unit; assessment0insufficient/1negative/2positive; nontransferable1 |
+@@ -92,6 +92,11 @@
+ 
+ Constants are fixed:feeBps100,maxTransfers3,maxSeries16,maxUnits64,maxMatches256,
+ leaseSlots150,maxGross1_000_000_000. Series cap<=64 and global issuedUnits<=64.
++Canonical issuance pairs (transferable,maxTransfers) are exactly (0,0),(1,1),(1,2),
++(1,3). All other combinations, including (0,3) and (1,0), reject INVALID_INPUT in
++issuer admission and native IssueSeries before state/counter changes. Existing Series
++used by Fund must satisfy this invariant too; no silent normalization. A sponsored
++Unit overrides the underlying valid Series policy to zero effective resale rights.
+ Series termsHash hashes issuer,resourceHash,versionHash,format,useBySlot,
+ sponsoredPrice,cap,maxTransfers,transferable,contentBytes in that order (excludes
+ mutable issued count). Series registration duplicate compares ALL immutable fields.
+@@ -148,6 +153,20 @@
+ Series.sponsoredPrice, payer=sponsor, buyerbeneficiary, nonzero campaign/packet;
+ sets sponsorRefundKey=payer and permanently nontransferable. Aggregate campaign
+ mandate stays backend/signer authority; consent is consumed buy authorization.
++
++For ALL Fund kinds, validate effective post-fill rights before account creation,
++consideration movement, order consumption or owner changes. Kind0 ordinary primary
++has post-fill transferCount=0 and effective rights=Series.maxTransfers if transferable,
++else0. Kind1 requires the permitted secondary transition and uses
++Series.maxTransfers-(Unit.transferCount+1). Kind2 sponsored primary has effective
++rights0 and MUST encode minRemainingAfter=0; a positive value rejects even if the
++Series is transferable. Require effective rights>=the ordinary buyer's signed
++minimum for kinds0 AND1. The signing adapter verifies that Fund.minRemainingAfter
++is exactly the admitted bid minimum; it must not lower it to make a fill pass.
++Ordinary primary order admission also rejects a minimum above the Series effective
++primary rights before an order hold is created. SponsoredConsent already commits
++to nontransferable=1, so its common Fund minimum
++is the explicit constant0. No new fields, tags or account-layout changes are needed.
+ 
+ Secondary kind1 requires FundedOpen and exact native current owner/cursor, transferable
+ nonsponsored Unit, transferCount<maxTransfers, expectedRefundFace=Unit.refundFace>0,
+@@ -265,6 +284,9 @@
+ - POST /campaigns same envelope kind3; fields derive from bytes.
+ - POST /sponsored-access same envelope kind4 plus issuer posted-order authorization;
+   exact fixed-price quote required; returns match/operation identity or rejection.
++  Sponsored trade projections label pricingProvenance=sponsored-fixed-price, derived
++  from Fund kind2; kinds0/1 label book-maker-price. No global highest-bid claim.
++  This path shares the same Unit reservation guard as regular book matching.
+ - POST /deliveries/start same envelope kind5;202pending with operation identity,
+   never a claim of native admission before reconciliation.
+ - POST /deliveries/process {unit,requestHash,idempotencyKey}, explicit local gateway
+@@ -293,7 +315,17 @@
+ sendPersisted(attempt), observeFinalized(attempt,expectedAccounts). No arbitrary
+ URL,key,recipient,program or amount override. Admission fetches local chain context
+ outside DB lock; signing revalidates versions/balances/mandates and writes bytes
+-inside the sole-writer transaction. Broadcast after durable commit only.
++inside the sole-writer transaction. The payer walletStateVersion covers both accepted
++balance observations and hold-set changes. Captured version must still match and
++contextSlot must meet the wallet watermark at admission/signing; otherwise refuse
++and refetch outside the transaction, without new reservation or signature. Coherent
++balance update and hold retirement commit atomically. New operation IDs do not
++bypass this check. Broadcast after durable commit only.
++
++Matching and signing apply the same W4 effective-rights predicate in both directions,
++including an incoming ask against resting bids. Exclude an ineligible higher-priced
++bid BEFORE selecting the eligible maker; do not reserve it and rely on native failure.
++Retain exact Series/lane/claim-face compatibility. These are local checks only.
+ 
+ Monotonic observation contract: reducer compares contextSlot>=watermark and allowed
+ state transition. PrimaryEscrowed->PrimarySettled/PrimaryRefunded proves primary funding; SecondarySettled
+--- Packet02/ACCEPTANCE_V2.md
++++ Packet03/ACCEPTANCE_V2.md
+@@ -26,14 +26,14 @@
+ | ID | Required cases | Pass condition/evidence |
+ | --- | --- | --- |
+ | T0 Contract | Same manifest; all21 findings; derive primary/resale/sponsor/cancel/delivery traces | No unresolved A semantic ambiguity; root explicit GO still needed |
+-| T1 Algorithm | Both maker-price directions; equal-price sequence; IOC/GTC; self-cross; remaining resale eligibility; EXACT secondary primary-refund-face compatibility | Expected order/price/sequence/claim; no partial fill or unbounded price; incompatible cheaper ask skipped |
+-| T2 Authority | Golden binary vector per message; one-field economic mutations incllane/claimface/TIF; same nonce/newHTTPkey; same filledorder/anotherUnit; wrong native signer/account | No unintended debit/owner/claim change; Rust/backend bytes match; fresh O2 works |
+-| T3 Concurrency | Last-unit/shared-balance/same-nonce/cancel-sign HTTP races; direct native competing secondary trades; resale versus Start; two Start requests | One serial result and owner/claim/debit. Cancel before reservation cancels the order; reservation first rejects single-order cancellation. NeverSignedAbort fails BOTH reserved orders once; Signed/Unknown holds never release. Second live backend refused |
+-| T4 Sponsor | Concurrent60+60/cap100,countcap; failure/unknown; refundnonreplenishment; changedpacket/price/unit; decline/negative; secondary request | Onecapreservation; exactprimaryonly consent; sponsor receives refund; independentcontent unchanged; nontransferable |
++| T1 Algorithm | Effective-rights issuance/primary/secondary checks and incoming-ask/resting-bid eligibility (V7/V8); both maker-price directions; equal-price sequence; IOC/GTC; self-cross; remaining resale eligibility; EXACT secondary primary-refund-face compatibility | Expected order/price/sequence/claim; no partial fill or unbounded price; incompatible cheaper ask skipped |
++| T2 Authority | False-transferable/positive-count issuance rejection and native primary signed-minimum rejection (V7); golden binary vector per message; one-field economic mutations incllane/claimface/TIF; same nonce/newHTTPkey; same filledorder/anotherUnit; wrong native signer/account | No unintended debit/owner/claim change; Rust/backend bytes match; fresh O2 works |
++| T3 Concurrency | Stale wallet observation versus hold retirement and regular-book versus sponsored exact-Unit reservation (V9/V10); last-unit/shared-balance/same-nonce/cancel-sign HTTP races; direct native competing secondary trades; resale versus Start; two Start requests | One serial result and owner/claim/debit. Cancel before reservation cancels the order; reservation first rejects single-order cancellation. NeverSignedAbort fails BOTH reserved orders once; Signed/Unknown holds never release. Second live backend refused |
++| T4 Sponsor | Fixed-price provenance/shared Unit guard (V10), effective resale rights0 even on transferable Series, positive sponsored Fund minimum rejected; concurrent60+60/cap100,countcap; failure/unknown; refundnonreplenishment; changedpacket/price/unit; decline/negative; secondary request | Onecapreservation; exactprimaryonly consent; sponsor receives refund; independentcontent unchanged; nontransferable |
+ | T5 Timing/lifecycle | Before/equal/after orderdeadline/useBy/lease; wallclockskew; never-signedabort; definitivefailedtrade; IOCnofill | Oneexplicit outcome; holds move once; failedIOC neverrests; no blockheight/slot confusion |
+ | T6 Delivery | StartbeforeE/observeafterE; lostresponse/restart; sourcefailureafterStart; expirybeforeStart; old/returningowner; timeoutwins | Consumed originalresponse recoverable afteruseBy; lockedunitcannotexpirepay; refund/expiry releasesnobytes |
+ | T7 Native money/claim | PrimaryP, secondaryQ1/Q2; payout and current-holder refund on separateunits; premium/discount; recurringowner; sponsorrefund; repeatedsecondary/terminal receipts; wrong payee | Actual local signatures/finality/accountdeltas; primaryescrow staysP duringresale; secondaryseller/fees paidonce immediately; no historicalrefund/clawback; claim consumedonce |
+-| T8 Current-run recovery | Primary and secondary lostresponses; terminalaction: kill aftersignedpersistence, aftersend, afterresolvedDB/beforeHTTP; oneunsignedabort; reordered observations | Same signature/op; laterownership/primaryterminal doesnoterase secondarysettled receipt; no extra sellerpayment; terminal neverregresses; unknownfee reserved |
++| T8 Current-run recovery | Stale wallet-context schedule (V9); primary and secondary lostresponses; terminalaction: kill aftersignedpersistence, aftersend, afterresolvedDB/beforeHTTP; oneunsignedabort; reordered observations | Same signature/op; laterownership/primaryterminal doesnoterase secondarysettled receipt; no extra sellerpayment; terminal neverregresses; unknownfee reserved |
+ | T9 Bounds/feasibility | Count/byte refusal; fundedunitstillcloses at ordinaryingresscap; actual maximal secondary/terminal serialization/CU; FULL config; wallet/statechecks | No historyeviction; <=1232byte transaction and declaredCU; no powerloss/HA claim; safe failure onunsupported recipientstate |
+ 
+ These are shared groups, not21 duplicate suites. Physical storage/runtime overhead
+@@ -79,6 +79,47 @@
+ fundunknown followedbyvalidexpiry gives PrimarySettled proof oforiginalfunding. Native
+ account-onlyproof is labelednarrower ifhistory/feesunknown; never invent a signature.
+ 
++V7 effective rights (SOL-R2-001 / MKT-R2-01, within T1/T2/T4):
++- The exact reported trace starts with ordinary Series transferable=0,maxTransfers=3.
++  Issuer/backend and native IssueSeries reject INVALID_INPUT; no Series/counter change.
++  Do not normalize it to a different signed policy. No trade principal or right is
++  created; a failed native transaction may still incur its separate network fee.
++- A valid nontransferable (0,0) Series is supported. Primary bid minRemainingAfter=1
++  is rejected before an order hold and cannot reserve or sign a fill. A direct native primary Fund with otherwise valid
++  roles and minimum1 also rejects atomically: no trade debit, OrderUse or owner change.
++  Minimum0 may acquire this consume-only right, but no secondary sale is permitted.
++- Valid transferable (1,3) admits primary minimum0..3. Secondary fills leave2,1,0;
++  each buyer's minimum must be met, and no fourth resale is allowed even with minimum0.
++  Invalid (1,0), flag values outside0/1, and maxTransfers>3 also reject issuance.
++- Sponsored acquisition of a (1,3) Series still has effective rights0. Its Fund
++  minimum must equal0; minimum1 rejects. It never becomes resale inventory.
++These are planned tests only. Structural rights do not guarantee a future buyer,
++price, liquidity or usable time after the stated deadlines.
++
++V8 incoming ask (BKR2-N02, within T1): same secondary Series and exact P; resting
++bid120 requires minimum1 and bid110 accepts0. Incoming ask100 has transferCount2
++under max3, so the fill would leave0. Filter out120 as ineligible; match110 at its
++resting price110. Do not reserve120 or first attempt a native failure. It remains
++an otherwise valid resting bid for a different eligible Unit. In the opposite
++incoming-bid direction use the same predicate to skip insufficient-rights asks.
++
++V9 stale wallet observation (BKR2-N01, within T3/T8): requestA captures wallet versionv
++and balance at slot s, then pauses. Reconciliation at s+n updates the wallet and
++retires an existing hold, incrementing walletStateVersion. A resumes with a fresh
++operation ID but old higher balance/version. Refuse its admission/signing with no
++new hold/debit; refetch outside the write transaction and reconsider against the
++current version/context. Do not combine the old balance with the new reduced holds.
++This is an internal supported schedule, not the deferred external-wallet-drain case.
++
++V10 sponsored provenance/availability (MKT-R2-02, within T3/T4): regular bid120 and
++issuer-authorized sponsored exact-Unit quote100 contend for one available Unit.
++If the regular match reserves first, sponsored consent rejects as unavailable with
++no sponsor grant/charge or substitute Unit. If sponsored procurement reserves first,
++regular matching cannot reserve/sell that Unit. The sponsored result is labeled
++sponsored-fixed-price, never proof that120 lost a global competitive auction. Campaign
++allowance and Unit reservation move atomically. Existing book trades retain
++book-maker-price provenance; no sponsor book or new auction is introduced.
++
+ ## A4. Finite local execution package after GO
+ 
+ One declared run,8Units initially(max64 lifetime), atmost24 successfultradeexecutions
+@@ -106,8 +147,8 @@
+ 
+ ## A5. Gates
+ 
+-G0: frozen spec/wire/acceptance/dispositions/hashes; independentround2; noopenAcritical
+-semantics; Cscopeaccepted; rootreviewsfullpacket andexplicitlyGO. G1: exactcodecs/engine
++G0: frozen spec/wire/acceptance/dispositions/hashes; preserved Round Two reports plus
++focused Packet03 verification; no open essential A semantics; C scope accepted; rootreviewsfullpacket andexplicitlyGO. G1: exactcodecs/engine
+ andT1–T5. G2: pinnedtoolchain/disk/loopback/program andactualT6–T9. G3: reconcileallnative
+ outcomes/residuals, scopedlocalcommits,no push. Tool incompatibility stopsbeforefunding;
+ no cloudfallback. OverallMVP remainsincomplete untilrealvalidatorproof. No GO is present.
+--- Packet02/AUDIT_DISPOSITIONS.md
++++ Packet03/AUDIT_DISPOSITIONS.md
+@@ -1,12 +1,15 @@
+-# Round-one dispositions — v2 candidate, awaiting independent verification
++# Audit dispositions — Packet03 review-closure candidate
+ 
+ All21 original IDs/severities preserved. Full reports read after all submitted;
+ no original report or SPEC_V1 altered. A=MVP correctness/design blocker;
+ B=cheap useful improvement; C=explicitly unsupported production hardening/feature.
+ Mixed A/C separates fundamental supported-flow fix from deferred expansion.
+-Every disposition below is a PROPOSED resolution/scope boundary for round2, not
+-reviewer closure or implementation GO. RootGO absent. No original High is wholly
+-waived. Native execution tests remainfuture; claims here are architectural.
++The original 21 rows retain their IDs/severities and correction history. The three
++preserved Round Two reports accepted their original findings within the narrowed
++scope; those are architectural dispositions, not executed native results or GO.
++The Solana report added SOL-R2-001 (Medium/A), overlapping MKT-R2-01 (Low/B).
++Packet03 supplies its proposed correction plus the other Low/B clarifications below.
++These NEW changes require focused independent verification. Root GO remains absent.
+ 
+ | ID | Original severity | MVP class | Selected correction / exact v2 sections | Counterexample and required evidence | Alternatives / residual |
+ | --- | --- | --- | --- | --- | --- |
+@@ -44,9 +47,9 @@
+ 10000only remainsescrowed. Success paysissuer9900+fee100. Admittedfailure instead
+ refunds currentholder10000; no historicalclawbacks/refunds. Premiumloss/discountgain
+ are explicitlysignedrisks. Genericsecondarybook binds EXACT originalrefundface;
+-primarylane usesface0sentinel meaningactualexecutiongross. This proposes a resolution of the new
+-claim-substitutability issue under MKT-002 as well as remaining transfers; independent
+-Round Two must verify it before any closure is accepted.
++primarylane usesface0sentinel meaningactualexecutiongross. Round Two accepted exact claim-face compatibility in the bounded model. The new
++transfer-flag/minimum issue SOL-R2-001 is separately corrected in Packet03 and remains
++pending focused verification; the original reports are not rewritten.
+ 
+ Selectedcuts: onebook/nonativeauction; no nativecancellationtombstones,campaigncaps,
+ independentanchors,HA,automaticrentrepairorbackuprestoreguarantee. Correctnessstill
+@@ -73,10 +76,33 @@
+ authorityMKT-003/SOL-R1-001/BKR1-01/BKR1-04; lifecycleMKT-004/BKR1-02/SOL-R1-004;
+ alias/rentMKT-007/SOL-R1-006/SOL-R1-003; freezeMKT-008/SOL-R1-005/BKR1-07.
+ 
+-## Open before round2 verdict
++## Continuing verification boundary
+ 
+ No claim of independentclosure. Reviewers must verify actualcross-layerconsistency,
+ economics, message/layoutbounds and proportionatescope. Toolchainexpandedsize and
+ runtime/serialization/CU/storage measurements remain executionpreflight AFTERGO,
+ not secretlypassedfacts. If an A decision remains ambiguous inthiscandidate,
+ reportitandrevise; do not implementaroundit. RootGO hasNOTbeenissued.
++
++
++## Round Two findings — explicit Packet03 dispositions
++
++Original report classifications are preserved. The overlapping transfer-policy
++issue is governed by SOL-R2-001's essential A classification; the market review's
++Low/B classification is retained as provenance, not used to downgrade that blocker.
++All five corrections below are authored and awaiting focused independent verification.
++No audit report or Packet02 content has been rewritten.
++
++| Finding ID | Original Round Two severity/class | Packet03 disposition and exact sections | Required finite proof / residual |
++| --- | --- | --- | --- |
++| SOL-R2-001 | Medium / A | Proposed correction: SPEC S2 canonical pairs (0,0)/(1,1..3), effective-rights formula and all-layer minimum; S3 both matching directions; WIRE W2/W3/W4 signer/native primary+secondary checks and sponsored minimum0; ACCEPTANCE V7/T1/T2/T4 | Reject false/positive issuance; valid false/zero cannot satisfy primary minimum1; native primary rejection with valid signers; transferable3 and sponsored override. Structural rights, not liquidity. Focused independent closure REQUIRED. |
++| MKT-R2-01 | Low / B | Same correction as SOL-R2-001; same sections/vector. Its separate ID/class remain recorded; combined issue treated as A | Reuse V7, not another suite. No flag/count ambiguity or reliance on UI disclosure. |
++| MKT-R2-02 | Low / B | SPEC S5 and WIRE W6 identify sponsored-fixed-price versus book-maker-price provenance and shared Unit/campaign reservation; ACCEPTANCE V10/T3/T4 | Exercise both reservation orders with regular120 versus sponsor quote100; no double sale, no substitute consent or highest-bid claim. Issuer discretion/aliases remain disclosed. |
++| BKR2-N01 | Low / B | SPEC S3 and WIRE W6 specify payer walletStateVersion plus context watermark, atomic hold retirement and stale-observation refusal/refetch; ACCEPTANCE V9/T3/T8 | Pause old higher-balance observation while newer reconciliation retires a hold. New operation ID cannot authorize against stale version. No RPC inside writer or new HA/history subsystem. |
++| BKR2-N02 | Low / B | SPEC S3 and WIRE W6 apply the shared effective-rights predicate before price-time selection in BOTH directions; ACCEPTANCE V8/T1 | Incoming ask leaves0: highbid120/min1 skipped, eligiblebid110/min0 executes110 if crossing. This is eligibility, not fallback after a reserved failed match. |
++
++All Low/B items are addressed cheaply in existing policy/test groups; none is deferred
++in this phase. The selected economic model, account layouts/tags/byte sizes, custody,
++clock/claim semantics and production exclusions remain unchanged. No additional
++essential design blocker was identified by the author; SOL-R2-001 is not considered
++independently closed until the authorized focused reviewer verifies Packet03.

@@ -1,42 +1,31 @@
-# AXP Market: north star and finish line
+# AXP Market north star — backend and Solana settlement
 
 “Google built AdSense for the web. We are building the advertising market for AI.”
 
-AXP makes machine access discoverable, priceable, purchasable and, when the issuer
-explicitly permits it, transferable before use. Advertising funds access without
-buying the answer. Existing conversational sponsored placements remain a distinct,
-award-bound inventory type alongside direct and sponsored resource access.
+Build the trading algorithm/backend and genuine Solana settlement of matched
+access trades. Catalog, inventory descriptions, reasoning, order book and matching
+can remain offchain. The first execution target is an isolated localhost Solana
+validator with disposable fixture accounts, not Devnet/mainnet or real assets.
+Keep frontend minimal and usable. The preserved SQLite/microcredit market is a
+reference implementation, not proof of native settlement or the finished objective.
 
-## What this MVP must make real
+Completion eventually requires deterministic authenticated order matching,
+reservation/cancellation/concurrency invariants, program-enforced escrow and duplicate/
+conflicting-trade prevention, full-chain solvency, trusted delivery/recovery boundaries,
+and actual local-validator signatures/account deltas for payout/refund. No model
+controls keys or money. No attention/comprehension/endorsement claims.
 
-A single polished local journey: a publisher issues finite access rights bound to
-an immutable resource version/hash and expiry; a budget-bound agent discovers and
-buys or bids; A lists an unused right and B acquires it; A is denied and B retrieves
-exact bytes once, with durable same-key recovery. A sponsor can instead fund an
-explicitly consented, nontransferable grant. Negative assessments remain permitted.
+## Binding approval gate
 
-SQLite is the authority for ownership, supply, balanced integer synthetic funds,
-trade escrow, consent, delivery and audit. Browser state never grants authority.
-Each trade's full consideration remains escrowed until delivery/ordinary expiry;
-issuer failure unwinds each trade to its payer. Unknown settlement freezes rights
-and holds until operator reconciliation. Protected bytes are absent from public
-catalogs, errors, operation projections and audit events.
+Implementation workers are PAUSED. Planning, read-only research and architecture
+audits only. Freeze/version the specification; conduct three independent LOCAL
+GPT-6 Astra High domain reviews, reconcile findings, then a second review round
+verifies fixes and cross-layer consistency. No critical/high or rights/settlement
+ambiguity may remain. All medium risks need explicit bounded dispositions.
+Parent orchestration chat01a17200-435b-74c1-9fd0-24a82e3f60ee must independently
+inspect the final packet and provide explicit GO. Lead cannot self-authorize resume.
+No code/installs/builds/validator execution before that gate. No push, deployment,
+external RPC, paid calls or persistent external credentials.40GBhard free-space floor.
 
-## Finished means observed evidence
-
-- Primary sale, first-price auction with loser release, one-owner secondary sale,
-  old-owner denial, exact-version delivery and no post-delivery resale.
-- Duplicate/conflicting key, restart, concurrency, expiry, cancellation, insufficient
-  funds, failure refund and unknown-settlement recovery tested through domain/API.
-- Sponsorship consent/decline/direct paths and honest negative assessment verified.
-- Discover, Portfolio, Publisher, Sponsor, Agent and Activity form a working /market/
-  experience, checked on desktop/mobile with reload and accessible controls.
-- Existing repository tests, typechecks and serial build evaluated; actual failures,
-  skips and limitations documented. Scoped local commits and a reproducible demo.
-
-All new funds, participants, agent decisions and settlement are local synthetic.
-No new onchain ownership, x402 compatibility, customer demand, attention proof or
-production readiness is claimed. Existing dated testnet evidence remains separate.
-No push, deployment, hosted writes, credentials, paid calls or live transfers.
-40 GB free is the hard floor; source/worktrees <=3 GiB, builds <=2 GiB, initial
-market DB/logs <=50 MiB. No deletion of user work to satisfy the budget.
+See architecture/SPEC_V1.md and AUDIT_PROTOCOL.md. The architecture is under review;
+its proposed design is not implemented or approved merely because it is written.

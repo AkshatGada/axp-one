@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "packet_version": "v2-review-2026-10-26-02",
+  "status": "FROZEN FOR REVIEW ONLY",
+  "implementation_approval": false,
+  "workspace": "/Users/akshat/agentic-dsp/.worktrees/axp-machine-market",
+  "path_basis": "repository-relative to workspace",
+  "hash_algorithm": "SHA-256",
+  "supersedes_for_review": {
+    "version": "v2-review-2026-10-26-01",
+    "manifest_path": "docs/machine-market/architecture/MANIFEST_V2.json",
+    "sha256": "4bbc565da014b122a526ff36f0b7c5cf939151047a1720e9b1e186c031c0cc70",
+    "preserved_unchanged": true
+  },
+  "documents": [
+    {
+      "path": "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/SELECTED_MODEL_V2.md",
+      "sha256": "8b72ef534b6497c13ae1f00a75c1669a64286670e6a85eb1de853b5337d8ee3e"
+    },
+    {
+      "path": "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/SPEC_V2.md",
+      "sha256": "b84eda45894000d16ec2f126a1885778165a2ac88dc1bb5fda599978f2b60c5b"
+    },
+    {
+      "path": "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/WIRE_V2.md",
+      "sha256": "d59f60ee963942e471e19c00ca37ad6b30f249be74ebf22127bf5e5828d80850"
+    },
+    {
+      "path": "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/ACCEPTANCE_V2.md",
+      "sha256": "af2a68f92c1608076fac3051566252bc7720e1b247dcbe729a5911b9fd4bd512"
+    },
+    {
+      "path": "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/AUDIT_DISPOSITIONS.md",
+      "sha256": "40143228908a108905d98d57fa291111d7bb5200478eac04f7ab35762d6026d9"
+    }
+  ],
+  "handoff": {
+    "path": "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/PLANNING_HANDOFF.md",
+    "sha256": "0f34d82856121770909bfa7d298bf031584d8b890385f21588a0eb9be9b72f48"
+  },
+  "finding_coverage": {
+    "total": 21,
+    "original_high": 7,
+    "original_medium": 13,
+    "original_low": 1,
+    "independently_closed": 0
+  },
+  "author_unresolved_semantic_A": "No additional unresolved A decision identified in static reconciliation; all proposed resolutions remain subject to independent review.",
+  "validation_state": "Native implementation and execution validation remain unexecuted.",
+  "review_gate": "Independent Round Two not dispatched by this phase. Coordinator authorization required.",
+  "implementation_gate": "Explicit GO from root parent 01a17200-435b-74c1-9fd0-24a82e3f60ee is absent and required.",
+  "freeze_rule": "Read exact snapshot bytes. Any change requires a new version; freezing is not approval."
+}

@@ -1,0 +1,37 @@
+{
+  "version": "v2-review-2026-10-26-03",
+  "prior_manifest_path": "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/MANIFEST_V2.json",
+  "prior_manifest_sha256": "ebeccd4064c37059f2bb4d72e4f3ebe0c2f611e0cb2ae955c0029f215162b9ea",
+  "preserved_hashes": {
+    "docs/machine-market/audits/solana/ROUND1.md": "ed1db5f3bff35ef4b70448e3117341c1ce315aeccf4fbf76ec97d9dc6b801234",
+    "docs/machine-market/audits/solana/PREPARATION.md": "f32b25a8619f317f6550cf6ce69063e5e0eaa758364a6da19f8c95cc584760a2",
+    "docs/machine-market/audits/solana/ROUND2.md": "35c7f9e0b69322aeb056190f805824d5a373321a95c901575ed42ea8fe274aa2",
+    "docs/machine-market/audits/backend/ROUND1.md": "cc18ed4203f2387226d63480f1f7bb2d4a0fb7ee8fc8deb68e6e1076bc3cd7d4",
+    "docs/machine-market/audits/backend/PREPARATION.md": "0d6c8ff89a9ed8f90ea9e27f7e088baeaa8b01d4c6a400295c85a0182f8dac0c",
+    "docs/machine-market/audits/backend/ROUND2.md": "9db41fe5ed0c9f436f6a2bf4421b8bb614c222468ecf21777a366dd397472753",
+    "docs/machine-market/audits/market/ROUND1.md": "3dc56959a91f6151e7434c1704695adea33b9ae8fcbc9580e52a579d5b793b64",
+    "docs/machine-market/audits/market/PREPARATION.md": "80fd36ff3fff2f9a6c2cf85c33112f847043066ce39d4782ee30f239afe1dda3",
+    "docs/machine-market/audits/market/ROUND2.md": "06cbf2b0b71b0829b3dde59f7fc7e589866345feddda74a74939167ca064a4b3",
+    "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/SELECTED_MODEL_V2.md": "8b72ef534b6497c13ae1f00a75c1669a64286670e6a85eb1de853b5337d8ee3e",
+    "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/WIRE_V2.md": "d59f60ee963942e471e19c00ca37ad6b30f249be74ebf22127bf5e5828d80850",
+    "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/AUDIT_DISPOSITIONS.md": "40143228908a108905d98d57fa291111d7bb5200478eac04f7ab35762d6026d9",
+    "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/ACCEPTANCE_V2.md": "af2a68f92c1608076fac3051566252bc7720e1b247dcbe729a5911b9fd4bd512",
+    "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/MANIFEST_V2.json": "ebeccd4064c37059f2bb4d72e4f3ebe0c2f611e0cb2ae955c0029f215162b9ea",
+    "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/PLANNING_HANDOFF.md": "0f34d82856121770909bfa7d298bf031584d8b890385f21588a0eb9be9b72f48",
+    "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-02/SPEC_V2.md": "b84eda45894000d16ec2f126a1885778165a2ac88dc1bb5fda599978f2b60c5b"
+  },
+  "review_inputs": [
+    {
+      "path": "docs/machine-market/audits/market/ROUND2.md",
+      "sha256": "06cbf2b0b71b0829b3dde59f7fc7e589866345feddda74a74939167ca064a4b3"
+    },
+    {
+      "path": "docs/machine-market/audits/backend/ROUND2.md",
+      "sha256": "9db41fe5ed0c9f436f6a2bf4421b8bb614c222468ecf21777a366dd397472753"
+    },
+    {
+      "path": "docs/machine-market/audits/solana/ROUND2.md",
+      "sha256": "35c7f9e0b69322aeb056190f805824d5a373321a95c901575ed42ea8fe274aa2"
+    }
+  ]
+}
