@@ -1,0 +1,19 @@
+{
+  "schema": "axp.market.devnet.recovery-verification.v1",
+  "tests": {
+    "passed": 184,
+    "failed": 0,
+    "skipped": 0,
+    "outputSha256": "6e6e24e57d225bcc130cf2d89dd7d952cbeacf6ec7e44ac66ae0e0a1f7f1ad28"
+  },
+  "sourceHashes": {
+    "packages/machine-market/devnet/rpc.mjs": "caed4f14a300bb614a4da6cfac27f09d717164c0200993a860d4d706f287cbdc",
+    "packages/machine-market/devnet/journal.mjs": "39c22fec8a6f6ab6b012eaeffd1866137f56bd16731984cfcdd161ef0c4a3084",
+    "packages/machine-market/devnet/runner.mjs": "d78fee97371cabd87134dce0dc1cc76de58be5060cc95729140097b71cf45184",
+    "scripts/machine-market/devnet-runner.mjs": "21a9b7265758efb7609e262c9ce0dd378818ec39cb88d1aea9519c1086d9b4ce",
+    "tests/machine-market/devnet.test.mjs": "2de2624f00ffe30f64b630823a12cf0bd6125a119958fc07a844cf9560bae07f",
+    "tests/machine-market/helpers/devnet-fixture.mjs": "8a15cb1a4a539beb7de0df02f806c1025d59f2ff80abf98354b012104337cc27"
+  },
+  "scope": "Live RPC pacing; explicit recovery of four expired never-submitted writes; original signed bytes retained; original attempt/write/budget ceilings unchanged",
+  "newLiveSignaturesDuringTests": 0
+}

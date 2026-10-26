@@ -12,16 +12,17 @@ export function createDevnetRpc({plan,endpoint,run,programBytes,programDeploymen
  endpoint=devnetEndpoint(endpoint);if(!run||!Buffer.isBuffer(programBytes)&&!(programBytes instanceof Uint8Array)||typeof fetchImpl!=='function'||!Number.isInteger(timeoutMs)||timeoutMs<1||timeoutMs>30000||!Number.isInteger(maxResponseBytes)||maxResponseBytes<1024||maxResponseBytes>8*1024*1024)reject('INVALID_INPUT');
  demand(typeof manifestHash==='string'&&/^[a-f0-9]{64}$/.test(manifestHash),'MANIFEST_HASH');demand(run.genesis===publicKeyBytes(GENESIS).toString('hex'),'DEVNET_GENESIS_REQUIRED');
  run=Object.freeze(structuredClone(run));programBytes=Buffer.from(programBytes);if(programBytes.length<64||programBytes.length>1048576||!programBytes.subarray(0,4).equals(Buffer.from([127,69,76,70])))reject('RUN_MISMATCH');
- const programHash=sha256(programBytes);let nextId=1;
+ const programHash=sha256(programBytes);let nextId=1,pacing=Promise.resolve(),lastRequest=0;const lastMethod=new Map();
+ async function pace(method){if(provenance==='injected-offline-rpc')return;const next=pacing.then(async()=>{const delay=Math.max(lastRequest+120,(lastMethod.get(method)??0)+300)-Date.now();if(delay>0)await new Promise(r=>setTimeout(r,delay));lastRequest=Date.now();lastMethod.set(method,lastRequest);});pacing=next.catch(()=>{});await next;}
  async function call(method,params){
-  const id=nextId++,controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);timer.unref?.();
+  await pace(method);const id=nextId++,controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);timer.unref?.();
   try{
    const response=await fetchImpl(endpoint,{method:'POST',redirect:'error',signal:controller.signal,headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id,method,params})});
-   if(!response.ok||!/^application\/json(?:;|$)/i.test(response.headers.get('content-type')??''))reject('PENDING_SETTLEMENT');
+   if(!response.ok||!/^application\/json(?:;|$)/i.test(response.headers.get('content-type')??'')){if(provenance==='public-devnet-rpc')process.stderr.write(JSON.stringify({rpcFailure:{method,httpStatus:response.status}})+'\n');reject('PENDING_SETTLEMENT');}
    const reader=response.body?.getReader();if(!reader)reject('RUN_MISMATCH');const chunks=[];let total=0;
    while(true){const {done,value}=await reader.read();if(done)break;total+=value.length;if(total>maxResponseBytes){await reader.cancel();reject('CAPACITY');}chunks.push(value);}
    let value;try{value=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{reject('RUN_MISMATCH');}
-   if(value?.jsonrpc!=='2.0'||value.id!==id||Object.hasOwn(value,'error')||!Object.hasOwn(value,'result'))reject('PENDING_SETTLEMENT');return value.result;
+   if(value?.jsonrpc!=='2.0'||value.id!==id||Object.hasOwn(value,'error')||!Object.hasOwn(value,'result')){if(provenance==='public-devnet-rpc')process.stderr.write(JSON.stringify({rpcFailure:{method,errorCode:value?.error?.code??null}})+'\n');reject('PENDING_SETTLEMENT');}return value.result;
   }catch(error){if(error?.code&&['RUN_MISMATCH','PENDING_SETTLEMENT','CAPACITY'].includes(error.code))throw error;reject('PENDING_SETTLEMENT');}finally{clearTimeout(timer);}
  }
  const commitment={commitment:'finalized'};

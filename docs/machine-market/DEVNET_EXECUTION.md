@@ -37,3 +37,29 @@ Deadlines seal once. Every real attempt and unresolved liability survives in the
 private journal; unresolved outcomes stop further expansion. Public evidence
 separates successful, expected failed and unknown receipts, fee/rent/principal,
 program deployment and application effects. Original local evidence is preserved.
+
+## Initial live attempt and preserved recovery
+
+Integration commit: `b0597f8`. The first buffer creation finalized successfully:
+`4RLYuKTCDHSrdAdsPmShS3FouBHXLRcoMC4cSMmLJ8h5XD6jZPmkznT2mNPs6JUTsd27r6YyTVVAmrXihkdG8p1a`,
+slot 515430396. Buffer collateral: 1,229,385,400 lamports; fee: 10,000 lamports.
+A later RPC failure stopped upload preparation before any loader write was sent.
+Three writes were signed and one was prepared. All four original blockhashes
+expired with zero durable send intents. These attempts must remain preserved,
+including exact signed bytes and their original slot reservations.
+
+The direct recovery correction paces live requests and adds explicit expiry recovery
+only for never-submitted loader writes. Recovery checks the original blockhash is
+invalid, finalized height exceeds its validity, and no transaction exists for the
+original signature. It archives the complete original row and proof before admitting
+a fresh attempt. Archived attempts continue to count toward the same 300-attempt
+and 256-write ceilings. No submitted/unknown transaction qualifies. No funded
+application obligation, identity, budget or deadline is reset.
+
+Explicit recovery uses the same command arguments with `--recover-expired-unsent`
+in place of `--execute`; then `--execute` resumes the same sealed run. This is
+within the user's authorization to complete the run inside the agreed ceilings.
+
+Recovery verification: all 184 focused native/phase2/Devnet/host-binding checks passed,
+including exact original-byte preservation and refusal of any submitted attempt.
+See `artifacts/machine-market/devnet-implementation/RECOVERY_VERIFICATION.json`.
