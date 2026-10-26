@@ -1,0 +1,23 @@
+[package]
+name = "axp-machine-market-program"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[features]
+default = []
+no-entrypoint = []
+
+[dependencies]
+solana-program = { version = "=2.3.0", default-features = false }
+
+[profile.release]
+overflow-checks = true
+lto = "fat"
+codegen-units = 1
+
+[dev-dependencies]
+serde_json = "=1.0.154"

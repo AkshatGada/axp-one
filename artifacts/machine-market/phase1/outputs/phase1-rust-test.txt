@@ -1,0 +1,87 @@
+warning: use of deprecated module `solana_program::system_program`: Use `solana_sdk_ids::system_program` instead
+ --> src/domain.rs:8:51
+  |
+8 | use solana_program::{hash::hashv, pubkey::Pubkey, system_program};
+  |                                                   ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated module `solana_program::system_instruction`: Use `solana_system_interface` crate instead
+  --> src/processor.rs:19:5
+   |
+19 |     system_instruction, system_program,
+   |     ^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated module `solana_program::system_program`: Use `solana_sdk_ids::system_program` instead
+  --> src/processor.rs:19:25
+   |
+19 |     system_instruction, system_program,
+   |                         ^^^^^^^^^^^^^^
+
+warning: `axp-machine-market-program` (lib) generated 3 warnings
+warning: `axp-machine-market-program` (lib test) generated 3 warnings (3 duplicates)
+   Compiling axp-machine-market-program v0.1.0 (<WORKTREE>/programs/machine-market)
+warning: use of deprecated module `solana_program::system_program`: Use `solana_sdk_ids::system_program` instead
+  --> tests/processor.rs:19:5
+   |
+19 |     system_program,
+   |     ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: `axp-machine-market-program` (test "processor") generated 1 warning
+    Finished `test` profile [unoptimized] target(s) in 0.23s
+     Running unittests src/lib.rs (local-state/machine-market/build/host/debug/deps/axp_machine_market_program-b74559d600bfa75d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/domain.rs (local-state/machine-market/build/host/debug/deps/domain-462fccbceb543489)
+
+running 12 tests
+test claim_recipient_follows_current_owner_not_historical_payer ... ok
+test consume_only_primary_cannot_promise_resale ... ok
+test delivery_identity_binds_owner_cursor_and_exact_nonce ... ok
+test domain_and_strict_deadline_cursor_boundaries ... ok
+test every_primary_minimum_and_three_secondary_boundaries ... ok
+test exact_layouts_and_invalid_trailing_or_enum_bytes ... ok
+test fund_hash_binds_every_instruction_byte_and_semantic_account_role ... ok
+test funding_checks_exact_face_limits_and_each_deadline ... ok
+test only_canonical_issuance_pairs_are_accepted ... ok
+test precise_fee_arithmetic_and_conservation_selected_economics ... ok
+test quoted_fee_is_immutable_but_unearned_on_refund ... ok
+test sponsorship_overrides_series_rights_and_never_underflows ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/golden.rs (local-state/machine-market/build/host/debug/deps/golden-d49be18c6c553042)
+
+running 2 tests
+test javascript_pda_vectors_match_solana_sdk_for_all_five_families ... ok
+test shared_packet03_golden_vectors_match_every_native_field ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/processor.rs (local-state/machine-market/build/host/debug/deps/processor-6fd20a235afba8b1)
+
+running 11 tests
+test canonical_filled_receipt_replays_after_later_owner_and_terminal_without_payment ... ok
+test current_holder_refund_and_sponsor_refund_each_preserve_quoted_fee ... ok
+test direct_owner_start_needs_no_matcher_and_recovers_after_deadline ... ok
+test finalization_timeout_and_expiry_boundaries_are_exact ... ok
+test host_finalize_moves_only_primary_principal_and_replay_pays_nothing ... ok
+test intentional_duplicate_wallet_roles_use_union_flags_but_state_aliases_do_not_gain_authority ... ok
+test locked_unit_cannot_expire_and_sibling_terminal_actions_conflict ... ok
+test native_fund_refuses_impossible_primary_or_sponsored_minimum_before_pda_or_debit ... ok
+test native_secondary_zero_minimum_does_not_enable_fourth_resale ... ok
+test wrong_historical_refund_recipient_foreign_or_readonly_accounts_reject_before_effects ... ok
+test wrong_owner_wrong_signer_stale_cursor_and_useby_equality_have_no_effect ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests axp_machine_market_program
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

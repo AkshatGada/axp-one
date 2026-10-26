@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "axp.market.phase1-verification.v1",
+  "observedAt": "2026-10-26T09:52:52.853413+00:00",
+  "phase": 1,
+  "status": "passed-source-host-tests-and-sbf-build",
+  "packetSha256": "d77ac0f699a29dd89812137007f3ccb1cbf1d271dbcb738c66fd63c3736a3f3c",
+  "architectureCommit": "283d469",
+  "nativeExecution": false,
+  "validatorStarted": false,
+  "pushPerformed": false,
+  "focusedJs": {
+    "passed": 59,
+    "failed": 0,
+    "skipped": 0
+  },
+  "rustHost": {
+    "passed": 25,
+    "failed": 0,
+    "domain": 12,
+    "crossLanguage": 2,
+    "processor": 11
+  },
+  "crossLanguage": {
+    "abiVectors": 20,
+    "pdaVectors": 40,
+    "pdaFamilies": 5
+  },
+  "broaderReview": {
+    "passed": 940,
+    "skipped": 23,
+    "failed": 0,
+    "componentsPassed": 90,
+    "productUiTypecheck": "passed",
+    "marketingTypecheck": "passed",
+    "sdkParity": "passed",
+    "note": "Ran before final PDA-only test addition; final focused tests cover that addition."
+  },
+  "sbf": {
+    "exitCode": 0,
+    "unsafeStackDiagnostics": 0,
+    "compilerErrorDiagnostics": 0,
+    "bytes": 241832,
+    "sha256": "3335158a895ac7f483c9cbbcc4470e95e65098c54c7da1b7be4733b0594fea1a",
+    "format": "ELF64 little endian EM_BPF flags 3",
+    "runtimeVerified": false
+  },
+  "resources": {
+    "freeBytes": 151769325568,
+    "toolCacheBytes": 2313732096,
+    "buildBytes": 334790656,
+    "verificationLogBytes": 389120
+  },
+  "outputs": {
+    "phase1-js-test": {
+      "path": "artifacts/machine-market/phase1/outputs/phase1-js-test.txt",
+      "sha256": "59e03ed831e2d90f92b58159cbd90abef02498c436a3b728445d75b46c0810c5",
+      "sanitization": "absolute worktree path replaced with <WORKTREE>"
+    },
+    "phase1-rust-test": {
+      "path": "artifacts/machine-market/phase1/outputs/phase1-rust-test.txt",
+      "sha256": "88c59626d8865f665846e928b19058fab6e7993aae4cc4f20c55cf6d82cb8c29",
+      "sanitization": "absolute worktree path replaced with <WORKTREE>; trailing blank lines normalized"
+    },
+    "phase1-rust-sbf": {
+      "path": "artifacts/machine-market/phase1/outputs/phase1-rust-sbf.txt",
+      "sha256": "f3c4b3f74210d1e4fd31d0a2b5c318d585a6a460b48fea3b3006f13eaad2fce7",
+      "sanitization": "absolute worktree path replaced with <WORKTREE>"
+    },
+    "phase1-review": {
+      "path": "artifacts/machine-market/phase1/outputs/phase1-review.txt",
+      "sha256": "317d8cc65f78f23e1c2762b9a728220afc7801cc47d1d41ac8ba7c15189148a5",
+      "sanitization": "absolute worktree path replaced with <WORKTREE>"
+    }
+  },
+  "sourceSha256": {
+    "artifacts/machine-market/phase1/golden-vectors.json": "1670a4a2315a4f2522145ad88dcceca1cc2447825b31e1f566108d5a0e5bb995",
+    "artifacts/machine-market/phase1/pda-vectors.json": "79444b73961e8cd9c74aade6778f6822b8ff28aac2d7b2e7c48da9c66b60b308",
+    "packages/machine-market/native/codec.mjs": "29530e9be2b347b7f3ae801b5e784223159f8947c3230c6e0d2f4a1f367c3e17",
+    "packages/machine-market/native/domain.mjs": "e51019175186be47b66e49bc4823d93d7f86a2d4455a329c5b0b37a05b4a7704",
+    "packages/machine-market/native/golden.mjs": "fc95f7f615caa2a0409d326fefa559115fb7a26e633c8765c5d0c3089081e727",
+    "packages/machine-market/native/trading.mjs": "44dd114eae53eddbb0c89fe853d2b71f2df7d92d338d16545e80ce0a9591f608",
+    "programs/machine-market/Cargo.lock": "3936a0916964631c91f4e6046b50bd20683fbd02d38b5d08ca951a8c96984950",
+    "programs/machine-market/Cargo.toml": "a4e6dca96bfddc4a73ab0b0150c19fa00eb2e022400ca3af27924f8b8a694708",
+    "programs/machine-market/src/codec.rs": "c1c3e6883d6a87cbb855e634789233ce5d8675baa095b221e25d9720a0ab2fa4",
+    "programs/machine-market/src/domain.rs": "7d63a6ccfe9e017f97e3b0aecb8573053e8c3d9766982adad92e177d31d48874",
+    "programs/machine-market/src/error.rs": "83d3da1a0b5baefbe1a989db27778533f5d392f2fae3c26314356e0dd4ec48f4",
+    "programs/machine-market/src/instruction.rs": "ffb212a9a47b9257d72895f3758330e25ac450987b71ac83d8cddd20c13a35c5",
+    "programs/machine-market/src/lib.rs": "a94dd67d079ac685fe4d8ba715814bdc471253f33592a0714ee31184eff855fa",
+    "programs/machine-market/src/processor.rs": "b0b572eafca2b5065700280a9ee707d6672046779fc0a25004b1dbd7dc816d15",
+    "programs/machine-market/src/state.rs": "dcbb29a399d0ea1a5453fb21664966161e3e61a1c3ba396a44af2145909f8627",
+    "programs/machine-market/tests/common/mod.rs": "52b75a4aea1b01c0a7c561d5b6c1ada3f61f3a9dbe9e60910d8a6cca44eab91e",
+    "programs/machine-market/tests/domain.rs": "dd45ba06ef4e59a52788c5547fb34f88c5bcf6d8ae95ffc5c53f730b4b463acf",
+    "programs/machine-market/tests/golden.rs": "e2aaa06047b24cae9b3720afb21586bd3b9e7dafc9bc63c7694887e1c96f27fc",
+    "programs/machine-market/tests/processor.rs": "c6ea70033e1cf73f83e8220bca654df66c095b78b6c7269325bec2a5e8e5c40e",
+    "scripts/machine-market/phase1-rust.mjs": "17a7b5bd23aad3bfe6b3b2a1d45788ded73937f0b30d6aee8d87c8362caafed3",
+    "tests/machine-market/native-codec.test.mjs": "3bc50661c658c111a2972261fed64c24c914ea2d0dace6c8db32e37cc8293d60",
+    "tests/machine-market/native-domain.test.mjs": "321b8c0896b507b2878c8555ac6f2887aacfeab9a0ed877661796d6b8cf32cea",
+    "tests/machine-market/native-trading-fixtures.test.mjs": "bbd4fbeceb00745c425a40ed68430446ce1b019bd5e1c4ea78ac9c94835ac5b7",
+    "tests/machine-market/native-trading.test.mjs": "5bec839911f416ee9f7574f493d3a13fede3db1fcca47e55934a852f523ec772"
+  },
+  "stagedHygiene": {
+    "status": "passed",
+    "stagedFiles": 33,
+    "runtimeFiles": 500,
+    "vendorFiles": 71,
+    "findings": []
+  }
+}
