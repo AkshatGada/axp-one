@@ -1,0 +1,74 @@
+{
+  "schema": "axp.market.devnet.offline-implementation.v1",
+  "baseCommit": "d76f808",
+  "mode": "offline-implementation-only",
+  "tests": {
+    "passed": 179,
+    "failed": 0,
+    "skipped": 0,
+    "existingNativeChecks": 147,
+    "newDevnetChecks": 32,
+    "outputSha256": "477539661ae3e5728abd0bf43f98ab0b7e7b46015e5baf97f2769ef6f1b2ed38"
+  },
+  "fixtureAssertions": {
+    "basis": "Assertions in the passing full-size scripted fixture test; not SBF or Devnet execution",
+    "syntheticElfBytes": 241832,
+    "writes": 252,
+    "signedFixtureTransactions": 284,
+    "rentLamports": "1276985000",
+    "feesLamports": "1535000",
+    "fixtureCapitalLamports": "81000000",
+    "grossLamports": "60000",
+    "primaryLamports": "30000",
+    "completedCases": [
+      "D0",
+      "D1",
+      "D2"
+    ],
+    "fullDurableFencesBeforeSigner": true,
+    "newSignaturesOnReplay": 0
+  },
+  "liveActivity": {
+    "existingOperatingKeyLoads": 0,
+    "signatures": 0,
+    "simulations": 0,
+    "broadcasts": 0,
+    "deployments": 0,
+    "paidProviderCalls": 0,
+    "persistentExecutionKeysCreatedDuringOfflineTests": 0
+  },
+  "sourceHashes": {
+    "packages/machine-market/devnet/evidence.mjs": "e3d172a3f77c3c73293b8337428dca4b1a50a3079c841422fcb6e37b66c749af",
+    "packages/machine-market/devnet/journal.mjs": "9be86260e3bfff10c55116db221099ef07fec961c1da08b4624c77e5ed59d1cc",
+    "packages/machine-market/devnet/legacy.mjs": "3dd028858e9877dcbc2f67d965d397e7ab097b98e95a602414925245172347eb",
+    "packages/machine-market/devnet/manifest.mjs": "deeeb29fbc80b1bc80b252caec8864f87c6b7bd34f67f9a7693a24408f3eb7a3",
+    "packages/machine-market/devnet/plan.mjs": "bf91fe11927a4cea694a69b5a45198d2a633e5b16c7e2f6a475719368a5c3962",
+    "packages/machine-market/devnet/resources.mjs": "f384bde732eb9d1cf1ae3c622c3585060081cb251f03b668438eae2bd78ef129",
+    "packages/machine-market/devnet/rpc.mjs": "b0fcdbbd827099a9d8870cda55ee0a78cc753a6e58dcadc8d89a4384cd8afc02",
+    "packages/machine-market/devnet/runner.mjs": "1d7ec0bd0b47e075e7a6df0f09f99c5cb11a811bbd7b8ded52211ab86dded8ba",
+    "scripts/machine-market/devnet-runner.mjs": "a212083be68c3fed3544ba9f96dd81efa2d6e8ac03faf062a5c482e2f6a97a88",
+    "tests/machine-market/devnet.test.mjs": "dcf062dc57900a89c01783a3495ffe90cf4e816e14ca8558e6ec1a67fcaafbee",
+    "tests/machine-market/helpers/devnet-fixture.mjs": "7e5869c0538c9abc58576606d8f13f5b3a5898392f64587055c0c70475acfc59",
+    "tests/machine-market/helpers/devnet-fence-child.mjs": "2833bc10ca30dc38fbf78dd4b343d6ed983547bef97ad5311d4139a7280a01e4"
+  },
+  "preservedEvidence": {
+    "docs/machine-market/PHASE2_NATIVE_ACCEPTANCE_RESULT.md": "dcd3e3761a760b006e281b52a1d223119de03b3e4d0501ea2f0042a9b7b0a19b",
+    "artifacts/machine-market/phase2/native-acceptance-after-order-repair.json": "7988f0ba689ca7422dc8e4fe8515b9ae388673070aade2947510f3f4f81c188c",
+    "artifacts/machine-market/phase2/order-repair-readonly-recheck.json": "946449c66a544b47ccc0b8f8babe9e443ef0ad28dd14db5869a970afa7779f5b",
+    "artifacts/machine-market/phase2/order-repair-final-verification.json": "104e1d8120b3efc9d7cc755b86f7d81853081fc7012a9b0c12db149a6995b714",
+    "docs/machine-market/DEVNET_REVIEW_PACKET.md": "edc0556566cfc29789990c033076c05794e498e8145a4fefdc8026774bf61c9b"
+  },
+  "remainingDemoBlockers": [
+    "secure scoped host-only D7 signer binding and live launcher are absent",
+    "execution public keys/nonce/deadlines must be prepared and sealed",
+    "financial ROOT GO/action-time gate required"
+  ],
+  "deferredProductionWork": [
+    "independent RPC provider",
+    "exhaustive recovery drills",
+    "additional adversarial scenarios",
+    "production HTTP/UI integration",
+    "new controlled-bank timing harness",
+    "load/performance work"
+  ]
+}
