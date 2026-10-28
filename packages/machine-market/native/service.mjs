@@ -19,7 +19,7 @@ export function createNativeService({run,rpc,store,signers,operatorToken,reposit
  function orderProjection(order){
   const match=order.matchId?store.getMatch(order.matchId):null;
   const reserved=order.state==='Open'?{ownerType:'order',ownerId:order.id,amount:order.side===0?order.limit:'0',unit:order.side===1?order.exactUnit:null}:order.state==='Reserved'&&match?{ownerType:'match',ownerId:match.id,amount:match.gross,unit:match.unit}:null;
-  return {orderId:order.id,state:order.state,version:order.version,sequence:order.sequence,actor:order.actor,kind:order.kind,side:order.side??null,series:order.series,limit:order.limit??order.amount,matchId:order.matchId??null,operationId:match?.operationId??null,reservation:reserved,...(match?{pricingProvenance:match.pricingProvenance}:{})};
+  return {orderId:order.id,state:order.state,version:order.version,sequence:order.sequence,actor:order.actor,kind:order.kind,side:order.side??null,lane:order.lane??null,refundFace:order.refundFace??null,exactUnit:order.exactUnit??null,validUntilSlot:order.validUntilSlot??null,series:order.series,limit:order.limit??order.amount,matchId:order.matchId??null,operationId:match?.operationId??null,reservation:reserved,...(match?{pricingProvenance:match.pricingProvenance}:{})};
  }
  function operationProjection(op){let evidence=null;try{evidence=typeof outbox.getEvidence==='function'?outbox.getEvidence(op.id):null;}catch(error){if(error.code!=='INVALID_INPUT')throw error;}return {...safeOperation(op),evidence:evidence?.evidence??null,observedSlot:evidence?.contextSlot??null,nativeEvidence:evidence?.status==='success',operatingFeesKnown:evidence?.operatingFeesKnown===true};}
  async function walletContext(key){
@@ -99,6 +99,7 @@ export function createNativeService({run,rpc,store,signers,operatorToken,reposit
   getOrder(id){hex32(id);return orderProjection(store.getOrder(id));},
   getOperation(id){hex32(id);return operationProjection(maybeNative(id)??store.getOperation(id));},
   getUnit(address){publicKeyBytes(address);return store.getUnit(address);},
+  getMatch(id){hex32(id);const m=store.getMatch(id),op=service.getOperation(m.operationId);return {id:m.id,state:m.state,unit:m.unit,series:m.series,payer:m.payer,beneficiary:m.beneficiary,seller:m.seller,buyOrderId:m.buyOrderId,sellOrderId:m.sellOrderId,gross:m.gross,fee:m.fee,fundingKind:m.fundingKind,originalPrimaryRefundFace:m.refundFace,pricingProvenance:m.pricingProvenance,expectedSecondaryProceeds:m.fundingKind===1?(BigInt(m.gross)-BigInt(m.fee)).toString():'0',immediateSecondaryProceeds:m.fundingKind===1&&m.state==='SecondarySettled'?(BigInt(m.gross)-BigInt(m.fee)).toString():'0',operationId:m.operationId,signature:op.signature,nativeEvidence:op.nativeEvidence,operatingFeesKnown:op.operatingFeesKnown,evidence:op.evidence};},
   book(series){publicKeyBytes(series);const all=actors.flatMap(actor=>store.projectActor(actor).orders);const orders=[...new Map(all.filter(o=>o.series===series&&o.state==='Open').map(o=>[o.id,o])).values()];orders.sort((a,b)=>a.side-b.side||(a.limit===b.limit?a.sequence-b.sequence:a.side===0?(BigInt(a.limit)>BigInt(b.limit)?-1:1):(BigInt(a.limit)<BigInt(b.limit)?-1:1)));return {mode:'local-solana-validator',genesis:run.genesis,series,orders:orders.map(orderProjection)};},
   async orders(value){
    envelope(value);const auth=verifyAuthorization({...value,domain,allowedActors:actors,kind:'BookOrder'}),identity=auth.value.actor+':'+auth.value.nonce,existing=orderAdmissions.get(identity);
@@ -141,7 +142,7 @@ export function createTradingHandler({service,origin}){
   if(req.method==='GET'){
    if(route==='/health'&&!url.search)return json(res,200,service.health());
    if(route==='/book'){if([...url.searchParams.keys()].join(',')!=='series')reject('INVALID_INPUT');return json(res,200,service.book(url.searchParams.get('series')));}
-   if(url.search)reject('INVALID_INPUT');const match=/^\/(orders|operations|units)\/([-a-zA-Z0-9]+)$/.exec(route);if(!match)reject('INVALID_INPUT');return json(res,200,service[{orders:'getOrder',operations:'getOperation',units:'getUnit'}[match[1]]](match[2]));
+   if(url.search)reject('INVALID_INPUT');const match=/^\/(orders|operations|units|matches)\/([-a-zA-Z0-9]+)$/.exec(route);if(!match)reject('INVALID_INPUT');return json(res,200,service[{orders:'getOrder',operations:'getOperation',units:'getUnit',matches:'getMatch'}[match[1]]](match[2]));
   }
   if(url.search)reject('INVALID_INPUT');const body=await readBody(req);
   const operations=/^\/operations\/([0-9a-f]{64})\/(reconcile|resend)$/.exec(route);
