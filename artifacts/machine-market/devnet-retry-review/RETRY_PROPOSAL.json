@@ -1,0 +1,116 @@
+{
+  "schema": "axp.market.devnet.retry-review.v1",
+  "status": "local-review-only-no-new-execution-authority",
+  "priorTerminalCommit": "f764727",
+  "priorRunId": "devnet-mvp-29fa8ffe-2206-4308-a29a-6547103eb962",
+  "proposedManifest": {
+    "schema": "axp.market.devnet.run.v1",
+    "runId": "devnet-retry-review-20261028",
+    "provenance": "reviewed-devnet-run",
+    "endpoint": "https://api.devnet.solana.com",
+    "genesis": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+    "loader": "BPFLoaderUpgradeab1e11111111111111111111111",
+    "elf": {
+      "bytes": 241832,
+      "sha256": "3335158a895ac7f483c9cbbcc4470e95e65098c54c7da1b7be4733b0594fea1a"
+    },
+    "identities": {
+      "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+      "issuer": "H5JrwMmdspXT8NhAbFyxbaZnge4kMmgWUycqd8qnco6D",
+      "buyerA": "9NoaXoxFWkNYsYAJh6mBMgpuL4N3VemYJFUNCz1CoRP9",
+      "buyerB": "ETH5LiidF3vg83yDpurqGZwaeYhieUsMUD1MqFRkRYZr",
+      "sponsor": "BNcD12m1c5y6KsT69fw847xqrWQDPjbBYd9mcrJtfXR",
+      "collector": "6ZdWEkm8zdZuC5aTjqFVMBakVAbySNu48nJXqYxq5v9s",
+      "program": "13pUf2FAc5db74eBie9pPhikg891RGTRZpwYABAQz2fz",
+      "buffer": "EUsYCitWzDsVA57oATGnxRrjN6y5QApM4EY4aouDkwcd"
+    },
+    "marketNonce": "d1880ad227280219089d234f37ec1a3cf795d200c99dcd1baaa6cca1598f22dc",
+    "seriesId": "27fc704a59b78f9251d2d79a65f162087df13dd7018f1251209c72a572de4370",
+    "useBySlot": null,
+    "readValidUntilSlot": null,
+    "source": {
+      "resourceHash": "723bd6e3c9307cb1bd17638110823000e92b88476f97ae011533de4d523f1c7a",
+      "versionHash": "66e8103a4e3673cd562db7402d3bc0616904cbde8704e14daf1a7d9d736b9d3a",
+      "contentBytes": 35
+    },
+    "authorization": {
+      "allocationLamports": "1400000000",
+      "allocationApproved": true,
+      "financialRootGo": false,
+      "keyPreparationPending": false,
+      "priorFeesLamports": "875000"
+    },
+    "deadlinePolicy": "after-deployment-v1"
+  },
+  "reuseExistingSevenKeypairs": true,
+  "newKeypairs": 0,
+  "oldPrivateJournalMustRemainUnchanged": true,
+  "freshSeparateJournalRequired": true,
+  "capacity": {
+    "priorAttempts": 178,
+    "priorWrites": 176,
+    "originalAttemptLimit": 300,
+    "originalWriteLimit": 256,
+    "oldAttemptsRemaining": 122,
+    "oldWritesRemaining": 80,
+    "proposedAdditionalAttemptLimit": 300,
+    "proposedAdditionalWriteLimit": 256,
+    "proposedCumulativeAttemptLimit": 478,
+    "proposedCumulativeWriteLimit": 432,
+    "expectedNewNativeTransactions": 284,
+    "expectedCumulativeAttemptSlots": 462,
+    "expectedNewWrites": 252,
+    "expectedCumulativeWriteSlots": 428,
+    "authorizationLimit": 64,
+    "changeApproved": false,
+    "reviewStatus": "approval-pending-live-retry-closed"
+  },
+  "monetary": {
+    "asset": "DEVNET_SOL_LAMPORTS",
+    "aggregateAllocationLamports": "1400000000",
+    "priorNetFeeSpendLamports": "875000",
+    "priorRetainedCollateralLamports": "0",
+    "priorRefundedCollateralLamports": "1229385400",
+    "remainingAggregateAllocationLamports": "1399125000",
+    "aggregateFeeLimitLamports": "15000000",
+    "remainingFeeAllowanceLamports": "14125000",
+    "newRentCeilingLamports": "1300000000",
+    "newFixtureCapitalCeilingLamports": "81000000",
+    "grossTradeCeilingLamports": "60000",
+    "primaryFundingCeilingLamports": "30000",
+    "perTransactionFeeCeilingLamports": "50000",
+    "walletReserveLamportsAtPriorQuote": "650240",
+    "worstListedCombinedReservationLamports": "1396650240",
+    "headroomAtPriorWalletReserveQuoteLamports": "3349760",
+    "grossHistoricalAndProposedRentCeilingLamports": "2529385400",
+    "newMoneyRequestedAboveOriginalAggregateCap": false,
+    "priorSpendMustBeSeededIntoNextJournal": true,
+    "implementationSeedsPriorFeesBeforeSigning": true
+  },
+  "deadlineEvidence": {
+    "firstFinalizedWriteSlot": "515432041",
+    "lastFinalizedWriteSlot": "515436002",
+    "finalizedWrites": 172,
+    "elapsedSlots": 3961,
+    "projectedFullUploadSlotsAtObservedPace": 5838,
+    "oldWindowSlots": 6000,
+    "newPolicy": "after-deployment-v1",
+    "applicationUseByOffsetSlots": 6000,
+    "applicationReadValidOffsetSlots": 10000,
+    "sealAfterConfirmedDeployment": true,
+    "extendFundedRights": false
+  },
+  "priorEvidenceHashes": {
+    "artifacts/machine-market/devnet-implementation/live-abort-result.json": "85eb4a6c8adbf6e8ea7fc2629e32d77ac0df17c5646135e8a623ee8465df74f8",
+    "artifacts/machine-market/devnet-implementation/live-abort-verification.json": "6cb20ee46dde92360cf9edfe44aee4928d1eaf362e9d728aa792f136c6676acb",
+    "artifacts/machine-market/devnet-implementation/execution-manifest.sealed.json": "894d41d674ec58bb6ee1d973180316db97b82fd96121872343a3f8c8b13b31a4",
+    "artifacts/machine-market/devnet-implementation/expired-unsent-recovery.json": "98a3df0c588f5037a8cd48f0ec3aef870608fe6dcb1405cb4fb2bc7c5f41815c"
+  },
+  "remainingPreExecutionWork": [
+    "Review and explicitly accept cumulative attempt/write capacity adjustment; original caps are unchanged by this local patch",
+    "Bind new reviewed public manifest and separate journal to the seven existing key files without regenerating, copying or overwriting keys/index/original journal",
+    "Verify new journal reports carried prior fees 875000 before any signature; source now requires this on live deferred manifests and includes it in fee/peak limits, without charging the new payer baseline twice",
+    "Refresh read-only genesis/ELF-loader compatibility, fee/rent/available balance and resources against remaining aggregate allowance",
+    "Execute no new run until the retry scope and capacity are reviewed"
+  ]
+}

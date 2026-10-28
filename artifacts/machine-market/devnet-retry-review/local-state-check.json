@@ -1,0 +1,17 @@
+{
+  "resources": {
+    "freeBytes": 149626806272,
+    "totalTaskBytes": 7978180608,
+    "appBytes": 3284992
+  },
+  "originalWriterOwners": 0,
+  "originalActionStates": [
+    {
+      "state": "FinalizedSuccess",
+      "n": 174
+    }
+  ],
+  "newLiveSignatures": 0,
+  "newBroadcasts": 0,
+  "newDeposits": 0
+}
