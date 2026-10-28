@@ -1,0 +1,33 @@
+(node:11206) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ native CLI recorded inspection is offline, provenance-labeled and shows verified original-face economics (5.433334ms)
+✔ native CLI rejects changed recorded proof instead of relabeling a fixture as Devnet (2.999875ms)
+✔ native CLI live inspection uses only fixed GET routes and never supplies an operator token (16.396084ms)
+✔ native CLI submits an existing signed contract only through explicit submit (24.120292ms)
+✖ native CLI does not accept public RPC origins or guess operator credentials (0.194291ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 116.192209
+
+✖ failing tests:
+
+test at tests/machine-market/native-cli.test.mjs:9:1
+✖ native CLI does not accept public RPC origins or guess operator credentials (0.194291ms)
+  Error: INVALID_INPUT
+      at reject (file:///Users/akshat/agentic-dsp/.worktrees/axp-machine-market/packages/machine-market/native/codec.mjs:11:34)
+      at strict (file:///Users/akshat/agentic-dsp/.worktrees/axp-machine-market/packages/machine-market/native/codec.mjs:12:198)
+      at envelope (file:///Users/akshat/agentic-dsp/.worktrees/axp-machine-market/packages/machine-market/native/client.mjs:6:22)
+      at Object.submit (file:///Users/akshat/agentic-dsp/.worktrees/axp-machine-market/packages/machine-market/native/client.mjs:18:202)
+      at TestContext.<anonymous> (file:///Users/akshat/agentic-dsp/.worktrees/axp-machine-market/tests/machine-market/native-cli.test.mjs:9:420)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1116:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:786:7) {
+    code: 'INVALID_INPUT',
+    customCode: 1,
+    status: 400
+  }

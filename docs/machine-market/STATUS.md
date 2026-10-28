@@ -1,3 +1,33 @@
+# Current MVP handoff — native CLI and completed Devnet evidence
+
+28 October 2026. The compact native entrypoint is now `npm run demo:market` for
+offline **recorded Devnet** inspection, and `npm run market -- live …/submit …` for
+the existing `/api/trading` contracts. It does not use the historical `/market/`
+simulator. [Runbook](MVP_RUNBOOK.md) · [Acceptance matrix](MVP_ACCEPTANCE.md).
+
+Devnet deployment and D0/D1/D2 completed at `0faa13e`: 458 finalized on-chain
+transactions across runs, 463/478 attempt slots and 429/432 writes; total net spend
+1.279395 test SOL including earlier fees and retained rent. Five test wallets were
+swept, principal escrow and unresolved outcomes were zero. The run is terminal;
+these are retained execution/verification records, not permission for another run.
+
+The finishing phase adds a native CLI, read-only Match/lane/claim-face projections,
+verified recorded-receipt Explorer links and one sponsored-success JS host fixture.
+The fixture keeps independent source bytes unchanged, delivers a separate Sponsored
+packet and verifies expected payout plus restart/response replay. It does not execute
+the Rust program or a new validator/Devnet transaction. Six localhost HTTP GETs add
+zero native sends/signatures; all new Solana RPC is scripted.
+
+Local native acceptance remains 38/40, with the two exact-slot validator probes
+unproved. Existing deterministic Rust host tests are accepted as narrower rule
+evidence; no new timing campaign or broad audit was run. Private/frozen state and
+unrelated marketing/prototype work are preserved. No push, new funded public
+transaction, credentials or paid call occurred. This phase stops for root review.
+
+---
+
+# Historical checkpoints — preserved, not current pending status
+
 ## Current completed local execution — financial drain verified, acceptance partial
 
 26 October 2026. Repair/continuation execution finished on the original run. There

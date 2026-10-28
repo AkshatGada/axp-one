@@ -1,0 +1,87 @@
+
+> axp-agentic-exchange@0.1.0 market
+> node scripts/machine-market/native-cli.mjs evidence --case D2 --json
+
+{
+  "mode": "recorded-solana-devnet",
+  "liveService": false,
+  "evidenceCommit": "0faa13e",
+  "recordedAt": "2026-10-28T05:05:25.402Z",
+  "providerEvidence": "same pinned public provider; not independent-provider proof",
+  "note": "Saved execution evidence. This command makes no network request, signs nothing and submits nothing. Devnet used declared case prices; live book matching is inspected through /api/trading.",
+  "program": "13pUf2FAc5db74eBie9pPhikg891RGTRZpwYABAQz2fz",
+  "programExplorer": "https://explorer.solana.com/address/13pUf2FAc5db74eBie9pPhikg891RGTRZpwYABAQz2fz?cluster=devnet",
+  "market": "4bx7JvrWUHjw2jaG7AzdbgLb6pU6y3EtrUMQGZGRozpi",
+  "book": {
+    "available": false,
+    "reason": "The fixed Devnet driver did not run the off-chain order book; do not infer maker-price matching from these case receipts."
+  },
+  "cases": [
+    {
+      "case": "D2",
+      "unit": "9vuCGbz3atoLiMj8V6jebpwtfCFuS59ASLbw4LTZTKHE",
+      "unitExplorer": "https://explorer.solana.com/address/9vuCGbz3atoLiMj8V6jebpwtfCFuS59ASLbw4LTZTKHE?cluster=devnet",
+      "owner": "9NoaXoxFWkNYsYAJh6mBMgpuL4N3VemYJFUNCz1CoRP9",
+      "cursor": "3",
+      "state": "Refunded",
+      "sponsored": true,
+      "originalPrimaryRefundFace": "10000",
+      "remainingPrincipalEscrowLamports": "0",
+      "trades": [
+        {
+          "lane": "sponsored-primary",
+          "pricingProvenance": "declared-devnet-case-price",
+          "bookSelectionProvenByThisRun": false,
+          "matchId": "e604a3450c83f9cc17b4a01982a03f6ad04ee3879c60d6ac52063e372189e487",
+          "matchAddress": "2pcJSMa2c2rGqpsNxdaXyHd2w3eoZEUTDJwNXBJwga4X",
+          "grossLamports": "10000",
+          "originalPrimaryRefundFace": "10000",
+          "payer": "BNcD12m1c5y6KsT69fw847xqrWQDPjbBYd9mcrJtfXR",
+          "buyer": "9NoaXoxFWkNYsYAJh6mBMgpuL4N3VemYJFUNCz1CoRP9",
+          "seller": "H5JrwMmdspXT8NhAbFyxbaZnge4kMmgWUycqd8qnco6D",
+          "ownerAfterTrade": "9NoaXoxFWkNYsYAJh6mBMgpuL4N3VemYJFUNCz1CoRP9",
+          "immediateSellerProceedsLamports": "0",
+          "immediateCollectorFeeLamports": "0",
+          "signature": "2WEBfP3A4CACNqH1S7bPfLLGEXeiyepiNMxGhMQeGsj8ohxt95TbsVUMipNaZVTd3JgDnk6NuzTuDqeL58UUmPWr",
+          "slot": "515942539",
+          "explorer": "https://explorer.solana.com/tx/2WEBfP3A4CACNqH1S7bPfLLGEXeiyepiNMxGhMQeGsj8ohxt95TbsVUMipNaZVTd3JgDnk6NuzTuDqeL58UUmPWr?cluster=devnet"
+        }
+      ],
+      "terminalReceipt": {
+        "state": "Refunded",
+        "recipient": "BNcD12m1c5y6KsT69fw847xqrWQDPjbBYd9mcrJtfXR",
+        "recipientLamports": "10000",
+        "collectorLamports": "0",
+        "signature": "Ek1g2wLkLuTpmb41r1aT4tuQ8iWQBkZ2i8sMJsXbcXA7NhG61umfvgW2MLWHbJqk6pR1vdupEmnjSjYSTK1gLgu",
+        "slot": "515942647",
+        "responseHash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "explorer": "https://explorer.solana.com/tx/Ek1g2wLkLuTpmb41r1aT4tuQ8iWQBkZ2i8sMJsXbcXA7NhG61umfvgW2MLWHbJqk6pR1vdupEmnjSjYSTK1gLgu?cluster=devnet"
+      }
+    }
+  ],
+  "financial": {
+    "asset": "DEVNET_SOL_LAMPORTS",
+    "priorFeeSpendLamports": "875000",
+    "retryFeesLamports": "1535000",
+    "aggregateFeesLamports": "2410000",
+    "retainedRentLamports": "1276985000",
+    "initialRetryPayerLamports": "4378685920",
+    "finalPayerLamports": "3100165920",
+    "aggregateNetSpendLamports": "1279395000",
+    "allocationLamports": "1400000000",
+    "remainingAllocationLamports": "120605000",
+    "remainingPrincipalEscrowLamports": "0",
+    "fixtureWalletsSwept": true,
+    "bufferRecycled": true,
+    "sponsorship": {
+      "budget": "10000",
+      "consumedGross": "10000",
+      "reservedGross": "0",
+      "refundedGross": "10000",
+      "availableGross": "0"
+    }
+  },
+  "cumulativeAttemptSlots": 463,
+  "cumulativeWriteSlots": 429,
+  "sponsoredSuccessEvidence": "not exercised in this Devnet run; D2 was the declared sponsor-refund case"
+}

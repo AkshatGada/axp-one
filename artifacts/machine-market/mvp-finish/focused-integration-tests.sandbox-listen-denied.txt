@@ -1,0 +1,41 @@
+
+> axp-agentic-exchange@0.1.0 test:market:mvp
+> node --test tests/machine-market/native-cli.test.mjs tests/machine-market/phase2-transport-integration.test.mjs
+
+(node:11777) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ native CLI recorded inspection is offline, provenance-labeled and shows verified original-face economics (5.294917ms)
+✔ native CLI rejects changed recorded proof instead of relabeling a fixture as Devnet (2.891917ms)
+✔ native CLI live inspection uses only fixed GET routes and never supplies an operator token (17.345125ms)
+✔ native CLI submits an existing signed contract only through explicit submit (31.85225ms)
+✔ native CLI does not accept public RPC origins or guess operator credentials (0.17875ms)
+(node:11778) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ native JS service scenario=service using scripted RPC and restart/replay guards (1228.543416ms)
+✔ native JS service scenario=direct using scripted RPC and restart/replay guards (1143.54425ms)
+✔ native JS service scenario=failure using scripted RPC and restart/replay guards (1200.051875ms)
+✔ native JS service scenario=finalize-response-loss using scripted RPC and restart/replay guards (1283.877208ms)
+✖ native JS service scenario=sponsored-success using scripted RPC and restart/replay guards (1231.022292ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6171.07825
+
+✖ failing tests:
+
+test at tests/machine-market/phase2-transport-integration.test.mjs:23:99
+✖ native JS service scenario=sponsored-success using scripted RPC and restart/replay guards (1231.022292ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }

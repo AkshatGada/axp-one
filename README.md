@@ -8,6 +8,16 @@ labelled **Sponsored** card below the app's independent answer.
 **[Open AXP](https://axp.one) · [Sign in](https://axp.one/account/) ·
 [Reviewer guide](docs/REVIEWER_GUIDE.md) · [Publisher SDK](packages/publisher-sdk/README.md)**
 
+## Machine-access trading MVP
+
+The isolated native-market MVP has a compact CLI and recorded Solana Devnet proof:
+`npm run demo:market` inspects the completed run without network access, signing or
+funding. `npm run market -- --help` lists the client for the existing `/api/trading`
+service. See the [MVP runbook](docs/machine-market/MVP_RUNBOOK.md) and
+[acceptance matrix](docs/machine-market/MVP_ACCEPTANCE.md). Recorded Devnet evidence,
+live service projections and the inherited synthetic `/market/` prototype are
+explicitly separate. The existing advertising product below remains unchanged.
+
 ## Explore the product
 
 | Entry point | Purpose |

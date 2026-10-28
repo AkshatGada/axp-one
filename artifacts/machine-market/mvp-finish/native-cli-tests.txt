@@ -1,0 +1,15 @@
+(node:11331) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ native CLI recorded inspection is offline, provenance-labeled and shows verified original-face economics (5.333167ms)
+✔ native CLI rejects changed recorded proof instead of relabeling a fixture as Devnet (3.034542ms)
+✔ native CLI live inspection uses only fixed GET routes and never supplies an operator token (16.988292ms)
+✔ native CLI submits an existing signed contract only through explicit submit (23.412875ms)
+✔ native CLI does not accept public RPC origins or guess operator credentials (0.1495ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 115.889917
