@@ -1,0 +1,44 @@
+{
+  "schema": "axp.market.devnet.run.v1",
+  "runId": "devnet-retry-review-20261028",
+  "provenance": "reviewed-devnet-run",
+  "endpoint": "https://api.devnet.solana.com",
+  "genesis": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+  "loader": "BPFLoaderUpgradeab1e11111111111111111111111",
+  "elf": {
+    "bytes": 241832,
+    "sha256": "3335158a895ac7f483c9cbbcc4470e95e65098c54c7da1b7be4733b0594fea1a"
+  },
+  "identities": {
+    "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+    "issuer": "H5JrwMmdspXT8NhAbFyxbaZnge4kMmgWUycqd8qnco6D",
+    "buyerA": "9NoaXoxFWkNYsYAJh6mBMgpuL4N3VemYJFUNCz1CoRP9",
+    "buyerB": "ETH5LiidF3vg83yDpurqGZwaeYhieUsMUD1MqFRkRYZr",
+    "sponsor": "BNcD12m1c5y6KsT69fw847xqrWQDPjbBYd9mcrJtfXR",
+    "collector": "6ZdWEkm8zdZuC5aTjqFVMBakVAbySNu48nJXqYxq5v9s",
+    "program": "13pUf2FAc5db74eBie9pPhikg891RGTRZpwYABAQz2fz",
+    "buffer": "EUsYCitWzDsVA57oATGnxRrjN6y5QApM4EY4aouDkwcd"
+  },
+  "marketNonce": "d1880ad227280219089d234f37ec1a3cf795d200c99dcd1baaa6cca1598f22dc",
+  "seriesId": "27fc704a59b78f9251d2d79a65f162087df13dd7018f1251209c72a572de4370",
+  "useBySlot": null,
+  "readValidUntilSlot": null,
+  "source": {
+    "resourceHash": "723bd6e3c9307cb1bd17638110823000e92b88476f97ae011533de4d523f1c7a",
+    "versionHash": "66e8103a4e3673cd562db7402d3bc0616904cbde8704e14daf1a7d9d736b9d3a",
+    "contentBytes": 35
+  },
+  "authorization": {
+    "allocationLamports": "1400000000",
+    "allocationApproved": true,
+    "financialRootGo": true,
+    "keyPreparationPending": false,
+    "priorFeesLamports": "875000",
+    "priorAttempts": 178,
+    "priorWrites": 176,
+    "cumulativeAttemptLimit": 478,
+    "cumulativeWriteLimit": 432,
+    "rootGoReference": "user-2026-10-28-approved-retry-478-432-total-1400000000"
+  },
+  "deadlinePolicy": "after-deployment-v1"
+}

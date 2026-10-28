@@ -1,0 +1,46 @@
+{
+  "schema": "axp.market.devnet.completed-retry-record.v1",
+  "status": "completed",
+  "completedCases": [
+    "D0",
+    "D1",
+    "D2"
+  ],
+  "sourceCommits": [
+    "3c26614",
+    "32bb759"
+  ],
+  "cumulativeAttemptSlots": 463,
+  "cumulativeWriteSlots": 429,
+  "finalizedTransactionsAcrossRuns": 458,
+  "aggregateNetSpendLamports": "1279395000",
+  "aggregateFeesLamports": "2410000",
+  "retainedRentLamports": "1276985000",
+  "conservativePeakLamports": "1361045240",
+  "allocationLamports": "1400000000",
+  "unresolved": 0,
+  "activeWriterOwners": 0,
+  "newPersistentKeys": 0,
+  "existingKeyFiles": 7,
+  "keyFileModes": [
+    "600"
+  ],
+  "originalJournalUnchanged": true,
+  "artifactHashes": {
+    "execution-manifest.sealed.json": "91fa60663b21344d41e56c0236504e6334f8a0261568dea46bf657e873ffbbb9",
+    "application-deadlines.sealed.json": "17c213dac3624824d0417fcbb49b3425c698df7d499fa91bb65b32b4f4c29390",
+    "expired-write-235-recovery.json": "ee9c5629f648db60bf2abcf4b90493d2ca7f25ec1d7aefa8ecf962633eeca817",
+    "live-result.json": "68ea8689f38df4262deff26d3b509a9cc94e67734f69e30e5befbeb8e042f195",
+    "live-verification.json": "aaaf12d77c3feaf61c4ddc7f0f14f5d559b942d62f7020d91fd3a10e30a7908d"
+  },
+  "verifierSourceSha256": "cc7155004ace39f84afb64aaaaf923caceaf6985f99a8ec48add0f8c88ce69ef",
+  "providerEvidence": "same pinned public provider; not independent-provider proof",
+  "newPaidProviderCalls": 0,
+  "mainnetTransactions": 0,
+  "githubPushes": 0,
+  "resources": {
+    "freeBytes": 147893862400,
+    "totalTaskBytes": 7982485504,
+    "appBytes": 4304896
+  }
+}

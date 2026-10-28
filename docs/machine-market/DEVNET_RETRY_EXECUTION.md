@@ -53,7 +53,7 @@ signature is reconciled; no automatic fresh signature substitutes for uncertaint
 No mainnet, paid provider call, hosted change, extra keypair, GitHub push, additional
 run or capacity increase beyond this approval is included.
 
-Actual results will be appended after execution. Public artifacts are in
+**Completed: deployment, D0/D1/D2 and cleanup all passed.** See the verified result below. Public artifacts are in
 `artifacts/machine-market/devnet-retry-run/`; ignored private state stays local.
 
 ## Preserved expired write during upload
@@ -74,3 +74,89 @@ proof. A successful proof archives the complete original attempt and observation
 with zero actual fee before a fresh blockhash can be signed for that offset. The old
 attempt and write slot remain in cumulative counts. No program, buffer, funding
 cycle, key or cap is reset. Actual recovery proof is recorded separately if it passes.
+
+## Verified completed result
+
+The retry completed 284 on-chain transactions: 280 successes and the four exact
+expected rejection probes (Custom 2/2/2/6). All 252 upload chunks finalized, then
+the exact reviewed program deployed at slot 515941548 with signature
+`3cVenmit7R4eauGLjti9X5q2m6eB516e81JMKRNE61T5kjG7chDspBqzgGUvp2Zwi47961RE35P4dw52FcvUMvNV`.
+Program: `13pUf2FAc5db74eBie9pPhikg891RGTRZpwYABAQz2fz`. ProgramData:
+`8AiVc3Lta4BY8K6eBopb7j9wMsN6uc43Q3w2UTEfTCAE`; authority remains the approved D7
+payer. The ELF hash is unchanged and read-only inspection verified exact bytes with
+zero padding. No old deployed program was modified.
+
+Application deadlines sealed at finalized slot 515941559, after deployment: useBy
+515947559 and read-valid 515951559. Upload and its recovery consumed no application
+window. The immutable seal persisted in the same journal and public sidecar.
+
+| Case | Actual result |
+| --- | --- |
+| D0 | Primary 10,000 lamports, resale 15,000; native delivery finalized; Unit Consumed/cursor 4, primary Paid. Current-owner exact response replay and old-owner rejection assertions passed. |
+| D1 | Same purchase/resale, then source-failure refund; Unit Refunded/cursor 4 and original 10,000 primary refunded to current buyer B. |
+| D2 | Sponsor paid 10,000 for A with disclosure/consent and the declared negative assessment; native sponsored flag 1, no resale, source-failure refund to sponsor, Unit Refunded/cursor 3. |
+
+Five Funds record 60,000 gross lamports and 30,000 primary lamports. Final native
+Market counts are one Series, three Units and five funded matches. Each primary
+account retains only its 3,794,760-lamport rent reserve: zero principal escrow. D2
+consumed allowance is 10,000, refund 10,000 and available allowance zero; refund did
+not replenish its campaign budget. D2 does not claim successful sponsored-body delivery.
+
+All five test wallets were swept to zero. The upload buffer was recycled into the
+new ProgramData, not funded again. No additional keypair was created. The original
+journal hash remains unchanged, and the existing wallet integrity checks passed.
+
+| Aggregate accounting across original run and retry | Actual | Approved ceiling |
+| --- | ---: | ---: |
+| Native attempt slots, including preserved non-executed attempts | 463 | 478 |
+| Loader write slots, including expired attempts | 429 | 432 |
+| Finalized on-chain transactions | 458: original 174 + retry 284 | Slots counted separately |
+| W2 authorizations in retry | 16 | 64 |
+| Prior fees | 0.000875 test SOL | Included in total |
+| Retry fees | 0.001535 test SOL | Included in total |
+| Aggregate fees | 0.002410 test SOL | 0.015 |
+| Retained program/application rent | 1.276985 test SOL | 1.30 new rent |
+| **Aggregate net spend including prior fees** | **1.279395 test SOL** | **1.40** |
+| Conservative reservation peak, including fixture capital and wallet reserve | 1.36104524 test SOL | 1.40 |
+| Remaining principal escrow | 0 | 0 at completion |
+| Unresolved native/W2 outcomes and active writer owners | 0 / 0 / 0 | 0 at completion |
+
+The original payer balance of 4,379,560,920 lamports fell to 3,100,165,920: the
+1,279,395,000-lamport difference exactly equals aggregate fees plus retained rent.
+Prior fees count once. The remaining allocation headroom is 120,605,000 lamports
+(0.120605 test SOL); this completed run does not automatically start another run.
+
+Write 235 recovery passed at distinct finalized contexts 515940919/515940929. Both
+showed expected payer balance 3,148,115,520, absent original transaction/status,
+untouched target bytes and all known chunks intact. Exact original transaction
+bytes/send intent and proof were archived before that offset was re-signed. The
+old attempt still counts and its signature remained absent at final verification.
+It incurred zero actual fee; no counter or budget was reset.
+
+The saved result and fresh read-only verification are:
+
+- `artifacts/machine-market/devnet-retry-run/live-result.json`
+- `artifacts/machine-market/devnet-retry-run/live-verification.json`
+- `artifacts/machine-market/devnet-retry-run/application-deadlines.sealed.json`
+- `artifacts/machine-market/devnet-retry-run/expired-write-235-recovery.json`
+
+Read-only verification recompiled and cryptographically verified every retry signed
+transaction, including the archived expired write; refreshed all 458 signatures'
+finality/expected errors; inspected program, market and terminal accounts; confirmed
+zero fixture-wallet/primary principal balances; and reproduced payer conservation.
+This uses the same pinned public provider and is not independent-provider proof.
+No fixture count is presented as chain execution or production capacity. The old
+local exact-slot/history gaps remain unchanged.
+
+To repeat the read-only check without modifying an existing proof:
+
+```sh
+node scripts/machine-market/devnet-retry-verify.mjs
+```
+
+Optional `--output NEW_FILE.json` saves a new proof and refuses to overwrite an
+existing file. The verifier opens journals read-only and never loads private keys,
+signs or submits transactions. Sources/keys/private journals remain local; no
+GitHub push, mainnet action, paid model call, hosted deployment or extra run occurred.
+The final verification sample recorded 147,893,862,400 free bytes, 7,982,485,504 task
+bytes and 4,304,896 app bytes; all resource ceilings/floors passed.

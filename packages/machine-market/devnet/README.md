@@ -33,3 +33,10 @@ The proposed retry's live deferred manifest must carry the original 875,000 lamp
 of fees. The journal counts them before signing in both aggregate fee and peak
 checks; current payer conservation excludes that historical debit from being charged
 twice. The total 1.40 SOL allocation and 0.015 SOL fee ceiling are unchanged.
+
+The explicitly approved 28 October retry is now complete: exact program deployment,
+D0/D1/D2 and cleanup passed. Aggregate net spend including the original fees is
+1.279395 test SOL; cumulative capacity used is 463 attempts/429 writes. See the
+[verified execution record](../../../docs/machine-market/DEVNET_RETRY_EXECUTION.md).
+`node scripts/machine-market/devnet-retry-verify.mjs` repeats read-only verification
+without keys, signing, submission or overwriting proof.
