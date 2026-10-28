@@ -1,0 +1,11 @@
+✔ controlled agent selects source independently and declares scripted policy (0.540125ms)
+✔ negative sponsor opinion does not deny explicitly consented funding (0.487625ms)
+✔ delivered source produces the same deterministic answer with no packet input (0.10775ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 61.261041
