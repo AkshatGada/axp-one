@@ -1,0 +1,14 @@
+{
+  "schema": "axp.market.devnet.retry-authorization.v1",
+  "reference": "user-2026-10-28-approved-retry-478-432-total-1400000000",
+  "userInstruction": "approved 478 transaction slots and 432 writes, go ahead with the retry but keep total spend within 1.40 test SOL including the earlier fees. dont ask me again within those limits",
+  "cumulativeAttemptLimit": 478,
+  "cumulativeWriteLimit": 432,
+  "totalAllocationLamports": "1400000000",
+  "priorFeeSpendLamports": "875000",
+  "newPersistentKeys": 0,
+  "existingKeysReused": 7,
+  "stateDirectoryRelative": "local-state/machine-market/devnet-execution/devnet-retry-20261028",
+  "preparedManifestHash": "328102d8a4146e5af1f394c3f903d4af051193414caa0f3a16b30f8a89da471d",
+  "priorJournalHash": "a668b5a9f65d74ea7aa7f1290da1948e6d48bb5282ad22c2469105a2ac9f2978"
+}

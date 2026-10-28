@@ -1,0 +1,34 @@
+{
+  "schema": "axp.market.devnet.approved-retry-source-verification.v1",
+  "baseCommit": "7a79b8e",
+  "tests": {
+    "passed": 194,
+    "failed": 0,
+    "skipped": 0,
+    "outputSha256": "1b9a988a2f8900b13d36b4f313840193c51892ed82900b4212c304026488f1bd"
+  },
+  "directTests": {
+    "passed": 13,
+    "overlapWithFullSet": true,
+    "outputSha256": "93a75805cd279af7d89edae523257dff8c9e42c167f11179be2da9d7e66adefd"
+  },
+  "sourceHashes": {
+    "packages/machine-market/devnet/host-signer.mjs": "e6fb635da91f371391cf923bd3d9fd23f33cd546c05d86a724feea9958679138",
+    "packages/machine-market/devnet/manifest.mjs": "94cd4037f43a75670aebfabaaea4aaefa4143eecb9657c5dd803c3aeb4871ba9",
+    "packages/machine-market/devnet/journal.mjs": "1dbfc84931df575815e2275978d200a36d188e959c872eba8511459eb19f7a6b",
+    "scripts/machine-market/devnet-runner.mjs": "c33d516e48862003cce4667c985380afdd540ba882d0f116a0040f0b53aa6e97",
+    "tests/machine-market/devnet-host.test.mjs": "905840362b15239502cf591efa0effbfce5e8685850c46966f2cf679b2cd38c3",
+    "tests/machine-market/devnet-cumulative.test.mjs": "dd6c6418a4f82d4e2c2b29900ec69c472d336210f78c521b301ce44f74e2b4f9",
+    "tests/machine-market/devnet-prior-fees.test.mjs": "2113b908a3249d9b2dc313951e702c21ed3327b8a740c98a1289e22577fec7ed",
+    "tests/machine-market/helpers/devnet-fixture.mjs": "1b16c22a8e61aa379d0e8a191cd302bf67736f78e0b7f214ef02a342332462de"
+  },
+  "authorizationReference": "user-2026-10-28-approved-retry-478-432-total-1400000000",
+  "cumulativeAttemptLimit": 478,
+  "cumulativeWriteLimit": 432,
+  "priorAttempts": 178,
+  "priorWrites": 176,
+  "priorFeeSpendLamports": "875000",
+  "totalAllocationLamports": "1400000000",
+  "newPersistentKeys": 0,
+  "nonbroadcastConfirmedBindings": 8
+}
