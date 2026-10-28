@@ -55,3 +55,22 @@ run or capacity increase beyond this approval is included.
 
 Actual results will be appended after execution. Public artifacts are in
 `artifacts/machine-market/devnet-retry-run/`; ignored private state stays local.
+
+## Preserved expired write during upload
+
+Write 235 was submitted once with signature
+`22ZAPG9RSEnJF9w9i4oKWvrom4i3f8CaWHG41762M6SAUucQebjzdye4WhhLy2Dn9B2Y8qtAeSGrmCWdnnm5ea5x`.
+The pinned provider returned no status/receipt, and its original blockhash expired.
+The runner stopped expansion and retained the exact bytes, send intent and full
+reservation. It did not automatically replace the signature.
+
+The narrow recovery checks two distinct fresh finalized account contexts after
+expiry: both must show no status or transaction, the exact expected payer balance
+(no unknown fee), the intended byte range still zero while the ELF range is nonzero,
+and every known finalized write still matching the ELF. Buffer owner, authority and
+full data hash must agree across observations. If any condition fails, the original
+Unknown reservation remains. This is same-provider proof, not independent-provider
+proof. A successful proof archives the complete original attempt and observations
+with zero actual fee before a fresh blockhash can be signed for that offset. The old
+attempt and write slot remain in cumulative counts. No program, buffer, funding
+cycle, key or cap is reset. Actual recovery proof is recorded separately if it passes.

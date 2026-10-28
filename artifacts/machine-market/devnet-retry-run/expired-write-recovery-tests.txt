@@ -1,0 +1,33 @@
+(node:1001) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ retry counters include all 178 original attempts and 176 write slots before signing (572.478292ms)
+✔ cumulative attempt ceiling prevents a new signature (274.002541ms)
+✔ cumulative write ceiling prevents a new upload signature (364.918542ms)
+(node:1002) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ upload exceeding the old window leaves a fresh, durable application window after deployment (3909.114125ms)
+✔ application plan cannot open the journal with an uncommitted or extended seal (124.277708ms)
+✔ a closed original run is rejected read-only before signer or network access (19.705542ms)
+(node:1003) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ two finalized nonexecution observations preserve a submitted expired write and its counted slot (1552.857958ms)
+✔ expired write cannot be replaced when finalized buffer bytes show it may have executed (365.972666ms)
+(node:1004) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ host-only check derives all eight public bindings without changing the existing file or creating signatures (28.036625ms)
+✔ one-run signer accepts only the exact durable fenced message and closes its capability (510.600292ms)
+✔ executable entry rejects a missing financial GO before reading any manifest, key or network (73.790125ms)
+✔ retry signs only its separate journal while reusing untouched original key files (409.730333ms)
+(node:1005) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 875000 prior fees are reserved before signing and counted once through current payer conservation (3650.33125ms)
+✔ carried fees can reject the next native reservation before any signer callback (136.530958ms)
+✔ live deferred retry cannot omit or zero the known prior fee spend (23.482625ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4133.348625
