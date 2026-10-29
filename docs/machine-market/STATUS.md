@@ -1,3 +1,14 @@
+# Agent-access research slice — prepared; browser handoff blocked
+
+29 October 2026. The controlled-source screen and native bridge are implemented.
+The same local ledger resumed successfully with zero new funding/signing slots.
+All four access cases remain unexecuted: automatic approval review requires the
+human to perform the final browser Run action, despite explicit approval and resume.
+Owned runtimes are stopped. See [operation and exact evidence](AGENT_ACCESS_RUNBOOK.md)
+and [saved status](../../artifacts/machine-market/agent-access/EXECUTION_STATUS.json).
+No new public-chain or provider operation occurred. Earlier evidence below remains
+unchanged.
+
 # Current MVP handoff — native CLI and completed Devnet evidence
 
 28 October 2026. The compact native entrypoint is now `npm run demo:market` for

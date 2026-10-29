@@ -1,0 +1,16 @@
+{
+  "schema": "axp.agent-access.action-scope.v1",
+  "rpc": "http://127.0.0.1:20899",
+  "ui": "http://127.0.0.1:20990",
+  "isolatedLocalGenesis": "9aBvsKvrQ5Q9dZeE8uuVdsFnEeqjBrAYBDtvANJHR5Df",
+  "loopbackOnly": true,
+  "validatorProgramVerified": true,
+  "fundingSource": "new isolated test-validator faucet; LOCAL coins have no public-chain or monetary value",
+  "externalFundedWalletPresent": false,
+  "userDevnetPayerUsed": false,
+  "actualCasesExecuted": 0,
+  "localFixtureFundingLamports": "216000000",
+  "maxTotalAttempts": 32,
+  "source": "owned fictional report; no purchase from any third party",
+  "noDevnetMainnetOrHostedEndpoint": true
+}

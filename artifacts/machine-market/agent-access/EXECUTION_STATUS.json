@@ -1,0 +1,49 @@
+{
+  "schema": "axp.agent-access.execution-status.v1",
+  "status": "blocked_user_browser_handoff",
+  "recordedAt": "2026-10-29",
+  "runId": "agent-access-local-20261028",
+  "implementationCommit": "b27b3f4f420dae85eae1bada5623dd1a7dae5487",
+  "localRuntimeStopped": true,
+  "sameLedgerResumeVerified": true,
+  "newFundingRequestsOnResume": 0,
+  "newNativeSigningSlotsOnResume": 0,
+  "genesis": "7f5e04f0437b95acca9b3e93689043eb2a4c03af3f90e36626d41506d4b9e08e",
+  "program": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+  "cases": {
+    "direct-success": "available",
+    "sponsored-success": "available",
+    "direct-failure": "available",
+    "sponsored-failure": "available"
+  },
+  "executedAccessCases": 0,
+  "finalizedFundingRequests": 5,
+  "localFundingLamports": "216000000",
+  "finalizedProgramSetupTransactions": 6,
+  "attemptSlots": 11,
+  "maximumAttemptSlots": 32,
+  "maximumFundingLamports": "250000000",
+  "observedSetupRentLamports": "20337120",
+  "observedProgramAndFaucetFeesLamports": "80000",
+  "activeElapsedMs": 786773,
+  "maximumActiveMs": 1200000,
+  "seriesUseBySlot": "6190",
+  "readValidUntilSlot": "10190",
+  "nativeSourceUnchanged": true,
+  "paidProviderCalls": 0,
+  "publicChainTransactions": 0,
+  "approval": {
+    "humanApprovedFourLocalScenarios": true,
+    "humanExplicitlyResumedAfterPause": true,
+    "automaticReviewRejectedFinalClick": true,
+    "reason": "The click would execute a native settlement transfer, which is a consequential financial action requiring user handoff at the final browser action; pre-approval cannot replace that requirement.",
+    "requiredNextAction": "Human performs final Run clicks in the local browser within the unchanged limits; no agent API/CLI workaround."
+  },
+  "unexercised": [
+    "direct paid access/content/payout",
+    "sponsored access/content/payout",
+    "buyer refund",
+    "sponsor refund",
+    "native retrieval replay and wrong-owner refusal"
+  ]
+}

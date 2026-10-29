@@ -1,0 +1,116 @@
+{
+  "mode": "live-local-solana",
+  "runId": "agent-access-local-20261028",
+  "agentPolicy": "scripted; no model/provider call",
+  "ready": true,
+  "complete": false,
+  "busy": null,
+  "resource": {
+    "id": "controlled-route-report",
+    "title": "Controlled route lead-time report",
+    "version": "owned-route-report-v1",
+    "requiredFields": [
+      "route",
+      "median_days"
+    ],
+    "priceLamports": "10000",
+    "contentType": "application/json",
+    "hash": "0bfbc2175ef5129ac5c4d6eda938e820f399b47d91925b206e47da005ebd572f",
+    "versionHash": "714c035ed5bb78d68b6add1bdb362edeba27493c0cc1ee0fa995c1738efce137"
+  },
+  "sponsor": {
+    "packet": {
+      "schema": "axp.sponsor.packet.v1",
+      "disclosure": "Sponsored",
+      "sponsor": "Demo Access Sponsor",
+      "message": "We pay for access to this report. This fictional sponsor declaration is separate from the independent dataset; no favorable conclusion is required."
+    },
+    "packetHash": "448a922cf7d8306acc6da78bcaedc82162a83a8ef68a86b807078d3153ba7ba0"
+  },
+  "run": {
+    "genesis": "7f5e04f0437b95acca9b3e93689043eb2a4c03af3f90e36626d41506d4b9e08e",
+    "program": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+    "market": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+    "buyer": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+    "publisher": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+    "sponsor": "7fkrm7NrpoExxv2C8Pt8BBgu7osLRHDGh7W1MbErsEnn",
+    "collector": "9jgNjiUt1mMQBesUQPymgw611Z28SqoQ3GjQAHXGYruL"
+  },
+  "cases": [
+    {
+      "id": "direct-success",
+      "funding": "direct",
+      "outcome": "success",
+      "status": "available",
+      "steps": [],
+      "request": null,
+      "offer": null,
+      "unit": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
+      "match": null,
+      "grant": null,
+      "terminal": null,
+      "summary": null,
+      "error": null
+    },
+    {
+      "id": "sponsored-success",
+      "funding": "sponsored",
+      "outcome": "success",
+      "status": "available",
+      "steps": [],
+      "request": null,
+      "offer": null,
+      "unit": "BP4DKE9xexmTQL1omeLkEwTtLa8ZJWbo8Cemh7ecmhgY",
+      "match": null,
+      "grant": null,
+      "terminal": null,
+      "summary": null,
+      "error": null
+    },
+    {
+      "id": "direct-failure",
+      "funding": "direct",
+      "outcome": "failure",
+      "status": "available",
+      "steps": [],
+      "request": null,
+      "offer": null,
+      "unit": "BuHGawyoc33BADHfD9gqgDzYS7DQaai7FA17twpeoP2Z",
+      "match": null,
+      "grant": null,
+      "terminal": null,
+      "summary": null,
+      "error": null
+    },
+    {
+      "id": "sponsored-failure",
+      "funding": "sponsored",
+      "outcome": "failure",
+      "status": "available",
+      "steps": [],
+      "request": null,
+      "offer": null,
+      "unit": "6FtcEkVS7R4WzynkpQ61k1bH2ZLkoBywTkLPRJcSfgT3",
+      "match": null,
+      "grant": null,
+      "terminal": null,
+      "summary": null,
+      "error": null
+    }
+  ],
+  "budget": {
+    "fundingRequests": 5,
+    "localFundingLamports": "216000000",
+    "nativeSigningSlots": 6,
+    "totalAttemptSlots": 11,
+    "maximumAttempts": 32,
+    "maximumFundingLamports": "250000000"
+  },
+  "resources": {
+    "freeBytes": 147483787264,
+    "totalTaskBytes": 9154220032,
+    "appBytes": 598016,
+    "ledgerBytes": 1171128320
+  },
+  "errors": []
+}
