@@ -16,9 +16,9 @@
       "refundDelta": "0"
     }
   },
-  "status": "partial_one_of_four_verified",
+  "status": "continuation_prepared_awaiting_human_run",
   "runtimeStopped": true,
-  "monitorStopReason": "Owned runtime intentionally stopped after direct-success verification; polling then encountered the stopped server.",
+  "monitorStopReason": "Owned runtime intentionally stopped before another human Run click; its shutdown briefly closed HTTP before the final process checkpoint. No new case or verification was executed.",
   "nativeOutboxStates": [
     {
       "state": "ResolvedSuccess",
@@ -31,5 +31,10 @@
     "operating_holds": 0,
     "native_fee_holds": 0,
     "campaign_reservations": 0
-  }
+  },
+  "continuationOnly": [
+    "sponsored-success",
+    "direct-failure",
+    "sponsored-failure"
+  ]
 }

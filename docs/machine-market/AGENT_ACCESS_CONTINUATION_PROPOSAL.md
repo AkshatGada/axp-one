@@ -1,3 +1,15 @@
+# Approved continuation — preparation checkpoint
+
+29 October 2026. The human approved this proposal and the extra 600,000 ms. The
+minimal partial-completion resume change is implemented. Five focused checks pass.
+A same-ledger restart verified the original native state without new funding or
+native operations. No human Run click arrived; the validator was stopped to preserve
+the remaining window. Actual cumulative active time is **1,468,412 ms**, with
+**331,588 ms** remaining under the approved **1,800,000-ms** cap. Financial usage
+remains **14/32 attempts** and **0.216/0.25 LOCAL test SOL funded**. Direct proof,
+direct workflow case and the original authorization cache retain their exact hashes.
+The original proposal below records the approved scope; it is not a new allowance.
+
 # Three untouched local cases — continuation proposal only
 
 29 October 2026. No execution or cap change is authorized by this document.

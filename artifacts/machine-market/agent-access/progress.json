@@ -695,10 +695,10 @@
     "maximumFundingLamports": "250000000"
   },
   "resources": {
-    "freeBytes": 146261839872,
-    "totalTaskBytes": 10346586112,
-    "appBytes": 757760,
-    "ledgerBytes": 2364383232
+    "freeBytes": 146390712320,
+    "totalTaskBytes": 10227884032,
+    "appBytes": 761856,
+    "ledgerBytes": 2244628480
   },
   "errors": []
 }

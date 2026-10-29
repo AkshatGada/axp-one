@@ -1,0 +1,40 @@
+{
+  "schema": "axp.agent-access.continuation.v1",
+  "scope": [
+    "sponsored-success",
+    "direct-failure",
+    "sponsored-failure"
+  ],
+  "approvedAdditionalActiveMs": 600000,
+  "previousMaximumActiveMs": 1200000,
+  "maximumActiveMs": 1800000,
+  "carriedElapsedMs": 1176234,
+  "futureActiveAllowanceMs": 623766,
+  "newFundingRequestsAllowed": 0,
+  "maximumFundingLamports": "250000000",
+  "existingFundingLamports": "216000000",
+  "startingAttemptSlots": 14,
+  "maximumAttempts": 32,
+  "expectedFinalAttemptSlots": 23,
+  "seriesUseBySlot": "6190",
+  "readValidUntilSlot": "10190",
+  "originalDirectProofSha256": "c8b44a4666a0ac0cf60654cb8581f2b675cc91f6ac9777f0378563048b90bdad",
+  "originalDirectWorkflowCaseSha256": "3f58146cd0c0069ee5e54f4cf2b920bda832f141e600909a944edac80ada258a",
+  "originalAuthorizationCacheSha256": "583c34f23d6a8c176fe055a2d03836e633511aaba762d44c34f1e45b2050a953",
+  "requiredFinalRunActor": "human",
+  "newPublicChainTransactionsAllowed": 0,
+  "status": "prepared_awaiting_human_run",
+  "activeElapsedMs": 1468412,
+  "remainingActiveMs": 331588,
+  "resumeVerification": {
+    "sameGenesisAndProgram": true,
+    "originalDirectProofPreserved": true,
+    "originalDirectWorkflowCasePreserved": true,
+    "originalAuthorizationCachePreserved": true,
+    "nativeSigningSlots": 9,
+    "totalAttemptSlots": 14,
+    "newFundingRequests": 0,
+    "newNativeOperations": 0
+  },
+  "runtimeStopped": true
+}

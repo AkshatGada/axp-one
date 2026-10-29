@@ -37,7 +37,7 @@ is claimed. Prior local acceptance remains 38/40; its exact-slot gaps are unchan
   faucet fees: **110,000**. No public-chain or paid-provider call was made.
 - Same-ledger restart preserved genesis/program, keys, signed identities, funding,
   counters and immutable deadlines; it performed no new funding or setup operation.
-- Four focused policy/resume tests pass. Repository hygiene checks pass. The saved
+- Five focused policy/resume tests pass. Repository hygiene checks pass. The saved
   view now selects the completed case and displays its recorded payout; replay and
   execution are disabled in recorded/offline mode.
 
@@ -66,32 +66,36 @@ node scripts/machine-market/agent-access.mjs view
 node --test tests/machine-market/agent-access.test.mjs
 ```
 
-`start` refuses the existing experiment directory. The existing
-`resume --execute-local` command accepts only the prepared, entirely unstarted state;
-it intentionally refuses this partially completed ledger. Do not reset the ledger,
+`start` refuses the existing experiment directory. The approved
+`resume --execute-local` change accepts the original prepared state or this exact
+partial state: direct success finalized, with three untouched Units. It validates
+the direct owner/cursor/request/response/terminal operation, original Series deadline,
+zero principal and holds, all nine known operations and remaining Open Units. Do not reset the ledger,
 re-fund fixtures, extend deadlines, recreate Units or re-sign a new economic operation.
 No runtime remains running. Read-only commands do not consume native transaction slots.
 
 The human explicitly approved four cases within **0.25 LOCAL test SOL** and
-**32 total attempts**, and explicitly resumed after the pause. Automatic approval
-review required the human's final browser click. On 29 October, the runtime opened
-successfully, the human clicked direct Run, and the agent verified the actual result.
-The other three cases were still unstarted near the original **20-minute cumulative
-active runtime** ceiling. The agent stopped at a fully finalized boundary rather
-than begin another settlement without enough remaining time to finish it.
+**32 total attempts**, then approved the bounded continuation: **600,000 ms** more
+active runtime, for a cumulative ceiling of **1,800,000 ms (30 minutes)**. The same
+ledger resumed successfully with nine existing native operations and zero new
+funding, signatures or native sends. Direct proof and case hashes and the full
+original authorization cache hash remain unchanged.
 
-Cumulative active time is **1,176,234 ms**, with **23,766 ms** remaining under the
-unchanged 1,200,000-ms cap. The immutable Series deadline is **6190** and read deadline
-**10190**. The sponsored-success and both refund paths remain unexercised; this is
-not a four-case completion claim. Any continuation must preserve this same ledger,
-original identities, terminal direct Unit and unstarted Units, and explicitly resolve
-the exhausted runtime allowance and prepared-only resume limitation.
+No new human Run click arrived during that restart. The agent stopped the validator
+to preserve the remaining allowance while awaiting human availability. Actual
+cumulative active time is **1,468,412 ms**, leaving **331,588 ms**. Approval is already
+recorded; only the human's availability and three final browser Run clicks remain.
+
+The immutable Series deadline is **6190** and read deadline **10190**. Sponsorship
+success and both refund paths remain unexercised. The live page was prepared with
+sponsorship selected, explicit packet consent checked and failure unchecked. On the
+next same-ledger start, the agent prepares those fields again, the human clicks Run,
+and the agent verifies the terminal result before preparing each refund alternative.
+No completed direct transaction is rerun. Stop on unknown state or exhausted bounds.
 
 Financial ceilings remain intact: **0.216/0.25 LOCAL test SOL funding** and
 **14/32 total attempts**. No new funded Devnet run, mainnet, user wallet, paid provider
 call, hosted deployment or push occurred. The terminal Devnet retry and previous
-local 38/40 evidence remain unchanged and separate.
-
-[Planning-only continuation scope](AGENT_ACCESS_CONTINUATION_PROPOSAL.md) proposes
-only the three untouched cases, a 10-minute runtime extension requiring explicit
-authorization, and a minimal same-ledger resume change. No such change was applied.
+local 38/40 evidence remain unchanged and separate. See the
+[approved continuation scope](AGENT_ACCESS_CONTINUATION_PROPOSAL.md) and
+[preparation checkpoint](../../artifacts/machine-market/agent-access/CONTINUATION.json).

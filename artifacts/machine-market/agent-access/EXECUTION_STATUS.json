@@ -1,6 +1,6 @@
 {
   "schema": "axp.agent-access.execution-status.v1",
-  "status": "partial_direct_success_verified_runtime_stopped",
+  "status": "continuation_prepared_awaiting_human_run",
   "recordedAt": "2026-10-29",
   "runId": "agent-access-local-20261028",
   "implementationCommit": "b27b3f4f420dae85eae1bada5623dd1a7dae5487",
@@ -24,8 +24,8 @@
   "maximumAttemptSlots": 32,
   "maximumFundingLamports": "250000000",
   "observedProgramAndFaucetFeesLamports": "110000",
-  "activeElapsedMs": 1176234,
-  "maximumActiveMs": 1200000,
+  "activeElapsedMs": 1468412,
+  "maximumActiveMs": 1800000,
   "seriesUseBySlot": "6190",
   "readValidUntilSlot": "10190",
   "nativeSourceUnchanged": true,
@@ -36,7 +36,7 @@
     "humanExplicitlyResumedAfterPause": true,
     "automaticReviewRejectedFinalClick": true,
     "reason": "The click would execute a native settlement transfer, which is a consequential financial action requiring user handoff at the final browser action; pre-approval cannot replace that requirement.",
-    "requiredNextAction": "No Run click is pending. The prepared-only resume command intentionally refuses this partially completed ledger; preserve completed and unstarted Units and all original limits."
+    "requiredNextAction": "Human availability signal, then restart the same ledger and human final Run clicks for the three untouched cases; approval is already recorded."
   },
   "unexercised": [
     "sponsored access/content/payout",
@@ -47,7 +47,7 @@
   "finalizedProgramTransactions": 9,
   "finalizedAccessTransactions": 3,
   "observedRetainedRentLamports": "29795760",
-  "remainingActiveMs": 23766,
+  "remainingActiveMs": 331588,
   "nativeOutboxStates": [
     {
       "state": "ResolvedSuccess",
@@ -72,5 +72,6 @@
     "sourceHash": "0bfbc2175ef5129ac5c4d6eda938e820f399b47d91925b206e47da005ebd572f",
     "responseHash": "bf8ddb299a9fea1cfc257351e8166e60c28eaf25e28e1249c1473723d4a43de1"
   },
-  "stopReason": "Stopped at the fully finalized boundary before the original 20-minute cumulative runtime window expired; other cases remained unstarted."
+  "stopReason": "Same-ledger restart verified; stopped to preserve the remaining window while awaiting human availability. No new Run click or native operation occurred.",
+  "approvedAdditionalActiveMs": 600000
 }

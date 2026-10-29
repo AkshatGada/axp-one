@@ -1,3 +1,16 @@
+# Approved continuation prepared — waiting for human Run clicks
+
+29 October 2026. Minimal same-ledger resume now preserves the completed direct
+case and validates the three untouched Units. The approved cumulative cap is
+30 minutes; **1,468,412 ms used / 331,588 ms remaining**. The actual restart added
+no funding, native signatures or transactions and preserved the original direct
+proof, case and authorization-cache hashes. No new human Run click arrived, so
+owned runtimes stopped to preserve the remaining window. Financial usage stays
+**14/32 attempts** and **0.216/0.25 LOCAL test SOL funded**. Five focused checks pass.
+[Current runbook](AGENT_ACCESS_RUNBOOK.md) · [Continuation checkpoint](../../artifacts/machine-market/agent-access/CONTINUATION.json).
+
+Earlier phase checkpoints below remain historical.
+
 # Agent-access result — direct success verified; three alternatives unexecuted
 
 29 October 2026. The human executed direct Run on the same local ledger. Actual
