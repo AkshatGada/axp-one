@@ -2,7 +2,7 @@
 
 29 October 2026. Implementation: `b27b3f4`; additive same-ledger resume and evidence
 follow in this commit. [Original plan](AGENT_ACCESS_PHASE_PLAN.md) defines the fixed
-scope. The human-executed direct-success case is now verified. The slice remains partial: sponsored success and both refund alternatives are unexecuted.
+scope. The human-executed direct-success case is verified. A later human sponsored Run funded its Unit but stopped before delivery; both refund alternatives remain untouched.
 
 The agent is a deterministic policy, with no model/provider call. It selects one
 owned fictional route report from required fields before inspecting sponsorship.
@@ -15,11 +15,11 @@ The bridge uses the real native store, W2 authorization, price-time book, outbox
 HTTP `/api/trading` service and local Solana program. The four distinct Units are
 for direct success, sponsored success, buyer failure/refund and sponsor failure/refund.
 The screen displays content, disclosure, grants, actual terminal receipts and account
-deltas. Direct success executed through the validator; the other three journeys remain implementation-only.
+deltas. Direct success executed through the validator; the sponsored Fund later finalized, while its delivery and both refunds remain unexecuted.
 No attention, semantic understanding, endorsement, MCP/WebMCP or Cloudflare integration
 is claimed. Prior local acceptance remains 38/40; its exact-slot gaps are unchanged.
 
-## Actual evidence — one of four cases verified
+## Direct-success proof — preserved first checkpoint
 
 - Five finalized disposable-faucet funding requests: **0.216 LOCAL test SOL**.
 - Nine finalized program transactions: six setup plus direct Fund, Start and Finalize
@@ -56,46 +56,30 @@ ignored under `local-state/machine-market/agent-access-local-20261028/`.
 
 ## Commands and current stop boundary
 
-From the machine-market worktree:
-
 ```sh
 # Offline saved inspection: no keys, RPC, signatures or transfers
 node scripts/machine-market/agent-access.mjs inspect
-# Read-only localhost screen, without validator or execution routes; Ctrl-C stops it
+# Recorded localhost viewer only; no validator or execution routes; Ctrl-C stops it
 node scripts/machine-market/agent-access.mjs view
-node --test tests/machine-market/agent-access.test.mjs
 ```
 
-`start` refuses the existing experiment directory. The approved
-`resume --execute-local` change accepts the original prepared state or this exact
-partial state: direct success finalized, with three untouched Units. It validates
-the direct owner/cursor/request/response/terminal operation, original Series deadline,
-zero principal and holds, all nine known operations and remaining Open Units. Do not reset the ledger,
-re-fund fixtures, extend deadlines, recreate Units or re-sign a new economic operation.
-No runtime remains running. Read-only commands do not consume native transaction slots.
+The human performed sponsored Run after the approved same-ledger restart. Its
+native Fund finalized, but the local client reported SERVICE_UNAVAILABLE and the
+workflow stopped before delivery. Read-only reconciliation established the original
+Fund's success without another signature/send. **10,000 lamports remain in native
+sponsor-backed escrow**. Neither refund case started. Current usage is **15/32
+attempts**, funding **0.216/0.25 LOCAL test SOL**. All ten native operations are known
+and finalized, while the sponsored delivery obligation remains incomplete.
 
-The human explicitly approved four cases within **0.25 LOCAL test SOL** and
-**32 total attempts**, then approved the bounded continuation: **600,000 ms** more
-active runtime, for a cumulative ceiling of **1,800,000 ms (30 minutes)**. The same
-ledger resumed successfully with nine existing native operations and zero new
-funding, signatures or native sends. Direct proof and case hashes and the full
-original authorization cache hash remain unchanged.
+The 30-minute cumulative runtime guard stopped the validator. Final shutdown
+elapsed is **1,802,028 ms**, including **2,028 ms** beyond the 1,800,000-ms ceiling at
+the timer/shutdown boundary. There is **zero remaining allowance**. No reset,
+re-funding, deadline extension, replacement signature or retry is permitted by
+these records. The existing resume command rejects this funded stopped case.
 
-No new human Run click arrived during that restart. The agent stopped the validator
-to preserve the remaining allowance while awaiting human availability. Actual
-cumulative active time is **1,468,412 ms**, leaving **331,588 ms**. Approval is already
-recorded; only the human's availability and three final browser Run clicks remain.
-
-The immutable Series deadline is **6190** and read deadline **10190**. Sponsorship
-success and both refund paths remain unexercised. The live page was prepared with
-sponsorship selected, explicit packet consent checked and failure unchecked. On the
-next same-ledger start, the agent prepares those fields again, the human clicks Run,
-and the agent verifies the terminal result before preparing each refund alternative.
-No completed direct transaction is rerun. Stop on unknown state or exhausted bounds.
-
-Financial ceilings remain intact: **0.216/0.25 LOCAL test SOL funding** and
-**14/32 total attempts**. No new funded Devnet run, mainnet, user wallet, paid provider
-call, hosted deployment or push occurred. The terminal Devnet retry and previous
-local 38/40 evidence remain unchanged and separate. See the
-[approved continuation scope](AGENT_ACCESS_CONTINUATION_PROPOSAL.md) and
-[preparation checkpoint](../../artifacts/machine-market/agent-access/CONTINUATION.json).
+See [the interruption and exact remaining scope](AGENT_ACCESS_INTERRUPTION.md),
+[finalized sponsored Fund proof](../../artifacts/machine-market/agent-access/sponsored-fund-proof.json)
+and [current checkpoint](../../artifacts/machine-market/agent-access/INTERRUPTED_SPONSORED.json).
+A further bounded runtime/recovery instruction is required before execution. The
+original Series/read deadlines remain 6190/10190. Direct success and its proof are
+preserved; sponsored success and both refunds are not claimed complete.

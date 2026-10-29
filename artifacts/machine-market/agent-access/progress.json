@@ -644,16 +644,70 @@
       "id": "sponsored-success",
       "funding": "sponsored",
       "outcome": "success",
-      "status": "available",
-      "steps": [],
-      "request": null,
-      "offer": null,
+      "status": "stopped",
+      "steps": [
+        {
+          "name": "admitted",
+          "at": "2026-10-29T02:44:18.442Z"
+        },
+        {
+          "name": "funding-native-pending",
+          "at": "2026-10-29T02:44:18.471Z"
+        }
+      ],
+      "request": {
+        "task": "Which route has the shorter median lead time in the controlled route cohort?",
+        "selectedResource": "controlled-route-report",
+        "versionHash": "714c035ed5bb78d68b6add1bdb362edeba27493c0cc1ee0fa995c1738efce137",
+        "funding": "sponsored",
+        "explicitConsent": true,
+        "packetHash": "448a922cf7d8306acc6da78bcaedc82162a83a8ef68a86b807078d3153ba7ba0",
+        "assessment": "not_fit"
+      },
+      "offer": {
+        "id": "2238f2f10afcaa3d296f84e810a270345114cdd7700f9b4d6294aaf191272b6d",
+        "task": "Which route has the shorter median lead time in the controlled route cohort?",
+        "agent": {
+          "policy": "scripted-resource-policy-v1",
+          "reason": "The controlled catalogue has one report with the required route and median_days fields. Selection does not use sponsor material.",
+          "modelCalls": 0
+        },
+        "resource": {
+          "id": "controlled-route-report",
+          "title": "Controlled route lead-time report",
+          "version": "owned-route-report-v1",
+          "requiredFields": [
+            "route",
+            "median_days"
+          ],
+          "priceLamports": "10000",
+          "contentType": "application/json",
+          "hash": "0bfbc2175ef5129ac5c4d6eda938e820f399b47d91925b206e47da005ebd572f",
+          "versionHash": "714c035ed5bb78d68b6add1bdb362edeba27493c0cc1ee0fa995c1738efce137",
+          "series": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq"
+        },
+        "priceLamports": "10000",
+        "beneficiary": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+        "expiresAtSlot": "6190",
+        "sponsor": {
+          "packet": {
+            "schema": "axp.sponsor.packet.v1",
+            "disclosure": "Sponsored",
+            "sponsor": "Demo Access Sponsor",
+            "message": "We pay for access to this report. This fictional sponsor declaration is separate from the independent dataset; no favorable conclusion is required."
+          },
+          "packetHash": "448a922cf7d8306acc6da78bcaedc82162a83a8ef68a86b807078d3153ba7ba0",
+          "campaignId": "b8ff6e05b86dbbee3d53148802d842d17f29e1db99ef4f14738c0560ab3a6406",
+          "assessment": "not_fit",
+          "assessmentLabel": "Scripted unfavorable assessment; consent can still permit funding."
+        }
+      },
       "unit": "BP4DKE9xexmTQL1omeLkEwTtLa8ZJWbo8Cemh7ecmhgY",
       "match": null,
       "grant": null,
       "terminal": null,
       "summary": null,
-      "error": null
+      "error": "SERVICE_UNAVAILABLE"
     },
     {
       "id": "direct-failure",
@@ -689,16 +743,21 @@
   "budget": {
     "fundingRequests": 5,
     "localFundingLamports": "216000000",
-    "nativeSigningSlots": 9,
-    "totalAttemptSlots": 14,
+    "nativeSigningSlots": 10,
+    "totalAttemptSlots": 15,
     "maximumAttempts": 32,
     "maximumFundingLamports": "250000000"
   },
   "resources": {
-    "freeBytes": 146390712320,
-    "totalTaskBytes": 10227884032,
-    "appBytes": 761856,
-    "ledgerBytes": 2244628480
+    "freeBytes": 145935794176,
+    "totalTaskBytes": 10749136896,
+    "appBytes": 831488,
+    "ledgerBytes": 2765811712
   },
-  "errors": []
+  "errors": [
+    {
+      "case": "sponsored-success",
+      "code": "SERVICE_UNAVAILABLE"
+    }
+  ]
 }

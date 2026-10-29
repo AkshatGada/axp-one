@@ -1,3 +1,13 @@
+# Current outcome of approved continuation — interrupted sponsored delivery
+
+29 October 2026. The human sponsored Run finalized its original Fund, then stopped
+before delivery with SERVICE_UNAVAILABLE. Read-only reconciliation established the
+known Fund; no retry/re-sign/resend occurred. Principal **10,000 LOCAL lamports** is
+still in native escrow. Attempts **15/32**, funding **0.216/0.25 LOCAL test SOL**.
+The runtime guard stopped the validator; no allowance remains. See
+[the interruption and planning-only remaining scope](AGENT_ACCESS_INTERRUPTION.md).
+The proposal/checkpoints below are historical; no further execution is authorized.
+
 # Approved continuation — preparation checkpoint
 
 29 October 2026. The human approved this proposal and the extra 600,000 ms. The

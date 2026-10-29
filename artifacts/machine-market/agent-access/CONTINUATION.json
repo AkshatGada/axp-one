@@ -23,9 +23,9 @@
   "originalAuthorizationCacheSha256": "583c34f23d6a8c176fe055a2d03836e633511aaba762d44c34f1e45b2050a953",
   "requiredFinalRunActor": "human",
   "newPublicChainTransactionsAllowed": 0,
-  "status": "prepared_awaiting_human_run",
-  "activeElapsedMs": 1468412,
-  "remainingActiveMs": 331588,
+  "status": "blocked_after_human_sponsored_run",
+  "activeElapsedMs": 1802028,
+  "remainingActiveMs": 0,
   "resumeVerification": {
     "sameGenesisAndProgram": true,
     "originalDirectProofPreserved": true,
@@ -36,5 +36,11 @@
     "newFundingRequests": 0,
     "newNativeOperations": 0
   },
-  "runtimeStopped": true
+  "runtimeStopped": true,
+  "originalDirectProofPreserved": true,
+  "originalDirectWorkflowCasePreserved": true,
+  "originalAuthorizationCacheEntriesPreserved": true,
+  "finalAttemptSlots": 15,
+  "knownSponsoredFundOperationId": "16985275b3de4a848e72c5bed1826257dc6b205d40cf8d252124d22139594a8f",
+  "fundedPrincipalOutstandingLamports": "10000"
 }

@@ -1,3 +1,21 @@
+# Current stop — sponsored Fund finalized; delivery incomplete
+
+29 October 2026. The human sponsored Run returned SERVICE_UNAVAILABLE before its
+delivery stage. The exact original Fund was reconciled read-only to finalized
+success at slot 3390. **10,000 LOCAL lamports remain in sponsor-backed native escrow**;
+no sponsored body, payout or refund occurred. Direct success remains preserved and
+verified. Both refund cases are untouched. No Run/Fund/signature/resend was repeated.
+
+Usage: **15/32 attempts**, **0.216/0.25 LOCAL test SOL funded**, ten known finalized
+native operations. All active off-chain holds/reservations are zero; the native
+escrow obligation is still outstanding. The 30-minute runtime guard stopped all
+owned runtimes; final shutdown elapsed is 1,802,028 ms, including 2,028 ms at the
+cap/shutdown boundary. No runtime allowance remains.
+
+[Exact interruption/recovery scope](AGENT_ACCESS_INTERRUPTION.md) ·
+[Finalized Fund proof](../../artifacts/machine-market/agent-access/sponsored-fund-proof.json).
+The following checkpoints remain historical; they do not authorize recovery/reset.
+
 # Approved continuation prepared — waiting for human Run clicks
 
 29 October 2026. Minimal same-ledger resume now preserves the completed direct

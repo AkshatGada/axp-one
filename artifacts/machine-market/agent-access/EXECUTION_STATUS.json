@@ -1,6 +1,6 @@
 {
   "schema": "axp.agent-access.execution-status.v1",
-  "status": "continuation_prepared_awaiting_human_run",
+  "status": "blocked_sponsored_fund_finalized_delivery_not_started",
   "recordedAt": "2026-10-29",
   "runId": "agent-access-local-20261028",
   "implementationCommit": "b27b3f4f420dae85eae1bada5623dd1a7dae5487",
@@ -12,19 +12,19 @@
   "program": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
   "cases": {
     "direct-success": "delivered",
-    "sponsored-success": "available",
+    "sponsored-success": "stopped",
     "direct-failure": "available",
     "sponsored-failure": "available"
   },
-  "executedAccessCases": 1,
+  "executedAccessCases": 2,
   "finalizedFundingRequests": 5,
   "localFundingLamports": "216000000",
   "finalizedProgramSetupTransactions": 6,
-  "attemptSlots": 14,
+  "attemptSlots": 15,
   "maximumAttemptSlots": 32,
   "maximumFundingLamports": "250000000",
-  "observedProgramAndFaucetFeesLamports": "110000",
-  "activeElapsedMs": 1468412,
+  "observedProgramAndFaucetFeesLamports": "130000",
+  "activeElapsedMs": 1802028,
   "maximumActiveMs": 1800000,
   "seriesUseBySlot": "6190",
   "readValidUntilSlot": "10190",
@@ -36,32 +36,31 @@
     "humanExplicitlyResumedAfterPause": true,
     "automaticReviewRejectedFinalClick": true,
     "reason": "The click would execute a native settlement transfer, which is a consequential financial action requiring user handoff at the final browser action; pre-approval cannot replace that requirement.",
-    "requiredNextAction": "Human availability signal, then restart the same ledger and human final Run clicks for the three untouched cases; approval is already recorded."
+    "requiredNextAction": "Preserve and recover the original funded sponsored obligation under an explicitly bounded runtime/continuation plan; do not repeat its Run or Fund. The current runtime allowance is exhausted."
   },
   "unexercised": [
-    "sponsored access/content/payout",
+    "sponsored successful delivery and publisher payout",
     "buyer refund",
     "sponsor refund"
   ],
   "verifiedAccessCases": 1,
-  "finalizedProgramTransactions": 9,
-  "finalizedAccessTransactions": 3,
-  "observedRetainedRentLamports": "29795760",
-  "remainingActiveMs": 331588,
+  "finalizedProgramTransactions": 10,
+  "finalizedAccessTransactions": 4,
+  "observedRetainedRentLamports": "39254400",
+  "remainingActiveMs": 0,
   "nativeOutboxStates": [
     {
       "state": "ResolvedSuccess",
       "blocked": 0,
-      "count": 9
+      "count": 10
     }
   ],
   "holds": {
     "principal_holds": 0,
     "operating_holds": 0,
     "native_fee_holds": 0,
-    "campaign_reservations": 0
+    "activeCampaignReservations": 0
   },
-  "terminalPrincipalEscrowLamports": "0",
   "directSuccess": {
     "grossLamports": "10000",
     "publisherLamports": "9900",
@@ -72,6 +71,64 @@
     "sourceHash": "0bfbc2175ef5129ac5c4d6eda938e820f399b47d91925b206e47da005ebd572f",
     "responseHash": "bf8ddb299a9fea1cfc257351e8166e60c28eaf25e28e1249c1473723d4a43de1"
   },
-  "stopReason": "Same-ledger restart verified; stopped to preserve the remaining window while awaiting human availability. No new Run click or native operation occurred.",
-  "approvedAdditionalActiveMs": 600000
+  "stopReason": "LOCAL_EXECUTION_TIME_CAP",
+  "approvedAdditionalActiveMs": 600000,
+  "completedAccessCases": 1,
+  "shutdownCheckpointOverCapMs": 2028,
+  "fundedPrincipalOutstandingLamports": "10000",
+  "workflowIncomplete": true,
+  "knownSponsoredFund": {
+    "schema": "axp.agent-access.interrupted-sponsored.v1",
+    "workflowError": "SERVICE_UNAVAILABLE",
+    "originalFundOperationId": "16985275b3de4a848e72c5bed1826257dc6b205d40cf8d252124d22139594a8f",
+    "signature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
+    "transactionSha256": "80e97a35291bd21f5d8563a385584f65723921ddf30c4fea7ffc80c13855fb7b",
+    "finalizedSlot": "3390",
+    "nativeOutcome": "FinalizedSuccess",
+    "workflowOutcome": "stopped_after_fund_before_delivery_request",
+    "fundedPrincipalOutstandingLamports": "10000",
+    "sponsorRefundKey": "7fkrm7NrpoExxv2C8Pt8BBgu7osLRHDGh7W1MbErsEnn",
+    "unit": "BP4DKE9xexmTQL1omeLkEwTtLa8ZJWbo8Cemh7ecmhgY",
+    "unitState": "FundedOpen",
+    "cursor": "1",
+    "deliveryRequestCreated": false,
+    "protectedBodyReturned": false,
+    "publisherPayoutLamports": "0",
+    "reconciliationSignedOrResent": false,
+    "remainingCasesUntouched": [
+      "direct-failure",
+      "sponsored-failure"
+    ],
+    "nativeOutboxStates": [
+      {
+        "state": "ResolvedSuccess",
+        "blocked": 0,
+        "count": 10
+      }
+    ],
+    "holds": {
+      "principal_holds": 0,
+      "operating_holds": 0,
+      "native_fee_holds": 0,
+      "activeCampaignReservations": 0
+    },
+    "campaign": {
+      "consumedGross": "10000",
+      "consumedCount": 1,
+      "refundedGross": "0"
+    },
+    "totalAttemptSlots": 15,
+    "nativeSendRows": 10,
+    "fundingLamports": "216000000",
+    "additionalFundingRequests": 0,
+    "originalDirectProofPreserved": true,
+    "originalDirectWorkflowCasePreserved": true,
+    "originalAuthorizationCacheEntriesPreserved": true,
+    "maximumActiveMs": 1800000,
+    "shutdownElapsedMs": 1802028,
+    "shutdownCheckpointOverCapMs": 2028,
+    "runtimeStopReason": "LOCAL_EXECUTION_TIME_CAP",
+    "noFurtherExecutionAuthorizedByThisRecord": true
+  },
+  "directTerminalPrincipalEscrowLamports": "0"
 }

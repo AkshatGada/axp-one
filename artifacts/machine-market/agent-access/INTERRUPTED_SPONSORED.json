@@ -1,0 +1,53 @@
+{
+  "schema": "axp.agent-access.interrupted-sponsored.v1",
+  "workflowError": "SERVICE_UNAVAILABLE",
+  "originalFundOperationId": "16985275b3de4a848e72c5bed1826257dc6b205d40cf8d252124d22139594a8f",
+  "signature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
+  "transactionSha256": "80e97a35291bd21f5d8563a385584f65723921ddf30c4fea7ffc80c13855fb7b",
+  "finalizedSlot": "3390",
+  "nativeOutcome": "FinalizedSuccess",
+  "workflowOutcome": "stopped_after_fund_before_delivery_request",
+  "fundedPrincipalOutstandingLamports": "10000",
+  "sponsorRefundKey": "7fkrm7NrpoExxv2C8Pt8BBgu7osLRHDGh7W1MbErsEnn",
+  "unit": "BP4DKE9xexmTQL1omeLkEwTtLa8ZJWbo8Cemh7ecmhgY",
+  "unitState": "FundedOpen",
+  "cursor": "1",
+  "deliveryRequestCreated": false,
+  "protectedBodyReturned": false,
+  "publisherPayoutLamports": "0",
+  "reconciliationSignedOrResent": false,
+  "remainingCasesUntouched": [
+    "direct-failure",
+    "sponsored-failure"
+  ],
+  "nativeOutboxStates": [
+    {
+      "state": "ResolvedSuccess",
+      "blocked": 0,
+      "count": 10
+    }
+  ],
+  "holds": {
+    "principal_holds": 0,
+    "operating_holds": 0,
+    "native_fee_holds": 0,
+    "activeCampaignReservations": 0
+  },
+  "campaign": {
+    "consumedGross": "10000",
+    "consumedCount": 1,
+    "refundedGross": "0"
+  },
+  "totalAttemptSlots": 15,
+  "nativeSendRows": 10,
+  "fundingLamports": "216000000",
+  "additionalFundingRequests": 0,
+  "originalDirectProofPreserved": true,
+  "originalDirectWorkflowCasePreserved": true,
+  "originalAuthorizationCacheEntriesPreserved": true,
+  "maximumActiveMs": 1800000,
+  "shutdownElapsedMs": 1802028,
+  "shutdownCheckpointOverCapMs": 2028,
+  "runtimeStopReason": "LOCAL_EXECUTION_TIME_CAP",
+  "noFurtherExecutionAuthorizedByThisRecord": true
+}
