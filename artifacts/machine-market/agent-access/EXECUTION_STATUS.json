@@ -1,6 +1,6 @@
 {
   "schema": "axp.agent-access.execution-status.v1",
-  "status": "blocked_user_browser_handoff",
+  "status": "partial_direct_success_verified_runtime_stopped",
   "recordedAt": "2026-10-29",
   "runId": "agent-access-local-20261028",
   "implementationCommit": "b27b3f4f420dae85eae1bada5623dd1a7dae5487",
@@ -11,21 +11,20 @@
   "genesis": "7f5e04f0437b95acca9b3e93689043eb2a4c03af3f90e36626d41506d4b9e08e",
   "program": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
   "cases": {
-    "direct-success": "available",
+    "direct-success": "delivered",
     "sponsored-success": "available",
     "direct-failure": "available",
     "sponsored-failure": "available"
   },
-  "executedAccessCases": 0,
+  "executedAccessCases": 1,
   "finalizedFundingRequests": 5,
   "localFundingLamports": "216000000",
   "finalizedProgramSetupTransactions": 6,
-  "attemptSlots": 11,
+  "attemptSlots": 14,
   "maximumAttemptSlots": 32,
   "maximumFundingLamports": "250000000",
-  "observedSetupRentLamports": "20337120",
-  "observedProgramAndFaucetFeesLamports": "80000",
-  "activeElapsedMs": 786773,
+  "observedProgramAndFaucetFeesLamports": "110000",
+  "activeElapsedMs": 1176234,
   "maximumActiveMs": 1200000,
   "seriesUseBySlot": "6190",
   "readValidUntilSlot": "10190",
@@ -37,13 +36,41 @@
     "humanExplicitlyResumedAfterPause": true,
     "automaticReviewRejectedFinalClick": true,
     "reason": "The click would execute a native settlement transfer, which is a consequential financial action requiring user handoff at the final browser action; pre-approval cannot replace that requirement.",
-    "requiredNextAction": "Human performs final Run clicks in the local browser within the unchanged limits; no agent API/CLI workaround."
+    "requiredNextAction": "No Run click is pending. The prepared-only resume command intentionally refuses this partially completed ledger; preserve completed and unstarted Units and all original limits."
   },
   "unexercised": [
-    "direct paid access/content/payout",
     "sponsored access/content/payout",
     "buyer refund",
-    "sponsor refund",
-    "native retrieval replay and wrong-owner refusal"
-  ]
+    "sponsor refund"
+  ],
+  "verifiedAccessCases": 1,
+  "finalizedProgramTransactions": 9,
+  "finalizedAccessTransactions": 3,
+  "observedRetainedRentLamports": "29795760",
+  "remainingActiveMs": 23766,
+  "nativeOutboxStates": [
+    {
+      "state": "ResolvedSuccess",
+      "blocked": 0,
+      "count": 9
+    }
+  ],
+  "holds": {
+    "principal_holds": 0,
+    "operating_holds": 0,
+    "native_fee_holds": 0,
+    "campaign_reservations": 0
+  },
+  "terminalPrincipalEscrowLamports": "0",
+  "directSuccess": {
+    "grossLamports": "10000",
+    "publisherLamports": "9900",
+    "collectorLamports": "100",
+    "fundSlot": "1739",
+    "startSlot": "1802",
+    "terminalSlot": "1865",
+    "sourceHash": "0bfbc2175ef5129ac5c4d6eda938e820f399b47d91925b206e47da005ebd572f",
+    "responseHash": "bf8ddb299a9fea1cfc257351e8166e60c28eaf25e28e1249c1473723d4a43de1"
+  },
+  "stopReason": "Stopped at the fully finalized boundary before the original 20-minute cumulative runtime window expired; other cases remained unstarted."
 }

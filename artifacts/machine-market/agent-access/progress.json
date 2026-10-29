@@ -41,15 +41,603 @@
       "id": "direct-success",
       "funding": "direct",
       "outcome": "success",
-      "status": "available",
-      "steps": [],
-      "request": null,
-      "offer": null,
+      "status": "delivered",
+      "steps": [
+        {
+          "name": "admitted",
+          "at": "2026-10-29T01:53:36.550Z"
+        },
+        {
+          "name": "funding-native-pending",
+          "at": "2026-10-29T01:53:37.459Z"
+        },
+        {
+          "name": "funded",
+          "at": "2026-10-29T01:54:09.046Z"
+        },
+        {
+          "name": "delivery-locked",
+          "at": "2026-10-29T01:54:40.356Z"
+        },
+        {
+          "name": "delivered",
+          "at": "2026-10-29T01:55:10.471Z"
+        }
+      ],
+      "request": {
+        "task": "Which route has the shorter median lead time in the controlled route cohort?",
+        "selectedResource": "controlled-route-report",
+        "versionHash": "714c035ed5bb78d68b6add1bdb362edeba27493c0cc1ee0fa995c1738efce137",
+        "funding": "direct",
+        "explicitConsent": false,
+        "packetHash": null,
+        "assessment": null
+      },
+      "offer": {
+        "id": "2238f2f10afcaa3d296f84e810a270345114cdd7700f9b4d6294aaf191272b6d",
+        "task": "Which route has the shorter median lead time in the controlled route cohort?",
+        "agent": {
+          "policy": "scripted-resource-policy-v1",
+          "reason": "The controlled catalogue has one report with the required route and median_days fields. Selection does not use sponsor material.",
+          "modelCalls": 0
+        },
+        "resource": {
+          "id": "controlled-route-report",
+          "title": "Controlled route lead-time report",
+          "version": "owned-route-report-v1",
+          "requiredFields": [
+            "route",
+            "median_days"
+          ],
+          "priceLamports": "10000",
+          "contentType": "application/json",
+          "hash": "0bfbc2175ef5129ac5c4d6eda938e820f399b47d91925b206e47da005ebd572f",
+          "versionHash": "714c035ed5bb78d68b6add1bdb362edeba27493c0cc1ee0fa995c1738efce137",
+          "series": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq"
+        },
+        "priceLamports": "10000",
+        "beneficiary": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+        "expiresAtSlot": "6190",
+        "sponsor": {
+          "packet": {
+            "schema": "axp.sponsor.packet.v1",
+            "disclosure": "Sponsored",
+            "sponsor": "Demo Access Sponsor",
+            "message": "We pay for access to this report. This fictional sponsor declaration is separate from the independent dataset; no favorable conclusion is required."
+          },
+          "packetHash": "448a922cf7d8306acc6da78bcaedc82162a83a8ef68a86b807078d3153ba7ba0",
+          "campaignId": "b8ff6e05b86dbbee3d53148802d842d17f29e1db99ef4f14738c0560ab3a6406",
+          "assessment": "not_fit",
+          "assessmentLabel": "Scripted unfavorable assessment; consent can still permit funding."
+        }
+      },
       "unit": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
-      "match": null,
-      "grant": null,
-      "terminal": null,
-      "summary": null,
+      "match": {
+        "id": "2962de771d88b8bfe4e061a882e511a0f538356f347ec1fb0eef087b15f611ca",
+        "state": "PrimaryEscrowed",
+        "unit": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
+        "series": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+        "payer": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+        "beneficiary": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+        "seller": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+        "buyOrderId": "f2a670b1d9ed7cab29f478e48a4cee34c8867c6f5f65dae46a2f1ca891279f4c",
+        "sellOrderId": "ce481a2d61f12e4eabbe7af17718fc6f6d08e8dd8351d619a89432819f418009",
+        "gross": "10000",
+        "fee": "100",
+        "fundingKind": 0,
+        "originalPrimaryRefundFace": "10000",
+        "pricingProvenance": "book-maker-price",
+        "expectedSecondaryProceeds": "0",
+        "immediateSecondaryProceeds": "0",
+        "operationId": "b9f0cb66960072ecdb598150059933dcf7cc791e300a0202e4b89f4f10720662",
+        "signature": "55BuMDS1DGbXNqBSnddZ51xPZrDmZRm5mY9MjqrYuH2B1oUzFtM3aJRMh8hLa2Y4GiiXogtFej1n2z6ocsvkFsgg",
+        "nativeEvidence": true,
+        "operatingFeesKnown": true,
+        "evidence": "transaction-finalized"
+      },
+      "grant": {
+        "beneficiary": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+        "resourceId": "controlled-route-report",
+        "resourceVersionHash": "714c035ed5bb78d68b6add1bdb362edeba27493c0cc1ee0fa995c1738efce137",
+        "sourceHash": "0bfbc2175ef5129ac5c4d6eda938e820f399b47d91925b206e47da005ebd572f",
+        "unit": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
+        "requestHash": "a93c8d313d26a804507023ec850668480f223c143b8fdcbc2f95d20464294632",
+        "consumedCursor": "3",
+        "validUntilSlot": "10190"
+      },
+      "terminal": {
+        "unit": {
+          "state": 3,
+          "owner": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+          "cursor": "3",
+          "sponsored": 0,
+          "responseHash": "bf8ddb299a9fea1cfc257351e8166e60c28eaf25e28e1249c1473723d4a43de1"
+        },
+        "primary": {
+          "state": 2,
+          "gross": "10000",
+          "recipient": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+          "remainingPrincipal": "0"
+        },
+        "receipt": {
+          "evidence": {
+            "kind": "native-transaction",
+            "authority": "solana-local-validator",
+            "evidence": "transaction-finalized",
+            "status": "finalized-success",
+            "operationId": "9e9d4c0f675ed2b1778bb650b0b37ba34b3d743b7f15e4692dccada8df4b8d95",
+            "signature": "2D1b9U8UrgnrdpGkg8mtmp9PafPN8yUKFTJxsrqaCmUx2S6Giv2U7Qpe2S2gZstSwTwZ3FGotL6Uiija6GPqYngD",
+            "slot": "1865",
+            "transactionBytes": 474,
+            "computeUnits": 27047,
+            "feePayer": "9xQgemUiGXg7G86Px3ELAmWpdoH4b6c9YHsnk5u1FfYL",
+            "feeLamports": "5000",
+            "rentLamports": "0",
+            "instructionBase64": "BQKenUwPZ17SsXeLtlCws3ujSz10O38V5GktzK2o30uNlQIAAAAAAAAAqTyNMT0mqARQcCPshQZoSA8iPBQ7j9y8L5XSBGQpRjK/jdspmp/qHPwlc1HoFm5gwo6vJeKOEknBRzcj1KQ94Q==",
+            "instructionSha256": "25513c4e5a537eccb7172f9731eee29e00e0da65fd268db92c73f74470595c11",
+            "accounts": [
+              {
+                "address": "9xQgemUiGXg7G86Px3ELAmWpdoH4b6c9YHsnk5u1FfYL",
+                "before": "170124240",
+                "after": "170119240",
+                "delta": "-5000"
+              },
+              {
+                "address": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
+                "before": "3556560",
+                "after": "3556560",
+                "delta": "0"
+              },
+              {
+                "address": "9U8buwQV779ywn93fiJKhNm2iaTPqVDELmQoTW2agUsY",
+                "before": "5209120",
+                "after": "5199120",
+                "delta": "-10000"
+              },
+              {
+                "address": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+                "before": "5000000",
+                "after": "5009900",
+                "delta": "9900"
+              },
+              {
+                "address": "9jgNjiUt1mMQBesUQPymgw611Z28SqoQ3GjQAHXGYruL",
+                "before": "1000000",
+                "after": "1000100",
+                "delta": "100"
+              },
+              {
+                "address": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+                "before": "3626160",
+                "after": "3626160",
+                "delta": "0"
+              },
+              {
+                "address": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+                "before": "2484720",
+                "after": "2484720",
+                "delta": "0"
+              },
+              {
+                "address": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+                "before": "1141440",
+                "after": "1141440",
+                "delta": "0"
+              }
+            ],
+            "receipts": [
+              {
+                "address": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+                "kind": "Market",
+                "base64": "QVhQTUtUMDIBATUst9SxnhXltgMVyHixB+Gz0P19OZWWQJETSrX2GX9VhQ84FiHDJH2fbuJE91Gp4oLg7AKrv9rzPtsa0nFioqFExLU4UV+cjysdh/B1BzdkNqEfAkyF1vL2+hfu52sIZ39eBPBDe5Wsyps+k2iQQ+sqTAOvP5DjZibUFQbUueCOhQ84FiHDJH2fbuJE91Gp4oLg7AKrv9rzPtsa0nFioqGFDzgWIcMkfZ9u4kT3UaniguDsAqu/2vM+2xrScWKioYHMaRvxPHVDN4Tuj0JDwYKc2XgKnHH8g8eijEaeM8DHnI8oQTmS+LfyIJBdGQdpLCEnccXh3fgUJIsTzc5Oj58g9AR/7hHhikH9D5iUXGaLknKSduMHzxbjOTc3eGiuK9LF+bXrxCxZAwv2vI9HDkvxrYH0apYO4SRq3NUc93KlYxPIWq9ynSrj8g7Ea42ubN78Fj2o4Ighx07c17S9KrNkAAMQAEAAAAEBAAQAAQCWAAAAAAAAAADKmjsAAAAA",
+                "sha256": "1fa8d50184a019fcff941ae025a5d1a2d6d703cb9e6a3509c2cadc164ad14ef8"
+              },
+              {
+                "address": "9U8buwQV779ywn93fiJKhNm2iaTPqVDELmQoTW2agUsY",
+                "kind": "Match",
+                "base64": "QVhQTUtUMDIEAjUst9SxnhXltgMVyHixB+Gz0P19OZWWQJETSrX2GX9VKWLedx2IuL/k4GGoguURoPU4NW80fsH7Du8IexX2Ecpt0yLrlAlJK05URd8jn6A+5lmBB9osgaeVDIBgyYR/EZi2j5CZrOyVTOgVWPcBtr3Si7GJtiII5H3Q/1HF4V9OAAAAAAAAAAABAAAAAAAAACD0BH/uEeGKQf0PmJRcZouScpJ24wfPFuM5Nzd4aK4rIPQEf+4R4YpB/Q+YlFxmi5JyknbjB88W4zk3N3horiucjyhBOZL4t/IgkF0ZB2ksISdxxeHd+BQkixPNzk6Pn2Dlv+FFkYthUWOuuU/HEt5dV4pXbhiPHTCVfdc3FZVnRKB5qk9v9SOC0eZvPnMw/ei+dF4Kim85hhhLlSwawDsYPft4PkuNvdVmPFWs1Z2wXvzZkZ8UE/TUKo8HiJwkiwJNeXxhQsxWfdaBTIuL3Ng3/FbqXhbclkU6oxESRLkzECcAAAAAAABkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXnHVgF6GZ5tsSH8aWQ8610REi8zqJ43CYKBZkdKpdnXLBgAAAAAAAJ6dTA9nXtKxd4u2ULCze6NLPXQ7fxXkaS3MrajfS42VSQcAAAAAAAAQVU8AAAAAABAnAAAAAAAAnI8oQTmS+LfyIJBdGQdpLCEnccXh3fgUJIsTzc5Oj58AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "sha256": "69f51ad4f3f1af052491c56427ea171268290c98865ec41f25179fe485d69c48"
+              },
+              {
+                "address": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+                "kind": "Series",
+                "base64": "QVhQTUtUMDICATUst9SxnhXltgMVyHixB+Gz0P19OZWWQJETSrX2GX9VdMhR50AST4diCqXYMjMDid7IOWysTbXsYJ7mpMmuDk2cjyhBOZL4t/IgkF0ZB2ksISdxxeHd+BQkixPNzk6Pnwv7whde9RKaxcTW7ak46CDzmbR9kZJbIG5H2gBevVcvcUwDXtW7eNaLat0b2zYu3ronSTwMwe4PqZXBc4784TcKf4Xa8VwdF9qzCt7WmCilNQ5kNJUSNXvcDvSHVVleEAIuGAAAAAAAABAnAAAAAAAABAAEAAMBPgEAAA==",
+                "sha256": "5020bcae415c953966c680ef729e1cf5204671e79c3dd8109d6fdc9c42c3e516"
+              },
+              {
+                "address": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
+                "kind": "Unit",
+                "base64": "QVhQTUtUMDIDAzUst9SxnhXltgMVyHixB+Gz0P19OZWWQJETSrX2GX9VmLaPkJms7JVM6BVY9wG2vdKLsYm2IgjkfdD/UcXhX04mbNENbmz0UlBoL895TbJ41ZqckIQX0qFyMAh4yDOiEwAAIPQEf+4R4YpB/Q+YlFxmi5JyknbjB88W4zk3N3horisDAAAAAAAAAAAAfdDF1kXL3ZZLMD3h3EqZ0z0d4byDvfRxxs+YedXDEUd90MXWRcvdlkswPeHcSpnTPR3hvIO99HHGz5h51cMRRxAnAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACpPI0xPSaoBFBwI+yFBmhIDyI8FDuP3LwvldIEZClGMgEAAAAAAAAACgcAAAAAAACgBwAAAAAAAJ6dTA9nXtKxd4u2ULCze6NLPXQ7fxXkaS3MrajfS42Vv43bKZqf6hz8JXNR6BZuYMKOryXijhJJwUc3I9SkPeFJBwAAAAAAAAE=",
+                "sha256": "f4e7cea1952a00f69667edc7bd3eac40d5e29ac77c27b2d7cfe3ce368c99fb56"
+              }
+            ],
+            "rent": []
+          },
+          "observed": {
+            "operationId": "9e9d4c0f675ed2b1778bb650b0b37ba34b3d743b7f15e4692dccada8df4b8d95",
+            "contextSlot": "1883",
+            "status": "success",
+            "evidence": "transaction-finalized",
+            "nativeEvidence": true,
+            "signature": "2D1b9U8UrgnrdpGkg8mtmp9PafPN8yUKFTJxsrqaCmUx2S6Giv2U7Qpe2S2gZstSwTwZ3FGotL6Uiija6GPqYngD",
+            "transactionSlot": "1865",
+            "computeUnitsConsumed": "27047",
+            "feeKnown": true,
+            "operatingCost": {
+              "fee": "5000",
+              "rent": "0"
+            },
+            "effects": {
+              "fee": "5000",
+              "rent": "0",
+              "feePayer": "9xQgemUiGXg7G86Px3ELAmWpdoH4b6c9YHsnk5u1FfYL",
+              "economicReplay": false,
+              "deltas": [
+                {
+                  "key": "9xQgemUiGXg7G86Px3ELAmWpdoH4b6c9YHsnk5u1FfYL",
+                  "pre": "170124240",
+                  "post": "170119240",
+                  "delta": "-5000"
+                },
+                {
+                  "key": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
+                  "pre": "3556560",
+                  "post": "3556560",
+                  "delta": "0"
+                },
+                {
+                  "key": "9U8buwQV779ywn93fiJKhNm2iaTPqVDELmQoTW2agUsY",
+                  "pre": "5209120",
+                  "post": "5199120",
+                  "delta": "-10000"
+                },
+                {
+                  "key": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+                  "pre": "5000000",
+                  "post": "5009900",
+                  "delta": "9900"
+                },
+                {
+                  "key": "9jgNjiUt1mMQBesUQPymgw611Z28SqoQ3GjQAHXGYruL",
+                  "pre": "1000000",
+                  "post": "1000100",
+                  "delta": "100"
+                },
+                {
+                  "key": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+                  "pre": "3626160",
+                  "post": "3626160",
+                  "delta": "0"
+                },
+                {
+                  "key": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+                  "pre": "2484720",
+                  "post": "2484720",
+                  "delta": "0"
+                },
+                {
+                  "key": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+                  "pre": "1141440",
+                  "post": "1141440",
+                  "delta": "0"
+                }
+              ]
+            },
+            "proof": {
+              "effect": true,
+              "state": "Consumed",
+              "unit": {
+                "kind": "Unit",
+                "state": 3,
+                "market": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+                "series": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+                "unitId": "266cd10d6e6cf45250682fcf794db278d59a9c908417d2a172300878c833a213",
+                "serial": 0,
+                "owner": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+                "cursor": "3",
+                "transferCount": 0,
+                "sponsored": 0,
+                "primaryMatch": "9U8buwQV779ywn93fiJKhNm2iaTPqVDELmQoTW2agUsY",
+                "latestMatch": "9U8buwQV779ywn93fiJKhNm2iaTPqVDELmQoTW2agUsY",
+                "refundFace": "10000",
+                "sponsorRefundKey": "11111111111111111111111111111111",
+                "requestHash": "a93c8d313d26a804507023ec850668480f223c143b8fdcbc2f95d20464294632",
+                "lockStartCursor": "1",
+                "lockStartSlot": "1802",
+                "lockDeadlineSlot": "1952",
+                "terminalOpHash": "9e9d4c0f675ed2b1778bb650b0b37ba34b3d743b7f15e4692dccada8df4b8d95",
+                "responseHash": "bf8ddb299a9fea1cfc257351e8166e60c28eaf25e28e1249c1473723d4a43de1",
+                "terminalSlot": "1865",
+                "terminalReason": 1,
+                "address": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
+                "lamports": "3556560",
+                "dataHash": "f4e7cea1952a00f69667edc7bd3eac40d5e29ac77c27b2d7cfe3ce368c99fb56",
+                "stateName": "Consumed"
+              },
+              "primaryMatch": {
+                "kind": "Match",
+                "state": 2,
+                "market": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+                "matchId": "2962de771d88b8bfe4e061a882e511a0f538356f347ec1fb0eef087b15f611ca",
+                "unit": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
+                "series": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+                "expectedCursor": "0",
+                "fundedCursor": "1",
+                "payer": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+                "beneficiary": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+                "seller": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+                "buyNonce": "60e5bfe145918b615163aeb94fc712de5d578a576e188f1d30957dd737159567",
+                "sellNonce": "44a079aa4f6ff52382d1e66f3e7330fde8be745e0a8a6f3986184b952c1ac03b",
+                "buyAuthHash": "183dfb783e4b8dbdd5663c55acd59db05efcd9919f1413f4d42a8f07889c248b",
+                "sellAuthHash": "024d797c6142cc567dd6814c8b8bdcd837fc56ea5e16dc96453aa3111244b933",
+                "gross": "10000",
+                "fee": "100",
+                "tradeKind": 0,
+                "packetHash": "0000000000000000000000000000000000000000000000000000000000000000",
+                "campaignId": "0000000000000000000000000000000000000000000000000000000000000000",
+                "fundTermsHash": "5e71d5805e86679b6c487f1a590f3ad744448bccea278dc260a05991d2a97675",
+                "fundedSlot": "1739",
+                "terminalOpHash": "9e9d4c0f675ed2b1778bb650b0b37ba34b3d743b7f15e4692dccada8df4b8d95",
+                "terminalSlot": "1865",
+                "rentReserve": "5199120",
+                "primaryClaimFace": "10000",
+                "terminalRecipient": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+                "previousMatch": "11111111111111111111111111111111",
+                "address": "9U8buwQV779ywn93fiJKhNm2iaTPqVDELmQoTW2agUsY",
+                "lamports": "5199120",
+                "dataHash": "69f51ad4f3f1af052491c56427ea171268290c98865ec41f25179fe485d69c48",
+                "stateName": "PrimarySettled"
+              },
+              "terminalOperationId": "9e9d4c0f675ed2b1778bb650b0b37ba34b3d743b7f15e4692dccada8df4b8d95",
+              "recipient": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ"
+            },
+            "wallets": [
+              {
+                "key": "9xQgemUiGXg7G86Px3ELAmWpdoH4b6c9YHsnk5u1FfYL",
+                "balance": "170119240"
+              },
+              {
+                "key": "9jgNjiUt1mMQBesUQPymgw611Z28SqoQ3GjQAHXGYruL",
+                "balance": "1000100"
+              },
+              {
+                "key": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+                "balance": "5009900"
+              }
+            ],
+            "accounts": [
+              {
+                "address": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+                "missing": false,
+                "dataHash": "1fa8d50184a019fcff941ae025a5d1a2d6d703cb9e6a3509c2cadc164ad14ef8",
+                "lamports": "3626160",
+                "decoded": {
+                  "kind": "Market",
+                  "state": 1,
+                  "market": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+                  "initializer": "9xQgemUiGXg7G86Px3ELAmWpdoH4b6c9YHsnk5u1FfYL",
+                  "marketNonce": "44c4b538515f9c8f2b1d87f07507376436a11f024c85d6f2f6fa17eee76b0867",
+                  "genesis": "7f5e04f0437b95acca9b3e93689043eb2a4c03af3f90e36626d41506d4b9e08e",
+                  "matcher": "9xQgemUiGXg7G86Px3ELAmWpdoH4b6c9YHsnk5u1FfYL",
+                  "gateway": "9xQgemUiGXg7G86Px3ELAmWpdoH4b6c9YHsnk5u1FfYL",
+                  "feeCollector": "9jgNjiUt1mMQBesUQPymgw611Z28SqoQ3GjQAHXGYruL",
+                  "issuer": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+                  "buyerA": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+                  "buyerB": "FBmi1NHkey8yG8muNRU7wErKUsMdP38gZkqksdk7Lnzp",
+                  "sponsor": "7fkrm7NrpoExxv2C8Pt8BBgu7osLRHDGh7W1MbErsEnn",
+                  "feeBps": 100,
+                  "maxTransfers": 3,
+                  "maxSeries": 16,
+                  "maxUnits": 64,
+                  "maxMatches": 256,
+                  "issuedSeries": 1,
+                  "issuedUnits": 4,
+                  "fundedMatches": 1,
+                  "leaseSlots": "150",
+                  "maxGross": "1000000000",
+                  "address": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+                  "lamports": "3626160",
+                  "dataHash": "1fa8d50184a019fcff941ae025a5d1a2d6d703cb9e6a3509c2cadc164ad14ef8"
+                }
+              },
+              {
+                "address": "9xQgemUiGXg7G86Px3ELAmWpdoH4b6c9YHsnk5u1FfYL",
+                "missing": false,
+                "dataHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "lamports": "170119240",
+                "decoded": null
+              },
+              {
+                "address": "9jgNjiUt1mMQBesUQPymgw611Z28SqoQ3GjQAHXGYruL",
+                "missing": false,
+                "dataHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "lamports": "1000100",
+                "decoded": null
+              },
+              {
+                "address": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+                "missing": false,
+                "dataHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "lamports": "5009900",
+                "decoded": null
+              },
+              {
+                "address": "9U8buwQV779ywn93fiJKhNm2iaTPqVDELmQoTW2agUsY",
+                "missing": false,
+                "dataHash": "69f51ad4f3f1af052491c56427ea171268290c98865ec41f25179fe485d69c48",
+                "lamports": "5199120",
+                "decoded": {
+                  "kind": "Match",
+                  "state": 2,
+                  "market": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+                  "matchId": "2962de771d88b8bfe4e061a882e511a0f538356f347ec1fb0eef087b15f611ca",
+                  "unit": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
+                  "series": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+                  "expectedCursor": "0",
+                  "fundedCursor": "1",
+                  "payer": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+                  "beneficiary": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+                  "seller": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+                  "buyNonce": "60e5bfe145918b615163aeb94fc712de5d578a576e188f1d30957dd737159567",
+                  "sellNonce": "44a079aa4f6ff52382d1e66f3e7330fde8be745e0a8a6f3986184b952c1ac03b",
+                  "buyAuthHash": "183dfb783e4b8dbdd5663c55acd59db05efcd9919f1413f4d42a8f07889c248b",
+                  "sellAuthHash": "024d797c6142cc567dd6814c8b8bdcd837fc56ea5e16dc96453aa3111244b933",
+                  "gross": "10000",
+                  "fee": "100",
+                  "tradeKind": 0,
+                  "packetHash": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "campaignId": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "fundTermsHash": "5e71d5805e86679b6c487f1a590f3ad744448bccea278dc260a05991d2a97675",
+                  "fundedSlot": "1739",
+                  "terminalOpHash": "9e9d4c0f675ed2b1778bb650b0b37ba34b3d743b7f15e4692dccada8df4b8d95",
+                  "terminalSlot": "1865",
+                  "rentReserve": "5199120",
+                  "primaryClaimFace": "10000",
+                  "terminalRecipient": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+                  "previousMatch": "11111111111111111111111111111111",
+                  "address": "9U8buwQV779ywn93fiJKhNm2iaTPqVDELmQoTW2agUsY",
+                  "lamports": "5199120",
+                  "dataHash": "69f51ad4f3f1af052491c56427ea171268290c98865ec41f25179fe485d69c48",
+                  "stateName": "PrimarySettled"
+                }
+              },
+              {
+                "address": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+                "missing": false,
+                "dataHash": "5020bcae415c953966c680ef729e1cf5204671e79c3dd8109d6fdc9c42c3e516",
+                "lamports": "2484720",
+                "decoded": {
+                  "kind": "Series",
+                  "state": 1,
+                  "market": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+                  "seriesId": "74c851e740124f87620aa5d832330389dec8396cac4db5ec609ee6a4c9ae0e4d",
+                  "issuer": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+                  "resourceHash": "0bfbc2175ef5129ac5c4d6eda938e820f399b47d91925b206e47da005ebd572f",
+                  "versionHash": "714c035ed5bb78d68b6add1bdb362edeba27493c0cc1ee0fa995c1738efce137",
+                  "termsHash": "0a7f85daf15c1d17dab30aded69828a5350e64349512357bdc0ef48755595e10",
+                  "format": 2,
+                  "useBySlot": "6190",
+                  "sponsoredPrice": "10000",
+                  "cap": 4,
+                  "issued": 4,
+                  "maxTransfers": 3,
+                  "transferable": 1,
+                  "contentBytes": 318,
+                  "address": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+                  "lamports": "2484720",
+                  "dataHash": "5020bcae415c953966c680ef729e1cf5204671e79c3dd8109d6fdc9c42c3e516"
+                }
+              },
+              {
+                "address": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
+                "missing": false,
+                "dataHash": "f4e7cea1952a00f69667edc7bd3eac40d5e29ac77c27b2d7cfe3ce368c99fb56",
+                "lamports": "3556560",
+                "decoded": {
+                  "kind": "Unit",
+                  "state": 3,
+                  "market": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+                  "series": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+                  "unitId": "266cd10d6e6cf45250682fcf794db278d59a9c908417d2a172300878c833a213",
+                  "serial": 0,
+                  "owner": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+                  "cursor": "3",
+                  "transferCount": 0,
+                  "sponsored": 0,
+                  "primaryMatch": "9U8buwQV779ywn93fiJKhNm2iaTPqVDELmQoTW2agUsY",
+                  "latestMatch": "9U8buwQV779ywn93fiJKhNm2iaTPqVDELmQoTW2agUsY",
+                  "refundFace": "10000",
+                  "sponsorRefundKey": "11111111111111111111111111111111",
+                  "requestHash": "a93c8d313d26a804507023ec850668480f223c143b8fdcbc2f95d20464294632",
+                  "lockStartCursor": "1",
+                  "lockStartSlot": "1802",
+                  "lockDeadlineSlot": "1952",
+                  "terminalOpHash": "9e9d4c0f675ed2b1778bb650b0b37ba34b3d743b7f15e4692dccada8df4b8d95",
+                  "responseHash": "bf8ddb299a9fea1cfc257351e8166e60c28eaf25e28e1249c1473723d4a43de1",
+                  "terminalSlot": "1865",
+                  "terminalReason": 1,
+                  "address": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
+                  "lamports": "3556560",
+                  "dataHash": "f4e7cea1952a00f69667edc7bd3eac40d5e29ac77c27b2d7cfe3ce368c99fb56",
+                  "stateName": "Consumed"
+                }
+              }
+            ]
+          },
+          "transactionHash": "9570741e9a75a75d79da90e42f239fdda6049e14efb854080fc97ccf8da30165",
+          "rentLamports": "0"
+        },
+        "payoutDeltas": [
+          {
+            "key": "9xQgemUiGXg7G86Px3ELAmWpdoH4b6c9YHsnk5u1FfYL",
+            "pre": "170124240",
+            "post": "170119240",
+            "delta": "-5000"
+          },
+          {
+            "key": "8PiAp55ZbbwzjduWnmoarm1kjD8CVvGWbBvpdAyWbDXv",
+            "pre": "3556560",
+            "post": "3556560",
+            "delta": "0"
+          },
+          {
+            "key": "9U8buwQV779ywn93fiJKhNm2iaTPqVDELmQoTW2agUsY",
+            "pre": "5209120",
+            "post": "5199120",
+            "delta": "-10000"
+          },
+          {
+            "key": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+            "pre": "5000000",
+            "post": "5009900",
+            "delta": "9900"
+          },
+          {
+            "key": "9jgNjiUt1mMQBesUQPymgw611Z28SqoQ3GjQAHXGYruL",
+            "pre": "1000000",
+            "post": "1000100",
+            "delta": "100"
+          },
+          {
+            "key": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+            "pre": "3626160",
+            "post": "3626160",
+            "delta": "0"
+          },
+          {
+            "key": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+            "pre": "2484720",
+            "post": "2484720",
+            "delta": "0"
+          },
+          {
+            "key": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+            "pre": "1141440",
+            "post": "1141440",
+            "delta": "0"
+          }
+        ],
+        "wallets": [
+          {
+            "address": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+            "lamports": "5009900"
+          },
+          {
+            "address": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+            "lamports": "4990000"
+          },
+          {
+            "address": "7fkrm7NrpoExxv2C8Pt8BBgu7osLRHDGh7W1MbErsEnn",
+            "lamports": "5000000"
+          },
+          {
+            "address": "9jgNjiUt1mMQBesUQPymgw611Z28SqoQ3GjQAHXGYruL",
+            "lamports": "1000100"
+          }
+        ],
+        "contextSlot": "1883"
+      },
+      "summary": "Scripted result from delivered data: North has the lower listed median (2 days) in this controlled fictional cohort.",
       "error": null
     },
     {
@@ -101,16 +689,16 @@
   "budget": {
     "fundingRequests": 5,
     "localFundingLamports": "216000000",
-    "nativeSigningSlots": 6,
-    "totalAttemptSlots": 11,
+    "nativeSigningSlots": 9,
+    "totalAttemptSlots": 14,
     "maximumAttempts": 32,
     "maximumFundingLamports": "250000000"
   },
   "resources": {
-    "freeBytes": 147483787264,
-    "totalTaskBytes": 9154220032,
-    "appBytes": 598016,
-    "ledgerBytes": 1171128320
+    "freeBytes": 146261839872,
+    "totalTaskBytes": 10346586112,
+    "appBytes": 757760,
+    "ledgerBytes": 2364383232
   },
   "errors": []
 }

@@ -1,9 +1,9 @@
-(node:31746) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:47333) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
-✔ controlled agent selects source independently and declares scripted policy (0.539042ms)
-✔ negative sponsor opinion does not deny explicitly consented funding (0.527833ms)
-✔ delivered source produces the same deterministic answer with no packet input (0.116583ms)
-✔ resume preserves prepared identities, reservations and cached authorizations; rejects changed or started state (1.644125ms)
+✔ controlled agent selects source independently and declares scripted policy (0.711541ms)
+✔ negative sponsor opinion does not deny explicitly consented funding (0.5755ms)
+✔ delivered source produces the same deterministic answer with no packet input (0.1425ms)
+✔ resume preserves prepared identities, reservations and cached authorizations; rejects changed or started state (1.376416ms)
 ℹ tests 4
 ℹ suites 0
 ℹ pass 4
@@ -11,4 +11,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 79.586125
+ℹ duration_ms 77.566625

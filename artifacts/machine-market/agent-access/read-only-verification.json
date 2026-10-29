@@ -1,0 +1,35 @@
+{
+  "mode": "actual-local-native-read-only-verification",
+  "cases": {
+    "direct-success": {
+      "passed": true,
+      "sourceUnchanged": true,
+      "replaySameBytes": true,
+      "packetSeparate": null,
+      "denialHttpStatus": 403,
+      "denialCode": "INVALID_AUTH",
+      "remainingPrincipal": "0",
+      "extraNativeSigningSlots": 0,
+      "finalizedSlot": "1865",
+      "publisherDelta": "9900",
+      "collectorDelta": "100",
+      "refundDelta": "0"
+    }
+  },
+  "status": "partial_one_of_four_verified",
+  "runtimeStopped": true,
+  "monitorStopReason": "Owned runtime intentionally stopped after direct-success verification; polling then encountered the stopped server.",
+  "nativeOutboxStates": [
+    {
+      "state": "ResolvedSuccess",
+      "blocked": 0,
+      "count": 9
+    }
+  ],
+  "holds": {
+    "principal_holds": 0,
+    "operating_holds": 0,
+    "native_fee_holds": 0,
+    "campaign_reservations": 0
+  }
+}

@@ -1,3 +1,17 @@
+# Agent-access result — direct success verified; three alternatives unexecuted
+
+29 October 2026. The human executed direct Run on the same local ledger. Actual
+Fund/Start/Finalize settled at slots 1739/1802/1865, delivered the original source,
+and paid publisher 9,900 + collector 100 lamports. Replay required no new native
+signature; the wrong owner received HTTP 403 INVALID_AUTH. Principal and operating
+holds, campaign reservations and unresolved operations are zero. All runtimes stopped.
+
+The slice remains partial: sponsored success and both refunds were unstarted when
+the original cumulative runtime window was nearly exhausted. Funding is 0.216/0.25
+LOCAL test SOL; attempts 14/32. [Current operation/evidence](AGENT_ACCESS_RUNBOOK.md) ·
+[Strict verification](../../artifacts/machine-market/agent-access/read-only-verification.json).
+The following earlier records remain historical.
+
 # Agent-access research slice — prepared; browser handoff blocked
 
 29 October 2026. The controlled-source screen and native bridge are implemented.
