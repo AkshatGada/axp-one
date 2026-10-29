@@ -14,38 +14,77 @@
       "publisherDelta": "9900",
       "collectorDelta": "100",
       "refundDelta": "0"
+    },
+    "sponsored-success": {
+      "passed": true,
+      "sourceUnchanged": true,
+      "replaySameBytes": true,
+      "packetSeparate": true,
+      "denialHttpStatus": 403,
+      "denialCode": "INVALID_AUTH",
+      "remainingPrincipal": "0",
+      "extraNativeSigningSlots": 0,
+      "finalizedSlot": "4513",
+      "publisherDelta": "9900",
+      "collectorDelta": "100",
+      "refundDelta": "0"
     }
   },
-  "status": "fix_tested_funded_recovery_validated_no_new_run_click",
+  "status": "partial_two_verified_buyer_fund_unknown",
   "runtimeStopped": true,
-  "monitorStopReason": "Runtime intentionally stopped to preserve its remaining allowance while awaiting the required human action. No new case executed.",
+  "monitorStopReason": "Sponsored recovery verified. Human buyer Run overlapped operator shutdown; exact Fund retained Unknown after bounded observation. Sponsor refund unstarted.",
   "nativeOutboxStates": [
     {
       "state": "ResolvedSuccess",
       "blocked": 0,
-      "count": 10
+      "count": 12
+    },
+    {
+      "state": "Unknown",
+      "blocked": 1,
+      "count": 1
     }
   ],
   "holds": {
-    "principal_holds": 0,
-    "operating_holds": 0,
-    "native_fee_holds": 0,
-    "activeCampaignReservations": 0
+    "principal": [
+      {
+        "amount": "10000",
+        "owner_type": "match",
+        "owner_id": "2dd889001dbd8b51db453adc2cfa9b35602d39a3869f6f2b7017e85643baf4ae"
+      }
+    ],
+    "unit": [
+      {
+        "unit": "BuHGawyoc33BADHfD9gqgDzYS7DQaai7FA17twpeoP2Z",
+        "owner_type": "match",
+        "owner_id": "2dd889001dbd8b51db453adc2cfa9b35602d39a3869f6f2b7017e85643baf4ae"
+      }
+    ],
+    "operating": [
+      {
+        "operation_id": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+        "amount": "9473640",
+        "unknown": 1
+      }
+    ],
+    "nativeFee": [
+      {
+        "operation_id": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+        "amount": "9473640"
+      }
+    ],
+    "activeCampaign": []
   },
   "continuationOnly": [
     "sponsored-success",
     "direct-failure",
     "sponsored-failure"
   ],
-  "sponsoredFundOnly": {
-    "signature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
-    "finalizedSlot": "3390",
-    "principalOutstanding": "10000",
-    "fullCasePassed": false
-  },
   "recoveryValidation": {
     "signature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
     "evidence": "persisted-finalized-proof-and-current-native-accounts",
     "contextSlot": "3512"
-  }
+  },
+  "buyerUnknownSignature": "3na3JMKBtuujwMLXPcaSxmsvLfpiUh4QonRgrYvCJqtdAcBjWMzhChYkrFgKyYMYPhr5Nef2eM95Q3DvtM1ZbPPh",
+  "sponsoredRecoveryComplete": true
 }

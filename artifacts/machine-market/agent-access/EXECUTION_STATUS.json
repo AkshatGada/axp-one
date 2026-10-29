@@ -1,6 +1,6 @@
 {
   "schema": "axp.agent-access.execution-status.v1",
-  "status": "fix_tested_recovery_ready_awaiting_human_click",
+  "status": "sponsored_recovered_buyer_fund_unknown_sponsor_refund_unstarted",
   "recordedAt": "2026-10-29",
   "runId": "agent-access-local-20261028",
   "implementationCommit": "b27b3f4f420dae85eae1bada5623dd1a7dae5487",
@@ -12,19 +12,19 @@
   "program": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
   "cases": {
     "direct-success": "delivered",
-    "sponsored-success": "stopped",
-    "direct-failure": "available",
+    "sponsored-success": "delivered",
+    "direct-failure": "funding-native-pending",
     "sponsored-failure": "available"
   },
-  "executedAccessCases": 2,
+  "executedAccessCases": 3,
   "finalizedFundingRequests": 5,
   "localFundingLamports": "216000000",
   "finalizedProgramSetupTransactions": 6,
-  "attemptSlots": 15,
+  "attemptSlots": 18,
   "maximumAttemptSlots": 32,
   "maximumFundingLamports": "250000000",
-  "observedProgramAndFaucetFeesLamports": "130000",
-  "activeElapsedMs": 2178044,
+  "observedProgramAndFaucetFeesLamports": "145000",
+  "activeElapsedMs": 2395614,
   "maximumActiveMs": 2400000,
   "seriesUseBySlot": "6190",
   "readValidUntilSlot": "10190",
@@ -36,30 +36,58 @@
     "humanExplicitlyResumedAfterPause": true,
     "automaticReviewRejectedFinalClick": true,
     "reason": "The click would execute a native settlement transfer, which is a consequential financial action requiring user handoff at the final browser action; pre-approval cannot replace that requirement.",
-    "requiredNextAction": "Human final Continue existing funded case click, then the two refund Run clicks after verification. Recovery is authorized; no new funding or approval is needed within the recorded caps."
+    "requiredNextAction": "Reconcile only the original buyer Fund identity under a new explicitly bounded runtime allowance before further spending; no resend/re-sign/reset. The remaining 4386ms is insufficient for finality and completion."
   },
   "unexercised": [
-    "sponsored successful delivery and publisher payout",
-    "buyer refund",
-    "sponsor refund"
+    "buyer admitted failure delivery/refund",
+    "sponsor admitted failure/refund"
   ],
-  "verifiedAccessCases": 1,
-  "finalizedProgramTransactions": 10,
-  "finalizedAccessTransactions": 4,
+  "verifiedAccessCases": 2,
+  "finalizedProgramTransactions": 12,
+  "finalizedAccessTransactions": 6,
   "observedRetainedRentLamports": "39254400",
-  "remainingActiveMs": 221956,
+  "remainingActiveMs": 4386,
   "nativeOutboxStates": [
     {
       "state": "ResolvedSuccess",
       "blocked": 0,
-      "count": 10
+      "count": 12
+    },
+    {
+      "state": "Unknown",
+      "blocked": 1,
+      "count": 1
     }
   ],
   "holds": {
-    "principal_holds": 0,
-    "operating_holds": 0,
-    "native_fee_holds": 0,
-    "activeCampaignReservations": 0
+    "principal": [
+      {
+        "amount": "10000",
+        "owner_type": "match",
+        "owner_id": "2dd889001dbd8b51db453adc2cfa9b35602d39a3869f6f2b7017e85643baf4ae"
+      }
+    ],
+    "unit": [
+      {
+        "unit": "BuHGawyoc33BADHfD9gqgDzYS7DQaai7FA17twpeoP2Z",
+        "owner_type": "match",
+        "owner_id": "2dd889001dbd8b51db453adc2cfa9b35602d39a3869f6f2b7017e85643baf4ae"
+      }
+    ],
+    "operating": [
+      {
+        "operation_id": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+        "amount": "9473640",
+        "unknown": 1
+      }
+    ],
+    "nativeFee": [
+      {
+        "operation_id": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+        "amount": "9473640"
+      }
+    ],
+    "activeCampaign": []
   },
   "directSuccess": {
     "grossLamports": "10000",
@@ -71,64 +99,23 @@
     "sourceHash": "0bfbc2175ef5129ac5c4d6eda938e820f399b47d91925b206e47da005ebd572f",
     "responseHash": "bf8ddb299a9fea1cfc257351e8166e60c28eaf25e28e1249c1473723d4a43de1"
   },
-  "stopReason": "operator_stop_to_preserve_remaining_window_for_required_human_clicks",
+  "stopReason": "operator shutdown overlapped human buyer admission; bounded observation preserved unknown original attempt",
   "approvedAdditionalActiveMs": 1200000,
-  "completedAccessCases": 1,
+  "completedAccessCases": 2,
   "shutdownCheckpointOverCapMs": 2028,
-  "fundedPrincipalOutstandingLamports": "10000",
+  "fundedPrincipalOutstandingLamports": "0",
   "workflowIncomplete": true,
-  "knownSponsoredFund": {
-    "schema": "axp.agent-access.interrupted-sponsored.v1",
-    "workflowError": "SERVICE_UNAVAILABLE",
-    "originalFundOperationId": "16985275b3de4a848e72c5bed1826257dc6b205d40cf8d252124d22139594a8f",
-    "signature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
-    "transactionSha256": "80e97a35291bd21f5d8563a385584f65723921ddf30c4fea7ffc80c13855fb7b",
-    "finalizedSlot": "3390",
-    "nativeOutcome": "FinalizedSuccess",
-    "workflowOutcome": "stopped_after_fund_before_delivery_request",
-    "fundedPrincipalOutstandingLamports": "10000",
-    "sponsorRefundKey": "7fkrm7NrpoExxv2C8Pt8BBgu7osLRHDGh7W1MbErsEnn",
-    "unit": "BP4DKE9xexmTQL1omeLkEwTtLa8ZJWbo8Cemh7ecmhgY",
-    "unitState": "FundedOpen",
-    "cursor": "1",
-    "deliveryRequestCreated": false,
-    "protectedBodyReturned": false,
-    "publisherPayoutLamports": "0",
-    "reconciliationSignedOrResent": false,
-    "remainingCasesUntouched": [
-      "direct-failure",
-      "sponsored-failure"
-    ],
-    "nativeOutboxStates": [
-      {
-        "state": "ResolvedSuccess",
-        "blocked": 0,
-        "count": 10
-      }
-    ],
-    "holds": {
-      "principal_holds": 0,
-      "operating_holds": 0,
-      "native_fee_holds": 0,
-      "activeCampaignReservations": 0
-    },
-    "campaign": {
-      "consumedGross": "10000",
-      "consumedCount": 1,
-      "refundedGross": "0"
-    },
-    "totalAttemptSlots": 15,
-    "nativeSendRows": 10,
-    "fundingLamports": "216000000",
-    "additionalFundingRequests": 0,
-    "originalDirectProofPreserved": true,
-    "originalDirectWorkflowCasePreserved": true,
-    "originalAuthorizationCacheEntriesPreserved": true,
-    "maximumActiveMs": 1800000,
-    "shutdownElapsedMs": 1802028,
-    "shutdownCheckpointOverCapMs": 2028,
-    "runtimeStopReason": "LOCAL_EXECUTION_TIME_CAP",
-    "noFurtherExecutionAuthorizedByThisRecord": true
+  "directTerminalPrincipalEscrowLamports": "0",
+  "unknownNativeOperations": 1,
+  "unresolvedBuyerPrincipalReservationLamports": "10000",
+  "unresolvedBuyerFeeReserveLamports": "15000",
+  "unresolvedBuyerRentReserveLamports": "9458640",
+  "sponsoredRecovery": {
+    "passed": true,
+    "originalFundSignature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
+    "payoutLamports": "9900",
+    "collectorLamports": "100",
+    "remainingPrincipal": "0"
   },
-  "directTerminalPrincipalEscrowLamports": "0"
+  "originalDirectProofPreserved": true
 }

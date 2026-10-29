@@ -1,0 +1,120 @@
+{
+  "schema": "axp.agent-access.buyer-unknown.v1",
+  "workflowCase": "direct-failure",
+  "workflowStatus": "funding-native-pending",
+  "trigger": "human Run click admitted while operator shutdown was being requested",
+  "operationId": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+  "signature": "3na3JMKBtuujwMLXPcaSxmsvLfpiUh4QonRgrYvCJqtdAcBjWMzhChYkrFgKyYMYPhr5Nef2eM95Q3DvtM1ZbPPh",
+  "transactionSha256": "da72485fc07408b581e239980c9ed1389b355d74ce77a635ef5112bad9a998c2",
+  "messageSha256": "a7b130a5f4b966fc4f713c2257f44c22ae2d08954b604dc8b74dc1498ed74184",
+  "blockhash": "J15oQ7yL9JMmxAJaVQosTRMwMt7TZs1QEKJGCKhjFA6B",
+  "lastValidBlockHeight": "4845",
+  "originalSendRows": 1,
+  "nativeState": "Unknown",
+  "blocked": true,
+  "reconciliation": {
+    "contextSlot": "4728",
+    "evidence": "account-state-only",
+    "factsHash": "05cc07703dd9e8809ff90cde4a2b0f7e0450e41802bde3f8d4256ee208cdd97c",
+    "latestEvidence": "account-state-only",
+    "operatingFeesKnown": false,
+    "signature": null,
+    "status": "unknown"
+  },
+  "facts": {
+    "account": null,
+    "accountOwner": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+    "economicReplay": null,
+    "exactFailedTransaction": false,
+    "fundedMatchAbsent": true,
+    "operatingCost": null,
+    "operationId": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+    "orderUses": [],
+    "primaryMatch": null,
+    "receipt": null,
+    "receiptOwner": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+    "terminalOperationId": null,
+    "transactionSlot": null,
+    "unit": null,
+    "unitOwner": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+    "verified": true,
+    "wallets": [
+      {
+        "balance": "160625600",
+        "key": "9xQgemUiGXg7G86Px3ELAmWpdoH4b6c9YHsnk5u1FfYL",
+        "rent": "890880"
+      },
+      {
+        "balance": "4990000",
+        "key": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+        "rent": "890880"
+      },
+      {
+        "balance": "1000200",
+        "key": "9jgNjiUt1mMQBesUQPymgw611Z28SqoQ3GjQAHXGYruL",
+        "rent": "890880"
+      },
+      {
+        "balance": "5019800",
+        "key": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+        "rent": "890880"
+      }
+    ]
+  },
+  "feeReserveLamports": "15000",
+  "rentReserveLamports": "9458640",
+  "principalReservationLamports": "10000",
+  "signedBytesPreservedInIgnoredJournal": true,
+  "noReplacementSignatureOrResend": true,
+  "noDeliveryRequestCreated": true,
+  "sponsorRefundUntouched": true,
+  "nativeOutboxStates": [
+    {
+      "state": "ResolvedSuccess",
+      "blocked": 0,
+      "count": 12
+    },
+    {
+      "state": "Unknown",
+      "blocked": 1,
+      "count": 1
+    }
+  ],
+  "holds": {
+    "principal": [
+      {
+        "amount": "10000",
+        "owner_type": "match",
+        "owner_id": "2dd889001dbd8b51db453adc2cfa9b35602d39a3869f6f2b7017e85643baf4ae"
+      }
+    ],
+    "unit": [
+      {
+        "unit": "BuHGawyoc33BADHfD9gqgDzYS7DQaai7FA17twpeoP2Z",
+        "owner_type": "match",
+        "owner_id": "2dd889001dbd8b51db453adc2cfa9b35602d39a3869f6f2b7017e85643baf4ae"
+      }
+    ],
+    "operating": [
+      {
+        "operation_id": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+        "amount": "9473640",
+        "unknown": 1
+      }
+    ],
+    "nativeFee": [
+      {
+        "operation_id": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+        "amount": "9473640"
+      }
+    ],
+    "activeCampaign": []
+  },
+  "attemptSlots": 18,
+  "maximumAttempts": 32,
+  "fundingLamports": "216000000",
+  "maximumFundingLamports": "250000000",
+  "cumulativeElapsedMs": 2395614,
+  "maximumActiveMs": 2400000,
+  "remainingActiveMs": 4386
+}

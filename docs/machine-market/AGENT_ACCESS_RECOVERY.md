@@ -1,3 +1,16 @@
+# Current result — sponsored recovery passed; buyer Fund Unknown
+
+29 October 2026. Both direct and sponsored success are verified. The original
+sponsored Fund was not repeated; recovery paid publisher 9,900 + collector 100 and
+cleared its escrow. A human buyer-refund Run overlapped operator shutdown and its
+original signed Fund remains Unknown after bounded observation. Its full 10,000
+principal, 15,000 fee and 9,458,640 rent reservations are preserved. Sponsor refund
+is untouched. **18/32 attempts**, **0.216/0.25 LOCAL test SOL funded**. All runtimes
+stopped; **4,386 ms** remains under the 2,400,000-ms cap, insufficient for finality.
+[Exact results, original identity and next boundary](AGENT_ACCESS_RECOVERY_RESULT.md).
+
+The checkpoints below are historical and do not authorize another execution.
+
 # Local request fix and exact funded recovery — ready for human action
 
 29 October 2026. The user authorized fixing SERVICE_UNAVAILABLE, recovering the
