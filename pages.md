@@ -3,6 +3,15 @@
 Canonical origin: **https://axp.one**. Account entry points updated 13 October 2026.
 Localhost URLs are for explicit development and replay instructions only.
 
+## Isolated native-market CLI
+
+`npm run demo:market` is an offline **recorded Devnet** inspector;
+`npm run market -- live …` reads an already-configured native `/api/trading` service.
+The native read routes include health, book, orders, Units, operations and Matches.
+No new web route or funded service is started by inspection. The inherited
+`/market/` → `/api/market` browser prototype remains a historical synthetic simulator
+and does not represent native economics. See [the native MVP runbook](docs/machine-market/MVP_RUNBOOK.md).
+
 ## Account-owned product
 
 | Route | Purpose | Boundary |

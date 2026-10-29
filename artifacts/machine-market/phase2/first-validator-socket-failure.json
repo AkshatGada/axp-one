@@ -1,0 +1,17 @@
+{
+  "schema": "axp.market.validator.first-start.v1",
+  "validatorPid": 19166,
+  "binarySha256": "123bac12cc1236249a90431c900adf2183531ff2e9a6a021ec3bf2d525ab827d",
+  "health": "ok",
+  "genesis": "DiFc6vsemLp95cTNHVEyzGBCKWpKUKR3qRNVLFyM5LQ2",
+  "finalizedSlotObserved": 46,
+  "program": "9VzEiSEFVoDtE8ZxRNYvFrCdnzvQNoAbiPUxXquqYVcY",
+  "socketGate": "failed",
+  "wildcardUdp": [
+    "*:8000"
+  ],
+  "fixtureFundingRequests": 0,
+  "stopped": true,
+  "ledgerPreserved": true,
+  "originalManifestSha256": "d2ad6a0743270249809834cf1d55758a8b4c1214ab0ee3856d68a43fa37a5862"
+}

@@ -1,0 +1,162 @@
+{
+  "mode": "loopback-http-client-over-scripted-rpc-fixture",
+  "nativeProgramExecuted": false,
+  "realPublicNetworkCalls": 0,
+  "requests": 6,
+  "mutationRequests": 0,
+  "extraSignerCalls": 0,
+  "extraNativeSends": 0,
+  "steps": [
+    {
+      "command": "market live health",
+      "projection": {
+        "mode": "native-service-projection",
+        "origin": "http://127.0.0.1:57111",
+        "authority": "response-from-configured-loopback-service",
+        "freshChainVerification": false,
+        "data": {
+          "ok": true,
+          "mode": "local-solana-validator",
+          "genesis": "3232323232323232323232323232323232323232323232323232323232323232",
+          "program": "4Ss5JMkXAD9Z7cktFEdrqeMuT6jGMF1pVozTyPHZ6zT4",
+          "market": "3bUZ5Umt3frKZ1vT7ka3JmCb6wU4kYYz6io6N4scC796",
+          "authority": "local-service-configuration",
+          "nativeEvidence": false
+        }
+      }
+    },
+    {
+      "command": "market live book",
+      "projection": {
+        "mode": "native-service-projection",
+        "origin": "http://127.0.0.1:57111",
+        "authority": "response-from-configured-loopback-service",
+        "freshChainVerification": false,
+        "data": {
+          "mode": "local-solana-validator",
+          "genesis": "3232323232323232323232323232323232323232323232323232323232323232",
+          "series": "3QsnNtWkns4nsxRjxrScS7PAu5SGqLMbjoif78q2ZukC",
+          "orders": []
+        }
+      }
+    },
+    {
+      "command": "market live unit",
+      "projection": {
+        "mode": "native-service-projection",
+        "origin": "http://127.0.0.1:57111",
+        "authority": "response-from-configured-loopback-service",
+        "freshChainVerification": false,
+        "data": {
+          "address": "SYsRYx4tuRHzSrqEAJRQtd7zAH7CmZdmjjyty8dEnus",
+          "cursor": "3",
+          "kind": "Unit",
+          "latestMatch": "8b549n7QjgidhhmcYdFUn9FCFLpVgA66bAKnRaR9xPn6",
+          "lockDeadlineSlot": "250",
+          "lockStartCursor": "1",
+          "lockStartSlot": "100",
+          "market": "3bUZ5Umt3frKZ1vT7ka3JmCb6wU4kYYz6io6N4scC796",
+          "owner": "A8189oFjFx41UQ6AAngCyWs2LiXBoK9Eh7iCQ8qw4iMR",
+          "primaryMatch": "8b549n7QjgidhhmcYdFUn9FCFLpVgA66bAKnRaR9xPn6",
+          "refundFace": "10000",
+          "requestHash": "dc3b91880153499ff2231217450e371bf6ac8b435308fcf8754485cbdefa5531",
+          "responseHash": "6898fe4392fe734627c79d1e3ac7fae9867d829109ab4a9a569a4370311e3524",
+          "serial": 0,
+          "series": "3QsnNtWkns4nsxRjxrScS7PAu5SGqLMbjoif78q2ZukC",
+          "sponsorRefundKey": "PRWSxrf87Zhg8xAK1baWcVctJWQeyMXbg7xFvxpp6RV",
+          "sponsored": 1,
+          "state": "Consumed",
+          "terminalOpHash": "418ade5e4cd0c0b991d383173aed999d946d71d58e922697f8cbcc3050866dad",
+          "terminalReason": 1,
+          "terminalSlot": "100",
+          "transferCount": 0,
+          "unitId": "caecb94af8b9a0b4b472e753dea3ccedb577f5a963cd4680584e22eb318d195b",
+          "version": 7
+        }
+      }
+    },
+    {
+      "command": "market live order",
+      "projection": {
+        "mode": "native-service-projection",
+        "origin": "http://127.0.0.1:57111",
+        "authority": "response-from-configured-loopback-service",
+        "freshChainVerification": false,
+        "data": {
+          "orderId": "8c17be8cc36ad94e6d8fcb0f4d25cd7490e6cf6900a7a6f39b1de2c985b2ee9f",
+          "state": "Filled",
+          "version": 4,
+          "sequence": 1,
+          "actor": "A8189oFjFx41UQ6AAngCyWs2LiXBoK9Eh7iCQ8qw4iMR",
+          "kind": "SponsoredConsent",
+          "side": null,
+          "lane": null,
+          "refundFace": null,
+          "exactUnit": null,
+          "validUntilSlot": "190",
+          "series": "3QsnNtWkns4nsxRjxrScS7PAu5SGqLMbjoif78q2ZukC",
+          "limit": "10000",
+          "matchId": "d75137207690a6b76cd1c339067e7bfa1a3c0ce388c790bdde4a409a162324e4",
+          "operationId": "04281f271f396ca590e3766094d187d275f27193fab73c962f32f593abbdb9d7",
+          "reservation": null,
+          "pricingProvenance": "sponsored-fixed-price"
+        }
+      }
+    },
+    {
+      "command": "market live match",
+      "projection": {
+        "mode": "native-service-projection",
+        "origin": "http://127.0.0.1:57111",
+        "authority": "response-from-configured-loopback-service",
+        "freshChainVerification": false,
+        "data": {
+          "id": "d75137207690a6b76cd1c339067e7bfa1a3c0ce388c790bdde4a409a162324e4",
+          "state": "PrimarySettled",
+          "unit": "SYsRYx4tuRHzSrqEAJRQtd7zAH7CmZdmjjyty8dEnus",
+          "series": "3QsnNtWkns4nsxRjxrScS7PAu5SGqLMbjoif78q2ZukC",
+          "payer": "PRWSxrf87Zhg8xAK1baWcVctJWQeyMXbg7xFvxpp6RV",
+          "beneficiary": "A8189oFjFx41UQ6AAngCyWs2LiXBoK9Eh7iCQ8qw4iMR",
+          "seller": "BNuNP9WPdeSk2D878nfbnXwBK6TsVKkhYNqZcco5hxtp",
+          "buyOrderId": "8c17be8cc36ad94e6d8fcb0f4d25cd7490e6cf6900a7a6f39b1de2c985b2ee9f",
+          "sellOrderId": "a92b97533d92b90182dc830524b6050ee06c70c26ea08a08952d44789298c344",
+          "gross": "10000",
+          "fee": "100",
+          "fundingKind": 2,
+          "originalPrimaryRefundFace": "10000",
+          "pricingProvenance": "sponsored-fixed-price",
+          "expectedSecondaryProceeds": "0",
+          "immediateSecondaryProceeds": "0",
+          "operationId": "04281f271f396ca590e3766094d187d275f27193fab73c962f32f593abbdb9d7",
+          "signature": "4xUSdrj4wjAKUwenC33MnRcRjF6LWRx4qNVbg9QEJXF834Z3u5Y9RB8WdRLHaA9UvBnEkhLGWaBQ37pEc4n6eAF",
+          "nativeEvidence": true,
+          "operatingFeesKnown": true,
+          "evidence": "transaction-finalized"
+        }
+      }
+    },
+    {
+      "command": "market live operation",
+      "projection": {
+        "mode": "native-service-projection",
+        "origin": "http://127.0.0.1:57111",
+        "authority": "response-from-configured-loopback-service",
+        "freshChainVerification": false,
+        "data": {
+          "id": "04281f271f396ca590e3766094d187d275f27193fab73c962f32f593abbdb9d7",
+          "type": "FundMatch",
+          "state": "ResolvedSuccess",
+          "version": 7,
+          "lastObservedSlot": "1000",
+          "unit": "SYsRYx4tuRHzSrqEAJRQtd7zAH7CmZdmjjyty8dEnus",
+          "signature": "4xUSdrj4wjAKUwenC33MnRcRjF6LWRx4qNVbg9QEJXF834Z3u5Y9RB8WdRLHaA9UvBnEkhLGWaBQ37pEc4n6eAF",
+          "evidence": "transaction-finalized",
+          "facts": null,
+          "observedSlot": "1000",
+          "nativeEvidence": true,
+          "operatingFeesKnown": true
+        }
+      }
+    }
+  ]
+}

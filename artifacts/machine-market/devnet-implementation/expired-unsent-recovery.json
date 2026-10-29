@@ -1,0 +1,47 @@
+{
+  "recovered": [
+    {
+      "id": "write:000",
+      "originalHash": "233bbf29ef9e63e7bbc0fdbde3f6207be1e685e41a923c4a8e77c2bb688973dc",
+      "signature": "zdNbt7KhoHWxMzoAnkbHhxi95gtXZbdmwamz4vQG92cib1tzm2Eb24vUPhCgkY38a7SxmfuYjEyH9DcrQWVGx8y"
+    },
+    {
+      "id": "write:001",
+      "originalHash": "b814ad2f238c740755e1d2ef46d7b28efae9bed28e704d5138eae387f44f9c76",
+      "signature": "5y9hfkALbCNhFKfZ47S58vSuzKh4ALtQ8NKiudeJo4UfRjXuFELgaMWdmio29fMfWwRrL6ZxcySGkBGvDqzZdTEu"
+    },
+    {
+      "id": "write:002",
+      "originalHash": "0cd3673b48d6477561694a0e30ad3795ed5c6ca2c16b5dc4161e39ea1bf9e942",
+      "signature": "4H8X4gU5ZxPePRqb54NgcuEcetaXR8zchmKzzyPmqj3yTdwBiAqgyQ9LaTYHXEBWcEdkwXq4Lv541zLSNvNpr3wF"
+    },
+    {
+      "id": "write:003",
+      "originalHash": "e2e4b7529a11e4ff7872914a3ced49fee53f2854168b001068fec48cef1c7ecc",
+      "signature": null
+    }
+  ],
+  "summary": {
+    "actions": 5,
+    "signed": 4,
+    "expiredUnsent": 4,
+    "authorizations": 0,
+    "unresolvedAuthorizations": [],
+    "sponsorship": {
+      "budget": "10000",
+      "consumedGross": "0",
+      "reservedGross": "0",
+      "refundedGross": "0",
+      "availableGross": "10000"
+    },
+    "totals": {
+      "fee": "10000",
+      "rent": "1229385400",
+      "fixture": "0",
+      "gross": "0",
+      "primary": "0"
+    },
+    "peak": "1230045640",
+    "unresolved": []
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "schema": "axp.market.devnet-preparation.readonly.v1",
+  "observedAt": "2026-10-26T16:42:24.970Z",
+  "endpoint": "https://api.devnet.solana.com",
+  "genesis": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+  "version": {
+    "feature-set": 3993424257,
+    "solana-core": "4.4.0-beta.1"
+  },
+  "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+  "balance": {
+    "context": {
+      "apiVersion": "4.4.0-beta.1",
+      "slot": 515394781
+    },
+    "value": 4379560920
+  },
+  "account": {
+    "context": {
+      "apiVersion": "4.4.0-beta.1",
+      "slot": 515394781
+    },
+    "owner": "11111111111111111111111111111111",
+    "executable": false,
+    "dataLength": 0,
+    "lamports": 4379560920
+  },
+  "elf": {
+    "bytes": 241832,
+    "sha256": "3335158a895ac7f483c9cbbcc4470e95e65098c54c7da1b7be4733b0594fea1a",
+    "flags": 3
+  },
+  "rent": {
+    "program": {
+      "bytes": 36,
+      "lamports": 833120
+    },
+    "wallet": {
+      "bytes": 0,
+      "lamports": 650240
+    },
+    "buffer": {
+      "bytes": 241869,
+      "lamports": 1229344760
+    },
+    "series": {
+      "bytes": 229,
+      "lamports": 1813560
+    },
+    "orderUse": {
+      "bytes": 178,
+      "lamports": 1554480
+    },
+    "market": {
+      "bytes": 393,
+      "lamports": 2646680
+    },
+    "unit": {
+      "bytes": 383,
+      "lamports": 2595880
+    },
+    "programData": {
+      "bytes": 241877,
+      "lamports": 1229385400
+    },
+    "match": {
+      "bytes": 619,
+      "lamports": 3794760
+    }
+  },
+  "featureStatus": {
+    "contextSlot": 515394783,
+    "features": {
+      "sbpfV1": {
+        "address": "JE86WkYvTrzW8HgNmrHY7dFYpCmSptUpKupbo2AdQ9cG",
+        "missing": false,
+        "owner": "Feature111111111111111111111111111111111111",
+        "activatedAt": "389664000",
+        "dataSha256": "56d6b8438a2cb397679fd8099261defbfc233ab3406847a94eb082a322c7002e"
+      },
+      "sbpfV2": {
+        "address": "F6UVKh1ujTEFK3en2SyAL3cdVnqko1FVEXWhmdLRu6WP",
+        "missing": false,
+        "owner": "Feature111111111111111111111111111111111111",
+        "activatedAt": "396576000",
+        "dataSha256": "d35d8e9520779db2262f1f2d85489e0c58e745eb368122e8fb0dde78f1d2c578"
+      },
+      "sbpfV3": {
+        "address": "5cC3foj77CWun58pC51ebHFUWavHWKarWyR5UUik7dnC",
+        "missing": false,
+        "owner": "Feature111111111111111111111111111111111111",
+        "activatedAt": "461808000",
+        "dataSha256": "f78057aec7c5ab501a96b199383d12b78b789010a78a7bf0324a5511c7affac2"
+      },
+      "disableV0V1V2Deployment": {
+        "address": "B8JJXCy5amZyWG9r7EnUYLwzXSXTxG7GZ1qZ1qggo83g",
+        "missing": true,
+        "owner": null,
+        "activatedAt": null,
+        "dataSha256": null
+      }
+    }
+  },
+  "sizing": {
+    "payerEqualsAuthority": true,
+    "computeUnitPrice": 0,
+    "quotedComputeLimit": 1400000,
+    "emptyWriteTransactionBytes": 271,
+    "chunkSize": 960,
+    "fullWriteTransactionBytes": 1232,
+    "maximumChunkCount": 252,
+    "nonzeroChunkCount": 252,
+    "actualElfBytesSentToRpc": 0,
+    "feeMessagePayload": "synthetic zeros only"
+  },
+  "feeQuotes": [
+    {
+      "label": "synthetic-signature-count-only",
+      "requiredSignatures": 1,
+      "messageBytes": 150,
+      "serializedTransactionBytes": 215,
+      "feeLamports": 5000,
+      "slot": 515394784
+    },
+    {
+      "label": "synthetic-signature-count-only",
+      "requiredSignatures": 2,
+      "messageBytes": 150,
+      "serializedTransactionBytes": 279,
+      "feeLamports": 10000,
+      "slot": 515394784
+    },
+    {
+      "label": "synthetic-signature-count-only",
+      "requiredSignatures": 3,
+      "messageBytes": 183,
+      "serializedTransactionBytes": 376,
+      "feeLamports": 15000,
+      "slot": 515394784
+    }
+  ],
+  "writeFeeQuote": {
+    "requiredSignatures": 1,
+    "feeLamports": 5000,
+    "slot": 515394784
+  },
+  "credentialMetadataOnly": {
+    "ownerMatches": true,
+    "mode": "600",
+    "contentsRead": false
+  },
+  "signingCalls": 0,
+  "keyGenerationCalls": 0,
+  "simulations": 0,
+  "broadcasts": 0
+}

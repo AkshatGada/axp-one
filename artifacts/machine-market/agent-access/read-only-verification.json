@@ -1,0 +1,86 @@
+{
+  "mode": "actual-local-native-read-only-verification",
+  "cases": {
+    "direct-success": {
+      "passed": true,
+      "sourceUnchanged": true,
+      "replaySameBytes": true,
+      "packetSeparate": null,
+      "denialHttpStatus": 403,
+      "denialCode": "INVALID_AUTH",
+      "remainingPrincipal": "0",
+      "extraNativeSigningSlots": 0,
+      "finalizedSlot": "1865",
+      "publisherDelta": "9900",
+      "collectorDelta": "100",
+      "refundDelta": "0"
+    },
+    "sponsored-success": {
+      "passed": true,
+      "sourceUnchanged": true,
+      "replaySameBytes": true,
+      "packetSeparate": true,
+      "denialHttpStatus": 403,
+      "denialCode": "INVALID_AUTH",
+      "remainingPrincipal": "0",
+      "extraNativeSigningSlots": 0,
+      "finalizedSlot": "4513",
+      "publisherDelta": "9900",
+      "collectorDelta": "100",
+      "refundDelta": "0"
+    },
+    "direct-failure": {
+      "passed": true,
+      "evidenceMode": "transaction-finalized",
+      "sourceUnchanged": null,
+      "replaySameBytes": null,
+      "packetSeparate": null,
+      "denialHttpStatus": 403,
+      "denialCode": "INVALID_AUTH",
+      "remainingPrincipal": "0",
+      "extraNativeSigningSlots": 0,
+      "finalizedSlot": "4947",
+      "publisherDelta": "0",
+      "collectorDelta": "0",
+      "refundDelta": "10000"
+    }
+  },
+  "status": "three_verified_financially_settled_sponsor_refund_unexecuted",
+  "runtimeStopped": true,
+  "monitorStopReason": "Buyer refund verified; sponsor refund unstarted when deadline headroom was below 450 and protected drain cutoff closed admissions.",
+  "nativeOutboxStates": [
+    {
+      "state": "ResolvedSuccess",
+      "blocked": 0,
+      "count": 15
+    }
+  ],
+  "holds": {
+    "principal_holds": 0,
+    "unit_holds": 0,
+    "operating_holds": 0,
+    "native_fee_holds": 0,
+    "activeCampaignReservations": 0
+  },
+  "continuationOnly": [
+    "sponsored-success",
+    "direct-failure",
+    "sponsored-failure"
+  ],
+  "recoveryValidation": {
+    "signature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
+    "evidence": "persisted-finalized-proof-and-current-native-accounts",
+    "contextSlot": "3512"
+  },
+  "sponsoredRecoveryComplete": true,
+  "buyerFundResolved": true,
+  "sponsorRefundExecuted": false,
+  "slotCutoffObservation": {
+    "source": "actual localhost getSlot finalized RPC",
+    "finalizedSlot": "5872",
+    "seriesUseBySlot": "6190",
+    "observedSlotHeadroom": 318,
+    "requiredAdmissionHeadroom": 450,
+    "belowMargin": true
+  }
+}

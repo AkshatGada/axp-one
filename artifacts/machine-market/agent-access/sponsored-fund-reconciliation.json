@@ -1,0 +1,20 @@
+{
+  "mode": "native-service-projection",
+  "origin": "http://127.0.0.1:20990",
+  "authority": "response-from-configured-loopback-service",
+  "freshChainVerification": false,
+  "data": {
+    "id": "16985275b3de4a848e72c5bed1826257dc6b205d40cf8d252124d22139594a8f",
+    "type": "FundMatch",
+    "state": "ResolvedSuccess",
+    "version": 7,
+    "lastObservedSlot": "3468",
+    "unit": "BP4DKE9xexmTQL1omeLkEwTtLa8ZJWbo8Cemh7ecmhgY",
+    "signature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
+    "evidence": "transaction-finalized",
+    "facts": null,
+    "observedSlot": "3468",
+    "nativeEvidence": true,
+    "operatingFeesKnown": true
+  }
+}

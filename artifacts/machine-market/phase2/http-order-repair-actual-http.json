@@ -1,0 +1,131 @@
+{
+  "authority": "localhost-http",
+  "originalJournalSha256": "dbcef89d82a3b08280ca44e203c4d6d640ec6ad1d20cb606b24e098871f081ba",
+  "originalInterruptedStepPreserved": true,
+  "recovery": {
+    "evidence": [
+      {
+        "authority": "localhost-http",
+        "checks": [],
+        "kind": "http",
+        "requestHash": "e846f7620d583d3a5155e401cc0566d22402808ebfd16a0c8ba328f91037cf40",
+        "responseHash": "079fe921758d209b2ebf317cee5da78b74c82e7cbfcae8716670474da90e5899",
+        "status": 200
+      },
+      {
+        "authority": "localhost-http",
+        "checks": [],
+        "kind": "http",
+        "requestHash": "9b5c92fe8bedff9bfd976b64bf9ea13f8e7375b8aa62d8e883ecbd5d0e57bee3",
+        "responseHash": "079fe921758d209b2ebf317cee5da78b74c82e7cbfcae8716670474da90e5899",
+        "status": 200
+      },
+      {
+        "authority": "localhost-http",
+        "checks": [],
+        "kind": "http",
+        "requestHash": "cb0a1b26df5c29a74326e06bc4d4ecb5d4223ae9f688611a3a689d3dc8a1f61b",
+        "responseHash": "d677c288e3e76f04dd0ba6c8a8676e527516f3b12ff03969a9a0bc06e1eedc40",
+        "status": 200
+      },
+      {
+        "authority": "localhost-http",
+        "checks": [],
+        "kind": "http",
+        "requestHash": "63a26cfb994336b3e3688479ebdcaa84002cd9bb0c2d22f58e7894f392cac3fd",
+        "responseHash": "ead16d09bc2d4d1750381b959450521c73177483a1e89b7588da13e05fc7889b",
+        "status": 409
+      },
+      {
+        "authority": "localhost-http",
+        "checks": [],
+        "kind": "http",
+        "requestHash": "21608eafef21cc27a7820dea4a7db7de69d898f64c066d356467ac7ce3398831",
+        "responseHash": "c4038e01f094bda7351b16b6bc1ac376867ef165a6c17f090d6889cf3371bcf2",
+        "status": 200
+      },
+      {
+        "authority": "localhost-http",
+        "checks": [],
+        "kind": "http",
+        "requestHash": "94148aedfdb40ca6a7d0861f2afeabc74e4eaa3e563ba8836831aa1c0d29bbae",
+        "responseHash": "ea85953ad7adf0d2a9d8b6ac91a8b60daae35bc8cd466e875f08d9d9ce11353d",
+        "status": 200
+      },
+      {
+        "authority": "localhost-http",
+        "checks": [],
+        "kind": "http",
+        "requestHash": "d450ce920c52fee53d80c969d379fcc2fd309a173885614d0adfe99414c67677",
+        "responseHash": "0cbb04455c80ada55f50f2952ffff2802c2c59e50cf1c44dfdf89161c66fd1af",
+        "status": 200
+      }
+    ],
+    "finalHeldLamports": "0",
+    "originalInterruptedStepPreserved": true,
+    "originalJournalSha256": "dbcef89d82a3b08280ca44e203c4d6d640ec6ad1d20cb606b24e098871f081ba",
+    "proofs": [
+      {
+        "assertions": [
+          "both-real-concurrent-retries-return-original-order",
+          "one-original-carried-reservation",
+          "no-new-order-or-principal"
+        ],
+        "evidenceHashes": [
+          "d6f55336bd89325f7bf81b82af57fa50b5177da76d1fefcc0f049c0718eff9cd",
+          "5657ab17283a6ae8fa8cc68b9d021a96dc6d5a848d3fb1df69faf126609f95c3"
+        ],
+        "id": "T2:same-nonce-http-key",
+        "status": "passed"
+      },
+      {
+        "assertions": [
+          "both-real-concurrent-retries-return-original-order",
+          "one-original-carried-reservation",
+          "no-new-order-or-principal"
+        ],
+        "evidenceHashes": [
+          "d6f55336bd89325f7bf81b82af57fa50b5177da76d1fefcc0f049c0718eff9cd",
+          "5657ab17283a6ae8fa8cc68b9d021a96dc6d5a848d3fb1df69faf126609f95c3"
+        ],
+        "id": "T3:http-same-nonce-race",
+        "status": "passed"
+      },
+      {
+        "assertions": [
+          "original-hold-released-once",
+          "pre-cancellation-wallet-version-refused"
+        ],
+        "evidenceHashes": [
+          "2e6b1c84171d03a2a909792589e44d05700550a07ea80600494ba2b19668e5b0"
+        ],
+        "id": "T3:wallet-watermark",
+        "status": "passed"
+      },
+      {
+        "assertions": [
+          "separately-declared-recovery-requests",
+          "two-real-concurrent-http-requests",
+          "one-reservation-one-refusal"
+        ],
+        "evidenceHashes": [
+          "4b5abecddb41dadb4bb8f29d1fe61b287d8ae338c50a15d2df93eb2441b702c4",
+          "061a3dfb82367160dd31174b7545f4c9def5dee2b1432b8f3a6fbf1b9c6c6d38"
+        ],
+        "id": "T3:http-shared-balance-race",
+        "status": "passed"
+      },
+      {
+        "assertions": [
+          "IOC-never-rested",
+          "all-carried-and-recovery-holds-zero"
+        ],
+        "evidenceHashes": [
+          "d3d792682e4d5fb8fa90987626fed7134098cf97def808cefa70546509f1764e"
+        ],
+        "id": "T1:ioc-gtc",
+        "status": "passed"
+      }
+    ]
+  }
+}

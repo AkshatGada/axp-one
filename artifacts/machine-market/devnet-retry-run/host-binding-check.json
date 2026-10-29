@@ -1,0 +1,21 @@
+{
+  "schema": "axp.market.devnet.host-binding.v1",
+  "runId": "devnet-retry-review-20261028",
+  "publicIdentities": {
+    "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+    "issuer": "H5JrwMmdspXT8NhAbFyxbaZnge4kMmgWUycqd8qnco6D",
+    "buyerA": "9NoaXoxFWkNYsYAJh6mBMgpuL4N3VemYJFUNCz1CoRP9",
+    "buyerB": "ETH5LiidF3vg83yDpurqGZwaeYhieUsMUD1MqFRkRYZr",
+    "sponsor": "BNcD12m1c5y6KsT69fw847xqrWQDPjbBYd9mcrJtfXR",
+    "collector": "6ZdWEkm8zdZuC5aTjqFVMBakVAbySNu48nJXqYxq5v9s",
+    "program": "13pUf2FAc5db74eBie9pPhikg891RGTRZpwYABAQz2fz",
+    "buffer": "EUsYCitWzDsVA57oATGnxRrjN6y5QApM4EY4aouDkwcd"
+  },
+  "confirmedBindings": 8,
+  "keyPreparationRunId": "devnet-mvp-29fa8ffe-2206-4308-a29a-6547103eb962",
+  "reusedKeys": true,
+  "existingWalletUnchanged": true,
+  "existingKeyCopiedOrConvertedOnDisk": false,
+  "signatures": 0,
+  "broadcasts": 0
+}

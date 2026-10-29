@@ -1,0 +1,23 @@
+(node:86863) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ upload exceeding the old window leaves a fresh, durable application window after deployment (3205.164541ms)
+✔ application plan cannot open the journal with an uncommitted or extended seal (148.815792ms)
+✔ a closed original run is rejected read-only before signer or network access (17.789916ms)
+(node:86864) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ host-only check derives all eight public bindings without changing the existing file or creating signatures (32.160708ms)
+✔ one-run signer accepts only the exact durable fenced message and closes its capability (275.5235ms)
+✔ executable entry rejects a missing financial GO before reading any manifest, key or network (65.7365ms)
+(node:86865) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 875000 prior fees are reserved before signing and counted once through current payer conservation (3367.261416ms)
+✔ carried fees can reject the next native reservation before any signer callback (91.559042ms)
+✔ live deferred retry cannot omit or zero the known prior fee spend (30.951959ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3564.805959

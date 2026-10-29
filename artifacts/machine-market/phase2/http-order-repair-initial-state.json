@@ -1,0 +1,34 @@
+{
+  "schema": "axp.market.http-reservation.recovery.v1",
+  "originalStepId": "concrete:http-reservations",
+  "originalJournalSha256": "dbcef89d82a3b08280ca44e203c4d6d640ec6ad1d20cb606b24e098871f081ba",
+  "originalStop": {
+    "code": "CASE_NEEDS_REVIEW",
+    "operationIds": []
+  },
+  "carriedOrderId": "2086df6268c994890667e037ef96b8d8d6c371881e9a6d9fa1a7be9a8a81abac",
+  "carriedOrderVersion": 1,
+  "carriedHoldLamports": "10000",
+  "originalRequestRows": [
+    {
+      "actor": "Hk7qWQamvWSeLRQt4zGrudLqJDR2YBTKghKpRoPywMnz",
+      "key": "421f8df989d0f18d33b7529ca7ca1caec4d79ec1fc5c2ab91fa1c22ca4d037d3",
+      "bodyHash": "a7665af450a02d65ecaadac001694440d06bdc84fceb8dcba59db4fda94e57f5",
+      "resultHash": "16babc9a94dc70997f48543f9bd3f6f44bbf4963769c1a484c839808e2642efc"
+    },
+    {
+      "actor": "Hk7qWQamvWSeLRQt4zGrudLqJDR2YBTKghKpRoPywMnz",
+      "key": "5fe6c8eda5fbd9d2f20e0a7733a36037e64dbf6b8fc192fa8bf895535175f37d",
+      "bodyHash": "0cdc56fc7880b016c48ab4b0c4607c9efccea538f59d499a983b5ecb0e1994e1",
+      "resultHash": "f84edcba72bb01128c4b58af5fe5d4607e51210ce5603d9e109e99719b672ee2"
+    },
+    {
+      "actor": "Hk7qWQamvWSeLRQt4zGrudLqJDR2YBTKghKpRoPywMnz",
+      "key": "eaaf99e57232bfe130383b57cafcee0a16576d4db52d7896fa885b7f7db47107",
+      "bodyHash": "5f07e16512c4d14f3844938c6a58d8ba5f61a88ef706e1608279b6f5d323c9be",
+      "resultHash": "017f451e534ed3579da87b744e94cdfd596a36dd335054303bb5e3b9627c1b63"
+    }
+  ],
+  "initialSignedAttempts": 19,
+  "initialTrades": 0
+}

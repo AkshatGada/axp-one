@@ -1,0 +1,29 @@
+(node:90506) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ retry counters include all 178 original attempts and 176 write slots before signing (571.065083ms)
+✔ cumulative attempt ceiling prevents a new signature (340.262042ms)
+✔ cumulative write ceiling prevents a new upload signature (488.587042ms)
+(node:90507) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ upload exceeding the old window leaves a fresh, durable application window after deployment (4798.376625ms)
+✔ application plan cannot open the journal with an uncommitted or extended seal (190.25575ms)
+✔ a closed original run is rejected read-only before signer or network access (19.466041ms)
+(node:90508) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ host-only check derives all eight public bindings without changing the existing file or creating signatures (50.563041ms)
+✔ one-run signer accepts only the exact durable fenced message and closes its capability (565.350042ms)
+✔ executable entry rejects a missing financial GO before reading any manifest, key or network (59.601667ms)
+✔ retry signs only its separate journal while reusing untouched original key files (577.133666ms)
+(node:90509) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 875000 prior fees are reserved before signing and counted once through current payer conservation (4615.2895ms)
+✔ carried fees can reject the next native reservation before any signer callback (211.421083ms)
+✔ live deferred retry cannot omit or zero the known prior fee spend (26.567917ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5089.240833

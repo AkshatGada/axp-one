@@ -1,0 +1,44 @@
+diff --git a/test-validator/src/lib.rs b/test-validator/src/lib.rs
+index 1dc50d8..09079ac 100644
+--- a/test-validator/src/lib.rs
++++ b/test-validator/src/lib.rs
+@@ -1169,11 +1169,11 @@ impl TestValidator {
+             on_start_geyser_plugin_config_files: config.geyser_plugin_config_files.clone(),
+             rpc_addrs: Some((
+                 SocketAddr::new(
+-                    IpAddr::V4(Ipv4Addr::UNSPECIFIED),
++                    IpAddr::V4(Ipv4Addr::LOCALHOST),
+                     node.info.rpc().unwrap().port(),
+                 ),
+                 SocketAddr::new(
+-                    IpAddr::V4(Ipv4Addr::UNSPECIFIED),
++                    IpAddr::V4(Ipv4Addr::LOCALHOST),
+                     node.info.rpc_pubsub().unwrap().port(),
+                 ),
+             )),
+diff --git a/udp-client/src/lib.rs b/udp-client/src/lib.rs
+index 233b069..957e38d 100644
+--- a/udp-client/src/lib.rs
++++ b/udp-client/src/lib.rs
+@@ -67,7 +67,7 @@ impl NewConnectionConfig for UdpConfig {
+         // Use UNSPECIFIED for production validators to bind to all interfaces
+         // Use LOCALHOST only in dev/test context to avoid port conflicts in CI
+         #[cfg(not(feature = "dev-context-only-utils"))]
+-        let bind_ip = std::net::IpAddr::V4(std::net::Ipv4Addr::UNSPECIFIED);
++        let bind_ip = std::net::IpAddr::V4(std::net::Ipv4Addr::LOCALHOST);
+         #[cfg(feature = "dev-context-only-utils")]
+         let bind_ip = std::net::IpAddr::V4(std::net::Ipv4Addr::LOCALHOST);
+ 
+diff --git a/validator/src/bin/solana-test-validator.rs b/validator/src/bin/solana-test-validator.rs
+index f577f25..3d62010 100644
+--- a/validator/src/bin/solana-test-validator.rs
++++ b/validator/src/bin/solana-test-validator.rs
+@@ -200,7 +200,7 @@ fn main() {
+ 
+     let compute_unit_limit = value_t!(matches, "compute_unit_limit", u64).ok();
+ 
+-    let faucet_addr = SocketAddr::new(IpAddr::V4(Ipv4Addr::UNSPECIFIED), faucet_port);
++    let faucet_addr = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), faucet_port);
+ 
+     let parse_address = |address: &str, input_type: &str| {
+         address

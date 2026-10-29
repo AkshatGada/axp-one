@@ -1,0 +1,38 @@
+{
+  "schema": "axp.final-refund.preparation.v1",
+  "status": "three_verified_financially_settled_sponsor_refund_unexecuted",
+  "approvedAdditionalActiveMs": 900000,
+  "maximumActiveMs": 3300000,
+  "carriedElapsedMs": 2395614,
+  "remainingAllowanceMs": 299147,
+  "originalBuyerOperationId": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+  "originalSignature": "3na3JMKBtuujwMLXPcaSxmsvLfpiUh4QonRgrYvCJqtdAcBjWMzhChYkrFgKyYMYPhr5Nef2eM95Q3DvtM1ZbPPh",
+  "originalLastValidBlockHeight": "4845",
+  "originalMessageHash": "a7b130a5f4b966fc4f713c2257f44c22ae2d08954b604dc8b74dc1498ed74184",
+  "originalTransactionHash": "da72485fc07408b581e239980c9ed1389b355d74ce77a635ef5112bad9a998c2",
+  "completedProofSha256": {
+    "direct": "c8b44a4666a0ac0cf60654cb8581f2b675cc91f6ac9777f0378563048b90bdad",
+    "sponsored": "b14eae7bc1bd6dfa09cf420911f95ae793496b2f8ed4cfddac8d236b22e2f6a3"
+  },
+  "completedCaseSha256": {
+    "direct": "3f58146cd0c0069ee5e54f4cf2b920bda832f141e600909a944edac80ada258a",
+    "sponsored": "046bd656f4fabb2b8a21748ac434e63e3f8a638cbaa450e9c7232d628ef2e92f"
+  },
+  "admissionReserveMs": 300000,
+  "admissionMinimumSeriesSlotHeadroom": 450,
+  "shutdownMarginMs": 100000,
+  "financialReadyWhileUnknown": false,
+  "additionalFundingRequests": 0,
+  "startingAttemptSlots": 18,
+  "maximumAttempts": 32,
+  "expectedFinalAttemptSlots": 23,
+  "humanReadinessConfirmed": true,
+  "focusedChecksPassed": 17,
+  "noRuntimeStartedForPreparation": true,
+  "immutableUseBySlot": "6190",
+  "immutableReadExpiry": "10190",
+  "activeElapsedMs": 3000853,
+  "verifiedCases": 3,
+  "unknownNativeOperations": 0,
+  "runtimeStopped": true
+}

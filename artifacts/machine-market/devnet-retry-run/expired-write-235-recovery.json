@@ -1,0 +1,76 @@
+{
+  "recovered": {
+    "id": "write:235",
+    "originalHash": "395a3e80d8d9063e19388fbe233f259d7a84423134c6fe74fcd74c851cd40f8d",
+    "signature": "22ZAPG9RSEnJF9w9i4oKWvrom4i3f8CaWHG41762M6SAUucQebjzdye4WhhLy2Dn9B2Y8qtAeSGrmCWdnnm5ea5x",
+    "proof": {
+      "schema": "axp.market.devnet.expired-write-nonexecution.v1",
+      "authority": "same-pinned-provider-finalized-observations",
+      "independentProvider": false,
+      "signature": "22ZAPG9RSEnJF9w9i4oKWvrom4i3f8CaWHG41762M6SAUucQebjzdye4WhhLy2Dn9B2Y8qtAeSGrmCWdnnm5ea5x",
+      "transactionHash": "e48a5c6498abda249791dc0efa55dd5276569cbc9deb1a71df4fec1fdee9bdff",
+      "observations": [
+        {
+          "blockhash": "3uWp3DYJYNZdMLufLDhwQitNQbcoAcosYof8wnusw3aP",
+          "blockhashValid": false,
+          "blockHeight": "503135607",
+          "contextSlot": "515940919",
+          "signatureAbsent": true,
+          "transactionAbsent": true,
+          "expectedPayerLamports": "3148115520",
+          "payerLamports": "3148115520",
+          "bufferDataHash": "e0f84898767f085b2ef95195c9c4df4fbcbab7301848091b767c36aff7bd066a",
+          "chunkHash": "3dc463a76fc170607c07b104c3cb531362ce7d6e10c1a34e0c0f370aeae08ce8",
+          "expectedChunkHash": "0c7f6b2ab6409bd3bcae122df09c9962ebe4313680bedd5e615251bfa7e0b909",
+          "chunkAllZero": true,
+          "knownWritesMatch": true
+        },
+        {
+          "blockhash": "3uWp3DYJYNZdMLufLDhwQitNQbcoAcosYof8wnusw3aP",
+          "blockhashValid": false,
+          "blockHeight": "503135617",
+          "contextSlot": "515940929",
+          "signatureAbsent": true,
+          "transactionAbsent": true,
+          "expectedPayerLamports": "3148115520",
+          "payerLamports": "3148115520",
+          "bufferDataHash": "e0f84898767f085b2ef95195c9c4df4fbcbab7301848091b767c36aff7bd066a",
+          "chunkHash": "3dc463a76fc170607c07b104c3cb531362ce7d6e10c1a34e0c0f370aeae08ce8",
+          "expectedChunkHash": "0c7f6b2ab6409bd3bcae122df09c9962ebe4313680bedd5e615251bfa7e0b909",
+          "chunkAllZero": true,
+          "knownWritesMatch": true
+        }
+      ]
+    }
+  },
+  "summary": {
+    "priorAttemptSlots": 178,
+    "priorWriteSlots": 176,
+    "cumulativeAttemptSlots": 415,
+    "cumulativeWriteSlots": 412,
+    "priorFeeSpendLamports": "875000",
+    "currentRunFeeLiabilityLamports": "1185000",
+    "actions": 237,
+    "signed": 237,
+    "expiredUnsent": 0,
+    "expiredUnexecuted": 1,
+    "authorizations": 0,
+    "unresolvedAuthorizations": [],
+    "sponsorship": {
+      "budget": "10000",
+      "consumedGross": "0",
+      "reservedGross": "0",
+      "refundedGross": "0",
+      "availableGross": "10000"
+    },
+    "totals": {
+      "fee": "2060000",
+      "rent": "1229385400",
+      "fixture": "0",
+      "gross": "0",
+      "primary": "0"
+    },
+    "peak": "1232095640",
+    "unresolved": []
+  }
+}

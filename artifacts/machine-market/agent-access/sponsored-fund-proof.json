@@ -1,0 +1,141 @@
+{
+  "mode": "persisted-actual-native-finalized-proof",
+  "runId": "agent-access-local-20261028",
+  "genesis": "7f5e04f0437b95acca9b3e93689043eb2a4c03af3f90e36626d41506d4b9e08e",
+  "program": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+  "operationId": "16985275b3de4a848e72c5bed1826257dc6b205d40cf8d252124d22139594a8f",
+  "signature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
+  "transactionSha256": "80e97a35291bd21f5d8563a385584f65723921ddf30c4fea7ffc80c13855fb7b",
+  "messageSha256": "3722226c20fd5f66705e80ad611fa5a2c4fcec1d06353e098bd0fcc6f54a27f7",
+  "reconciliation": {
+    "contextSlot": "3468",
+    "evidence": "transaction-finalized",
+    "factsHash": "c3da1d5029d79f641df1668b58e656be4b27b34f0ef18bb67863f98571a13fa5",
+    "latestEvidence": "transaction-finalized",
+    "operatingFeesKnown": true,
+    "signature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
+    "status": "success"
+  },
+  "facts": {
+    "account": null,
+    "accountOwner": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+    "economicReplay": false,
+    "exactFailedTransaction": false,
+    "fundedMatchAbsent": false,
+    "operatingCost": {
+      "fee": "20000",
+      "rent": "9458640"
+    },
+    "operationId": "16985275b3de4a848e72c5bed1826257dc6b205d40cf8d252124d22139594a8f",
+    "orderUses": [
+      {
+        "actor": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+        "authHash": "c9eba54a36b31f8f9dc2cfdb0bac4a503436263dc64096a92272059bd3ce2cdc",
+        "consumedSlot": "3390",
+        "kind": "OrderUse",
+        "market": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+        "match": "ESzjeWj3sWcp8Eazu59Zjzv6indpzGv2UMyWXbs1GcBQ",
+        "nonce": "21524f2cf5e1132a16bb834145a480381b0b5adc0609be1f5ab9b76b0a0941ff",
+        "state": 1
+      },
+      {
+        "actor": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+        "authHash": "1aaa4c1f43bf2a00bd6ae5487d53483cd6d3917dc4a21a7bfb59907979707e2a",
+        "consumedSlot": "3390",
+        "kind": "OrderUse",
+        "market": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+        "match": "ESzjeWj3sWcp8Eazu59Zjzv6indpzGv2UMyWXbs1GcBQ",
+        "nonce": "8199e262298df812f2b5149060b0e5ef8d9e4d4a6dfbde9a4a1588e2c32e9530",
+        "state": 1
+      }
+    ],
+    "primaryMatch": null,
+    "receipt": {
+      "beneficiary": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+      "buyAuthHash": "c9eba54a36b31f8f9dc2cfdb0bac4a503436263dc64096a92272059bd3ce2cdc",
+      "buyNonce": "21524f2cf5e1132a16bb834145a480381b0b5adc0609be1f5ab9b76b0a0941ff",
+      "campaignId": "b8ff6e05b86dbbee3d53148802d842d17f29e1db99ef4f14738c0560ab3a6406",
+      "expectedCursor": "0",
+      "fee": "100",
+      "fundTermsHash": "f46212d794b5f5e705fa780e83e4062c60408a5f38bcec0fe82f61d8d451e7a7",
+      "fundedCursor": "1",
+      "fundedSlot": "3390",
+      "gross": "10000",
+      "kind": "Match",
+      "market": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+      "matchId": "bd1cf436283e2b0f834b4ddd5c495957042627a1787fc70ff45a2805b177e451",
+      "packetHash": "448a922cf7d8306acc6da78bcaedc82162a83a8ef68a86b807078d3153ba7ba0",
+      "payer": "7fkrm7NrpoExxv2C8Pt8BBgu7osLRHDGh7W1MbErsEnn",
+      "previousMatch": "11111111111111111111111111111111",
+      "primaryClaimFace": "10000",
+      "rentReserve": "5199120",
+      "sellAuthHash": "1aaa4c1f43bf2a00bd6ae5487d53483cd6d3917dc4a21a7bfb59907979707e2a",
+      "sellNonce": "8199e262298df812f2b5149060b0e5ef8d9e4d4a6dfbde9a4a1588e2c32e9530",
+      "seller": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+      "series": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+      "state": 1,
+      "terminalOpHash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "terminalRecipient": "11111111111111111111111111111111",
+      "terminalSlot": "0",
+      "tradeKind": 2,
+      "unit": "BP4DKE9xexmTQL1omeLkEwTtLa8ZJWbo8Cemh7ecmhgY"
+    },
+    "receiptOwner": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+    "terminalOperationId": null,
+    "transactionSlot": "3390",
+    "unit": {
+      "cursor": "1",
+      "kind": "Unit",
+      "latestMatch": "ESzjeWj3sWcp8Eazu59Zjzv6indpzGv2UMyWXbs1GcBQ",
+      "lockDeadlineSlot": "0",
+      "lockStartCursor": "0",
+      "lockStartSlot": "0",
+      "market": "4aaA6mNEjRctv1DGUjcvojgrp2fmhkaLRtZ54zB6F2WY",
+      "owner": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+      "primaryMatch": "ESzjeWj3sWcp8Eazu59Zjzv6indpzGv2UMyWXbs1GcBQ",
+      "refundFace": "10000",
+      "requestHash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "responseHash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "serial": 1,
+      "series": "BH8RoyVjmmWtZtWyZSd5JCiC8cmsKqp2t9qqKzzPwuUq",
+      "sponsorRefundKey": "7fkrm7NrpoExxv2C8Pt8BBgu7osLRHDGh7W1MbErsEnn",
+      "sponsored": 1,
+      "state": 1,
+      "terminalOpHash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "terminalReason": 0,
+      "terminalSlot": "0",
+      "transferCount": 0,
+      "unitId": "34e50eca352be090fb6551312bfeb95dac8ee5e6cfd9459035c378c744253972"
+    },
+    "unitOwner": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+    "verified": true,
+    "wallets": [
+      {
+        "balance": "160640600",
+        "key": "9xQgemUiGXg7G86Px3ELAmWpdoH4b6c9YHsnk5u1FfYL",
+        "rent": "890880"
+      },
+      {
+        "balance": "4990000",
+        "key": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+        "rent": "890880"
+      },
+      {
+        "balance": "1000100",
+        "key": "9jgNjiUt1mMQBesUQPymgw611Z28SqoQ3GjQAHXGYruL",
+        "rent": "890880"
+      },
+      {
+        "balance": "4990000",
+        "key": "7fkrm7NrpoExxv2C8Pt8BBgu7osLRHDGh7W1MbErsEnn",
+        "rent": "890880"
+      },
+      {
+        "balance": "5009900",
+        "key": "BY9DAv7mRt9Zv2URLVyeY3g9hTKSXEFZcDXyrdvEuPqQ",
+        "rent": "890880"
+      }
+    ]
+  },
+  "source": "Existing native observer proof persisted during original operation and explicit read-only reconciliation; no additional RPC capture completed before runtime stop."
+}

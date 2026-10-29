@@ -1,0 +1,13 @@
+--- a/validator/src/bin/solana-test-validator.rs
++++ b/validator/src/bin/solana-test-validator.rs
+@@ -189,1 +189,1 @@
+-    let faucet_addr = SocketAddr::new(IpAddr::V4(Ipv4Addr::UNSPECIFIED), faucet_port);
++    let faucet_addr = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), faucet_port);
+--- a/test-validator/src/lib.rs
++++ b/test-validator/src/lib.rs
+@@ -1103,1 +1103,1 @@
+-                    IpAddr::V4(Ipv4Addr::UNSPECIFIED),
++                    IpAddr::V4(Ipv4Addr::LOCALHOST),
+@@ -1107,1 +1107,1 @@
+-                    IpAddr::V4(Ipv4Addr::UNSPECIFIED),
++                    IpAddr::V4(Ipv4Addr::LOCALHOST),

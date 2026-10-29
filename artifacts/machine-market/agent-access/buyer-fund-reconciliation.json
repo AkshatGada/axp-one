@@ -1,0 +1,24 @@
+{
+  "mode": "same-ledger-observation-only",
+  "operationId": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+  "result": {
+    "id": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+    "type": "FundMatch",
+    "state": "Unknown",
+    "version": 53,
+    "lastObservedSlot": "4728",
+    "unit": "BuHGawyoc33BADHfD9gqgDzYS7DQaai7FA17twpeoP2Z",
+    "signature": "3na3JMKBtuujwMLXPcaSxmsvLfpiUh4QonRgrYvCJqtdAcBjWMzhChYkrFgKyYMYPhr5Nef2eM95Q3DvtM1ZbPPh",
+    "evidence": "account-state-only",
+    "facts": null,
+    "observedSlot": "4728",
+    "nativeEvidence": false,
+    "operatingFeesKnown": false
+  },
+  "observationError": null,
+  "noSignersLoaded": true,
+  "noSendOrExecuteCalled": true,
+  "additionalElapsedMs": 6706,
+  "cumulativeElapsedMs": 2395614,
+  "maximumActiveMs": 2400000
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "axp.market.devnet.run.v1",
+  "runId": "ROOT_REVIEW_REQUIRED",
+  "provenance": "reviewed-devnet-run",
+  "endpoint": "https://api.devnet.solana.com",
+  "genesis": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+  "loader": "BPFLoaderUpgradeab1e11111111111111111111111",
+  "elf": {
+    "bytes": 241832,
+    "sha256": "3335158a895ac7f483c9cbbcc4470e95e65098c54c7da1b7be4733b0594fea1a"
+  },
+  "identities": {
+    "payer": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+    "issuer": null,
+    "buyerA": null,
+    "buyerB": null,
+    "sponsor": null,
+    "collector": null,
+    "program": null,
+    "buffer": null
+  },
+  "marketNonce": null,
+  "seriesId": null,
+  "useBySlot": null,
+  "readValidUntilSlot": null,
+  "source": {
+    "resourceHash": null,
+    "versionHash": null,
+    "contentBytes": null
+  },
+  "authorization": {
+    "allocationLamports": "1400000000",
+    "allocationApproved": true,
+    "financialRootGo": false,
+    "keyPreparationPending": true
+  }
+}

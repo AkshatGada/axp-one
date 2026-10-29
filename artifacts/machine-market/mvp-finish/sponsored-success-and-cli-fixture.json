@@ -1,0 +1,48 @@
+{
+  "schema": "axp.market.mvp.sponsored-success-fixture.v1",
+  "mode": "scripted-loopback-rpc-fixture",
+  "nativeProgramExecuted": false,
+  "realSolanaRpcCalls": 0,
+  "publicNetworkCalls": 0,
+  "loopbackHttpRequests": 6,
+  "publicBroadcasts": 0,
+  "paidProviderCalls": 0,
+  "source": "Immutable independent owned fixture.",
+  "sourceHashBefore": "43b51e241bf972d4238712f20bc92f72bff77d67b8c619bc3a388275342ea92e",
+  "sourceHashAfter": "43b51e241bf972d4238712f20bc92f72bff77d67b8c619bc3a388275342ea92e",
+  "sponsoredPacket": {
+    "schema": "axp.sponsor.packet.v1",
+    "disclosure": "Sponsored",
+    "message": "Paid access; the independent source may be unfavorable."
+  },
+  "packetHash": "baf2666695316b09ad2a4415f299eb82a9083f14f26b60404ec5a43eb4d9491f",
+  "sourceUnchanged": true,
+  "steps": [
+    "IssueSeries",
+    "RegisterUnit",
+    "Fund",
+    "StartDelivery",
+    "FinalizeDelivery"
+  ],
+  "scriptedTransactions": 5,
+  "signerCalls": 11,
+  "fundingSigners": 4,
+  "pricingProvenance": "sponsored-fixed-price",
+  "unitState": "Consumed",
+  "primaryState": 2,
+  "sponsorDebitLamports": "10000",
+  "issuerPayoutLamports": "9900",
+  "collectorPayoutLamports": "100",
+  "refundLamports": "0",
+  "responseReplay": true,
+  "restartReplay": true,
+  "extraSendsOnReplay": 0,
+  "extraSignsOnReplay": 0,
+  "campaignConsumedGross": "10000",
+  "readOnlyCliWalkthrough": {
+    "requests": 6,
+    "mutationRequests": 0,
+    "extraSignerCalls": 0,
+    "extraNativeSends": 0
+  }
+}

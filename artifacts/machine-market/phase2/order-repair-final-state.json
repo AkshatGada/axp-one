@@ -1,0 +1,111 @@
+{
+  "schema": "axp.market.order-repair.final-state.v1",
+  "observedAt": "2026-10-26T16:27:32.745Z",
+  "executionFinished": true,
+  "financiallyDrained": true,
+  "acceptanceComplete": false,
+  "proofsPassed": 38,
+  "pending": [
+    {
+      "id": "T5:useby-equality",
+      "status": "pending"
+    },
+    {
+      "id": "T5:lease-equality",
+      "status": "pending"
+    }
+  ],
+  "budget": {
+    "allocatedSigningSlots": 67,
+    "knownSignedOperations": 65,
+    "successfulTrades": 16,
+    "remaining": 61,
+    "counts": {
+      "bootstrap": 19,
+      "funding": 15,
+      "terminal": 14,
+      "probes": 19,
+      "reserve": 0
+    }
+  },
+  "reservedAttempts": [
+    {
+      "id": "759aac1a4bedad856a11d75d4dc2dc1d3c3d62f53708a16864902b79c3c089f6",
+      "bucket": "probes",
+      "state": "Reserved"
+    },
+    {
+      "id": "e0e86fb83e2b4b383892ca64c0b94d0ade7c0257566ff6bab9f40d1ec303f6f0",
+      "bucket": "funding",
+      "state": "Reserved"
+    }
+  ],
+  "boundarySlots": {
+    "direct:expired-start": {
+      "deadline": "5197",
+      "executionSlot": "5229",
+      "relation": "after"
+    },
+    "direct:finalize-lease-equality": {
+      "deadline": "3375",
+      "executionSlot": "3407",
+      "relation": "after"
+    }
+  },
+  "runtime": {
+    "state": "stopped",
+    "reason": "operator_stop",
+    "listenerCheck": {
+      "ports": [
+        18899,
+        18900,
+        18910,
+        19900
+      ],
+      "listeners": 0,
+      "commandExitCode": 1
+    },
+    "explicitShredLimit": "18446744073709551615"
+  },
+  "resources": {
+    "passed": true,
+    "failures": [],
+    "limits": {
+      "freeBytes": 40000000000,
+      "totalTaskBytes": 21474836480,
+      "ledgerBytes": 10737418240,
+      "databaseAndLogBytes": 52428800
+    },
+    "reserveBytes": 0,
+    "snapshot": {
+      "measuredAt": "2026-10-26T16:27:33.056Z",
+      "freeBytes": 146186829824,
+      "toolBytes": 3901521920,
+      "buildBytes": 3128479744,
+      "combinedToolBuildBytes": 7030001664,
+      "totalTaskBytes": 8074018816,
+      "ledgerBytes": 1037430784,
+      "databaseAndLogBytes": 6467584,
+      "totalRunBytes": 3448832,
+      "measurement": "allocated filesystem blocks; task paths only",
+      "recoveredMeasurementRaces": 0,
+      "measurementNotes": []
+    }
+  },
+  "stopHistory": [
+    {
+      "code": "CASE_NEEDS_REVIEW",
+      "operationIds": []
+    },
+    {
+      "code": "CASE_NEEDS_REVIEW",
+      "operationIds": []
+    }
+  ],
+  "currentRpcVerifiedTransactions": 2,
+  "retainedEvidenceOnlyTransactions": 63,
+  "firstAvailableBlock": "4099",
+  "isolatedFixtureSigningSlots": 1,
+  "conservativeCombinedSigningSlots": 68,
+  "isolatedFixtureSignedTransactions": 0
+}

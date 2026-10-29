@@ -1,0 +1,321 @@
+{
+  "schema": "axp.market.local-recovery.result.v1",
+  "observedAt": "2026-10-26T15:20:50.538Z",
+  "authority": "single-local-validator",
+  "acceptanceComplete": false,
+  "bootstrapComplete": true,
+  "initialAllocatedAttempts": 13,
+  "finalAllocatedAttempts": 19,
+  "originalUnknownResolved": true,
+  "originalSignature": "3teaFchGbwHM6UAk4nwB7fr5xv286qsqP73PjiJYdYwHf37fMzEYeBLFYdmeTkcrk8mu3FhVtSymQq78cyPHVcsj",
+  "sameBytesResent": false,
+  "newFundingTransactions": 0,
+  "totalFundingLamports": "9001000000",
+  "totalKnownNativeFeesLamports": "155000",
+  "nativeOperations": [
+    {
+      "id": "760b43482fc7128ab178288fa84c2ea3c01cb68312ea586785f6822d1f098a25",
+      "state": "ResolvedSuccess"
+    },
+    {
+      "id": "e821e5435a96a30c08867682461333bd212a453d72de29c2b41a127509c88c68",
+      "state": "ResolvedSuccess"
+    },
+    {
+      "id": "ba587e0f57102ee3603300a21bcf2ff0b5b40aed1de357301a8ce52e01f7efbd",
+      "state": "ResolvedSuccess"
+    },
+    {
+      "id": "1888cc5873b7435ad7fde4187fba740ed409f71a1d5e304c949cf043013a983e",
+      "state": "ResolvedSuccess"
+    },
+    {
+      "id": "7601c16111e6f714b05f696677348bf66bc3c3487ddbd12311e9b876195ca8a5",
+      "state": "ResolvedSuccess"
+    },
+    {
+      "id": "4c8f89db235dfe403283b61539c053e6332a87b60ec6b974ea8db282a1f65a82",
+      "state": "ResolvedSuccess"
+    },
+    {
+      "id": "469db1bfe94b44bf475934739f5da8b876a499f50fd11d30c87ca90f4ade5f95",
+      "state": "ResolvedSuccess"
+    },
+    {
+      "id": "caaef303cb0c1bbd59ce3b55e0d8205bde512be13625b6cb278ec938fb754141",
+      "state": "ResolvedSuccess"
+    },
+    {
+      "id": "fe90d758704d9c7ad508c959c5d472618040f4cbfbb531085c41a4edb042efe2",
+      "state": "ResolvedSuccess"
+    },
+    {
+      "id": "1f1cc001e2dceee7f38d1a7f57c11cb95e180b457e2db3d78f10d3f5b20ef5d7",
+      "state": "ResolvedSuccess"
+    },
+    {
+      "id": "c8ae3271c0ab4a52ed4d69ef215213f16990e294adefab120fd525a51a13d2ed",
+      "state": "ResolvedSuccess"
+    },
+    {
+      "id": "4cc9155ac20ba1175fb4c238109dcd10b33e64f6e07871e47dfc47610e598d8c",
+      "state": "ResolvedSuccess"
+    },
+    {
+      "id": "68878a4254879e2932663ba7de2a17739f2d3ce673d9aeaadc470c34f4d8333b",
+      "state": "ResolvedSuccess"
+    }
+  ],
+  "unknownNativeOperations": 0,
+  "issuedSeries": 4,
+  "issuedUnits": 8,
+  "successfulMarketplaceTrades": 0,
+  "orders": [
+    {
+      "id": "ac6056a1984f5d75a903a59caaaeabd24b37f2b0df6a61304b88adc968c4c558",
+      "state": "Cancelled"
+    },
+    {
+      "id": "2086df6268c994890667e037ef96b8d8d6c371881e9a6d9fa1a7be9a8a81abac",
+      "state": "Open"
+    }
+  ],
+  "offchainReservationLamports": "10000",
+  "acceptanceStop": {
+    "code": "CASE_NEEDS_REVIEW",
+    "operationIds": []
+  },
+  "actualHarnessError": "HTTP_CASE_REJECTED",
+  "originalHttpResponseBodyPreserved": false,
+  "reproducedBlocker": "Concurrent duplicate W2 authorization produces STALE_CURSOR during wallet observation before idempotency lookup",
+  "blockerAuthority": "offline same-database copy; zero RPC/signing calls",
+  "runtime": {
+    "state": "stopped",
+    "reason": "operator_stop",
+    "runningLockPresent": false
+  },
+  "resourceCheck": {
+    "passed": true,
+    "failures": [],
+    "limits": {
+      "freeBytes": 40000000000,
+      "totalTaskBytes": 21474836480,
+      "ledgerBytes": 10737418240,
+      "databaseAndLogBytes": 52428800
+    },
+    "reserveBytes": 0,
+    "snapshot": {
+      "measuredAt": "2026-10-26T15:20:50.258Z",
+      "freeBytes": 145909075968,
+      "toolBytes": 3901521920,
+      "buildBytes": 3128479744,
+      "combinedToolBuildBytes": 7030001664,
+      "totalTaskBytes": 8353325056,
+      "ledgerBytes": 1319055360,
+      "databaseAndLogBytes": 4149248,
+      "totalRunBytes": 1232896,
+      "measurement": "allocated filesystem blocks; task paths only",
+      "recoveredMeasurementRaces": 0,
+      "measurementNotes": []
+    }
+  },
+  "attempts": [
+    {
+      "id": "038092a90420897c89122e05d2085e1536943b16df06a87bac0f499b362b3ace",
+      "kind": "airdrop",
+      "signature": "3wqn73QK3b4m84yUhozVqyoBuebwhnNaboHDr2SnMitdcQDj4yeHTkT5XEsAaNEmf5unKjxXNZ5evTX4ntfLNWsi",
+      "status": "finalized-success",
+      "type": "fixture-funding",
+      "slot": "1233",
+      "feeLamports": "5000"
+    },
+    {
+      "id": "12d3aaddfc18a8760e4a2e871ebebc4e41cf5ebf483a63f57e958571e72d963a",
+      "kind": "airdrop",
+      "signature": "SMmCzeEQeThFiFz3dor9RvB771X2XfLHpBcM5TyQqd9aK3ZtdL7Q6y87pyf57KQoYUkq9PK3sDsGsnDKMcdjTaz",
+      "status": "finalized-success",
+      "type": "fixture-funding",
+      "slot": "1266",
+      "feeLamports": "5000"
+    },
+    {
+      "id": "ac1bfb8d1c0eced169602eb6a1c61156ca8c0e03e2755dca5c7ae384eaa5f68e",
+      "kind": "airdrop",
+      "signature": "5xA2qNzoVDq1VhW5Ayw3Wdoe7dvJX4KW1ZUKGYNCLd8VeFC3HQhD5MgYZc43t2VEoGPbULsYsdPd2V1FHc2i8szA",
+      "status": "finalized-success",
+      "type": "fixture-funding",
+      "slot": "1299",
+      "feeLamports": "5000"
+    },
+    {
+      "id": "98482aff548e8aaa96e5d9d72ed680a2b44efa1011676483644d2976b3c618cd",
+      "kind": "airdrop",
+      "signature": "givME5dzySsEJDhGWZ7w8PUmZ4ufuJp6hNPTuYEEXZKiN6hckbKJfWi4feBShGALoMqaCybcmP479FkBXAqnqvb",
+      "status": "finalized-success",
+      "type": "fixture-funding",
+      "slot": "1332",
+      "feeLamports": "5000"
+    },
+    {
+      "id": "758f29a9317e701f413ba8dce95b08dbe742225494adb8c640e0362551152074",
+      "kind": "airdrop",
+      "signature": "cGk4q4NajFnPrCZNjT6u4dowW1jM6BzkS5oL7Xfwf22ngV3s7g8muEuCvyEXC9NTKyLpNYn8ZdjVMvhbqfeiQQS",
+      "status": "finalized-success",
+      "type": "fixture-funding",
+      "slot": "1365",
+      "feeLamports": "5000"
+    },
+    {
+      "id": "ee3a5ec3de9e061cd3c2010677b0f7e0d8ccea1ae36493f0b3ab3d0215f86339",
+      "kind": "airdrop",
+      "signature": "3WBaXXPaCp8VjDiS784XDJQtgnpVo7kK3nK9tRSwLenYcEnzyguBENmPgx5c8e131gd75eqY7wLQquChECgvqUWv",
+      "status": "finalized-success",
+      "type": "fixture-funding",
+      "slot": "1398",
+      "feeLamports": "5000"
+    },
+    {
+      "id": "760b43482fc7128ab178288fa84c2ea3c01cb68312ea586785f6822d1f098a25",
+      "kind": "native",
+      "signature": "53aczXN8NWxwFWAWrbm2GJ1681jvejqyHYEm2M691X2wQG6n4hyJDBt65xdMb7RosGNFnjJ1J9JhqHAMqoF1uzMc",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1431",
+      "feeLamports": "5000",
+      "computeUnits": 13903,
+      "transactionBytes": 559
+    },
+    {
+      "id": "e821e5435a96a30c08867682461333bd212a453d72de29c2b41a127509c88c68",
+      "kind": "native",
+      "signature": "24AL7TjyBzeEDuSbmgEoS3yFF9pJHmaDGz5ZcKFacufrJ8MrMqncCJiBpyTDacMbmHmAEzT21YPvbgN2xp5z2MpY",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1464",
+      "feeLamports": "10000",
+      "computeUnits": 18251,
+      "transactionBytes": 522
+    },
+    {
+      "id": "ba587e0f57102ee3603300a21bcf2ff0b5b40aed1de357301a8ce52e01f7efbd",
+      "kind": "native",
+      "signature": "rPRVny1ojFPJn7LT98EQzQX2eZYuqfCGDErNb822pDw2jtwnMVQ9erqSmE5ko5C865rfyYKBy76WZyqekBoFWnz",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1497",
+      "feeLamports": "10000",
+      "computeUnits": 27239,
+      "transactionBytes": 522
+    },
+    {
+      "id": "1888cc5873b7435ad7fde4187fba740ed409f71a1d5e304c949cf043013a983e",
+      "kind": "native",
+      "signature": "3Kk9m99B1tsSYLsFrVnEqabkuB6UfwobSojdG9e4DS5H1xr1KiQFEq2xMgZcaXtXTJ2FuNMJqrwWyNYfxGhs9Mop",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1530",
+      "feeLamports": "10000",
+      "computeUnits": 24251,
+      "transactionBytes": 522
+    },
+    {
+      "id": "7601c16111e6f714b05f696677348bf66bc3c3487ddbd12311e9b876195ca8a5",
+      "kind": "native",
+      "signature": "2BhEyoq6NNU3bwBrskWbMwfvvSmM4A7QtkRYtGR13fg445RszGE71X2VNwKY6td4PjJCEmgRiZgt8APpUjLh3qWA",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1563",
+      "feeLamports": "10000",
+      "computeUnits": 18251,
+      "transactionBytes": 522
+    },
+    {
+      "id": "4c8f89db235dfe403283b61539c053e6332a87b60ec6b974ea8db282a1f65a82",
+      "kind": "native",
+      "signature": "3CwMUZ2JqBvPq7CURWBvjoDw6XWSTRKApPWbFMNU3UKcNWxx3BuUxkQEhmkCY2qQE7fBpEGFy959aE5bD93ZwNwk",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1596",
+      "feeLamports": "10000",
+      "computeUnits": 25775,
+      "transactionBytes": 467
+    },
+    {
+      "id": "469db1bfe94b44bf475934739f5da8b876a499f50fd11d30c87ca90f4ade5f95",
+      "kind": "native",
+      "signature": "3teaFchGbwHM6UAk4nwB7fr5xv286qsqP73PjiJYdYwHf37fMzEYeBLFYdmeTkcrk8mu3FhVtSymQq78cyPHVcsj",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1629",
+      "feeLamports": "10000",
+      "computeUnits": 22775,
+      "transactionBytes": 467
+    },
+    {
+      "id": "caaef303cb0c1bbd59ce3b55e0d8205bde512be13625b6cb278ec938fb754141",
+      "kind": "native",
+      "signature": "2DAUSSfmbGhxB7qxRqBfmHMpWgjjhgot7ws6zqxFvhUvHRmrG74jrbN92ttVajixNRcKqBF7DgnPEPNbvfHwGLah",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1697",
+      "feeLamports": "10000",
+      "computeUnits": 22775,
+      "transactionBytes": 467
+    },
+    {
+      "id": "fe90d758704d9c7ad508c959c5d472618040f4cbfbb531085c41a4edb042efe2",
+      "kind": "native",
+      "signature": "64x1h6uLBWhKFwNKqB1AJijHu4khUXf6RR77KESr7xgwTWkiMYqtofVRgSRSVwgDeSHgoUGVY7MeFBjLoBvDkB7q",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1731",
+      "feeLamports": "10000",
+      "computeUnits": 25775,
+      "transactionBytes": 467
+    },
+    {
+      "id": "1f1cc001e2dceee7f38d1a7f57c11cb95e180b457e2db3d78f10d3f5b20ef5d7",
+      "kind": "native",
+      "signature": "YYy2SK3ikjaR7RU1BQb4nkpb2u1zstd4pfeCAXART6zpvAABZ9qCBTSw8w6t7J86qtneWdxf3usRvHpbgEtiLbq",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1765",
+      "feeLamports": "10000",
+      "computeUnits": 27267,
+      "transactionBytes": 467
+    },
+    {
+      "id": "c8ae3271c0ab4a52ed4d69ef215213f16990e294adefab120fd525a51a13d2ed",
+      "kind": "native",
+      "signature": "66HLmEnRqCfFW5aDbs2k7YZz2HEUDrxGXztd8ynMdrwsLCMqAncj2q1sBQg1oSVWKMmLokNwL9kHEv1Y5ibq5V5F",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1799",
+      "feeLamports": "10000",
+      "computeUnits": 25775,
+      "transactionBytes": 467
+    },
+    {
+      "id": "4cc9155ac20ba1175fb4c238109dcd10b33e64f6e07871e47dfc47610e598d8c",
+      "kind": "native",
+      "signature": "3pN98GBVYPG52RtenKiWQdTNNaVtzeD16YK8BJa3iXWR1E5z7gXkGXBTfi3sUuN9HNju6DrzoJsSWDuRp1g3eQTR",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1833",
+      "feeLamports": "10000",
+      "computeUnits": 28775,
+      "transactionBytes": 467
+    },
+    {
+      "id": "68878a4254879e2932663ba7de2a17739f2d3ce673d9aeaadc470c34f4d8333b",
+      "kind": "native",
+      "signature": "67ZxvnaYirmyo3PUQfMYZwM4Zsok7jb5qL6Bu9w857pXXrs3M4jHJWsJwKXuTfWdn7LmEWEY5MHvPdaWiiTrUzk5",
+      "status": "finalized-success",
+      "type": "native-transaction",
+      "slot": "1867",
+      "feeLamports": "10000",
+      "computeUnits": 25775,
+      "transactionBytes": 467
+    }
+  ]
+}

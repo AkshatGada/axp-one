@@ -1,0 +1,31 @@
+(node:83072) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ import/help contract and explicit resource/path/execute gates precede keys or funding (4.615625ms)
+✔ actual core/service/RPC APIs bootstrap four Series/eight Units with nineteen counted public attempts (3241.291833ms)
+✔ identity/binary/resource preflight refuses before any funding request (77.390792ms)
+✔ unknown airdrop response is never requested again, including explicit same-run resume (458.021875ms)
+✔ known funding signature resumes readonly finality and proceeds once; completed bootstrap never re-funds or re-signs (3396.05525ms)
+✔ native lost response recovers original signed outbox without another send or blockhash (3367.040416ms)
+✔ funding proof rejects fee/principal/recipient/signature corruption (3314.449292ms)
+✔ parent-only handles rebind to reopened store; separate probe signatures require exact committed catalog fence/global slot (3160.097791ms)
+✔ resource measurement includes sibling verification logs and separates the explicit ledger (2.8075ms)
+✔ completed bootstrap reopens advanced/expired run and recovers consumed bytes without setup or proof rewrite (3075.303083ms)
+✔ missing current native database refuses resume without recreating it or making setup requests (3105.925042ms)
+✔ recovery resource guards stop before fixture creation for total storage, ledger and app limits (3.152ms)
+(node:83073) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ default/help parsing is read-only and execution mode is explicit (1.380917ms)
+✔ all validator listeners/readiness must match before bootstrap or child starts (24.650333ms)
+✔ parent closes bootstrap writer before fork, uses actual fixed IPC facade, then closes only owned child/handles (24.892166ms)
+✔ same-run resume never calls create and error cleanup stops the owned service process (33.089166ms)
+✔ launcher preserves actual exit records, rejects wrong readiness identity and never signals validator PID (33.44975ms)
+✔ child alone resumes writer, binds exact127 gated service and exposes only fixed IPC (4.917125ms)
+✔ child crash hook is installed before HTTP use and invokes only injected own-process SIGKILL (6.714375ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23286.917208

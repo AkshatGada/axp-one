@@ -1,0 +1,31 @@
+(node:26907) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ controlled agent selects source independently and declares scripted policy (0.559958ms)
+✔ negative sponsor opinion does not deny explicitly consented funding (0.51475ms)
+✔ delivered source produces the same deterministic answer with no packet input (0.113667ms)
+✔ resume preserves prepared identities, reservations and cached authorizations; rejects changed or started state (1.413834ms)
+✔ bounded continuation preserves completed direct evidence and rejects changed terminal/deadline or a started remaining case (1.503333ms)
+✔ an unavailable response observes its one durable attempt without submitting again (0.263125ms)
+✔ local client distinguishes bounded timeout and accepts a slower successful response without retry (68.504125ms)
+✔ only the exact known funded sponsored interruption can resume; its original error is retained (0.852459ms)
+(node:26908) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ final continuation accepts only the pinned buyer interruption and preserves both successes (2.763542ms)
+✔ closing admission during the asynchronous slot read prevents any claim and cannot reopen (0.25875ms)
+✔ protected reserve and actual Series slot headroom both refuse new admission (0.1125ms)
+✔ expiry absence needs actual height, invalid hash, empty signature and both native observations (0.116417ms)
+(node:26909) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ native CLI recorded inspection is offline, provenance-labeled and shows verified original-face economics (7.17325ms)
+✔ native CLI rejects changed recorded proof instead of relabeling a fixture as Devnet (4.221125ms)
+✔ native CLI live inspection uses only fixed GET routes and never supplies an operator token (23.466416ms)
+✔ native CLI submits an existing signed contract only through explicit submit (32.348333ms)
+✔ native CLI does not accept public RPC origins or guess operator credentials (0.228334ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 152.269208

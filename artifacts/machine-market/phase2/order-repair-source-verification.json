@@ -1,0 +1,17 @@
+{
+  "tests": {
+    "passed": 145,
+    "failed": 0,
+    "skipped": 0,
+    "fixtureEvidenceOnly": true,
+    "outputSha256": "2c1cc73f8b74df49cd1f61cf7474387105da53bf6779f13e490e7adfdd8ce2ab"
+  },
+  "sourceHashes": {
+    "packages/machine-market/native/service.mjs": "c0174835e22fdc417fa16103a7c33b2856e036caaa22366e1073dba269c69c2c",
+    "scripts/machine-market/phase2-acceptance-journal.mjs": "9bd43db41b7ce4b027e24ef5aedc0772113f60a756d6ae6ac0d0db84b5165408",
+    "scripts/machine-market/phase2-acceptance-plan.mjs": "852fa819f9015c31a9cf6433676dc09ef42d7e7c0b49a4b4e6dee72506caa81f",
+    "scripts/machine-market/phase2-http-reservation-recovery.mjs": "b57cb6f9e7bc45af15c8407e605ef3d1e72ff6129f7fae8154e195a289133fce",
+    "scripts/machine-market/phase2-continue-acceptance.mjs": "8d92d1acf369f84159596dbc12182ef690953c1369442b7c9ecc4aa5522634b1",
+    "tests/machine-market/phase2-order-concurrency.test.mjs": "d8adb5978179656cd0dc7831eb595887f8c1f26c0447a348306307e9388f9e25"
+  }
+}

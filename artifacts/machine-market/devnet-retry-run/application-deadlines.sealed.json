@@ -1,0 +1,10 @@
+{
+  "schema": "axp.market.devnet.application-deadlines.v1",
+  "manifestHash": "0852e45640ce2732b0411399a6fb2a4ac2938b319fb74ff87cf614ce2acfb715",
+  "program": "13pUf2FAc5db74eBie9pPhikg891RGTRZpwYABAQz2fz",
+  "deploymentSignature": "3cVenmit7R4eauGLjti9X5q2m6eB516e81JMKRNE61T5kjG7chDspBqzgGUvp2Zwi47961RE35P4dw52FcvUMvNV",
+  "deploymentSlot": "515941548",
+  "sealedAtSlot": "515941559",
+  "useBySlot": "515947559",
+  "readValidUntilSlot": "515951559"
+}

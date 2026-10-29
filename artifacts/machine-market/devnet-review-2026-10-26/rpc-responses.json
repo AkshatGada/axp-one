@@ -1,0 +1,215 @@
+[
+  {
+    "id": 1,
+    "method": "getGenesisHash",
+    "result": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+    "error": null
+  },
+  {
+    "id": 2,
+    "method": "getVersion",
+    "result": {
+      "feature-set": 3993424257,
+      "solana-core": "4.4.0-beta.1"
+    },
+    "error": null
+  },
+  {
+    "id": 3,
+    "method": "getBalance",
+    "result": {
+      "context": {
+        "apiVersion": "4.4.0-beta.1",
+        "slot": 515394781
+      },
+      "value": 4379560920
+    },
+    "error": null
+  },
+  {
+    "id": 4,
+    "method": "getAccountInfo",
+    "result": {
+      "context": {
+        "apiVersion": "4.4.0-beta.1",
+        "slot": 515394781
+      },
+      "value": {
+        "data": [
+          "",
+          "base64"
+        ],
+        "executable": false,
+        "lamports": 4379560920,
+        "owner": "11111111111111111111111111111111",
+        "rentEpoch": 18446744073709552000,
+        "space": 0
+      }
+    },
+    "error": null
+  },
+  {
+    "id": 5,
+    "method": "getMinimumBalanceForRentExemption",
+    "result": 650240,
+    "error": null
+  },
+  {
+    "id": 6,
+    "method": "getMinimumBalanceForRentExemption",
+    "result": 833120,
+    "error": null
+  },
+  {
+    "id": 7,
+    "method": "getMinimumBalanceForRentExemption",
+    "result": 1229344760,
+    "error": null
+  },
+  {
+    "id": 8,
+    "method": "getMinimumBalanceForRentExemption",
+    "result": 1229385400,
+    "error": null
+  },
+  {
+    "id": 9,
+    "method": "getMinimumBalanceForRentExemption",
+    "result": 2646680,
+    "error": null
+  },
+  {
+    "id": 10,
+    "method": "getMinimumBalanceForRentExemption",
+    "result": 1813560,
+    "error": null
+  },
+  {
+    "id": 11,
+    "method": "getMinimumBalanceForRentExemption",
+    "result": 2595880,
+    "error": null
+  },
+  {
+    "id": 12,
+    "method": "getMinimumBalanceForRentExemption",
+    "result": 3794760,
+    "error": null
+  },
+  {
+    "id": 13,
+    "method": "getMinimumBalanceForRentExemption",
+    "result": 1554480,
+    "error": null
+  },
+  {
+    "id": 14,
+    "method": "getMultipleAccounts",
+    "result": {
+      "context": {
+        "apiVersion": "4.4.0-beta.1",
+        "slot": 515394783
+      },
+      "value": [
+        {
+          "data": [
+            "AQDNORcAAAAA",
+            "base64"
+          ],
+          "executable": false,
+          "lamports": 953520,
+          "owner": "Feature111111111111111111111111111111111111",
+          "rentEpoch": 18446744073709552000,
+          "space": 9
+        },
+        {
+          "data": [
+            "AQBFoxcAAAAA",
+            "base64"
+          ],
+          "executable": false,
+          "lamports": 953520,
+          "owner": "Feature111111111111111111111111111111111111",
+          "rentEpoch": 18446744073709552000,
+          "space": 9
+        },
+        {
+          "data": [
+            "AYChhhsAAAAA",
+            "base64"
+          ],
+          "executable": false,
+          "lamports": 953520,
+          "owner": "Feature111111111111111111111111111111111111",
+          "rentEpoch": 18446744073709552000,
+          "space": 9
+        },
+        null
+      ]
+    },
+    "error": null
+  },
+  {
+    "id": 15,
+    "method": "getLatestBlockhash",
+    "result": {
+      "context": {
+        "apiVersion": "4.4.0-beta.1",
+        "slot": 515394783
+      },
+      "value": {
+        "blockhash": "Eaj6SPcRPffvjF9AnBgN9u4WBmM5YNdLabMvN2sE1wXU",
+        "lastValidBlockHeight": 502593716
+      }
+    },
+    "error": null
+  },
+  {
+    "id": 16,
+    "method": "getFeeForMessage",
+    "result": {
+      "context": {
+        "apiVersion": "4.4.0-beta.1",
+        "slot": 515394784
+      },
+      "value": 5000
+    },
+    "error": null
+  },
+  {
+    "id": 17,
+    "method": "getFeeForMessage",
+    "result": {
+      "context": {
+        "apiVersion": "4.4.0-beta.1",
+        "slot": 515394784
+      },
+      "value": 10000
+    },
+    "error": null
+  },
+  {
+    "id": 18,
+    "method": "getFeeForMessage",
+    "result": {
+      "context": {
+        "apiVersion": "4.4.0-beta.1",
+        "slot": 515394784
+      },
+      "value": 15000
+    },
+    "error": null
+  },
+  {
+    "id": 19,
+    "method": "getFeeForMessage",
+    "result": {
+      "context": {
+        "apiVersion": "4.4.0-beta.1",
+        "slot": 515394784
+      },
+      "value": 5000
+    },
+    "error": null
+  }
+]

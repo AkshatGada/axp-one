@@ -1,0 +1,16 @@
+{
+  "loopbackOnly": true,
+  "validatorVerified": true,
+  "validatorBinaryHash": "1f135bb21bdd50df55e92f5254120e02e7e7118d428e668270ba8b98acf13dbf",
+  "programHash": "3335158a895ac7f483c9cbbcc4470e95e65098c54c7da1b7be4733b0594fea1a",
+  "genesis": "7f5e04f0437b95acca9b3e93689043eb2a4c03af3f90e36626d41506d4b9e08e",
+  "genesisBase58": "9aBvsKvrQ5Q9dZeE8uuVdsFnEeqjBrAYBDtvANJHR5Df",
+  "program": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
+  "socketRows": 27,
+  "resources": {
+    "freeBytes": 144650125312,
+    "totalTaskBytes": 12115898368,
+    "appBytes": 1028096,
+    "ledgerBytes": 4132376576
+  }
+}

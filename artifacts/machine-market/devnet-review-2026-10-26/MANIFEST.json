@@ -1,0 +1,120 @@
+{
+  "schema": "axp.market.devnet-preparation.packet.v1",
+  "phase": "Preparation/review only, complete then stop",
+  "baseLocalCommit": "a054281",
+  "allocationStatus": "APPROVED_UP_TO_1_40_TEST_SOL_FOR_THIS_RUN",
+  "allocationAuthority": "ROOT forwarded direct user answer \"ys u can\"; supersedes pending allocation",
+  "readyForSigningOrTransactions": false,
+  "adapterImplementationAuthorized": false,
+  "activity": {
+    "publicReadonlyRpcCalls": 21,
+    "methods": {
+      "getGenesisHash": 1,
+      "getVersion": 1,
+      "getBalance": 1,
+      "getAccountInfo": 1,
+      "getMinimumBalanceForRentExemption": 9,
+      "getMultipleAccounts": 1,
+      "getLatestBlockhash": 2,
+      "getFeeForMessage": 5
+    },
+    "privateConfigurationContentsRead": false,
+    "signatures": 0,
+    "keyGeneration": 0,
+    "simulations": 0,
+    "broadcasts": 0,
+    "elfBytesUploaded": 0,
+    "testsLaunched": 0,
+    "runtimesLaunched": 0,
+    "toolsInstalledOrBuilt": 0
+  },
+  "preservedLocalEvidence": [
+    {
+      "file": "docs/machine-market/PHASE2_NATIVE_ACCEPTANCE_RESULT.md",
+      "sha256": "dcd3e3761a760b006e281b52a1d223119de03b3e4d0501ea2f0042a9b7b0a19b",
+      "matchesCommittedLocalCheckpoint": true
+    },
+    {
+      "file": "artifacts/machine-market/phase2/native-acceptance-after-order-repair.json",
+      "sha256": "7988f0ba689ca7422dc8e4fe8515b9ae388673070aade2947510f3f4f81c188c",
+      "matchesCommittedLocalCheckpoint": true
+    },
+    {
+      "file": "artifacts/machine-market/phase2/order-repair-readonly-recheck.json",
+      "sha256": "946449c66a544b47ccc0b8f8babe9e443ef0ad28dd14db5869a970afa7779f5b",
+      "matchesCommittedLocalCheckpoint": true
+    },
+    {
+      "file": "artifacts/machine-market/phase2/order-repair-final-verification.json",
+      "sha256": "104e1d8120b3efc9d7cc755b86f7d81853081fc7012a9b0c12db149a6995b714",
+      "matchesCommittedLocalCheckpoint": true
+    }
+  ],
+  "packetFiles": {
+    "bounds-and-liabilities.json": {
+      "sha256": "2f761680af804b9a688b4db059c6aa44db884e160880375126f488d2cf2fd129",
+      "bytes": 6007
+    },
+    "four-signer-fee.json": {
+      "sha256": "9b3fabfd91ac79686efe76d03232b17dda35a77d3250a7445037a7b0bd601dd8",
+      "bytes": 1612
+    },
+    "prior-draft.snapshot.md": {
+      "sha256": "ccad911a5b64a60a7a31a75b3e3660ae291ca70a3529440e75bb16b72bece3d1",
+      "bytes": 14157
+    },
+    "public-observations.json": {
+      "sha256": "57e634d4485cd5868c62acaa961ceb74f1959fc767bcd185f3a056b9e95924c8",
+      "bytes": 4025
+    },
+    "query-readonly.mjs": {
+      "sha256": "d6a831029ee79073be016219d1e45a22be488b82ab65409b7728bbaf8204a146",
+      "bytes": 8424
+    },
+    "readiness.json": {
+      "sha256": "8391137d0824407ac061bd2a1fc9a21ef50dad86284966813975118e66927b05",
+      "bytes": 1502
+    },
+    "resources-snapshot.json": {
+      "sha256": "60c75e148bda16b12009313ece511134843aa30f95d0ff693f1d61729314cd09",
+      "bytes": 672
+    },
+    "rpc-requests.json": {
+      "sha256": "c493e18d1076f8b0795099941eef29df42bdf6a3839b5592c26332d6f9313005",
+      "bytes": 5645
+    },
+    "rpc-responses.json": {
+      "sha256": "5f6c899f93ae99fa4c22b15e59ff185970149ea7b8c180a0d114d81054d34a86",
+      "bytes": 4279
+    },
+    "source-review.json": {
+      "sha256": "bd01b05507bfa710ecb7dd607c870e6a58ed111134ca2998f384ed751ba351af",
+      "bytes": 6551
+    }
+  },
+  "doc": {
+    "file": "docs/machine-market/DEVNET_REVIEW_PACKET.md",
+    "sha256": "edc0556566cfc29789990c033076c05794e498e8145a4fefdc8026774bf61c9b"
+  },
+  "remainingTechnicalGates": [
+    "ROOT review of actual packet and accepted local limitations",
+    "separate adapter/opaque-key-preparation phase authorization",
+    "exact generated-public-identity manifest and scoped signer/outbox review",
+    "fresh fee/rent/balance/feature preflight",
+    "distinct financial Devnet ROOT GO before first signature or deployment"
+  ],
+  "resourceGate": {
+    "passed": true,
+    "freeBytes": 146190995456,
+    "totalTaskBytes": 8048492544,
+    "requiredFreeBytes": 40000000000,
+    "totalTaskLimitBytes": 21474836480
+  },
+  "stagedRepositoryHygiene": {
+    "passed": true,
+    "runtimeFiles": 533,
+    "vendorFiles": 71,
+    "stagedFiles": 12,
+    "findings": []
+  }
+}

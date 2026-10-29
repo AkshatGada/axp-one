@@ -1,0 +1,59 @@
+{
+  "schema": "axp.market.devnet.retry-preflight.v1",
+  "readOnly": true,
+  "genesis": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+  "version": {
+    "feature-set": 3993424257,
+    "solana-core": "4.4.0-beta.1"
+  },
+  "contextSlot": 515932781,
+  "sbpfV3": {
+    "address": "5cC3foj77CWun58pC51ebHFUWavHWKarWyR5UUik7dnC",
+    "activationSlot": "461808000",
+    "owner": "Feature111111111111111111111111111111111111"
+  },
+  "loaderCompatibility": "feature-prerequisite-only-live-deployment-not-yet-attempted",
+  "elfBytes": 241832,
+  "elfSha256": "3335158a895ac7f483c9cbbcc4470e95e65098c54c7da1b7be4733b0594fea1a",
+  "payerLamports": "4378685920",
+  "allOtherRunAccountsAbsent": true,
+  "priorFinalizedSuccessfulTransactions": 174,
+  "rent": {
+    "wallet": "650240",
+    "program": "833120",
+    "buffer": "1229344760",
+    "programData": "1229385400",
+    "market": "2646680",
+    "series": "1813560",
+    "unit": "2595880",
+    "match": "3794760",
+    "orderUse": "1554480"
+  },
+  "plannedTotalRentLamports": "1276985000",
+  "feeQuotes": {
+    "buffer:create": {
+      "feeLamports": "10000",
+      "signatures": 2
+    },
+    "deploy:new": {
+      "feeLamports": "10000",
+      "signatures": 2
+    },
+    "write:000": {
+      "feeLamports": "5000",
+      "signatures": 1
+    }
+  },
+  "priorFeeSpendLamports": "875000",
+  "remainingFeeBudgetLamports": "14125000",
+  "aggregateAllocationLamports": "1400000000",
+  "worstListedCombinedReservationLamports": "1396650240",
+  "headroomLamports": "3349760",
+  "resources": {
+    "freeBytes": 147837812736,
+    "totalTaskBytes": 7978184704,
+    "appBytes": 4096
+  },
+  "signaturesCreated": 0,
+  "broadcasts": 0
+}

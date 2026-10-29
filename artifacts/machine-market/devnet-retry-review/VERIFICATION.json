@@ -1,0 +1,77 @@
+{
+  "schema": "axp.market.devnet.retry-local-verification.v1",
+  "baseCommit": "f764727",
+  "phase": "local-code-and-review-only",
+  "timingRegression": {
+    "passed": 187,
+    "failed": 0,
+    "skipped": 0,
+    "stage": "After timing fix, before final prior-fee binding",
+    "outputSha256": "b1afcc7409f8cef7a3b6e57ad9edc0a0129420271347beb6f1d6e19c6a19fa35"
+  },
+  "finalChangedAccountingDeadlineAndBindingChecks": {
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "stage": "Final code including carried prior fees; overlaps timing regression set",
+    "outputSha256": "f7cbe7cf6d015bb7f12f0e2409a07f22bdaf64a8578a3b48827fce8883b4ad70"
+  },
+  "sourceHashes": {
+    "packages/machine-market/devnet/deadlines.mjs": "00b792abebac6230047c26c617572f98751177649f471e9034e3f8687e8c99f7",
+    "packages/machine-market/devnet/manifest.mjs": "9a1550c67dfc5d818a3b539ece91d85506ac957d6e279a8986b3d498e23406cf",
+    "packages/machine-market/devnet/plan.mjs": "ab768fec2de7aebaf45363c7901fbffe806cc7e78404d84b5b778c1d7d32de45",
+    "packages/machine-market/devnet/journal.mjs": "344f44ddebf4fec9a575ef7fe4c228afcde3d81c0663217902060b56a644c8c2",
+    "packages/machine-market/devnet/runner.mjs": "ea0576ef1b15900da3bf63db17f27e34c5063998e3183f84f0fd4fc60d7589b9",
+    "scripts/machine-market/devnet-runner.mjs": "ab5907ea8a1921054c4ffdbe16ad0083e710b0e60c07d2527740fe094611547f",
+    "tests/machine-market/devnet-deadlines.test.mjs": "299bc76ecc0609e93a45b7b245819dd0c8a2eddaaa4ee9ee63deaf4b51fede2f",
+    "tests/machine-market/devnet-prior-fees.test.mjs": "3e097064d738c7d7d5db7ded5cd8b6a04b5799af0db92791707870dce5c26420",
+    "tests/machine-market/helpers/devnet-fixture.mjs": "b45349ee31ac46f50b5d1980d5443ce1ca64d999503ec15bc74272721713a3a3"
+  },
+  "preservedOriginalEvidenceHashes": {
+    "artifacts/machine-market/devnet-implementation/live-abort-result.json": "85eb4a6c8adbf6e8ea7fc2629e32d77ac0df17c5646135e8a623ee8465df74f8",
+    "artifacts/machine-market/devnet-implementation/live-abort-verification.json": "6cb20ee46dde92360cf9edfe44aee4928d1eaf362e9d728aa792f136c6676acb",
+    "artifacts/machine-market/devnet-implementation/execution-manifest.sealed.json": "894d41d674ec58bb6ee1d973180316db97b82fd96121872343a3f8c8b13b31a4",
+    "artifacts/machine-market/devnet-implementation/expired-unsent-recovery.json": "98a3df0c588f5037a8cd48f0ec3aef870608fe6dcb1405cb4fb2bc7c5f41815c"
+  },
+  "preservedHistoricalEvidenceHashes": {
+    "docs/machine-market/PHASE2_NATIVE_ACCEPTANCE_RESULT.md": "dcd3e3761a760b006e281b52a1d223119de03b3e4d0501ea2f0042a9b7b0a19b",
+    "artifacts/machine-market/phase2/native-acceptance-after-order-repair.json": "7988f0ba689ca7422dc8e4fe8515b9ae388673070aade2947510f3f4f81c188c",
+    "artifacts/machine-market/phase2/order-repair-readonly-recheck.json": "946449c66a544b47ccc0b8f8babe9e443ef0ad28dd14db5869a970afa7779f5b",
+    "artifacts/machine-market/phase2/order-repair-final-verification.json": "104e1d8120b3efc9d7cc755b86f7d81853081fc7012a9b0c12db149a6995b714",
+    "docs/machine-market/DEVNET_REVIEW_PACKET.md": "edc0556566cfc29789990c033076c05794e498e8145a4fefdc8026774bf61c9b"
+  },
+  "accounting": {
+    "asset": "DEVNET_SOL_LAMPORTS",
+    "aggregateAllocationLamports": "1400000000",
+    "priorNetFeeSpendLamports": "875000",
+    "priorRetainedCollateralLamports": "0",
+    "priorRefundedCollateralLamports": "1229385400",
+    "remainingAggregateAllocationLamports": "1399125000",
+    "aggregateFeeLimitLamports": "15000000",
+    "remainingFeeAllowanceLamports": "14125000",
+    "newRentCeilingLamports": "1300000000",
+    "newFixtureCapitalCeilingLamports": "81000000",
+    "grossTradeCeilingLamports": "60000",
+    "primaryFundingCeilingLamports": "30000",
+    "perTransactionFeeCeilingLamports": "50000",
+    "walletReserveLamportsAtPriorQuote": "650240",
+    "worstListedCombinedReservationLamports": "1396650240",
+    "headroomAtPriorWalletReserveQuoteLamports": "3349760",
+    "grossHistoricalAndProposedRentCeilingLamports": "2529385400",
+    "newMoneyRequestedAboveOriginalAggregateCap": false,
+    "priorSpendMustBeSeededIntoNextJournal": true,
+    "implementationSeedsPriorFeesBeforeSigning": true
+  },
+  "implementationAttemptLimit": 300,
+  "implementationWriteLimit": 256,
+  "proposedCumulativeAttemptLimit": 478,
+  "proposedCumulativeWriteLimit": 432,
+  "capacityApproval": "pending",
+  "financialRootGo": false,
+  "newLiveSignatures": 0,
+  "newBroadcasts": 0,
+  "newDeposits": 0,
+  "newPersistentKeys": 0,
+  "originalRunClosed": true,
+  "goNoGo": "NO_GO_pending_capacity_review_separate_key_journal_binding_and_fresh_quotes"
+}

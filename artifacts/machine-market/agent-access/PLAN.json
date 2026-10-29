@@ -1,0 +1,31 @@
+{
+  "schema": "axp.agent-access.local-plan.v1",
+  "runId": "agent-access-local-20261028",
+  "scope": "new local-only connected research MVP",
+  "actualExecutionStarted": false,
+  "plannedNativeTransactions": 18,
+  "plannedFundingRequests": 5,
+  "maxTotalAttempts": 32,
+  "maxW2Authorizations": 32,
+  "maxProgramSigningSlots": 27,
+  "fundingLamports": "216000000",
+  "fundingCeilingLamports": "250000000",
+  "maxPrincipalLamports": "40000",
+  "maxSponsorGrossLamports": "20000",
+  "maxOperatingFeesLamports": "1600000",
+  "maxFeePerTransaction": "50000",
+  "maxRentLamports": "80000000",
+  "maxLedgerBytes": 6442450944,
+  "maxTaskBytes": 21474836480,
+  "minFreeBytes": 40000000000,
+  "programPrerequisites": {
+    "validator": {
+      "bytes": 64945584,
+      "sha256": "1f135bb21bdd50df55e92f5254120e02e7e7118d428e668270ba8b98acf13dbf"
+    },
+    "program": {
+      "bytes": 241832,
+      "sha256": "3335158a895ac7f483c9cbbcc4470e95e65098c54c7da1b7be4733b0594fea1a"
+    }
+  }
+}

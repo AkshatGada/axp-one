@@ -1,0 +1,179 @@
+{
+  "schema": "axp.market.devnet-preparation.bounds.v1",
+  "preparedAt": "2026-10-26T16:50:43.284699+00:00",
+  "readyForTransactions": false,
+  "rootFinancialGoReceived": false,
+  "proposedLimits": {
+    "nativeTransactionCeiling": 300,
+    "writeTransactionCeiling": 256,
+    "priorityPriceMicroLamportsPerCu": 0,
+    "maxFeeLamportsPerTransaction": 50000,
+    "totalFeeReservationLamports": 15000000,
+    "retainedRentCapLamports": 1300000000,
+    "fixtureFundingCapLamports": 81000000,
+    "marketGrossTransferCapLamports": 60000,
+    "primaryEscrowDepositCapLamports": 30000,
+    "singleTradeGrossCapLamports": 15000,
+    "peakUnreservedPayerCapitalRequiredLamports": 1400000000,
+    "newPrograms": 1,
+    "newSeries": 1,
+    "newUnits": 3,
+    "successfulTrades": 5,
+    "newOpaqueHandlesAfterSeparateGoOnly": 7,
+    "providerCalls": 0,
+    "marketComputeUnitsPerTransaction": 200000,
+    "legacyTransactionBytesMaximum": 1232,
+    "w2AuthorizationMessageCeiling": 64,
+    "loaderComputeUnitLimit": 1400000,
+    "uploadWriteConcurrency": 4
+  },
+  "transactionCeilingRows": [
+    {
+      "category": "Buffer create/init",
+      "ceiling": 1
+    },
+    {
+      "category": "Loader writes",
+      "ceiling": 256,
+      "measuredRequired": 252
+    },
+    {
+      "category": "New Program create/deploy",
+      "ceiling": 1
+    },
+    {
+      "category": "Market/Series/three Units",
+      "ceiling": 5
+    },
+    {
+      "category": "Five Fund/three Start/three terminals",
+      "ceiling": 11
+    },
+    {
+      "category": "Five fixture funding transfers",
+      "ceiling": 5
+    },
+    {
+      "category": "Five fixture sweeps",
+      "ceiling": 5
+    },
+    {
+      "category": "Known-aborted buffer close",
+      "ceiling": 1
+    },
+    {
+      "category": "Four declared native negative probes",
+      "ceiling": 4
+    },
+    {
+      "category": "Unallocated reserve (no automatic permission)",
+      "ceiling": 11
+    }
+  ],
+  "nominalSuccessfulPathIncludingFourExpectedRejections": {
+    "transactions": 284,
+    "baseFeeLamports": 1535000,
+    "notExecutionEvidence": true,
+    "fixtureSweepsPayOwnFees": true
+  },
+  "rent": {
+    "bufferMinimum": 1229344760,
+    "bufferFundedToProgramDataRent": 1229385400,
+    "bufferOverMinimum": 40640,
+    "programAndProgramDataRetained": 1230218520,
+    "applicationRetained": 46766480,
+    "totalRetained": 1276985000,
+    "noDoubleCountOfBufferAndProgramData": true
+  },
+  "capital": {
+    "exactQuotedRentPlusFullFeeReserveAndFloatAndPayerReserve": 1373635240,
+    "hardRentCapPlusFullFeeReserveAndFloatAndPayerReserve": 1396650240,
+    "roundedRequired": 1400000000,
+    "grossWallet": 4379560920,
+    "maximumLegacyReservationCompatibleWithPeak": 2979560920,
+    "legacyReservationsStillUnknown": true,
+    "runSpecificAllocationApproved": true,
+    "approvedMaximumAllocationLamports": 1400000000
+  },
+  "plannedEconomics": {
+    "primaryGross": 30000,
+    "secondaryGross": 30000,
+    "primaryEarnedFace": 10000,
+    "issuerNet": 9900,
+    "primaryMarketFee": 100,
+    "ordinaryAndSponsorRefunds": 20000,
+    "secondarySellerNet": 29700,
+    "secondaryMarketFees": 300,
+    "allAmountsTestSolLamports": true
+  },
+  "liabilities": {
+    "publicWallet": "D7GzU2o43V4whHJG1pv7k1o3UTU9yuC3Hohp1mdii6ST",
+    "grossLamports": 4379560920,
+    "availableBalanceVerified": false,
+    "reservationAmountForThisWallet": "run-specific up-to1400000000 lamports allocation approved; complete legacy reservation total not audited",
+    "reason": "No authoritative current reservation ledger for D7... was accessed in this planning phase. Gross balance is not available balance.",
+    "historicalBenchmark": {
+      "payerOwner": "FvZ2jvMmVveZYNvsQEQbpkPnHtUuBWburtHAYAWW4SLg",
+      "sameAsProposedPayer": false,
+      "retainedNativeFeeReservationLamports": "1280050000",
+      "expiredCloseReservations": 5,
+      "channelsFinanciallyClosed": 125,
+      "finalizedTransactions": 250,
+      "sourceIsHistorical": true,
+      "amountNotAttributedOrReleasedFromProposedPayer": true,
+      "unknownProviderAttempts": {
+        "Jev": 8,
+        "DeepSeek": 1
+      },
+      "providerCurrencySeparateFromSolLamports": true
+    },
+    "liveDemoThreePreparedChannelsSeparate": true,
+    "localNinePointZeroZeroOneSolNotDevnetCapital": true,
+    "allocationStatus": "APPROVED_UP_TO_1_40_TEST_SOL_FOR_THIS_RUN",
+    "furtherBroadLiabilitySearchInThisPhase": false,
+    "parentCheckpoint": "ROOT forwarded direct user reply \"ys u can\" to whether up to1.40 test SOL may be allocated from D7 for this run. This supersedes pending allocation; no broad liability search is needed."
+  },
+  "preparationActivity": {
+    "keyGeneration": 0,
+    "signatures": 0,
+    "broadcasts": 0,
+    "simulations": 0,
+    "actualElfBytesUploaded": 0,
+    "privateConfigurationContentsRead": false
+  },
+  "negativeProbes": [
+    {
+      "id": "wrong-start-owner",
+      "expectedCustomError": 2,
+      "requiredSignatures": 2
+    },
+    {
+      "id": "missing-owner-signature",
+      "expectedCustomError": 2,
+      "requiredSignatures": 1
+    },
+    {
+      "id": "foreign-unit-account",
+      "expectedCustomError": 2,
+      "requiredSignatures": 2
+    },
+    {
+      "id": "stale-start-cursor",
+      "expectedCustomError": 6,
+      "requiredSignatures": 2
+    }
+  ],
+  "unallocatedReservePolicy": {
+    "total": 11,
+    "maximumConditionalTerminalDrainSlots": 3,
+    "remainingNeverAutoConsumed": 8,
+    "noReplacementOfUnresolvedSignatures": true,
+    "conditionalTimeoutOnlyIfNoOtherUnknownAndNoTerminalAlreadySucceeded": true,
+    "fallbackDoesNotPassIntendedSuccessCase": true
+  },
+  "negativeProbePrincipalExposureLamports": 0,
+  "nativeFundInstructionsAllowed": 5,
+  "nontransferabilityAndNonceChecksDevnetEvidenceScope": "HTTP refusals/native state and same-byte replay only; no extra signed Fund probe. Local native probes remain separate historical evidence.",
+  "allocationStatus": "APPROVED_UP_TO_1_40_TEST_SOL_FOR_THIS_RUN",
+  "requestedUserAllocationLamports": 1400000000
+}

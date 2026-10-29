@@ -1,0 +1,69 @@
+{
+  "schema": "axp.market.local-recovery.verification.v1",
+  "tests": {
+    "passed": 140,
+    "failed": 0,
+    "skipped": 0,
+    "fixtureEvidenceOnly": true,
+    "output": "artifacts/machine-market/phase2/outputs/recovery-focused-suite.txt",
+    "outputSha256": "ccf9d65ede18d6b4031c24372e8651820ad012349aa9bda353926d06eddb7d53"
+  },
+  "syntaxChecks": 23,
+  "sourceHashes": {
+    "scripts/machine-market/phase2-acceptance-crash.mjs": "c36ba3cf8a2782b8d3d58f4007ede3e9d9f3867065e4a35882d99c3a614b9d66",
+    "scripts/machine-market/phase2-acceptance-evidence.mjs": "8759e57303f1c11cf436af4174256b9301f8965b297108800c1a066f6c103a5f",
+    "scripts/machine-market/phase2-acceptance-fence-child.mjs": "9047961e0b82b6c217914542363e6fd05f5deed95e02a6270e008a5187e7bf80",
+    "scripts/machine-market/phase2-acceptance-fence.mjs": "35d3bb2a75903fc132eedc7eb28f0cff325a66a40749cd1991e9a593260c4e2c",
+    "scripts/machine-market/phase2-acceptance-gates.mjs": "d75379962784cd91f458d5880d25b18456643a9f4b0468d740560348c6027630",
+    "scripts/machine-market/phase2-acceptance-journal.mjs": "cb553ba41fc58fc1fea86f16b61bc64452104757bf10543513e7f925ecfa1abb",
+    "scripts/machine-market/phase2-acceptance-plan.mjs": "e0eac7b182b4fd28bdad4db0aec61e33a935db03915529aa44e886656736d67b",
+    "scripts/machine-market/phase2-acceptance-probes.mjs": "57c75f6f80aab26a0c6fe0c69e0544c09171907a414de8a815f825fbcb6eb13f",
+    "scripts/machine-market/phase2-acceptance-recovery.mjs": "d0a3e3dcb5586d89a7c36569ae21b325afc631a6609ae4615c778faf2a37efd4",
+    "scripts/machine-market/phase2-acceptance-repository.mjs": "0d8b8c5a2107f050b8faa52182a5a18898f4e9018d049fc4d77c0305423bbdcf",
+    "scripts/machine-market/phase2-acceptance-runtime.mjs": "e7ef54421458bc333cc906de52e6ea0d825e4f78aa964648efabd99c91269a58",
+    "scripts/machine-market/phase2-acceptance-schedule.mjs": "1ee667ae1b4f6ebac47d419d382f3d5d52769a1ec4c9165cb31545abc1073b57",
+    "scripts/machine-market/phase2-acceptance-sponsor.mjs": "15d056baeb6685898351d45d1e6997bd6a41d48f8e8102316798aebc0a9cbe78",
+    "scripts/machine-market/phase2-acceptance-verification.mjs": "99b7762e5d2a1fce1f7b97e98c43383e350cd8cde271e72ab68a97abc9f82d3b",
+    "scripts/machine-market/phase2-acceptance-worker.mjs": "3c49df8c2ff6f7b48806399d48a920d526eaf5d22cdb8cc974f91c838d39230e",
+    "scripts/machine-market/phase2-acceptance.mjs": "915ec85dd8368b62a5981270cd20990a022b7d034d6b990a52305331977bc98a",
+    "scripts/machine-market/phase2-bootstrap.mjs": "39ab37202e8d2ef170b57a562985d5ac3409dcd02179056dafa4674caf8c3854",
+    "scripts/machine-market/phase2-local-acceptance.mjs": "a759f26e64cf913a36ccc1b262b32aee97b0416007b7a2d493cdbd6769674fe0",
+    "scripts/machine-market/phase2-native-preflight.mjs": "0b3de38f71082257e6576255cece7ad7c90bedc708cb78226d52ab84723c9a94",
+    "scripts/machine-market/phase2-recover-current.mjs": "b9e392a36081bbf959be9501644630d7d3147e1df214dd022a7c4b65db1f3774",
+    "scripts/machine-market/phase2-resources.mjs": "a4e4ffaca9e5d25f75754e5daf6c81b11102bda84b372368d06ecf3d7c3e21be",
+    "scripts/machine-market/phase2-validator-build.mjs": "ccfc730c8b96ff4c637b59d400d1fb1bfaf93933e1e51959dd6e325fd9cb3199",
+    "scripts/machine-market/phase2-validator-run.mjs": "3cf6845d9ba0df010068e1fbcc73cc7081a10509fba97829a9285b80eebf6957"
+  },
+  "evidenceHashes": {
+    "artifacts/machine-market/phase2/bootstrap-native-result.json": "b0f94331ca417a512795352542614359dcd36f9256a3999d8008c5157fc10d08",
+    "artifacts/machine-market/phase2/original-registration-recovery.json": "c8576edc88330ce2af338e2c0ae4d154765eb269bddd2539afb2ccc2c1b88c1b",
+    "artifacts/machine-market/phase2/first-acceptance-entry-proof.json": "fab5fd9498debfefd3ae5094e943705317e823f6efdc41d9a05be62794f31b96",
+    "artifacts/machine-market/phase2/http-wallet-race-reproduction.json": "166090662fd4491bcbb012d4e734136d3f12719bc30f7bbce95f607a532e72e1",
+    "artifacts/machine-market/phase2/recovery-result.json": "b843d18c4d4065315d04e63539347a723c0ca4eda93639c575b2eefab1690527",
+    "artifacts/machine-market/phase2/runtime-budget-adjustment-10gib.json": "232518cdf3e8abdc46e5e517eea0d29c6cd73a37db60ca6f6d7c0a03e336eeed"
+  },
+  "fullRepositoryRegression": "Earlier unchanged benchmark timing failure remains; full suite not rerun",
+  "stagedRepositoryHygiene": {
+    "passed": true,
+    "runtimeFiles": 530,
+    "vendorFiles": 71,
+    "stagedFiles": 32,
+    "findings": []
+  },
+  "shutdownListenerCheck": {
+    "ports": [
+      18899,
+      18900,
+      18910,
+      19900
+    ],
+    "listeners": 0,
+    "commandExitCode": 1,
+    "recordedAt": "2026-10-26T15:24:34.801334+00:00"
+  },
+  "whitespaceCheck": {
+    "sourceAndDocsPassed": true,
+    "rawPatchContextWhitespaceRetained": true,
+    "reason": "Seven single-space unified-diff context lines in exact hashed provenance patches"
+  }
+}

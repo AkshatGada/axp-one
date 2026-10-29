@@ -1,0 +1,31 @@
+{
+  "schema": "axp.market.devnet.expired-write-recovery-verification.v1",
+  "baseCommit": "3c26614",
+  "fullRegression": {
+    "passed": 196,
+    "failed": 0,
+    "skipped": 0,
+    "stage": "Before final monotonic context guard tightening",
+    "outputSha256": "4942deb3a7829944a747a6891e558e9e5fed05afd4b3fecee7f898e3719fd701"
+  },
+  "finalTargetedChecks": {
+    "passed": 15,
+    "failed": 0,
+    "overlapWithFullSet": true,
+    "stage": "Final code including proof contexts at or above original watermark",
+    "outputSha256": "40bb0faee9382bce138e54599eb87027d76189ea4d9a80733cec331857f2b5b0"
+  },
+  "sourceHashes": {
+    "packages/machine-market/devnet/journal.mjs": "bbf13946e4b050f25cf0db3310dc404792d728fbef704156de1aba58a045ed2e",
+    "packages/machine-market/devnet/runner.mjs": "aab2d09671e3f5fee8e3b330a4e37c1e6c4ee22395d8912eb4ec32f27f66877c",
+    "scripts/machine-market/devnet-runner.mjs": "c0458a584ab20d01c127d2f77847d98e36c6bd3d913a422aa885195d5bbd8de0",
+    "tests/machine-market/helpers/devnet-fixture.mjs": "83d283ed9eb8ce9bb0e2d3a62945f8d3e4a005e39fdd41d5c9f8db8f21d3cb96",
+    "tests/machine-market/devnet-expired-write.test.mjs": "6d0727d17d51bffe9fc001ac23fdb1e371deb977a7141dd54a9d252360df47cf"
+  },
+  "recoveryScope": "Only an expired submitted upload write with two fresh finalized proofs of no ledger execution; exact old bytes/send intent preserved; slot counts never reset",
+  "newSignaturesDuringVerification": 0,
+  "fundsReleasedDuringVerification": 0,
+  "cumulativeAttemptLimit": 478,
+  "cumulativeWriteLimit": 432,
+  "totalAllocationLamports": "1400000000"
+}

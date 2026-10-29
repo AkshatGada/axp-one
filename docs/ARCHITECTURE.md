@@ -6,6 +6,19 @@ native settlement evidence refers to its separately identified testnet runs.
 The earlier component proposals are preserved
 in [MVP_MASTER_PLAN.md](MVP_MASTER_PLAN.md); this page describes the current product.
 
+## Separate machine-access trading MVP
+
+The native machine-market prototype is isolated from the advertising exchange
+described below. It uses the Packet03 price-time book, primary-only escrow, immediate
+secondary proceeds and an original primary refund face that follows the current
+ordinary owner; sponsored grants are nontransferable and refund the sponsor.
+`packages/machine-market/native/` supplies its store, service, delivery and projections.
+The compact CLI targets `/api/trading`; its default demonstration inspects saved
+Devnet evidence. The inherited `/market/`/`/api/market` synthetic full-chain escrow
+prototype is historical and is not this implementation. See the
+[native MVP acceptance matrix](machine-market/MVP_ACCEPTANCE.md) for exact evidence
+levels, terminal Devnet results and the two retained native timing gaps.
+
 ## One user turn
 
 The diagram below describes the common exchange and native-channel architecture.

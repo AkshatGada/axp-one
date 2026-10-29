@@ -1,0 +1,127 @@
+{
+  "sourceUrl": "https://github.com/anza-xyz/agave",
+  "tag": "v4.3.2",
+  "commit": "a203300045b405f86c9c84308b2eae76af69ac3b",
+  "patchSha256": "322e83674a8c64f2e29ec306de336ac656c283a939850026f5f35da51d65726e",
+  "substitutions": 4,
+  "files": {
+    "validator/src/bin/solana-test-validator.rs": {
+      "beforeSha256": "05f0685607f61a69538c893eb1e95e9d8c013f9e61be55f964b7b3989d6363cd",
+      "afterSha256": "e2debd7e27836063a2f461c17cf143716a433f7d8c80a9cf08bc94224c684f97"
+    },
+    "test-validator/src/lib.rs": {
+      "beforeSha256": "77d058182f92f0a0cd33200055af9463d55deb286a72780b1bd132a469953cc8",
+      "afterSha256": "fef373d38c879f0aa8805b82d32d12e78f71b9a801119ff8218c8db097a720ab"
+    },
+    "udp-client/src/lib.rs": {
+      "beforeSha256": "fa32324ddb29281320072b8422a49da78f4cff248f9db17d0a32bf6b8b037558",
+      "afterSha256": "04e259d11086492e2b4843d8c34c7066d9b78251787569c8dfa025cfd4944dea"
+    }
+  },
+  "cargoLockSha256": "d5ae4d5728e42e45637bee3ea3b9acbb3cc98df20f16e5b2c463f567006030f6",
+  "rust": {
+    "manifestSha256": "03569b1886ceb5c05276b50c8431ab111de944cd6140fe1fa7d821dd8e0f29cf",
+    "date": "2026-07-16",
+    "target": "aarch64-apple-darwin",
+    "components": [
+      {
+        "component": "cargo",
+        "url": "https://static.rust-lang.org/dist/2026-07-16/cargo-1.97.1-aarch64-apple-darwin.tar.xz",
+        "sha256": "2d84a74e9558192a7de674aca6aa3ab7464bed2df97e0377156ddb7e09a0fd7a",
+        "file": "cargo-1.97.1-aarch64-apple-darwin.tar.xz",
+        "compressedBytes": 8876992,
+        "expandedBytes": 32496408,
+        "links": 0,
+        "archiveVerified": true
+      },
+      {
+        "component": "rustc",
+        "url": "https://static.rust-lang.org/dist/2026-07-16/rustc-1.97.1-aarch64-apple-darwin.tar.xz",
+        "sha256": "6076cad38ccabaa24325f26a74080a363a2633a9cd34c473a8977255d8a593cb",
+        "file": "rustc-1.97.1-aarch64-apple-darwin.tar.xz",
+        "compressedBytes": 68127952,
+        "expandedBytes": 391144454,
+        "links": 0,
+        "archiveVerified": true
+      },
+      {
+        "component": "rust-std",
+        "url": "https://static.rust-lang.org/dist/2026-07-16/rust-std-1.97.1-aarch64-apple-darwin.tar.xz",
+        "sha256": "a4895f5c6995e83cab8687e46b14324592398049def71ce75ca308c981cf200d",
+        "file": "rust-std-1.97.1-aarch64-apple-darwin.tar.xz",
+        "compressedBytes": 29286636,
+        "expandedBytes": 143434831,
+        "links": 0,
+        "archiveVerified": true
+      }
+    ]
+  },
+  "unitGraph": {
+    "units": 1053,
+    "roots": [
+      22
+    ],
+    "devContextOnlyUnits": []
+  },
+  "originalValidatorSha256": "286009e2d04d7a5d21ba335628204e4747bd2e8a973e4bb6421bd0476dc8a69d",
+  "buildStatus": "passed exit0; all-socket runtime recheck pending",
+  "firstThreeSubstitutionBuild": {
+    "binarySha256": "123bac12cc1236249a90431c900adf2183531ff2e9a6a021ec3bf2d525ab827d",
+    "runtimeGate": "failed wildcard UDP8000; stopped before fixture funding"
+  },
+  "binarySha256": "1f135bb21bdd50df55e92f5254120e02e7e7118d428e668270ba8b98acf13dbf",
+  "buildResult": {
+    "action": "build",
+    "sourceCommit": "a203300045b405f86c9c84308b2eae76af69ac3b",
+    "args": [
+      "build",
+      "--locked",
+      "--offline",
+      "--release",
+      "--target",
+      "aarch64-apple-darwin",
+      "--manifest-path",
+      "/Users/akshat/agentic-dsp/.worktrees/axp-machine-market/local-state/machine-market/toolchain/agave-loopback-source/validator/Cargo.toml",
+      "--bin",
+      "solana-test-validator",
+      "--features",
+      "agave-unstable-api",
+      "-j",
+      "2"
+    ],
+    "result": {
+      "code": 0,
+      "signal": null
+    },
+    "stopped": null,
+    "stopDetail": null,
+    "before": {
+      "measuredAt": "2026-10-26T13:46:57.005Z",
+      "freeBytes": 147227406336,
+      "toolBytes": 3907739648,
+      "buildBytes": 3131990016,
+      "combinedToolBuildBytes": 7039729664,
+      "ledgerBytes": 173555712,
+      "databaseAndLogBytes": 2265088,
+      "totalRunBytes": 0,
+      "measurement": "allocated filesystem blocks; task paths only",
+      "recoveredMeasurementRaces": 0,
+      "measurementNotes": []
+    },
+    "after": {
+      "measuredAt": "2026-10-26T13:49:41.160Z",
+      "freeBytes": 147225378816,
+      "toolBytes": 3907739648,
+      "buildBytes": 3131994112,
+      "combinedToolBuildBytes": 7039733760,
+      "ledgerBytes": 173555712,
+      "databaseAndLogBytes": 2265088,
+      "totalRunBytes": 0,
+      "measurement": "allocated filesystem blocks; task paths only",
+      "recoveredMeasurementRaces": 0,
+      "measurementNotes": []
+    },
+    "logBytes": 878,
+    "logSha256": "cbd8bc1d1c12f818a0de6341945a54ccc7d101d2eb11638187125cf0cb09cf60"
+  }
+}

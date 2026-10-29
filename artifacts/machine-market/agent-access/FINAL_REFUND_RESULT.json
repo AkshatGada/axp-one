@@ -1,0 +1,91 @@
+{
+  "schema": "axp.final-refund.result.v1",
+  "status": "three_verified_financially_settled_sponsor_refund_unexecuted",
+  "completedVerifiedCases": [
+    "direct-success",
+    "sponsored-success",
+    "direct-failure"
+  ],
+  "unexecuted": [
+    "sponsored-failure"
+  ],
+  "originalBuyerFund": {
+    "operationId": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+    "signature": "3na3JMKBtuujwMLXPcaSxmsvLfpiUh4QonRgrYvCJqtdAcBjWMzhChYkrFgKyYMYPhr5Nef2eM95Q3DvtM1ZbPPh",
+    "transactionSha256": "da72485fc07408b581e239980c9ed1389b355d74ce77a635ef5112bad9a998c2",
+    "sendRows": 1,
+    "finalizedSlot": "4731"
+  },
+  "buyerRefund": {
+    "startSlot": "4914",
+    "terminalSlot": "4947",
+    "recipient": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+    "returnedLamports": "10000",
+    "remainingPrincipal": "0",
+    "protectedBodyReturned": false,
+    "readDenialHttpStatus": 403,
+    "readDenialCode": "INVALID_AUTH",
+    "verificationEvidenceMode": "transaction-finalized",
+    "extraNativeSigningSlotsForVerification": 0
+  },
+  "nativeOutboxStates": [
+    {
+      "state": "ResolvedSuccess",
+      "blocked": 0,
+      "count": 15
+    }
+  ],
+  "holds": {
+    "principal_holds": 0,
+    "unit_holds": 0,
+    "operating_holds": 0,
+    "native_fee_holds": 0,
+    "activeCampaignReservations": 0
+  },
+  "knownNativePrincipalOutstandingLamports": "0",
+  "financiallySettledFundedCases": true,
+  "bothOriginalSuccessProofsAndCasesPreserved": true,
+  "knownRetainedRentLamports": "48713040",
+  "knownProgramAndFaucetFeesLamports": "175000",
+  "nativePrincipalFundedLamports": "30000",
+  "publisherPaidLamports": "19800",
+  "collectorPaidLamports": "200",
+  "buyerRefundedLamports": "10000",
+  "sponsorRefundedLamports": "0",
+  "fundingLamports": "216000000",
+  "maximumFundingLamports": "250000000",
+  "totalAttemptSlots": 20,
+  "maximumAttempts": 32,
+  "additionalFundingRequests": 0,
+  "campaign": {
+    "consumedGross": "10000",
+    "consumedCount": 1,
+    "refundedGross": "0"
+  },
+  "maximumActiveMs": 3300000,
+  "activeElapsedMs": 3000853,
+  "remainingActiveMs": 299147,
+  "runtimeStopped": true,
+  "stopReason": "protected-drain-reserve",
+  "admission": {
+    "accepting": false,
+    "sealed": true,
+    "reason": "protected-drain-reserve",
+    "remainingMs": 299429,
+    "protectedDrainReserveMs": 300000,
+    "minimumSlotHeadroom": 450
+  },
+  "slotCutoffObservation": {
+    "source": "actual localhost getSlot finalized RPC",
+    "finalizedSlot": "5872",
+    "seriesUseBySlot": "6190",
+    "observedSlotHeadroom": 318,
+    "requiredAdmissionHeadroom": 450,
+    "belowMargin": true
+  },
+  "readValidUntilSlot": "10190",
+  "lastCaseStarted": false,
+  "phase2Complete": false,
+  "pushOrPrPerformed": false,
+  "verificationCorrection": "Refunded Units are denied INVALID_AUTH by readPrivateResponse; source and independent verifier were corrected to require that actual denial, rather than PENDING_SETTLEMENT."
+}

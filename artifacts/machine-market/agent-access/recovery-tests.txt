@@ -1,0 +1,25 @@
+(node:95138) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ controlled agent selects source independently and declares scripted policy (0.646333ms)
+✔ negative sponsor opinion does not deny explicitly consented funding (0.558417ms)
+✔ delivered source produces the same deterministic answer with no packet input (0.130291ms)
+✔ resume preserves prepared identities, reservations and cached authorizations; rejects changed or started state (1.501041ms)
+✔ bounded continuation preserves completed direct evidence and rejects changed terminal/deadline or a started remaining case (1.324083ms)
+✔ an unavailable response observes its one durable attempt without submitting again (0.225459ms)
+✔ local client distinguishes bounded timeout and accepts a slower successful response without retry (65.631667ms)
+✔ only the exact known funded sponsored interruption can resume; its original error is retained (1.319917ms)
+(node:95139) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ native CLI recorded inspection is offline, provenance-labeled and shows verified original-face economics (6.901542ms)
+✔ native CLI rejects changed recorded proof instead of relabeling a fixture as Devnet (3.677375ms)
+✔ native CLI live inspection uses only fixed GET routes and never supplies an operator token (18.140375ms)
+✔ native CLI submits an existing signed contract only through explicit submit (24.679791ms)
+✔ native CLI does not accept public RPC origins or guess operator credentials (0.165833ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 150.644917

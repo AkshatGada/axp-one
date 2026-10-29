@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "axp.market.phase2-preflight.v1",
+  "status": "blocked-before-validator-start",
+  "validatorVersion": "4.3.2",
+  "sourceCommitPrefix": "a2033000",
+  "faucetBindSource": "0.0.0.0",
+  "requiredBind": "127.0.0.1",
+  "validatorStarted": false,
+  "fundingExecuted": false,
+  "signedNativeOperations": 0,
+  "helpPath": "artifacts/machine-market/phase2/validator-help.txt",
+  "helpSha256": "22f5405ca2b071c5940b6e838374b9c156d856317b163b132193dc390490d248",
+  "source": "https://github.com/anza-xyz/agave/blob/v4.3.2/validator/src/bin/solana-test-validator.rs",
+  "sourceLines": [
+    189,
+    307,
+    358
+  ],
+  "rpcAndPubsubBindSource": "0.0.0.0",
+  "rpcSource": "https://github.com/anza-xyz/agave/blob/v4.3.2/test-validator/src/lib.rs",
+  "rpcSourceLines": [
+    1101,
+    1109
+  ]
+}

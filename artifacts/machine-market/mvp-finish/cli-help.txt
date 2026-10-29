@@ -1,0 +1,13 @@
+
+> axp-agentic-exchange@0.1.0 market
+> node scripts/machine-market/native-cli.mjs --help
+
+AXP native market
+  evidence [--case D0|D1|D2] [--json]      saved Devnet proof; no network or signing
+  live health|book|unit|order|match|operation [ID] [--origin http://127.0.0.1:8799] [--json]
+  submit order|cancel|campaign|sponsored|start|read --file SIGNED_PUBLIC_REQUEST.json [--origin ORIGIN]
+  operator process --file REQUEST.json --operator-token-file EXISTING_CAPABILITY [--origin ORIGIN]
+  operator reconcile|resend OPERATION_ID --operator-token-file EXISTING_CAPABILITY [--origin ORIGIN]
+GET inspection never sends a mutation. Submit/operator commands explicitly use existing native API contracts.
+The local gateway/validator must already be running under its own approved configuration. This CLI never starts or funds it.
+Historical /market/ and /api/market are a separate synthetic simulator, not this native interface.

@@ -1,0 +1,103 @@
+{
+  "schema": "axp.market.mvp-finish.verification.v1",
+  "status": "complete-local-phase-stopped-for-root-review",
+  "baseCommit": "0faa13e",
+  "scope": "minimal native CLI, additive public projections, sponsored-success host trace, docs and acceptance",
+  "focusedChecks": {
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0
+  },
+  "capturedSponsoredSuccessCheck": {
+    "passed": 1,
+    "overlapsFocusedSet": true
+  },
+  "recordedUsability": "npm run demo:market -- --case D0; npm run market -- evidence --case D2 --json; no network or keys",
+  "nativeClientUsability": {
+    "mode": "loopback-http-client-over-scripted-rpc-fixture",
+    "loopbackGetRequests": 6,
+    "mutationRequests": 0,
+    "extraSignerCalls": 0,
+    "extraNativeSends": 0
+  },
+  "sponsoredSuccessEvidence": {
+    "mode": "scripted-loopback-rpc-fixture",
+    "nativeProgramExecuted": false,
+    "scriptedTransactions": 5,
+    "realSolanaRpcCalls": 0,
+    "publicBroadcasts": 0,
+    "payoutLamports": {
+      "sponsorDebit": "10000",
+      "issuer": "9900",
+      "collector": "100",
+      "refund": "0"
+    },
+    "unchangedSource": true,
+    "separateSponsoredPacket": true,
+    "responseReplay": true,
+    "restartReplay": true,
+    "extraSignsOnReplay": 0,
+    "extraSendsOnReplay": 0
+  },
+  "actualNativeEvidenceGaps": [
+    "local acceptance remains 38/40; exact useBy/lease equality validator probes unproved",
+    "new sponsored-success body/payout trace is host fixture only, not Rust-program/validator/Devnet execution"
+  ],
+  "newFundedRuns": 0,
+  "newFundedPublicTransactions": 0,
+  "newPersistentCredentials": 0,
+  "newPaidCalls": 0,
+  "pushes": 0,
+  "legacySimulatorIncluded": false,
+  "originalFinancialRunTerminal": true,
+  "resources": {
+    "freeBytes": 147844648960,
+    "totalTaskBytes": 7982485504,
+    "appBytes": 4304896
+  },
+  "preservedHashes": {
+    "docs/machine-market/architecture/review-packets/v2-review-2026-10-26-03/MANIFEST_V2.json": "d77ac0f699a29dd89812137007f3ccb1cbf1d271dbcb738c66fd63c3736a3f3c",
+    "docs/machine-market/PHASE2_NATIVE_ACCEPTANCE_RESULT.md": "dcd3e3761a760b006e281b52a1d223119de03b3e4d0501ea2f0042a9b7b0a19b",
+    "artifacts/machine-market/devnet-retry-run/COMPLETED.json": "5df8bcb28c2e2c983939b2b8c93fc6c5219ea88d0ba605bdc820299424b6812a",
+    "artifacts/machine-market/devnet-retry-run/live-result.json": "68ea8689f38df4262deff26d3b509a9cc94e67734f69e30e5befbeb8e042f195",
+    "artifacts/machine-market/devnet-retry-run/live-verification.json": "aaaf12d77c3feaf61c4ddc7f0f14f5d559b942d62f7020d91fd3a10e30a7908d",
+    "packages/machine-market/native/trading.mjs": "4e944d6c303db051cec140c9d3d89fdae2af3d3819a4b1a4bb8cad275422dc28",
+    "packages/machine-market/native/outbox.mjs": "1f30333beedc7bcc5965f9b142f414c4022d6c306e7a4daaf07ca8cc7c91352e",
+    "packages/machine-market/native/delivery.mjs": "52b8a1f3be8e0b56eb6d95d516c7e33cef55dace8d2115d2962406b369679e76",
+    "programs/machine-market/src/processor.rs": "b0b572eafca2b5065700280a9ee707d6672046779fc0a25004b1dbd7dc816d15"
+  },
+  "sourceHashes": {
+    "packages/machine-market/native/client.mjs": "71592b62bfee9fdb2c1c010ded2ca7556d133bda3f0f35d60751935922110d20",
+    "packages/machine-market/native/inspect.mjs": "35659dafeb371a37e48b250442d828b78e47776f54cd416d193e4c624f80a927",
+    "packages/machine-market/native/service.mjs": "ff8156802d15d17b3a2291e3b9e484b9e0294dccd608b2df78387282b7fba2d6",
+    "scripts/machine-market/native-cli.mjs": "c946bb0608f7b394df935d256d440ac45b81a08656fbaf870e87aeb4b7114c6f",
+    "tests/machine-market/native-cli.test.mjs": "8c4464260b70efb2cd6fcf8282403368232f5280990c72212e7419dca68b8ed5",
+    "tests/machine-market/phase2-transport-integration.test.mjs": "19c07e7b3e5849234e90d9c5d72315fd76505750df694842827a2f050bbfe860"
+  },
+  "artifactHashes": {
+    "focused-integration-tests.txt": "1d2c56eeccc41d5e6707d8f9742405949f600a0f45903eeac4273390ac05c5b2",
+    "sponsored-success-and-cli-tests.final.txt": "27938f7e603c1d6da0162ae4bcfe63559c9404d62661f06f127afb6546951689",
+    "sponsored-success-and-cli-fixture.json": "be2bab46e5fb036cdc9dc12ab6b9d5796c8704c1c587af2a09b36cb8d983cfb2",
+    "live-client-walkthrough.json": "63960ded07d78b22e83c23750af5fcb2f327e94d1580a6ccf8432b331c9b892b",
+    "recorded-cli-walkthrough.txt": "bb152260297bc9533413fa0636fb9a01ce338fd692dcd53e1bcc73844c8ba289",
+    "recorded-cli-d2.json.txt": "f9e6106896a7112945afad6b4b7ed20a1c3654b480351a23afc5a09ce850002b",
+    "cli-help.txt": "5fd4e93032ef4250c8f8bd1a89ab3930b9b53af7bc42c6f23b5dfb398ce7058f"
+  },
+  "intendedPackageScriptsSha256": "f9ccb26fdf08050b99e8855be71f8f395f85a05ed736dd7073b1dd3a05228c74",
+  "implementationCommit": "f68fe83",
+  "documentationHashes": {
+    "README.md": "e2926ee1423921dff1c1a438ac82f76ab3b51cb2613bff694ef75e093367f30d",
+    "pages.md": "feb3ffca9aab114f6ba6a78d15be93b1310c20c9918608f211f7436e0c3dff7d",
+    "docs/ARCHITECTURE.md": "dd26230326a51d41a526805f8e3fb4aec108e1236a779e2fe622fd5e7dad920d",
+    "docs/machine-market/STATUS.md": "a45bef6956128df9889b3981bca3b5084ed1541431349d0a0591095af9754869",
+    "docs/machine-market/MVP_RUNBOOK.md": "7637929852627afda3d2ac4c06661786582d969da0f3f91767e1d1105897e2c1",
+    "docs/machine-market/MVP_ACCEPTANCE.md": "e3119745dcd40b2cf1ca42ba911eb010eee34006ad3ad4d8d647259a5b86eeac",
+    "artifacts/machine-market/mvp-finish/HANDOFF.md": "e1a529d78097d60f80c73a5f025d29a875bbe2369924da1a71fc6cc4a60d589a",
+    "artifacts/machine-market/mvp-finish/OWNERSHIP.md": "5bd80a928188d5df156176158ee30debcef4439b47714d061851c2f1f2652eb6"
+  },
+  "initialTestNotes": [
+    "An initial CLI test used assert.rejects for synchronous validation; assertion corrected before final pass",
+    "Sandbox loopback bind was denied; only the ephemeral fixture HTTP test was rerun with loopback permission",
+    "Final counts refer to focused-integration-tests.txt; earlier outputs remain history"
+  ]
+}

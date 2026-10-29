@@ -1,0 +1,65 @@
+{
+  "schema": "axp.market.order-repair.final-verification.v1",
+  "sourceCheckpoints": [
+    "3390850",
+    "50a94af"
+  ],
+  "packetSha256": "d77ac0f699a29dd89812137007f3ccb1cbf1d271dbcb738c66fd63c3736a3f3c",
+  "tests": {
+    "passed": 147,
+    "failed": 0,
+    "skipped": 0,
+    "fixtureEvidenceOnly": true,
+    "output": "artifacts/machine-market/phase2/outputs/order-repair-final-focused-suite.txt",
+    "outputSha256": "749bae1d072f3dd6db82bd63cade42062189cbc395c3f0b412c1002c9be524c3"
+  },
+  "syntaxChecks": 26,
+  "sourceHashes": {
+    "scripts/machine-market/phase2-acceptance-crash.mjs": "c36ba3cf8a2782b8d3d58f4007ede3e9d9f3867065e4a35882d99c3a614b9d66",
+    "scripts/machine-market/phase2-acceptance-evidence.mjs": "8759e57303f1c11cf436af4174256b9301f8965b297108800c1a066f6c103a5f",
+    "scripts/machine-market/phase2-acceptance-fence-child.mjs": "9047961e0b82b6c217914542363e6fd05f5deed95e02a6270e008a5187e7bf80",
+    "scripts/machine-market/phase2-acceptance-fence.mjs": "35d3bb2a75903fc132eedc7eb28f0cff325a66a40749cd1991e9a593260c4e2c",
+    "scripts/machine-market/phase2-acceptance-gates.mjs": "d75379962784cd91f458d5880d25b18456643a9f4b0468d740560348c6027630",
+    "scripts/machine-market/phase2-acceptance-journal.mjs": "9bd43db41b7ce4b027e24ef5aedc0772113f60a756d6ae6ac0d0db84b5165408",
+    "scripts/machine-market/phase2-acceptance-plan.mjs": "852fa819f9015c31a9cf6433676dc09ef42d7e7c0b49a4b4e6dee72506caa81f",
+    "scripts/machine-market/phase2-acceptance-probes.mjs": "408cd33f44abfa20497f753fd0bc4ba2b740cf9067dea2a131ed9717ae98c162",
+    "scripts/machine-market/phase2-acceptance-recovery.mjs": "d0a3e3dcb5586d89a7c36569ae21b325afc631a6609ae4615c778faf2a37efd4",
+    "scripts/machine-market/phase2-acceptance-repository.mjs": "0d8b8c5a2107f050b8faa52182a5a18898f4e9018d049fc4d77c0305423bbdcf",
+    "scripts/machine-market/phase2-acceptance-runtime.mjs": "e7ef54421458bc333cc906de52e6ea0d825e4f78aa964648efabd99c91269a58",
+    "scripts/machine-market/phase2-acceptance-schedule.mjs": "1ee667ae1b4f6ebac47d419d382f3d5d52769a1ec4c9165cb31545abc1073b57",
+    "scripts/machine-market/phase2-acceptance-sponsor.mjs": "15d056baeb6685898351d45d1e6997bd6a41d48f8e8102316798aebc0a9cbe78",
+    "scripts/machine-market/phase2-acceptance-verification.mjs": "99b7762e5d2a1fce1f7b97e98c43383e350cd8cde271e72ab68a97abc9f82d3b",
+    "scripts/machine-market/phase2-acceptance-worker.mjs": "3c49df8c2ff6f7b48806399d48a920d526eaf5d22cdb8cc974f91c838d39230e",
+    "scripts/machine-market/phase2-acceptance.mjs": "915ec85dd8368b62a5981270cd20990a022b7d034d6b990a52305331977bc98a",
+    "scripts/machine-market/phase2-bootstrap.mjs": "39ab37202e8d2ef170b57a562985d5ac3409dcd02179056dafa4674caf8c3854",
+    "scripts/machine-market/phase2-continue-acceptance.mjs": "8d92d1acf369f84159596dbc12182ef690953c1369442b7c9ecc4aa5522634b1",
+    "scripts/machine-market/phase2-http-reservation-recovery.mjs": "b57cb6f9e7bc45af15c8407e605ef3d1e72ff6129f7fae8154e195a289133fce",
+    "scripts/machine-market/phase2-local-acceptance.mjs": "a759f26e64cf913a36ccc1b262b32aee97b0416007b7a2d493cdbd6769674fe0",
+    "scripts/machine-market/phase2-native-preflight.mjs": "0b3de38f71082257e6576255cece7ad7c90bedc708cb78226d52ab84723c9a94",
+    "scripts/machine-market/phase2-recheck-current.mjs": "dbb77f1caf06c257fb9dfc4d37f866ae14e373f31ab19de6f94a15e71e9c9270",
+    "scripts/machine-market/phase2-recover-current.mjs": "b9e392a36081bbf959be9501644630d7d3147e1df214dd022a7c4b65db1f3774",
+    "scripts/machine-market/phase2-resources.mjs": "a4e4ffaca9e5d25f75754e5daf6c81b11102bda84b372368d06ecf3d7c3e21be",
+    "scripts/machine-market/phase2-validator-build.mjs": "ccfc730c8b96ff4c637b59d400d1fb1bfaf93933e1e51959dd6e325fd9cb3199",
+    "scripts/machine-market/phase2-validator-run.mjs": "8e460ed73ab8f42c0188093dc695ab9f96a2f5b950efd8eadf6c56457cd44fad",
+    "packages/machine-market/native/service.mjs": "c0174835e22fdc417fa16103a7c33b2856e036caaa22366e1073dba269c69c2c",
+    "tests/machine-market/phase2-order-concurrency.test.mjs": "d8adb5978179656cd0dc7831eb595887f8c1f26c0447a348306307e9388f9e25",
+    "tests/machine-market/phase2-replay.test.mjs": "5b434addf17170114f23dbbb4ac3fa26a8eaf62276500d5b88f0570abb42a9d2"
+  },
+  "evidenceHashes": {
+    "artifacts/machine-market/phase2/native-acceptance-after-order-repair.json": "7988f0ba689ca7422dc8e4fe8515b9ae388673070aade2947510f3f4f81c188c",
+    "artifacts/machine-market/phase2/order-repair-readonly-recheck.json": "946449c66a544b47ccc0b8f8babe9e443ef0ad28dd14db5869a970afa7779f5b",
+    "artifacts/machine-market/phase2/order-repair-final-state.json": "b870566e93d415cc577f922dc95052dbb851dd60872f2d32ea7fdc1368b3cd15",
+    "artifacts/machine-market/phase2/http-order-repair-actual-http.json": "3cfe6693f2b39a2ea9c18836be5d6170c8c0855efeeabd281e97eada54aeddd5",
+    "artifacts/machine-market/phase2/http-order-repair-initial-state.json": "7d6852a68d0f229df58a9c1abf0dccd58ec1676e0576af9ede7615606ee58dc5",
+    "artifacts/machine-market/phase2/native-exact-replay.json": "37d863d35bdd64e9de71a80fd54e7647c8f26f778f223fc2c717ef413d29ecac",
+    "artifacts/machine-market/phase2/history-retention-guard.json": "d6ad06399484cc3fc66de3f1de7ae03f1f2ebc77eff09f91adb1d6fec7aae09e"
+  },
+  "fullRepositoryRegression": "Earlier unrelated benchmark timing assertion failure retained; no full-suite green claim",
+  "stagedRepositoryHygiene": {
+    "passed": true,
+    "runtimeFiles": 533,
+    "vendorFiles": 71,
+    "stagedFiles": 15,
+    "findings": []
+  }
+}

@@ -1,0 +1,21 @@
+
+> axp-agentic-exchange@0.1.0 demo:market
+> node scripts/machine-market/native-cli.mjs evidence --case D0
+
+RECORDED SOLANA DEVNET — saved proof, not a running service
+Recorded: 2026-10-28T05:05:25.402Z
+Program: https://explorer.solana.com/address/13pUf2FAc5db74eBie9pPhikg891RGTRZpwYABAQz2fz?cluster=devnet
+Pricing: declared Devnet case amounts; book selection is not claimed.
+
+D0 Consumed | owner ETH5LiidF3vg83yDpurqGZwaeYhieUsMUD1MqFRkRYZr
+Original primary refund face: 10000 lamports | principal escrow now 0
+primary 10000 lamports | immediate seller 0 | collector 0
+https://explorer.solana.com/tx/5YraPKGSs4N4EgJya1j5J2xShwSzR5vz2E4b8GCV1BshqQNrDAbMnm65eFTFFU68n7wGmuTbminCoAdiStXhCBnr?cluster=devnet
+secondary 15000 lamports | immediate seller 14850 | collector 150
+https://explorer.solana.com/tx/5LZHvXESLKiCpuEaecTeXs2t8HsXjpExuaRfopfthnFjvTxbjMnMaonYj4DWMgCUAbjuzuswhGRXqZNRVnfCeFop?cluster=devnet
+Terminal: 9900 lamports to H5JrwMmdspXT8NhAbFyxbaZnge4kMmgWUycqd8qnco6D | collector 100
+https://explorer.solana.com/tx/3tcgxwgyWwJPHkCW5tYrX8uDXig79bzLyfFrVyybQ3AqY2KVeWs7RAXrBDEjrLLBGWdfm26dFyzH8TjM1UqNA83Y?cluster=devnet
+
+Aggregate spend: 1279395000 lamports including prior fees and retained rent.
+Capacity: 463/478 attempt slots; 429/432 write slots.
+D2 records sponsor refund, not sponsored successful-body delivery.

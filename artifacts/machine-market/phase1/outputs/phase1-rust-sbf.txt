@@ -1,0 +1,23 @@
+   Compiling axp-machine-market-program v0.1.0 (<WORKTREE>/programs/machine-market)
+warning: use of deprecated module `solana_program::system_program`: Use `solana_sdk_ids::system_program` instead
+ --> src/domain.rs:8:51
+  |
+8 | use solana_program::{hash::hashv, pubkey::Pubkey, system_program};
+  |                                                   ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated module `solana_program::system_instruction`: Use `solana_system_interface` crate instead
+  --> src/processor.rs:19:5
+   |
+19 |     system_instruction, system_program,
+   |     ^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated module `solana_program::system_program`: Use `solana_sdk_ids::system_program` instead
+  --> src/processor.rs:19:25
+   |
+19 |     system_instruction, system_program,
+   |                         ^^^^^^^^^^^^^^
+
+warning: `axp-machine-market-program` (lib) generated 3 warnings
+    Finished `release` profile [optimized] target(s) in 0.72s

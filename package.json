@@ -21,6 +21,9 @@
     "start": "node apps/backend/server.mjs",
     "build:site": "node scripts/build-site.mjs",
     "serve:site": "node scripts/build-site/serve.mjs",
-    "dev:site": "node scripts/hosted/dev-server.mjs"
+    "dev:site": "node scripts/hosted/dev-server.mjs",
+    "market": "node scripts/machine-market/native-cli.mjs",
+    "demo:market": "node scripts/machine-market/native-cli.mjs evidence",
+    "test:market:mvp": "node --test tests/machine-market/native-cli.test.mjs tests/machine-market/phase2-transport-integration.test.mjs"
   }
 }
