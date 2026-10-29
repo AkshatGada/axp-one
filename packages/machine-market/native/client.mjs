@@ -4,11 +4,11 @@ import {strict,publicKeyBytes,hex32,canonicalBase64,decodeAuthorization} from '.
 export const SUBMISSIONS=Object.freeze({order:'/orders',cancel:'/orders/cancel',campaign:'/campaigns',sponsored:'/sponsored-access',start:'/deliveries/start',read:'/deliveries/read'});
 export function inputError(code='INVALID_INPUT'){return Object.assign(Error(code),{code});}
 function envelope(v){strict(v,['authorization','signature','idempotencyKey']);decodeAuthorization(canonicalBase64(v.authorization));canonicalBase64(v.signature,64);if(typeof v.idempotencyKey!=='string'||!v.idempotencyKey||v.idempotencyKey.length>128||/[\x00-\x1f\x7f]/.test(v.idempotencyKey))throw inputError();}
-export function createTradingClient({origin='http://127.0.0.1:8799',fetchImpl=globalThis.fetch}={}){
- origin=localEndpoint(origin);
+export function createTradingClient({origin='http://127.0.0.1:8799',fetchImpl=globalThis.fetch,requestTimeoutMs=30000}={}){
+ origin=localEndpoint(origin);if(!Number.isInteger(requestTimeoutMs)||requestTimeoutMs<1||requestTimeoutMs>120000)throw inputError();
  async function request(route,body,operatorToken){
   const bytes=body===undefined?null:Buffer.from(JSON.stringify(body));if(bytes&&bytes.length>8192)throw inputError('CAPACITY');
-  let response;try{response=await fetchImpl(origin+'/api/trading'+route,{method:bytes?'POST':'GET',redirect:'error',signal:AbortSignal.timeout(30000),headers:{origin,...(bytes?{'content-type':'application/json'}:{}),...(operatorToken?{'x-axp-local-operator':operatorToken}:{})},...(bytes?{body:bytes}: {})});}catch{throw inputError('SERVICE_UNAVAILABLE');}
+  const signal=AbortSignal.timeout(requestTimeoutMs);let response;try{response=await fetchImpl(origin+'/api/trading'+route,{method:bytes?'POST':'GET',redirect:'error',signal,headers:{origin,...(bytes?{'content-type':'application/json'}:{}),...(operatorToken?{'x-axp-local-operator':operatorToken}:{})},...(bytes?{body:bytes}: {})});}catch{throw inputError(signal.aborted?'SERVICE_TIMEOUT':'SERVICE_UNAVAILABLE');}
   const reader=response.body?.getReader();if(!reader)throw inputError('SERVICE_RESPONSE');const chunks=[];let length=0;while(true){const {done,value}=await reader.read();if(done)break;length+=value.length;if(length>196608){await reader.cancel();throw inputError('CAPACITY');}chunks.push(value);}
   let value;try{value=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{throw inputError('SERVICE_RESPONSE');}if(!response.ok)throw inputError(/^[A-Z0-9_]{1,64}$/.test(value?.code??'')?value.code:'SERVICE_RESPONSE');
   return {mode:'native-service-projection',origin,authority:'response-from-configured-loopback-service',freshChainVerification:false,data:value};

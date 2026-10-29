@@ -16,9 +16,9 @@
       "refundDelta": "0"
     }
   },
-  "status": "blocked_sponsored_fund_finalized_delivery_unexecuted",
+  "status": "fix_tested_funded_recovery_validated_no_new_run_click",
   "runtimeStopped": true,
-  "monitorStopReason": "Human-triggered sponsored workflow stopped with SERVICE_UNAVAILABLE. Original Fund explicitly reconciled to finalized success without signing/resend. No sponsored delivery/refund verification occurred.",
+  "monitorStopReason": "Runtime intentionally stopped to preserve its remaining allowance while awaiting the required human action. No new case executed.",
   "nativeOutboxStates": [
     {
       "state": "ResolvedSuccess",
@@ -42,5 +42,10 @@
     "finalizedSlot": "3390",
     "principalOutstanding": "10000",
     "fullCasePassed": false
+  },
+  "recoveryValidation": {
+    "signature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
+    "evidence": "persisted-finalized-proof-and-current-native-accounts",
+    "contextSlot": "3512"
   }
 }

@@ -638,7 +638,8 @@
         "contextSlot": "1883"
       },
       "summary": "Scripted result from delivered data: North has the lower listed median (2 days) in this controlled fictional cohort.",
-      "error": null
+      "error": null,
+      "recoverable": false
     },
     {
       "id": "sponsored-success",
@@ -707,7 +708,8 @@
       "grant": null,
       "terminal": null,
       "summary": null,
-      "error": "SERVICE_UNAVAILABLE"
+      "error": "SERVICE_UNAVAILABLE",
+      "recoverable": true
     },
     {
       "id": "direct-failure",
@@ -722,7 +724,8 @@
       "grant": null,
       "terminal": null,
       "summary": null,
-      "error": null
+      "error": null,
+      "recoverable": false
     },
     {
       "id": "sponsored-failure",
@@ -737,7 +740,8 @@
       "grant": null,
       "terminal": null,
       "summary": null,
-      "error": null
+      "error": null,
+      "recoverable": false
     }
   ],
   "budget": {
@@ -749,10 +753,10 @@
     "maximumFundingLamports": "250000000"
   },
   "resources": {
-    "freeBytes": 145935794176,
-    "totalTaskBytes": 10749136896,
-    "appBytes": 831488,
-    "ledgerBytes": 2765811712
+    "freeBytes": 144878092288,
+    "totalTaskBytes": 11844075520,
+    "appBytes": 835584,
+    "ledgerBytes": 3860746240
   },
   "errors": [
     {

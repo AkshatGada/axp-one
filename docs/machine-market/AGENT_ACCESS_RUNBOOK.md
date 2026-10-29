@@ -1,3 +1,15 @@
+# Current checkpoint — request fix tested, exact funded recovery ready
+
+29 October 2026. Thirteen focused checks pass. The implemented recovery validates
+the original finalized Fund and current native accounts, then skips purchase/Fund
+when the human clicks Continue. No continuation click arrived; owned runtimes are
+stopped with **221,956 ms** remaining under the approved **2,400,000-ms** cumulative
+cap. Usage remains **15/32 attempts**, funding **0.216/0.25 LOCAL test SOL**. Original
+sponsored escrow is still **10,000 lamports**. Direct success is preserved; neither
+refund has run. [Current recovery instructions and exact evidence](AGENT_ACCESS_RECOVERY.md).
+
+The checkpoints below are historical and do not supersede the current recovery guide.
+
 # Controlled agent-access research slice
 
 29 October 2026. Implementation: `b27b3f4`; additive same-ledger resume and evidence

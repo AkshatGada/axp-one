@@ -1,0 +1,64 @@
+{
+  "schema": "axp.agent-access.funded-recovery.v1",
+  "status": "fix_tested_funded_recovery_validated_awaiting_human_click",
+  "approvedScope": [
+    "fix local request failure",
+    "continue exact funded sponsored case",
+    "buyer refund",
+    "sponsor refund"
+  ],
+  "maximumActiveMs": 2400000,
+  "carriedElapsedMs": 1802028,
+  "remainingActiveMs": 221956,
+  "maximumFundingLamports": "250000000",
+  "fundingLamports": "216000000",
+  "additionalFundingRequests": 0,
+  "startingAttemptSlots": 15,
+  "maximumAttempts": 32,
+  "expectedFinalAttemptSlots": 23,
+  "originalSponsoredFund": {
+    "operationId": "16985275b3de4a848e72c5bed1826257dc6b205d40cf8d252124d22139594a8f",
+    "signature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
+    "transactionSha256": "80e97a35291bd21f5d8563a385584f65723921ddf30c4fea7ffc80c13855fb7b",
+    "messageSha256": "3722226c20fd5f66705e80ad611fa5a2c4fcec1d06353e098bd0fcc6f54a27f7",
+    "sendRows": 1
+  },
+  "originalErrors": [
+    {
+      "case": "sponsored-success",
+      "code": "SERVICE_UNAVAILABLE"
+    }
+  ],
+  "originalDirectProofSha256": "c8b44a4666a0ac0cf60654cb8581f2b675cc91f6ac9777f0378563048b90bdad",
+  "originalDirectCaseSha256": "3f58146cd0c0069ee5e54f4cf2b920bda832f141e600909a944edac80ada258a",
+  "seriesUseBySlot": "6190",
+  "readValidUntilSlot": "10190",
+  "requestTimeoutMs": 120000,
+  "resourceSamplingCacheMaxAgeMs": 2000,
+  "requiredFinalActionActor": "human",
+  "programSha256": "3335158a895ac7f483c9cbbcc4470e95e65098c54c7da1b7be4733b0594fea1a",
+  "activeElapsedMs": 2178044,
+  "runtimeStopped": true,
+  "recoveryValidation": {
+    "signature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
+    "evidence": "persisted-finalized-proof-and-current-native-accounts",
+    "contextSlot": "3512"
+  },
+  "newFundingRequests": 0,
+  "newNativeTransactions": 0,
+  "focusedChecksPassed": 13,
+  "fullRecoveryAndRefundsExecuted": false,
+  "originalErrorHistoryPreserved": [
+    {
+      "case": "sponsored-success",
+      "code": "SERVICE_UNAVAILABLE"
+    }
+  ],
+  "diagnosticResourceSample": {
+    "recursiveWalkMs": 542.444791,
+    "duMs": 569.201042,
+    "evidence": "one read-only measurement while stopped; not a capacity benchmark"
+  },
+  "requestFix": "120000ms explicit local request budget; classify timeout; observe the one durable attempt after a failed response, never resubmit; 2000ms resource sample cache with live free-space checks",
+  "remainingBlocker": "Human final Continue existing funded case click and two refund Run clicks; none arrived during the validated runtime window."
+}

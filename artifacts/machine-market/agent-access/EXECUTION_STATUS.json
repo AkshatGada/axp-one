@@ -1,6 +1,6 @@
 {
   "schema": "axp.agent-access.execution-status.v1",
-  "status": "blocked_sponsored_fund_finalized_delivery_not_started",
+  "status": "fix_tested_recovery_ready_awaiting_human_click",
   "recordedAt": "2026-10-29",
   "runId": "agent-access-local-20261028",
   "implementationCommit": "b27b3f4f420dae85eae1bada5623dd1a7dae5487",
@@ -24,8 +24,8 @@
   "maximumAttemptSlots": 32,
   "maximumFundingLamports": "250000000",
   "observedProgramAndFaucetFeesLamports": "130000",
-  "activeElapsedMs": 1802028,
-  "maximumActiveMs": 1800000,
+  "activeElapsedMs": 2178044,
+  "maximumActiveMs": 2400000,
   "seriesUseBySlot": "6190",
   "readValidUntilSlot": "10190",
   "nativeSourceUnchanged": true,
@@ -36,7 +36,7 @@
     "humanExplicitlyResumedAfterPause": true,
     "automaticReviewRejectedFinalClick": true,
     "reason": "The click would execute a native settlement transfer, which is a consequential financial action requiring user handoff at the final browser action; pre-approval cannot replace that requirement.",
-    "requiredNextAction": "Preserve and recover the original funded sponsored obligation under an explicitly bounded runtime/continuation plan; do not repeat its Run or Fund. The current runtime allowance is exhausted."
+    "requiredNextAction": "Human final Continue existing funded case click, then the two refund Run clicks after verification. Recovery is authorized; no new funding or approval is needed within the recorded caps."
   },
   "unexercised": [
     "sponsored successful delivery and publisher payout",
@@ -47,7 +47,7 @@
   "finalizedProgramTransactions": 10,
   "finalizedAccessTransactions": 4,
   "observedRetainedRentLamports": "39254400",
-  "remainingActiveMs": 0,
+  "remainingActiveMs": 221956,
   "nativeOutboxStates": [
     {
       "state": "ResolvedSuccess",
@@ -71,8 +71,8 @@
     "sourceHash": "0bfbc2175ef5129ac5c4d6eda938e820f399b47d91925b206e47da005ebd572f",
     "responseHash": "bf8ddb299a9fea1cfc257351e8166e60c28eaf25e28e1249c1473723d4a43de1"
   },
-  "stopReason": "LOCAL_EXECUTION_TIME_CAP",
-  "approvedAdditionalActiveMs": 600000,
+  "stopReason": "operator_stop_to_preserve_remaining_window_for_required_human_clicks",
+  "approvedAdditionalActiveMs": 1200000,
   "completedAccessCases": 1,
   "shutdownCheckpointOverCapMs": 2028,
   "fundedPrincipalOutstandingLamports": "10000",

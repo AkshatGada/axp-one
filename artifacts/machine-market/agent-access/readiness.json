@@ -8,9 +8,9 @@
   "program": "2YQ6Pzcn57H585pwWWz51MP7Qx1qnFrWyr7UZd8HF9R8",
   "socketRows": 27,
   "resources": {
-    "freeBytes": 146477330432,
-    "totalTaskBytes": 10161414144,
-    "appBytes": 729088,
-    "ledgerBytes": 2179715072
+    "freeBytes": 146116882432,
+    "totalTaskBytes": 10661625856,
+    "appBytes": 798720,
+    "ledgerBytes": 2678333440
   }
 }
