@@ -1,3 +1,15 @@
+# Current result — buyer refund verified, all funded obligations settled
+
+29 October 2026. The exact original buyer Fund finalized at slot 4731 and the human
+continuation returned 10,000 lamports to the buyer at slot 4947. Both prior successes
+are preserved. **Three of four journeys pass**; sponsor refund was not admitted
+before the approved 450-slot headroom and protected drain boundaries closed.
+All 15 native operations are finalized and unblocked; all principal/operating holds
+and active reservations are zero. **20/32 attempts**, **0.216/0.25 LOCAL test SOL**.
+All runtimes stopped at 3,000,853/3,300,000 ms, preserving 299,147 ms of protected
+allowance. [Current exact outcome, proof and scope boundary](FINAL_REFUND_CONTINUATION_RESULT.md).
+The checkpoints below are historical.
+
 # Sponsored recovery verified; buyer Fund remains Unknown
 
 29 October 2026. The human clicked **Continue existing funded case**. The same Unit

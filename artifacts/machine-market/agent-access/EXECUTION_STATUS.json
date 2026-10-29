@@ -1,6 +1,6 @@
 {
   "schema": "axp.agent-access.execution-status.v1",
-  "status": "sponsored_recovered_buyer_fund_unknown_sponsor_refund_unstarted",
+  "status": "three_verified_financially_settled_sponsor_refund_unexecuted",
   "recordedAt": "2026-10-29",
   "runId": "agent-access-local-20261028",
   "implementationCommit": "b27b3f4f420dae85eae1bada5623dd1a7dae5487",
@@ -13,19 +13,19 @@
   "cases": {
     "direct-success": "delivered",
     "sponsored-success": "delivered",
-    "direct-failure": "funding-native-pending",
+    "direct-failure": "refunded",
     "sponsored-failure": "available"
   },
   "executedAccessCases": 3,
   "finalizedFundingRequests": 5,
   "localFundingLamports": "216000000",
   "finalizedProgramSetupTransactions": 6,
-  "attemptSlots": 18,
+  "attemptSlots": 20,
   "maximumAttemptSlots": 32,
   "maximumFundingLamports": "250000000",
-  "observedProgramAndFaucetFeesLamports": "145000",
-  "activeElapsedMs": 2395614,
-  "maximumActiveMs": 2400000,
+  "observedProgramAndFaucetFeesLamports": "175000",
+  "activeElapsedMs": 3000853,
+  "maximumActiveMs": 3300000,
   "seriesUseBySlot": "6190",
   "readValidUntilSlot": "10190",
   "nativeSourceUnchanged": true,
@@ -36,58 +36,29 @@
     "humanExplicitlyResumedAfterPause": true,
     "automaticReviewRejectedFinalClick": true,
     "reason": "The click would execute a native settlement transfer, which is a consequential financial action requiring user handoff at the final browser action; pre-approval cannot replace that requirement.",
-    "requiredNextAction": "Reconcile only the original buyer Fund identity under a new explicitly bounded runtime allowance before further spending; no resend/re-sign/reset. The remaining 4386ms is insufficient for finality and completion."
+    "requiredNextAction": "Sponsor refund is unstarted; remaining time is protected drain reserve and the same Series has less than the approved 450-slot admission margin. Do not extend deadline, reset or silently relax the admission policy. A separately scoped decision is required for the unexecuted fourth journey."
   },
   "unexercised": [
-    "buyer admitted failure delivery/refund",
     "sponsor admitted failure/refund"
   ],
-  "verifiedAccessCases": 2,
-  "finalizedProgramTransactions": 12,
-  "finalizedAccessTransactions": 6,
-  "observedRetainedRentLamports": "39254400",
-  "remainingActiveMs": 4386,
+  "verifiedAccessCases": 3,
+  "finalizedProgramTransactions": 15,
+  "finalizedAccessTransactions": 9,
+  "observedRetainedRentLamports": "48713040",
+  "remainingActiveMs": 299147,
   "nativeOutboxStates": [
     {
       "state": "ResolvedSuccess",
       "blocked": 0,
-      "count": 12
-    },
-    {
-      "state": "Unknown",
-      "blocked": 1,
-      "count": 1
+      "count": 15
     }
   ],
   "holds": {
-    "principal": [
-      {
-        "amount": "10000",
-        "owner_type": "match",
-        "owner_id": "2dd889001dbd8b51db453adc2cfa9b35602d39a3869f6f2b7017e85643baf4ae"
-      }
-    ],
-    "unit": [
-      {
-        "unit": "BuHGawyoc33BADHfD9gqgDzYS7DQaai7FA17twpeoP2Z",
-        "owner_type": "match",
-        "owner_id": "2dd889001dbd8b51db453adc2cfa9b35602d39a3869f6f2b7017e85643baf4ae"
-      }
-    ],
-    "operating": [
-      {
-        "operation_id": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
-        "amount": "9473640",
-        "unknown": 1
-      }
-    ],
-    "nativeFee": [
-      {
-        "operation_id": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
-        "amount": "9473640"
-      }
-    ],
-    "activeCampaign": []
+    "principal_holds": 0,
+    "unit_holds": 0,
+    "operating_holds": 0,
+    "native_fee_holds": 0,
+    "activeCampaignReservations": 0
   },
   "directSuccess": {
     "grossLamports": "10000",
@@ -99,17 +70,17 @@
     "sourceHash": "0bfbc2175ef5129ac5c4d6eda938e820f399b47d91925b206e47da005ebd572f",
     "responseHash": "bf8ddb299a9fea1cfc257351e8166e60c28eaf25e28e1249c1473723d4a43de1"
   },
-  "stopReason": "operator shutdown overlapped human buyer admission; bounded observation preserved unknown original attempt",
+  "stopReason": "protected-drain-reserve",
   "approvedAdditionalActiveMs": 1200000,
-  "completedAccessCases": 2,
+  "completedAccessCases": 3,
   "shutdownCheckpointOverCapMs": 2028,
   "fundedPrincipalOutstandingLamports": "0",
   "workflowIncomplete": true,
   "directTerminalPrincipalEscrowLamports": "0",
-  "unknownNativeOperations": 1,
-  "unresolvedBuyerPrincipalReservationLamports": "10000",
-  "unresolvedBuyerFeeReserveLamports": "15000",
-  "unresolvedBuyerRentReserveLamports": "9458640",
+  "unknownNativeOperations": 0,
+  "unresolvedBuyerPrincipalReservationLamports": "0",
+  "unresolvedBuyerFeeReserveLamports": "0",
+  "unresolvedBuyerRentReserveLamports": "0",
   "sponsoredRecovery": {
     "passed": true,
     "originalFundSignature": "4ikXuPH72mC3FevcdXMtdUZypju6VizdKctwMkMtjDh2R6w2jDQSfGE5uVwQJPVyR7tfoRf4Wba25VC4fbAYFCKg",
@@ -117,5 +88,25 @@
     "collectorLamports": "100",
     "remainingPrincipal": "0"
   },
-  "originalDirectProofPreserved": true
+  "originalDirectProofPreserved": true,
+  "buyerRefundVerified": {
+    "startSlot": "4914",
+    "terminalSlot": "4947",
+    "recipient": "3DdrgyWFANMFY9rwsSxpKK9fhoJ23ap2p4sxcmWews4N",
+    "returnedLamports": "10000",
+    "remainingPrincipal": "0",
+    "protectedBodyReturned": false,
+    "readDenialHttpStatus": 403,
+    "readDenialCode": "INVALID_AUTH",
+    "verificationEvidenceMode": "transaction-finalized",
+    "extraNativeSigningSlotsForVerification": 0
+  },
+  "slotCutoffObservation": {
+    "source": "actual localhost getSlot finalized RPC",
+    "finalizedSlot": "5872",
+    "seriesUseBySlot": "6190",
+    "observedSlotHeadroom": 318,
+    "requiredAdmissionHeadroom": 450,
+    "belowMargin": true
+  }
 }

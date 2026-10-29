@@ -1,0 +1,70 @@
+{
+  "operationId": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+  "signature": "3na3JMKBtuujwMLXPcaSxmsvLfpiUh4QonRgrYvCJqtdAcBjWMzhChYkrFgKyYMYPhr5Nef2eM95Q3DvtM1ZbPPh",
+  "status": "buyer-refunded-original-proof-validated",
+  "startedAt": "2026-10-29T04:38:19.857Z",
+  "observations": [],
+  "provider": "same loopback validator; repeated observations are not independent providers",
+  "noSendOrReplacement": true,
+  "previousSessions": [
+    {
+      "operationId": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+      "signature": "3na3JMKBtuujwMLXPcaSxmsvLfpiUh4QonRgrYvCJqtdAcBjWMzhChYkrFgKyYMYPhr5Nef2eM95Q3DvtM1ZbPPh",
+      "status": "funded-finalized",
+      "startedAt": "2026-10-29T04:26:37.739Z",
+      "observations": [
+        {
+          "observedAtMs": 1793247997768,
+          "contextSlot": "4728",
+          "blockHeight": "4724",
+          "lastValidBlockHeight": "4845",
+          "blockhashValid": true,
+          "signatureStatus": null,
+          "unitState": 0,
+          "unitCursor": "0",
+          "matchMissing": true,
+          "orderUsesMissing": true,
+          "nativeState": "Unknown",
+          "blocked": true,
+          "evidence": "account-state-only",
+          "operatingFeesKnown": false
+        },
+        {
+          "observedAtMs": 1793248000528,
+          "contextSlot": "4733",
+          "blockHeight": "4729",
+          "lastValidBlockHeight": "4845",
+          "blockhashValid": true,
+          "signatureStatus": {
+            "confirmationStatus": "finalized",
+            "confirmations": null,
+            "err": null,
+            "slot": 4731,
+            "status": {
+              "Ok": null
+            }
+          },
+          "unitState": 1,
+          "unitCursor": "1",
+          "matchMissing": false,
+          "orderUsesMissing": false,
+          "nativeState": "ResolvedSuccess",
+          "blocked": false,
+          "evidence": "transaction-finalized",
+          "operatingFeesKnown": true
+        }
+      ],
+      "provider": "same loopback validator; repeated observations are not independent providers",
+      "noSendOrReplacement": true
+    },
+    {
+      "operationId": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
+      "signature": "3na3JMKBtuujwMLXPcaSxmsvLfpiUh4QonRgrYvCJqtdAcBjWMzhChYkrFgKyYMYPhr5Nef2eM95Q3DvtM1ZbPPh",
+      "status": "buyer-refunded-original-proof-validated",
+      "startedAt": "2026-10-29T04:36:10.077Z",
+      "observations": [],
+      "provider": "same loopback validator; repeated observations are not independent providers",
+      "noSendOrReplacement": true
+    }
+  ]
+}

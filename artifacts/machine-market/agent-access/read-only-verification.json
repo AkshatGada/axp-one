@@ -28,52 +28,39 @@
       "publisherDelta": "9900",
       "collectorDelta": "100",
       "refundDelta": "0"
+    },
+    "direct-failure": {
+      "passed": true,
+      "evidenceMode": "transaction-finalized",
+      "sourceUnchanged": null,
+      "replaySameBytes": null,
+      "packetSeparate": null,
+      "denialHttpStatus": 403,
+      "denialCode": "INVALID_AUTH",
+      "remainingPrincipal": "0",
+      "extraNativeSigningSlots": 0,
+      "finalizedSlot": "4947",
+      "publisherDelta": "0",
+      "collectorDelta": "0",
+      "refundDelta": "10000"
     }
   },
-  "status": "partial_two_verified_buyer_fund_unknown",
+  "status": "three_verified_financially_settled_sponsor_refund_unexecuted",
   "runtimeStopped": true,
-  "monitorStopReason": "Sponsored recovery verified. Human buyer Run overlapped operator shutdown; exact Fund retained Unknown after bounded observation. Sponsor refund unstarted.",
+  "monitorStopReason": "Buyer refund verified; sponsor refund unstarted when deadline headroom was below 450 and protected drain cutoff closed admissions.",
   "nativeOutboxStates": [
     {
       "state": "ResolvedSuccess",
       "blocked": 0,
-      "count": 12
-    },
-    {
-      "state": "Unknown",
-      "blocked": 1,
-      "count": 1
+      "count": 15
     }
   ],
   "holds": {
-    "principal": [
-      {
-        "amount": "10000",
-        "owner_type": "match",
-        "owner_id": "2dd889001dbd8b51db453adc2cfa9b35602d39a3869f6f2b7017e85643baf4ae"
-      }
-    ],
-    "unit": [
-      {
-        "unit": "BuHGawyoc33BADHfD9gqgDzYS7DQaai7FA17twpeoP2Z",
-        "owner_type": "match",
-        "owner_id": "2dd889001dbd8b51db453adc2cfa9b35602d39a3869f6f2b7017e85643baf4ae"
-      }
-    ],
-    "operating": [
-      {
-        "operation_id": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
-        "amount": "9473640",
-        "unknown": 1
-      }
-    ],
-    "nativeFee": [
-      {
-        "operation_id": "635a026cdbf1485e8e5f7d30ffc0e75dd07e5a13331f12459ea1291714db042a",
-        "amount": "9473640"
-      }
-    ],
-    "activeCampaign": []
+    "principal_holds": 0,
+    "unit_holds": 0,
+    "operating_holds": 0,
+    "native_fee_holds": 0,
+    "activeCampaignReservations": 0
   },
   "continuationOnly": [
     "sponsored-success",
@@ -85,6 +72,15 @@
     "evidence": "persisted-finalized-proof-and-current-native-accounts",
     "contextSlot": "3512"
   },
-  "buyerUnknownSignature": "3na3JMKBtuujwMLXPcaSxmsvLfpiUh4QonRgrYvCJqtdAcBjWMzhChYkrFgKyYMYPhr5Nef2eM95Q3DvtM1ZbPPh",
-  "sponsoredRecoveryComplete": true
+  "sponsoredRecoveryComplete": true,
+  "buyerFundResolved": true,
+  "sponsorRefundExecuted": false,
+  "slotCutoffObservation": {
+    "source": "actual localhost getSlot finalized RPC",
+    "finalizedSlot": "5872",
+    "seriesUseBySlot": "6190",
+    "observedSlotHeadroom": 318,
+    "requiredAdmissionHeadroom": 450,
+    "belowMargin": true
+  }
 }
