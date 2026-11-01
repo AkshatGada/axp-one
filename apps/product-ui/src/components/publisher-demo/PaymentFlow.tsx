@@ -1,4 +1,5 @@
 "use client";
+import {HspPayment} from '../hsp/HspPayment';
 import {Ld} from '@axp/design-system/ledger';
 import {nativeTransactionURL, isFinalizedNativeTransaction, moneyUnit, type NativePayment} from '../../../../../packages/publisher-sdk/financial.mjs';
 import {boundPaymentIdentity, paymentState, syntheticSettlementFinalized} from './payment-state.mjs';
@@ -21,6 +22,7 @@ export function PaymentFlow({turn, campaign, payment, mode, pending, onAction, o
   const finalized = native ? controls.finalized : syntheticSettlementFinalized(campaign);
   const paid = finalized || (tempo && finalizedTransactions?.some(tx => tx.operation === 'payout'));
   const busy = pending || turn.budgetLoading || turn.paymentOperation?.pending;
+  if(mode==='testnet')return turn.receipt?<HspPayment chargeId={turn.receipt.charge.id} />:<p>No accepted delivery to pay.</p>;
   return <div className="pub-payment-story" data-native={native || undefined} data-network={payment?.network}>
     <div className="pub-stage-heading"><h3>{finalized ? native ? 'Publisher paid. Unused funds returned.' : 'Synthetic settlement recorded.' : native ? `Off-chain vouchers. ${tempo ? 'Tempo' : 'Solana'} settlement.` : 'Synthetic payment ledger'}</h3><Ld.Tag tone={finalized ? 'success' : controls.needsReconcile ? 'warning' : 'outline'}>{finalized ? native ? 'Finalized' : 'Recorded' : controls.needsReconcile ? 'Reconcile status' : controls.pending ? 'Operation pending' : paid ? 'Paid · channel open' : authorized.length ? 'Authorized' : 'Payment records'}</Ld.Tag></div>
     {campaign ? <>

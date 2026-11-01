@@ -14,9 +14,10 @@ const STEP_HELP = [
 ];
 type Props = { initial?: Campaign; bootstrap: Bootstrap; account: { name: string; websiteURL: string }; onSaved: () => Promise<void>; onClose: () => void; onLaunched: (campaign: Campaign) => void; onDirtyChange: (dirty: boolean) => void };
 export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, onLaunched, onDirtyChange }: Props) {
+  const direct=bootstrap.financialMode==='testnet';
   const native = nativePayments(bootstrap);
-  const [draft, setDraft] = useState<Draft>(() => initial ? draftFields(initial) : blankDraft());
-  const network = draft.settlementNetwork ?? 'solana-devnet', unit = currencyUnit(native, network), readiness = paymentReadiness(bootstrap, network);
+  const [draft, setDraft] = useState<Draft>(() => initial ? draftFields(initial) : {...blankDraft(),...(direct?{depositBaseUnits:'0',settlementNetwork:'hsk-testnet' as const}:{})});
+  const network = draft.settlementNetwork ?? (direct?'hsk-testnet':'solana-devnet'), unit = currencyUnit(native, network), readiness = paymentReadiness(bootstrap, network);
   const [step, setStep] = useState(0), [hints, setHints] = useState(initial?.contextHints.join('\n') ?? '');
   const [money, setMoney] = useState({ maxBidBaseUnits: decimal(draft.maxBidBaseUnits), budgetCapBaseUnits: decimal(draft.budgetCapBaseUnits), depositBaseUnits: decimal(draft.depositBaseUnits) });
   const [errors, setErrors] = useState<Record<string, string>>({}), [busy, setBusy] = useState(false), [notice, setNoticeText] = useState(''), [noticeTone, setNoticeTone] = useState<'done' | 'error' | 'blocked'>('done'), [dirty, setDirty] = useState(!initial);
@@ -29,7 +30,7 @@ export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, 
   const [reviewed, setReviewed] = useState(false);
   const markDirty = () => { setDirty(true); setReviewed(false); };
   const patch = (key: keyof Draft, value: Draft[keyof Draft]) => { setDraft(d => ({ ...d, [key]: value })); markDirty(); setNotice(''); setPreview(null); setErrors(e => ({ ...e, [key]: '' })); };
-  const complete = (): Draft => ({ ...draftFields(draft), contextHints: hints.split(/\n/).map(v => v.trim()).filter(Boolean), ...Object.fromEntries(Object.entries(money).map(([k, v]) => [k, v.trim() ? toBaseUnits(v) ?? '0' : draft[k as keyof typeof money]])) });
+  const complete = (): Draft => ({ ...draftFields(draft), contextHints: hints.split(/\n/).map(v => v.trim()).filter(Boolean), ...(direct?{settlementNetwork:'hsk-testnet',depositBaseUnits:'0'}:{}), ...Object.fromEntries(Object.entries(money).filter(([k])=>!direct||k!=='depositBaseUnits').map(([k, v]) => [k, v.trim() ? toBaseUnits(v) ?? '0' : draft[k as keyof typeof money]])) });
   function validate(until = step) {
     const e: Record<string, string> = {};
     if (until >= 0) {
@@ -47,7 +48,7 @@ export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, 
     }
     if (until >= 2 && !draft.approvedText.trim()) e.approvedText = 'Add the exact text approved for the Sponsored card.';
     if (until >= 3) {
-      for (const [key, value] of Object.entries(money)) if (!toBaseUnits(value) || BigInt(toBaseUnits(value)!) <= 0n) e[key] = 'Enter a positive amount with up to 6 decimal places.';
+      for (const [key, value] of Object.entries(money)) if ((!direct||key!=='depositBaseUnits') && (!toBaseUnits(value) || BigInt(toBaseUnits(value)!) <= 0n)) e[key] = 'Enter a positive amount with up to 6 decimal places.';
       if (!Object.keys(e).some(k => k in money)) {
         if (bootstrap.limits) {
           const bid = BigInt(toBaseUnits(money.maxBidBaseUnits)!);
@@ -56,7 +57,7 @@ export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, 
           for (const key of ['budgetCapBaseUnits', 'depositBaseUnits'] as const) { const ceiling = key === 'depositBaseUnits' ? readiness?.limits?.maxDepositBaseUnits ?? bootstrap.limits.maxBudgetBaseUnits : bootstrap.limits.maxBudgetBaseUnits; if (BigInt(toBaseUnits(money[key])!) > BigInt(ceiling)) e[key] = `Maximum amount is ${decimal(ceiling)} ${unit}.`; }
         }
         if (BigInt(toBaseUnits(money.maxBidBaseUnits)!) > BigInt(toBaseUnits(money.budgetCapBaseUnits)!)) e.maxBidBaseUnits = 'The maximum bid must fit within the spending limit.';
-        if (BigInt(toBaseUnits(money.budgetCapBaseUnits)!) > BigInt(toBaseUnits(money.depositBaseUnits)!)) e.depositBaseUnits = `${native ? 'The channel deposit' : 'The amount set aside'} must cover the spending limit.`;
+        if (!direct && BigInt(toBaseUnits(money.budgetCapBaseUnits)!) > BigInt(toBaseUnits(money.depositBaseUnits)!)) e.depositBaseUnits = `${native ? 'The channel deposit' : 'The amount set aside'} must cover the spending limit.`;
       }
     }
     setErrors(e);
@@ -102,7 +103,7 @@ export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, 
   }
   function preset(index: number) {
     const p = bootstrap.presets[index]; if (!p) return;
-    const value = { ...blankDraft(), ...p, ...(p.campaign ?? {}), id: draft.id };
+    const value = { ...blankDraft(), ...p, ...(p.campaign ?? {}), id: draft.id,...(direct?{depositBaseUnits:'0',settlementNetwork:'hsk-testnet' as const}:{}) };
     setDraft(value); setHints(value.contextHints.join('\n')); setMoney({ maxBidBaseUnits: decimal(value.maxBidBaseUnits), budgetCapBaseUnits: decimal(value.budgetCapBaseUnits), depositBaseUnits: decimal(value.depositBaseUnits) }); setQuestion(p.exampleQuestion ?? ''); markDirty(); setPreview(null); setErrors({});
   }
   const input = (name: 'name' | 'brandName' | 'websiteURL', label: string, hint?: string) => <Ld.Field label={label} hint={hint} error={errors[name]}><input className="ld-input" name={name} value={draft[name]} onChange={e => patch(name, e.target.value)} maxLength={name === 'websiteURL' ? 500 : 120} type={name === 'websiteURL' ? 'url' : 'text'} aria-invalid={Boolean(errors[name])} autoComplete={name === 'brandName' ? 'organization' : 'off'} /></Ld.Field>;
@@ -153,10 +154,10 @@ export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, 
           {step === 3 && <>
             {native && <Ld.Field label="Payment network" hint="Fixed once the campaign is funded."><select className="ld-select" name="settlementNetwork" value={network} onChange={e => patch('settlementNetwork', e.target.value as Draft['settlementNetwork'])}><option value="solana-devnet">Solana Devnet · Test USDC</option><option value="tempo-testnet" disabled={!bootstrap.payments?.networks?.['tempo-testnet']}>Tempo Testnet · test PathUSD</option></select></Ld.Field>}
             <p className="ad-money-note"><Ld.Tag tone="outline">{native ? `${networkLabel(network)} · ${unit}` : 'Test credits · no real money'}</Ld.Tag><span className="ld-secondary">{native ? network === 'tempo-testnet' ? 'The shared demo funds your channel with test tokens. Pay out while the campaign runs, then close to return what is unused.' : 'The shared demo funds your channel with test tokens. Closing pays accepted deliveries and returns what is unused.' : 'A bid is a ceiling, not a charge. You only spend when your card is shown.'}</span></p>
-            {([['maxBidBaseUnits', 'Maximum bid per card', 'The most this campaign may bid for one placement.'], ['budgetCapBaseUnits', 'Spending limit', 'Total spend can never pass this.'], ['depositBaseUnits', native ? 'Channel deposit' : 'Test credits to set aside', native ? `${unit} locked at launch. Must cover the spending limit. Network fees are separate.` : 'Must cover the spending limit.']] as const).map(([key, label, hint]) => <Ld.Field key={key} label={label} hint={hint} error={errors[key]}><div className="ad-money-input"><input className="ld-input" name={key} inputMode="decimal" value={money[key]} onChange={e => { setMoney(v => ({ ...v, [key]: e.target.value })); markDirty(); setErrors(v => ({ ...v, [key]: '' })); }} aria-invalid={Boolean(errors[key])} /><span>{unit}</span></div></Ld.Field>)}
+            {([['maxBidBaseUnits', 'Maximum bid per card', 'The most this campaign may bid for one placement.'], ['budgetCapBaseUnits', 'Spending limit', 'Total spend can never pass this.'], ['depositBaseUnits', native ? 'Channel deposit' : 'Test credits to set aside', native ? `${unit} locked at launch. Must cover the spending limit. Network fees are separate.` : 'Must cover the spending limit.']] as const).filter(([key])=>!direct||key!=='depositBaseUnits').map(([key, label, hint]) => <Ld.Field key={key} label={label} hint={hint} error={errors[key]}><div className="ad-money-input"><input className="ld-input" name={key} inputMode="decimal" value={money[key]} onChange={e => { setMoney(v => ({ ...v, [key]: e.target.value })); markDirty(); setErrors(v => ({ ...v, [key]: '' })); }} aria-invalid={Boolean(errors[key])} /><span>{unit}</span></div></Ld.Field>)}
           </>}
           {step === 4 && <>
-            <dl className="ad-review">{native && <div><dt>Payment network</dt><dd>{networkLabel(network)} · {unit}</dd></div>}<div><dt>Advertiser</dt><dd>{draft.brandName} · {draft.websiteURL}</dd></div><div><dt>Campaign</dt><dd>{draft.name}</dd></div><div><dt>Offer</dt><dd>{draft.productDescription}</dd></div><div><dt>Appears when</dt><dd>{complete().contextHints.join(' · ')}</dd></div><div><dt>Product features</dt><dd>{draft.declaredCapabilities.map(id => bootstrap.capabilities.find(c => c.id === id)?.label ?? id).join(', ') || 'None declared'}</dd></div><div><dt>Maximum bid</dt><dd>{money.maxBidBaseUnits} {unit}</dd></div><div><dt>Spending limit</dt><dd>{money.budgetCapBaseUnits} {unit}</dd></div><div><dt>{native ? 'Channel deposit' : 'Set aside'}</dt><dd>{money.depositBaseUnits} {unit}</dd></div></dl>
+            <dl className="ad-review">{native && <div><dt>Payment network</dt><dd>{networkLabel(network)} · {unit}</dd></div>}<div><dt>Advertiser</dt><dd>{draft.brandName} · {draft.websiteURL}</dd></div><div><dt>Campaign</dt><dd>{draft.name}</dd></div><div><dt>Offer</dt><dd>{draft.productDescription}</dd></div><div><dt>Appears when</dt><dd>{complete().contextHints.join(' · ')}</dd></div><div><dt>Product features</dt><dd>{draft.declaredCapabilities.map(id => bootstrap.capabilities.find(c => c.id === id)?.label ?? id).join(', ') || 'None declared'}</dd></div><div><dt>Maximum bid</dt><dd>{money.maxBidBaseUnits} {unit}</dd></div><div><dt>Spending limit</dt><dd>{money.budgetCapBaseUnits} {unit}</dd></div>{!direct&&<div><dt>{native ? 'Channel deposit' : 'Set aside'}</dt><dd>{money.depositBaseUnits} {unit}</dd></div>}</dl>
             {launchBlocked && <Ld.Notice tone="blocked" title={`${networkLabel(network)} is unavailable right now`}>{readiness?.reason ?? 'This campaign cannot be funded yet.'} Save the draft and launch later.</Ld.Notice>}
             <label className="ad-review-check"><input type="checkbox" checked={reviewed} onChange={e => setReviewed(e.target.checked)} /><span>I reviewed the exact Sponsored text, the product features and the spending limits. {native ? `I approve this campaign and its ${unit} channel deposit for launch.` : 'I approve this campaign for launch.'}</span></label>
             <p className="ld-caption">You are charged when your Sponsored card is shown. That does not prove attention, clicks or sales.</p>

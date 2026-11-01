@@ -1,0 +1,14 @@
+{
+  "name": "axp-hsp-tooling",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/client": "2.4.0",
+    "viem": "2.57.4"
+  },
+  "devDependencies": {
+    "solc": "0.8.28",
+    "ganache": "7.9.2",
+    "npm": "10.9.4"
+  }
+}

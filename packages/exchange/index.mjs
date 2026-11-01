@@ -6,7 +6,7 @@ import {ContractError,canonical,hash,baseUnits,validateCampaign,validateOpportun
 
 export class Exchange {
   constructor({dbPath=':memory:',runId='demo',mode='synthetic',now=Date.now,networkState=null}={}) {
-    if(mode!=='synthetic'&&(!['sandbox','devnet'].includes(mode)||typeof networkState!=='function'))throw new ContractError('network_adapter_required');
+    if(mode!=='synthetic'&&(!['sandbox','devnet','testnet'].includes(mode)||typeof networkState!=='function'))throw new ContractError('network_adapter_required');
     this.runId=runId;this.mode=mode;this.now=now;this.networkState=networkState;
     if(dbPath!==':memory:')mkdirSync(dirname(dbPath),{recursive:true,mode:0o700});
     this.db=new DatabaseSync(dbPath);this.db.exec('PRAGMA busy_timeout=5000; PRAGMA journal_mode=WAL;');
@@ -33,6 +33,15 @@ export class Exchange {
     return this.tx(()=>{const old=this.get('publisher_settlement_routes',key);if(old&&hash(old)!==hash(route))throw new ContractError('publisher_route_conflict',undefined,409);return old??this.put('publisher_settlement_routes',key,route);});
   }
   settlementRoute(publisherId,network='solana-devnet') {return this.get('publisher_settlement_routes',`${publisherId}:${network}`);}
+  // A direct account is a spending ceiling, never collateral or a chain opening.
+  createDirectAccount(c){
+    if(this.mode!=='testnet'||c.settlementNetwork!=='hsk-testnet')throw new ContractError('direct_configuration_invalid');
+    this.require('publishers',c.publisherId);baseUnits(c.budgetLimitBaseUnits);
+    if(!/^0x[0-9a-fA-F]{40}$/.test(c.payee))throw new ContractError('payee_mismatch');
+    return this.tx(()=>{const old=this.get('channels',c.channelId);const value={...c,mode:this.mode,paymentModel:'direct',status:'open',authorizedBaseUnits:'0',settledBaseUnits:'0'};
+      if(old){for(const k of ['advertiserId','publisherId','payee','budgetLimitBaseUnits','settlementNetwork','token'])if(old[k]!==value[k])throw new ContractError('channel_conflict',undefined,409);return old;}
+      this.put('channels',c.channelId,value);return value;});
+  }
   createChannel(c){
     if(c.mode!==this.mode||!c.channelId||!c.advertiserId||(c.mode!=='synthetic'&&!this.networkState))throw new ContractError('network_adapter_required');
     const pub=this.require('publishers',c.publisherId),rail=c.settlementNetwork??'solana-devnet';if(Object.hasOwn(c,'settlementNetwork'))settlementNetwork(rail);const route=this.settlementRoute(c.publisherId,rail);if((rail==='tempo-testnet'&&!route)||c.payee!==(route?.payee??pub.payee))throw new ContractError('payee_mismatch');if(c.token!==undefined&&c.token!==route?.token)throw new ContractError('asset_mismatch');
@@ -72,10 +81,10 @@ export class Exchange {
     const accepted=this.all('charges').filter(matching).reduce((n,c)=>n+baseUnits(c.amountBaseUnits),0n);
     const reserved=this.all('awards').filter(a=>a.status==='reserved'&&matching(a)).reduce((n,a)=>n+baseUnits(a.priceBaseUnits),0n);return {accepted,reserved};
   }
-  available(c){const ct=this.totals({campaignId:c.campaignId}),ch=this.require('channels',c.channelId),t=this.totals({channelId:c.channelId});return {campaign:(baseUnits(c.budgetCapBaseUnits)-ct.accepted-ct.reserved).toString(),channel:(baseUnits(ch.depositBaseUnits)-t.accepted-t.reserved).toString()};}
+  available(c){const ct=this.totals({campaignId:c.campaignId}),ch=this.require('channels',c.channelId),t=this.totals({channelId:c.channelId});const directRemaining=this.mode==='testnet'?3000000n-this.totals().accepted-this.totals().reserved:null;return {campaign:(directRemaining!==null&&directRemaining<baseUnits(c.budgetCapBaseUnits)-ct.accepted-ct.reserved?directRemaining:baseUnits(c.budgetCapBaseUnits)-ct.accepted-ct.reserved).toString(),channel:(baseUnits(ch.paymentModel==='direct'?ch.budgetLimitBaseUnits:ch.depositBaseUnits)-t.accepted-t.reserved).toString()};}
   reason(c,o,{ignoreFunding=false}={}){
     if(this.mode!=='synthetic'&&(c.settlementNetwork??'solana-devnet')!==(o.settlementNetwork??'solana-devnet'))return 'settlement_network_mismatch';
-    if(c.status!=='active')return 'campaign_paused';if(!c.allowedIntents.includes(o.coarseIntent)||c.destination!==o.destination)return 'policy_excluded';
+    if(c.status!=='active')return 'campaign_paused';if(this.mode==='testnet'&&this.all('awards').filter(a=>['reserved','delivered'].includes(a.status)).length>=3)return 'delivery_cap';if(this.mode==='testnet'&&this.networkState?.(c.channelId)?.reconciliationRequired)return 'payment_reconciliation_required';if(!c.allowedIntents.includes(o.coarseIntent)||c.destination!==o.destination)return 'policy_excluded';
     if(o.taskConstraints.some(k=>!c.declaredConstraints.includes(k)))return 'missing_constraint';
     const ch=this.require('channels',c.channelId);if(ch.publisherId!==o.publisherId||(!ignoreFunding&&ch.status!=='open'))return 'channel_unavailable';
     if(ch.settlementNetwork==='tempo-testnet'){const s=this.networkState?.(ch.channelId);if(!s||s.reconciliationRequired||s.phase!=='open')return 'channel_unavailable';}

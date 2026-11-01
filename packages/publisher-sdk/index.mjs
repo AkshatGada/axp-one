@@ -34,7 +34,7 @@ function opportunityInput(input) {
   }
   const body = {question: question.trim(), sessionId, turnId, placementId};
   if (settlementNetwork !== undefined) {
-    if (!['solana-devnet', 'tempo-testnet'].includes(settlementNetwork)) throw new PublisherSDKError('invalid_settlementNetwork');
+    if (!['solana-devnet', 'tempo-testnet', 'hsk-testnet'].includes(settlementNetwork)) throw new PublisherSDKError('invalid_settlementNetwork');
     body.settlementNetwork = settlementNetwork;
   }
   for (const [key, value] of Object.entries({requiredCapabilities, excludedCategories})) {

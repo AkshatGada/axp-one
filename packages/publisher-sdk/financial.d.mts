@@ -1,12 +1,12 @@
 export type FinancialMode = 'synthetic' | 'devnet' | 'sandbox' | (string & {});
-export type SettlementNetwork = 'solana-devnet' | 'tempo-testnet';
+export type SettlementNetwork = 'solana-devnet' | 'tempo-testnet' | 'hsk-testnet';
 export type FinancialMetadata = {financialMode?: FinancialMode; mode?: string; settlementNetwork?: SettlementNetwork; network?: SettlementNetwork};
 export type NativeTransaction = {operation: 'open' | 'payout' | 'close'; status: string; signature?: string; transactionHash?: string; network?: SettlementNetwork; chainId?: number; blockNumber?: string; feeAsset?: string; feeAmountBaseUnits?: string | null; gasUsed?: string; effectiveGasPrice?: string; explorerURL?: string; finality?: string; networkFeeLamports?: string; newRentLamports?: string; reclaimedRentLamports?: string; tokenDeltas?: {payer?: string; publisher?: string; treasury?: string}};
 export type PaymentVoucher = {chargeId: string; status: string; sequence?: string | number; incrementBaseUnits: string; cumulativeAmountBaseUnits: string; payloadHash?: string};
 export type NativePayment = {mode: FinancialMode; network?: SettlementNetwork; chainId?: number; token?: string; tokenSymbol?: string; decimals?: number; channelId?: string; protocolChannelId?: string; address?: string; payer?: string; payee?: string; mint?: string; phase?: 'pending_open' | 'open' | 'draining' | 'closing' | 'finalized'; openStatus?: string; closeStatus?: string; depositBaseUnits?: string; confirmedDepositBaseUnits?: string; acceptedBaseUnits?: string; authorizedBaseUnits?: string; settledBaseUnits?: string; refundBaseUnits?: string; reconciliationRequired?: boolean; canReconcile?: boolean; canRetryOpen?: boolean; canSettle?: boolean; canPayout?: boolean; canClose?: boolean; reason?: string; transactions?: NativeTransaction[]; vouchers?: PaymentVoucher[]};
 export type PaymentAuthorization = {status: 'authorized' | 'unknown' | 'blocked'; reason?: string};
 export function financialModeOf(...records: Array<FinancialMetadata | null | undefined>): FinancialMode | undefined;
-export function moneyUnit(mode?: FinancialMode, networkOrPayment?: SettlementNetwork | FinancialMetadata): 'test credits' | 'test USDC' | 'test PathUSD' | 'units';
+export function moneyUnit(mode?: FinancialMode, networkOrPayment?: SettlementNetwork | FinancialMetadata): 'test credits' | 'test USDC' | 'test PathUSD' | 'USD (QA obligation)' | 'units';
 export function devnetTransactionURL(signature?: string): string | undefined;
 export function nativeTransactionURL(transaction?: NativeTransaction, network?: SettlementNetwork): string | undefined;
 export function isFinalizedNativeTransaction(transaction?: NativeTransaction, network?: SettlementNetwork): boolean;

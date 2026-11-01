@@ -1,0 +1,9 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {generateKeyPairSync} from 'node:crypto';
+import {hash,signReceipt} from '../../packages/contracts/index.mjs';
+import {validateEvidence} from '../../packages/hsp/evidence.mjs';
+const keys=generateKeyPairSync('ed25519'),receipt={schemaVersion:'publisher-receipt.v1',runId:'fixture',mode:'testnet',publisherId:'publisher',publisherKeyId:'key',awardId:'award',opportunityId:'opportunity',creativeHash:'ab'.repeat(32),nonce:'nonce',renderAcknowledgementHash:'cd'.repeat(32)};
+function evidence(){const body={schemaVersion:'axp.hsp-evidence.v1',execution:'fixture',paymentModel:'direct',paymentChainId:133,registryChainId:177,decimals:6,deliveries:[{chargeId:'charge',amountMicroUsd:'1000',receiptHash:hash(receipt),receipt,receiptSignature:signReceipt(receipt,keys.privateKey),publisherPublicKey:keys.publicKey.export({type:'spki',format:'pem'}),stage:'accepted-unpaid',status:'not-prepared',uncertain:false}]};return {...body,contentHash:hash(body)};}
+test('public evidence validates delivery signatures and rejects tampering',()=>{const input=evidence();assert.equal(validateEvidence(input),input);input.deliveries[0].amountMicroUsd='2000';assert.throws(()=>validateEvidence(input),{code:'hsp_evidence_hash_mismatch'});const {contentHash,...body}=input;body.deliveries[0].receipt={...receipt,creativeHash:'ef'.repeat(32)};body.deliveries[0].receiptHash=hash(body.deliveries[0].receipt);assert.throws(()=>validateEvidence({...body,contentHash:hash(body)}),{code:'hsp_evidence_receipt_invalid'});});
+test('a finalized claim requires attribution, a valid reference and transfer proof',()=>{const {contentHash,...body}=evidence();body.deliveries[0].stage='finalized';body.deliveries[0].status='payment-finalized';assert.throws(()=>validateEvidence({...body,contentHash:hash(body)}),{code:'hsp_evidence_finality_invalid'});});

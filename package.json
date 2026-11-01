@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22.18.0" },
+  "engines": {
+    "node": ">=22.18.0"
+  },
   "scripts": {
     "test": "node scripts/test.mjs",
     "verify:review": "node scripts/setup/verify-review.mjs",
@@ -21,6 +23,11 @@
     "start": "node apps/backend/server.mjs",
     "build:site": "node scripts/build-site.mjs",
     "serve:site": "node scripts/build-site/serve.mjs",
-    "dev:site": "node scripts/hosted/dev-server.mjs"
+    "dev:site": "node scripts/hosted/dev-server.mjs",
+    "dev:hsp": "node scripts/hsp/dev-server.mjs",
+    "test:hsp": "node --test tests/hsp/*.test.mjs",
+    "hsp:discover": "node scripts/hsp/discover.mjs",
+    "hsp:compile": "node scripts/hsp/compile.mjs",
+    "hsp:replay": "node scripts/hsp/export-replay.mjs"
   }
 }

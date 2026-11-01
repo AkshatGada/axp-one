@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "axp.hsp-status.v1",
+  "implementation": "source-verified-live-acceptance-pending",
+  "liveAcceptance": "not-executed",
+  "hspQaAccess": "organizer-confirmation-not-received",
+  "eligibility": "organizer-clarification-required",
+  "paymentsFinalized": 0,
+  "mainnetDeployments": 0,
+  "mainnetAnchors": 0,
+  "newPaidProviderCalls": 0,
+  "limitations": [
+    "Live HSP schemas have not been discovered; live wire mapping must be reviewed after QA access.",
+    "HSP QA payments and HSK mainnet evidence anchors are distinct.",
+    "No production deployment or account database change is part of this branch."
+  ],
+  "fixtureAcceptance": {
+    "placements": 3,
+    "simulatedPayments": 3,
+    "replayChecks": 3,
+    "noFillVerified": true,
+    "browserUsed": false,
+    "publicChainBroadcasts": 0
+  },
+  "preview": {
+    "url": "https://axp-hsp-isolated.akshatgada004.chatgpt.site",
+    "access": "owner-private",
+    "staticOnly": true,
+    "content": "live-verification-pending"
+  },
+  "sourceVerification": {
+    "repositoryTests": 869,
+    "passed": 861,
+    "optionalSkipped": 8,
+    "failed": 0,
+    "componentPassed": 90,
+    "hspTests": 32,
+    "productionBuildPassed": true,
+    "hspUiBuildPassed": true
+  }
+}

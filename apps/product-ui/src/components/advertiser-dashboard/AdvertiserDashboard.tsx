@@ -70,7 +70,7 @@ export function AdvertiserDashboard() {
   async function reload() { setBusy(true); try { await refresh(); setError(''); } catch (e) { setError(e instanceof Error ? e.message : 'Refresh failed.'); } finally { setBusy(false); } }
   const signedIn = presence.state === 'signed-in';
   const item = (href: string, label: string, current = false, meta?: string) => ({ href, label, current, meta });
-  const modeFoot = !bootstrap ? 'Loading the shared demo.' : native ? 'Test tokens on a test network. No real money.' : 'Test credits. No real money moves.';
+  const modeFoot = !bootstrap ? 'Loading the shared demo.' : bootstrap.financialMode==='testnet'?'HSP QA direct payments. Mainnet anchors are separate.':native ? 'Test tokens on a test network. No real money.' : 'Test credits. No real money moves.';
   return <div className="ad-dashboard"><Ld.Shell
     top={<Ld.TopBar brand={<Ld.Wordmark href="/" />} run={<DemoContext />}
       chips={<Ld.Tag tone="outline">{bootstrap && !native ? 'Test credits · no real money' : financialModeLabel(bootstrap, state)}</Ld.Tag>}

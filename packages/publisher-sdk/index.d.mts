@@ -2,7 +2,7 @@ import type {FinancialMetadata, NativePayment, PaymentAuthorization} from './fin
 export type {FinancialMode, FinancialMetadata, NativePayment, NativeTransaction, PaymentVoucher, PaymentAuthorization} from './financial.mjs';
 export type Creative = { creativeVersionId?: string; approvedText: string; destinationURL: string; fictional?: boolean; softFitTags?: string[]; evidenceFieldIds?: string[] };
 export type Award = FinancialMetadata & { id: string; creativeHash: string; creative: Creative; brandName?: string; priceBaseUnits: string; /** Unix epoch milliseconds. */ expiresAt: number; campaignId?: string };
-export type OpportunityInput = { question: string; sessionId: string; turnId: string; placementId?: string; requiredCapabilities?: string[]; excludedCategories?: string[]; settlementNetwork?: 'solana-devnet' | 'tempo-testnet' };
+export type OpportunityInput = { question: string; sessionId: string; turnId: string; placementId?: string; requiredCapabilities?: string[]; excludedCategories?: string[]; settlementNetwork?: 'solana-devnet' | 'tempo-testnet' | 'hsk-testnet' };
 export type Trace = { engine?: string; bids?: unknown[]; rejections?: Array<{ reason?: string; campaignId?: string; [key: string]: unknown }>; decisions?: unknown[]; payment?: NativePayment; [key: string]: unknown };
 export type OpportunityResult = FinancialMetadata & ({ status: 'awarded'; mode?: string; opportunityId: string; award: Award; deliveryToken: string; trace?: Trace; replayed?: boolean } | { status: 'no_fill'; mode?: string; opportunityId: string; trace?: Trace; replayed?: boolean });
 export type AdResult = OpportunityResult | { status: 'error'; error: { code: string; status?: number } };

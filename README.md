@@ -1,5 +1,7 @@
 # AXP — Advertising for conversational AI
 
+> **Isolated HSK/HSP branch:** direct QA payment integration and a separate mainnet evidence registry. Live acceptance is pending. See [the HSP runbook](docs/product/HSP.md). Existing production is not changed.
+
 AXP connects advertisers with AI apps at the moment a person asks what to buy.
 Advertisers approve campaigns and set limits; advertiser agents evaluate relevant
 conversations, and a deterministic first-price auction awards one clearly

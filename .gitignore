@@ -25,3 +25,5 @@ docs/frontend/reviews/shots/*/
 !docs/frontend/reviews/shots/landing-v7/
 !docs/frontend/reviews/shots/hero-lab/
 docs/frontend/reviews/tools/**/out/
+
+**/.next-hsp-dev/

@@ -2,8 +2,8 @@ import { createHash, sign, verify } from 'node:crypto';
 
 export const CONTRACT_VERSION = 'axp.runtime.v1';
 export const BID_POLICY_VERSION = 'fit_intent_bid_v1';
-export const MODES = ['synthetic', 'sandbox', 'devnet'];
-export const SETTLEMENT_NETWORKS = Object.freeze(['solana-devnet','tempo-testnet']);
+export const MODES = ['synthetic', 'sandbox', 'devnet', 'testnet'];
+export const SETTLEMENT_NETWORKS = Object.freeze(['solana-devnet','tempo-testnet','hsk-testnet']);
 export function settlementNetwork(value) { if(!SETTLEMENT_NETWORKS.includes(value))throw new ContractError('settlement_network_invalid');return value; }
 export class ContractError extends Error {
   constructor(code, message = code, status = 400) { super(message); this.code = code; this.status = status; }

@@ -2,6 +2,7 @@ packages:
   - design-system
   - apps/marketing
   - apps/product-ui
+  - tooling/hsp-sdk
 
 # Keep Next's CSS processor patched without changing the framework or UI.
 overrides:

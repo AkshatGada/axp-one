@@ -72,7 +72,7 @@ export function taskContext(question,required=[]){
 
 /** One persisted local demo workspace. Financial authority remains in Exchange.
  * Synthetic by default; opt-in Devnet uses one server-held disposable demo sponsor. */
-export function createProductService({stateDir='local-state/product',runId='product-workspace-v1',now=Date.now,publisherKey,apiKey,transport,retriever,organicApiKey,organicTransport,dailyModelCap=50,demoMode=false,financialMode='synthetic',signingEnabled=false,walletPath,paymentOptions={},tempoEnabled=false,tempoSigningEnabled=false,tempoWalletPath,tempoOptions={},tempoFactory,checkpoint=null,benchmarkProfile=null}={}){
+export function createProductService({stateDir='local-state/product',runId='product-workspace-v1',now=Date.now,publisherKey,apiKey,transport,retriever,organicApiKey,organicTransport,dailyModelCap=50,demoMode=false,financialMode='synthetic',signingEnabled=false,walletPath,paymentOptions={},tempoEnabled=false,tempoSigningEnabled=false,tempoWalletPath,tempoOptions={},tempoFactory,checkpoint=null,benchmarkProfile=null,directOptions=null}={}){
  mkdirSync(stateDir,{recursive:true,mode:0o700});
  const secretFile=join(stateDir,'publisher-api-key');
  if(!publisherKey){if(!existsSync(secretFile))writeFileSync(secretFile,randomBytes(32).toString('hex'),{mode:0o600,flag:'wx'});publisherKey=readFileSync(secretFile,'utf8').trim();}
@@ -83,18 +83,21 @@ export function createProductService({stateDir='local-state/product',runId='prod
  if(!existsSync(keyFile))writeFileSync(keyFile,generateKeyPairSync('ed25519').privateKey.export({format:'pem',type:'pkcs8'}),{mode:0o600,flag:'wx'});
  const receiptKey=createPrivateKey(readFileSync(keyFile));
  const publisherId='axp-demo-publisher',publisherKeyId='product-publisher-v1';
- if(!['synthetic','devnet'].includes(financialMode))fail('financial_mode_invalid');
+ if(!['synthetic','devnet','testnet'].includes(financialMode))fail('financial_mode_invalid');
+ const direct=financialMode==='testnet';
+ if(direct&&!directOptions?.payee)fail('direct_configuration_required');
  let payments;
- const exchange=new Exchange({dbPath:join(stateDir,'exchange.sqlite'),runId,mode:financialMode,now,...(financialMode==='devnet'?{networkState:id=>payments?.projection(id)??null}:{})});
+ const exchange=new Exchange({dbPath:join(stateDir,'exchange.sqlite'),runId,mode:financialMode,now,...(financialMode==='devnet'?{networkState:id=>payments?.projection(id)??null}:direct?{networkState:()=>({reconciliationRequired:directOptions.blocked?.()??false})}:{})});
  if(financialMode==='devnet')payments=createProductPaymentFacade({exchange,stateDir,walletPath,signingEnabled,tempoEnabled,tempoSigningEnabled,tempoWalletPath,tempoOptions,...(tempoFactory?{tempoFactory}:{}),now,...(checkpoint?{checkpoint}:{}),...paymentOptions});
- const payee=payments?.identities.payee??'synthetic:axp-demo-publisher';
- const limits=financialMode==='devnet'?{...LIMITS,maxBidBaseUnits:NATIVE_LIMITS.maxBidBaseUnits,maxBudgetBaseUnits:NATIVE_LIMITS.maxBudgetBaseUnits,maxDepositBaseUnits:NATIVE_LIMITS.maxDepositBaseUnits}:LIMITS;
+ const payee=direct?directOptions.payee:payments?.identities.payee??'synthetic:axp-demo-publisher';
+ const limits=direct?{...LIMITS,maxBudgetBaseUnits:'3000000'}:financialMode==='devnet'?{...LIMITS,maxBidBaseUnits:NATIVE_LIMITS.maxBidBaseUnits,maxBudgetBaseUnits:NATIVE_LIMITS.maxBudgetBaseUnits,maxDepositBaseUnits:NATIVE_LIMITS.maxDepositBaseUnits}:LIMITS;
  for(const table of ['product_accounts','product_advertisers','product_campaigns','product_requests','product_request_admissions','product_answers'])exchange.db.exec(`CREATE TABLE IF NOT EXISTS ${table}(run TEXT NOT NULL,id TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(run,id))`);
  const credentials=publisherCredentials({exchange,publisherId,initialKey:publisherKey,now});
  const organicDailyCap=isBenchmarkProfile(benchmarkProfile)?64:20;
  const buyers=createProductDecisions({exchange,apiKey,transport,retriever,now,dailyCap:dailyModelCap,checkpoint,benchmarkProfile});
  const inFlight=new Map(),answerFlight=new Map();
  exchange.registerPublisher({publisherId,publisherKeyId,payee,publicKeyPEM:createPublicKey(receiptKey).export({format:'pem',type:'spki'})});
+ if(direct)exchange.registerPublisherSettlementRoute({publisherId,settlementNetwork:'hsk-testnet',payee,token:directOptions.token,decimals:6,chainId:133});
  if(payments){exchange.registerPublisherSettlementRoute({publisherId,settlementNetwork:'solana-devnet',payee,token:SOLANA_NETWORK.mint,decimals:6});const ts=payments.networkStatus('tempo-testnet');if(ts.payee&&ts.token)try{exchange.registerPublisherSettlementRoute({publisherId,settlementNetwork:'tempo-testnet',payee:ts.payee,token:ts.token,decimals:6,chainId:ts.chainId});}catch(e){payments.disableNetwork('tempo-testnet',e.code??'tempo_route_invalid');}}
  const tokenFor=awardId=>{
   // Historical awards can predate an explicit key override. Their saved capability
@@ -108,7 +111,7 @@ export function createProductService({stateDir='local-state/product',runId='prod
  const requireCampaign=campaignId=>exchange.require('product_campaigns',id(campaignId));
  function saveAccount(body){strictObject(body,['name','websiteURL'],['name','websiteURL']);const a={id:'workspace',name:text(body.name,120),websiteURL:website(body.websiteURL),mode:financialMode,updatedAt:stamp()};exchange.tx(()=>exchange.put('product_accounts','workspace',a));return {account:a};}
  function saveCampaign(body){
-  strictObject(body,['id',...fields,'settlementNetwork']);if(Object.hasOwn(body,'settlementNetwork'))settlementNetwork(body.settlementNetwork);if(financialMode==='synthetic'&&body.settlementNetwork==='tempo-testnet')fail('native_payments_required');
+  strictObject(body,['id',...fields,'settlementNetwork']);if(direct){if(body.settlementNetwork&&body.settlementNetwork!=='hsk-testnet')fail('settlement_network_invalid');if(body.depositBaseUnits&&body.depositBaseUnits!=='0')fail('direct_deposit_unsupported');body={...body,settlementNetwork:'hsk-testnet',depositBaseUnits:'0'};}else if(body.settlementNetwork==='hsk-testnet')fail('direct_configuration_required');if(Object.hasOwn(body,'settlementNetwork'))settlementNetwork(body.settlementNetwork);if(financialMode==='synthetic'&&body.settlementNetwork==='tempo-testnet')fail('native_payments_required');
   const old=body.id?requireCampaign(body.id):null;if(old&&old.status!=='draft')fail('launched_campaign_immutable',409);
   const c={...defaults,...old,...body,id:old?.id??`campaign-${randomUUID()}`,status:'draft',createdAt:old?.createdAt??stamp(),updatedAt:stamp()};
   for(const k of ['name','brandName'])c[k]=text(c[k],120,true);
@@ -122,11 +125,12 @@ export function createProductService({stateDir='local-state/product',runId='prod
   exchange.tx(()=>exchange.put('product_campaigns',c.id,c));return {campaign:campaignView(c)};
  }
  function validateLaunch(c){
+  if(direct&&!directOptions.ready)fail('hsp_not_ready',409);
   if(!account())fail('complete_onboarding',409);
   for(const k of ['name','brandName','productDescription','approvedText'])text(c[k],k==='approvedText'?800:k==='productDescription'?1200:120);
   website(c.websiteURL);if(!c.declaredCapabilities.length)fail('capabilities_required');if(!c.contextHints.length)fail('context_hints_required');
   const bid=baseUnits(c.maxBidBaseUnits),budget=baseUnits(c.budgetCapBaseUnits),deposit=baseUnits(c.depositBaseUnits);
-  if(bid<1000n||budget<bid||deposit<budget)fail('invalid_budget');
+  if(bid<1000n||budget<bid||(!direct&&deposit<budget))fail('invalid_budget');
  }
  function asExchangeCampaign(c){return {...(c.settlementNetwork?{settlementNetwork:c.settlementNetwork}:{}),campaignId:c.id,campaignVersionId:`${c.id}-v1`,advertiserId:c.advertiserId??'workspace',status:'active',allowedIntents:['product_tools'],destination:'global',declaredConstraints:c.declaredCapabilities,creatives:[{creativeVersionId:`creative-${c.id}-v1`,approvedText:c.approvedText,destinationURL:c.websiteURL,fictional:true,softFitTags:c.declaredCapabilities,evidenceFieldIds:['declaredConstraints']}],softFitTags:c.declaredCapabilities,maxBidBaseUnits:c.maxBidBaseUnits,budgetCapBaseUnits:c.budgetCapBaseUnits,channelId:`${c.id}-channel`,policyVersion:'fit_intent_bid_v1'};}
  const contentHash=c=>hash({...Object.fromEntries(fields.map(k=>[k,c[k]])),...(c.settlementNetwork?{settlementNetwork:c.settlementNetwork}:{})});
@@ -135,7 +139,8 @@ export function createProductService({stateDir='local-state/product',runId='prod
   if(!c.approved||c.approvedContentHash!==contentHash(c))fail('campaign_approval_required',409);
   if(exchange.all('campaigns').filter(c=>c.status==='active').length>=8)fail('active_campaign_limit',409);
   const item=asExchangeCampaign(c);
-  exchange.createChannel({channelId:item.channelId,advertiserId:item.advertiserId,publisherId,payee,depositBaseUnits:c.depositBaseUnits,mode:financialMode});
+  if(direct)exchange.createDirectAccount({channelId:item.channelId,advertiserId:item.advertiserId,publisherId,payee,budgetLimitBaseUnits:c.budgetCapBaseUnits,settlementNetwork:'hsk-testnet',token:directOptions.token});
+  else exchange.createChannel({channelId:item.channelId,advertiserId:item.advertiserId,publisherId,payee,depositBaseUnits:c.depositBaseUnits,mode:financialMode});
   exchange.createCampaign(item);c.status='active';c.updatedAt=stamp();exchange.tx(()=>{exchange.put('product_campaigns',c.id,c);if(c.advertiserId&&!exchange.get('product_advertisers',c.advertiserId))exchange.put('product_advertisers',c.advertiserId,{id:c.advertiserId,brandName:c.brandName,websiteURL:c.websiteURL,workspaceId:'workspace',createdAt:stamp()});});return {campaign:campaignView(c),replayed:false};
  }
  function updateNativeCampaign(c,result){const item=exchange.get('campaigns',c.id),payment=item?payments.evidence(item.channelId):null;
@@ -154,7 +159,7 @@ export function createProductService({stateDir='local-state/product',runId='prod
   if(['settle','close'].includes(action)){if(c.status==='settled')return {campaign:campaignView(c),replayed:true};exchange.pauseCampaign(c.id);exchange.drainNetworkChannel(item.channelId);c.status='settling';exchange.tx(()=>exchange.put('product_campaigns',c.id,c));const drained=await payments.drain(item.channelId);if(drained.status==='blocked')return updateNativeCampaign(c,drained);if(exchange.totals({channelId:item.channelId}).reserved>0n)return updateNativeCampaign(c,{status:'blocked',reason:'outstanding_deliveries'});const auth=await payments.authorize(item.channelId);if(auth.status!=='authorized')return updateNativeCampaign(c,auth);return updateNativeCampaign(c,await payments.close(item.channelId));}
   fail('unknown_action');
  }
- function campaignAction(campaignId,action){if(payments&&['settle','close','payout','authorize','reconcile'].includes(action))return nativeAction(campaignId,action);const c=requireCampaign(campaignId),item=exchange.get('campaigns',c.id);
+ function campaignAction(campaignId,action){if(direct&&['settle','close','payout','authorize','reconcile'].includes(action))fail('direct_payment_requires_charge',409);if(payments&&['settle','close','payout','authorize','reconcile'].includes(action))return nativeAction(campaignId,action);const c=requireCampaign(campaignId),item=exchange.get('campaigns',c.id);
   if(action==='duplicate'){const copy={...Object.fromEntries(fields.map(k=>[k,c[k]])),...(c.settlementNetwork?{settlementNetwork:c.settlementNetwork}:{})};return saveCampaign({...copy,name:`${c.name} copy`.slice(0,120)});}
   if(!item)fail('campaign_not_launched',409);
   if(action==='pause'){if(c.status==='settled')fail('channel_closed',409);exchange.pauseCampaign(c.id);c.status='paused';}
@@ -165,7 +170,7 @@ export function createProductService({stateDir='local-state/product',runId='prod
  function campaignView(c){const item=exchange.get('campaigns',c.id),totals=item?exchange.totals({campaignId:c.id}):{accepted:0n,reserved:0n},channel=item?exchange.require('channels',item.channelId):null;
   const payment=item&&payments?payments.evidence(item.channelId):null;
   const status=payment?.closeStatus==='finalized'?'settled':payment?.closeStatus?'settling':payment?.openStatus==='finalized'&&c.status==='opening'?'active':c.status;
-  return {...c,settlementNetwork:c.settlementNetwork??'solana-devnet',status,...(payment?{payment,financialMode}:{} ),deliveryCount:exchange.all('charges').filter(x=>x.campaignId===c.id).length,spendBaseUnits:String(totals.accepted),acceptedBaseUnits:String(totals.accepted),reservedBaseUnits:String(totals.reserved),remainingBaseUnits:String(baseUnits(c.budgetCapBaseUnits)-totals.accepted-totals.reserved),authorizedBaseUnits:channel?.authorizedBaseUnits??'0',settledBaseUnits:channel?.settledBaseUnits??'0',refundBaseUnits:channel?.refundBaseUnits??'0',channelStatus:channel?.status??'not_opened',fundingMode:payments?(c.settlementNetwork==='tempo-testnet'?'tempo_testnet_pathusd':'devnet_test_usdc'):'synthetic_test_credits'};
+  return {...c,settlementNetwork:c.settlementNetwork??'solana-devnet',status,...(payment?{payment,financialMode}:{} ),deliveryCount:exchange.all('charges').filter(x=>x.campaignId===c.id).length,spendBaseUnits:String(totals.accepted),acceptedBaseUnits:String(totals.accepted),reservedBaseUnits:String(totals.reserved),remainingBaseUnits:String(baseUnits(c.budgetCapBaseUnits)-totals.accepted-totals.reserved),authorizedBaseUnits:channel?.authorizedBaseUnits??'0',settledBaseUnits:channel?.settledBaseUnits??'0',refundBaseUnits:channel?.refundBaseUnits??'0',channelStatus:channel?.status??'not_opened',...(direct?{paymentModel:'direct',financialMode,accountingCurrency:'USD',accountingDecimals:6,unpaidBaseUnits:String(exchange.all('charges').filter(x=>x.campaignId===c.id&&x.status!=='settled').reduce((n,x)=>n+baseUnits(x.amountBaseUnits),0n)),settledBaseUnits:String(exchange.all('charges').filter(x=>x.campaignId===c.id&&x.status==='settled').reduce((n,x)=>n+baseUnits(x.amountBaseUnits),0n))}:{}),fundingMode:direct?'hsp_direct_testnet':payments?(c.settlementNetwork==='tempo-testnet'?'tempo_testnet_pathusd':'devnet_test_usdc'):'synthetic_test_credits'};
  }
  function preview(campaignId,body){strictObject(body,['question'],['question']);const question=text(body.question,1200),draft=requireCampaign(campaignId),c=asExchangeCampaign(draft),context=taskContext(question),o={...context,id:'preview-only',publisherId,coarseIntent:context.coarseIntent,destination:'global',floorBaseUnits:'1000'};
   const missing=o.taskConstraints.filter(k=>!c.declaredConstraints.includes(k));
@@ -173,7 +178,7 @@ export function createProductService({stateDir='local-state/product',runId='prod
   return {eligible:!reason,reason,creative:{brandName:draft.brandName,text:draft.approvedText,websiteURL:draft.websiteURL},matchedHints:draft.contextHints.filter(h=>[...tokens(h)].some(t=>tokens(question).has(t))),question,previewOnly:true,providerCalls:0,mode:financialMode,engine:buyers.status(),decision:null,explanation:'Checks declared eligibility and previews copy. Jev has not judged this preview; it does not predict a bid or win.'};
  }
  function normalizeOpportunity(body){
-  strictObject(body,['question','sessionId','turnId','placementId','requiredCapabilities','excludedCategories','settlementNetwork'],['question','sessionId','turnId']);
+  strictObject(body,['question','sessionId','turnId','placementId','requiredCapabilities','excludedCategories','settlementNetwork'],['question','sessionId','turnId']);if(direct){if(body.settlementNetwork&&body.settlementNetwork!=='hsk-testnet')fail('settlement_network_invalid');body={...body,settlementNetwork:'hsk-testnet'};}else if(body.settlementNetwork==='hsk-testnet')fail('direct_configuration_required');
   if(Object.hasOwn(body,'settlementNetwork'))settlementNetwork(body.settlementNetwork);if(financialMode==='synthetic'&&body.settlementNetwork==='tempo-testnet')fail('native_payments_required');
   const question=text(body.question,1200);id(body.sessionId);id(body.turnId);
   if(/[\w.+-]+@[\w.-]+\.[a-z]{2,}|apikey_[a-z0-9_]+|-----BEGIN .*PRIVATE KEY/iu.test(question))fail('private_content');
@@ -187,6 +192,7 @@ export function createProductService({stateDir='local-state/product',runId='prod
   const startedAt=now(),normalized=normalizeOpportunity(body),{question,requiredCapabilities:required,excludedCategories:blocked}=normalized;
   const key=hash([body.sessionId,body.turnId]),prior=exchange.get('product_requests',key);
   if(prior){const savedHash=prior.input?hash({...prior.input,requiredCapabilities:[...(prior.input.requiredCapabilities??[])].sort(),excludedCategories:[...(prior.input.excludedCategories??[])].sort()}):prior.inputHash;if(savedHash!==hash(normalized))fail('turn_conflict',409);return {...prior.result,replayed:true};}
+  if(direct&&directOptions.blocked?.())fail('payment_reconciliation_required',409);
   const admission=exchange.get('product_request_admissions',key);
   if(admission){if(admission.inputHash!==hash(normalized))fail('turn_conflict',409);fail('opportunity_outcome_unknown',409);}
   exchange.tx(()=>exchange.put('product_request_admissions',key,{id:key,inputHash:hash(normalized),sessionId:body.sessionId,turnId:body.turnId,status:'pending',admittedAt:now()}));
@@ -212,7 +218,7 @@ export function createProductService({stateDir='local-state/product',runId='prod
   const award=exchange.require('awards',awardId);
   if(body.creativeHash!==award.creativeHash||body.domInserted!==true||body.sponsoredLabelPresent!==true)fail('render_ack_invalid');
   const receipt={schemaVersion:'publisher-receipt.v1',runId,mode:financialMode,publisherId,publisherKeyId,awardId,opportunityId:award.opportunityId,creativeHash:award.creativeHash,nonce:`render-${awardId}`,renderAcknowledgementHash:hash({awardId,creativeHash:award.creativeHash,domInserted:true,sponsoredLabelPresent:true})},signature=signReceipt(receipt,receiptKey);
-  const result=exchange.acceptDelivery({receipt,signature});if(!payments)exchange.authorizeSynthetic(award.channelId);
+  const result=exchange.acceptDelivery({receipt,signature});if(!payments&&!direct)exchange.authorizeSynthetic(award.channelId);
   return {status:'accepted',financialMode,receipt,signature,receiptHash:hash(receipt),charge:exchange.require('charges',result.charge.id),replayed:result.replayed};
  }
  async function renderNative(awardId,body,token){const result=acceptRender(awardId,body,token),channelId=result.charge.channelId,authorization=await payments.authorize(channelId);return {...result,charge:exchange.require('charges',result.charge.id),authorization,payment:payments.evidence(channelId)};}
@@ -243,6 +249,7 @@ export function createProductService({stateDir='local-state/product',runId='prod
   if(body.sessionId!==undefined)id(body.sessionId);if(body.turnId!==undefined)id(body.turnId);
   const k=hash([body.sessionId??'demo',body.turnId??randomUUID()]),before=exchange.get('product_answers',k);
   if(before){if(before.questionHash!==hash(question))fail('turn_conflict',409);if(before.result)return {...before.result,replayed:true};fail('organic_call_uncertain',409);}
+  if(direct&&directOptions.blocked?.())fail('payment_reconciliation_required',409);
   const row={id:k,questionHash:hash(question),day:stamp().slice(0,10),status:'pending',startedAt:now()};
   if(exchange.all('product_answers').filter(r=>r.day===row.day).length>=organicDailyCap)fail('organic_daily_cap',429);
   exchange.tx(()=>exchange.put('product_answers',k,row));
@@ -260,8 +267,8 @@ export function createProductService({stateDir='local-state/product',runId='prod
   const deliveries=report.charges.map(c=>({...c,createdAt:new Date(c.acceptedAt).toISOString(),brandName:requireCampaign(c.campaignId).brandName,campaignName:requireCampaign(c.campaignId).name,receipt:exchange.get('receipt_records',c.id)}));
   const events=report.events.map(e=>{const award=report.awards.find(a=>a.id===e.data.awardId),charge=report.charges.find(c=>c.id===e.data.chargeId),channel=report.channels.find(c=>c.channelId===e.data.channelId);return {...e,createdAt:new Date(e.at).toISOString(),campaignId:e.data.campaignId??report.campaigns.find(c=>c.campaignVersionId===e.data.decision?.campaignVersionId)?.campaignId??award?.campaignId??charge?.campaignId??report.campaigns.find(c=>c.channelId===channel?.channelId)?.campaignId??null};});
   const summarize=rows=>({campaignCount:rows.length,activeCount:rows.filter(c=>c.status==='active').length,deliveryCount:rows.reduce((n,c)=>n+c.deliveryCount,0),...Object.fromEntries(['spendBaseUnits','reservedBaseUnits','authorizedBaseUnits','settledBaseUnits','remainingBaseUnits','refundBaseUnits'].map(key=>[key,rows.reduce((n,c)=>n+baseUnits(c[key]),0n).toString()]))});
-  return {schemaVersion:'axp.product-state.v1',financialMode,mode:financialMode,payments:paymentStatus(),engine:buyers.status(),account:account(),advertisers:exchange.all('product_advertisers'),campaigns,drafts:campaigns.filter(c=>c.status==='draft'),summary:{...summarize(financialMode==='devnet'?campaigns.filter(c=>c.settlementNetwork==='solana-devnet'):campaigns),bySettlementNetwork:Object.fromEntries(['solana-devnet','tempo-testnet'].map(network=>[network,summarize(campaigns.filter(c=>c.settlementNetwork===network))]))},deliveries,events,publisher:{publisherId,publicKeyPEM:exchange.require('publishers',publisherId).publicKeyPEM},limitations:['One local demo workspace; no multi-tenant account authentication.',payments?'Testnet payment channels funded by a bounded server-held demo sponsor; no mainnet or independent advertiser wallet custody.':'Synthetic test credits; no real funding or blockchain settlement.','Live Jev judges supplied declarations; historical support may be unavailable for a category.','Signed receipts assert app insertion and Sponsored disclosure, not human attention.']};
+  return {schemaVersion:'axp.product-state.v1',financialMode,mode:financialMode,payments:paymentStatus(),engine:buyers.status(),account:account(),advertisers:exchange.all('product_advertisers'),campaigns,drafts:campaigns.filter(c=>c.status==='draft'),summary:{...summarize(financialMode==='devnet'?campaigns.filter(c=>c.settlementNetwork==='solana-devnet'):campaigns),bySettlementNetwork:Object.fromEntries(['solana-devnet','tempo-testnet','hsk-testnet'].map(network=>[network,summarize(campaigns.filter(c=>c.settlementNetwork===network))]))},deliveries,events,publisher:{publisherId,publicKeyPEM:exchange.require('publishers',publisherId).publicKeyPEM},limitations:['One local demo workspace; no multi-tenant account authentication.',direct?'Direct HSP QA payments; no deposit, voucher or refund. Registry anchors are separate mainnet evidence.':payments?'Testnet payment channels funded by a bounded server-held demo sponsor; no mainnet or independent advertiser wallet custody.':'Synthetic test credits; no real funding or blockchain settlement.','Live Jev judges supplied declarations; historical support may be unavailable for a category.','Signed receipts assert app insertion and Sponsored disclosure, not human attention.']};
  }
- const paymentStatus=()=>payments?.status()??{mode:'synthetic',ready:true,signingEnabled:false};
- return {exchange,financialMode,limits,payments:paymentStatus,paymentWorker:payments,saveAccount,saveCampaign,approve,launch,campaignAction,preview,opportunity,render,failAward,lookupOpportunity,lookupDelivery,credentials,answer,state,engine:buyers.status,organic:organicStatus,demo:()=>({enabled:demoMode,seededAdvertiserCount:exchange.all('product_advertisers').filter(a=>['ClearVault','KeyArc','ColdNest'].includes(a.brandName)).length,advertiserSuggestion:DEMO_ADVERTISER}),authenticate:credentials.authenticate,publisherConfig:()=>({schemaVersion:'publisher-config.v2',contractVersion:'0.2.0',expiresAtUnit:'unix_epoch_milliseconds',maxQuestionCharacters:1200,restrictionLimit:17,recoverySupported:true,publisherId,settlementNetwork:'solana-devnet',mode:financialMode,financialMode,payments:paymentStatus(),placementId:'chat-sponsored-card',keyConfigured:credentials.list().some(k=>k.revokedAt===null),apiBasePath:'/api/product',engine:buyers.status(),organic:organicStatus(),answerMode:organicStatus().execution,quickstartCommand:'npm run demo:product',capabilities:CAPABILITIES,sampleQuestions:demoMode?[PRESETS[1].exampleQuestion,...PRESETS.filter(p=>p.id!=='wallet').map(p=>p.exampleQuestion)]:PRESETS.map(p=>p.exampleQuestion)}),close:()=>{payments?.dispose();exchange.close();}};
+ const paymentStatus=()=>direct?{mode:'testnet',network:'hsk-testnet',paymentModel:'direct',chainId:133,accountingCurrency:'USD',accountingDecimals:6,ready:directOptions.ready===true,signingEnabled:false}:payments?.status()??{mode:'synthetic',ready:true,signingEnabled:false};
+ return {exchange,financialMode,limits,payments:paymentStatus,paymentWorker:payments,saveAccount,saveCampaign,approve,launch,campaignAction,preview,opportunity,render,failAward,lookupOpportunity,lookupDelivery,credentials,answer,state,engine:buyers.status,organic:organicStatus,demo:()=>({enabled:demoMode,seededAdvertiserCount:exchange.all('product_advertisers').filter(a=>['ClearVault','KeyArc','ColdNest'].includes(a.brandName)).length,advertiserSuggestion:DEMO_ADVERTISER}),authenticate:credentials.authenticate,publisherConfig:()=>({schemaVersion:'publisher-config.v2',contractVersion:'0.2.0',expiresAtUnit:'unix_epoch_milliseconds',maxQuestionCharacters:1200,restrictionLimit:17,recoverySupported:true,publisherId,settlementNetwork:direct?'hsk-testnet':'solana-devnet',mode:financialMode,financialMode,payments:paymentStatus(),placementId:'chat-sponsored-card',keyConfigured:credentials.list().some(k=>k.revokedAt===null),apiBasePath:'/api/product',engine:buyers.status(),organic:organicStatus(),answerMode:organicStatus().execution,quickstartCommand:'npm run demo:product',capabilities:CAPABILITIES,sampleQuestions:demoMode?[PRESETS[1].exampleQuestion,...PRESETS.filter(p=>p.id!=='wallet').map(p=>p.exampleQuestion)]:PRESETS.map(p=>p.exampleQuestion)}),close:()=>{payments?.dispose();exchange.close();}};
 }

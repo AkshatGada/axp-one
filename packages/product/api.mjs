@@ -2,7 +2,7 @@ import {randomBytes} from 'node:crypto';
 import {ContractError} from '../contracts/index.mjs';
 import {CAPABILITIES,PRESETS,LIMITS,secretMatches} from './service.mjs';
 
-export function createProductAPI({service,csrf:providedCSRF,publisherOnly=false}) {
+export function createProductAPI({service,csrf:providedCSRF,publisherOnly=false,operator=null}) {
   const csrf=providedCSRF??randomBytes(32).toString('hex');
   const send=(res,status,value)=>{res.writeHead(status,{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'});res.end(JSON.stringify(value));};
   async function read(req) {
@@ -23,6 +23,18 @@ export function createProductAPI({service,csrf:providedCSRF,publisherOnly=false}
       const url=new URL(req.url,'http://local'),path=url.pathname.replace(/^\/api\/product/,'').replace(/\/$/,'')||'/';
       if(publisherOnly&&!((req.method==='GET'&&['/publisher/config','/publisher/opportunities'].includes(path))||(req.method==='GET'&&/^\/awards\/[-\w]+\/status$/.test(path))||(req.method==='POST'&&(path==='/opportunities'||/^\/awards\/[-\w]+\/(render|fail)$/.test(path)))))throw new ContractError('not_found',undefined,404);
       let value;
+      const payment=path.match(/^\/payments\/(charge-[-\w]+)(?:\/(prepare|reprepare|finalize|submit|reconcile|anchor\/prepare|anchor\/reconcile))?$/);
+      if(payment){
+        if(!service.hsp||!operator?.(req))throw new ContractError('operator_required',undefined,401);
+        const [,id,action]=payment;
+        if(req.method==='GET'&&!action&&!url.search)return send(res,200,service.hsp.lookup(id));
+        if(req.method!=='POST'||!action||url.search)throw new ContractError('method_not_allowed',undefined,405);
+        if(req.headers.origin!==`http://${req.headers.host}`&&req.headers.origin!==`https://${req.headers.host}`)throw new ContractError('origin_invalid',undefined,403);
+        browser(req);const input=await read(req);
+        if(['prepare','reconcile','anchor/prepare'].includes(action)&&(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).length))throw new ContractError('empty_body_required');
+        const method={'anchor/prepare':'anchorPrepare','anchor/reconcile':'anchorReconcile'}[action]??action;
+        return send(res,200,await service.hsp[method](id,input));
+      }
       if(req.method==='GET') {
         if(path==='/bootstrap')value={csrf,mode:service.financialMode,financialMode:service.financialMode,payments:service.payments(),engine:service.engine(),demo:service.demo(),capabilities:CAPABILITIES,presets:PRESETS,limits:service.limits};
         else if(path==='/state')value=service.state();

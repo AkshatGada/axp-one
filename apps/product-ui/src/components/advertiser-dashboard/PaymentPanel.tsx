@@ -7,6 +7,7 @@ export function PaymentPanel({ campaign, native, busy, onSettle, onPayout, onClo
   const payment = campaign.payment, phase = paymentPhase(campaign), network = networkOf(campaign), tempo = network === 'tempo-testnet', unit = currencyUnit(native, network);
   const reason = campaign.paymentError ?? payment?.error ?? payment?.reason;
   const {closed, pending, uncertain, authorize, settle, payout, close, reconcile} = paymentActions(campaign);
+  if(campaign.paymentModel==='direct')return <Ld.Panel title="Direct HSP QA payments"><p>Accepted: {decimal(campaign.acceptedBaseUnits)} USD · unpaid: {decimal(campaign.unpaidBaseUnits)} USD. Pay each accepted delivery in the example chat’s Payment view. No collateral is held.</p></Ld.Panel>;
   return <Ld.Panel title={native ? 'Payment channel' : 'Close campaign'} sub={native ? `${networkLabel(network)} · ${unit}` : 'Test credits · no real money'}>
     {native ? <>
       <div className="ad-payment-status" role="status"><Ld.Tag tone={uncertain ? 'warning' : closed ? 'success' : 'outline'}>{phaseLabel(phase)}</Ld.Tag></div>

@@ -6,13 +6,13 @@ export function nativePayments(bootstrap?: Partial<Bootstrap> | null, state?: Pa
   const mode = state?.financialMode ?? bootstrap?.financialMode ?? state?.payments?.mode ?? bootstrap?.payments?.mode;
   return mode === 'devnet' || mode === 'solana-devnet' || mode === 'native-devnet';
 }
-export function networkOf(campaign?: Pick<Campaign, 'settlementNetwork' | 'payment'>): SettlementNetwork { return campaign?.payment?.network === 'tempo-testnet' || campaign?.settlementNetwork === 'tempo-testnet' ? 'tempo-testnet' : 'solana-devnet'; }
-export function networkLabel(network: SettlementNetwork): string { return network === 'tempo-testnet' ? 'Tempo Testnet' : 'Solana Devnet'; }
-export function currencyUnit(native: boolean, network: SettlementNetwork = 'solana-devnet'): string { return native ? network === 'tempo-testnet' ? 'test PathUSD' : 'Test USDC' : 'test credits'; }
+export function networkOf(campaign?: Pick<Campaign, 'settlementNetwork' | 'payment'>): SettlementNetwork { return campaign?.settlementNetwork==='hsk-testnet'?'hsk-testnet':campaign?.payment?.network === 'tempo-testnet' || campaign?.settlementNetwork === 'tempo-testnet' ? 'tempo-testnet' : 'solana-devnet'; }
+export function networkLabel(network: SettlementNetwork): string { return network==='hsk-testnet'?'HSK Testnet · HSP QA':network === 'tempo-testnet' ? 'Tempo Testnet' : 'Solana Devnet'; }
+export function currencyUnit(native: boolean, network: SettlementNetwork = 'solana-devnet'): string { return network==='hsk-testnet'?'USD (QA obligation)':native ? network === 'tempo-testnet' ? 'test PathUSD' : 'Test USDC' : 'test credits'; }
 export function paymentReadiness(bootstrap: Bootstrap, network: SettlementNetwork): PaymentMetadata | undefined { return bootstrap.payments?.networks?.[network] ?? (network === 'solana-devnet' ? bootstrap.payments : undefined); }
 /** Totals stay partitioned by settlement asset, including legacy Solana campaigns. */
 export function networkTotals(campaigns: Campaign[]) {
-  return (['solana-devnet', 'tempo-testnet'] as const).map(network => {
+  return (['solana-devnet', 'tempo-testnet', 'hsk-testnet'] as const).map(network => {
     const rows = campaigns.filter(c => networkOf(c) === network);
     const sum = (key: 'spendBaseUnits' | 'settledBaseUnits') => rows.reduce((total, c) => total + BigInt(c[key] ?? (key === 'spendBaseUnits' ? c.acceptedBaseUnits : undefined) ?? '0'), 0n).toString();
     return {network, campaigns: rows.length, spendBaseUnits: sum('spendBaseUnits'), settledBaseUnits: sum('settledBaseUnits')};
@@ -20,7 +20,7 @@ export function networkTotals(campaigns: Campaign[]) {
 }
 export function financialModeLabel(bootstrap?: Partial<Bootstrap> | null, state?: Partial<ProductState> | null): string {
   if (!bootstrap) return 'Connecting payments…';
-  return nativePayments(bootstrap, state) ? bootstrap.payments?.networks?.['tempo-testnet'] ? 'Native testnet payments' : 'Solana Devnet · Test USDC' : 'Synthetic test credits';
+  return bootstrap.financialMode==='testnet'?'HSP direct QA payments':nativePayments(bootstrap, state) ? bootstrap.payments?.networks?.['tempo-testnet'] ? 'Native testnet payments' : 'Solana Devnet · Test USDC' : 'Synthetic test credits';
 }
 export function nativeSettlementLabel(campaign: Campaign, field: 'settledBaseUnits' | 'refundBaseUnits'): string {
   const payment = campaign.payment, network = networkOf(campaign);

@@ -41,11 +41,13 @@ export function useAccountPresence(): Presence {
 }
 
 export function DemoContext() {
+  if(process.env.NEXT_PUBLIC_AXP_HSP_DEMO==='1')return <Ld.Context kind="demo" label="Isolated HSP demo" detail="Local operator · QA payments" />;
   return <Ld.Context kind="demo" label="Shared demo" detail="Public example data" />;
 }
 
 /** The sentence that stops demo campaigns being mistaken for the visitor's own, with the way out. */
 export function DemoNotice({ presence, subject = 'campaigns' }: { presence: Presence; subject?: string }) {
+  if(process.env.NEXT_PUBLIC_AXP_HSP_DEMO==='1')return <Ld.Notice tone="demo" title="Isolated hackathon workspace">These fictional campaigns are separate from production accounts and payment channels.</Ld.Notice>;
   const signedIn = presence.state === 'signed-in';
   return <Ld.Notice tone="demo" title={`You are viewing the shared demo. These ${subject} are public examples, not yours.`}
     actions={signedIn
