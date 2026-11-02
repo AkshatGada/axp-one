@@ -1,6 +1,8 @@
 // axp.one: the product landing page (V5). The 3D wall cover, one question followed through, what
 // each side gets, agentic payments, and the doors. One flow, no controls. Copy: src/v11/copy.ts.
 // The removed company-logo strip listed clients of ContextHint (contexthint.com).
+// ContextHint is our ChatGPT advertising-intelligence platform, a product we own
+// that serves as a distribution channel for AXP.
 import "@/v11/v11.css";
 import MotionRoot from "@/motion/MotionRoot";
 import Masthead from "@/v11/shell/Masthead";
