@@ -1,5 +1,6 @@
 // axp.one: the product landing page (V5). The 3D wall cover, one question followed through, what
 // each side gets, agentic payments, and the doors. One flow, no controls. Copy: src/v11/copy.ts.
+// The removed company-logo strip listed ContextHint's clients.
 import "@/v11/v11.css";
 import MotionRoot from "@/motion/MotionRoot";
 import Masthead from "@/v11/shell/Masthead";
