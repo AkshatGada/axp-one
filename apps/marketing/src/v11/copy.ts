@@ -28,37 +28,6 @@ export const COVER = {
   note: "Illustrative prompts.",
 };
 
-/** The companies that use the platform (the owner's list). Each logo is the company's own file
- *  from its official site, shown without its colours. `h` is the drawn height in px (optical);
- *  `tone: "grey"` keeps a mark's inner shading, the default draws it as one flat tone;
- *  `word` sets the name beside a mark that has no wordmark of its own. */
-export const USERS: { label: string; logos: { name: string; src: string; h: number; tone?: "grey"; word?: boolean }[] } = {
-  label: "Used by teams at",
-  logos: [
-    { name: "Deloitte", src: "/customers/deloitte.svg", h: 24 },
-    { name: "Financial Times", src: "/customers/ft.svg", h: 17 },
-    { name: "Publicis Groupe", src: "/customers/publicis.svg", h: 34, tone: "grey", word: true },
-    { name: "Dentsu", src: "/customers/dentsu.png", h: 26 },
-    { name: "WPP Media", src: "/customers/wppmedia.svg", h: 24 },
-    { name: "AXA", src: "/customers/axa.svg", h: 34, tone: "grey" },
-    { name: "Razorpay", src: "/customers/razorpay.svg", h: 26 },
-    { name: "InMobi", src: "/customers/inmobi.svg", h: 19 },
-    { name: "foodpanda", src: "/customers/foodpanda.svg", h: 28, tone: "grey" },
-    { name: "Trustpilot", src: "/customers/trustpilot.svg", h: 28 },
-    { name: "BrowserStack", src: "/customers/browserstack.svg", h: 26, tone: "grey" },
-    { name: "Back Market", src: "/customers/backmarket.svg", h: 20 },
-    { name: "Zscaler", src: "/customers/zscaler.svg", h: 26 },
-    { name: "MYOB", src: "/customers/myob.svg", h: 26 },
-    { name: "upGrad", src: "/customers/upgrad.svg", h: 26 },
-    { name: "FTI Consulting", src: "/customers/fti.svg", h: 30 },
-    { name: "Tinuiti", src: "/customers/tinuiti.svg", h: 32 },
-    { name: "Branch", src: "/customers/branch.svg", h: 22 },
-    { name: "Bybit", src: "/customers/bybit.svg", h: 24 },
-    { name: "Infinity", src: "/customers/infinity.png", h: 26 },
-    { name: "Merlin AI", src: "/customers/merlin.svg", h: 22 },
-  ],
-};
-
 /** 01 The shift. */
 export const SHIFT_COPY = {
   no: "01",
