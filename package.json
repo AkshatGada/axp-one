@@ -28,6 +28,7 @@
     "test:hsp": "node --test tests/hsp/*.test.mjs",
     "hsp:discover": "node scripts/hsp/discover.mjs",
     "hsp:compile": "node scripts/hsp/compile.mjs",
-    "hsp:replay": "node scripts/hsp/export-replay.mjs"
+    "hsp:replay": "node scripts/hsp/export-replay.mjs",
+    "hsp:presentation": "node scripts/hsp/export-presentation.mjs"
   }
 }

@@ -191,3 +191,39 @@ contains static pages/fonts only, with no JavaScript, forms, APIs or wallet acce
 Upload only that directory to separate static hosting; never deploy the live local
 service or the repository's ordinary Vercel function build. Existing production
 hosting and deployment branch must remain untouched.
+
+
+## Interactive concept presentation
+
+The desktop walkthrough source is `apps/hsk-presentation/`. Export it separately
+from the evidence-only replay:
+
+```sh
+npm run hsp:presentation
+python3 -m http.server 8768 --bind 127.0.0.1 --directory local-state/hsk-hsp/presentation
+```
+
+Use a fresh empty output directory for each export. The optional first argument
+must stay below `local-state/hsk-hsp`. The exporter copies only the reviewed HTML,
+CSS/JavaScript scenes and three existing design-system fonts. It does not copy
+hosting identity, environment files, databases, API handlers or credentials.
+
+Campaign review, independent answer, buyer evaluation, bidding, insertion,
+acknowledgement, payment authorization and evidence anchoring are browser-local
+examples. The visible concept/example-data label remains present; no new model,
+wallet, HSP or chain execution occurs. The amounts, buyer decisions, question and
+answer are fixed examples. Repeated insertion acknowledgement in the concept UI
+retains one $0.60 obligation; this demonstrates the behavior without constituting
+another execution of the product's ledger.
+
+Generic HSK Chain labels in this presentation do not change the implementation's
+QA source chain 133 or mainnet registry chain 177. Actual HSP payments and deployed
+mainnet proof remain outstanding. Use the evidence exporter/verifier above for
+actual network claims. The presentation contains no invented transaction hashes,
+wallet signatures or Explorer proof.
+
+The private Sites publication is separate from axp.one and both financial stores.
+Use Next/Previous, arrow keys, Notes and Present. Play advances steps, while scene
+buttons run the local interaction. Motion can be paused; reduced-motion settings
+are honored. Scene work was refined by three GPT-6 Astra agents at high reasoning
+effort and integrated/verified by OpenAI Codex.
