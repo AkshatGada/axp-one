@@ -20,6 +20,10 @@ export function devnetTransactionURL(signature) {
 export function nativeTransactionURL(transaction, network = transaction?.network ?? 'solana-devnet') {
   if (transaction?.network && transaction.network !== network) return undefined;
   if (network === 'solana-devnet') return devnetTransactionURL(transaction?.signature);
+  if (network === 'arc-testnet') {
+    const hash = transaction?.transactionHash;
+    return transaction?.chainId === 5042002 && typeof hash === 'string' && /^0x[0-9a-fA-F]{64}$/.test(hash) ? `https://testnet.arcscan.app/tx/${hash}` : undefined;
+  }
   if (network !== 'tempo-testnet' || (transaction?.chainId !== undefined && transaction.chainId !== 42431)) return undefined;
   const hash = transaction?.transactionHash;
   return typeof hash === 'string' && /^0x[0-9a-fA-F]{64}$/.test(hash) ? `https://explore.testnet.tempo.xyz/tx/${hash}` : undefined;

@@ -3,8 +3,8 @@ import {isFinalizedNativeTransaction} from '../../../../../packages/publisher-sd
 // Presentation/action guards only. The existing backend remains the signer and ledger authority.
 export function paymentState(campaign, {campaignId, channelId, settlementNetwork = 'solana-devnet', uncertain = false} = {}) {
   const payment = campaign?.payment;
-  const bound = Boolean(campaignId && channelId && campaign?.id === campaignId && payment?.channelId === channelId && payment?.mode === 'devnet' && ['solana-devnet', 'tempo-testnet'].includes(payment?.network) && payment.network === settlementNetwork);
-  const finalized = bound && payment.closeStatus === 'finalized' && payment.transactions?.some(tx => tx.operation === 'close' && isFinalizedNativeTransaction(tx, payment.network)) === true;
+  const bound = Boolean(campaignId && channelId && campaign?.id === campaignId && payment?.channelId === channelId && payment?.mode === 'devnet' && ['solana-devnet', 'tempo-testnet', 'arc-testnet'].includes(payment?.network) && payment.network === settlementNetwork);
+  const finalized = bound && payment.closeStatus === 'finalized' && (payment.network === 'arc-testnet' ? payment.payments?.every(p => p.status === 'finalized' && p.batchProof && isFinalizedNativeTransaction(p.batchProof, 'arc-testnet')) === true : payment.transactions?.some(tx => tx.operation === 'close' && isFinalizedNativeTransaction(tx, payment.network)) === true);
   const closed = finalized || campaign?.status === 'settled' || payment?.phase === 'finalized' || payment?.closeStatus === 'finalized';
   const pending = ['pending_open', 'opening', 'authorizing', 'paying_out', 'closing'].includes(payment?.phase) || Boolean(payment?.closeStatus && !['finalized', 'failed'].includes(payment.closeStatus));
   const needsReconcile = uncertain || payment?.reconciliationRequired === true;
@@ -18,8 +18,8 @@ export function paymentState(campaign, {campaignId, channelId, settlementNetwork
   return {
     bound, finalized, closed, pending, needsReconcile,
     settle: safe && payment.canSettle === true,
-    payout: safe && payment.network === 'tempo-testnet' && payment.phase === 'open' && !payment.closeStatus && payment.canPayout === true && /^\d+$/.test(settled) && BigInt(authorized) > BigInt(settled),
-    close: safe && payment.network === 'tempo-testnet' && payment.canClose === true,
+    payout: safe && ['tempo-testnet', 'arc-testnet'].includes(payment.network) && payment.phase === 'open' && !payment.closeStatus && payment.canPayout === true && /^\d+$/.test(settled) && BigInt(authorized) > BigInt(settled),
+    close: safe && ['tempo-testnet', 'arc-testnet'].includes(payment.network) && payment.canClose === true,
     authorize: bound && !closed && !pending && !needsReconcile && ['open', 'draining'].includes(payment.phase) && gap,
     // A lost HTTP acknowledgement may leave a known operation on the server. Lookup reuses it.
     reconcile: bound && !finalized && (payment.canReconcile === true || uncertain),

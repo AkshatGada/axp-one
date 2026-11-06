@@ -146,7 +146,7 @@ export function createArcTransport({walletPath, rpcURL = N.rpc, limits = ARC_LIM
       check(receipt.status === 'success' && same(receipt.to, N.gatewayWallet), 'arc_batch_receipt_invalid');
       const block = await publicClient.getBlock({blockNumber: receipt.blockNumber});
       check(block.hash === receipt.blockHash, 'arc_batch_block_mismatch');
-      batchProof = {transactionHash: t.txHash, blockNumber: String(receipt.blockNumber), blockHash: receipt.blockHash,
+      batchProof = {operation: 'batch', transactionHash: t.txHash, blockNumber: String(receipt.blockNumber), blockHash: receipt.blockHash,
         status: 'finalized', finality: 'finalized', network: N.network, chainId: N.chainId,
         attribution: 'Gateway transfer API links this nonce to the RPC-verified batch transaction'};
     }

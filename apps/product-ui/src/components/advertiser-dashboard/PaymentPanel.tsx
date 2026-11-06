@@ -1,3 +1,4 @@
+import {ArcPayments} from '../shared/ArcPayments';
 import {nativeTransactionURL} from '../../../../../packages/publisher-sdk/financial.mjs';
 import { Ld } from '@axp/design-system/ledger';
 import { date, decimal, type Campaign } from './model';
@@ -7,6 +8,7 @@ export function PaymentPanel({ campaign, native, busy, onSettle, onPayout, onClo
   const payment = campaign.payment, phase = paymentPhase(campaign), network = networkOf(campaign), tempo = network === 'tempo-testnet', unit = currencyUnit(native, network);
   const reason = campaign.paymentError ?? payment?.error ?? payment?.reason;
   const {closed, pending, uncertain, authorize, settle, payout, close, reconcile} = paymentActions(campaign);
+  if (native && network === 'arc-testnet' && payment) return <Ld.Panel title="Arc Nanopayments" sub="Circle Gateway · test USDC"><ArcPayments payment={payment} busy={busy} onSubmit={onPayout} onClose={onClose} onReconcile={onReconcile} onAuthorize={onAuthorize} />{reason && <p role="status">{reason.replaceAll('_',' ')}</p>}</Ld.Panel>;
   return <Ld.Panel title={native ? 'Payment channel' : 'Close campaign'} sub={native ? `${networkLabel(network)} · ${unit}` : 'Test credits · no real money'}>
     {native ? <>
       <div className="ad-payment-status" role="status"><Ld.Tag tone={uncertain ? 'warning' : closed ? 'success' : 'outline'}>{phaseLabel(phase)}</Ld.Tag></div>

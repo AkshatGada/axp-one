@@ -12,6 +12,7 @@ function eventLabel(type?: string) { if (!type) return 'Campaign updated'; const
 export function CampaignDetail({ campaign: current, state, bootstrap, native, busy, onBack, onAction }: {
   campaign: Campaign; state: ProductState; bootstrap: Bootstrap; native: boolean; busy: boolean; onBack: () => void; onAction: (verb: CampaignAction) => void;
 }) {
+  const arc = networkOf(current) === 'arc-testnet';
   const unit = currencyUnit(native, networkOf(current));
   const deliveries = state.deliveries.filter(d => d.campaignId === current.id);
   const events = state.events.filter(e => e.campaignId === current.id);
@@ -31,7 +32,7 @@ export function CampaignDetail({ campaign: current, state, bootstrap, native, bu
       { label: 'Accepted deliveries', value: count(current, state.deliveries), note: 'Sponsored cards shown' },
       { label: 'Spend', value: decimal(amount(current, 'spend')), unit, note: `Limit ${decimal(current.budgetCapBaseUnits)} ${unit}` },
       { label: 'Left to spend', value: decimal(amount(current, 'remaining')), unit, note: 'Limit less spend and held amounts' },
-      native ? { label: 'Paid out', value: <span className="ad-stat-text">{settled}</span>, note: 'Confirmed publisher payout' } : { label: 'Settled', value: decimal(current.settledBaseUnits), unit, note: 'Test credits, no real money' },
+      native ? { label: arc ? 'Batch settled' : 'Paid out', value: <span className="ad-stat-text">{settled}</span>, note: arc ? 'Publisher Gateway balance' : 'Confirmed publisher payout' } : { label: 'Settled', value: decimal(current.settledBaseUnits), unit, note: 'Test credits, no real money' },
     ]} />
     <div className="ad-detail-grid">
       <div className="ld-stack">
@@ -57,8 +58,8 @@ export function CampaignDetail({ campaign: current, state, bootstrap, native, bu
             <div><dt>Held<small>Awaiting delivery, not a charge yet</small></dt><dd>{decimal(current.reservedBaseUnits)} {unit}</dd></div>
             <div><dt>Accepted<small>Counted in spend</small></dt><dd>{decimal(current.acceptedBaseUnits)} {unit}</dd></div>
             <div><dt>Authorized<small>Running total, adds no spend</small></dt><dd>{decimal(current.authorizedBaseUnits)} {unit}</dd></div>
-            <div><dt>{native ? 'Paid out' : 'Settled'}<small>{native ? 'Confirmed publisher payout' : 'Recorded when the campaign closes'}</small></dt><dd>{settled}</dd></div>
-            <div><dt>Returned<small>{native ? 'Confirmed unused deposit' : 'Unused amount at close'}</small></dt><dd>{refund}</dd></div>
+            <div><dt>{arc ? 'Batch finalized' : native ? 'Paid out' : 'Settled'}<small>{native ? 'Confirmed publisher payout' : 'Recorded when the campaign closes'}</small></dt><dd>{settled}</dd></div>
+            <div><dt>{arc ? 'Unused allocation' : 'Returned'}<small>{arc ? 'Stays in the payer Gateway balance' : native ? 'Confirmed unused deposit' : 'Unused amount at close'}</small></dt><dd>{refund}</dd></div>
           </dl>
           <Ld.Disclosure summary="Targeting and limits">
             <dl className="ad-review">

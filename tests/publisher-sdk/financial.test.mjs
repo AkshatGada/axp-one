@@ -50,3 +50,12 @@ test('receipt authorization deadline is independent of the short auction deadlin
   assert.equal((await client.acknowledgeRender({awardId: 'award-1', deliveryToken: 'token', observation: {creativeHash: 'a'.repeat(64), domInserted: true, sponsoredLabelPresent: true}})).status, 'accepted');
   for (const receiptTimeoutMs of [0, -1, 120001, NaN]) assert.throws(() => new AXPPublisher({apiKey: 'server-key', receiptTimeoutMs}), /invalid_receipt_timeout/);
 });
+
+test('Arc Explorer proof requires the exact testnet chain and a transaction hash, not a Gateway ID', () => {
+  const proof = {operation:'batch',status:'finalized',finality:'finalized',network:'arc-testnet',chainId:5042002,transactionHash:'0x'+'a'.repeat(64)};
+  assert.equal(isFinalizedNativeTransaction(proof,'arc-testnet'),true);
+  assert.equal(isFinalizedNativeTransaction({...proof,chainId:5042},'arc-testnet'),false);
+  assert.equal(isFinalizedNativeTransaction({...proof,chainId:undefined},'arc-testnet'),false);
+  assert.equal(isFinalizedNativeTransaction({...proof,transactionHash:'932980c6-ccf7-45e3-99c4-9c8d1f55f4e3'},'arc-testnet'),false);
+  assert.equal(moneyUnit('devnet','arc-testnet'),'test USDC');
+});

@@ -6,13 +6,13 @@ export function nativePayments(bootstrap?: Partial<Bootstrap> | null, state?: Pa
   const mode = state?.financialMode ?? bootstrap?.financialMode ?? state?.payments?.mode ?? bootstrap?.payments?.mode;
   return mode === 'devnet' || mode === 'solana-devnet' || mode === 'native-devnet';
 }
-export function networkOf(campaign?: Pick<Campaign, 'settlementNetwork' | 'payment'>): SettlementNetwork { return campaign?.payment?.network === 'tempo-testnet' || campaign?.settlementNetwork === 'tempo-testnet' ? 'tempo-testnet' : 'solana-devnet'; }
-export function networkLabel(network: SettlementNetwork): string { return network === 'tempo-testnet' ? 'Tempo Testnet' : 'Solana Devnet'; }
+export function networkOf(campaign?: Pick<Campaign, 'settlementNetwork' | 'payment'>): SettlementNetwork { return campaign?.payment?.network === 'arc-testnet' || campaign?.settlementNetwork === 'arc-testnet' ? 'arc-testnet' : campaign?.payment?.network === 'tempo-testnet' || campaign?.settlementNetwork === 'tempo-testnet' ? 'tempo-testnet' : 'solana-devnet'; }
+export function networkLabel(network: SettlementNetwork): string { return network === 'arc-testnet' ? 'Arc Testnet · Nanopayments' : network === 'tempo-testnet' ? 'Tempo Testnet' : 'Solana Devnet'; }
 export function currencyUnit(native: boolean, network: SettlementNetwork = 'solana-devnet'): string { return native ? network === 'tempo-testnet' ? 'test PathUSD' : 'Test USDC' : 'test credits'; }
 export function paymentReadiness(bootstrap: Bootstrap, network: SettlementNetwork): PaymentMetadata | undefined { return bootstrap.payments?.networks?.[network] ?? (network === 'solana-devnet' ? bootstrap.payments : undefined); }
 /** Totals stay partitioned by settlement asset, including legacy Solana campaigns. */
 export function networkTotals(campaigns: Campaign[]) {
-  return (['solana-devnet', 'tempo-testnet'] as const).map(network => {
+  return (['solana-devnet', 'tempo-testnet', 'arc-testnet'] as const).map(network => {
     const rows = campaigns.filter(c => networkOf(c) === network);
     const sum = (key: 'spendBaseUnits' | 'settledBaseUnits') => rows.reduce((total, c) => total + BigInt(c[key] ?? (key === 'spendBaseUnits' ? c.acceptedBaseUnits : undefined) ?? '0'), 0n).toString();
     return {network, campaigns: rows.length, spendBaseUnits: sum('spendBaseUnits'), settledBaseUnits: sum('settledBaseUnits')};
@@ -24,6 +24,7 @@ export function financialModeLabel(bootstrap?: Partial<Bootstrap> | null, state?
 }
 export function nativeSettlementLabel(campaign: Campaign, field: 'settledBaseUnits' | 'refundBaseUnits'): string {
   const payment = campaign.payment, network = networkOf(campaign);
+  if (network === 'arc-testnet') return field === 'refundBaseUnits' ? 'Funds remain in Gateway' : `${decimal(payment?.settledBaseUnits ?? campaign.settledBaseUnits)} test USDC · batch finalized`;
   const tempo = network === 'tempo-testnet';
   const closeFinalized = payment?.closeStatus === 'finalized' && (!tempo || payment.transactions?.some(tx => tx.operation === 'close' && isFinalizedNativeTransaction(tx, network)));
   const paidWhileOpen = tempo && field === 'settledBaseUnits' && payment?.transactions?.some(tx => tx.operation === 'payout' && isFinalizedNativeTransaction(tx, network));
@@ -36,7 +37,7 @@ export function phaseLabel(phase: string): string {
 }
 export function launchNotice(campaign: Campaign, native: boolean): string {
   if (!native) return 'Campaign launched. Open the publisher demo to create a matching conversation.';
-  if (campaign.status === 'active' && paymentPhase(campaign) === 'open') return `Channel funded on ${networkLabel(networkOf(campaign))}. Your campaign is ready to compete.`;
+  if (campaign.status === 'active' && paymentPhase(campaign) === 'open') return `${networkOf(campaign) === 'arc-testnet' ? 'Gateway balance funded' : 'Channel funded'} on ${networkLabel(networkOf(campaign))}. Your campaign is ready to compete.`;
   return `Campaign saved. ${phaseLabel(paymentPhase(campaign))}. Check payment status before testing a conversation.`;
 }
 export type PaymentOperationResult = {status?: string; reason?: string | null; reasonCode?: string | null};
@@ -48,6 +49,7 @@ export function paymentOperationProblem(operation?: PaymentOperationResult): str
 }
 /** Construct a pinned Devnet explorer URL rather than trusting arbitrary response URLs. */
 export function transactionURL(signature?: string, network: SettlementNetwork = 'solana-devnet'): string | null {
+  if (network === 'arc-testnet') return signature && /^0x[0-9a-fA-F]{64}$/.test(signature) ? `https://testnet.arcscan.app/tx/${signature}` : null;
   if (network === 'tempo-testnet') return signature && /^0x[0-9a-fA-F]{64}$/.test(signature) ? `https://explore.testnet.tempo.xyz/tx/${signature}` : null;
   return signature && /^[1-9A-HJ-NP-Za-km-z]{64,88}$/.test(signature) ? `https://explorer.solana.com/tx/${signature}?cluster=devnet` : null;
 }
@@ -60,7 +62,7 @@ export function paymentActions(campaign: Campaign): { closed: boolean; pending: 
   const authorized = campaign.authorizedBaseUnits ?? payment?.authorizedBaseUnits ?? '0';
   const amountsValid = /^\d+$/.test(accepted) && /^\d+$/.test(authorized);
   const gap = amountsValid && BigInt(accepted) > BigInt(authorized);
-  return { closed, pending, uncertain, authorize: !closed && !pending && !uncertain && ['open', 'draining'].includes(phase) && gap, settle: !closed && !pending && !uncertain && payment?.canSettle === true, payout: networkOf(campaign) === 'tempo-testnet' && !closed && !pending && !uncertain && amountsValid && accepted === authorized && campaign.reservedBaseUnits === '0' && payment?.canPayout === true, close: networkOf(campaign) === 'tempo-testnet' && !closed && !pending && !uncertain && payment?.canClose === true, reconcile: payment?.canReconcile === true };
+  return { closed, pending, uncertain, authorize: !closed && !pending && !uncertain && ['open', 'draining'].includes(phase) && gap, settle: !closed && !pending && !uncertain && payment?.canSettle === true, payout: ['tempo-testnet', 'arc-testnet'].includes(networkOf(campaign)) && !closed && !pending && !uncertain && amountsValid && accepted === authorized && campaign.reservedBaseUnits === '0' && payment?.canPayout === true, close: ['tempo-testnet', 'arc-testnet'].includes(networkOf(campaign)) && !closed && !pending && !uncertain && payment?.canClose === true, reconcile: payment?.canReconcile === true };
 }
 
 /** Retry only the same saved opening; a signed/uncertain identity requires lookup. */

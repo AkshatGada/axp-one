@@ -3,6 +3,7 @@ import {Ld} from '@axp/design-system/ledger';
 import {nativeTransactionURL, isFinalizedNativeTransaction, moneyUnit, type NativePayment} from '../../../../../packages/publisher-sdk/financial.mjs';
 import {boundPaymentIdentity, paymentState, syntheticSettlementFinalized} from './payment-state.mjs';
 import {money, type BudgetCampaign, type PaymentAction, type Turn} from './model';
+import {ArcPayments} from '../shared/ArcPayments';
 import {NativePaymentEvidence} from './NativePaymentEvidence';
 
 export function PaymentFlow({turn, campaign, payment, mode, pending, onAction, onRefresh}: {
@@ -21,6 +22,7 @@ export function PaymentFlow({turn, campaign, payment, mode, pending, onAction, o
   const finalized = native ? controls.finalized : syntheticSettlementFinalized(campaign);
   const paid = finalized || (tempo && finalizedTransactions?.some(tx => tx.operation === 'payout'));
   const busy = pending || turn.budgetLoading || turn.paymentOperation?.pending;
+  if (native && payment?.network === 'arc-testnet') return <div className="pub-payment-story"><ArcPayments payment={payment} busy={busy} bound={controls.bound} onSubmit={onAction ? () => onAction('payout') : undefined} onClose={onAction ? () => onAction('close') : undefined} onReconcile={onAction ? () => onAction('reconcile') : undefined} onAuthorize={onAction ? () => onAction('authorize') : undefined} />{turn.paymentOperation?.error && <p role="alert">{turn.paymentOperation.error}</p>}{turn.paymentOperation?.message && <p role="status">{turn.paymentOperation.message}</p>}{onRefresh && <Ld.Button variant="ghost" onClick={onRefresh} disabled={busy}>Refresh payment records</Ld.Button>}</div>;
   return <div className="pub-payment-story" data-native={native || undefined} data-network={payment?.network}>
     <div className="pub-stage-heading"><h3>{finalized ? native ? 'Publisher paid. Unused funds returned.' : 'Synthetic settlement recorded.' : native ? `Off-chain vouchers. ${tempo ? 'Tempo' : 'Solana'} settlement.` : 'Synthetic payment ledger'}</h3><Ld.Tag tone={finalized ? 'success' : controls.needsReconcile ? 'warning' : 'outline'}>{finalized ? native ? 'Finalized' : 'Recorded' : controls.needsReconcile ? 'Reconcile status' : controls.pending ? 'Operation pending' : paid ? 'Paid · channel open' : authorized.length ? 'Authorized' : 'Payment records'}</Ld.Tag></div>
     {campaign ? <>

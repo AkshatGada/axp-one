@@ -77,3 +77,14 @@ test('synthetic payment display only reports settlement after the ledger campaig
   assert.equal(syntheticSettlementFinalized(undefined),false);
   assert.equal(syntheticSettlementFinalized({status:'settled',settledBaseUnits:'3000'}),true);
 });
+
+test('Arc acceptance never becomes finalized proof and saved allocation identity gates actions', () => {
+  const bound={...identity,settlementNetwork:'arc-testnet'};
+  const c={...campaign,settlementNetwork:'arc-testnet',payment:{...campaign.payment,network:'arc-testnet',canPayout:true,canClose:true,canReconcile:true,payments:[{status:'accepted',amountBaseUnits:'3000'}]}};
+  assert.equal(paymentState(c,bound).bound,true);
+  assert.equal(paymentState(c,bound).finalized,false);
+  assert.equal(paymentState(c,identity).bound,false);
+  const closed={...c,status:'settled',payment:{...c.payment,closeStatus:'finalized',payments:[{status:'finalized',batchProof:{operation:'batch',status:'finalized',finality:'finalized',network:'arc-testnet',chainId:5042002,transactionHash:'0x'+'c'.repeat(64)}}]}};
+  assert.equal(paymentState(closed,bound).finalized,true);
+  assert.equal(paymentState({...closed,payment:{...closed.payment,payments:[{status:'accepted'}]}},bound).finalized,false);
+});
