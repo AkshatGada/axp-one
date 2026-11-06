@@ -41,3 +41,33 @@ test('official Circle SDK creates a verifiable Arc EIP-3009 authorization withou
   assert.equal(typedData.domain.verifyingContract.toLowerCase(), N.gatewayWallet.toLowerCase());
   assert.equal(await viem.verifyTypedData({...typedData, address: account.address, signature: partial.payload.signature}), true);
 });
+
+test('signed zero-value approval preserves exact chain, amount, recipient, nonce and fee identity', {skip: !existsSync(new URL('../../tooling/arc-sdk/node_modules/@circle-fin/x402-batching/package.json', import.meta.url))}, async () => {
+  const {validateArcNativeTransaction} = await import('../../packages/arc/transport.mjs');
+  const {viem: v, accounts} = loadArcSDK(), account = accounts.privateKeyToAccount(accounts.generatePrivateKey());
+  const request = {chainId: N.chainId, type: 'eip1559', to: N.token, value: 0n, nonce: 0, gas: 80000n, maxFeePerGas: 30000000000n, maxPriorityFeePerGas: 1000000000n,
+    data: v.encodeFunctionData({abi: v.erc20Abi, functionName:'approve',args:[N.gatewayWallet,20000n]})};
+  const wire = await account.signTransaction(request), signed = {kind:'approve', amountBaseUnits:'20000', nonce:0,wire,transactionHash:v.keccak256(wire),feeReservationAttoUSD:String(request.gas*request.maxFeePerGas)};
+  assert.equal((await validateArcNativeTransaction(signed, account.address)).chainId, N.chainId);
+  await assert.rejects(validateArcNativeTransaction({...signed, amountBaseUnits:'20001'}, account.address));
+  await assert.rejects(validateArcNativeTransaction({...signed, nonce:1}, account.address));
+  await assert.rejects(validateArcNativeTransaction({...signed, feeReservationAttoUSD:'1'}, account.address));
+  const wrongWire = await account.signTransaction({...request, chainId:1});
+  await assert.rejects(validateArcNativeTransaction({...signed, wire:wrongWire,transactionHash:v.keccak256(wrongWire)}, account.address));
+});
+
+test('saved payment integrity survives canonical SQLite persistence without re-signing', {skip: !existsSync(new URL('../../tooling/arc-sdk/node_modules/@circle-fin/x402-batching/package.json', import.meta.url))}, async () => {
+  const {validateArcPaymentIntegrity} = await import('../../packages/arc/transport.mjs');
+  const {canonical} = await import('../../packages/contracts/index.mjs');
+  const {client,accounts,viem:v} = loadArcSDK(), account=accounts.privateKeyToAccount(accounts.generatePrivateKey());
+  const r=buildDeliveryRequirements({payTo,amountBaseUnits:'2000'}), scheme=new client.BatchEvmScheme({address:account.address,signTypedData:d=>account.signTypedData(d)});
+  const partial=await scheme.createPaymentPayload(2,r), payload={...partial,accepted:r,resource:{url:'https://example.test/receipt/one',description:'A receipt',mimeType:'application/json'}};
+  for(const encoding of ['legacy','canonical-json-v1']) {
+    const signed={requirements:r,payload,nonce:payload.payload.authorization.nonce,payloadHash:v.keccak256(v.toHex(encoding==='legacy'?JSON.stringify(payload):canonical(payload))),...(encoding==='legacy'?{}:{payloadHashEncoding:encoding})};
+    const saved=JSON.parse(canonical(signed));
+    assert.doesNotThrow(()=>validateArcPaymentIntegrity(saved,account.address,payTo));
+    assert.equal(saved.payload.payload.signature,payload.payload.signature);
+    saved.payload.payload.authorization.value='2001';
+    assert.throws(()=>validateArcPaymentIntegrity(saved,account.address,payTo));
+  }
+});

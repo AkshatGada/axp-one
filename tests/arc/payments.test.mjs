@@ -39,8 +39,8 @@ function fixture(t, overrides = {}) {
   t.after(() => {service.close(); rmSync(stateDir, {recursive: true, force: true});});
   return {get service() {return service;}, calls, transfers, checkpoints, setUnknown: value => {unknown = value;},
     restart() {service.close(); start();},
-    async campaign() {const {id, label, exampleQuestion, ...draft} = PRESETS[0]; const c = service.saveCampaign({...draft, settlementNetwork: N.network}).campaign; service.approve(c.id); return (await service.launch(c.id)).campaign;},
-    ad(turn = 'one') {return service.opportunity({question: PRESETS[0].exampleQuestion, sessionId: 'arc-fixture', turnId: turn, settlementNetwork: N.network});},
+    async campaign(extra = {}) {const {id, label, exampleQuestion, ...draft} = PRESETS[0]; const c = service.saveCampaign({...draft, settlementNetwork: N.network, ...extra}).campaign; service.approve(c.id); return (await service.launch(c.id)).campaign;},
+    ad(turn = 'one', sessionId = 'arc-fixture') {return service.opportunity({question: PRESETS[0].exampleQuestion, sessionId, turnId: turn, settlementNetwork: N.network});},
     render(ad) {return service.render(ad.award.id, {creativeHash: ad.award.creativeHash, domInserted: true, sponsoredLabelPresent: true}, ad.deliveryToken);},
   };
 }
@@ -107,4 +107,23 @@ test('Arc disabled is fail closed; synthetic and legacy Solana behavior remains 
   assert.throws(() => service.saveCampaign({settlementNetwork: N.network}), e => e.code === 'native_payments_required');
   await assert.rejects(service.opportunity({question: 'Compare tools', sessionId: 'one', turnId: 'one', settlementNetwork: N.network}), e => e.code === 'native_payments_required');
   assert.equal(service.payments().mode, 'synthetic');
+});
+
+test('aggregate Arc cap constrains new auctions across campaigns before receipt acceptance', async t => {
+  const f=fixture(t), first=await f.campaign({budgetCapBaseUnits:'16000'}), second=await f.campaign({budgetCapBaseUnits:'16000'});
+  await f.service.campaignAction(second.id,'pause');
+  for(let i=0;i<4;i++){const ad=await f.ad(`turn-${i}`,`session-${Math.floor(i/2)}`);assert.equal(ad.award.campaignId,first.id);await f.render(ad);}
+  assert.equal(f.service.state().campaigns.find(c=>c.id===first.id).spendBaseUnits,'16000');
+  await f.service.campaignAction(first.id,'pause'); await f.service.campaignAction(second.id,'resume');
+  const count=f.calls.length, result=await f.ad('beyond-cap','new-session');
+  assert.equal(result.status,'no_fill');assert.equal(f.calls.length,count);
+  assert.equal(f.service.exchange.all('charges').length,4);
+});
+
+test('unknown outcome on one Arc campaign blocks sibling auctions and authorizations', async t => {
+  const f=fixture(t), first=await f.campaign(), second=await f.campaign();
+  await f.service.campaignAction(second.id,'pause'); const ad=await f.ad();await f.render(ad);f.setUnknown(true);
+  await f.service.campaignAction(first.id,'payout');await f.service.campaignAction(first.id,'pause');
+  assert.throws(()=>f.service.campaignAction(second.id,'resume'),e=>e.code==='payment_reconciliation_required');
+  assert.equal((await f.ad('no-new-spend','new-session')).status,'no_fill');
 });

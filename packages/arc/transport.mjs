@@ -1,5 +1,6 @@
 // Server-only official Circle SDK transport. No high-level SDK method may hide a
 // funding broadcast: the caller persists exact native bytes before submitNative.
+import {canonical} from '../contracts/index.mjs';
 import {loadArcSDK} from './sdk.mjs';
 import {buildDeliveryRequirements,buildPaymentRequired,validateAuthorizationBinding,transferStage} from './protocol.mjs';
 import {readArcWallet} from './wallet.mjs';
@@ -8,6 +9,30 @@ const API = 'https://gateway-api-testnet.circle.com';
 const HEX = /^0x[0-9a-f]{64}$/i;
 const json = value => JSON.parse(JSON.stringify(value, (_, v) => typeof v === 'bigint' ? v.toString() : v));
 export {buildDeliveryRequirements as paymentRequirements} from './protocol.mjs';
+export async function validateArcNativeTransaction(signed, payer, limits = ARC_LIMITS) {
+  const {viem: v} = loadArcSDK();
+  check(['approve','deposit'].includes(signed.kind), 'arc_native_kind_invalid');
+  const amount = BigInt(signed.amountBaseUnits);
+  check(amount > 0n && amount <= BigInt(limits.maxDepositBaseUnits), 'arc_deposit_cap');
+  const abi = signed.kind === 'approve' ? v.erc20Abi : v.parseAbi(['function deposit(address token,uint256 value)']);
+  const expectedTo = signed.kind === 'approve' ? N.token : N.gatewayWallet;
+  const expectedData = v.encodeFunctionData({abi, functionName: signed.kind === 'approve' ? 'approve' : 'deposit', args: signed.kind === 'approve' ? [N.gatewayWallet,amount] : [N.token,amount]});
+  check(v.keccak256(signed.wire) === signed.transactionHash && same(await v.recoverTransactionAddress({serializedTransaction:signed.wire}), payer), 'arc_native_identity_mismatch');
+  const parsed = v.parseTransaction(signed.wire);
+  check(parsed.type === 'eip1559' && parsed.chainId === N.chainId && same(parsed.to, expectedTo) && parsed.data === expectedData && parsed.nonce === signed.nonce && (parsed.value ?? 0n) === 0n, 'arc_native_identity_mismatch');
+  check(parsed.gas * parsed.maxFeePerGas === BigInt(signed.feeReservationAttoUSD) && BigInt(signed.feeReservationAttoUSD) <= BigInt(limits.maxTransactionFeeAttoUSD), 'arc_fee_cap');
+  return parsed;
+}
+export function validateArcPaymentIntegrity(payment, payer, payee) {
+  const {viem:v} = loadArcSDK();
+    const {requirements: r, payload} = payment, a = payload?.payload?.authorization;
+    check(r.network === N.caip2 && same(r.asset, N.token) && same(r.payTo, payee) && same(r.extra?.verifyingContract, N.gatewayWallet) && r.extra?.name === 'GatewayWalletBatched' && r.extra.version === '1', 'arc_payment_binding');
+    check(a && same(a.from, payer) && same(a.to, payee) && a.value === r.amount && a.nonce === payment.nonce && payload.x402Version === 2, 'arc_payment_binding');
+    const orderedLegacy = {x402Version:payload.x402Version,payload:{authorization:{from:a.from,to:a.to,value:a.value,validAfter:a.validAfter,validBefore:a.validBefore,nonce:a.nonce},signature:payload.payload.signature},accepted:{scheme:r.scheme,network:r.network,asset:r.asset,amount:r.amount,payTo:r.payTo,maxTimeoutSeconds:r.maxTimeoutSeconds,extra:{name:r.extra.name,version:r.extra.version,verifyingContract:r.extra.verifyingContract}},resource:{url:payload.resource.url,description:payload.resource.description,mimeType:payload.resource.mimeType}};
+    const encoded = payment.payloadHashEncoding === 'canonical-json-v1' ? canonical(payload) : JSON.stringify(orderedLegacy);
+    check(canonical(payload) === canonical(orderedLegacy) && v.keccak256(v.toHex(encoded)) === payment.payloadHash, 'arc_payment_changed');
+  }
+
 export function createArcTransport({walletPath, rpcURL = N.rpc, limits = ARC_LIMITS} = {}) {
   const {viem: v, accounts, client: c, server: s} = loadArcSDK();
   const wallet = readArcWallet(walletPath), payer = accounts.privateKeyToAccount(wallet.payer.privateKey);
@@ -58,9 +83,7 @@ export function createArcTransport({walletPath, rpcURL = N.rpc, limits = ARC_LIM
   }
   async function lookupNative(signed) {
     check(await publicClient.getChainId() === N.chainId, 'arc_chain_mismatch');
-    check(v.keccak256(signed.wire) === signed.transactionHash && same(await v.recoverTransactionAddress({serializedTransaction: signed.wire}), payer.address), 'arc_native_identity_mismatch');
-    const parsed = v.parseTransaction(signed.wire);
-    check(parsed.chainId === N.chainId && same(parsed.to, signed.to) && parsed.data === signed.data && parsed.nonce === signed.nonce && parsed.value === 0n, 'arc_native_identity_mismatch');
+    await validateArcNativeTransaction(signed, payer.address, limits);
     let receipt;
     try { receipt = await publicClient.getTransactionReceipt({hash: signed.transactionHash}); }
     catch (e) { if (e.name === 'TransactionReceiptNotFoundError') return {status: 'pending', transactionHash: signed.transactionHash}; throw e; }
@@ -77,7 +100,7 @@ export function createArcTransport({walletPath, rpcURL = N.rpc, limits = ARC_LIM
   }
   async function submitNative(signed) {
     check(await publicClient.getChainId() === N.chainId, 'arc_chain_mismatch');
-    check(v.keccak256(signed.wire) === signed.transactionHash, 'arc_native_identity_mismatch');
+    await validateArcNativeTransaction(signed, payer.address, limits);
     const hash = await publicClient.sendRawTransaction({serializedTransaction: signed.wire});
     check(hash === signed.transactionHash, 'arc_native_identity_mismatch');
     try { await publicClient.waitForTransactionReceipt({hash, timeout: 15000, pollingInterval: 1000}); } catch { /* lookup the same identity */ }
@@ -100,18 +123,12 @@ export function createArcTransport({walletPath, rpcURL = N.rpc, limits = ARC_LIM
     check(same(a.from, payer.address) && same(a.to, payee) && a.value === amountBaseUnits && HEX.test(a.nonce), 'arc_payment_binding');
     check(await v.verifyTypedData({...typedData, address: payer.address, signature: payload.payload.signature}), 'arc_payment_signature_invalid');
     return {requirements, payload: json(payload), nonce: a.nonce,
-      payloadHash: v.keccak256(v.toHex(JSON.stringify(json(payload)))), signedAt: Date.now()};
+      payloadHash: v.keccak256(v.toHex(canonical(json(payload)))), payloadHashEncoding: 'canonical-json-v1', signedAt: Date.now()};
   }
-  function validatePayment(payment) {
-    const {requirements: r, payload} = payment, a = payload?.payload?.authorization;
-    check(r.network === N.caip2 && same(r.asset, N.token) && same(r.payTo, payee) && same(r.extra?.verifyingContract, N.gatewayWallet) && r.extra?.name === 'GatewayWalletBatched' && r.extra.version === '1', 'arc_payment_binding');
-    check(a && same(a.from, payer.address) && same(a.to, payee) && a.value === r.amount && a.nonce === payment.nonce && payload.x402Version === 2, 'arc_payment_binding');
-    check(v.keccak256(v.toHex(JSON.stringify(payload))) === payment.payloadHash, 'arc_payment_changed');
-  }
-  async function verifyPayment(payment) { validatePayment(payment); validateAuthorizationBinding({payload:payment.payload,requirements:payment.requirements,resourceUrl:payment.payload.resource.url,payer:payer.address}); return facilitator.verify(payment.payload, payment.requirements); }
-  async function settlePayment(payment) { validatePayment(payment); validateAuthorizationBinding({payload:payment.payload,requirements:payment.requirements,resourceUrl:payment.payload.resource.url,payer:payer.address}); return facilitator.settle(payment.payload, payment.requirements); }
+  async function verifyPayment(payment) { validateArcPaymentIntegrity(payment, payer.address, payee); validateAuthorizationBinding({payload:payment.payload,requirements:payment.requirements,resourceUrl:payment.payload.resource.url,payer:payer.address}); return facilitator.verify(payment.payload, payment.requirements); }
+  async function settlePayment(payment) { validateArcPaymentIntegrity(payment, payer.address, payee); validateAuthorizationBinding({payload:payment.payload,requirements:payment.requirements,resourceUrl:payment.payload.resource.url,payer:payer.address}); return facilitator.settle(payment.payload, payment.requirements); }
   async function lookupPayment(payment) {
-    validatePayment(payment);
+    validateArcPaymentIntegrity(payment, payer.address, payee);
     // Search by the ORIGINAL nonce. Empty results never authorize a fresh send.
     let pageAfter, found = [], seen = new Set();
     do {

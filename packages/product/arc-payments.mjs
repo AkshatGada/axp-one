@@ -73,7 +73,7 @@ export function createArcProductPayments({exchange, walletPath, signingEnabled =
     let result;
     try {result = await transport()[submit ? 'submitNative' : 'lookupNative'](op.signed);}
     catch {result = {status: 'unknown', reasonCode: 'arc_native_outcome_unknown'};}
-    save(id, s => {Object.assign(s.operations[index], {status: result.status, receipt: result}); return s;});
+    save(id, s => {const op=s.operations[index];op.observations=[...(op.observations??[]),{at:now(),previousStatus:op.status,previousReceipt:op.receipt,result}];Object.assign(op, {status: result.status, receipt: result}); return s;});
     await persist('native_outcome'); return result;
   }
   async function nativeOperation(id, kind) {
@@ -223,7 +223,8 @@ export function createArcProductPayments({exchange, walletPath, signingEnabled =
       depositBaseUnits: s.funded ? s.terms.depositBaseUnits : '0', authorizedBaseUnits: s.payments.filter(p => p.signed).reduce((n, p) => n + baseUnits(p.amountBaseUnits), 0n).toString(),
       submittedBaseUnits: sum(['accepted', 'finalized']), settledBaseUnits: sum(['finalized']), refundBaseUnits: '0',
       acceptedBaseUnits: exchange.totals({channelId: id}).accepted.toString(), protocolChannelId: null,
-      termsHash: s.termsHash, reconciliationRequired: unresolved(s)};
+      aggregateRemainingBaseUnits: (baseUnits(limits.aggregateChargeBaseUnits) - all().reduce((n,row)=>{const t=exchange.totals({channelId:row.channelId});return n+t.accepted+t.reserved;},0n)).toString(),
+      termsHash: s.termsHash, reconciliationRequired: all().some(unresolved)};
   }
   function evidence(id) {
     const s = exchange.get('arc_payment_channels', id); if (!s) return null;

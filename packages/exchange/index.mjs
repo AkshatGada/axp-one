@@ -72,7 +72,7 @@ export class Exchange {
     const accepted=this.all('charges').filter(matching).reduce((n,c)=>n+baseUnits(c.amountBaseUnits),0n);
     const reserved=this.all('awards').filter(a=>a.status==='reserved'&&matching(a)).reduce((n,a)=>n+baseUnits(a.priceBaseUnits),0n);return {accepted,reserved};
   }
-  available(c){const ct=this.totals({campaignId:c.campaignId}),ch=this.require('channels',c.channelId),t=this.totals({channelId:c.channelId});return {campaign:(baseUnits(c.budgetCapBaseUnits)-ct.accepted-ct.reserved).toString(),channel:(baseUnits(ch.depositBaseUnits)-t.accepted-t.reserved).toString()};}
+  available(c){const ct=this.totals({campaignId:c.campaignId}),ch=this.require('channels',c.channelId),t=this.totals({channelId:c.channelId});let available=baseUnits(ch.depositBaseUnits)-t.accepted-t.reserved;if(ch.settlementNetwork==='arc-testnet'){const remaining=this.networkState?.(ch.channelId)?.aggregateRemainingBaseUnits;if(remaining!==undefined&&BigInt(remaining)<available)available=BigInt(remaining);}return {campaign:(baseUnits(c.budgetCapBaseUnits)-ct.accepted-ct.reserved).toString(),channel:available.toString()};}
   reason(c,o,{ignoreFunding=false}={}){
     if(this.mode!=='synthetic'&&(c.settlementNetwork??'solana-devnet')!==(o.settlementNetwork??'solana-devnet'))return 'settlement_network_mismatch';
     if(c.status!=='active')return 'campaign_paused';if(!c.allowedIntents.includes(o.coarseIntent)||c.destination!==o.destination)return 'policy_excluded';
