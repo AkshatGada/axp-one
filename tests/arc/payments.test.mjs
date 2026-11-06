@@ -14,7 +14,7 @@ function fixture(t, overrides = {}) {
   const stateDir = mkdtempSync(join(tmpdir(), 'axp-arc-fixture-'));
   const calls = [], checkpoints = [], transfers = new Map(); let serial = 0, unknown = false, service;
   const transport = {
-    inspect: async () => ({compatible: true, chainId: N.chainId, token: N.token, decimals: 6, codeHash: 'fixture-code'}),
+    inspect: async () => ({compatible: true, chainId: N.chainId, token: N.token, decimals: 6, codeHash: 'fixture-code', ...ids}),
     signNative: async input => {calls.push(`sign:${input.kind}`); return {...input, transactionHash: `0x${hash(input)}`, wire: 'fixture-only', feeReservationAttoUSD: '1000'};},
     submitNative: async signed => {calls.push(`submit:${signed.kind}`); assert.ok(checkpoints.includes('arc_signed_native_bytes')); return {status: 'finalized', finality: 'finalized', transactionHash: signed.transactionHash, feeAttoUSD: '100'};},
     lookupNative: async signed => ({status: 'finalized', finality: 'finalized', transactionHash: signed.transactionHash, feeAttoUSD: '100'}),
@@ -37,7 +37,7 @@ function fixture(t, overrides = {}) {
     transport: async packet => jevResponse(packet, 3, 3), publisherKey: 'fixture-publisher'});
   start(); service.saveAccount({name: 'Arc fixture', websiteURL: 'https://example.test/'});
   t.after(() => {service.close(); rmSync(stateDir, {recursive: true, force: true});});
-  return {get service() {return service;}, calls, transfers, checkpoints, setUnknown: value => {unknown = value;},
+  return {get service() {return service;}, calls, transfers, checkpoints, transport, setUnknown: value => {unknown = value;},
     restart() {service.close(); start();},
     async campaign(extra = {}) {const {id, label, exampleQuestion, ...draft} = PRESETS[0]; const c = service.saveCampaign({...draft, settlementNetwork: N.network, ...extra}).campaign; service.approve(c.id); return (await service.launch(c.id)).campaign;},
     ad(turn = 'one', sessionId = 'arc-fixture') {return service.opportunity({question: PRESETS[0].exampleQuestion, sessionId, turnId: turn, settlementNetwork: N.network});},
@@ -126,4 +126,12 @@ test('unknown outcome on one Arc campaign blocks sibling auctions and authorizat
   await f.service.campaignAction(first.id,'payout');await f.service.campaignAction(first.id,'pause');
   assert.throws(()=>f.service.campaignAction(second.id,'resume'),e=>e.code==='payment_reconciliation_required');
   assert.equal((await f.ad('no-new-spend','new-session')).status,'no_fill');
+});
+
+test('frozen Arc payer identity is rechecked before any payment signing', async t => {
+  const f=fixture(t);await f.campaign();const ad=await f.ad(),report=await f.transport.inspect();
+  f.transport.inspect=async()=>({...report,payer:`0x${'33'.repeat(20)}`});
+  const before=f.calls.length,result=await f.render(ad);
+  assert.equal(result.authorization.reason,'arc_frozen_network_changed');
+  assert.equal(f.calls.length,before);
 });

@@ -63,7 +63,7 @@ export function createArcProductPayments({exchange, walletPath, signingEnabled =
   }
   async function verifyEnvironment(id) {
     const report = await transport().inspect(), terms = read(id).terms;
-    check(report.compatible && report.chainId === N.chainId && report.decimals === 6 && same(report.token, N.token) && report.codeHash === terms.gatewayCodeHash, 'arc_frozen_network_changed');
+    check(report.compatible && report.chainId === N.chainId && report.decimals === 6 && same(report.token, N.token) && report.codeHash === terms.gatewayCodeHash && same(report.payer,terms.payer) && same(report.payee,terms.payee), 'arc_frozen_network_changed');
   }
   function feeUsed() {
     return all().reduce((sum, s) => sum + s.operations.reduce((n, o) => n + BigInt(o.receipt?.feeAttoUSD ?? o.signed?.feeReservationAttoUSD ?? (o.status === 'signing' ? limits.maxTransactionFeeAttoUSD : '0')), 0n), 0n);
@@ -133,7 +133,7 @@ export function createArcProductPayments({exchange, walletPath, signingEnabled =
     check(baseUnits(channel.depositBaseUnits) > 0n && baseUnits(channel.depositBaseUnits) <= baseUnits(limits.maxDepositBaseUnits) && baseUnits(campaign.budgetCapBaseUnits) > 0n && baseUnits(campaign.budgetCapBaseUnits) <= baseUnits(limits.maxBudgetBaseUnits) && baseUnits(campaign.budgetCapBaseUnits) <= baseUnits(channel.depositBaseUnits) && baseUnits(campaign.maxBidBaseUnits) <= baseUnits(limits.maxBidBaseUnits), 'arc_campaign_limit');
     check(all().length < limits.maxChannels && all().reduce((n, s) => n + baseUnits(s.terms.depositBaseUnits), 0n) + baseUnits(channel.depositBaseUnits) <= baseUnits(limits.aggregateDepositBaseUnits), 'arc_aggregate_deposit_cap');
     const report = await transport().inspect();
-    check(report.compatible && report.chainId === N.chainId && report.decimals === 6 && same(report.token, N.token), 'arc_preflight_failed');
+    check(report.compatible && report.chainId === N.chainId && report.decimals === 6 && same(report.token, N.token) && same(report.payer,ids.payer) && same(report.payee,ids.payee), 'arc_preflight_failed');
     const terms = {...N, runId: exchange.runId, channelId: id, advertiserId: campaign.advertiserId,
       campaignVersionId: campaign.campaignVersionId, payer: ids.payer, payee: ids.payee,
       depositBaseUnits: channel.depositBaseUnits, chargeCapBaseUnits: campaign.budgetCapBaseUnits,
