@@ -21,6 +21,12 @@
     "start": "node apps/backend/server.mjs",
     "build:site": "node scripts/build-site.mjs",
     "serve:site": "node scripts/build-site/serve.mjs",
-    "dev:site": "node scripts/hosted/dev-server.mjs"
+    "dev:site": "node scripts/hosted/dev-server.mjs",
+    "arc:wallet": "node scripts/arc/create-wallet.mjs",
+    "arc:prepare": "node scripts/arc/prepare-demo.mjs",
+    "arc:demo": "node scripts/arc/dev-server.mjs",
+    "arc:test": "node --test tests/arc/*.test.mjs",
+    "arc:reconcile": "node scripts/arc/reconcile-demo.mjs",
+    "arc:verify": "node scripts/arc/verify-evidence.mjs"
   }
 }
