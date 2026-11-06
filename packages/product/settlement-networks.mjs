@@ -1,7 +1,9 @@
+import {ARC_NETWORK} from '../arc/network.mjs';
 // Public, non-secret settlement metadata. Financial terms remain server-owned.
 export const SOLANA_NETWORK = 'solana-devnet';
 export const TEMPO_NETWORK = 'tempo-testnet';
 export const SETTLEMENT_NETWORKS = Object.freeze({
+  'arc-testnet': Object.freeze({...ARC_NETWORK,label:'Arc Testnet · Nanopayments',canPayout:true}),
   [SOLANA_NETWORK]: Object.freeze({network:SOLANA_NETWORK,label:'Solana Devnet',tokenSymbol:'Test USDC',decimals:6,canPayout:false}),
   [TEMPO_NETWORK]: Object.freeze({network:TEMPO_NETWORK,label:'Tempo Testnet',chainId:42431,token:'0x20c0000000000000000000000000000000000000',tokenSymbol:'PathUSD',decimals:6,escrow:'0x4d50500000000000000000000000000000000000',rpcURL:'https://rpc.moderato.tempo.xyz',explorerURL:'https://explore.testnet.tempo.xyz',canPayout:true}),
 });
