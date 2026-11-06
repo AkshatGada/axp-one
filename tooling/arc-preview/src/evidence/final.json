@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "axp.arc-evidence.v1",
+  "observedAt": "2026-11-06T22:55:52.327Z",
+  "network": {
+    "network": "arc-testnet",
+    "chainId": 5042002,
+    "caip2": "eip155:5042002",
+    "domain": 26,
+    "rpc": "https://rpc.testnet.arc.io",
+    "explorer": "https://testnet.arcscan.app",
+    "token": "0x3600000000000000000000000000000000000000",
+    "tokenSymbol": "USDC",
+    "decimals": 6,
+    "gatewayWallet": "0x0077777d7EBA4688BDeF3E311b846F25870A19B9",
+    "gatewayMinter": "0x0022222ABE238Cc2C7Bb1f21003F0a260052475B"
+  },
+  "execution": {
+    "providers": "fixture",
+    "actualModelCalls": 0,
+    "actualModelSpendMicroUSD": "0",
+    "domInsertionReceipts": 2,
+    "startedPublisherTurns": 3,
+    "preparedIndependentAnswers": 3,
+    "note": "One original no-fill from a malformed fixture buyer response remains preserved. Other provider responses are fixtures; payment and chain outcomes are actual."
+  },
+  "receipts": [
+    {
+      "receiptHash": "6137b652399cb42e0d871a17184432a45ce9f43c9f4f80f172a1dfc212c51bb4",
+      "chargeId": "charge-award-b2e9c494-ab40-4eb1-bd08-a22d523ff8a8"
+    },
+    {
+      "receiptHash": "88105775f34585e168362dbd7fe060d161723fe0f6b855e6a41ec098f76b1e90",
+      "chargeId": "charge-award-da0a7ea3-b816-411a-b88c-b135b2c2eb83"
+    }
+  ],
+  "totals": {
+    "depositedBaseUnits": "20000",
+    "acceptedDeliveryBaseUnits": "4000",
+    "gatewayAcceptedBaseUnits": "4000",
+    "batchFinalizedBaseUnits": "4000",
+    "nativeFeeAttoUSD": "3573525000000000",
+    "withdrawnBaseUnits": "0",
+    "refundedBaseUnits": "0"
+  },
+  "channels": [
+    {
+      "campaignVersionId": "campaign-6a11cd3c-b1ae-4ec1-a456-e105f99c200b-v1",
+      "allocationId": "campaign-6a11cd3c-b1ae-4ec1-a456-e105f99c200b-channel",
+      "payer": "0xe48205ad7745750e2ba38f43f60f61f12757d1fe",
+      "publisher": "0x30086df57164ea18b0050b54bbbae9e0aec66901",
+      "depositBaseUnits": "20000",
+      "phase": "open",
+      "closeRequested": false,
+      "nativeOperations": [
+        {
+          "kind": "approve",
+          "status": "finalized",
+          "transactionHash": "0x325d7f858c8db74396878b930e0c6e0b0a25f188bd82bf0b35984edd466ea35b",
+          "receipt": {
+            "blockHash": "0x390d69710418f1fd019a807bcdba8d048059e05f56c7724e99425ef5cf02dabd",
+            "blockNumber": "71098741",
+            "chainId": 5042002,
+            "effectiveGasPrice": "25000000000",
+            "feeAmountBaseUnits": "1386",
+            "feeAsset": "native test USDC",
+            "feeAttoUSD": "1385350000000000",
+            "finality": "finalized",
+            "gasUsed": "55414",
+            "network": "arc-testnet",
+            "status": "finalized",
+            "transactionHash": "0x325d7f858c8db74396878b930e0c6e0b0a25f188bd82bf0b35984edd466ea35b"
+          },
+          "previousObservationStatuses": [
+            "unknown"
+          ]
+        },
+        {
+          "kind": "deposit",
+          "status": "finalized",
+          "transactionHash": "0xd2a7d8330c060608428275fada4c74b6a6581a7c4948aad922c472b814d49e4c",
+          "receipt": {
+            "blockHash": "0x9be49568a64dc0b191f35868465557c9a1a2693241b2abd3bb3c49ee1c850e00",
+            "blockNumber": "71098919",
+            "chainId": 5042002,
+            "effectiveGasPrice": "25000000000",
+            "feeAmountBaseUnits": "2189",
+            "feeAsset": "native test USDC",
+            "feeAttoUSD": "2188175000000000",
+            "finality": "finalized",
+            "gasUsed": "87527",
+            "network": "arc-testnet",
+            "status": "finalized",
+            "transactionHash": "0xd2a7d8330c060608428275fada4c74b6a6581a7c4948aad922c472b814d49e4c"
+          },
+          "previousObservationStatuses": [
+            "submitting"
+          ]
+        }
+      ],
+      "payments": [
+        {
+          "chargeId": "charge-award-b2e9c494-ab40-4eb1-bd08-a22d523ff8a8",
+          "receiptHash": "6137b652399cb42e0d871a17184432a45ce9f43c9f4f80f172a1dfc212c51bb4",
+          "authorizationHash": "0x172e3b7098a29fb8d4395baa80406924b1d87b73ddd39554b4649587aef560a7",
+          "amountBaseUnits": "2000",
+          "status": "finalized",
+          "transferId": "932980c6-ccf7-45e3-99c4-9c8d1f55f4e3",
+          "gatewayAccepted": true,
+          "transferStatus": "completed",
+          "batchProof": {
+            "attribution": "Gateway transfer API links this nonce to the RPC-verified batch transaction",
+            "blockHash": "0x399004d2d9c44d1e6299404adfb5ce65721426c31c23eebd39bd4c2896aae8f8",
+            "blockNumber": "71100834",
+            "chainId": 5042002,
+            "finality": "finalized",
+            "network": "arc-testnet",
+            "status": "finalized",
+            "transactionHash": "0xcc2e5aabe8828064e2b89064f7f649ac5116edb6eeba091fd1728d76a6dcea7f"
+          }
+        },
+        {
+          "chargeId": "charge-award-da0a7ea3-b816-411a-b88c-b135b2c2eb83",
+          "receiptHash": "88105775f34585e168362dbd7fe060d161723fe0f6b855e6a41ec098f76b1e90",
+          "authorizationHash": "0x9f6ff8489627410d922ad8172bdc3ff2485f16c748070268987fbca680d95566",
+          "amountBaseUnits": "2000",
+          "status": "finalized",
+          "transferId": "207bcbab-32fe-4dee-b8d4-145d2371311b",
+          "gatewayAccepted": true,
+          "transferStatus": "completed",
+          "batchProof": {
+            "attribution": "Gateway transfer API links this nonce to the RPC-verified batch transaction",
+            "blockHash": "0x399004d2d9c44d1e6299404adfb5ce65721426c31c23eebd39bd4c2896aae8f8",
+            "blockNumber": "71100834",
+            "chainId": 5042002,
+            "finality": "finalized",
+            "network": "arc-testnet",
+            "status": "finalized",
+            "transactionHash": "0xcc2e5aabe8828064e2b89064f7f649ac5116edb6eeba091fd1728d76a6dcea7f"
+          }
+        }
+      ]
+    }
+  ],
+  "studio": {
+    "appId": "0c07e997-5564-4b38-94f9-099ea3e95393",
+    "url": "https://studio.arc.io/app/0c07e997-5564-4b38-94f9-099ea3e95393",
+    "unusedEscrow": {
+      "address": "0x1ea0491f04873b012c0c19bf5da96030bd8d1c05",
+      "transactionHash": "0x624283d89bfea4ee7edb4533152d7bb5acf91f7ef0bb0ae3c16642e4dbb81e16",
+      "status": "success",
+      "feeAttoUSD": "36564850000000000",
+      "funded": false,
+      "usedByIntegration": false
+    }
+  },
+  "limitations": [
+    "Gateway acceptance is not batch finality.",
+    "Gateway links each transfer ID to a batch; RPC verifies that transaction, not the offchain attribution independently.",
+    "Unused funds remain in the payer Gateway balance. No withdrawal or refund is claimed.",
+    "No production deployment, repository push/publication or ETHGlobal submission was performed."
+  ]
+}

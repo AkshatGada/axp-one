@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="860" viewBox="0 0 1400 860" role="img" aria-labelledby="title desc">
+<title id="title">AXP with Circle Gateway Nanopayments on Arc</title><desc id="desc">The existing approved campaign, deterministic auction, separate Sponsored insertion and signed receipt ledger feed a new Arc rail. Gateway deposits fund exact offchain authorizations per accepted receipt, which the facilitator accepts before later onchain batch settlement. Solana and Tempo stay available.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#3437ff"/></marker><style>text{font-family:PolySans,Arial,sans-serif;fill:#171b1f}.label{font-size:15px;font-weight:700;letter-spacing:1.5px}.head{font-size:24px;font-weight:700}.body{font-size:18px;fill:#535761}.small{font-size:16px;fill:#535761}.box{fill:#fff;stroke:#d8d9e1;stroke-width:1.5}.new{fill:#f2f2ff;stroke:#3437ff;stroke-width:1.5}.line{fill:none;stroke:#3437ff;stroke-width:2;marker-end:url(#arrow)}</style></defs>
+<rect width="1400" height="860" fill="#f7f6f2"/>
+<text x="44" y="72" font-size="46" font-weight="700">AXP + Arc Nanopayments</text>
+<text x="46" y="112" class="body">An accepted ad delivery becomes an exact USDC payment to an independent AI app.</text>
+<rect x="28" y="145" width="1344" height="250" rx="18" fill="#eeeee9"/>
+<text x="48" y="178" class="label">PRE-EXISTING AXP PRODUCT</text>
+<rect x="48" y="202" width="270" height="158" rx="12" class="box"/>
+<text x="68" y="242" class="head">Approved campaign</text><text x="68" y="277" class="body">Creative, context hints,</text><text x="68" y="304" class="body">integer bids and budget cap</text><text x="68" y="338" class="small">Advertiser dashboard</text>
+<path d="M320 281H365" class="line"/>
+<rect x="378" y="202" width="296" height="158" rx="12" class="box"/>
+<text x="398" y="242" class="head">Deterministic auction</text><text x="398" y="277" class="body">Eligible buying decisions</text><text x="398" y="304" class="body">reserve one winning bid</text><text x="398" y="338" class="small">Reservation is not a charge</text>
+<path d="M676 281H717" class="line"/>
+<rect x="730" y="202" width="270" height="158" rx="12" class="box"/>
+<text x="750" y="242" class="head">Sponsored insertion</text><text x="750" y="277" class="body">Independent answer first</text><text x="750" y="304" class="body">Separate disclosed card</text><text x="750" y="338" class="small">Publisher SDK + actual DOM</text>
+<path d="M1002 281H1043" class="line"/>
+<rect x="1056" y="202" width="296" height="158" rx="12" class="box"/>
+<text x="1076" y="242" class="head">Signed receipt ledger</text><text x="1076" y="277" class="body">Accepted insertion accrues</text><text x="1076" y="304" class="body">exactly one delivery charge</text><text x="1076" y="338" class="small">Stable identity + duplicate guard</text>
+<rect x="28" y="442" width="1344" height="294" rx="18" fill="#e9eaff"/>
+<text x="48" y="477" class="label">NEW ARC RAIL · BUILT WITH ARC STUDIO + OFFICIAL CIRCLE SDK</text>
+<rect x="48" y="504" width="270" height="183" rx="12" class="new"/>
+<text x="68" y="544" class="head">Gateway funding</text><text x="68" y="580" class="body">Arc Testnet USDC deposit</text><text x="68" y="607" class="body">Bounded campaign allocation</text><text x="68" y="655" class="small">Onchain · 6-decimal USDC</text>
+<path d="M320 592H365" class="line"/>
+<rect x="378" y="504" width="296" height="183" rx="12" class="new"/>
+<text x="398" y="544" class="head">Exact authorization</text><text x="398" y="580" class="body">One EIP-3009 signature</text><text x="398" y="607" class="body">per accepted delivery receipt</text><text x="398" y="655" class="small">Offchain · persist before send</text>
+<path d="M1204 362V416H526V497" class="line"/>
+<rect x="760" y="399" width="248" height="30" fill="#f7f6f2"/><text x="772" y="421" class="small">Accepted receipt authority</text>
+<path d="M676 592H717" class="line"/>
+<rect x="730" y="504" width="270" height="183" rx="12" class="new"/>
+<text x="750" y="544" class="head">Gateway acceptance</text><text x="750" y="580" class="body">Verify + accept payment</text><text x="750" y="607" class="body">Save original transfer ID</text><text x="750" y="655" class="small">No transaction per ad</text>
+<path d="M1002 592H1043" class="line"/>
+<rect x="1056" y="504" width="296" height="183" rx="12" class="new"/>
+<text x="1076" y="544" class="head">Arc batch settlement</text><text x="1076" y="580" class="body">Gateway reports completed</text><text x="1076" y="607" class="body">RPC verifies batch receipt</text><text x="1076" y="655" class="small">Onchain · Explorer evidence</text>
+<text x="48" y="716" class="small">Gateway acceptance and batch finality are separate facts. Unused funds remain in the payer Gateway balance.</text>
+<text x="48" y="781" font-size="20" font-weight="700">Solana and Tempo remain separate, supported rails.</text>
+<text x="48" y="817" class="body">Models judge fit. Code controls amounts and keys. A receipt proves app-reported insertion, not attention or conversion.</text>
+</svg>
