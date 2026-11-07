@@ -4,8 +4,10 @@
 import {createHostedAPI} from './api.mjs';
 import {createHostedProductAPI} from '../product/hosted.mjs';
 import {createHostedAccountsAPI} from '../accounts/hosted.mjs';
+import {createHostedArcDemoAPI} from '../arc/hosted.mjs';
 
 let accountsAPI=null;
+let arcAPI=null;
 
 let productAPI = null;
 async function productInstance() {
@@ -25,6 +27,10 @@ function instance() {
 }
 export default async function handler(req,res) {
   const path=new URL(req.url,'http://local').pathname;
+  if(path==='/api/arc'||path.startsWith('/api/arc/')) {
+    try{arcAPI??=createHostedArcDemoAPI().catch(e=>{arcAPI=null;throw e;});return await (await arcAPI).handler(req,res);}
+    catch{if(!res.headersSent)res.writeHead(503,{'Content-Type':'application/json','Cache-Control':'no-store'});if(!res.writableEnded)res.end(JSON.stringify({error:'arc_unavailable'}));return;}
+  }
   if(path==='/api/accounts'||path.startsWith('/api/accounts/')) {
     accountsAPI??=createHostedAccountsAPI();
     return accountsAPI.handler(req,res);

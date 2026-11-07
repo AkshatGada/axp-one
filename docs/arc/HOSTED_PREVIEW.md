@@ -55,19 +55,26 @@ Buyer judgments and independent answers are labelled fixtures. Auction, DOM
 acknowledgement, receipt signatures, ledger, EIP-3009 signatures and Arc/Gateway
 payments are actual. No paid provider credentials are passed into this demo.
 
-## Hosting is pending local approval
+## Preview activation
 
-The human requested localhost review before hosting. These interactive changes
-have not been pushed/deployed or enabled in Vercel. The earlier `/arc/` Vercel
-page is still the read-only evidence viewer.
+After localhost review, the human requested keeping the entire integration on
+the feature branch and using Vercel Preview without merging to main. The pages,
+API routing and official SDK are packaged for that deployment. These interactive
+changes have not yet been pushed/enabled; the earlier `/arc/` Vercel page remains
+the read-only evidence viewer until activation is verified.
 
 The adapter is gated to the `feature/arc-integration` Vercel Preview environment;
-it stays disabled in Production and other branches. Hosted activation will need
-the official Arc SDK packaged with the function, separate branch-scoped Arc wallet
-and encryption settings, an isolated durable KV workspace, a one-writer migration,
-and hosted verification. Existing Vercel Authentication also needs a judge-access
-decision. Production state, Solana/Tempo identities and account-owned APIs remain
-unchanged. No production merge or promotion is authorized by this local review.
+it stays disabled in Production and other branches. Hosted activation still needs
+Vercel login, branch-scoped Arc wallet and encryption settings, an isolated durable
+KV workspace, a one-writer migration and hosted verification. The human will
+disable Preview protection for judge access. That access change does not itself
+configure the backend. Production state, Solana/Tempo identities and account-owned
+APIs remain unchanged. No production merge or promotion is authorized.
+
+The package bundles the pinned SDK runtime (rather than its source/types/tests),
+keeping the function at 167.8 MB including the existing Solana/Tempo dependencies.
+Local packaged checks passed both interactive routes, 45 referenced Next assets,
+the disabled-by-default Arc health route and SDK export/cryptographic compatibility.
 
 ## Validation for the local review
 

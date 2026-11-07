@@ -18,6 +18,7 @@ import {flattenSDK} from './build-site/flatten-sdk.mjs';
 import {flattenTempoSDK} from './build-site/flatten-tempo-sdk.mjs';
 import {publishProductStatic,verifyPageAssets} from './build-site/product-static.mjs';
 import {siteRoutes} from './build-site/site-routes.mjs';
+import {bundleArcSDK} from './build-site/arc-sdk.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const out=join(root,'.vercel/output'),fnDir=join(out,'functions/api/index.func');
@@ -51,6 +52,7 @@ if(!readFileSync(join(mvpOut,'index.html'),'utf8').includes('/mvp/_next/'))throw
 // are packaged here; the functional funded Arc workspace stays local.
 sh('npm',['ci','--ignore-scripts','--no-audit','--no-fund','--prefix','tooling/arc-preview']);
 sh('npm',['run','build','--prefix','tooling/arc-preview','--','--base=/arc/']);
+sh('npm',['ci','--ignore-scripts','--no-audit','--no-fund','--prefix','tooling/arc-sdk']);
 
 // 2. The native payment SDK (from vendored, hash-pinned source; the loader re-checks hashes).
 const sdkRoot=join(root,process.env.AXP_PAYMENT_SDK_ROOT||'local-state/phase4-sdk');
@@ -74,6 +76,7 @@ cpSync(marketingOut,staticDir,{recursive:true});
 cpSync(mvpOut,join(staticDir,'mvp'),{recursive:true});
 publishProductStatic(productOut,staticDir);
 cpSync(join(root,'tooling/arc-preview/dist'),join(staticDir,'arc'),{recursive:true});
+for(const page of ['advertiser-dashboard','publisher-demo'])cpSync(join(productOut,'arc',page),join(staticDir,'arc',page),{recursive:true});
 log('static: / (marketing) + /mvp/ (MVP) + root advertiser dashboard, publisher chat and SDK guide');
 log('static: /arc/ (read-only Studio nanopayments evidence, no signing or funding routes)');
 
@@ -89,6 +92,7 @@ const sdk=flattenSDK(sdkRoot,join(fnDir,'local-state/phase4-sdk'));
 log(`function: payment SDK flattened (${sdk.packages} packages, nested: ${sdk.nested.join(', ')||'none'})`);
 const tempo=flattenTempoSDK(tempoRoot,join(fnDir,'local-state/tempo-sdk'));
 log(`function: Tempo SDK flattened (${tempo.packages} packages)`);
+bundleArcSDK(root,join(fnDir,'tooling/arc-sdk'));
 writeFileSync(join(fnDir,'.vc-config.json'),JSON.stringify({runtime:RUNTIME,handler:'index.mjs',launcherType:'Nodejs',shouldAddHelpers:false,
   supportsResponseStreaming:false,maxDuration:300,memory:1024,environment:{NODE_OPTIONS:'--no-warnings=ExperimentalWarning'}},null,2)+'\n');
 
@@ -109,15 +113,18 @@ for(const p of ['index.html','demo/index.html','mvp/index.html','mvp/verify/inde
 }
 // Vite's companion has a separate asset namespace from the existing Next pages.
 const arcHTML=readFileSync(join(staticDir,'arc/index.html'),'utf8');
+for(const page of ['arc/advertiser-dashboard/index.html','arc/publisher-demo/index.html'])verifyPageAssets(staticDir,page);
 const arcAssets=[...arcHTML.matchAll(/(?:src|href)="(\/arc\/assets\/[A-Za-z0-9_.-]+)"/g)].map(m=>m[1]);
 if(arcAssets.length<2||arcAssets.some(p=>!existsSync(join(staticDir,p))))throw Error('arc_preview_assets_missing');
 const leaked=readdirSync(out,{recursive:true}).map(String).filter(p=>/(^|\/)(\.env[^/]*|test-wallets\.json|hosted-devnet-wallets\.json|[^/]*\.pem|[^/]*\.sqlite)$/.test(p));
 if(leaked.length)throw new Error(`private files in output: ${leaked.join(', ')}`);
 const fnTop=readdirSync(fnDir).sort().join(),fnLocal=readdirSync(join(fnDir,'local-state')).sort().join(),fnArtifacts=readdirSync(join(fnDir,'artifacts')).join();
-if(fnTop!=='.vc-config.json,apps,artifacts,index.mjs,local-state,package.json,packages'||fnLocal!=='phase4-sdk,tempo-sdk'||fnArtifacts!=='v2')throw new Error(`unexpected function contents: ${fnTop} | ${fnLocal} | ${fnArtifacts}`);
+if(fnTop!=='.vc-config.json,apps,artifacts,index.mjs,local-state,package.json,packages,tooling'||fnLocal!=='phase4-sdk,tempo-sdk'||fnArtifacts!=='v2')throw new Error(`unexpected function contents: ${fnTop} | ${fnLocal} | ${fnArtifacts}`);
 // The function must import and answer with live runs off, with no environment.
 const probe=spawnSync(process.execPath,['--input-type=module','-e',`
   const {default:h}=await import(${JSON.stringify(join(fnDir,'index.mjs'))});
+  const {loadArcSDK}=await import(${JSON.stringify(join(fnDir,'packages/arc/sdk.mjs'))});
+  const arc=loadArcSDK();if(typeof arc.client.BatchEvmScheme!=='function'||typeof arc.server.BatchFacilitatorClient!=='function'||typeof arc.accounts.privateKeyToAccount!=='function')throw Error('arc_bundle_invalid');
   const {loadNativeSDK}=await import(${JSON.stringify(join(fnDir,'packages/payments/sdk-loader.mjs'))});
   await loadNativeSDK(${JSON.stringify(join(fnDir,'local-state/phase4-sdk'))});
   const {loadTempoSDK}=await import(${JSON.stringify(join(fnDir,'packages/payments/tempo-sdk.mjs'))});
