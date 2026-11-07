@@ -11,6 +11,7 @@ import {createHostedArcDemoAPI} from '../../packages/arc/hosted.mjs';
 
 const root=resolve('.'),state=resolve('local-state/arc/hosted-local'),keyPath=join(state,'state-key');
 mkdirSync(state,{recursive:true,mode:0o700});
+if(existsSync(join(state,'CLOUD_OWNER')))throw Error('This financial workspace has moved to Preview. Use the hosted Arc demo; do not restart a second writer.');
 if(!existsSync(keyPath))writeFileSync(keyPath,randomBytes(32).toString('base64'),{mode:0o600,flag:'wx'});
 if((statSync(keyPath).mode&0o777)!==0o600)throw Error('Arc local state key must have mode 0600');
 const config={AXP_ARC_PREVIEW_ENABLED:'1',AXP_ARC_PREVIEW_LOCAL:'1',AXP_ARC_PREVIEW_STATE_KEY:readFileSync(keyPath,'utf8').trim()};

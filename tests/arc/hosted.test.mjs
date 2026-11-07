@@ -14,6 +14,7 @@ import {unpackDirectory} from '../../packages/hosted/vault.mjs';
 import {ARC_NETWORK as N} from '../../packages/arc/network.mjs';
 import {PRESETS} from '../../packages/product/service.mjs';
 import {hash} from '../../packages/contracts/index.mjs';
+import {importProof} from '../../packages/arc/hosted-import.mjs';
 
 const ids={payer:`0x${'11'.repeat(20)}`,payee:`0x${'22'.repeat(20)}`};
 async function request(api,path,{body,csrf,headers={}}={}) {
@@ -80,9 +81,25 @@ test('Arc hosted cold starts preserve exact authorization and receipt, isolate A
 });
 
 test('Arc hosted endpoint stays disabled in Production and on other preview branches',async()=>{
-  for(const config of [{VERCEL:'1',VERCEL_ENV:'production',VERCEL_GIT_COMMIT_REF:'main'}, {VERCEL:'1',VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_REF:'other-branch'},{}]) {
+  for(const config of [{VERCEL:'1',VERCEL_ENV:'production',VERCEL_GIT_COMMIT_REF:'main'}, {VERCEL:'1',VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_REF:'other-branch'}, {VERCEL:'1',VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_REF:'feature/arc-integration',AXP_ARC_PREVIEW_COMMIT:'a'.repeat(40),VERCEL_GIT_COMMIT_SHA:'b'.repeat(40)},{}]) {
     const api=await createHostedArcDemoAPI({config:{...config,AXP_ARC_PREVIEW_ENABLED:'1'}});
     assert.equal((await request(api,'/health')).body.enabled,false);
     assert.equal((await request(api,'/bootstrap')).status,503);
   }
+});
+
+test('operator import authenticates both encrypted shards and never overwrites an existing workspace',async t=>{
+  const f=await fixture(t);const {settlementNetwork,...answer}=f.input;await f.post('/demo/answer',answer);
+  const rows=Object.fromEntries(await Promise.all(['financial','organic'].map(async k=>[k,await f.kv.get(productStateKey(ARC_WORKSPACE,k))])));
+  const values=new Map(),kv={kind:'fixture',get:async k=>values.get(k)??null,compareAndSet:async(k,old,v)=>{if((values.get(k)??null)!==old)return false;values.set(k,v);return true;}};
+  const api=await createHostedArcDemoAPI({config:{...f.config,AXP_ARC_PREVIEW_ENABLED:'import'},root:f.root,kv});
+  assert.equal((await request(api,'/bootstrap')).status,503);
+  assert.equal((await request(api,'/operator/import',{body:rows})).status,403);assert.equal(values.size,0);
+  const proof=importProof(Buffer.from(f.config.AXP_ARC_PREVIEW_STATE_KEY,'base64'),rows),headers={'x-axp-arc-import-proof':proof};
+  assert.equal((await request(api,'/operator/import',{body:rows,headers})).status,200);
+  assert.equal((await request(api,'/operator/import',{body:rows,headers})).status,200);
+  assert.equal(await kv.get(productStateKey(ARC_WORKSPACE)),rows.financial);
+  values.set(productStateKey(ARC_WORKSPACE),'different-existing-state');
+  assert.equal((await request(api,'/operator/import',{body:rows,headers})).status,409);
+  assert.equal(await kv.get(productStateKey(ARC_WORKSPACE)),'different-existing-state');
 });

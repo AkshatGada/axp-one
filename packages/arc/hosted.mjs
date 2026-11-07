@@ -8,6 +8,7 @@ import {createArcDemoService} from './demo.mjs';
 import {arcWalletIdentities} from './wallet.mjs';
 import {ARC_LIMITS} from './network.mjs';
 import {repositoryRoot} from '../config/local.mjs';
+import {createArcImportHandler} from './hosted-import.mjs';
 
 export const ARC_WORKSPACE='arc-mumbai-preview-v1';
 const send=(res,status,value)=>{res.writeHead(status,{'content-type':'application/json; charset=utf-8','cache-control':'no-store'});res.end(JSON.stringify(value));};
@@ -27,9 +28,14 @@ function materializeWallet(config,root) {
 }
 
 export async function createHostedArcDemoAPI({config=process.env,root=repositoryRoot,kv,now=Date.now,arcOptions={},workspaceFactory}={}) {
-  const preview=config.VERCEL_ENV==='preview'&&config.VERCEL_GIT_COMMIT_REF==='feature/arc-integration';
+  // Activation flags are supplied to the designated deployment, not shared
+  // Preview/Production settings. A matching commit pin prevents other builds
+  // on the same branch from inheriting payment authority.
+  const preview=config.VERCEL_ENV==='preview'&&config.VERCEL_GIT_COMMIT_REF==='feature/arc-integration'&&
+    /^[a-f0-9]{40}$/.test(config.AXP_ARC_PREVIEW_COMMIT??'')&&config.AXP_ARC_PREVIEW_COMMIT===config.VERCEL_GIT_COMMIT_SHA;
   const local=!config.VERCEL&&config.AXP_ARC_PREVIEW_LOCAL==='1';
   const enabled=config.AXP_ARC_PREVIEW_ENABLED==='1'&&(preview||local);
+  if((preview||local)&&config.AXP_ARC_PREVIEW_ENABLED==='import')return {handler:createArcImportHandler({config,root,kv,id:ARC_WORKSPACE}),enabled:false};
   if(!enabled)return {handler:async(req,res)=>send(res,req.method==='GET'&&new URL(req.url,'http://local').pathname==='/api/arc/health'?200:503,
     {enabled:false,error:'arc_preview_disabled',network:'arc-testnet'}),enabled:false};
   const api=await createHostedProductAPI({root,kv,now,workspaceFactory,
