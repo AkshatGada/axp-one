@@ -145,3 +145,13 @@ for chapter seeking. Test public routes, referenced assets, guide content and
 provider/payment readiness after deployment. Do not claim HTTP 200 alone proves
 a new model call or finalized payment. See [hosting](docs/product/HOSTING.md) and
 [the demo runbook](docs/product/PRODUCT_DEMO.md).
+
+## Local Arc hackathon branch
+
+`npm run arc:demo` serves the existing advertiser and publisher routes at
+`http://127.0.0.1:3440`. The publisher selects `?network=arc-testnet`; the same
+product API uses the optional Circle Gateway Nanopayments worker. Payment panels
+show Gateway acceptance separately from completed batch proof. No separate
+benchmark page/endpoint or production route was added. The isolated harness
+labels fixture answer/buyer providers and uses actual Arc Testnet payments.
+See [setup and demo](docs/arc/README.md).

@@ -5,8 +5,10 @@ Project: [AXP Arc Nanopayments](https://studio.arc.io/app/0c07e997-5564-4b38-94f
 - App: `0c07e997-5564-4b38-94f9-099ea3e95393`
 - Thread: `0261dd3b-d6b0-4a63-b4c1-fa0b52538762`
 - CLI session: `axp-arc-mumbai`; CLI version 1.2.2.
-- Only repository input: `docs/arc/INTEGRATION_SPEC.md`, plus plain-language
-  requirements. No repository clone, keys, environment, SQLite or private data.
+- Initial input: `docs/arc/INTEGRATION_SPEC.md` and plain-language requirements.
+  Later selected public protocol source, sanitized evidence and the diagram/runbook
+  were supplied for review and the read-only evidence viewer. No repository clone,
+  keys, environment, SQLite or private payment payloads were uploaded.
 - Studio produced a working reference app, Express backend and
   `sdk/axp-arc-x402/` nanopayments module using the official Circle SDK 4.0.0.
 - Studio's `requirements.ts` supplies the requirement/challenge construction,
@@ -41,14 +43,40 @@ is shown separately and does not trigger withdrawal.
 
 No custom escrow is required: the deployed Circle Gateway contracts provide the
 payment stack. The first Studio prompt explored a custom escrow before the user
-specified Gateway Nanopayments. Studio's deployment listing was empty after the
-scope correction; custom escrow output is excluded from this integration.
+specified Gateway Nanopayments. A deployment listing initially returned empty while the first turn was still
+running. The completed result later disclosed one already-deployed, unused testnet
+escrow at `0x1ea0491f04873b012c0c19bf5da96030bd8d1c05`, transaction
+`0x624283d89bfea4ee7edb4533152d7bb5acf91f7ef0bb0ae3c16642e4dbb81e16`.
+No AXP funds are sent to it. Its source is archived in Studio and excluded from
+this repository's integration. Verify its receipt/gas separately; do not treat
+that deployment as nanopayment proof.
+
+Studio first reported 32 passing offline adapter tests. After adding the final
+evidence viewer it reported **44 tests / 227 assertions**, clean lint and typecheck.
+These are Studio-reported results; they were not independently rerun locally.
+Its own funded payment/withdrawal test did not run: its faucet role was denied. Those claims
+remain distinct from the locally verified AXP tests and funded run.
 
 ## Judge access
 
-The workspace URL above identifies the real Studio project. A logged-in owner's
-workspace is not proof of anonymous judge access. Verify its Share setting and
-open the share URL from a signed-out browser before submission. The demo must show
-Studio's chat, generated SDK/backend code and preview, alongside the integrated
-AXP advertiser/chat flow. Record the final share URL and access check in the
-submission checklist.
+The workspace URL above identifies the real Studio project. It opens for the
+logged-in owner, but redirected to Studio's root in a private Safari window.
+**Anonymous judge access is not verified.** Studio's Share menu offered hosting
+connections, not a proven public workspace link. The auto-generated workspace
+title still refers to the earlier escrow exploration; the preview identifies AXP
+Nanopayments and explicitly excludes that escrow from payment evidence.
+
+A reviewed static companion is preserved at `tooling/arc-preview`. It uses the
+Studio-generated evidence frontend, with wallet providers, development tracing,
+backend and signing routes excluded. It shows the final recorded batch, earlier
+pending snapshot, architecture and public read-only Gateway status checks.
+Its npm lockfile, typecheck and Vite build make the later deployment reproducible.
+It contains only public source/evidence. It is not a hosted live AXP backend.
+
+The human initially approved a separate Vercel preview, then explicitly deferred
+deployment. **Nothing was deployed to Vercel.** Do not start hosting until they
+resume that work. A public companion URL would not by itself establish public
+access to Studio's source workspace; confirm the prize's accepted sharing method.
+Show Studio's chat, generated SDK/backend code and preview in the video, alongside
+the integrated AXP advertiser/chat flow. Record the final judge-openable URL and
+access check in the submission checklist.

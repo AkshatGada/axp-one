@@ -77,6 +77,20 @@ using disposable test signers and fixture ad decisions/answer. It does not enabl
 production payments or establish participant wallet-extension signing.
 See the [verification matrix](docs/VERIFICATION.md).
 
+## Arc Nanopayments — local hackathon integration
+
+The `feature/arc-integration` branch adds an optional **Arc Testnet** rail using
+Circle Gateway Nanopayments, built with Arc Studio. It reuses the current
+campaign, auction and signed insertion receipt flow, then authorizes exact USDC
+payments per accepted receipt. Gateway acceptance and batch finality are separate
+UI states. The isolated run deposited 0.020 test USDC and batch-settled two 0.002
+payments; its answer/buyer providers are labelled fixtures. This unpushed local
+addition is separate from the current hosted release and historical evidence.
+
+See [Arc setup, demo and deliverables](docs/arc/README.md),
+[architecture](docs/arc/ARCHITECTURE.md) and
+[actual verification](docs/arc/VERIFICATION.md). Solana and Tempo remain supported.
+
 ## Evidence reviewers can inspect
 
 | Evidence | Result | Read more |

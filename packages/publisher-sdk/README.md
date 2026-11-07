@@ -286,3 +286,12 @@ Use the packaged validators rather than treating HTTP 200 alone as acceptance.
 - [Account integration documentation](https://github.com/AkshatGada/axp-one/tree/main/docs/accounts)
 - [Source and integration tests](https://github.com/AkshatGada/axp-one/tree/main/tests/publisher-sdk)
 - [Report an SDK issue](https://github.com/AkshatGada/axp-one/issues)
+
+### Arc Nanopayments (hackathon branch source)
+
+The `feature/arc-integration` source additionally accepts
+`settlementNetwork: 'arc-testnet'`. It uses the same Request → Render → Acknowledge
+SDK flow. Accepted receipts authorize exact Circle Gateway USDC nanopayments,
+with Gateway acceptance and later batch finality reported separately. The
+published npm **0.2.1** predates this addition; use the local source on this branch
+for Arc. No new npm release is claimed. See [Arc setup and demo](../../docs/arc/README.md).

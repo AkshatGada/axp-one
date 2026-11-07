@@ -174,3 +174,14 @@ verifies deposit, payout and refund in a local runtime using the public npm SDK,
 disposable test signers and fixture ad decisions/answer. These later account
 results do not alter the original shared-demo records or enable production cash
 payments; participant wallet-extension acceptance remains a distinct scope.
+
+## Optional Arc Nanopayments rail on the hackathon branch
+
+The local `feature/arc-integration` branch reuses the existing exchange/receipt
+path with Circle Gateway USDC funding and exact per-receipt EIP-3009
+authorizations. Gateway acceptance, completed batch settlement and wallet
+withdrawal are distinct; unused allocation remains in Gateway. Solana/Tempo
+cumulative vouchers keep their original semantics. See the
+[Arc architecture and diagram](arc/ARCHITECTURE.md) and
+[verified isolated execution](arc/VERIFICATION.md). Hosted and account-owned
+configuration are unchanged by this local addition.

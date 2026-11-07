@@ -2,8 +2,9 @@
 
 Target: **Arc Studio Continuity Track: Bring Your Project to Arc**, ETHGlobal Mumbai.
 Clean starting commit: `88c9bfbb9ce5d3b532e1a4bff2a276d4c1c1baa4` on `main`.
-Branch: `feature/arc-integration`. No push, publication, submission, mainnet or
-production deployment is authorized.
+Branch: `feature/arc-integration`. Push, publication, submission, mainnet and AXP
+production deployment require separate human approval. A separate read-only
+Vercel preview was approved and then deferred by the human; it has not been deployed.
 
 ## Product decision
 

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "axp.arc-checks.v1",
+  "recordedAt": "2026-11-06T23:10:55.635898+00:00",
+  "baselineCommit": "88c9bfbb9ce5d3b532e1a4bff2a276d4c1c1baa4",
+  "branch": "feature/arc-integration",
+  "local": {
+    "reviewCommand": "npm run verify:review",
+    "repositoryTests": {
+      "total": 851,
+      "passed": 828,
+      "skipped": 23,
+      "failed": 0,
+      "skipNote": "Optional native capabilities unavailable; no new paid Solana/Tempo run claimed."
+    },
+    "uiComponentTests": {
+      "total": 91,
+      "passed": 91,
+      "failed": 0
+    },
+    "arcTargetedTests": {
+      "total": 13,
+      "passed": 13,
+      "failed": 0
+    },
+    "productTypecheck": "passed",
+    "marketingTypecheck": "passed",
+    "reactSdkParity": "passed",
+    "documentationLinks": "passed",
+    "repositoryHygiene": "passed",
+    "productProductionBuild": "passed",
+    "readOnlyPreviewTypecheckAndBuild": "passed",
+    "finalStaticPreviewBrowserInspection": "unavailable after native browser controls timed out",
+    "readOnlyPreviewHTTPAssets": {
+      "status": "passed",
+      "index": true,
+      "referencedAssets": 2,
+      "signaturesCreated": 0,
+      "broadcasts": 0
+    },
+    "architectureSVGVisualReview": "passed: full diagram rendered locally"
+  },
+  "testnetIndependentReadOnlyVerification": {
+    "evidence": "artifacts/arc/batch-finalized.json",
+    "nativeTransactionsVerified": 2,
+    "paymentsVerified": 2,
+    "currentlyBatchFinalized": 2,
+    "publicReceiptSignaturesVerified": 2,
+    "signaturesCreated": 0,
+    "broadcasts": 0,
+    "providerCalls": 0
+  },
+  "studioReported": {
+    "tests": 44,
+    "assertions": 227,
+    "lint": "passed",
+    "typecheck": "passed",
+    "independentlyRerun": false
+  },
+  "sharing": {
+    "studioWorkspace": "https://studio.arc.io/app/0c07e997-5564-4b38-94f9-099ea3e95393",
+    "anonymousStudioAccessVerified": false,
+    "vercelDeployment": "deferred by human; not deployed"
+  },
+  "scope": "Fixture checks, Studio-reported checks and actual testnet proof are separate."
+}
