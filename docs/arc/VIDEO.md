@@ -1,11 +1,15 @@
 # AXP × Arc submission video
 
-The completed film is **3 minutes 18 seconds**, **1920×1080**, **30 fps**, H.264
+The revised version 2 film is **3 minutes 18 seconds**, **1920×1080**, **30 fps**, H.264
 MP4 with AAC narration and optional English captions. There is **no music**.
 
 Local downloadable export (ignored; do not commit the media):
 
-`local-state/arc/video/AXP-Arc-Continuity-Demo.mp4`
+`local-state/arc/video/v2/AXP-Arc-Continuity-Demo-v2.mp4`
+
+Version 2 uses a different male voice (George), gives AXP a 45-second opening
+explanation, and adds quiet chapter pauses. Speech is not time-stretched. The
+original Roger version remains at `local-state/arc/video/AXP-Arc-Continuity-Demo.mp4`.
 
 The narration is calm and product-focused. It shows the advertiser's campaign,
 the independent answer and separate Sponsored card, accepted delivery, app
@@ -17,7 +21,7 @@ code tour, private key, raw payment signature, nonce or storage walkthrough.
 - [Final narration](video/NARRATION.md)
 - [Storyboard](video/STORYBOARD.md)
 - [Product flow SVG](video/product-flow.svg)
-- Optional captions: `local-state/arc/video/AXP-Arc-Continuity-Demo.srt`
+- Optional captions: `local-state/arc/video/v2/AXP-Arc-Continuity-Demo-v2.srt`
 
 ## Factual boundaries
 
@@ -41,10 +45,11 @@ No new deposit, mainnet action, withdrawal or refund is implied.
 
 - Duration, resolution, video/audio/caption streams verified with ffprobe.
 - Entire encoded MP4 decoded without errors.
-- Thirteen representative frames inspected across the final encoded film.
+- Representative frames inspected across the final encoded film, including the new introduction.
 - Narration timing checked against its character alignment and scene cuts.
-- Audio measures approximately −16.7 LUFS integrated, with −4.2 dBFS true peak:
-  audible narration, no clipping and no music track.
+- Revision reuses the original UI evidence and performs no new financial action.
+- Revised encoded audio measures −16.51 LUFS integrated and −4.34 dBFS true peak,
+  with no clipping. Final measurements are retained in the ignored local QA record.
 - Studio's actual preview was restored through its own Restart dev server control.
   The shot excludes the personal account footer and unrelated browser tabs.
 - The final file has not been uploaded or submitted. The human reviews the file

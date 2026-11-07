@@ -1,29 +1,29 @@
-# AXP × Arc — submission film
+# AXP × Arc — revised submission film
 
-Target: approximately three minutes, 1920×1080 H.264 MP4, narration only, no music.
-Tone: calm, conversational, a founder walking through the product. No synthetic
-voice declaration, sponsor pitch, code tour, private credentials or backend detail.
-Show actual UI and retain its testnet/fixture labels. No speeding up actions.
+Version 2: 3:18, 1920×1080, H.264 MP4, male narration only, no music.
+The opening spends about 45 seconds explaining AXP and the two sides it connects.
+The revised voice is George; speech is not time-stretched. Short quiet chapter
+pauses give the viewer time to follow. The original export remains available.
 
-| Scene | Approximate span | Actual picture | Narration purpose |
+| Scene | Span | Picture | Narration purpose |
 | --- | --- | --- | --- |
-| 1 | 0:00–0:24 | AXP campaign dashboard, then project title | Explain AXP; identify existing product and new Arc contribution |
-| 2 | 0:24–0:47 | Approved StackPilot campaign and spending cap | Advertiser controls the offer and budget |
-| 3 | 0:47–1:13 | One real chat turn; independent answer and Sponsored card | Show the product experience and its visible fixture label |
-| 4 | 1:13–1:36 | Delivery inspection and app earnings | Accepted insertion creates one charge; duplicate delivery cannot charge twice |
-| 5 | 1:36–2:01 | Arc payment view, explicit send/reconcile only if needed | Explain small payments and acceptance versus later settlement |
-| 6 | 2:01–2:19 | Actual Arc Studio project and preview | Show substantive Studio use without code/debug exposure |
-| 7 | 2:19–2:39 | Clean product-flow diagram | Explain advertiser → app → Arc settlement visually |
-| 8 | 2:39–3:03 | Saved completed batch proof and closing product view | Show real payment evidence and clear current limits |
+| 1 | 0:00–0:19 | Title; new AI app and advertiser explainer | Who AXP serves and why each side uses it |
+| 2 | 0:19–0:45 | Both sides; actual Sponsored card and receipt; Arc title | Explain the existing product, then introduce the new Arc path |
+| 3 | 0:45–1:04 | Approved StackPilot campaign and spending cap | Advertiser controls the offer and budget |
+| 4 | 1:04–1:26 | Actual chat, independent answer and Sponsored card | Show the experience and disclose prepared provider fixtures |
+| 5 | 1:26–1:50 | Delivery inspection | Accepted insertion creates one charge; repeated receipt creates no duplicate |
+| 6 | 1:50–2:16 | Arc earnings totals and recorded completed batch | Separate authorization, Gateway acceptance and Arc batch settlement |
+| 7 | 2:16–2:43 | Actual Studio project/preview, then product-flow diagram | Show Studio and connect the existing app to the new payment rail |
+| 8 | 2:43–3:18 | Recorded two-payment batch, real Explorer proof, closing | State the 0.004 test-USDC result and limits clearly |
 
-Final timings follow the generated narration alignment. Preserve ordinary action
-speed and pause deliberately where a viewer needs to read. Use saved proof for
-retakes; never reset state or repeat paid/funding actions. If a newly captured
-payment is pending, do not cut it together as if it were the earlier completed
-batch. The completed two-payment batch is explicitly recorded proof.
+Cuts follow the narration's character alignment. Genuine UI captures are held for
+reading; this is an edited walkthrough rather than an uninterrupted live recording.
+The edit reuses the original evidence and makes no new model call, signature,
+delivery, deposit or payment. Keep fixture/testnet labels visible. The completed
+two-payment batch is explicitly earlier recorded proof; the third authorization
+shown in the earnings snapshot is not represented as that completed batch.
 
-Capture checklist: real Studio UI visible; readable 16:9 product UI; no login
-callback/history/autofill screens; no other personal tabs or private terminals;
-fixture and testnet labels remain honest; no private wallet/signature inspection.
-Export checklist: 2–4 minutes; ≥720p; audible voice; no music; no accelerated demo;
-check the final encoded file, representative frames, timing and audio loudness.
+Capture checklist: actual Studio visible; readable 16:9 product UI; no login,
+autofill, personal account footer, unrelated tabs, wallet keys or raw signatures.
+Export checklist: 2–4 minutes; ≥720p; narrator audible without clipping; no music;
+no accelerated demo; inspect the encoded frames, captions, chapter timing and audio.

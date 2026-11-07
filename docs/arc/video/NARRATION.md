@@ -1,17 +1,20 @@
-# Final demo narration
+# Revised demo narration
 
-This is AXP. It connects advertisers with independent AI apps, so a useful Sponsored suggestion can appear beside an answer, without changing the answer itself. For the Arc Studio Continuity Track, we brought our existing product to Arc. The new feature lets those apps earn small USDC payments for accepted ad deliveries.
+Version 2 gives AXP a longer introduction before the Arc walkthrough. Calm male
+narration, with short chapter pauses; approximately 3 minutes 18 seconds in total.
 
-Let's start with the advertiser. Here, StackPilot has an approved campaign, a fixed spending limit, and the exact text that can appear in a Sponsored card. The advertiser can review the offer, choose when it is relevant, and keep spending within a clear cap. This campaign is funded with test USDC on Arc Testnet.
+AXP is an advertising network for independent AI apps and agents. Think of a developer building a chat assistant or a specialist research tool. They want to earn revenue from the app. Advertisers, meanwhile, want to reach people when their product is relevant to what someone is doing.
 
-Now we switch to the app. Someone asks for help choosing developer tools. The app gives its own answer first. A separate Sponsored card appears underneath, with a clear label and a link to the advertiser. For this demonstration, the answer and buying judgment are prepared fixtures, as the page shows. The ad delivery and the payment flow are real.
+AXP connects those two sides. An advertiser supplies an approved offer and a spending limit. The app can show that offer as a clearly labelled Sponsored card, separate from its own answer. When the app confirms the card was delivered, it earns a small payment. That's the existing product. For Mumbai, we added Arc Nanopayments, so those accepted deliveries can be paid in USDC.
 
-Opening this turn shows what happened. The app has acknowledged that the card was inserted and that Sponsored disclosure was present. That accepted delivery creates one charge. Simply reserving a bid does not spend the budget, and sending the same receipt again does not create another charge. The advertiser's spend and the app's earnings come from the same delivery record.
+Here's the advertiser's side. StackPilot has an approved campaign, the exact Sponsored text, and a fixed spending cap. This allocation uses test USDC on Arc Testnet. The advertiser can see what is eligible to appear, and how much of the allocation has been used.
 
-Here is the Arc payment view. Each accepted delivery authorizes an exact payment to the app. Circle Gateway accepts these small payments without requiring a separate onchain transaction for every ad. The product shows acceptance and completed batch settlement separately, so an accepted payment is never presented as already finalized. The unused part of the advertiser's allocation remains in its Gateway balance.
+Now we move to the independent app. Someone asks for help choosing developer tools. The app gives its own answer, and a separate Sponsored card appears underneath. In this demo, the answer and buying judgment are prepared fixtures, as the page shows. The delivery receipt, accounting, and Arc payment path are real.
 
-We used Arc Studio to build the new payment integration and its reference experience, then brought that work into the existing AXP application. This is the actual Studio project and preview. The campaign, chat, and delivery flow remain part of AXP; Arc provides the new stablecoin payment rail. The existing Solana and Tempo options are still available.
+Opening the delivery shows the next step. The app has acknowledged that the card was inserted with Sponsored disclosure. That accepted receipt creates one charge. Reserving a bid doesn't charge the advertiser, and submitting the same receipt again doesn't create another payment. Here, one delivery earns zero point zero zero two test USDC.
 
-The flow is straightforward. An advertiser approves a campaign. An independent app delivers a clearly disclosed Sponsored card. An accepted delivery earns a small USDC payment. Arc then provides a shared settlement record. That connects the advertising experience to something the app can actually earn, while keeping the answer independent and the spending limit visible.
+The payment view separates authorization, Gateway acceptance, and completed settlement. We use Circle Gateway Nanopayments to accept small payments without sending a separate onchain transaction for every ad. Gateway later settles them in a shared Arc batch. Acceptance isn't treated as finality, and the unused allocation remains in the advertiser's Gateway balance.
 
-And here is the recorded result. Two deliveries, at zero point zero zero two test USDC each, completed in the same Arc batch: zero point zero zero four in total. The Explorer transaction is real. This demo uses test assets; wallet withdrawal is outside this version. What we added during Mumbai is a working Arc payment path inside an existing product, from an accepted Sponsored delivery to the app's payment record.
+This is the actual Arc Studio project. We used Studio to develop and review the Arc integration and its reference experience, then brought that work into the existing AXP app. The diagram shows the connection: campaign, independent app, accepted delivery, then an exact USDC payment through Gateway to Arc settlement. The existing Solana and Tempo options remain available.
+
+Finally, here's the recorded settlement proof. Two earlier deliveries, each worth zero point zero zero two test USDC, completed in the same Arc batch. That's zero point zero zero four in total. The Explorer shows the successful transaction. These are test assets, and wallet withdrawal is outside this version. AXP already connected advertisers and AI apps. What we added is a working Arc payment path from an accepted Sponsored delivery to the app's earnings.
