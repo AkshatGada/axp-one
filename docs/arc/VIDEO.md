@@ -1,52 +1,51 @@
-# Demo video script and recording checklist
+# AXP × Arc submission video
 
-Target length: **2:30–3:00**. Bounty name in title/description:
-**Arc Studio Continuity Track: Bring Your Project to Arc**.
+The completed film is **3 minutes 18 seconds**, **1920×1080**, **30 fps**, H.264
+MP4 with AAC narration and optional English captions. There is **no music**.
 
-| Time | Show | Say |
-| --- | --- | --- |
-| 0:00–0:20 | Existing AXP advertiser dashboard and example chat | “AXP connects advertisers with independent AI apps. This is our existing product: campaign approval, buying agents, deterministic auction, Sponsored insertion and signed delivery receipts.” |
-| 0:20–0:40 | Architecture diagram; highlight new Arc branch | “During ETHGlobal Mumbai we added Arc Nanopayments using Circle Gateway. It takes the payment role previously handled by Solana channels. Solana and Tempo remain available.” |
-| 0:40–1:00 | Arc Studio chat, `sdk/axp-arc-x402/requirements.ts`, tests and preview | “We used Arc Studio to build the nanopayment protocol and reference backend/UI, then reviewed and integrated its code into AXP. Here is the real project and generated source.” |
-| 1:00–1:20 | AXP campaign, approved text/cap, Gateway deposit Explorer link | “The advertiser funds a Gateway balance with test USDC on Arc. This deposit is real. A campaign allocation bounds spending; it is not a new onchain escrow.” |
-| 1:20–1:50 | Send the developer-tools prompt; show answer then Sponsored card | “The independent answer and buying judgment are labelled fixtures for this bounded demo. The auction, actual DOM insertion, receipt signature and payment authorization are real. Only accepted insertion creates a charge.” |
-| 1:50–2:15 | View internals → Payment → Send nanopayments | “Each receipt authorizes exactly one 0.002 test-USDC EIP-3009 payment. Circle Gateway accepts both payments without a transaction per ad. Acceptance is shown separately from batch settlement.” |
-| 2:15–2:40 | Check batch settlement and actual Explorer proof, or explicitly pending state | “Gateway later settles the batch on Arc. We reconcile the original transfer ID/nonce and verify the reported batch transaction through RPC. If it is pending, we say pending.” |
-| 2:40–3:00 | Advertiser report, Studio evidence preview, repository diff/commits | “The same accepted receipts drive advertiser spend and publisher earnings. The branch documents exactly what existed before and what we added. No mainnet, real funds or new trained model is claimed.” |
+Local downloadable export (ignored; do not commit the media):
 
-If batch proof is still pending, end with the finalized Gateway deposit and real
-facilitator acceptance. Do not substitute the unrelated unused Studio escrow
-transaction. Do not edit a pending state into “finalized.”
+`local-state/arc/video/AXP-Arc-Continuity-Demo.mp4`
 
-## Before recording
+The narration is calm and product-focused. It shows the advertiser's campaign,
+the independent answer and separate Sponsored card, accepted delivery, app
+earnings, the actual Arc Studio project/preview, a product-flow diagram and the
+real Arc Explorer transaction. It identifies AXP as a pre-existing product and
+Arc Nanopayments as the new Mumbai work. It contains no voice-service attribution,
+code tour, private key, raw payment signature, nonce or storage walkthrough.
 
-- [ ] Confirm Continuity registration/eligibility and owner disclosure.
-- [ ] Start `npm run arc:demo`; open the advertiser and publisher URLs in README.
-- [ ] Open the Studio project and preview; confirm its sandbox is awake.
-- [ ] Verify a judge can open the final Studio/share URL. Owner access is insufficient.
-- [ ] Prepare [architecture.svg](architecture.svg) or the Mermaid diagram.
-- [ ] Check remaining campaign cap before any fresh turn. Current preparation has
-      two 0.002 deliveries already accepted, leaving 0.004 for two recording turns.
-- [ ] Use saved evidence for repeated takes; do not reset state or make new deposits.
-- [ ] Close login callback tabs, terminal environment views, wallet files and private
-      database inspectors. Never show keys or raw EIP-3009 signatures.
-- [ ] Use a clean 16:9 capture, readable zoom and microphone; remove notifications.
-- [ ] Keep fixture-provider disclosure visible and verbally identify test USDC.
+- [Final narration](video/NARRATION.md)
+- [Storyboard](video/STORYBOARD.md)
+- [Product flow SVG](video/product-flow.svg)
+- Optional captions: `local-state/arc/video/AXP-Arc-Continuity-Demo.srt`
 
-## During recording
+## Factual boundaries
 
-- [ ] Show Arc Studio itself, not only a screenshot or generic logo.
-- [ ] Show actual frontend and backend behavior with an accepted DOM receipt.
-- [ ] Open the actual Gateway deposit Explorer transaction.
-- [ ] Show amount/party/receipt hashes, not private payment payloads.
-- [ ] Show Gateway acceptance separately from batch finality.
-- [ ] If ending the campaign, do it last. Unused allocation stays in Gateway.
+The UI captures come from actual AXP, Arc Studio and Arc Explorer. Provider
+fixture/testnet labels remain visible. Product interactions were not accelerated.
+The edit uses captured views and a product diagram, with deliberate holds timed
+to narration. It is an edited walkthrough, not an uninterrupted live session.
 
-## Before upload/submission
+One new actual delivery was captured, creating its original 0.002 test-USDC
+signed authorization. The final submission click was blocked by automatic UI
+approval review; no payment request was sent by that click. That authorization
+was preserved during the parent task's hosting handoff. It is not presented as
+finalized in the film.
 
-- [ ] Review every frame and audio for credentials or unrelated personal information.
-- [ ] Verify the video link works in a signed-out browser.
-- [ ] Include the exact bounty name, repo/branch/commit links, Studio URL and diagram.
-- [ ] State the pre-existing/new-work boundary and fixture/live evidence distinction.
-- [ ] Human approves repository publication/hosting and submits before
-      **Saturday, 7 November 2026, 9:00 AM IST**.
+Settlement proof is explicitly the earlier **recorded two-payment batch**:
+2 × 0.002 = 0.004 test USDC. The Explorer shot shows its successful transaction:
+`0xcc2e5aabe8828064e2b89064f7f649ac5116edb6eeba091fd1728d76a6dcea7f`.
+No new deposit, mainnet action, withdrawal or refund is implied.
+
+## Export review
+
+- Duration, resolution, video/audio/caption streams verified with ffprobe.
+- Entire encoded MP4 decoded without errors.
+- Thirteen representative frames inspected across the final encoded film.
+- Narration timing checked against its character alignment and scene cuts.
+- Audio measures approximately −16.7 LUFS integrated, with −4.2 dBFS true peak:
+  audible narration, no clipping and no music track.
+- Studio's actual preview was restored through its own Restart dev server control.
+  The shot excludes the personal account footer and unrelated browser tabs.
+- The final file has not been uploaded or submitted. The human reviews the file
+  and uploads it to ETHGlobal before the stated 9:00 AM IST deadline.

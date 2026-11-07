@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#f7f6f2" />
+<style>text{font-family:PolySans,Arial,sans-serif;fill:#171b1f}</style>
+<text x="100" y="150" font-size="58">AXP + Arc Nanopayments</text>
+<rect x="110" y="300" width="500" height="210" rx="18" fill="#fff" stroke="#d7d8e2" />
+<text x="140" y="360" font-size="34">Approved campaign</text>
+<text x="140" y="425" font-size="30">Exact offer</text>
+<text x="140" y="469" font-size="30">Bounded spending</text>
+<rect x="710" y="300" width="500" height="210" rx="18" fill="#fff" stroke="#d7d8e2" />
+<text x="740" y="360" font-size="34">Independent app</text>
+<text x="740" y="425" font-size="30">Own answer</text>
+<text x="740" y="469" font-size="30">Separate Sponsored card</text>
+<rect x="1310" y="300" width="500" height="210" rx="18" fill="#fff" stroke="#d7d8e2" />
+<text x="1340" y="360" font-size="34">Accepted delivery</text>
+<text x="1340" y="425" font-size="30">Insertion acknowledged</text>
+<text x="1340" y="469" font-size="30">One accepted charge</text>
+<rect x="110" y="675" width="500" height="210" rx="18" fill="#ececff" stroke="#d7d8e2" />
+<text x="140" y="735" font-size="34">Exact USDC payment</text>
+<text x="140" y="800" font-size="30">A small payment</text>
+<text x="140" y="844" font-size="30">For the AI app</text>
+<rect x="710" y="675" width="500" height="210" rx="18" fill="#ececff" stroke="#d7d8e2" />
+<text x="740" y="735" font-size="34">Circle Gateway</text>
+<text x="740" y="800" font-size="30">Offchain acceptance</text>
+<text x="740" y="844" font-size="30">No transaction per ad</text>
+<rect x="1310" y="675" width="500" height="210" rx="18" fill="#ececff" stroke="#d7d8e2" />
+<text x="1340" y="735" font-size="34">Arc settlement</text>
+<text x="1340" y="800" font-size="30">Shared batch proof</text>
+<text x="1340" y="844" font-size="30">Publisher Gateway balance</text>
+<text x="100" y="220" font-size="38">From an approved campaign to app earnings.</text><text x="110" y="268" font-size="30">The existing AXP experience</text><text x="110" y="643" font-size="30">The new Arc payment path</text><text x="110" y="1025" font-size="30">Solana and Tempo remain available.</text><path d="M630 405h55" stroke="#3437ff" stroke-width="5" fill="none" /><path d="M688 405l-18 -11v22z" fill="#3437ff" /><path d="M1230 405h55" stroke="#3437ff" stroke-width="5" fill="none" /><path d="M1288 405l-18 -11v22z" fill="#3437ff" /><path d="M630 780h55" stroke="#3437ff" stroke-width="5" fill="none" /><path d="M688 780l-18 -11v22z" fill="#3437ff" /><path d="M1230 780h55" stroke="#3437ff" stroke-width="5" fill="none" /><path d="M1288 780l-18 -11v22z" fill="#3437ff" /><path d="M1560 525V565H600V650" stroke="#3437ff" stroke-width="4" fill="none" /><path d="M600 659l-10 -18h20z" fill="#3437ff" /></svg>
