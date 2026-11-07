@@ -15,7 +15,7 @@ const STEP_HELP = [
 type Props = { initial?: Campaign; bootstrap: Bootstrap; account: { name: string; websiteURL: string }; onSaved: () => Promise<void>; onClose: () => void; onLaunched: (campaign: Campaign) => void; onDirtyChange: (dirty: boolean) => void };
 export function CampaignEditor({ initial, bootstrap, account, onSaved, onClose, onLaunched, onDirtyChange }: Props) {
   const native = nativePayments(bootstrap);
-  const [draft, setDraft] = useState<Draft>(() => initial ? draftFields(initial) : blankDraft());
+  const [draft, setDraft] = useState<Draft>(() => initial ? draftFields(initial) : {...blankDraft(),...(bootstrap.demo?.arcDemo?{settlementNetwork:"arc-testnet" as const,maxBidBaseUnits:"1000",budgetCapBaseUnits:"12000",depositBaseUnits:"20000"}:{})});
   const network = draft.settlementNetwork ?? 'solana-devnet', unit = currencyUnit(native, network), readiness = paymentReadiness(bootstrap, network);
   const [step, setStep] = useState(0), [hints, setHints] = useState(initial?.contextHints.join('\n') ?? '');
   const [money, setMoney] = useState({ maxBidBaseUnits: decimal(draft.maxBidBaseUnits), budgetCapBaseUnits: decimal(draft.budgetCapBaseUnits), depositBaseUnits: decimal(draft.depositBaseUnits) });

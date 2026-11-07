@@ -26,7 +26,7 @@ export function CampaignDetail({ campaign: current, state, bootstrap, native, bu
         <Ld.Button variant="ghost" disabled={busy} onClick={() => onAction('duplicate')}>Duplicate</Ld.Button>
         {current.status === 'active' && <Ld.Button variant="secondary" disabled={busy} onClick={() => onAction('pause')}>Pause campaign</Ld.Button>}
         {current.status === 'paused' ? <Ld.Button disabled={busy} onClick={() => onAction('resume')}>Resume campaign</Ld.Button>
-          : current.status === 'active' ? <Ld.Button href={`/publisher-demo/?network=${networkOf(current)}`}>Try it in the example chat →</Ld.Button> : null}
+          : current.status === 'active' ? <Ld.Button href={`${bootstrap.demo?.arcDemo?"/arc":""}/publisher-demo/?network=${networkOf(current)}`}>Try it in the example chat →</Ld.Button> : null}
       </div>} />
     <Ld.StatStrip label="Campaign results" items={[
       { label: 'Accepted deliveries', value: count(current, state.deliveries), note: 'Sponsored cards shown' },
@@ -41,7 +41,7 @@ export function CampaignDetail({ campaign: current, state, bootstrap, native, bu
             { key: 'question', head: 'Conversation', cell: d => <span className="ad-delivery-question">{d.question ?? 'Sponsored card shown'}</span> },
             { key: 'time', head: 'Recorded', cell: d => date(d.createdAt) },
             { key: 'amount', head: `Charge, ${unit}`, num: true, cell: d => decimal(d.priceBaseUnits ?? d.amountBaseUnits ?? '0') },
-          ]} /> : <div className="ad-pad"><Ld.Empty title="No deliveries yet" action={current.status === 'active' ? <Ld.Button variant="secondary" href={`/publisher-demo/?network=${networkOf(current)}`}>Ask a matching question →</Ld.Button> : undefined}>A delivery appears when this campaign wins a placement and its card is shown in the example chat.</Ld.Empty></div>}
+          ]} /> : <div className="ad-pad"><Ld.Empty title="No deliveries yet" action={current.status === 'active' ? <Ld.Button variant="secondary" href={`${bootstrap.demo?.arcDemo?"/arc":""}/publisher-demo/?network=${networkOf(current)}`}>Ask a matching question →</Ld.Button> : undefined}>A delivery appears when this campaign wins a placement and its card is shown in the example chat.</Ld.Empty></div>}
         </Ld.Panel>
         <Ld.Panel title="Activity">
           {events.length ? <Ld.Timeline rows={events.slice(-8).reverse().map((e, i) => ({ key: e.id ?? String(i), time: date(e.createdAt), what: e.message ?? eventLabel(e.type) }))} /> : <p className="ld-secondary">Nothing has happened to this campaign yet.</p>}

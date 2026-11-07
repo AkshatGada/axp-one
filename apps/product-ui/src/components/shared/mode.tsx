@@ -40,8 +40,8 @@ export function useAccountPresence(): Presence {
   return presence;
 }
 
-export function DemoContext() {
-  return <Ld.Context kind="demo" label="Shared demo" detail="Public example data" />;
+export function DemoContext({arc=false}: {arc?: boolean}={}) {
+  return <Ld.Context kind="demo" label={arc?'Arc Testnet demo':'Shared demo'} detail={arc?'Shared testnet workspace':'Public example data'} />;
 }
 
 /** The sentence that stops demo campaigns being mistaken for the visitor's own, with the way out. */

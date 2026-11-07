@@ -70,7 +70,7 @@ export function CampaignList({ state, bootstrap, native, busy, presence, rows, o
           </ul>
         </> : <div className="ad-pad"><Ld.Empty title="No campaigns match" action={<Ld.Button variant="secondary" onClick={() => { setFilter('all'); setQuery(''); }}>Clear filters</Ld.Button>}>Try another status or a different search.</Ld.Empty></div>}
       </Ld.Panel>
-      <p className="ad-next"><a href={destinations.exampleChat.href}>See a campaign appear in the {destinations.exampleChat.label.toLowerCase()} →</a></p>
+      <p className="ad-next"><a href={bootstrap.demo?.arcDemo?"/arc/publisher-demo/":destinations.exampleChat.href}>See a campaign appear in the {destinations.exampleChat.label.toLowerCase()} →</a></p>
     </>}
   </>;
 }

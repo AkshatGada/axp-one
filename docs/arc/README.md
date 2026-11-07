@@ -66,9 +66,16 @@ Never share `.env`, wallet files or private database/payment payloads.
 
 ## Local demo
 
-The prepared workspace on this machine is `local-state/arc/product`; its Arc keys
-are in ignored `local-state/arc/secrets/arc-wallet.json`. Do not delete/reset it.
-It holds the actual funded state and original payment identities.
+**Current review:** the preserved workspace has moved to the per-request durable
+backend at [localhost:3450](http://127.0.0.1:3450/arc/advertiser-dashboard/).
+Use `npm run arc:hosted-local`. See [local hosted-backend review](HOSTED_PREVIEW.md)
+for the Arc chat, state handoff and remaining spending cap. The archived original
+writer below refuses to resume after this handoff; do not delete its marker.
+
+The original archived workspace on this machine is `local-state/arc/product`;
+the active durable copy is `local-state/arc/hosted-local`. Arc keys remain in
+ignored `local-state/arc/secrets/arc-wallet.json`. Do not delete/reset any of them.
+The commands below describe the original harness before the one-writer handoff.
 
 ```sh
 npm run arc:demo

@@ -18,7 +18,8 @@ const workingTitle: Record<string, string> = {
   payout: 'Processing the publisher payout', reconcile: 'Checking the saved payment status', authorize: 'Authorizing accepted deliveries',
 };
 
-export function AdvertiserDashboard() {
+export function AdvertiserDashboard({arcDemo=false}: {arcDemo?: boolean}={}) {
+  const exampleChat=arcDemo?{href:'/arc/publisher-demo/',label:'Arc example chat'}:destinations.exampleChat;
   const [bootstrap, setBootstrap] = useState<Bootstrap | null>(null), [state, setState] = useState<ProductState | null>(null);
   const [editorDirty, setEditorDirty] = useState(false);
   const [view, setView] = useState<View>('campaigns'), [selected, setSelected] = useState<string | null>(null), [editing, setEditing] = useState<Campaign | undefined>();
@@ -72,12 +73,12 @@ export function AdvertiserDashboard() {
   const item = (href: string, label: string, current = false, meta?: string) => ({ href, label, current, meta });
   const modeFoot = !bootstrap ? 'Loading the shared demo.' : native ? 'Test tokens on a test network. No real money.' : 'Test credits. No real money moves.';
   return <div className="ad-dashboard"><Ld.Shell
-    top={<Ld.TopBar brand={<Ld.Wordmark href="/" />} run={<DemoContext />}
-      chips={<Ld.Tag tone="outline">{bootstrap && !native ? 'Test credits · no real money' : financialModeLabel(bootstrap, state)}</Ld.Tag>}
-      actions={<><Ld.Button variant="ghost" href={destinations.exampleChat.href}>{destinations.exampleChat.label} →</Ld.Button>{signedIn ? <Ld.Button variant="secondary" href="/account/">Your account</Ld.Button> : <Ld.Button variant="secondary" href="/account/">Sign in</Ld.Button>}</>} />}
+    top={<Ld.TopBar brand={<Ld.Wordmark href={arcDemo?'/arc/':'/'} />} run={<DemoContext arc={arcDemo} />}
+      chips={<Ld.Tag tone="outline">{arcDemo?'Arc Testnet · USDC Nanopayments':bootstrap && !native ? 'Test credits · no real money' : financialModeLabel(bootstrap, state)}</Ld.Tag>}
+      actions={<><Ld.Button variant="ghost" href={exampleChat.href}>{exampleChat.label} →</Ld.Button>{signedIn ? <Ld.Button variant="secondary" href="/account/">Your account</Ld.Button> : <Ld.Button variant="secondary" href="/account/">Sign in</Ld.Button>}</>} />}
     side={<Ld.SideNav
       groups={[
-        { label: 'Shared demo', items: [item('#campaigns', 'Campaigns', view !== 'account', String(rows.length)), item('#account', 'Demo workspace', view === 'account'), item(destinations.exampleChat.href, `${destinations.exampleChat.label} →`), item(destinations.sdkGuide.href, `${destinations.sdkGuide.label} →`)] },
+        { label: arcDemo?'Arc demo':'Shared demo', items: [item('#campaigns', 'Campaigns', view !== 'account', String(rows.length)), item('#account', 'Demo workspace', view === 'account'), item(exampleChat.href, `${exampleChat.label} →`), item(destinations.sdkGuide.href, `${destinations.sdkGuide.label} →`)] },
         { label: 'Your account', items: signedIn ? [item(destinations.yourCampaigns.href, `${destinations.yourCampaigns.label} →`), item(destinations.yourApps.href, `${destinations.yourApps.label} →`)] : [item(destinations.account.href, 'Sign in →')] },
       ]}
       foot={<><strong>Shared demo</strong><p>{modeFoot}</p></>}
