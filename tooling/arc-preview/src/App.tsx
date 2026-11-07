@@ -1,48 +1,57 @@
-import { AlertTriangle } from 'lucide-react'
-import { BatchSettlement } from '@/components/BatchSettlement'
-import { Architecture } from '@/components/Architecture'
-import { Comparison } from '@/components/Comparison'
-import { Deliveries } from '@/components/Deliveries'
-import { Funding } from '@/components/Funding'
-import { Header } from '@/components/Header'
-import { Provenance } from '@/components/Provenance'
-import { RecordedSummary } from '@/components/RecordedSummary'
-import { RunLocally } from '@/components/RunLocally'
-import { evidence, explorerAddress } from '@/evidence'
+import { useState, type KeyboardEvent } from 'react'
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronRight, Layers, ReceiptText } from 'lucide-react'
+import { batch, evidence, explorerTx, payments, usdc3 } from './evidence'
 
+const studioUrl = 'https://studio.arc.io/app/0c07e997-5564-4b38-94f9-099ea3e95393'
+const chatUrl = '/arc/publisher-demo/'
+const dashboardUrl = '/arc/advertiser-dashboard/'
+const steps = [
+  { name: 'Campaign', title: 'The advertiser sets the terms.', body: 'Approve the creative, choose eligible conversations and set a spending limit. The campaign stays under advertiser control.', result: 'An approved campaign with a hard budget cap' },
+  { name: 'Match', title: 'Find the moment that fits.', body: 'ContextHint evidence and advertiser hints inform Jev’s buying-fit decision. Deterministic auction rules enforce eligibility, bids and budgets.', result: 'One winning placement, or a clean no-fill' },
+  { name: 'Delivery', title: 'The answer stays independent.', body: 'The AI app keeps its own answer and model. A clearly disclosed Sponsored card appears separately, below the answer.', result: 'A Sponsored placement inside the app’s own interface' },
+  { name: 'Receipt', title: 'Pay for an accepted insertion.', body: 'The app acknowledges the inserted creative and its disclosure. A signed receipt binds that delivery to one charge, with duplicate protection.', result: 'One accepted delivery → one exact payment' },
+  { name: 'Arc', title: 'Tiny payments. Shared settlement.', body: 'Circle Gateway accepts each exact payment offchain through the x402 batching SDK, then settles payments together on Arc Testnet.', result: 'Gateway acceptance first. Batch finality later.' },
+]
+
+function Mark() { return <span className="wordmark">axp<span>.</span>one</span> }
+function External({ href, children, className = '' }: { href: string; children: React.ReactNode; className?: string }) {
+  return <a className={className} href={href} target="_blank" rel="noopener noreferrer">{children}<ArrowUpRight size={17} aria-hidden="true" /></a>
+}
+function SponsoredCard() {
+  return <div className="sponsored"><div className="sponsored-head"><span>Sponsored</span><b>StackPilot</b></div><p>Find the bug. Ship the fix.</p><div className="sponsored-foot">Explore developer tools <ArrowUpRight size={15} aria-hidden="true" /></div></div>
+}
+function ChatSpecimen({ compact = false }: { compact?: boolean }) {
+  return <div className={`chat-specimen ${compact ? 'compact' : ''}`}><div className="specimen-bar"><span className="app-dot" />Independent AI app<span className="small-label">Illustrative</span></div><div className="chat-body"><div className="question">How do I debug my TypeScript API?</div><div className="answer-label">Your app’s answer</div><p className="answer-text">Use structured logs and a request ID to trace each call. Capture the failing input, then reproduce it in a focused test.</p><div className="answer-rule"><span>Separate from the answer</span></div><SponsoredCard /></div></div>
+}
+function HeroGraphic() {
+  return <figure className="hero-graphic" aria-label="Illustration: an advertiser reaches an independent AI app, whose Sponsored insertion earns a receipt and an Arc nanopayment."><div className="hero-graphic-label">The new ad-to-payment loop</div><div className="campaign-slip"><div className="slip-top"><span className="square" />Advertiser campaign</div><b>StackPilot · Developer tools</b><div className="slip-meta"><span>Approved creative</span><Check size={15} /></div></div><div className="hero-route" aria-hidden="true"><span /><ArrowDown size={18} /></div><ChatSpecimen compact /><div className="receipt-slip"><div className="receipt-symbol"><ReceiptText size={22} /></div><div><b>Insertion acknowledged</b><span>Signed receipt → exact payment</span></div><Check size={17} /></div><div className="hero-payment"><span className="mini-arc" aria-hidden="true">∩</span><span>Circle Gateway <ArrowRight size={14} /> Arc Testnet</span></div><figcaption>Illustrative product flow · no payment is triggered here</figcaption></figure>
+}
+function StageVisual({ step }: { step: number }) {
+  if (step === 0) return <div className="campaign-specimen"><div className="specimen-bar">Campaign control<span className="status-label"><Check size={12} />Approved</span></div><div className="campaign-inner"><div className="field-caption">Fictional advertiser</div><h3>StackPilot</h3><p>Developer tools for teams debugging and shipping APIs.</p><div className="control-row"><span>Creative</span><b>Approved version</b></div><div className="control-row"><span>Audience context</span><b>TypeScript API debugging</b></div><div className="control-row"><span>Spending</span><b>Hard campaign cap</b></div><div className="campaign-stamp"><Check size={16} />Terms approved before serving</div></div></div>
+  if (step === 1) return <div className="match-specimen"><div className="evidence-inputs"><div><span className="context-mark" />ContextHint<small>Screened evidence</small></div><span>+</span><div>Advertiser<small>Authored hints</small></div></div><div className="vertical-route" /><div className="jev-node"><span>Jev</span><b>Does this conversation fit?</b><small>Buying-fit decision</small></div><div className="vertical-route" /><div className="auction-node"><span>Deterministic auction</span><div><span>Eligibility</span><span>Bid limits</span><span>Budget</span></div></div><p className="visual-footnote">Models assess fit. Rules control money.</p></div>
+  if (step === 2) return <ChatSpecimen />
+  if (step === 3) return <div className="receipt-specimen"><div className="receipt-paper"><div className="receipt-paper-title"><ReceiptText size={26} /><span>Delivery receipt</span></div><div className="receipt-check"><Check size={16} />Approved creative inserted</div><div className="receipt-check"><Check size={16} />Sponsored disclosure present</div><div className="receipt-check"><Check size={16} />Bound to the original award</div><div className="receipt-signature"><span>Publisher signature</span><b>Authenticated</b></div></div><div className="one-charge"><span>1 receipt</span><ArrowRight size={23} /><span>1 charge</span></div><p className="visual-footnote">An insertion receipt, not a claim of attention or conversion.</p></div>
+  return <div className="arc-specimen"><div className="exact-payment"><span>Accepted delivery</span><ArrowDown size={20} /><b>Exact EIP-3009 payment</b><small>One authorization per receipt</small></div><div className="vertical-route" /><div className="gateway-node">Circle Gateway<span>Accepted offchain</span></div><div className="vertical-route dashed" /><div className="finality-node"><Layers size={23} /><div>Arc batch<small>Finalized onchain</small></div></div></div>
+}
+function Walkthrough() {
+  const [active, setActive] = useState(0)
+  function handleKey(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    let next = index
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % steps.length
+    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index + steps.length - 1) % steps.length
+    else if (event.key === 'Home') next = 0
+    else if (event.key === 'End') next = steps.length - 1
+    else return
+    event.preventDefault(); setActive(next); document.getElementById(`step-${next}`)?.focus()
+  }
+  return <section id="how-it-works" className="section wrap walkthrough"><div className="section-heading"><div><p className="eyebrow">The AXP exchange</p><h2>From conversation<br />to compensation.</h2></div><p>Advertisers reach relevant moments.<br />Independent AI apps earn from them.</p></div><div className="walkthrough-frame"><div role="tablist" aria-label="Explore the delivery flow" className="step-tabs">{steps.map((step, index) => <button key={step.name} id={`step-${index}`} role="tab" aria-selected={active === index} aria-controls="step-panel" tabIndex={active === index ? 0 : -1} onKeyDown={event => handleKey(event, index)} onClick={() => setActive(index)}><span className="step-dot">{active > index ? <Check size={13} /> : index + 1}</span>{step.name}{index < 4 && <ChevronRight className="step-arrow" size={16} aria-hidden="true" />}</button>)}</div><div id="step-panel" role="tabpanel" tabIndex={0} aria-labelledby={`step-${active}`} className="step-panel"><div className="step-copy"><p className="eyebrow">{active === 4 ? 'Added for Arc' : 'Built into AXP'}</p><h3>{steps[active].title}</h3><p>{steps[active].body}</p><div className="step-result"><span className="square" />{steps[active].result}</div><button className="text-link" onClick={() => setActive((active + 1) % steps.length)}>{active === 4 ? 'Back to the campaign' : 'Next step'}<ArrowRight size={18} /></button></div><div className="step-visual" key={active}><span className="visual-label">Illustrative architecture</span><StageVisual step={active} /></div></div><div className="walkthrough-note">In this Arc demo, answer and buying responses are labelled fixtures. Auction, insertion receipts, signing, ledger and testnet payments are real.</div></div></section>
+}
+function ArcSection() {
+  return <section className="arc-section" id="why-arc"><div className="wrap"><div className="section-heading"><div><p className="eyebrow">New for ETHGlobal Mumbai</p><h2>An ad-sized payment.<br />A shared Arc batch.</h2></div><p>Circle Gateway Nanopayments adds an optional payment rail to the existing AXP exchange.</p></div><div className="batch-diagram"><div className="batch-deliveries"><span className="diagram-label">Each accepted delivery</span>{['A', 'B', 'C'].map(letter => <div className="delivery-token" key={letter}><ReceiptText size={18} /><span>Receipt {letter}</span><span>Exact payment</span></div>)}</div><div className="merge-lines" aria-hidden="true"><svg viewBox="0 0 100 200" preserveAspectRatio="none"><path d="M0 35 H30 Q50 35 50 55 V85 Q50 100 70 100 H100 M0 100 H100 M0 165 H30 Q50 165 50 145 V115 Q50 100 70 100" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></div><div className="gateway-batch"><span className="diagram-label">Offchain acceptance</span><div className="gateway-frame"><span className="gateway-glyph" aria-hidden="true">G</span><h3>Circle Gateway</h3><p>x402 batching SDK</p><div className="batch-slots" aria-hidden="true"><span>A</span><span>B</span><span>C</span></div></div></div><div className="batch-arrow" aria-hidden="true"><ArrowRight size={26} /></div><div className="arc-batch"><span className="diagram-label">Onchain finality</span><div className="arc-frame"><span className="arc-glyph" aria-hidden="true">∩</span><h3>Arc Testnet</h3><span className="batch-tag">Shared settlement batch</span></div></div></div><div className="arc-bottom"><p>One exact authorization per receipt.<br /><strong>Acceptance and finality stay distinct.</strong></p><p>Unused allocation remains in the payer’s Gateway balance. Withdrawal and refund are outside this demo.</p></div><div className="rail-caption"><span>Already in AXP</span><span>Solana · Tempo</span><span className="rail-caption-new">Added here <ArrowRight size={14} /> Arc + Circle Gateway</span><span className="diagram-disclaimer">Illustrative batching · test USDC only</span></div></div></section>
+}
+function RecordedProof() {
+  return <section className="section wrap proof-section" id="proof"><div className="section-heading"><div><p className="eyebrow"><span className="recorded-dot" />Recorded execution · 6 November 2026 UTC</p><h2>Small payments.<br />Public proof.</h2></div><div className="proof-intro"><p>Two accepted placements. Two exact payments. Both finalized in the same Arc batch.</p>{batch && <External href={explorerTx(batch.transactionHash)} className="text-link">Verify on Arcscan</External>}</div></div><div className="proof-ledger"><div className="proof-stat"><span className="stat-label">Gateway deposit</span><strong>{usdc3(evidence.totals.depositedBaseUnits)}</strong><span>test USDC funded</span></div><div className="proof-stat"><span className="stat-label">Accepted deliveries</span><strong>{payments.length}<span className="stat-times"> × {usdc3(payments[0].amountBaseUnits)}</span></strong><span>test USDC per payment</span></div><div className="proof-stat final"><span className="stat-label"><Check size={15} />Batch-finalized</span><strong>{usdc3(evidence.totals.batchFinalizedBaseUnits)}</strong><span>test USDC · one shared batch</span></div></div><p className="proof-caption">This is the first recorded run, not the current balance or activity of the shared demo.</p><details className="proof-details"><summary>Inspect the recorded evidence <span className="detail-plus" aria-hidden="true">+</span></summary><div className="proof-detail-body"><div><h3>Receipt → payment → batch</h3>{payments.map((payment, i) => <div className="payment-record" key={payment.chargeId}><span>Delivery {i + 1}</span><code>{usdc3(payment.amountBaseUnits)} test USDC</code><span><Check size={13} />Completed</span></div>)}<p>Gateway links each transfer to the batch. The Arc RPC receipt independently verifies the batch transaction, not its individual offchain attribution.</p></div><div><h3>What this run establishes</h3><p>Actual DOM insertion receipts, exact signed authorizations, Gateway acceptance and finalized Arc settlement.</p><p>Answer and buyer responses were fixtures. No paid model execution, attention or conversion is claimed.</p>{batch && <External href={explorerTx(batch.transactionHash)} className="hash-link"><code>{batch.transactionHash.slice(0, 16)}…{batch.transactionHash.slice(-8)}</code></External>}</div></div></details></section>
+}
 export default function App() {
-  return (
-    <div className="mx-auto min-h-dvh max-w-6xl space-y-6 px-4 pb-24 pt-8 sm:px-6 sm:pt-12">
-      <Header />
-      <RecordedSummary />
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-6">
-          <Funding />
-          <BatchSettlement />
-        </div>
-        <Deliveries />
-      </div>
-      <Architecture />
-      <Comparison />
-      <Provenance />
-      <RunLocally />
-      <section className="card p-5" aria-label="Limitations">
-        <p className="eyebrow flex items-center gap-2">
-          <AlertTriangle size={14} className="text-[var(--warn)]" /> Limitations, as reported
-        </p>
-        <ul className="mt-3 space-y-2 text-sm text-[var(--muted)]">
-          {evidence.limitations.map((l) => (
-            <li key={l}>{l}</li>
-          ))}
-          <li>
-            An earlier custom escrow was deployed on Arc Testnet from this Studio project at{' '}
-            <a className="mono break-all text-[var(--accent)] hover:underline" href={explorerAddress(evidence.studio.unusedEscrow.address)} target="_blank" rel="noopener noreferrer">
-              {evidence.studio.unusedEscrow.address}
-            </a>
-            . It is unfunded, unused by this integration, and is not evidence for any payment, funding or batch shown here.
-          </li>
-        </ul>
-      </section>
-    </div>
-  )
+  return <><a className="skip-link" href="#main">Skip to content</a><header className="site-header wrap"><a href="/" className="brand-link" aria-label="AXP home"><Mark /></a><div className="header-context">AXP × Arc<span>ETHGlobal Mumbai</span></div><nav aria-label="Main navigation"><a href="#how-it-works">How it works</a><a href="#proof">The proof</a><a className="header-cta" href={chatUrl}>Try demo <ArrowUpRight size={16} /></a></nav></header><main id="main"><section className="hero wrap"><div className="hero-copy"><p className="eyebrow"><span className="brand-square" />Advertising for independent AI</p><h1>The right ad.<br />A real receipt.<br /><span>A tiny payment.</span></h1><p className="hero-lead">AXP connects advertisers with AI apps at the moment a conversation becomes a buying decision.</p><p className="hero-sub">Now with Circle Gateway Nanopayments on Arc.</p><div className="hero-actions"><a className="button primary" href={chatUrl}>Try the Arc demo<ArrowUpRight size={20} /></a><a className="text-link" href={dashboardUrl}>Advertiser dashboard<ArrowRight size={18} /></a></div><p className="demo-context"><span />Shared Arc Testnet demo · test USDC</p></div><HeroGraphic /></section><div className="promise-strip wrap"><div><b>Advertisers</b><span>Control the campaign.</span></div><div><b>AI apps</b><span>Keep the independent answer.</span></div><div><b>Arc + Circle</b><span>Settle the nanopayments.</span></div><a href="#how-it-works" aria-label="Explore how AXP works"><ArrowDown size={22} /></a></div><Walkthrough /><ArcSection /><RecordedProof /><section className="closing wrap"><div><p className="eyebrow">See the whole loop</p><h2>Start with a conversation.</h2><p>Open the chat, see the Sponsored placement, then inspect its delivery and payment.</p></div><div className="closing-actions"><a className="button primary" href={chatUrl}>Try the Arc demo<ArrowUpRight size={20} /></a><a className="text-link" href={dashboardUrl}>Open advertiser dashboard<ArrowRight size={18} /></a></div></section></main><footer className="site-footer wrap"><a className="brand-link" href="/"><Mark /></a><span>Advertising for conversational AI.</span><External href={studioUrl}>Built with Arc Studio</External><span className="footer-note">Studio project · access may require sign-in</span></footer></>
 }
