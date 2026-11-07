@@ -12,10 +12,10 @@ test('both API surfaces route to the function ahead of static files', () => {
 });
 
 test('root product routes and SDK alias redirect without intercepting nested pages', () => {
-  for (const [path, destination] of [['/mvp', '/mvp/'], ['/advertiser-dashboard', '/advertiser-dashboard/'], ['/publisher-demo', '/publisher-demo/'], ['/sdk', '/publisher-demo/integration/'], ['/sdk/', '/publisher-demo/integration/']]) {
+  for (const [path, destination] of [['/mvp', '/mvp/'], ['/advertiser-dashboard', '/advertiser-dashboard/'], ['/publisher-demo', '/publisher-demo/'], ['/arc', '/arc/'], ['/sdk', '/publisher-demo/integration/'], ['/sdk/', '/publisher-demo/integration/']]) {
     assert.deepEqual(firstTerminal(path), {src: firstTerminal(path).src, status: 308, headers: {Location: destination}});
   }
-  for (const path of ['/', '/mvp/', '/mvp/first-recording/', '/advertiser-dashboard/', '/publisher-demo/', '/publisher-demo/integration/']) assert.equal(firstTerminal(path), undefined);
+  for (const path of ['/', '/mvp/', '/mvp/first-recording/', '/advertiser-dashboard/', '/publisher-demo/', '/publisher-demo/integration/', '/arc/', '/arc/assets/index.js']) assert.equal(firstTerminal(path), undefined);
 });
 
 test('each build asset namespace gets immutable caching, APIs never do', () => {

@@ -8,7 +8,7 @@ export function Header() {
 
   useEffect(() => {
     let alive = true
-    Promise.resolve(new URL('/', window.location.origin).href)
+    Promise.resolve(new URL(import.meta.env.BASE_URL, window.location.origin).href)
       .then((url) => alive && setLink(url))
       .catch(() => undefined)
     return () => {

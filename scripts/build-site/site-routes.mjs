@@ -7,6 +7,7 @@ export function siteRoutes({mvp404 = '/mvp/404.html'} = {}) {
     {src: '^/mvp$', status: 308, headers: {Location: '/mvp/'}},
     {src: '^/advertiser-dashboard$', status: 308, headers: {Location: '/advertiser-dashboard/'}},
     {src: '^/publisher-demo$', status: 308, headers: {Location: '/publisher-demo/'}},
+    {src: '^/arc$', status: 308, headers: {Location: '/arc/'}},
     {src: '^/sdk/?$', status: 308, headers: {Location: '/publisher-demo/integration/'}},
     {handle: 'filesystem'},
     {src: '^/$', dest: '/index.html', check: true},

@@ -7,8 +7,9 @@ GET requests to Gateway. It cannot sign, fund, settle, or serve a live AXP chat.
 
 For deployment the unnecessary wallet providers, backend, signing SDK, development
 trace capture and polyfills were removed. The watermark/provenance remain.
-Only this directory is uploaded to the separate Vercel project, never the AXP
-repository root, private state, `.env`, or wallet files.
+The root site build publishes only this viewer's `dist` at `/arc/` without private
+state, `.env`, or wallet files. It can also be deployed alone using only this
+directory; a separate Vercel project was not connected.
 
 ```sh
 npm ci --ignore-scripts --no-audit --no-fund --prefix tooling/arc-preview

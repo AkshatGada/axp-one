@@ -73,10 +73,15 @@ pending snapshot, architecture and public read-only Gateway status checks.
 Its npm lockfile, typecheck and Vite build make the later deployment reproducible.
 It contains only public source/evidence. It is not a hosted live AXP backend.
 
-The human initially approved a separate Vercel preview, then explicitly deferred
-deployment. **Nothing was deployed to Vercel.** Do not start hosting until they
-resume that work. A public companion URL would not by itself establish public
-access to Studio's source workspace; confirm the prize's accepted sharing method.
-Show Studio's chat, generated SDK/backend code and preview in the video, alongside
-the integrated AXP advertiser/chat flow. Record the final judge-openable URL and
-access check in the submission checklist.
+The human initially deferred a separate Vercel project, then authorized pushing
+this branch to use the repository's existing Vercel Git integration. The site
+build includes this companion at `/arc/`, using a separate `/arc/assets/` namespace.
+It does not upload or activate the funded Arc workspace. No new Vercel connection
+or cloud environment changes are needed. The preview's final URL and access
+results belong in the submission checklist.
+
+A public companion URL does not by itself establish public access to Studio's
+source workspace; confirm the prize's accepted sharing method. Show Studio's chat,
+generated SDK/backend code and preview in the video, alongside the integrated
+AXP advertiser/chat flow. Record the final judge-openable Studio URL and access
+check in the submission checklist.

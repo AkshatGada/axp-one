@@ -152,6 +152,8 @@ a new model call or finalized payment. See [hosting](docs/product/HOSTING.md) an
 `http://127.0.0.1:3440`. The publisher selects `?network=arc-testnet`; the same
 product API uses the optional Circle Gateway Nanopayments worker. Payment panels
 show Gateway acceptance separately from completed batch proof. No separate
-benchmark page/endpoint or production route was added. The isolated harness
+benchmark page/endpoint was added. The isolated harness
 labels fixture answer/buyer providers and uses actual Arc Testnet payments.
+The site build also publishes the read-only Studio evidence companion at `/arc/`
+with assets under `/arc/assets/`. It contains no signer or fund-moving API.
 See [setup and demo](docs/arc/README.md).

@@ -10,8 +10,9 @@ channels, while retaining the existing Solana and Tempo implementations.
 **[Submission checklist](SUBMISSION.md)** · **[Video script](VIDEO.md)**
 
 The Studio URL opens for its owner; anonymous judge access still needs resolution.
-The read-only public companion is ready at `tooling/arc-preview`, but the human
-deferred Vercel deployment. No public preview is claimed.
+The read-only companion at `tooling/arc-preview` is included in the existing
+Vercel site build at `/arc/`. The human authorized pushing this feature branch
+to generate its Git-connected Preview deployment; production is not promoted.
 
 ## What works
 
@@ -147,9 +148,10 @@ The published npm SDK 0.2.1 predates Arc; no npm release is claimed. See the
 
 Normal local product configuration can opt in with `AXP_PRODUCT_ARC_ENABLED=1`,
 `AXP_PRODUCT_ARC_SIGN=1` and `AXP_ARC_WALLET_PATH`, alongside existing devnet
-configuration. The isolated harness above does not read `.env.local`. Hosted
-activation, production deployment, repository push/publication and submission
-require the human's separate approval.
+configuration. The isolated harness above does not read `.env.local`. Hosted Arc
+signing activation, production deployment and submission require separate approval.
+Branch publication and its Vercel Git preview were authorized after the local
+implementation was completed.
 
 ## Read-only evidence preview for later hosting
 
@@ -161,6 +163,8 @@ npm run dev --prefix tooling/arc-preview
 
 This selected, reviewed Studio frontend displays the recorded run and optional
 public Gateway status checks. It has no wallet, signer, backend or fund-moving
-routes. Deploy only `tooling/arc-preview` when the human resumes hosting work;
-never upload the repository root or private local workspace. See [provenance and
+routes. The root site build installs its locked dependencies, builds with
+`--base=/arc/` and copies only `dist` into the static output. No Arc keys or local
+workspace are uploaded. A separate standalone Vercel project is also possible
+using only `tooling/arc-preview`, but was not connected. See [provenance and
 sharing limits](STUDIO.md).

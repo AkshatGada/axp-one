@@ -47,6 +47,11 @@ if(!existsSync(join(mvpOut,'first-recording/index.html')))throw new Error('apps/
 // The MVP must have been built for /mvp (asset URLs carry the base path).
 if(!readFileSync(join(mvpOut,'index.html'),'utf8').includes('/mvp/_next/'))throw new Error('apps/product-ui/out was not built with NEXT_PUBLIC_BASE_PATH=/mvp');
 
+// Read-only Studio evidence companion. No wallets, backend or payment capability
+// are packaged here; the functional funded Arc workspace stays local.
+sh('npm',['ci','--ignore-scripts','--no-audit','--no-fund','--prefix','tooling/arc-preview']);
+sh('npm',['run','build','--prefix','tooling/arc-preview','--','--base=/arc/']);
+
 // 2. The native payment SDK (from vendored, hash-pinned source; the loader re-checks hashes).
 const sdkRoot=join(root,process.env.AXP_PAYMENT_SDK_ROOT||'local-state/phase4-sdk');
 const sdkReady=()=>{try{return JSON.parse(readFileSync(join(sdkRoot,'manifest.json'),'utf8')).imported===true;}catch{return false;}};
@@ -68,7 +73,9 @@ const staticDir=join(out,'static');
 cpSync(marketingOut,staticDir,{recursive:true});
 cpSync(mvpOut,join(staticDir,'mvp'),{recursive:true});
 publishProductStatic(productOut,staticDir);
+cpSync(join(root,'tooling/arc-preview/dist'),join(staticDir,'arc'),{recursive:true});
 log('static: / (marketing) + /mvp/ (MVP) + root advertiser dashboard, publisher chat and SDK guide');
+log('static: /arc/ (read-only Studio nanopayments evidence, no signing or funding routes)');
 
 mkdirSync(fnDir,{recursive:true});
 const copy=(rel,filter)=>cpSync(join(root,rel),join(fnDir,rel),{recursive:true,dereference:false,...(filter?{filter}:{})});
@@ -100,6 +107,10 @@ for(const p of ['index.html','demo/index.html','mvp/index.html','mvp/verify/inde
   if(!existsSync(join(staticDir,p)))throw new Error(`missing static page ${p}`);
   verifyPageAssets(staticDir,p);
 }
+// Vite's companion has a separate asset namespace from the existing Next pages.
+const arcHTML=readFileSync(join(staticDir,'arc/index.html'),'utf8');
+const arcAssets=[...arcHTML.matchAll(/(?:src|href)="(\/arc\/assets\/[A-Za-z0-9_.-]+)"/g)].map(m=>m[1]);
+if(arcAssets.length<2||arcAssets.some(p=>!existsSync(join(staticDir,p))))throw Error('arc_preview_assets_missing');
 const leaked=readdirSync(out,{recursive:true}).map(String).filter(p=>/(^|\/)(\.env[^/]*|test-wallets\.json|hosted-devnet-wallets\.json|[^/]*\.pem|[^/]*\.sqlite)$/.test(p));
 if(leaked.length)throw new Error(`private files in output: ${leaked.join(', ')}`);
 const fnTop=readdirSync(fnDir).sort().join(),fnLocal=readdirSync(join(fnDir,'local-state')).sort().join(),fnArtifacts=readdirSync(join(fnDir,'artifacts')).join();
