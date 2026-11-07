@@ -25,6 +25,7 @@
     "arc:wallet": "node scripts/arc/create-wallet.mjs",
     "arc:prepare": "node scripts/arc/prepare-demo.mjs",
     "arc:demo": "node scripts/arc/dev-server.mjs",
+    "arc:hosted-local": "node scripts/arc/hosted-local.mjs",
     "arc:test": "node --test tests/arc/*.test.mjs",
     "arc:reconcile": "node scripts/arc/reconcile-demo.mjs",
     "arc:verify": "node scripts/arc/verify-evidence.mjs"

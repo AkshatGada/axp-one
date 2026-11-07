@@ -1,9 +1,11 @@
 // Isolated local hackathon harness: actual Arc/Gateway, explicitly fixture
 // buyer decisions and independent answer. Never reads .env or model API keys.
 import {resolve} from 'node:path';
+import {existsSync} from 'node:fs';
 import {createProductService, PRESETS} from '../product/service.mjs';
 export function createArcDemoService({stateDir = resolve('local-state/arc/product'),
   walletPath = resolve('local-state/arc/secrets/arc-wallet.json'), ...options} = {}) {
+  if(existsSync(resolve(stateDir,'HOSTED_OWNER')))throw Object.assign(Error('arc_workspace_migrated'),{code:'arc_workspace_migrated'});
   const fixtureBuyer = async packet => {
     const score = (n, criteria) => ({type: 'score', score: n, confidence: 1,
       legend: Object.fromEntries(criteria.map((x, i) => [i, x])),
