@@ -11,9 +11,9 @@ channels, while retaining the existing Solana and Tempo implementations.
 
 The Studio URL opens for its owner; anonymous Studio workspace access still needs
 resolution. The **interactive Arc Preview is live**, separate from production:
-[overview](https://axp-hc1ae87ch-lucario004.vercel.app/arc/),
-[dashboard](https://axp-hc1ae87ch-lucario004.vercel.app/arc/advertiser-dashboard/) and
-[chat](https://axp-hc1ae87ch-lucario004.vercel.app/arc/publisher-demo/).
+[overview](https://axp-6ecvsn0yy-lucario004.vercel.app/arc/),
+[dashboard](https://axp-6ecvsn0yy-lucario004.vercel.app/arc/advertiser-dashboard/) and
+[chat](https://axp-6ecvsn0yy-lucario004.vercel.app/arc/publisher-demo/).
 See [hosted isolation, setup and verification](HOSTED_PREVIEW.md).
 
 ## What works

@@ -3,10 +3,10 @@
 This integration stays on `feature/arc-integration`. It is not merged or promoted
 to production. The current designated deployment is:
 
-- [Judge overview](https://axp-hc1ae87ch-lucario004.vercel.app/arc/)
-- [Arc advertiser dashboard](https://axp-hc1ae87ch-lucario004.vercel.app/arc/advertiser-dashboard/)
-- [Arc example chat](https://axp-hc1ae87ch-lucario004.vercel.app/arc/publisher-demo/)
-- [Configuration-only health](https://axp-hc1ae87ch-lucario004.vercel.app/api/arc/health)
+- [Judge overview](https://axp-6ecvsn0yy-lucario004.vercel.app/arc/)
+- [Arc advertiser dashboard](https://axp-6ecvsn0yy-lucario004.vercel.app/arc/advertiser-dashboard/)
+- [Arc example chat](https://axp-6ecvsn0yy-lucario004.vercel.app/arc/publisher-demo/)
+- [Configuration-only health](https://axp-6ecvsn0yy-lucario004.vercel.app/api/arc/health)
 
 All three pages and the isolated `/api/arc` backend were checked anonymously.
 The user removed Preview protection. `/arc/` is the presentation/evidence entry;
@@ -93,3 +93,10 @@ node scripts/arc/verify-evidence.mjs artifacts/arc/hosted-acceptance.json
 
 The verifier reads only public RPC/Gateway data and receipt signatures. It creates
 no signatures or broadcasts. Newer Gateway finality may exceed the frozen export.
+
+The final redesigned deployment is pinned to source `3579a57`. A fresh clean
+review passed 828/854 repository tests (26 optional skips), 91 UI tests and all
+review checks; the separately installed official SDK enabled 16/16 Arc tests.
+All four preserved payments now verify batch-completed and the hosted ledger
+was reconciled by lookup only. See the [final public snapshot](../../artifacts/arc/hosted-finalized.json)
+and [publication checks](../../artifacts/arc/hosted-preview-verification.json).

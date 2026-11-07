@@ -180,3 +180,28 @@ unused Studio escrow deployment, observed gas is 0.0432844 test USDC. Deposits
 are 0.040 test USDC total. No withdrawal, refund or mainnet operation occurred.
 The original local proof and `/arc/` recorded ledger remain the first two
 finalized payments, explicitly separate from subsequent hosted activity.
+
+## Final Preview and payment observation
+
+The redesigned presentation and interactive backend are public at the designated
+[Preview](https://axp-6ecvsn0yy-lucario004.vercel.app/arc/), source commit
+`3579a57`. Anonymous checks passed all three Arc pages, both referenced presentation
+assets and API health/state. The original paused campaign and active trial kept
+their identities and state. The production alias remained on its original
+`dpl_FbPgmunyqMgfnWf565ooxAu7zo26` deployment.
+
+A clean locked workspace review passed **828/854 repository tests**, with
+**26 optional checks skipped**, zero failures and **91/91 UI tests**, both
+UI typechecks, SDK parity, links and hygiene. After installing the isolated pinned
+Circle SDK in that checkout, all **16/16 Arc tests** passed with zero skips.
+These results do not turn the remaining optional native checks into passes.
+
+The final independent public verifier passed **4 funding transactions, 4 Gateway
+transfers, 4 successful completed-payment batch bindings and 4 Ed25519 receipts**.
+A subsequent lookup-only hosted reconciliation marked all four original payments
+finalized while leaving the campaign paused. It created no signatures, submissions,
+broadcasts or provider calls. The [final snapshot](../../artifacts/arc/hosted-finalized.json)
+records **0.008 test USDC batch-finalized**, separate from the first-run 0.004
+proof on the presentation page. Deposits remain 0.040 test USDC across both
+allocations. [Publication/check metadata](../../artifacts/arc/hosted-preview-verification.json)
+contains only public identifiers and scopes.

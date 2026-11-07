@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "axp.arc-hosted-preview-verification.v1",
+  "observedAt": "2026-11-07T02:53:06.048997+00:00",
+  "origin": "https://axp-6ecvsn0yy-lucario004.vercel.app",
+  "sourceCommit": "3579a577fbc6611320d9cb55e6656417aa14090d",
+  "branch": "feature/arc-integration",
+  "deploymentId": "dpl_Hfxkam91TsLbb5FHpNUxqdXeTjaM",
+  "environment": "preview",
+  "anonymousHttp": {
+    "/arc/": 200,
+    "/arc/advertiser-dashboard/": 200,
+    "/arc/publisher-demo/": 200,
+    "/api/arc/health": 200,
+    "/api/arc/state": 200
+  },
+  "presentationAssets": {
+    "count": 2,
+    "status": 200
+  },
+  "workspaceId": "arc-mumbai-preview-v1",
+  "solanaSigningEnabled": false,
+  "tempoSigningEnabled": false,
+  "production": {
+    "alias": "axp.one",
+    "deploymentId": "dpl_FbPgmunyqMgfnWf565ooxAu7zo26",
+    "unchanged": true
+  },
+  "mainCommit": "88c9bfbb9ce5d3b532e1a4bff2a276d4c1c1baa4",
+  "cleanReview": {
+    "repositoryTests": 854,
+    "passed": 828,
+    "skippedOptional": 26,
+    "failed": 0,
+    "uiTestsPassed": 91,
+    "typechecks": "passed",
+    "sdkParity": "passed",
+    "links": "passed",
+    "hygiene": "passed"
+  },
+  "isolatedOfficialSdkArcTests": {
+    "passed": 16,
+    "failed": 0,
+    "skipped": 0
+  },
+  "publicPaymentVerification": [
+    {
+      "transferId": "932980c6-ccf7-45e3-99c4-9c8d1f55f4e3",
+      "amountBaseUnits": "2000",
+      "currentStatus": "completed",
+      "batchTransactionHash": "0xcc2e5aabe8828064e2b89064f7f649ac5116edb6eeba091fd1728d76a6dcea7f"
+    },
+    {
+      "transferId": "207bcbab-32fe-4dee-b8d4-145d2371311b",
+      "amountBaseUnits": "2000",
+      "currentStatus": "completed",
+      "batchTransactionHash": "0xcc2e5aabe8828064e2b89064f7f649ac5116edb6eeba091fd1728d76a6dcea7f"
+    },
+    {
+      "transferId": "600ab7ea-be8b-438c-85c3-d0f3531a9e49",
+      "amountBaseUnits": "2000",
+      "currentStatus": "completed",
+      "batchTransactionHash": "0x50ea48b6608e92964c06855177b52f1ce4ef6b4263586be284124abc0e9996ee"
+    },
+    {
+      "transferId": "43b80761-d904-4eed-b56f-d0cb9844248d",
+      "amountBaseUnits": "2000",
+      "currentStatus": "completed",
+      "batchTransactionHash": "0x0edb92c987e490b5d931d0b6d2f8dec1c84bb74b9c3159925f875b930b2d4512"
+    },
+    {
+      "status": "passed",
+      "network": "arc-testnet",
+      "nativeTransactionsVerified": 4,
+      "paymentsVerified": 4,
+      "currentlyBatchFinalized": 4,
+      "publicReceiptSignaturesVerified": 4,
+      "signaturesCreated": 0,
+      "broadcasts": 0,
+      "providerCalls": 0
+    }
+  ],
+  "hostedReconciliation": {
+    "originalCampaignStatus": "paused",
+    "finalizedPayments": 4,
+    "signaturesCreated": 0,
+    "broadcasts": 0,
+    "providerCalls": 0
+  },
+  "limitations": [
+    "Presentation proof remains the immutable original two-payment run.",
+    "Fixture buyer/answer providers are not live model execution.",
+    "Native visual screenshot verification of the redesigned page is not claimed.",
+    "Anonymous Arc Studio source-workspace access remains unverified."
+  ],
+  "productionPromoted": false,
+  "ethglobalSubmitted": false
+}

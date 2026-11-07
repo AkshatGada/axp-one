@@ -9,7 +9,7 @@
 - Published branch URL:
   https://github.com/AkshatGada/axp-one/tree/feature/arc-integration
 - Interactive Preview and judge entry:
-  https://axp-hc1ae87ch-lucario004.vercel.app/arc/
+  https://axp-6ecvsn0yy-lucario004.vercel.app/arc/
   Dashboard: `/arc/advertiser-dashboard/`; chat: `/arc/publisher-demo/`.
   Anonymous page/API access verified; deployment-specific Arc activation and
   isolated durable state verified. See [hosted boundaries](HOSTED_PREVIEW.md).
@@ -70,9 +70,10 @@ that is not a determination of the team's registration or ownership eligibility.
       generated its Preview URL. Local packaged route/asset checks passed.
 - [x] Anonymous access to the interactive Preview verified after the human removed
       Preview protection. Production retains its original deployment and state.
-- [ ] Record and upload the concise video with Studio visibly demonstrated.
-- [ ] If payments remain pending, state their actual status. Batch scheduling is
-      controlled by Gateway; the unused custom Studio escrow is not payment proof.
+- [x] Human confirmed the demo video is uploaded.
+- [x] All four preserved payments independently verified completed with successful
+      Arc batch receipts; hosted ledger reconciled without signatures or broadcasts.
+      The unused custom Studio escrow is not payment proof.
 - [ ] Human reviews and submits the ETHGlobal form under the exact bounty name.
 
 The human authorized the feature branch push and existing Vercel Git Preview.
@@ -81,3 +82,9 @@ promotion, production configuration change, ETHGlobal submission or npm publicat
 was performed. Arc Studio's initial unused
 testnet escrow deployment is separately disclosed in STUDIO.md and is not part of
 the nanopayment proof.
+
+The portal draft was filled through Track & prizes only: project details, logo,
+cover and three recorded-demo screenshots, technology tags, brief Codex/Studio
+assistance disclosure, Continuity Track / Partner Prizes only and Arc details.
+The portal showed 5/6 complete, with Submit project missing. No Video, Future or
+Final action was taken by this editing task; the existing video was left alone.

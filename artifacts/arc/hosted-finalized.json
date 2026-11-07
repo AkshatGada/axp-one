@@ -1,0 +1,299 @@
+{
+  "schemaVersion": "axp.arc-evidence.v1",
+  "observedAt": "2026-11-07T02:52:25.772Z",
+  "origin": "https://axp-6ecvsn0yy-lucario004.vercel.app",
+  "network": {
+    "network": "arc-testnet",
+    "chainId": 5042002,
+    "caip2": "eip155:5042002",
+    "domain": 26,
+    "rpc": "https://rpc.testnet.arc.io",
+    "explorer": "https://testnet.arcscan.app",
+    "token": "0x3600000000000000000000000000000000000000",
+    "tokenSymbol": "USDC",
+    "decimals": 6,
+    "gatewayWallet": "0x0077777d7EBA4688BDeF3E311b846F25870A19B9",
+    "gatewayMinter": "0x0022222ABE238Cc2C7Bb1f21003F0a260052475B"
+  },
+  "execution": {
+    "providers": "fixture",
+    "actualModelCalls": 0,
+    "actualModelSpendMicroUSD": "0",
+    "domInsertionReceipts": 4
+  },
+  "receipts": [
+    {
+      "chargeId": "charge-award-05d30c12-b574-4613-b14c-66a95576a7d2",
+      "receipt": {
+        "awardId": "award-05d30c12-b574-4613-b14c-66a95576a7d2",
+        "creativeHash": "30803037c071590d5a6c8d4e6a1407ebe3e5d4bdac6076b2256d61b8f777e0cc",
+        "mode": "devnet",
+        "nonce": "render-award-05d30c12-b574-4613-b14c-66a95576a7d2",
+        "opportunityId": "opp-37f91c91923ee865bb374276",
+        "publisherId": "axp-demo-publisher",
+        "publisherKeyId": "product-publisher-v1",
+        "renderAcknowledgementHash": "0e2dda53cc7af3d5fac8b73f63970bc7fd78558dd34d6950851d011a91fcaf0b",
+        "runId": "arc-mumbai-v1",
+        "schemaVersion": "publisher-receipt.v1"
+      },
+      "receiptHash": "ac39f295c8cb35787035732b03a624b51c9b151531a9328667401f81667af273",
+      "recordedOnReplay": false,
+      "signature": "UNQUXi2V1YTtdSvVLeKYPg98FqflWVoqedFDXzDdOjZkK7ElCccXQ5ppPKmeZb+uXiH3g6yfqqC/uEPbqJsnBw=="
+    },
+    {
+      "chargeId": "charge-award-52ae3599-8bfa-4dc7-aec9-28bf116f4a58",
+      "receipt": {
+        "awardId": "award-52ae3599-8bfa-4dc7-aec9-28bf116f4a58",
+        "creativeHash": "30803037c071590d5a6c8d4e6a1407ebe3e5d4bdac6076b2256d61b8f777e0cc",
+        "mode": "devnet",
+        "nonce": "render-award-52ae3599-8bfa-4dc7-aec9-28bf116f4a58",
+        "opportunityId": "opp-42a1b8903063f31b474d4f0a",
+        "publisherId": "axp-demo-publisher",
+        "publisherKeyId": "product-publisher-v1",
+        "renderAcknowledgementHash": "1c5b1e2319c6b88010737c40dca57354f14b5efb50b1435139af6976a2a1f933",
+        "runId": "arc-mumbai-v1",
+        "schemaVersion": "publisher-receipt.v1"
+      },
+      "receiptHash": "44a44889beb1bcb5c55f8d93ba87c0487605c0a05ee0285d4a50e8c7595e5afa",
+      "recordedOnReplay": false,
+      "signature": "boU/LAxnMv/THi5gwLviMqRIC+NW3Nwe1N6Tib768FtjdHzNywBoN/usk1PqQyuFAbL41Yqzi86psS7p0v6cDA=="
+    },
+    {
+      "chargeId": "charge-award-b2e9c494-ab40-4eb1-bd08-a22d523ff8a8",
+      "receipt": {
+        "awardId": "award-b2e9c494-ab40-4eb1-bd08-a22d523ff8a8",
+        "creativeHash": "30803037c071590d5a6c8d4e6a1407ebe3e5d4bdac6076b2256d61b8f777e0cc",
+        "mode": "devnet",
+        "nonce": "render-award-b2e9c494-ab40-4eb1-bd08-a22d523ff8a8",
+        "opportunityId": "opp-51a8be895934500200da5ade",
+        "publisherId": "axp-demo-publisher",
+        "publisherKeyId": "product-publisher-v1",
+        "renderAcknowledgementHash": "a78bcda32c25467d1e8892b7d5e6e6a2a9bfe9e4af97b6add6af87f2bc7daa00",
+        "runId": "arc-mumbai-v1",
+        "schemaVersion": "publisher-receipt.v1"
+      },
+      "receiptHash": "6137b652399cb42e0d871a17184432a45ce9f43c9f4f80f172a1dfc212c51bb4",
+      "recordedOnReplay": false,
+      "signature": "Xm48vIKoE80aZBufBHYBypf0Ajj92K/byfZih454Sf6yR/sL3alQj5UtmZHftKk5zZXsELcf0tgGUJnfXL67Bg=="
+    },
+    {
+      "chargeId": "charge-award-da0a7ea3-b816-411a-b88c-b135b2c2eb83",
+      "receipt": {
+        "awardId": "award-da0a7ea3-b816-411a-b88c-b135b2c2eb83",
+        "creativeHash": "30803037c071590d5a6c8d4e6a1407ebe3e5d4bdac6076b2256d61b8f777e0cc",
+        "mode": "devnet",
+        "nonce": "render-award-da0a7ea3-b816-411a-b88c-b135b2c2eb83",
+        "opportunityId": "opp-c60086a07c528eb547898908",
+        "publisherId": "axp-demo-publisher",
+        "publisherKeyId": "product-publisher-v1",
+        "renderAcknowledgementHash": "730fe0d0f079f6551280c88861def65b27ea8162552db923f37a38c89a25c530",
+        "runId": "arc-mumbai-v1",
+        "schemaVersion": "publisher-receipt.v1"
+      },
+      "receiptHash": "88105775f34585e168362dbd7fe060d161723fe0f6b855e6a41ec098f76b1e90",
+      "recordedOnReplay": false,
+      "signature": "Xo33cZMtYeLAGKeSRZ4kv7dfeOOwliWyZ1oeAxiBSHANH2AyEvIH9MjBp9vzV4zmlS4w6/9S9zfn1j+M27ODBg=="
+    }
+  ],
+  "publisherPublicKeyPEM": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAW/UacZmEfHFQ6I2aULTqkzo71Z7vyaCJz4Mx2wt6FeA=\n-----END PUBLIC KEY-----\n",
+  "totals": {
+    "depositedBaseUnits": "40000",
+    "acceptedDeliveryBaseUnits": "8000",
+    "gatewayAcceptedBaseUnits": "8000",
+    "batchFinalizedBaseUnits": "8000",
+    "nativeFeeAttoUSD": "6719550000000000",
+    "withdrawnBaseUnits": "0",
+    "refundedBaseUnits": "0"
+  },
+  "channels": [
+    {
+      "campaignVersionId": "campaign-6a11cd3c-b1ae-4ec1-a456-e105f99c200b-v1",
+      "allocationId": "campaign-6a11cd3c-b1ae-4ec1-a456-e105f99c200b-channel",
+      "payer": "0xe48205ad7745750e2ba38f43f60f61f12757d1fe",
+      "publisher": "0x30086df57164ea18b0050b54bbbae9e0aec66901",
+      "depositBaseUnits": "20000",
+      "phase": "open",
+      "nativeOperations": [
+        {
+          "kind": "approve",
+          "status": "finalized",
+          "transactionHash": "0x325d7f858c8db74396878b930e0c6e0b0a25f188bd82bf0b35984edd466ea35b",
+          "receipt": {
+            "blockHash": "0x390d69710418f1fd019a807bcdba8d048059e05f56c7724e99425ef5cf02dabd",
+            "blockNumber": "71098741",
+            "chainId": 5042002,
+            "effectiveGasPrice": "25000000000",
+            "feeAmountBaseUnits": "1386",
+            "feeAsset": "native test USDC",
+            "feeAttoUSD": "1385350000000000",
+            "finality": "finalized",
+            "gasUsed": "55414",
+            "network": "arc-testnet",
+            "status": "finalized",
+            "transactionHash": "0x325d7f858c8db74396878b930e0c6e0b0a25f188bd82bf0b35984edd466ea35b"
+          }
+        },
+        {
+          "kind": "deposit",
+          "status": "finalized",
+          "transactionHash": "0xd2a7d8330c060608428275fada4c74b6a6581a7c4948aad922c472b814d49e4c",
+          "receipt": {
+            "blockHash": "0x9be49568a64dc0b191f35868465557c9a1a2693241b2abd3bb3c49ee1c850e00",
+            "blockNumber": "71098919",
+            "chainId": 5042002,
+            "effectiveGasPrice": "25000000000",
+            "feeAmountBaseUnits": "2189",
+            "feeAsset": "native test USDC",
+            "feeAttoUSD": "2188175000000000",
+            "finality": "finalized",
+            "gasUsed": "87527",
+            "network": "arc-testnet",
+            "status": "finalized",
+            "transactionHash": "0xd2a7d8330c060608428275fada4c74b6a6581a7c4948aad922c472b814d49e4c"
+          }
+        }
+      ],
+      "payments": [
+        {
+          "chargeId": "charge-award-b2e9c494-ab40-4eb1-bd08-a22d523ff8a8",
+          "receiptHash": "6137b652399cb42e0d871a17184432a45ce9f43c9f4f80f172a1dfc212c51bb4",
+          "authorizationHash": "0x172e3b7098a29fb8d4395baa80406924b1d87b73ddd39554b4649587aef560a7",
+          "amountBaseUnits": "2000",
+          "status": "finalized",
+          "transferId": "932980c6-ccf7-45e3-99c4-9c8d1f55f4e3",
+          "gatewayAccepted": true,
+          "transferStatus": "completed",
+          "batchProof": {
+            "attribution": "Gateway transfer API links this nonce to the RPC-verified batch transaction",
+            "blockHash": "0x399004d2d9c44d1e6299404adfb5ce65721426c31c23eebd39bd4c2896aae8f8",
+            "blockNumber": "71100834",
+            "chainId": 5042002,
+            "finality": "finalized",
+            "network": "arc-testnet",
+            "status": "finalized",
+            "transactionHash": "0xcc2e5aabe8828064e2b89064f7f649ac5116edb6eeba091fd1728d76a6dcea7f"
+          }
+        },
+        {
+          "chargeId": "charge-award-da0a7ea3-b816-411a-b88c-b135b2c2eb83",
+          "receiptHash": "88105775f34585e168362dbd7fe060d161723fe0f6b855e6a41ec098f76b1e90",
+          "authorizationHash": "0x9f6ff8489627410d922ad8172bdc3ff2485f16c748070268987fbca680d95566",
+          "amountBaseUnits": "2000",
+          "status": "finalized",
+          "transferId": "207bcbab-32fe-4dee-b8d4-145d2371311b",
+          "gatewayAccepted": true,
+          "transferStatus": "completed",
+          "batchProof": {
+            "attribution": "Gateway transfer API links this nonce to the RPC-verified batch transaction",
+            "blockHash": "0x399004d2d9c44d1e6299404adfb5ce65721426c31c23eebd39bd4c2896aae8f8",
+            "blockNumber": "71100834",
+            "chainId": 5042002,
+            "finality": "finalized",
+            "network": "arc-testnet",
+            "status": "finalized",
+            "transactionHash": "0xcc2e5aabe8828064e2b89064f7f649ac5116edb6eeba091fd1728d76a6dcea7f"
+          }
+        },
+        {
+          "chargeId": "charge-award-52ae3599-8bfa-4dc7-aec9-28bf116f4a58",
+          "receiptHash": "44a44889beb1bcb5c55f8d93ba87c0487605c0a05ee0285d4a50e8c7595e5afa",
+          "authorizationHash": "0xb0c128bebbe1d348ef3487087a4e49f771b453a311d84d468649a2ba7dc1e534",
+          "amountBaseUnits": "2000",
+          "status": "finalized",
+          "transferId": "600ab7ea-be8b-438c-85c3-d0f3531a9e49",
+          "gatewayAccepted": true,
+          "transferStatus": "completed",
+          "batchProof": {
+            "attribution": "Gateway transfer API links this nonce to the RPC-verified batch transaction",
+            "blockHash": "0x3b05fa0e7f5f842aa6128dbe855bbbadb562f7a3646e43c2d8ada6ca4381c9ed",
+            "blockNumber": "71125151",
+            "chainId": 5042002,
+            "finality": "finalized",
+            "network": "arc-testnet",
+            "operation": "batch",
+            "status": "finalized",
+            "transactionHash": "0x50ea48b6608e92964c06855177b52f1ce4ef6b4263586be284124abc0e9996ee"
+          }
+        },
+        {
+          "chargeId": "charge-award-05d30c12-b574-4613-b14c-66a95576a7d2",
+          "receiptHash": "ac39f295c8cb35787035732b03a624b51c9b151531a9328667401f81667af273",
+          "authorizationHash": "0xb946e2b7d6aa61b92699832217b2363817fefbe2714462d672411e6dd6877efb",
+          "amountBaseUnits": "2000",
+          "status": "finalized",
+          "transferId": "43b80761-d904-4eed-b56f-d0cb9844248d",
+          "gatewayAccepted": true,
+          "transferStatus": "completed",
+          "batchProof": {
+            "attribution": "Gateway transfer API links this nonce to the RPC-verified batch transaction",
+            "blockHash": "0xdc3ea84675cc56fb11fe54d012238aef6a462f03dd8c4320448969bd477b97ea",
+            "blockNumber": "71127038",
+            "chainId": 5042002,
+            "finality": "finalized",
+            "network": "arc-testnet",
+            "operation": "batch",
+            "status": "finalized",
+            "transactionHash": "0x0edb92c987e490b5d931d0b6d2f8dec1c84bb74b9c3159925f875b930b2d4512"
+          }
+        }
+      ],
+      "unsubmitted": []
+    },
+    {
+      "campaignVersionId": "campaign-82825294-b9ab-4c7d-babe-feb4f77356f5-v1",
+      "allocationId": "campaign-82825294-b9ab-4c7d-babe-feb4f77356f5-channel",
+      "payer": "0xe48205ad7745750e2ba38f43f60f61f12757d1fe",
+      "publisher": "0x30086df57164ea18b0050b54bbbae9e0aec66901",
+      "depositBaseUnits": "20000",
+      "phase": "open",
+      "nativeOperations": [
+        {
+          "kind": "approve",
+          "status": "finalized",
+          "transactionHash": "0x7ccb455acc60c82f8bec6904b19e03038e4494cbb6faa24bb522ca04f02e5566",
+          "receipt": {
+            "blockHash": "0x920b5fd766ed6ca3ede0af94871d201437a50fde41862474a9601af21d3dfa11",
+            "blockNumber": "71123936",
+            "chainId": 5042002,
+            "effectiveGasPrice": "25000000000",
+            "feeAmountBaseUnits": "1386",
+            "feeAsset": "native test USDC",
+            "feeAttoUSD": "1385350000000000",
+            "finality": "finalized",
+            "gasUsed": "55414",
+            "network": "arc-testnet",
+            "status": "finalized",
+            "transactionHash": "0x7ccb455acc60c82f8bec6904b19e03038e4494cbb6faa24bb522ca04f02e5566"
+          }
+        },
+        {
+          "kind": "deposit",
+          "status": "finalized",
+          "transactionHash": "0xeaaf504a156371638fe6b13a7fd53ac4e6baa87bb329a76c852374f2d1fb9a8d",
+          "receipt": {
+            "blockHash": "0x08b9c3ed782747e3c4ea6d9c663d22a75a768d84c7a7a7782b70bd82a64cbd71",
+            "blockNumber": "71123941",
+            "chainId": 5042002,
+            "effectiveGasPrice": "25000000000",
+            "feeAmountBaseUnits": "1761",
+            "feeAsset": "native test USDC",
+            "feeAttoUSD": "1760675000000000",
+            "finality": "finalized",
+            "gasUsed": "70427",
+            "network": "arc-testnet",
+            "status": "finalized",
+            "transactionHash": "0xeaaf504a156371638fe6b13a7fd53ac4e6baa87bb329a76c852374f2d1fb9a8d"
+          }
+        }
+      ],
+      "payments": [],
+      "unsubmitted": []
+    }
+  ],
+  "limitations": [
+    "Recorded public API observation, not a new provider or payment operation.",
+    "Unsubmitted authorizations remain listed separately and are not Gateway acceptance.",
+    "Gateway attributes transfers to batches; RPC independently verifies their batch receipts.",
+    "Unused funds remain in Gateway; no withdrawal/refund performed."
+  ]
+}
