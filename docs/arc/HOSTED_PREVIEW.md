@@ -1,87 +1,95 @@
-# Interactive Arc backend: local review before hosting
+# Interactive Arc Preview
 
-The interactive Arc pages use `/api/arc`, isolated from `/api/product` and the
-production shared demo. The backend reuses AXP's existing encrypted snapshot,
-compare-and-swap lease, checkpoint and original-operation recovery machinery.
-It restores a private scratch workspace per request. The local runner deliberately
-creates a fresh API instance each time, exercising the cold-start path.
+This integration stays on `feature/arc-integration`. It is not merged or promoted
+to production. The current designated deployment is:
 
-## Review now
+- [Judge overview](https://axp-hc1ae87ch-lucario004.vercel.app/arc/)
+- [Arc advertiser dashboard](https://axp-hc1ae87ch-lucario004.vercel.app/arc/advertiser-dashboard/)
+- [Arc example chat](https://axp-hc1ae87ch-lucario004.vercel.app/arc/publisher-demo/)
+- [Configuration-only health](https://axp-hc1ae87ch-lucario004.vercel.app/api/arc/health)
 
-- Dashboard: http://127.0.0.1:3450/arc/advertiser-dashboard/
-- Chat: http://127.0.0.1:3450/arc/publisher-demo/
-- Configuration-only health: http://127.0.0.1:3450/api/arc/health
+All three pages and the isolated `/api/arc` backend were checked anonymously.
+The user removed Preview protection. `/arc/` is the presentation/evidence entry;
+the dashboard and chat are interactive applications. Ordinary `/api/product` and
+account-owned APIs keep their original configuration.
 
-Start/restart after the one-time import:
+## Try the product
 
-```sh
-npm run arc:hosted-local
-```
+Open **StackPilot · Try Arc Nanopayments** in the dashboard, then open the Arc
+chat and choose the developer-tools suggestion. The independent fixture answer
+and separate Sponsored card lead to a signed insertion receipt. Open View
+internals → Payment to submit the exact saved payment and check batch status.
+The dashboard reports the same durable charges after reloads and cold starts.
 
-On this machine the original `local-state/arc/product` writer was gracefully
-stopped, and its original database, receipt identity and private payment records
-were imported once into `local-state/arc/hosted-local`. The latter contains a
-private local encryption key and file KV. A `HOSTED_OWNER` marker prevents the old
-`arc:demo` / `arc:prepare` writer from resuming against the archived snapshot.
-Do not remove the marker, reset either workspace or run both financial writers.
-The original public execution exports remain unchanged historical observations.
+The human approved one additional 0.020 test-USDC allocation, a 0.010 campaign
+cap and 0.001 per placement. Its funding transactions finalized and Gateway
+funding was observed. The original campaign is paused with its four accepted
+0.002 deliveries preserved. Both campaigns share the unchanged global 0.016
+accepted-obligation ceiling; at the recorded handoff this left 0.008 of usable
+new spend. Read current state before another take; do not promise ten remaining
+placements from the campaign cap alone.
 
-For an explicitly authorized first migration on another preserved workspace:
-
-```sh
-# Stop the original local Arc server first; its worker lock must be gone.
-npm run arc:hosted-local -- --import-local
-```
-
-Migration never overwrites an initialized financial/organic workspace. It imports
-only the existing allowlisted financial database and publisher identity files;
-Arc signing wallets stay outside snapshots. Startup/import make no model call,
-signature, deposit or transfer. Read-only routes never submit payments.
-
-## What the reviewer can do
-
-Open the prepared StackPilot campaign, then the Arc chat and choose the developer
-tools suggestion. Inspect the independent fixture answer, separate Sponsored
-card, signed insertion receipt and exact authorization in View internals. Submit
-saved nanopayments explicitly and reconcile their original transfer IDs. The
-dashboard shows the same durable charges and batch state after a reload/restart.
-
-At handoff the preserved campaign had 0.004 test USDC spent/finalized and 0.004
-remaining under its original 0.008 spending cap: two further 0.002 deliveries.
-Recheck current state before another take. No new allocation was funded for this
-local backend migration. The existing global Arc ceilings remain enforced.
-
-Buyer judgments and independent answers are labelled fixtures. Auction, DOM
-acknowledgement, receipt signatures, ledger, EIP-3009 signatures and Arc/Gateway
+Buyer judgments and answers are labelled fixtures. Auction, DOM insertion,
+Ed25519 receipts, accounting, exact EIP-3009 authorizations and Arc/Gateway
 payments are actual. No paid provider credentials are passed into this demo.
+Gateway acceptance, batch finality and wallet withdrawal remain distinct.
 
-## Preview activation
+## Isolation and deployment guard
 
-After localhost review, the human requested keeping the entire integration on
-the feature branch and using Vercel Preview without merging to main. The pages,
-API routing and official SDK are packaged for that deployment. These interactive
-changes have not yet been pushed/enabled; the earlier `/arc/` Vercel page remains
-the read-only evidence viewer until activation is verified.
+The backend requires all of the following:
 
-The adapter is gated to the `feature/arc-integration` Vercel Preview environment;
-it stays disabled in Production and other branches. Hosted activation still needs
-Vercel login, branch-scoped Arc wallet and encryption settings, an isolated durable
-KV workspace, a one-writer migration and hosted verification. The human will
-disable Preview protection for judge access. That access change does not itself
-configure the backend. Production state, Solana/Tempo identities and account-owned
-APIs remain unchanged. No production merge or promotion is authorized.
+- Vercel environment `preview`.
+- Git branch `feature/arc-integration`.
+- Deployment-specific `AXP_ARC_PREVIEW_ENABLED=1`.
+- Deployment-specific `AXP_ARC_PREVIEW_COMMIT` exactly matching the deployment SHA.
 
-The package bundles the pinned SDK runtime (rather than its source/types/tests),
-keeping the function at 167.8 MB including the existing Solana/Tempo dependencies.
-Local packaged checks passed both interactive routes, 45 referenced Next assets,
-the disabled-by-default Arc health route and SDK export/cryptographic compatibility.
+Activation flags are **not shared Preview or Production variables**. Only the
+Arc wallet and dedicated encryption key are stored as sensitive variables scoped
+to this feature branch. Automatic Git previews remain disabled unless explicitly
+activated. The private Blob namespace is `axp:product:arc-mumbai-preview-v1`,
+separate from the production demo. Neither Solana nor Tempo signing is enabled
+in this Arc workspace. Production's original wallet identities and encryption
+settings were not changed.
 
-## Validation for the local review
+The `axp.one` alias was independently confirmed on original deployment
+`dpl_FbPgmunyqMgfnWf565ooxAu7zo26`; `main` remained at
+`88c9bfbb9ce5d3b532e1a4bff2a276d4c1c1baa4`. No promotion occurred.
 
-The Arc/hosted/Tempo regression group passed 33 tests. Full `verify:review` passed
-845 of 853 repository tests, with eight optional checks skipped and zero failures,
-plus 91 UI component tests, both UI typechecks, SDK parity, links and hygiene.
-The product production build includes both new Arc pages. Read-only local HTTP
-checks returned 200 for both pages and all four Arc bootstrap/config/state/health
-endpoints; the imported campaign retained its original IDs and finalized totals.
-These fixture and local checks do not claim a new hosted network execution.
+## Preserved state handoff
+
+The original local writer was stopped before its state moved into the local
+encrypted executor. After recording, that writer was stopped before cloud
+migration. The exact encrypted financial and organic shards were imported using
+a separately guarded, HMAC-authenticated import-only deployment. Both snapshots
+are authenticated before either can be written. Existing target records are never
+overwritten; exact replay is idempotent. Import mode rejects ordinary demo traffic.
+Migration performed zero model calls, signatures, deposits or transfers.
+
+Arc keys stayed outside snapshots. `HOSTED_OWNER` and `CLOUD_OWNER` markers fence
+the archived local writers. **Do not remove those markers, reset state, or restart
+a local financial writer against either archive.** `npm run arc:hosted-local` was
+the local review command; that funded workspace is now cloud-owned.
+
+`export-hosted-import.mjs` creates only ignored encrypted body/proof files and
+refuses export while the local server listens. The operator import endpoint is
+available only in explicit import mode on the pinned Preview commit. Never put
+its proof, wallet, environment or encrypted private snapshots in Git or Studio.
+
+## Validation
+
+The local hosted review passed 845/853 repository tests (eight optional skips),
+91 UI tests, both typechecks, SDK parity and production UI build. Subsequent
+import/Arc/hosted tests passed 31 checks, including authenticated import, replay,
+no-overwrite and production/other-commit refusal. Packaged checks passed both
+interactive pages and 45 referenced assets. The pinned Circle SDK is bundled
+without shipping its source/types/tests; the complete function is 167.8 MB.
+
+[Hosted evidence](../../artifacts/arc/hosted-acceptance.json) is an allowlisted
+public API observation, separate from the original local snapshots. Recheck it:
+
+```sh
+node scripts/arc/verify-evidence.mjs artifacts/arc/hosted-acceptance.json
+```
+
+The verifier reads only public RPC/Gateway data and receipt signatures. It creates
+no signatures or broadcasts. Newer Gateway finality may exceed the frozen export.

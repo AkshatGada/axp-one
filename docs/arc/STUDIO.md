@@ -66,19 +66,20 @@ connections, not a proven public workspace link. The auto-generated workspace
 title still refers to the earlier escrow exploration; the preview identifies AXP
 Nanopayments and explicitly excludes that escrow from payment evidence.
 
-A reviewed static companion is preserved at `tooling/arc-preview`. It uses the
-Studio-generated evidence frontend, with wallet providers, development tracing,
-backend and signing routes excluded. It shows the final recorded batch, earlier
-pending snapshot, architecture and public read-only Gateway status checks.
-Its npm lockfile, typecheck and Vite build make the later deployment reproducible.
-It contains only public source/evidence. It is not a hosted live AXP backend.
+A reviewed companion is preserved at `tooling/arc-preview`. The current `/arc/`
+presentation uses AXP's actual PolySans/Ultramarine design system, an interactive
+five-stage walkthrough, a Gateway-to-Arc diagram and the immutable first recorded
+proof. It makes no API calls and has no signing authority. Studio provenance is
+retained in its source, metadata and footer. Local typecheck and production build
+passed. Native browser capture was unavailable during this revision, so visual
+screenshot verification is not claimed.
 
-The human initially deferred a separate Vercel project, then authorized pushing
-this branch to use the repository's existing Vercel Git integration. The site
-build includes this companion at `/arc/`, using a separate `/arc/assets/` namespace.
-It does not upload or activate the funded Arc workspace. No new Vercel connection
-or cloud environment changes are needed. The preview's final URL and access
-results belong in the submission checklist.
+The human subsequently authorized the interactive hosted backend on a separate
+Preview, with branch-scoped secrets, encrypted state migration and deployment-
+specific activation. The same-origin dashboard and chat link to that backend.
+This is separate from both the presentation's frozen proof and production AXP.
+See [public links, isolation and verification](HOSTED_PREVIEW.md). The source
+workspace's sharing requirement remains distinct from Vercel page access.
 
 A public companion URL does not by itself establish public access to Studio's
 source workspace; confirm the prize's accepted sharing method. Show Studio's chat,

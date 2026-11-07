@@ -9,13 +9,12 @@ channels, while retaining the existing Solana and Tempo implementations.
 **[Architecture](ARCHITECTURE.md)** · **[Diagram SVG](architecture.svg)** · **[Studio source provenance](STUDIO.md)** ·
 **[Submission checklist](SUBMISSION.md)** · **[Video script](VIDEO.md)**
 
-The Studio URL opens for its owner; anonymous judge access still needs resolution.
-The read-only companion at `tooling/arc-preview` is included in the existing
-Vercel site build at `/arc/`. The human authorized pushing this feature branch
-to generate its Git-connected Preview deployment; production is not promoted.
-The [first successful branch preview](https://axp-bll2c2o95-lucario004.vercel.app/arc/)
-requires Vercel sign-in. Anonymous access returned HTTP 302 to Vercel Authentication;
-judge access still needs an owner-approved sharing configuration.
+The Studio URL opens for its owner; anonymous Studio workspace access still needs
+resolution. The **interactive Arc Preview is live**, separate from production:
+[overview](https://axp-hc1ae87ch-lucario004.vercel.app/arc/),
+[dashboard](https://axp-hc1ae87ch-lucario004.vercel.app/arc/advertiser-dashboard/) and
+[chat](https://axp-hc1ae87ch-lucario004.vercel.app/arc/publisher-demo/).
+See [hosted isolation, setup and verification](HOSTED_PREVIEW.md).
 
 ## What works
 
@@ -66,14 +65,14 @@ Never share `.env`, wallet files or private database/payment payloads.
 
 ## Local demo
 
-**Current review:** the preserved workspace has moved to the per-request durable
-backend at [localhost:3450](http://127.0.0.1:3450/arc/advertiser-dashboard/).
-Use `npm run arc:hosted-local`. See [local hosted-backend review](HOSTED_PREVIEW.md)
-for the Arc chat, state handoff and remaining spending cap. The archived original
-writer below refuses to resume after this handoff; do not delete its marker.
+**Current demo:** use the public Preview links above. The preserved financial
+workspace is now cloud-owned; its archived local runners refuse to restart.
+See [the one-writer handoff](HOSTED_PREVIEW.md). The instructions below describe
+the original local harness and fresh, separately authorized setups.
 
 The original archived workspace on this machine is `local-state/arc/product`;
-the active durable copy is `local-state/arc/hosted-local`. Arc keys remain in
+the archived durable copy is `local-state/arc/hosted-local`. The active workspace
+is private hosted storage, not either local archive. Arc keys remain in
 ignored `local-state/arc/secrets/arc-wallet.json`. Do not delete/reset any of them.
 The commands below describe the original harness before the one-writer handoff.
 

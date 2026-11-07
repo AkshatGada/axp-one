@@ -8,10 +8,11 @@
 - Pre-event baseline: `88c9bfbb9ce5d3b532e1a4bff2a276d4c1c1baa4`
 - Published branch URL:
   https://github.com/AkshatGada/axp-one/tree/feature/arc-integration
-- Successful Vercel Preview (source commit `be576dc`):
-  https://axp-bll2c2o95-lucario004.vercel.app/arc/
-  **Vercel Authentication protects this URL:** anonymous HTTP redirected to
-  Vercel sign-in. The owner must arrange judge access; public access is not claimed.
+- Interactive Preview and judge entry:
+  https://axp-hc1ae87ch-lucario004.vercel.app/arc/
+  Dashboard: `/arc/advertiser-dashboard/`; chat: `/arc/publisher-demo/`.
+  Anonymous page/API access verified; deployment-specific Arc activation and
+  isolated durable state verified. See [hosted boundaries](HOSTED_PREVIEW.md).
 - Studio project:
   https://studio.arc.io/app/0c07e997-5564-4b38-94f9-099ea3e95393
 - [Setup/demo](README.md), [architecture](ARCHITECTURE.md), [video](VIDEO.md),
@@ -56,7 +57,7 @@ that is not a determination of the team's registration or ownership eligibility.
 
 ## Deliverables and final human actions
 
-- [x] Working local frontend and backend on the Arc integration branch.
+- [x] Working local and hosted Preview frontend/backend on the Arc integration branch.
 - [x] Official Circle Gateway Nanopayments SDK, actual Arc Testnet funding and
       completed batch settlement for per-delivery payments; no mainnet/real-fund activity.
 - [x] Arc Studio project and substantive source adoption, with reviewed output.
@@ -67,17 +68,16 @@ that is not a determination of the team's registration or ownership eligibility.
 - [x] Human approved branch publication; `feature/arc-integration` was pushed.
 - [x] Existing Vercel Git integration built the pushed branch successfully and
       generated its Preview URL. Local packaged route/asset checks passed.
-- [ ] Arrange anonymous/judge access to the Vercel Preview: existing project
-      protection redirects signed-out requests to Vercel. No protection setting
-      was changed. Production axp.one remains on the original main commit;
-      the funded Arc workspace stays local.
+- [x] Anonymous access to the interactive Preview verified after the human removed
+      Preview protection. Production retains its original deployment and state.
 - [ ] Record and upload the concise video with Studio visibly demonstrated.
 - [ ] If payments remain pending, state their actual status. Batch scheduling is
       controlled by Gateway; the unused custom Studio escrow is not payment proof.
 - [ ] Human reviews and submits the ETHGlobal form under the exact bounty name.
 
 The human authorized the feature branch push and existing Vercel Git Preview.
-No AXP production promotion, hosted Arc signing activation, new Vercel connection,
-ETHGlobal submission or npm publication was performed. Arc Studio's initial unused
+Arc signing was activated only on the designated pinned Preview. No AXP production
+promotion, production configuration change, ETHGlobal submission or npm publication
+was performed. Arc Studio's initial unused
 testnet escrow deployment is separately disclosed in STUDIO.md and is not part of
 the nanopayment proof.

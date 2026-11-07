@@ -122,7 +122,7 @@ and verified-wallet checks. Existing RLS ownership predicates, column grants and
 service-only financial RPC grants were reviewed and remain unchanged. No schema,
 cloud policy or account-owned Arc activation was performed.
 
-## Published branch preview
+## First published branch preview (historical)
 
 After human approval, `feature/arc-integration` was pushed. Vercel's existing
 Git integration successfully built source commit `be576dc` in **Preview** and
@@ -136,3 +136,47 @@ Anonymous HTTP to the actual Preview URL returned **302 to Vercel Authentication
 The deployment exists and built successfully, but it is not claimed as a public
 judge link. No access setting, production promotion or cloud environment change
 was performed. Studio workspace judge access remains a separate requirement.
+
+## Interactive hosted Preview
+
+The later [interactive Preview](HOSTED_PREVIEW.md) preserves the original signed
+identities through authenticated encrypted migration, with zero migration
+signatures, broadcasts or model calls. It uses a separate workspace and
+commit-pinned Preview activation. Production `axp.one` and `main` were independently
+checked unchanged. Anonymous requests passed the overview, both interactive pages
+and isolated API health/state/configuration.
+
+The local hosted review passed **845/853 repository tests** with eight optional
+skips and **91/91 UI tests**. Import/Arc/hosted checks then passed **31 tests**,
+including wrong-commit/production refusal and authenticated no-overwrite import.
+The complete packaged function built at 167.8 MB; both interactive pages and 45
+referenced assets passed packaged checks. The revised AXP presentation passed
+TypeScript and Vite production build. Native screenshot capture failed in this
+session; no visual browser approval is claimed.
+
+[Hosted acceptance](../../artifacts/arc/hosted-acceptance.json) is a public,
+allowlisted observation of four accepted 0.002 deliveries in the original
+campaign and a separately approved, funded 0.020 judge-trial allocation. The
+original campaign is paused; the trial has its own 0.010 cap and 0.001 bid,
+subject also to the unchanged aggregate 0.016 accepted-obligation limit. This
+snapshot does not promise a fixed number of future judge placements.
+
+Independent read-only verification passed four native funding transactions,
+four Gateway transfers and four public Ed25519 receipt signatures. At that
+observation, three transfers were batch-completed and one was received/pending.
+The fourth was submitted only after the human explicitly approved its preserved
+authorization. No replacement signature was created. Recheck public current
+finality rather than treating the frozen snapshot as current state:
+
+```sh
+node scripts/arc/verify-evidence.mjs artifacts/arc/hosted-acceptance.json
+```
+
+The additional trial's approval and deposit finalized on Arc:
+[approval](https://testnet.arcscan.app/tx/0x7ccb455acc60c82f8bec6904b19e03038e4494cbb6faa24bb522ca04f02e5566),
+[deposit](https://testnet.arcscan.app/tx/0xeaaf504a156371638fe6b13a7fd53ac4e6baa87bb329a76c852374f2d1fb9a8d).
+Total application native fees are 0.00671955 test USDC; including the separately
+unused Studio escrow deployment, observed gas is 0.0432844 test USDC. Deposits
+are 0.040 test USDC total. No withdrawal, refund or mainnet operation occurred.
+The original local proof and `/arc/` recorded ledger remain the first two
+finalized payments, explicitly separate from subsequent hosted activity.
