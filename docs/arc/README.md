@@ -13,6 +13,9 @@ The Studio URL opens for its owner; anonymous judge access still needs resolutio
 The read-only companion at `tooling/arc-preview` is included in the existing
 Vercel site build at `/arc/`. The human authorized pushing this feature branch
 to generate its Git-connected Preview deployment; production is not promoted.
+The [first successful branch preview](https://axp-bll2c2o95-lucario004.vercel.app/arc/)
+requires Vercel sign-in. Anonymous access returned HTTP 302 to Vercel Authentication;
+judge access still needs an owner-approved sharing configuration.
 
 ## What works
 

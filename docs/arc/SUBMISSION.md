@@ -4,10 +4,14 @@
 **Deadline supplied by the submitter:** Saturday, **7 November 2026, 9:00 AM IST**.
 
 - Existing repository: https://github.com/AkshatGada/axp-one
-- Work branch: `feature/arc-integration` (local; not pushed)
+- Work branch: `feature/arc-integration` (published with human approval)
 - Pre-event baseline: `88c9bfbb9ce5d3b532e1a4bff2a276d4c1c1baa4`
-- Intended branch URL after approved push:
+- Published branch URL:
   https://github.com/AkshatGada/axp-one/tree/feature/arc-integration
+- Successful Vercel Preview (source commit `be576dc`):
+  https://axp-bll2c2o95-lucario004.vercel.app/arc/
+  **Vercel Authentication protects this URL:** anonymous HTTP redirected to
+  Vercel sign-in. The owner must arrange judge access; public access is not claimed.
 - Studio project:
   https://studio.arc.io/app/0c07e997-5564-4b38-94f9-099ea3e95393
 - [Setup/demo](README.md), [architecture](ARCHITECTURE.md), [video](VIDEO.md),
@@ -60,17 +64,20 @@ that is not a determination of the team's registration or ownership eligibility.
 - [x] Small meaningful commits, test results and sanitized public payment evidence.
 - [ ] Final judge-openable Studio/share URL verified without owner access. Current
       owner workspace link alone does not prove this; see STUDIO.md.
-- [ ] Human approves push/publication. Then push `feature/arc-integration`, inspect
-      its public diff and add the branch/commit URL to the submission.
-- [ ] Resume the deferred separate Vercel preview, if desired. Source and locked
-      build are ready in `tooling/arc-preview`; no Vercel connection/deployment
-      was made. Existing axp.one does not contain these unpushed local changes.
+- [x] Human approved branch publication; `feature/arc-integration` was pushed.
+- [x] Existing Vercel Git integration built the pushed branch successfully and
+      generated its Preview URL. Local packaged route/asset checks passed.
+- [ ] Arrange anonymous/judge access to the Vercel Preview: existing project
+      protection redirects signed-out requests to Vercel. No protection setting
+      was changed. Production axp.one remains on the original main commit;
+      the funded Arc workspace stays local.
 - [ ] Record and upload the concise video with Studio visibly demonstrated.
 - [ ] If payments remain pending, state their actual status. Batch scheduling is
       controlled by Gateway; the unused custom Studio escrow is not payment proof.
 - [ ] Human reviews and submits the ETHGlobal form under the exact bounty name.
 
-No repository push, AXP production deployment, Vercel deployment/connection,
-ETHGlobal submission or new npm publication was performed. Arc Studio's initial
-unused testnet escrow deployment is separately disclosed in STUDIO.md and is not
-part of the nanopayment proof.
+The human authorized the feature branch push and existing Vercel Git Preview.
+No AXP production promotion, hosted Arc signing activation, new Vercel connection,
+ETHGlobal submission or npm publication was performed. Arc Studio's initial unused
+testnet escrow deployment is separately disclosed in STUDIO.md and is not part of
+the nanopayment proof.

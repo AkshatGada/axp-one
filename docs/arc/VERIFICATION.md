@@ -121,3 +121,18 @@ Arc. Account-owned native funding remains explicitly Solana-only, with owner/org
 and verified-wallet checks. Existing RLS ownership predicates, column grants and
 service-only financial RPC grants were reviewed and remain unchanged. No schema,
 cloud policy or account-owned Arc activation was performed.
+
+## Published branch preview
+
+After human approval, `feature/arc-integration` was pushed. Vercel's existing
+Git integration successfully built source commit `be576dc` in **Preview** and
+generated the URL recorded in [publication evidence](../../artifacts/arc/preview-publication.json).
+The build adds only a read-only Studio evidence viewer at `/arc/` to the existing
+site. Local packaged HTTP checks passed the page, two referenced assets, redirect,
+seven preserved routes and disabled-signing product health. Ten routing/static
+tests passed. No private Arc state was uploaded or activated.
+
+Anonymous HTTP to the actual Preview URL returned **302 to Vercel Authentication**.
+The deployment exists and built successfully, but it is not claimed as a public
+judge link. No access setting, production promotion or cloud environment change
+was performed. Studio workspace judge access remains a separate requirement.

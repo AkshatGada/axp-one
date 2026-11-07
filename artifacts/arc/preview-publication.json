@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "axp.arc-preview-publication.v1",
+  "branch": "feature/arc-integration",
+  "pushedCommit": "be576dc55d3316cd03cd4c8194fa7212f18970dd",
+  "repository": "https://github.com/AkshatGada/axp-one",
+  "branchURL": "https://github.com/AkshatGada/axp-one/tree/feature/arc-integration",
+  "vercelProject": "lucario004/axp-one",
+  "deploymentDashboard": "https://vercel.com/lucario004/axp-one/2rtbnx7T7Buw3icXbBnNNqSbhWoa",
+  "environment": "Preview",
+  "state": "READY",
+  "productionPromoted": false,
+  "mainCommitUnchanged": "88c9bfbb9ce5d3b532e1a4bff2a276d4c1c1baa4",
+  "route": "/arc/",
+  "semantics": "Read-only Studio evidence companion; funded Arc frontend/backend remains local.",
+  "localValidation": {
+    "siteAppBuilds": "passed",
+    "finalPackageBuild": "passed",
+    "routingAndStaticTests": {
+      "passed": 10,
+      "failed": 0
+    },
+    "arcHTTPStatus": 200,
+    "arcRedirectStatus": 308,
+    "arcReferencedAssetsVerified": 2,
+    "preservedRoutesVerified": 7,
+    "packagedProductHealthHTTPStatus": 200,
+    "privateFilesInOutput": 0,
+    "branchSecretScan": "passed",
+    "providerCalls": 0,
+    "signaturesCreated": 0,
+    "broadcasts": 0
+  },
+  "studioAnonymousAccessVerified": false,
+  "githubDeploymentId": 7614513638,
+  "createdAt": "2026-11-07T01:12:19Z",
+  "previewURL": "https://axp-bll2c2o95-lucario004.vercel.app/arc/",
+  "accessCheckedAt": "2026-11-07T01:13:43.645111+00:00",
+  "anonymousHTTP": {
+    "base": "https://axp-bll2c2o95-lucario004.vercel.app",
+    "arcURL": "https://axp-bll2c2o95-lucario004.vercel.app/arc/",
+    "anonymous": true,
+    "status": 302,
+    "contentType": "text/plain",
+    "titleMatches": false,
+    "redirect": "https://vercel.com/sso-api",
+    "assets": [],
+    "preservedRoutes": []
+  },
+  "anonymousAccess": "blocked by existing Vercel Authentication; HTTP 302 to vercel.com/sso-api",
+  "projectProtectionChanged": false
+}
